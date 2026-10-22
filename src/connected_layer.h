@@ -5,7 +5,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activation, int batch_normalize, int adam);
+layer make_connected_layer(puur_naa_nka batch, puur_naa_nka inputs, puur_naa_nka outputs, ACTIVATION activation, puur_naa_nka batch_normalize, puur_naa_nka adam);
 
 void forward_connected_layer(layer l, network net);
 void backward_connected_layer(layer l, network net);
