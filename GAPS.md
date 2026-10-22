@@ -1,0 +1,554 @@
+# What is still missing
+
+76 languages. Each line says in how many languages it is missing.
+
+## Files in languages BURP cannot read yet
+
+
+## Keywords with no word in a language's table
+
+- guru:size_t: 71
+- guru:fprintf: 71
+- guru:stderr: 71
+- guru:FILE: 71
+- guru:realloc: 71
+- guru:fread: 71
+- guru:fclose: 71
+- guru:fwrite: 71
+- guru:time: 71
+- guru:fopen: 71
+- guru:clock: 71
+- guru:sprintf: 71
+- guru:clock_t: 71
+- guru:fscanf: 71
+- guru:atoi: 71
+- guru:strchr: 71
+- guru:fseek: 71
+- guru:floor: 71
+- guru:fabs: 71
+- guru:atof: 71
+- guru:RAND_MAX: 71
+- guru:FLT_MAX: 71
+- guru:times: 71
+- guru:ftell: 71
+- guru:SEEK_SET: 71
+- guru:strtol: 71
+- guru:SEEK_CUR: 71
+- guru:feof: 71
+- guru:va_list: 71
+- guru:va_arg: 71
+- guru:memcmp: 71
+- guru:ceil: 71
+- shraeni:fprintf: 71
+- shraeni:stderr: 71
+- guru:fflush: 71
+- guru:stdout: 71
+- guru:va_start: 71
+- guru:va_end: 71
+- guru:fgets: 71
+- guru:strrchr: 71
+- shraeni:sprintf: 71
+- shraeni:system: 71
+- guru:memmove: 71
+- guru:perror: 71
+- guru:SEEK_END: 71
+- guru:strncpy: 71
+- guru:strtod: 71
+- guru:strcmp: 70
+- guru:rand: 70
+- guru:memset: 70
+- guru:div: 70
+- guru:srand: 70
+- guru:qsort: 70
+- guru:strcat: 70
+- shraeni:strcmp: 70
+- guru:exp: 67
+- guru:log: 67
+- guru:cos: 67
+- guru:sin: 67
+- shraeni:using: 67
+- guru:#endif: 66
+- guru:#ifdef: 66
+- guru:#define: 66
+- guru:#ifndef: 66
+- guru:#undef: 66
+- guru:#pragma: 66
+- guru:#error: 66
+- shraeni:#ifdef: 66
+- shraeni:#endif: 66
+- guru:calloc: 62
+- guru:unsigned: 62
+- guru:printf: 62
+- guru:short: 62
+- guru:memcpy: 62
+- guru:pow: 62
+- guru:sqrt: 62
+- guru:malloc: 62
+- guru:strlen: 62
+- guru:abs: 62
+- guru:signed: 62
+- guru:long: 62
+- guru:exit: 62
+- guru:INT_MAX: 62
+- guru:strncmp: 62
+- guru:sscanf: 62
+- shraeni:unsigned: 62
+- guru:strstr: 62
+- shraeni:true: 38
+- shraeni:namespace: 26
+- guru:float: 25
+- guru:void: 25
+- guru:static: 25
+- guru:const: 25
+- guru:free: 25
+- guru:NULL: 25
+- guru:typedef: 25
+- guru:assert: 25
+- guru:switch: 25
+- guru:continue: 25
+- guru:default: 25
+- guru:do: 25
+- guru:read: 25
+- guru:goto: 25
+- guru:extern: 25
+- guru:#elif: 25
+- shraeni:void: 25
+- guru:write: 25
+- shraeni:const: 25
+- shraeni:new: 25
+- shraeni:extern: 25
+- shraeni:float: 25
+- guru:for: 9
+- shraeni:for: 9
+- guru:char: 9
+- guru:sizeof: 9
+- guru:case: 9
+- guru:break: 9
+- guru:struct: 9
+- guru:inline: 9
+- guru:double: 9
+- shraeni:char: 9
+- guru:register: 9
+- guru:enum: 9
+- guru:int: 1
+- guru:if: 1
+- guru:return: 1
+- guru:else: 1
+- guru:while: 1
+- guru:#else: 1
+- guru:#if: 1
+- shraeni:int: 1
+- shraeni:if: 1
+- shraeni:return: 1
+- shraeni:else: 1
+
+## Names with no dictionary entry (the most common first)
+
+- `l`: 76
+- `i`: 76
+- `s`: 76
+- `n`: 76
+- `w`: 76
+- `h`: 76
+- `batch`: 76
+- `j`: 76
+- `net`: 76
+- `a`: 76
+- `c`: 76
+- `x`: 76
+- `outputs`: 76
+- `k`: 76
+- `b`: 76
+- `layer`: 76
+- `y`: 76
+- `z`: 76
+- `im`: 76
+- `d`: 76
+- `m`: 76
+- `delta`: 76
+- `output`: 76
+- `image`: 76
+- `p`: 76
+- `inputs`: 76
+- `stbi_uc`: 76
+- `X`: 76
+- `comp`: 76
+- `options`: 76
+- `stride`: 76
+- `delta_gpu`: 76
+- `g`: 76
+- `r`: 76
+- `output_gpu`: 76
+- `cuda_make_array`: 76
+- `type`: 76
+- `truth`: 76
+- `params`: 76
+- `v`: 76
+- `vals`: 76
+- `classes`: 76
+- `len`: 76
+- `scale`: 76
+- `req_comp`: 76
+- `t`: 76
+- `fp`: 76
+- `stbi__get8`: 76
+- `f`: 76
+- `val`: 76
+- `GPU`: 76
+- `stbi__context`: 76
+- `filename`: 76
+- `boxes`: 76
+- `paths`: 76
+- `img_comp`: 76
+- `labelpath`: 76
+- `increment_layer`: 76
+- `stbi__err`: 76
+- `max`: 76
+- `N`: 76
+- `layers`: 76
+- `dest`: 76
+- `dx`: 76
+- `box`: 76
+- `biases`: 76
+- `cur`: 76
+- `self_layer`: 76
+- `batch_normalize`: 76
+- `orig`: 76
+- `dets`: 76
+- `weights`: 76
+- `min`: 76
+- `STBIDEF`: 76
+- `cuda_free`: 76
+- `src`: 76
+- `dy`: 76
+- `img_n`: 76
+- `list`: 76
+- `groups`: 76
+- `copy_gpu`: 76
+- `train`: 76
+- `output_layer`: 76
+- `img_x`: 76
+- `pad`: 76
+- `info`: 76
+- `buff`: 76
+- `activation`: 76
+- `flip`: 76
+- `defined`: 76
+- `coords`: 76
+- `stbi__uint16`: 76
+- `copy_cpu`: 76
+- `scales`: 76
+- `ri`: 76
+- `stbi__errpuc`: 76
+- `axpy_cpu`: 76
+- `free_image`: 76
+- `STBI_FREE`: 76
+- `pred`: 76
+- `locations`: 76
+- `context`: 76
+- `aspect`: 76
+- `o`: 76
+- `spatial`: 76
+- `axpy_gpu`: 76
+- `error`: 76
+- `LOGISTIC`: 76
+- `state_gpu`: 76
+- `thresh`: 76
+- `img_y`: 76
+- `exposure`: 76
+- `stbi__f2f`: 76
+- `func`: 76
+- `iou`: 76
+- `adam`: 76
+- `q`: 76
+- `sz`: 76
+- `variance`: 76
+- `filters`: 76
+- `saturation`: 76
+- `id`: 76
+- `x_gpu`: 76
+- `hue`: 76
+- `name`: 76
+- `stbi__rewind`: 76
+- `STBI__CASE`: 76
+- `file`: 76
+- `ALPHA`: 76
+- `t1`: 76
+- `u`: 76
+- `forward`: 76
+- `angle`: 76
+- `stbi__get16be`: 76
+- `bias_updates`: 76
+- `diff`: 76
+- `fill_gpu`: 76
+- `convolutional_layer`: 76
+- `sized`: 76
+- `fill_cpu`: 76
+- `uf`: 76
+- `ui`: 76
+- `ug`: 76
+- `uo`: 76
+- `wf`: 76
+- `wi`: 76
+- `wg`: 76
+- `wo`: 76
+- `int16x8_t`: 76
+- `ACTIVATION`: 76
+- `channel`: 76
+- `part`: 76
+- `predictions`: 76
+- `ptr`: 76
+- `test`: 76
+- `argv`: 76
+- `hidden`: 76
+- `dstTensorDesc`: 76
+- `CUDNN_TENSOR_NCHW`: 76
+- `dw`: 76
+- `momentum`: 76
+- `curr`: 76
+- `ldb`: 76
+- `cuda_pull_array`: 76
+- `TA`: 76
+- `TB`: 76
+- `dh`: 76
+- `truths`: 76
+- `lda`: 76
+- `uh`: 76
+- `stbi__get32le`: 76
+- `zout`: 76
+- `activate_array_gpu`: 76
+- `channels`: 76
+- `uz`: 76
+- `ur`: 76
+- `stbi__uint32`: 76
+- `stbi__jpeg`: 76
+- `rolling_variance`: 76
+- `x2`: 76
+- `shallow`: 76
+- `get_pixel`: 76
+- `stbi__skip`: 76
+- `stbi__get16le`: 76
+- `tga_comp`: 76
+- `activate_array`: 76
+- `Y`: 76
+- `B`: 76
+- `hier`: 76
+- `wz`: 76
+- `wr`: 76
+- `wh`: 76
+- `quality`: 76
+- `user`: 76
+- `w2`: 76
+- `INCX`: 76
+- `decay`: 76
+- `workspace`: 76
+- `side`: 76
+- `def`: 76
+- `p2`: 76
+- `coutput`: 76
+- `forward_gpu`: 76
+- `backward_gpu`: 76
+- `M`: 76
+- `nweights`: 76
+- `make_image`: 76
+- `border`: 76
+- `lt`: 76
+- `transpose`: 76
+- `raw`: 76
+- `token`: 76
+- `stbi__write_context`: 76
+- `backward`: 76
+- `detection`: 76
+- `prob`: 76
+- `x1`: 76
+- `weights_gpu`: 76
+- `alpha`: 76
+- `netp`: 76
+- `STBI_NOTUSED`: 76
+- `t0`: 76
+- `STBIW_UCHAR`: 76
+- `di`: 76
+- `ldc`: 76
+- `STBI_ASSERT`: 76
+- `pal`: 76
+- `rgbe`: 76
+- `STBIWDEF`: 76
+- `biases_gpu`: 76
+- `map`: 76
+- `p1`: 76
+- `nets`: 76
+- `arr`: 76
+- `scales_gpu`: 76
+- `c2`: 76
+- `A`: 76
+- `ksize`: 76
+- `label`: 76
+- `K`: 76
+- `h_gpu`: 76
+- `color`: 76
+- `norms`: 76
+- `local_layer`: 76
+- `row0`: 76
+- `STBI__BYTECAST`: 76
+- `hs`: 76
+- `p3`: 76
+- `random_paths`: 76
+- `C`: 76
+- `row1`: 76
+- `hsz`: 76
+- `scanline`: 76
+- `TANH`: 76
+- `scale_updates`: 76
+- `scal_cpu`: 76
+- `bbox`: 76
+- `sortable_bbox`: 76
+- `copy`: 76
+- `new_w`: 76
+- `new_h`: 76
+- `save_connected_weights`: 76
+- `stbi_io_callbacks`: 76
+- `packet`: 76
+- `c1`: 76
+- `im1`: 76
+- `rad`: 76
+- `netw`: 76
+- `neth`: 76
+- `stbi__malloc`: 76
+- `bpp`: 76
+- `bias_updates_gpu`: 76
+- `plist`: 76
+- `argc`: 76
+- `make_connected_layer`: 76
+- `forward_connected_layer`: 76
+- `update_connected_layer`: 76
+- `forward_connected_layer_gpu`: 76
+- `backward_connected_layer_gpu`: 76
+- `update_connected_layer_gpu`: 76
+- `truth_gpu`: 76
+- `crop`: 76
+- `stbi__get32be`: 76
+- `pixel`: 76
+- `x_norm`: 76
+- `h2`: 76
+- `padding`: 76
+- `aug`: 76
+- `squared`: 76
+- `background`: 76
+- `row3`: 76
+- `row5`: 76
+- `row7`: 76
+- `L`: 76
+- `x_norm_gpu`: 76
+- `INCY`: 76
+- `sx`: 76
+- `sy`: 76
+- `resized`: 76
+- `avg_cat`: 76
+
+## Comments with no translation
+
+- fallthrough: 76
+- !STBI_NO_STDIO: 76
+- discard reserved: 76
+- list *plist = get_paths("data/compare.val.old");: 76
+- cudaDeviceSynchronize();: 76
+- image rgb = mask_to_rgb(sized_m, classes);
+           show_image(rgb, "part");
+           show_image: 76
+- STBI_NO_HDR: 76
+- simple implementation: 76
+- performance: 76
+- store: 76
+- color transform: 76
+- stbi__convert_format frees input on failure: 76
+- float scale = 1./sqrt(size*size*c);: 76
+- int i;: 76
+- printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);: 76
+- exclusive_image(mask);: 76
+- show_image(sized, "image");: 76
+- normalize_data_rows(d);: 76
+- normalize_image(copy);: 76
+- TODO This is approximate ;-): 76
+- return;: 76
+- STBI_NO_STDIO: 76
+- initialize a callback-based context: 76
+- test tga last because it's a crappy test!: 76
+- need to 'unget' all the characters in the IO buffer: 76
+- convert source image with img_n components to one with req_comp components;: 76
+- avoid switch per pixel, so use switch per scanline and massive macros: 76
+- compute number of non-alpha components: 76
+- fast-AC path: 76
+- combined length: 76
+- decode into unzigzag'd location: 76
+- wide add: 76
+- wide sub: 76
+- even part: 76
+- odd part: 76
+- column pass: 76
+- transpose pass 2: 76
+- transpose pass 3: 76
+- row pass: 76
+- pass 2: 76
+- pass 3: 76
+- non-interleaved data, we just need to process one block at a time,: 76
+- in trivial scanline order: 76
+- number of blocks to do just depends on how many actual "pixels" this: 76
+- component has, independent of interleaved MCU blocking and such: 76
+- every data block is an MCU, so countdown the restart interval: 76
+- interleaved: 76
+- scan an interleaved mcu... process scan_n components in order: 76
+- scan out an mcu's worth of this component; that's just determined: 76
+- by the basic H and V specified for the component: 76
+- after all interleaved components, that's an interleaved MCU,: 76
+- so now count down the restart interval: 76
+- need to generate 2x2 samples for every one in input: 76
+- load and perform the vertical filtering pass: 76
+- this uses 3*x + y = 4*x + (y - x): 76
+- current row: 76
+- horizontal filter works the same based on shifted vers of current: 76
+- row. "prev" is current row shifted right by 1 pixel; we need to: 76
+- insert the previous pixel value (from t1).: 76
+- "next" is current row shifted left by 1 pixel, with first pixel: 76
+- of next block of 8 pixels added in.: 76
+- horizontal filter, polyphase implementation since it's convenient:: 76
+- even pixels = 3*cur + prev = cur*4 + (prev - cur): 76
+- odd  pixels = 3*cur + next = cur*4 + (next - cur): 76
+- note the shared term.: 76
+- rounding: 76
+- this is a fairly straightforward implementation and not super-optimized.: 76
+- compute color-based transparency, assuming we've: 76
+- convert bgr to rgb: 76
+- discard filesize: 76
+- discard Offset: 76
+- only RGB or indexed allowed: 76
+- image type: 76
+- colormapped (paletted) image: 76
+- skip index of first colormap entry and number of entries: 76
+- check bits per palette color entry: 76
+- skip image x and y origin: 76
+- only RGB or grey allowed, +/- RLE: 76
+- skip colormap specification and image x/y origin: 76
+- test width: 76
+- test height: 76
+- bits per pixel: 76
+- corrupt data: 76
+- Check identifier: 76
+- Fill this channel with default data.: 76
+- pixels that were affected previous frame: 76
+- end of animated gif marker: 76
+- STBI_WRITE_NO_STDIO: 76
+- !STBI_WRITE_NO_STDIO: 76
+- STBIW_ZLIB_COMPRESS: 76
+- phase 2: 76
+- phase 5: 76
+- This one might be too, can't remember.: 76
+- list *plist = get_paths("data/compare.small.list");: 76
+- list *plist = get_paths("data/compare.cat.list");: 76
+- char *filename = (argc > 5) ? argv[5]: 0;: 76
+- else if(0==strcmp(argv[2], "train")) train_coco(cfg, weights);
+       else if(0==strcmp(argv[2], "ex: 76
+- float scale = 1./sqrt(inputs);: 76
+- printf("Rolling Mean ");
+           print_statistics(l.rolling_mean, l.outputs);
+           printf(": 76
+- printf("convscale %f\n", scale);: 76
