@@ -1,29 +1,29 @@
 // Oh boy, why am I about to do this....
-#ifndef NETWORK_H
-#define NETWORK_H
-#include "darknet.h"
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ ਜਾਲ_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ਜਾਲ_H
+#ਅਨ੍ਤਰ੍ਭਾਵ "darknet.h"
 
-#include "image.h"
-#include "layer.h"
-#include "data.h"
-#include "tree.h"
-
-
-#ifdef GPU
-void pull_network_output(network *net);
-#endif
-
-void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
-
-network *make_network(int n);
+#ਅਨ੍ਤਰ੍ਭਾਵ "image.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "data.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "tree.h"
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
-void print_network(network *net);
-int resize_network(network *net, int w, int h);
-void calc_network_cost(network *net);
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ pull_ਜਾਲ_output(ਜਾਲ *net);
+#ਜੇ_ਅੰਤ
 
-#endif
+ਖਾਲੀ compare_networks(ਜਾਲ *n1, ਜਾਲ *n2, ਅੰਕੜੇ d);
+ਅੱਖਰ *get_layer_string(LAYER_TYPE a);
+
+ਜਾਲ *make_ਜਾਲ(ਪੂਰਨ n);
+
+
+ਦਸ਼ਮਲਵ ਜਾਲ_accuracy_multi(ਜਾਲ *net, ਅੰਕੜੇ d, ਪੂਰਨ n);
+ਪੂਰਨ get_predicted_class_ਜਾਲ(ਜਾਲ *net);
+ਖਾਲੀ print_ਜਾਲ(ਜਾਲ *net);
+ਪੂਰਨ resize_ਜਾਲ(ਜਾਲ *net, ਪੂਰਨ w, ਪੂਰਨ h);
+ਖਾਲੀ calc_ਜਾਲ_ਲਾਗਤ(ਜਾਲ *net);
+
+#ਜੇ_ਅੰਤ
 

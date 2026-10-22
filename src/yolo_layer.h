@@ -1,19 +1,19 @@
-#ifndef YOLO_LAYER_H
-#define YOLO_LAYER_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ YOLO_LAYER_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ YOLO_LAYER_H
 
-#include "darknet.h"
-#include "layer.h"
-#include "network.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "darknet.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "network.h"
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes);
-void forward_yolo_layer(const layer l, network net);
-void backward_yolo_layer(const layer l, network net);
-void resize_yolo_layer(layer *l, int w, int h);
-int yolo_num_detections(layer l, float thresh);
+layer make_yolo_layer(ਪੂਰਨ batch, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ n, ਪੂਰਨ ਕੁੱਲ, ਪੂਰਨ *ਨਕਾਬ, ਪੂਰਨ classes);
+ਖਾਲੀ forward_yolo_layer(ਅਚਲ layer l, ਜਾਲ net);
+ਖਾਲੀ backward_yolo_layer(ਅਚਲ layer l, ਜਾਲ net);
+ਖਾਲੀ resize_yolo_layer(layer *l, ਪੂਰਨ w, ਪੂਰਨ h);
+ਪੂਰਨ yolo_ਅੰਕ_detections(layer l, ਦਸ਼ਮਲਵ thresh);
 
-#ifdef GPU
-void forward_yolo_layer_gpu(const layer l, network net);
-void backward_yolo_layer_gpu(layer l, network net);
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_yolo_layer_gpu(ਅਚਲ layer l, ਜਾਲ net);
+ਖਾਲੀ backward_yolo_layer_gpu(layer l, ਜਾਲ net);
+#ਜੇ_ਅੰਤ
 
-#endif
+#ਜੇ_ਅੰਤ

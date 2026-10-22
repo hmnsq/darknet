@@ -1,16 +1,16 @@
-#include "region_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "region_layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "activations.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "blas.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "box.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <assert.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
 
-layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
+layer make_region_layer(ਪੂਰਨ batch, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ n, ਪੂਰਨ classes, ਪੂਰਨ coords)
 {
     layer l = {0};
     l.type = REGION;
@@ -20,40 +20,40 @@ layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
     l.h = h;
     l.w = w;
     l.c = n*(classes + coords + 1);
-    l.out_w = l.w;
-    l.out_h = l.h;
-    l.out_c = l.c;
+    l.ਬਾਹਰਲਾ_w = l.w;
+    l.ਬਾਹਰਲਾ_h = l.h;
+    l.ਬਾਹਰਲਾ_c = l.c;
     l.classes = classes;
     l.coords = coords;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(n*2, sizeof(float));
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.ਲਾਗਤ_2 = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l.biases = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n*2, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l.bias_updates = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n*2, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
     l.outputs = h*w*n*(classes + coords + 1);
     l.inputs = l.outputs;
     l.truths = 30*(l.coords + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    int i;
-    for(i = 0; i < n*2; ++i){
+    l.delta = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(batch*l.outputs, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l.output = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(batch*l.outputs, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n*2; ++i){
         l.biases[i] = .5;
     }
 
     l.forward = forward_region_layer;
     l.backward = backward_region_layer;
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     l.forward_gpu = forward_region_layer_gpu;
     l.backward_gpu = backward_region_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
     l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
-#endif
+#ਜੇ_ਅੰਤ
 
     fprintf(stderr, "detection\n");
     srand(0);
 
-    return l;
+    ਵਾਪਸ l;
 }
 
-void resize_region_layer(layer *l, int w, int h)
+ਖਾਲੀ resize_region_layer(layer *l, ਪੂਰਨ w, ਪੂਰਨ h)
 {
     l->w = w;
     l->h = h;
@@ -61,266 +61,266 @@ void resize_region_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + l->coords + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l->delta = realloc(l->delta, l->batch*l->outputs*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
 
     l->delta_gpu =     cuda_make_array(l->delta, l->batch*l->outputs);
     l->output_gpu =    cuda_make_array(l->output, l->batch*l->outputs);
-#endif
+#ਜੇ_ਅੰਤ
 }
 
-box get_region_box(float *x, float *biases, int n, int index, int i, int j, int w, int h, int stride)
+box get_region_box(ਦਸ਼ਮਲਵ *x, ਦਸ਼ਮਲਵ *biases, ਪੂਰਨ n, ਪੂਰਨ ਸੂਚਕਾਂਕ, ਪੂਰਨ i, ਪੂਰਨ j, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ stride)
 {
     box b;
-    b.x = (i + x[index + 0*stride]) / w;
-    b.y = (j + x[index + 1*stride]) / h;
-    b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
-    b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    b.x = (i + x[ਸੂਚਕਾਂਕ + 0*stride]) / w;
+    b.y = (j + x[ਸੂਚਕਾਂਕ + 1*stride]) / h;
+    b.w = ਘਾਤਾਂਕ(x[ਸੂਚਕਾਂਕ + 2*stride]) * biases[2*n]   / w;
+    b.h = ਘਾਤਾਂਕ(x[ਸੂਚਕਾਂਕ + 3*stride]) * biases[2*n+1] / h;
+    ਵਾਪਸ b;
 }
 
-float delta_region_box(box truth, float *x, float *biases, int n, int index, int i, int j, int w, int h, float *delta, float scale, int stride)
+ਦਸ਼ਮਲਵ delta_region_box(box truth, ਦਸ਼ਮਲਵ *x, ਦਸ਼ਮਲਵ *biases, ਪੂਰਨ n, ਪੂਰਨ ਸੂਚਕਾਂਕ, ਪੂਰਨ i, ਪੂਰਨ j, ਪੂਰਨ w, ਪੂਰਨ h, ਦਸ਼ਮਲਵ *delta, ਦਸ਼ਮਲਵ scale, ਪੂਰਨ stride)
 {
-    box pred = get_region_box(x, biases, n, index, i, j, w, h, stride);
-    float iou = box_iou(pred, truth);
+    box pred = get_region_box(x, biases, n, ਸੂਚਕਾਂਕ, i, j, w, h, stride);
+    ਦਸ਼ਮਲਵ iou = box_iou(pred, truth);
 
-    float tx = (truth.x*w - i);
-    float ty = (truth.y*h - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    ਦਸ਼ਮਲਵ tx = (truth.x*w - i);
+    ਦਸ਼ਮਲਵ ty = (truth.y*h - j);
+    ਦਸ਼ਮਲਵ tw = ਲਘੂਗਣਕ(truth.w*w / biases[2*n]);
+    ਦਸ਼ਮਲਵ th = ਲਘੂਗਣਕ(truth.h*h / biases[2*n + 1]);
 
-    delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
-    delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
-    delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
-    delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    delta[ਸੂਚਕਾਂਕ + 0*stride] = scale * (tx - x[ਸੂਚਕਾਂਕ + 0*stride]);
+    delta[ਸੂਚਕਾਂਕ + 1*stride] = scale * (ty - x[ਸੂਚਕਾਂਕ + 1*stride]);
+    delta[ਸੂਚਕਾਂਕ + 2*stride] = scale * (tw - x[ਸੂਚਕਾਂਕ + 2*stride]);
+    delta[ਸੂਚਕਾਂਕ + 3*stride] = scale * (th - x[ਸੂਚਕਾਂਕ + 3*stride]);
+    ਵਾਪਸ iou;
 }
 
-void delta_region_mask(float *truth, float *x, int n, int index, float *delta, int stride, int scale)
+ਖਾਲੀ delta_region_ਨਕਾਬ(ਦਸ਼ਮਲਵ *truth, ਦਸ਼ਮਲਵ *x, ਪੂਰਨ n, ਪੂਰਨ ਸੂਚਕਾਂਕ, ਦਸ਼ਮਲਵ *delta, ਪੂਰਨ stride, ਪੂਰਨ scale)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        delta[index + i*stride] = scale*(truth[i] - x[index + i*stride]);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
+        delta[ਸੂਚਕਾਂਕ + i*stride] = scale*(truth[i] - x[ਸੂਚਕਾਂਕ + i*stride]);
     }
 }
 
 
-void delta_region_class(float *output, float *delta, int index, int class, int classes, tree *hier, float scale, int stride, float *avg_cat, int tag)
+ਖਾਲੀ delta_region_class(ਦਸ਼ਮਲਵ *output, ਦਸ਼ਮਲਵ *delta, ਪੂਰਨ ਸੂਚਕਾਂਕ, ਪੂਰਨ class, ਪੂਰਨ classes, ਰੁੱਖ *hier, ਦਸ਼ਮਲਵ scale, ਪੂਰਨ stride, ਦਸ਼ਮਲਵ *avg_cat, ਪੂਰਨ ਟੈਗ)
 {
-    int i, n;
-    if(hier){
-        float pred = 1;
-        while(class >= 0){
-            pred *= output[index + stride*class];
-            int g = hier->group[class];
-            int offset = hier->group_offset[g];
-            for(i = 0; i < hier->group_size[g]; ++i){
-                delta[index + stride*(offset + i)] = scale * (0 - output[index + stride*(offset + i)]);
+    ਪੂਰਨ i, n;
+    ਜੇ(hier){
+        ਦਸ਼ਮਲਵ pred = 1;
+        ਜਦੋਂ(class >= 0){
+            pred *= output[ਸੂਚਕਾਂਕ + stride*class];
+            ਪੂਰਨ g = hier->ਸਮੂਹ[class];
+            ਪੂਰਨ ਵਿੱਥ = hier->ਸਮੂਹ_ਵਿੱਥ[g];
+            ਲਈ(i = 0; i < hier->ਸਮੂਹ_ਮਾਪ[g]; ++i){
+                delta[ਸੂਚਕਾਂਕ + stride*(ਵਿੱਥ + i)] = scale * (0 - output[ਸੂਚਕਾਂਕ + stride*(ਵਿੱਥ + i)]);
             }
-            delta[index + stride*class] = scale * (1 - output[index + stride*class]);
+            delta[ਸੂਚਕਾਂਕ + stride*class] = scale * (1 - output[ਸੂਚਕਾਂਕ + stride*class]);
 
-            class = hier->parent[class];
+            class = hier->ਮਾਪਾ[class];
         }
         *avg_cat += pred;
-    } else {
-        if (delta[index] && tag){
-            delta[index + stride*class] = scale * (1 - output[index + stride*class]);
-            return;
+    } ਨਹੀਂਤਾਂ {
+        ਜੇ (delta[ਸੂਚਕਾਂਕ] && ਟੈਗ){
+            delta[ਸੂਚਕਾਂਕ + stride*class] = scale * (1 - output[ਸੂਚਕਾਂਕ + stride*class]);
+            ਵਾਪਸ;
         }
-        for(n = 0; n < classes; ++n){
-            delta[index + stride*n] = scale * (((n == class)?1 : 0) - output[index + stride*n]);
-            if(n == class) *avg_cat += output[index + stride*n];
-        }
-    }
-}
-
-float logit(float x)
-{
-    return log(x/(1.-x));
-}
-
-float tisnan(float x)
-{
-    return (x != x);
-}
-
-int entry_index(layer l, int batch, int location, int entry)
-{
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(l.coords+l.classes+1) + entry*l.w*l.h + loc;
-}
-
-void forward_region_layer(const layer l, network net)
-{
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-
-#ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) activate_array(l.output + index,   l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+        ਲਈ(n = 0; n < classes; ++n){
+            delta[ਸੂਚਕਾਂਕ + stride*n] = scale * (((n == class)?1 : 0) - output[ਸੂਚਕਾਂਕ + stride*n]);
+            ਜੇ(n == class) *avg_cat += output[ਸੂਚਕਾਂਕ + stride*n];
         }
     }
-    if (l.softmax_tree){
-        int i;
-        int count = l.coords + 1;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + count);
-            count += group_size;
-        }
-    } else if (l.softmax){
-        int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_cpu(net.input + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
-    }
-#endif
+}
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
-    *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        if(l.softmax_tree){
-            int onlyclass = 0;
-            for(t = 0; t < 30; ++t){
-                box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
-                if(!truth.x) break;
-                int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
-                float maxp = 0;
-                int maxi = 0;
-                if(truth.x > 100000 && truth.y > 100000){
-                    for(n = 0; n < l.n*l.w*l.h; ++n){
-                        int class_index = entry_index(l, b, n, l.coords + 1);
-                        int obj_index = entry_index(l, b, n, l.coords);
-                        float scale =  l.output[obj_index];
-                        l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                        float p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_tree, class, l.w*l.h);
-                        if(p > maxp){
+ਦਸ਼ਮਲਵ logit(ਦਸ਼ਮਲਵ x)
+{
+    ਵਾਪਸ ਲਘੂਗਣਕ(x/(1.-x));
+}
+
+ਦਸ਼ਮਲਵ tisnan(ਦਸ਼ਮਲਵ x)
+{
+    ਵਾਪਸ (x != x);
+}
+
+ਪੂਰਨ ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(layer l, ਪੂਰਨ batch, ਪੂਰਨ location, ਪੂਰਨ ਇੰਦਰਾਜ)
+{
+    ਪੂਰਨ n =   location / (l.w*l.h);
+    ਪੂਰਨ loc = location % (l.w*l.h);
+    ਵਾਪਸ batch*l.outputs + n*l.w*l.h*(l.coords+l.classes+1) + ਇੰਦਰਾਜ*l.w*l.h + loc;
+}
+
+ਖਾਲੀ forward_region_layer(ਅਚਲ layer l, ਜਾਲ net)
+{
+    ਪੂਰਨ i,j,b,t,n;
+    ਸਮ੍ਰਿਤੀ_ਨਕਲ(l.output, net.ਨਿਵੇਸ਼, l.outputs*l.batch*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ GPU
+    ਲਈ (b = 0; b < l.batch; ++b){
+        ਲਈ(n = 0; n < l.n; ++n){
+            ਪੂਰਨ ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, 0);
+            activate_array(l.output + ਸੂਚਕਾਂਕ, 2*l.w*l.h, LOGISTIC);
+            ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, l.coords);
+            ਜੇ(!l.background) activate_array(l.output + ਸੂਚਕਾਂਕ,   l.w*l.h, LOGISTIC);
+            ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, l.coords + 1);
+            ਜੇ(!l.softmax && !l.softmax_ਰੁੱਖ) activate_array(l.output + ਸੂਚਕਾਂਕ, l.classes*l.w*l.h, LOGISTIC);
+        }
+    }
+    ਜੇ (l.softmax_ਰੁੱਖ){
+        ਪੂਰਨ i;
+        ਪੂਰਨ ਗਿਣਤੀ_2 = l.coords + 1;
+        ਲਈ (i = 0; i < l.softmax_ਰੁੱਖ->groups; ++i) {
+            ਪੂਰਨ ਸਮੂਹ_ਮਾਪ = l.softmax_ਰੁੱਖ->ਸਮੂਹ_ਮਾਪ[i];
+            softmax_cpu(net.ਨਿਵੇਸ਼ + ਗਿਣਤੀ_2, ਸਮੂਹ_ਮਾਪ, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + ਗਿਣਤੀ_2);
+            ਗਿਣਤੀ_2 += ਸਮੂਹ_ਮਾਪ;
+        }
+    } ਨਹੀਂਤਾਂ ਜੇ (l.softmax){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, 0, l.coords + !l.background);
+        softmax_cpu(net.ਨਿਵੇਸ਼ + ਸੂਚਕਾਂਕ, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + ਸੂਚਕਾਂਕ);
+    }
+#ਜੇ_ਅੰਤ
+
+    memset(l.delta, 0, l.outputs * l.batch * ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਜੇ(!net.train) ਵਾਪਸ;
+    ਦਸ਼ਮਲਵ avg_iou = 0;
+    ਦਸ਼ਮਲਵ recall = 0;
+    ਦਸ਼ਮਲਵ avg_cat = 0;
+    ਦਸ਼ਮਲਵ avg_obj = 0;
+    ਦਸ਼ਮਲਵ avg_anyobj = 0;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਪੂਰਨ class_ਗਿਣਤੀ = 0;
+    *(l.ਲਾਗਤ_2) = 0;
+    ਲਈ (b = 0; b < l.batch; ++b) {
+        ਜੇ(l.softmax_ਰੁੱਖ){
+            ਪੂਰਨ onlyclass = 0;
+            ਲਈ(t = 0; t < 30; ++t){
+                box truth = float_ਮੰਜ਼ਿਲ_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
+                ਜੇ(!truth.x) ਰੋਕੋ;
+                ਪੂਰਨ class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
+                ਦਸ਼ਮਲਵ maxp = 0;
+                ਪੂਰਨ maxi = 0;
+                ਜੇ(truth.x > 100000 && truth.y > 100000){
+                    ਲਈ(n = 0; n < l.n*l.w*l.h; ++n){
+                        ਪੂਰਨ class_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n, l.coords + 1);
+                        ਪੂਰਨ obj_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n, l.coords);
+                        ਦਸ਼ਮਲਵ scale =  l.output[obj_ਸੂਚਕਾਂਕ];
+                        l.delta[obj_ਸੂਚਕਾਂਕ] = l.noobject_scale * (0 - l.output[obj_ਸੂਚਕਾਂਕ]);
+                        ਦਸ਼ਮਲਵ p = scale*get_hierarchy_probability(l.output + class_ਸੂਚਕਾਂਕ, l.softmax_ਰੁੱਖ, class, l.w*l.h);
+                        ਜੇ(p > maxp){
                             maxp = p;
                             maxi = n;
                         }
                     }
-                    int class_index = entry_index(l, b, maxi, l.coords + 1);
-                    int obj_index = entry_index(l, b, maxi, l.coords);
-                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-                    if(l.output[obj_index] < .3) l.delta[obj_index] = l.object_scale * (.3 - l.output[obj_index]);
-                    else  l.delta[obj_index] = 0;
-                    l.delta[obj_index] = 0;
-                    ++class_count;
+                    ਪੂਰਨ class_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, maxi, l.coords + 1);
+                    ਪੂਰਨ obj_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, maxi, l.coords);
+                    delta_region_class(l.output, l.delta, class_ਸੂਚਕਾਂਕ, class, l.classes, l.softmax_ਰੁੱਖ, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+                    ਜੇ(l.output[obj_ਸੂਚਕਾਂਕ] < .3) l.delta[obj_ਸੂਚਕਾਂਕ] = l.object_scale * (.3 - l.output[obj_ਸੂਚਕਾਂਕ]);
+                    ਨਹੀਂਤਾਂ  l.delta[obj_ਸੂਚਕਾਂਕ] = 0;
+                    l.delta[obj_ਸੂਚਕਾਂਕ] = 0;
+                    ++class_ਗਿਣਤੀ;
                     onlyclass = 1;
-                    break;
+                    ਰੋਕੋ;
                 }
             }
-            if(onlyclass) continue;
+            ਜੇ(onlyclass) ਜਾਰੀ;
         }
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
-                    box pred = get_region_box(l.output, l.biases, n, box_index, i, j, l.w, l.h, l.w*l.h);
-                    float best_iou = 0;
-                    for(t = 0; t < 30; ++t){
-                        box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
-                            best_iou = iou;
+        ਲਈ (j = 0; j < l.h; ++j) {
+            ਲਈ (i = 0; i < l.w; ++i) {
+                ਲਈ (n = 0; n < l.n; ++n) {
+                    ਪੂਰਨ box_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h + j*l.w + i, 0);
+                    box pred = get_region_box(l.output, l.biases, n, box_ਸੂਚਕਾਂਕ, i, j, l.w, l.h, l.w*l.h);
+                    ਦਸ਼ਮਲਵ ਉੱਤਮ_iou = 0;
+                    ਲਈ(t = 0; t < 30; ++t){
+                        box truth = float_ਮੰਜ਼ਿਲ_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
+                        ਜੇ(!truth.x) ਰੋਕੋ;
+                        ਦਸ਼ਮਲਵ iou = box_iou(pred, truth);
+                        ਜੇ (iou > ਉੱਤਮ_iou) {
+                            ਉੱਤਮ_iou = iou;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, l.coords);
-                    avg_anyobj += l.output[obj_index];
-                    l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                    if(l.background) l.delta[obj_index] = l.noobject_scale * (1 - l.output[obj_index]);
-                    if (best_iou > l.thresh) {
-                        l.delta[obj_index] = 0;
+                    ਪੂਰਨ obj_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h + j*l.w + i, l.coords);
+                    avg_anyobj += l.output[obj_ਸੂਚਕਾਂਕ];
+                    l.delta[obj_ਸੂਚਕਾਂਕ] = l.noobject_scale * (0 - l.output[obj_ਸੂਚਕਾਂਕ]);
+                    ਜੇ(l.background) l.delta[obj_ਸੂਚਕਾਂਕ] = l.noobject_scale * (1 - l.output[obj_ਸੂਚਕਾਂਕ]);
+                    ਜੇ (ਉੱਤਮ_iou > l.thresh) {
+                        l.delta[obj_ਸੂਚਕਾਂਕ] = 0;
                     }
 
-                    if(*(net.seen) < 12800){
+                    ਜੇ(*(net.ਵੇਖਿਆ) < 12800){
                         box truth = {0};
                         truth.x = (i + .5)/l.w;
                         truth.y = (j + .5)/l.h;
                         truth.w = l.biases[2*n]/l.w;
                         truth.h = l.biases[2*n+1]/l.h;
-                        delta_region_box(truth, l.output, l.biases, n, box_index, i, j, l.w, l.h, l.delta, .01, l.w*l.h);
+                        delta_region_box(truth, l.output, l.biases, n, box_ਸੂਚਕਾਂਕ, i, j, l.w, l.h, l.delta, .01, l.w*l.h);
                     }
                 }
             }
         }
-        for(t = 0; t < 30; ++t){
-            box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
+        ਲਈ(t = 0; t < 30; ++t){
+            box truth = float_ਮੰਜ਼ਿਲ_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            ਜੇ(!truth.x) ਰੋਕੋ;
+            ਦਸ਼ਮਲਵ ਉੱਤਮ_iou = 0;
+            ਪੂਰਨ ਉੱਤਮ_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
-            box truth_shift = truth;
-            truth_shift.x = 0;
-            truth_shift.y = 0;
-            for(n = 0; n < l.n; ++n){
-                int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
-                box pred = get_region_box(l.output, l.biases, n, box_index, i, j, l.w, l.h, l.w*l.h);
-                if(l.bias_match){
+            box truth_ਖਿਸਕਾਓ = truth;
+            truth_ਖਿਸਕਾਓ.x = 0;
+            truth_ਖਿਸਕਾਓ.y = 0;
+            ਲਈ(n = 0; n < l.n; ++n){
+                ਪੂਰਨ box_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h + j*l.w + i, 0);
+                box pred = get_region_box(l.output, l.biases, n, box_ਸੂਚਕਾਂਕ, i, j, l.w, l.h, l.w*l.h);
+                ਜੇ(l.bias_ਮੇਲ){
                     pred.w = l.biases[2*n]/l.w;
                     pred.h = l.biases[2*n+1]/l.h;
                 }
                 pred.x = 0;
                 pred.y = 0;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
-                    best_iou = iou;
-                    best_n = n;
+                ਦਸ਼ਮਲਵ iou = box_iou(pred, truth_ਖਿਸਕਾਓ);
+                ਜੇ (iou > ਉੱਤਮ_iou){
+                    ਉੱਤਮ_iou = iou;
+                    ਉੱਤਮ_n = n;
                 }
             }
 
-            int box_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 0);
-            float iou = delta_region_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, l.delta, l.coord_scale *  (2 - truth.w*truth.h), l.w*l.h);
-            if(l.coords > 4){
-                int mask_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 4);
-                delta_region_mask(net.truth + t*(l.coords + 1) + b*l.truths + 5, l.output, l.coords - 4, mask_index, l.delta, l.w*l.h, l.mask_scale);
+            ਪੂਰਨ box_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, ਉੱਤਮ_n*l.w*l.h + j*l.w + i, 0);
+            ਦਸ਼ਮਲਵ iou = delta_region_box(truth, l.output, l.biases, ਉੱਤਮ_n, box_ਸੂਚਕਾਂਕ, i, j, l.w, l.h, l.delta, l.coord_scale *  (2 - truth.w*truth.h), l.w*l.h);
+            ਜੇ(l.coords > 4){
+                ਪੂਰਨ ਨਕਾਬ_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, ਉੱਤਮ_n*l.w*l.h + j*l.w + i, 4);
+                delta_region_ਨਕਾਬ(net.truth + t*(l.coords + 1) + b*l.truths + 5, l.output, l.coords - 4, ਨਕਾਬ_ਸੂਚਕਾਂਕ, l.delta, l.w*l.h, l.ਨਕਾਬ_scale);
             }
-            if(iou > .5) recall += 1;
+            ਜੇ(iou > .5) recall += 1;
             avg_iou += iou;
 
-            int obj_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords);
-            avg_obj += l.output[obj_index];
-            l.delta[obj_index] = l.object_scale * (1 - l.output[obj_index]);
-            if (l.rescore) {
-                l.delta[obj_index] = l.object_scale * (iou - l.output[obj_index]);
+            ਪੂਰਨ obj_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, ਉੱਤਮ_n*l.w*l.h + j*l.w + i, l.coords);
+            avg_obj += l.output[obj_ਸੂਚਕਾਂਕ];
+            l.delta[obj_ਸੂਚਕਾਂਕ] = l.object_scale * (1 - l.output[obj_ਸੂਚਕਾਂਕ]);
+            ਜੇ (l.rescore) {
+                l.delta[obj_ਸੂਚਕਾਂਕ] = l.object_scale * (iou - l.output[obj_ਸੂਚਕਾਂਕ]);
             }
-            if(l.background){
-                l.delta[obj_index] = l.object_scale * (0 - l.output[obj_index]);
+            ਜੇ(l.background){
+                l.delta[obj_ਸੂਚਕਾਂਕ] = l.object_scale * (0 - l.output[obj_ਸੂਚਕਾਂਕ]);
             }
 
-            int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
-            if (l.map) class = l.map[class];
-            int class_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords + 1);
-            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-            ++count;
-            ++class_count;
+            ਪੂਰਨ class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
+            ਜੇ (l.map) class = l.map[class];
+            ਪੂਰਨ class_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, ਉੱਤਮ_n*l.w*l.h + j*l.w + i, l.coords + 1);
+            delta_region_class(l.output, l.delta, class_ਸੂਚਕਾਂਕ, class, l.classes, l.softmax_ਰੁੱਖ, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+            ++ਗਿਣਤੀ_2;
+            ++class_ਗਿਣਤੀ;
         }
     }
-    *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, count);
+    *(l.ਲਾਗਤ_2) = ਘਾਤ(mag_array(l.delta, l.outputs * l.batch), 2);
+    ਲਿਖੋ("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/ਗਿਣਤੀ_2, avg_cat/class_ਗਿਣਤੀ, avg_obj/ਗਿਣਤੀ_2, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/ਗਿਣਤੀ_2, ਗਿਣਤੀ_2);
 }
 
-void backward_region_layer(const layer l, network net)
+ਖਾਲੀ backward_region_layer(ਅਚਲ layer l, ਜਾਲ net)
 {
     /*
        int b;
@@ -333,25 +333,25 @@ void backward_region_layer(const layer l, network net)
      */
 }
 
-void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+ਖਾਲੀ correct_region_boxes(detection *dets, ਪੂਰਨ n, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ netw, ਪੂਰਨ neth, ਪੂਰਨ relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    ਪੂਰਨ i;
+    ਪੂਰਨ new_w=0;
+    ਪੂਰਨ new_h=0;
+    ਜੇ (((ਦਸ਼ਮਲਵ)netw/w) < ((ਦਸ਼ਮਲਵ)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } ਨਹੀਂਤਾਂ {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    ਲਈ (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((ਦਸ਼ਮਲਵ)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((ਦਸ਼ਮਲਵ)new_h/neth); 
+        b.w *= (ਦਸ਼ਮਲਵ)netw/new_w;
+        b.h *= (ਦਸ਼ਮਲਵ)neth/new_h;
+        ਜੇ(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -361,22 +361,22 @@ void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int ne
     }
 }
 
-void get_region_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, float tree_thresh, int relative, detection *dets)
+ਖਾਲੀ get_region_detections(layer l, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ netw, ਪੂਰਨ neth, ਦਸ਼ਮਲਵ thresh, ਪੂਰਨ *map, ਦਸ਼ਮਲਵ ਰੁੱਖ_thresh, ਪੂਰਨ relative, detection *dets)
 {
-    int i,j,n,z;
-    float *predictions = l.output;
-    if (l.batch == 2) {
-        float *flip = l.output + l.outputs;
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w/2; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    for(z = 0; z < l.classes + l.coords + 1; ++z){
-                        int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                        int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                        float swap = flip[i1];
+    ਪੂਰਨ i,j,n,z;
+    ਦਸ਼ਮਲਵ *predictions = l.output;
+    ਜੇ (l.batch == 2) {
+        ਦਸ਼ਮਲਵ *flip = l.output + l.outputs;
+        ਲਈ (j = 0; j < l.h; ++j) {
+            ਲਈ (i = 0; i < l.w/2; ++i) {
+                ਲਈ (n = 0; n < l.n; ++n) {
+                    ਲਈ(z = 0; z < l.classes + l.coords + 1; ++z){
+                        ਪੂਰਨ i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                        ਪੂਰਨ i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                        ਦਸ਼ਮਲਵ ਅਦਲਾ_ਬਦਲੀ = flip[i1];
                         flip[i1] = flip[i2];
-                        flip[i2] = swap;
-                        if(z == 0){
+                        flip[i2] = ਅਦਲਾ_ਬਦਲੀ;
+                        ਜੇ(z == 0){
                             flip[i1] = -flip[i1];
                             flip[i2] = -flip[i2];
                         }
@@ -384,50 +384,50 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
                 }
             }
         }
-        for(i = 0; i < l.outputs; ++i){
+        ਲਈ(i = 0; i < l.outputs; ++i){
             l.output[i] = (l.output[i] + flip[i])/2.;
         }
     }
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int index = n*l.w*l.h + i;
-            for(j = 0; j < l.classes; ++j){
-                dets[index].prob[j] = 0;
+    ਲਈ (i = 0; i < l.w*l.h; ++i){
+        ਪੂਰਨ ਪੰਕਤੀ = i / l.w;
+        ਪੂਰਨ ਖਾਨਾ = i % l.w;
+        ਲਈ(n = 0; n < l.n; ++n){
+            ਪੂਰਨ ਸੂਚਕਾਂਕ = n*l.w*l.h + i;
+            ਲਈ(j = 0; j < l.classes; ++j){
+                dets[ਸੂਚਕਾਂਕ].prob[j] = 0;
             }
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, l.coords);
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            int mask_index = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float scale = l.background ? 1 : predictions[obj_index];
-            dets[index].bbox = get_region_box(predictions, l.biases, n, box_index, col, row, l.w, l.h, l.w*l.h);
-            dets[index].objectness = scale > thresh ? scale : 0;
-            if(dets[index].mask){
-                for(j = 0; j < l.coords - 4; ++j){
-                    dets[index].mask[j] = l.output[mask_index + j*l.w*l.h];
+            ਪੂਰਨ obj_ਸੂਚਕਾਂਕ  = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, l.coords);
+            ਪੂਰਨ box_ਸੂਚਕਾਂਕ  = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, 0);
+            ਪੂਰਨ ਨਕਾਬ_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, 4);
+            ਦਸ਼ਮਲਵ scale = l.background ? 1 : predictions[obj_ਸੂਚਕਾਂਕ];
+            dets[ਸੂਚਕਾਂਕ].bbox = get_region_box(predictions, l.biases, n, box_ਸੂਚਕਾਂਕ, ਖਾਨਾ, ਪੰਕਤੀ, l.w, l.h, l.w*l.h);
+            dets[ਸੂਚਕਾਂਕ].objectness = scale > thresh ? scale : 0;
+            ਜੇ(dets[ਸੂਚਕਾਂਕ].ਨਕਾਬ){
+                ਲਈ(j = 0; j < l.coords - 4; ++j){
+                    dets[ਸੂਚਕਾਂਕ].ਨਕਾਬ[j] = l.output[ਨਕਾਬ_ਸੂਚਕਾਂਕ + j*l.w*l.h];
                 }
             }
 
-            int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + !l.background);
-            if(l.softmax_tree){
+            ਪੂਰਨ class_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, l.coords + !l.background);
+            ਜੇ(l.softmax_ਰੁੱਖ){
 
-                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_tree, 0, l.w*l.h);
-                if(map){
-                    for(j = 0; j < 200; ++j){
-                        int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
-                        float prob = scale*predictions[class_index];
-                        dets[index].prob[j] = (prob > thresh) ? prob : 0;
+                hierarchy_predictions(predictions + class_ਸੂਚਕਾਂਕ, l.classes, l.softmax_ਰੁੱਖ, 0, l.w*l.h);
+                ਜੇ(map){
+                    ਲਈ(j = 0; j < 200; ++j){
+                        ਪੂਰਨ class_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
+                        ਦਸ਼ਮਲਵ prob = scale*predictions[class_ਸੂਚਕਾਂਕ];
+                        dets[ਸੂਚਕਾਂਕ].prob[j] = (prob > thresh) ? prob : 0;
                     }
-                } else {
-                    int j =  hierarchy_top_prediction(predictions + class_index, l.softmax_tree, tree_thresh, l.w*l.h);
-                    dets[index].prob[j] = (scale > thresh) ? scale : 0;
+                } ਨਹੀਂਤਾਂ {
+                    ਪੂਰਨ j =  hierarchy_ਸਿਖਰ_prediction(predictions + class_ਸੂਚਕਾਂਕ, l.softmax_ਰੁੱਖ, ਰੁੱਖ_thresh, l.w*l.h);
+                    dets[ਸੂਚਕਾਂਕ].prob[j] = (scale > thresh) ? scale : 0;
                 }
-            } else {
-                if(dets[index].objectness){
-                    for(j = 0; j < l.classes; ++j){
-                        int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + j);
-                        float prob = scale*predictions[class_index];
-                        dets[index].prob[j] = (prob > thresh) ? prob : 0;
+            } ਨਹੀਂਤਾਂ {
+                ਜੇ(dets[ਸੂਚਕਾਂਕ].objectness){
+                    ਲਈ(j = 0; j < l.classes; ++j){
+                        ਪੂਰਨ class_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, l.coords + 1 + j);
+                        ਦਸ਼ਮਲਵ prob = scale*predictions[class_ਸੂਚਕਾਂਕ];
+                        dets[ਸੂਚਕਾਂਕ].prob[j] = (prob > thresh) ? prob : 0;
                     }
                 }
             }
@@ -436,71 +436,71 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
     correct_region_boxes(dets, l.w*l.h*l.n, w, h, netw, neth, relative);
 }
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
 
-void forward_region_layer_gpu(const layer l, network net)
+ਖਾਲੀ forward_region_layer_gpu(ਅਚਲ layer l, ਜਾਲ net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
-            if(l.coords > 4){
-                index = entry_index(l, b, n*l.w*l.h, 4);
-                activate_array_gpu(l.output_gpu + index, (l.coords - 4)*l.w*l.h, LOGISTIC);
+    copy_gpu(l.batch*l.inputs, net.ਨਿਵੇਸ਼_gpu, 1, l.output_gpu, 1);
+    ਪੂਰਨ b, n;
+    ਲਈ (b = 0; b < l.batch; ++b){
+        ਲਈ(n = 0; n < l.n; ++n){
+            ਪੂਰਨ ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, 0);
+            activate_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ, 2*l.w*l.h, LOGISTIC);
+            ਜੇ(l.coords > 4){
+                ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, 4);
+                activate_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ, (l.coords - 4)*l.w*l.h, LOGISTIC);
             }
-            index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) activate_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
+            ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, l.coords);
+            ਜੇ(!l.background) activate_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ,   l.w*l.h, LOGISTIC);
+            ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, l.coords + 1);
+            ਜੇ(!l.softmax && !l.softmax_ਰੁੱਖ) activate_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
-        int index = entry_index(l, 0, 0, l.coords + 1);
-        softmax_tree(net.input_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_tree);
-    } else if (l.softmax) {
-        int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_gpu(net.input_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
+    ਜੇ (l.softmax_ਰੁੱਖ){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, 0, l.coords + 1);
+        softmax_ਰੁੱਖ(net.ਨਿਵੇਸ਼_gpu + ਸੂਚਕਾਂਕ, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + ਸੂਚਕਾਂਕ, *l.softmax_ਰੁੱਖ);
+    } ਨਹੀਂਤਾਂ ਜੇ (l.softmax) {
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, 0, l.coords + !l.background);
+        softmax_gpu(net.ਨਿਵੇਸ਼_gpu + ਸੂਚਕਾਂਕ, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + ਸੂਚਕਾਂਕ);
     }
-    if(!net.train || l.onlyforward){
+    ਜੇ(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ਵਾਪਸ;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.ਨਿਵੇਸ਼, l.batch*l.inputs);
     forward_region_layer(l, net);
     //cuda_push_array(l.output_gpu, l.output, l.batch*l.outputs);
-    if(!net.train) return;
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    ਜੇ(!net.train) ਵਾਪਸ;
+    cuda_ਧੱਕੋ_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_region_layer_gpu(const layer l, network net)
+ਖਾਲੀ backward_region_layer_gpu(ਅਚਲ layer l, ਜਾਲ net)
 {
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            gradient_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC, l.delta_gpu + index);
-            if(l.coords > 4){
-                index = entry_index(l, b, n*l.w*l.h, 4);
-                gradient_array_gpu(l.output_gpu + index, (l.coords - 4)*l.w*l.h, LOGISTIC, l.delta_gpu + index);
+    ਪੂਰਨ b, n;
+    ਲਈ (b = 0; b < l.batch; ++b){
+        ਲਈ(n = 0; n < l.n; ++n){
+            ਪੂਰਨ ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, 0);
+            gradient_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ, 2*l.w*l.h, LOGISTIC, l.delta_gpu + ਸੂਚਕਾਂਕ);
+            ਜੇ(l.coords > 4){
+                ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, 4);
+                gradient_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ, (l.coords - 4)*l.w*l.h, LOGISTIC, l.delta_gpu + ਸੂਚਕਾਂਕ);
             }
-            index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) gradient_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC, l.delta_gpu + index);
+            ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, b, n*l.w*l.h, l.coords);
+            ਜੇ(!l.background) gradient_array_gpu(l.output_gpu + ਸੂਚਕਾਂਕ,   l.w*l.h, LOGISTIC, l.delta_gpu + ਸੂਚਕਾਂਕ);
         }
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#ਜੇ_ਅੰਤ
 
-void zero_objectness(layer l)
+ਖਾਲੀ zero_objectness(layer l)
 {
-    int i, n;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index = entry_index(l, 0, n*l.w*l.h + i, l.coords);
-            l.output[obj_index] = 0;
+    ਪੂਰਨ i, n;
+    ਲਈ (i = 0; i < l.w*l.h; ++i){
+        ਲਈ(n = 0; n < l.n; ++n){
+            ਪੂਰਨ obj_ਸੂਚਕਾਂਕ = ਇੰਦਰਾਜ_ਸੂਚਕਾਂਕ(l, 0, n*l.w*l.h + i, l.coords);
+            l.output[obj_ਸੂਚਕਾਂਕ] = 0;
         }
     }
 }

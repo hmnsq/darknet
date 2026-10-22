@@ -1,262 +1,262 @@
-#include "image.h"
-#include "utils.h"
-#include "blas.h"
-#include "cuda.h"
-#include <stdio.h>
-#include <math.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ "image.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "blas.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <math.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ STB_IMAGE_IMPLEMENTATION
+#ਅਨ੍ਤਰ੍ਭਾਵ "stb_image.h"
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ STB_IMAGE_WRITE_IMPLEMENTATION
+#ਅਨ੍ਤਰ੍ਭਾਵ "stb_image_write.h"
 
-int windows = 0;
+ਪੂਰਨ windows = 0;
 
-float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
+ਦਸ਼ਮਲਵ colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
 
-float get_color(int c, int x, int max)
+ਦਸ਼ਮਲਵ get_color(ਪੂਰਨ c, ਪੂਰਨ x, ਪੂਰਨ max)
 {
-    float ratio = ((float)x/max)*5;
-    int i = floor(ratio);
-    int j = ceil(ratio);
-    ratio -= i;
-    float r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
+    ਦਸ਼ਮਲਵ ਅਨੁਪਾਤ = ((ਦਸ਼ਮਲਵ)x/max)*5;
+    ਪੂਰਨ i = floor(ਅਨੁਪਾਤ);
+    ਪੂਰਨ j = ceil(ਅਨੁਪਾਤ);
+    ਅਨੁਪਾਤ -= i;
+    ਦਸ਼ਮਲਵ r = (1-ਅਨੁਪਾਤ) * colors[i][c] + ਅਨੁਪਾਤ*colors[j][c];
     //printf("%f\n", r);
-    return r;
+    ਵਾਪਸ r;
 }
 
-image mask_to_rgb(image mask)
+image ਨਕਾਬ_ਮੰਜ਼ਿਲ_rgb(image ਨਕਾਬ)
 {
-    int n = mask.c;
-    image im = make_image(mask.w, mask.h, 3);
-    int i, j;
-    for(j = 0; j < n; ++j){
-        int offset = j*123457 % n;
-        float red = get_color(2,offset,n);
-        float green = get_color(1,offset,n);
-        float blue = get_color(0,offset,n);
-        for(i = 0; i < im.w*im.h; ++i){
-            im.data[i + 0*im.w*im.h] += mask.data[j*im.h*im.w + i]*red;
-            im.data[i + 1*im.w*im.h] += mask.data[j*im.h*im.w + i]*green;
-            im.data[i + 2*im.w*im.h] += mask.data[j*im.h*im.w + i]*blue;
+    ਪੂਰਨ n = ਨਕਾਬ.c;
+    image im = make_image(ਨਕਾਬ.w, ਨਕਾਬ.h, 3);
+    ਪੂਰਨ i, j;
+    ਲਈ(j = 0; j < n; ++j){
+        ਪੂਰਨ ਵਿੱਥ = j*123457 % n;
+        ਦਸ਼ਮਲਵ red = get_color(2,ਵਿੱਥ,n);
+        ਦਸ਼ਮਲਵ green = get_color(1,ਵਿੱਥ,n);
+        ਦਸ਼ਮਲਵ blue = get_color(0,ਵਿੱਥ,n);
+        ਲਈ(i = 0; i < im.w*im.h; ++i){
+            im.ਅੰਕੜੇ[i + 0*im.w*im.h] += ਨਕਾਬ.ਅੰਕੜੇ[j*im.h*im.w + i]*red;
+            im.ਅੰਕੜੇ[i + 1*im.w*im.h] += ਨਕਾਬ.ਅੰਕੜੇ[j*im.h*im.w + i]*green;
+            im.ਅੰਕੜੇ[i + 2*im.w*im.h] += ਨਕਾਬ.ਅੰਕੜੇ[j*im.h*im.w + i]*blue;
         }
     }
-    return im;
+    ਵਾਪਸ im;
 }
 
-static float get_pixel(image m, int x, int y, int c)
+ਸਥਿਰ ਦਸ਼ਮਲਵ get_pixel(image m, ਪੂਰਨ x, ਪੂਰਨ y, ਪੂਰਨ c)
 {
-    assert(x < m.w && y < m.h && c < m.c);
-    return m.data[c*m.h*m.w + y*m.w + x];
+    ਪ੍ਰਤਿਜ੍ਞਾ(x < m.w && y < m.h && c < m.c);
+    ਵਾਪਸ m.ਅੰਕੜੇ[c*m.h*m.w + y*m.w + x];
 }
-static float get_pixel_extend(image m, int x, int y, int c)
+ਸਥਿਰ ਦਸ਼ਮਲਵ get_pixel_extend(image m, ਪੂਰਨ x, ਪੂਰਨ y, ਪੂਰਨ c)
 {
-    if(x < 0 || x >= m.w || y < 0 || y >= m.h) return 0;
+    ਜੇ(x < 0 || x >= m.w || y < 0 || y >= m.h) ਵਾਪਸ 0;
     /*
     if(x < 0) x = 0;
     if(x >= m.w) x = m.w-1;
     if(y < 0) y = 0;
     if(y >= m.h) y = m.h-1;
     */
-    if(c < 0 || c >= m.c) return 0;
-    return get_pixel(m, x, y, c);
+    ਜੇ(c < 0 || c >= m.c) ਵਾਪਸ 0;
+    ਵਾਪਸ get_pixel(m, x, y, c);
 }
-static void set_pixel(image m, int x, int y, int c, float val)
+ਸਥਿਰ ਖਾਲੀ ਸੈੱਟ_pixel(image m, ਪੂਰਨ x, ਪੂਰਨ y, ਪੂਰਨ c, ਦਸ਼ਮਲਵ val)
 {
-    if (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) return;
-    assert(x < m.w && y < m.h && c < m.c);
-    m.data[c*m.h*m.w + y*m.w + x] = val;
+    ਜੇ (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) ਵਾਪਸ;
+    ਪ੍ਰਤਿਜ੍ਞਾ(x < m.w && y < m.h && c < m.c);
+    m.ਅੰਕੜੇ[c*m.h*m.w + y*m.w + x] = val;
 }
-static void add_pixel(image m, int x, int y, int c, float val)
+ਸਥਿਰ ਖਾਲੀ ਜੋੜੋ_pixel(image m, ਪੂਰਨ x, ਪੂਰਨ y, ਪੂਰਨ c, ਦਸ਼ਮਲਵ val)
 {
-    assert(x < m.w && y < m.h && c < m.c);
-    m.data[c*m.h*m.w + y*m.w + x] += val;
+    ਪ੍ਰਤਿਜ੍ਞਾ(x < m.w && y < m.h && c < m.c);
+    m.ਅੰਕੜੇ[c*m.h*m.w + y*m.w + x] += val;
 }
 
-static float bilinear_interpolate(image im, float x, float y, int c)
+ਸਥਿਰ ਦਸ਼ਮਲਵ bilinear_interpolate(image im, ਦਸ਼ਮਲਵ x, ਦਸ਼ਮਲਵ y, ਪੂਰਨ c)
 {
-    int ix = (int) floorf(x);
-    int iy = (int) floorf(y);
+    ਪੂਰਨ ix = (ਪੂਰਨ) floorf(x);
+    ਪੂਰਨ iy = (ਪੂਰਨ) floorf(y);
 
-    float dx = x - ix;
-    float dy = y - iy;
+    ਦਸ਼ਮਲਵ dx = x - ix;
+    ਦਸ਼ਮਲਵ dy = y - iy;
 
-    float val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
+    ਦਸ਼ਮਲਵ val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
         dy     * (1-dx) * get_pixel_extend(im, ix, iy+1, c) + 
         (1-dy) *   dx   * get_pixel_extend(im, ix+1, iy, c) +
         dy     *   dx   * get_pixel_extend(im, ix+1, iy+1, c);
-    return val;
+    ਵਾਪਸ val;
 }
 
 
-void composite_image(image source, image dest, int dx, int dy)
+ਖਾਲੀ ਸੰਯੁਕਤ_image(image ਸਰੋਤ, image dest, ਪੂਰਨ dx, ਪੂਰਨ dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x, y, k);
-                float val2 = get_pixel_extend(dest, dx+x, dy+y, k);
-                set_pixel(dest, dx+x, dy+y, k, val * val2);
+    ਪੂਰਨ x,y,k;
+    ਲਈ(k = 0; k < ਸਰੋਤ.c; ++k){
+        ਲਈ(y = 0; y < ਸਰੋਤ.h; ++y){
+            ਲਈ(x = 0; x < ਸਰੋਤ.w; ++x){
+                ਦਸ਼ਮਲਵ val = get_pixel(ਸਰੋਤ, x, y, k);
+                ਦਸ਼ਮਲਵ val2 = get_pixel_extend(dest, dx+x, dy+y, k);
+                ਸੈੱਟ_pixel(dest, dx+x, dy+y, k, val * val2);
             }
         }
     }
 }
 
-image border_image(image a, int border)
+image border_image(image a, ਪੂਰਨ border)
 {
     image b = make_image(a.w + 2*border, a.h + 2*border, a.c);
-    int x,y,k;
-    for(k = 0; k < b.c; ++k){
-        for(y = 0; y < b.h; ++y){
-            for(x = 0; x < b.w; ++x){
-                float val = get_pixel_extend(a, x - border, y - border, k);
-                if(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
-                set_pixel(b, x, y, k, val);
+    ਪੂਰਨ x,y,k;
+    ਲਈ(k = 0; k < b.c; ++k){
+        ਲਈ(y = 0; y < b.h; ++y){
+            ਲਈ(x = 0; x < b.w; ++x){
+                ਦਸ਼ਮਲਵ val = get_pixel_extend(a, x - border, y - border, k);
+                ਜੇ(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
+                ਸੈੱਟ_pixel(b, x, y, k, val);
             }
         }
     }
-    return b;
+    ਵਾਪਸ b;
 }
 
-image tile_images(image a, image b, int dx)
+image tile_images(image a, image b, ਪੂਰਨ dx)
 {
-    if(a.w == 0) return copy_image(b);
+    ਜੇ(a.w == 0) ਵਾਪਸ copy_image(b);
     image c = make_image(a.w + b.w + dx, (a.h > b.h) ? a.h : b.h, (a.c > b.c) ? a.c : b.c);
-    fill_cpu(c.w*c.h*c.c, 1, c.data, 1);
+    fill_cpu(c.w*c.h*c.c, 1, c.ਅੰਕੜੇ, 1);
     embed_image(a, c, 0, 0); 
-    composite_image(b, c, a.w + dx, 0);
-    return c;
+    ਸੰਯੁਕਤ_image(b, c, a.w + dx, 0);
+    ਵਾਪਸ c;
 }
 
-image get_label(image **characters, char *string, int size)
+image get_label(image **characters, ਅੱਖਰ *string, ਪੂਰਨ ਮਾਪ)
 {
-    size = size/10;
-    if(size > 7) size = 7;
-    image label = make_empty_image(0,0,0);
-    while(*string){
-        image l = characters[size][(int)*string];
-        image n = tile_images(label, l, -size - 1 + (size+1)/2);
+    ਮਾਪ = ਮਾਪ/10;
+    ਜੇ(ਮਾਪ > 7) ਮਾਪ = 7;
+    image label = make_ਖਾਲੀ_ਥਾਵਾਂ_image(0,0,0);
+    ਜਦੋਂ(*string){
+        image l = characters[ਮਾਪ][(ਪੂਰਨ)*string];
+        image n = tile_images(label, l, -ਮਾਪ - 1 + (ਮਾਪ+1)/2);
         free_image(label);
         label = n;
         ++string;
     }
     image b = border_image(label, label.h*.25);
     free_image(label);
-    return b;
+    ਵਾਪਸ b;
 }
 
-void draw_label(image a, int r, int c, image label, const float *rgb)
+ਖਾਲੀ draw_label(image a, ਪੂਰਨ r, ਪੂਰਨ c, image label, ਅਚਲ ਦਸ਼ਮਲਵ *rgb)
 {
-    int w = label.w;
-    int h = label.h;
-    if (r - h >= 0) r = r - h;
+    ਪੂਰਨ w = label.w;
+    ਪੂਰਨ h = label.h;
+    ਜੇ (r - h >= 0) r = r - h;
 
-    int i, j, k;
-    for(j = 0; j < h && j + r < a.h; ++j){
-        for(i = 0; i < w && i + c < a.w; ++i){
-            for(k = 0; k < label.c; ++k){
-                float val = get_pixel(label, i, j, k);
-                set_pixel(a, i+c, j+r, k, rgb[k] * val);
+    ਪੂਰਨ i, j, k;
+    ਲਈ(j = 0; j < h && j + r < a.h; ++j){
+        ਲਈ(i = 0; i < w && i + c < a.w; ++i){
+            ਲਈ(k = 0; k < label.c; ++k){
+                ਦਸ਼ਮਲਵ val = get_pixel(label, i, j, k);
+                ਸੈੱਟ_pixel(a, i+c, j+r, k, rgb[k] * val);
             }
         }
     }
 }
 
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b)
+ਖਾਲੀ draw_box(image a, ਪੂਰਨ x1, ਪੂਰਨ y1, ਪੂਰਨ x2, ਪੂਰਨ y2, ਦਸ਼ਮਲਵ r, ਦਸ਼ਮਲਵ g, ਦਸ਼ਮਲਵ b)
 {
     //normalize_image(a);
-    int i;
-    if(x1 < 0) x1 = 0;
-    if(x1 >= a.w) x1 = a.w-1;
-    if(x2 < 0) x2 = 0;
-    if(x2 >= a.w) x2 = a.w-1;
+    ਪੂਰਨ i;
+    ਜੇ(x1 < 0) x1 = 0;
+    ਜੇ(x1 >= a.w) x1 = a.w-1;
+    ਜੇ(x2 < 0) x2 = 0;
+    ਜੇ(x2 >= a.w) x2 = a.w-1;
 
-    if(y1 < 0) y1 = 0;
-    if(y1 >= a.h) y1 = a.h-1;
-    if(y2 < 0) y2 = 0;
-    if(y2 >= a.h) y2 = a.h-1;
+    ਜੇ(y1 < 0) y1 = 0;
+    ਜੇ(y1 >= a.h) y1 = a.h-1;
+    ਜੇ(y2 < 0) y2 = 0;
+    ਜੇ(y2 >= a.h) y2 = a.h-1;
 
-    for(i = x1; i <= x2; ++i){
-        a.data[i + y1*a.w + 0*a.w*a.h] = r;
-        a.data[i + y2*a.w + 0*a.w*a.h] = r;
+    ਲਈ(i = x1; i <= x2; ++i){
+        a.ਅੰਕੜੇ[i + y1*a.w + 0*a.w*a.h] = r;
+        a.ਅੰਕੜੇ[i + y2*a.w + 0*a.w*a.h] = r;
 
-        a.data[i + y1*a.w + 1*a.w*a.h] = g;
-        a.data[i + y2*a.w + 1*a.w*a.h] = g;
+        a.ਅੰਕੜੇ[i + y1*a.w + 1*a.w*a.h] = g;
+        a.ਅੰਕੜੇ[i + y2*a.w + 1*a.w*a.h] = g;
 
-        a.data[i + y1*a.w + 2*a.w*a.h] = b;
-        a.data[i + y2*a.w + 2*a.w*a.h] = b;
+        a.ਅੰਕੜੇ[i + y1*a.w + 2*a.w*a.h] = b;
+        a.ਅੰਕੜੇ[i + y2*a.w + 2*a.w*a.h] = b;
     }
-    for(i = y1; i <= y2; ++i){
-        a.data[x1 + i*a.w + 0*a.w*a.h] = r;
-        a.data[x2 + i*a.w + 0*a.w*a.h] = r;
+    ਲਈ(i = y1; i <= y2; ++i){
+        a.ਅੰਕੜੇ[x1 + i*a.w + 0*a.w*a.h] = r;
+        a.ਅੰਕੜੇ[x2 + i*a.w + 0*a.w*a.h] = r;
 
-        a.data[x1 + i*a.w + 1*a.w*a.h] = g;
-        a.data[x2 + i*a.w + 1*a.w*a.h] = g;
+        a.ਅੰਕੜੇ[x1 + i*a.w + 1*a.w*a.h] = g;
+        a.ਅੰਕੜੇ[x2 + i*a.w + 1*a.w*a.h] = g;
 
-        a.data[x1 + i*a.w + 2*a.w*a.h] = b;
-        a.data[x2 + i*a.w + 2*a.w*a.h] = b;
+        a.ਅੰਕੜੇ[x1 + i*a.w + 2*a.w*a.h] = b;
+        a.ਅੰਕੜੇ[x2 + i*a.w + 2*a.w*a.h] = b;
     }
 }
 
-void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
+ਖਾਲੀ draw_box_ਚੌੜਾਈ(image a, ਪੂਰਨ x1, ਪੂਰਨ y1, ਪੂਰਨ x2, ਪੂਰਨ y2, ਪੂਰਨ w, ਦਸ਼ਮਲਵ r, ਦਸ਼ਮਲਵ g, ਦਸ਼ਮਲਵ b)
 {
-    int i;
-    for(i = 0; i < w; ++i){
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < w; ++i){
         draw_box(a, x1+i, y1+i, x2-i, y2-i, r, g, b);
     }
 }
 
-void draw_bbox(image a, box bbox, int w, float r, float g, float b)
+ਖਾਲੀ draw_bbox(image a, box bbox, ਪੂਰਨ w, ਦਸ਼ਮਲਵ r, ਦਸ਼ਮਲਵ g, ਦਸ਼ਮਲਵ b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
-    int bot   = (bbox.y+bbox.h/2)*a.h;
+    ਪੂਰਨ ਖੱਬਾ  = (bbox.x-bbox.w/2)*a.w;
+    ਪੂਰਨ ਸੱਜਾ = (bbox.x+bbox.w/2)*a.w;
+    ਪੂਰਨ ਸਿਖਰ   = (bbox.y-bbox.h/2)*a.h;
+    ਪੂਰਨ bot   = (bbox.y+bbox.h/2)*a.h;
 
-    int i;
-    for(i = 0; i < w; ++i){
-        draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < w; ++i){
+        draw_box(a, ਖੱਬਾ+i, ਸਿਖਰ+i, ਸੱਜਾ-i, bot-i, r, g, b);
     }
 }
 
-image **load_alphabet()
+image **ਲੱਦੋ_alphabet()
 {
-    int i, j;
-    const int nsize = 8;
-    image **alphabets = calloc(nsize, sizeof(image));
-    for(j = 0; j < nsize; ++j){
-        alphabets[j] = calloc(128, sizeof(image));
-        for(i = 32; i < 127; ++i){
-            char buff[256];
+    ਪੂਰਨ i, j;
+    ਅਚਲ ਪੂਰਨ nsize = 8;
+    image **alphabets = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(nsize, ਆਕਾਰ(image));
+    ਲਈ(j = 0; j < nsize; ++j){
+        alphabets[j] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(128, ਆਕਾਰ(image));
+        ਲਈ(i = 32; i < 127; ++i){
+            ਅੱਖਰ buff[256];
             sprintf(buff, "data/labels/%d_%d.png", i, j);
-            alphabets[j][i] = load_image_color(buff, 0, 0);
+            alphabets[j][i] = ਲੱਦੋ_image_color(buff, 0, 0);
         }
     }
-    return alphabets;
+    ਵਾਪਸ alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+ਖਾਲੀ draw_detections(image im, detection *dets, ਪੂਰਨ ਅੰਕ, ਦਸ਼ਮਲਵ thresh, ਅੱਖਰ **ਨਾਂ, image **alphabet, ਪੂਰਨ classes)
 {
-    int i,j;
+    ਪੂਰਨ i,j;
 
-    for(i = 0; i < num; ++i){
-        char labelstr[4096] = {0};
-        int class = -1;
-        for(j = 0; j < classes; ++j){
-            if (dets[i].prob[j] > thresh){
-                if (class < 0) {
-                    strcat(labelstr, names[j]);
+    ਲਈ(i = 0; i < ਅੰਕ; ++i){
+        ਅੱਖਰ labelstr[4096] = {0};
+        ਪੂਰਨ class = -1;
+        ਲਈ(j = 0; j < classes; ++j){
+            ਜੇ (dets[i].prob[j] > thresh){
+                ਜੇ (class < 0) {
+                    strcat(labelstr, ਨਾਂ[j]);
                     class = j;
-                } else {
+                } ਨਹੀਂਤਾਂ {
                     strcat(labelstr, ", ");
-                    strcat(labelstr, names[j]);
+                    strcat(labelstr, ਨਾਂ[j]);
                 }
-                printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
+                ਲਿਖੋ("%s: %.0f%%\n", ਨਾਂ[j], dets[i].prob[j]*100);
             }
         }
-        if(class >= 0){
-            int width = im.h * .006;
+        ਜੇ(class >= 0){
+            ਪੂਰਨ ਚੌੜਾਈ = im.h * .006;
 
             /*
                if(0){
@@ -266,11 +266,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
              */
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
-            int offset = class*123457 % classes;
-            float red = get_color(2,offset,classes);
-            float green = get_color(1,offset,classes);
-            float blue = get_color(0,offset,classes);
-            float rgb[3];
+            ਪੂਰਨ ਵਿੱਥ = class*123457 % classes;
+            ਦਸ਼ਮਲਵ red = get_color(2,ਵਿੱਥ,classes);
+            ਦਸ਼ਮਲਵ green = get_color(1,ਵਿੱਥ,classes);
+            ਦਸ਼ਮਲਵ blue = get_color(0,ਵਿੱਥ,classes);
+            ਦਸ਼ਮਲਵ rgb[3];
 
             //width = prob*20+2;
 
@@ -280,307 +280,307 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             box b = dets[i].bbox;
             //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
-            int bot   = (b.y+b.h/2.)*im.h;
+            ਪੂਰਨ ਖੱਬਾ  = (b.x-b.w/2.)*im.w;
+            ਪੂਰਨ ਸੱਜਾ = (b.x+b.w/2.)*im.w;
+            ਪੂਰਨ ਸਿਖਰ   = (b.y-b.h/2.)*im.h;
+            ਪੂਰਨ bot   = (b.y+b.h/2.)*im.h;
 
-            if(left < 0) left = 0;
-            if(right > im.w-1) right = im.w-1;
-            if(top < 0) top = 0;
-            if(bot > im.h-1) bot = im.h-1;
+            ਜੇ(ਖੱਬਾ < 0) ਖੱਬਾ = 0;
+            ਜੇ(ਸੱਜਾ > im.w-1) ਸੱਜਾ = im.w-1;
+            ਜੇ(ਸਿਖਰ < 0) ਸਿਖਰ = 0;
+            ਜੇ(bot > im.h-1) bot = im.h-1;
 
-            draw_box_width(im, left, top, right, bot, width, red, green, blue);
-            if (alphabet) {
+            draw_box_ਚੌੜਾਈ(im, ਖੱਬਾ, ਸਿਖਰ, ਸੱਜਾ, bot, ਚੌੜਾਈ, red, green, blue);
+            ਜੇ (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.03));
-                draw_label(im, top + width, left, label, rgb);
+                draw_label(im, ਸਿਖਰ + ਚੌੜਾਈ, ਖੱਬਾ, label, rgb);
                 free_image(label);
             }
-            if (dets[i].mask){
-                image mask = float_to_image(14, 14, 1, dets[i].mask);
-                image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
-                image tmask = threshold_image(resized_mask, .5);
-                embed_image(tmask, im, left, top);
-                free_image(mask);
-                free_image(resized_mask);
+            ਜੇ (dets[i].ਨਕਾਬ){
+                image ਨਕਾਬ = float_ਮੰਜ਼ਿਲ_image(14, 14, 1, dets[i].ਨਕਾਬ);
+                image resized_ਨਕਾਬ = resize_image(ਨਕਾਬ, b.w*im.w, b.h*im.h);
+                image tmask = ਹੱਦ_image(resized_ਨਕਾਬ, .5);
+                embed_image(tmask, im, ਖੱਬਾ, ਸਿਖਰ);
+                free_image(ਨਕਾਬ);
+                free_image(resized_ਨਕਾਬ);
                 free_image(tmask);
             }
         }
     }
 }
 
-void transpose_image(image im)
+ਖਾਲੀ transpose_image(image im)
 {
-    assert(im.w == im.h);
-    int n, m;
-    int c;
-    for(c = 0; c < im.c; ++c){
-        for(n = 0; n < im.w-1; ++n){
-            for(m = n + 1; m < im.w; ++m){
-                float swap = im.data[m + im.w*(n + im.h*c)];
-                im.data[m + im.w*(n + im.h*c)] = im.data[n + im.w*(m + im.h*c)];
-                im.data[n + im.w*(m + im.h*c)] = swap;
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.w == im.h);
+    ਪੂਰਨ n, m;
+    ਪੂਰਨ c;
+    ਲਈ(c = 0; c < im.c; ++c){
+        ਲਈ(n = 0; n < im.w-1; ++n){
+            ਲਈ(m = n + 1; m < im.w; ++m){
+                ਦਸ਼ਮਲਵ ਅਦਲਾ_ਬਦਲੀ = im.ਅੰਕੜੇ[m + im.w*(n + im.h*c)];
+                im.ਅੰਕੜੇ[m + im.w*(n + im.h*c)] = im.ਅੰਕੜੇ[n + im.w*(m + im.h*c)];
+                im.ਅੰਕੜੇ[n + im.w*(m + im.h*c)] = ਅਦਲਾ_ਬਦਲੀ;
             }
         }
     }
 }
 
-void rotate_image_cw(image im, int times)
+ਖਾਲੀ rotate_image_cw(image im, ਪੂਰਨ times)
 {
-    assert(im.w == im.h);
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.w == im.h);
     times = (times + 400) % 4;
-    int i, x, y, c;
-    int n = im.w;
-    for(i = 0; i < times; ++i){
-        for(c = 0; c < im.c; ++c){
-            for(x = 0; x < n/2; ++x){
-                for(y = 0; y < (n-1)/2 + 1; ++y){
-                    float temp = im.data[y + im.w*(x + im.h*c)];
-                    im.data[y + im.w*(x + im.h*c)] = im.data[n-1-x + im.w*(y + im.h*c)];
-                    im.data[n-1-x + im.w*(y + im.h*c)] = im.data[n-1-y + im.w*(n-1-x + im.h*c)];
-                    im.data[n-1-y + im.w*(n-1-x + im.h*c)] = im.data[x + im.w*(n-1-y + im.h*c)];
-                    im.data[x + im.w*(n-1-y + im.h*c)] = temp;
+    ਪੂਰਨ i, x, y, c;
+    ਪੂਰਨ n = im.w;
+    ਲਈ(i = 0; i < times; ++i){
+        ਲਈ(c = 0; c < im.c; ++c){
+            ਲਈ(x = 0; x < n/2; ++x){
+                ਲਈ(y = 0; y < (n-1)/2 + 1; ++y){
+                    ਦਸ਼ਮਲਵ ਆਰਜ਼ੀ = im.ਅੰਕੜੇ[y + im.w*(x + im.h*c)];
+                    im.ਅੰਕੜੇ[y + im.w*(x + im.h*c)] = im.ਅੰਕੜੇ[n-1-x + im.w*(y + im.h*c)];
+                    im.ਅੰਕੜੇ[n-1-x + im.w*(y + im.h*c)] = im.ਅੰਕੜੇ[n-1-y + im.w*(n-1-x + im.h*c)];
+                    im.ਅੰਕੜੇ[n-1-y + im.w*(n-1-x + im.h*c)] = im.ਅੰਕੜੇ[x + im.w*(n-1-y + im.h*c)];
+                    im.ਅੰਕੜੇ[x + im.w*(n-1-y + im.h*c)] = ਆਰਜ਼ੀ;
                 }
             }
         }
     }
 }
 
-void flip_image(image a)
+ਖਾਲੀ flip_image(image a)
 {
-    int i,j,k;
-    for(k = 0; k < a.c; ++k){
-        for(i = 0; i < a.h; ++i){
-            for(j = 0; j < a.w/2; ++j){
-                int index = j + a.w*(i + a.h*(k));
-                int flip = (a.w - j - 1) + a.w*(i + a.h*(k));
-                float swap = a.data[flip];
-                a.data[flip] = a.data[index];
-                a.data[index] = swap;
+    ਪੂਰਨ i,j,k;
+    ਲਈ(k = 0; k < a.c; ++k){
+        ਲਈ(i = 0; i < a.h; ++i){
+            ਲਈ(j = 0; j < a.w/2; ++j){
+                ਪੂਰਨ ਸੂਚਕਾਂਕ = j + a.w*(i + a.h*(k));
+                ਪੂਰਨ flip = (a.w - j - 1) + a.w*(i + a.h*(k));
+                ਦਸ਼ਮਲਵ ਅਦਲਾ_ਬਦਲੀ = a.ਅੰਕੜੇ[flip];
+                a.ਅੰਕੜੇ[flip] = a.ਅੰਕੜੇ[ਸੂਚਕਾਂਕ];
+                a.ਅੰਕੜੇ[ਸੂਚਕਾਂਕ] = ਅਦਲਾ_ਬਦਲੀ;
             }
         }
     }
 }
 
-image image_distance(image a, image b)
+image image_ਦੂਰੀ(image a, image b)
 {
-    int i,j;
+    ਪੂਰਨ i,j;
     image dist = make_image(a.w, a.h, 1);
-    for(i = 0; i < a.c; ++i){
-        for(j = 0; j < a.h*a.w; ++j){
-            dist.data[j] += pow(a.data[i*a.h*a.w+j]-b.data[i*a.h*a.w+j],2);
+    ਲਈ(i = 0; i < a.c; ++i){
+        ਲਈ(j = 0; j < a.h*a.w; ++j){
+            dist.ਅੰਕੜੇ[j] += ਘਾਤ(a.ਅੰਕੜੇ[i*a.h*a.w+j]-b.ਅੰਕੜੇ[i*a.h*a.w+j],2);
         }
     }
-    for(j = 0; j < a.h*a.w; ++j){
-        dist.data[j] = sqrt(dist.data[j]);
+    ਲਈ(j = 0; j < a.h*a.w; ++j){
+        dist.ਅੰਕੜੇ[j] = ਵਰਗਮੂਲ(dist.ਅੰਕੜੇ[j]);
     }
-    return dist;
+    ਵਾਪਸ dist;
 }
 
-void ghost_image(image source, image dest, int dx, int dy)
+ਖਾਲੀ ghost_image(image ਸਰੋਤ, image dest, ਪੂਰਨ dx, ਪੂਰਨ dy)
 {
-    int x,y,k;
-    float max_dist = sqrt((-source.w/2. + .5)*(-source.w/2. + .5));
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float dist = sqrt((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
-                float alpha = (1 - dist/max_dist);
-                if(alpha < 0) alpha = 0;
-                float v1 = get_pixel(source, x,y,k);
-                float v2 = get_pixel(dest, dx+x,dy+y,k);
-                float val = alpha*v1 + (1-alpha)*v2;
-                set_pixel(dest, dx+x, dy+y, k, val);
+    ਪੂਰਨ x,y,k;
+    ਦਸ਼ਮਲਵ max_dist = ਵਰਗਮੂਲ((-ਸਰੋਤ.w/2. + .5)*(-ਸਰੋਤ.w/2. + .5));
+    ਲਈ(k = 0; k < ਸਰੋਤ.c; ++k){
+        ਲਈ(y = 0; y < ਸਰੋਤ.h; ++y){
+            ਲਈ(x = 0; x < ਸਰੋਤ.w; ++x){
+                ਦਸ਼ਮਲਵ dist = ਵਰਗਮੂਲ((x - ਸਰੋਤ.w/2. + .5)*(x - ਸਰੋਤ.w/2. + .5) + (y - ਸਰੋਤ.h/2. + .5)*(y - ਸਰੋਤ.h/2. + .5));
+                ਦਸ਼ਮਲਵ alpha = (1 - dist/max_dist);
+                ਜੇ(alpha < 0) alpha = 0;
+                ਦਸ਼ਮਲਵ v1 = get_pixel(ਸਰੋਤ, x,y,k);
+                ਦਸ਼ਮਲਵ v2 = get_pixel(dest, dx+x,dy+y,k);
+                ਦਸ਼ਮਲਵ val = alpha*v1 + (1-alpha)*v2;
+                ਸੈੱਟ_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-void blocky_image(image im, int s)
+ਖਾਲੀ blocky_image(image im, ਪੂਰਨ s)
 {
-    int i,j,k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
-                im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
+    ਪੂਰਨ i,j,k;
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(j = 0; j < im.h; ++j){
+            ਲਈ(i = 0; i < im.w; ++i){
+                im.ਅੰਕੜੇ[i + im.w*(j + im.h*k)] = im.ਅੰਕੜੇ[i/s*s + im.w*(j/s*s + im.h*k)];
             }
         }
     }
 }
 
-void censor_image(image im, int dx, int dy, int w, int h)
+ਖਾਲੀ censor_image(image im, ਪੂਰਨ dx, ਪੂਰਨ dy, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    int i,j,k;
-    int s = 32;
-    if(dx < 0) dx = 0;
-    if(dy < 0) dy = 0;
+    ਪੂਰਨ i,j,k;
+    ਪੂਰਨ s = 32;
+    ਜੇ(dx < 0) dx = 0;
+    ਜੇ(dy < 0) dy = 0;
 
-    for(k = 0; k < im.c; ++k){
-        for(j = dy; j < dy + h && j < im.h; ++j){
-            for(i = dx; i < dx + w && i < im.w; ++i){
-                im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(j = dy; j < dy + h && j < im.h; ++j){
+            ਲਈ(i = dx; i < dx + w && i < im.w; ++i){
+                im.ਅੰਕੜੇ[i + im.w*(j + im.h*k)] = im.ਅੰਕੜੇ[i/s*s + im.w*(j/s*s + im.h*k)];
                 //im.data[i + j*im.w + k*im.w*im.h] = 0;
             }
         }
     }
 }
 
-void embed_image(image source, image dest, int dx, int dy)
+ਖਾਲੀ embed_image(image ਸਰੋਤ, image dest, ਪੂਰਨ dx, ਪੂਰਨ dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x,y,k);
-                set_pixel(dest, dx+x, dy+y, k, val);
+    ਪੂਰਨ x,y,k;
+    ਲਈ(k = 0; k < ਸਰੋਤ.c; ++k){
+        ਲਈ(y = 0; y < ਸਰੋਤ.h; ++y){
+            ਲਈ(x = 0; x < ਸਰੋਤ.w; ++x){
+                ਦਸ਼ਮਲਵ val = get_pixel(ਸਰੋਤ, x,y,k);
+                ਸੈੱਟ_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-image collapse_image_layers(image source, int border)
+image collapse_image_layers(image ਸਰੋਤ, ਪੂਰਨ border)
 {
-    int h = source.h;
-    h = (h+border)*source.c - border;
-    image dest = make_image(source.w, h, 1);
-    int i;
-    for(i = 0; i < source.c; ++i){
-        image layer = get_image_layer(source, i);
-        int h_offset = i*(source.h+border);
-        embed_image(layer, dest, 0, h_offset);
+    ਪੂਰਨ h = ਸਰੋਤ.h;
+    h = (h+border)*ਸਰੋਤ.c - border;
+    image dest = make_image(ਸਰੋਤ.w, h, 1);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < ਸਰੋਤ.c; ++i){
+        image layer = get_image_layer(ਸਰੋਤ, i);
+        ਪੂਰਨ h_ਵਿੱਥ = i*(ਸਰੋਤ.h+border);
+        embed_image(layer, dest, 0, h_ਵਿੱਥ);
         free_image(layer);
     }
-    return dest;
+    ਵਾਪਸ dest;
 }
 
-void constrain_image(image im)
+ਖਾਲੀ constrain_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        if(im.data[i] < 0) im.data[i] = 0;
-        if(im.data[i] > 1) im.data[i] = 1;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < im.w*im.h*im.c; ++i){
+        ਜੇ(im.ਅੰਕੜੇ[i] < 0) im.ਅੰਕੜੇ[i] = 0;
+        ਜੇ(im.ਅੰਕੜੇ[i] > 1) im.ਅੰਕੜੇ[i] = 1;
     }
 }
 
-void normalize_image(image p)
+ਖਾਲੀ normalize_image(image p)
 {
-    int i;
-    float min = 9999999;
-    float max = -999999;
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ min = 9999999;
+    ਦਸ਼ਮਲਵ max = -999999;
 
-    for(i = 0; i < p.h*p.w*p.c; ++i){
-        float v = p.data[i];
-        if(v < min) min = v;
-        if(v > max) max = v;
+    ਲਈ(i = 0; i < p.h*p.w*p.c; ++i){
+        ਦਸ਼ਮਲਵ v = p.ਅੰਕੜੇ[i];
+        ਜੇ(v < min) min = v;
+        ਜੇ(v > max) max = v;
     }
-    if(max - min < .000000001){
+    ਜੇ(max - min < .000000001){
         min = 0;
         max = 1;
     }
-    for(i = 0; i < p.c*p.w*p.h; ++i){
-        p.data[i] = (p.data[i] - min)/(max-min);
+    ਲਈ(i = 0; i < p.c*p.w*p.h; ++i){
+        p.ਅੰਕੜੇ[i] = (p.ਅੰਕੜੇ[i] - min)/(max-min);
     }
 }
 
-void normalize_image2(image p)
+ਖਾਲੀ normalize_image2(image p)
 {
-    float *min = calloc(p.c, sizeof(float));
-    float *max = calloc(p.c, sizeof(float));
-    int i,j;
-    for(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
+    ਦਸ਼ਮਲਵ *min = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(p.c, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਦਸ਼ਮਲਵ *max = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(p.c, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < p.c; ++i) min[i] = max[i] = p.ਅੰਕੜੇ[i*p.h*p.w];
 
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.h*p.w; ++i){
-            float v = p.data[i+j*p.h*p.w];
-            if(v < min[j]) min[j] = v;
-            if(v > max[j]) max[j] = v;
+    ਲਈ(j = 0; j < p.c; ++j){
+        ਲਈ(i = 0; i < p.h*p.w; ++i){
+            ਦਸ਼ਮਲਵ v = p.ਅੰਕੜੇ[i+j*p.h*p.w];
+            ਜੇ(v < min[j]) min[j] = v;
+            ਜੇ(v > max[j]) max[j] = v;
         }
     }
-    for(i = 0; i < p.c; ++i){
-        if(max[i] - min[i] < .000000001){
+    ਲਈ(i = 0; i < p.c; ++i){
+        ਜੇ(max[i] - min[i] < .000000001){
             min[i] = 0;
             max[i] = 1;
         }
     }
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.w*p.h; ++i){
-            p.data[i+j*p.h*p.w] = (p.data[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
+    ਲਈ(j = 0; j < p.c; ++j){
+        ਲਈ(i = 0; i < p.w*p.h; ++i){
+            p.ਅੰਕੜੇ[i+j*p.h*p.w] = (p.ਅੰਕੜੇ[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
         }
     }
-    free(min);
-    free(max);
+    ਮੁਕਤ(min);
+    ਮੁਕਤ(max);
 }
 
-void copy_image_into(image src, image dest)
+ਖਾਲੀ copy_image_into(image src, image dest)
 {
-    memcpy(dest.data, src.data, src.h*src.w*src.c*sizeof(float));
+    ਸਮ੍ਰਿਤੀ_ਨਕਲ(dest.ਅੰਕੜੇ, src.ਅੰਕੜੇ, src.h*src.w*src.c*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 }
 
 image copy_image(image p)
 {
     image copy = p;
-    copy.data = calloc(p.h*p.w*p.c, sizeof(float));
-    memcpy(copy.data, p.data, p.h*p.w*p.c*sizeof(float));
-    return copy;
+    copy.ਅੰਕੜੇ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(p.h*p.w*p.c, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਸਮ੍ਰਿਤੀ_ਨਕਲ(copy.ਅੰਕੜੇ, p.ਅੰਕੜੇ, p.h*p.w*p.c*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਵਾਪਸ copy;
 }
 
-void rgbgr_image(image im)
+ਖਾਲੀ rgbgr_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        float swap = im.data[i];
-        im.data[i] = im.data[i+im.w*im.h*2];
-        im.data[i+im.w*im.h*2] = swap;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < im.w*im.h; ++i){
+        ਦਸ਼ਮਲਵ ਅਦਲਾ_ਬਦਲੀ = im.ਅੰਕੜੇ[i];
+        im.ਅੰਕੜੇ[i] = im.ਅੰਕੜੇ[i+im.w*im.h*2];
+        im.ਅੰਕੜੇ[i+im.w*im.h*2] = ਅਦਲਾ_ਬਦਲੀ;
     }
 }
 
-int show_image(image p, const char *name, int ms)
+ਪੂਰਨ show_image(image p, ਅਚਲ ਅੱਖਰ *name, ਪੂਰਨ ms)
 {
-#ifdef OPENCV
-    int c = show_image_cv(p, name, ms);
-    return c;
-#else
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ OPENCV
+    ਪੂਰਨ c = show_image_cv(p, name, ms);
+    ਵਾਪਸ c;
+#ਨਹੀਂਤਾਂ
     fprintf(stderr, "Not compiled with OpenCV, saving to %s.png instead\n", name);
     save_image(p, name);
-    return -1;
-#endif
+    ਵਾਪਸ -1;
+#ਜੇ_ਅੰਤ
 }
 
-void save_image_options(image im, const char *name, IMTYPE f, int quality)
+ਖਾਲੀ save_image_options(image im, ਅਚਲ ਅੱਖਰ *name, IMTYPE f, ਪੂਰਨ quality)
 {
-    char buff[256];
+    ਅੱਖਰ buff[256];
     //sprintf(buff, "%s (%d)", name, windows);
-    if(f == PNG)       sprintf(buff, "%s.png", name);
-    else if (f == BMP) sprintf(buff, "%s.bmp", name);
-    else if (f == TGA) sprintf(buff, "%s.tga", name);
-    else if (f == JPG) sprintf(buff, "%s.jpg", name);
-    else               sprintf(buff, "%s.png", name);
-    unsigned char *data = calloc(im.w*im.h*im.c, sizeof(char));
-    int i,k;
-    for(k = 0; k < im.c; ++k){
-        for(i = 0; i < im.w*im.h; ++i){
-            data[i*im.c+k] = (unsigned char) (255*im.data[i + k*im.w*im.h]);
+    ਜੇ(f == PNG)       sprintf(buff, "%s.png", name);
+    ਨਹੀਂਤਾਂ ਜੇ (f == BMP) sprintf(buff, "%s.bmp", name);
+    ਨਹੀਂਤਾਂ ਜੇ (f == TGA) sprintf(buff, "%s.tga", name);
+    ਨਹੀਂਤਾਂ ਜੇ (f == JPG) sprintf(buff, "%s.jpg", name);
+    ਨਹੀਂਤਾਂ               sprintf(buff, "%s.png", name);
+    ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ *ਅੰਕੜੇ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(im.w*im.h*im.c, ਆਕਾਰ(ਅੱਖਰ));
+    ਪੂਰਨ i,k;
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(i = 0; i < im.w*im.h; ++i){
+            ਅੰਕੜੇ[i*im.c+k] = (ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ) (255*im.ਅੰਕੜੇ[i + k*im.w*im.h]);
         }
     }
-    int success = 0;
-    if(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
-    else if (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
-    else if (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
-    else if (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
-    free(data);
-    if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
+    ਪੂਰਨ success = 0;
+    ਜੇ(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, ਅੰਕੜੇ, im.w*im.c);
+    ਨਹੀਂਤਾਂ ਜੇ (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, ਅੰਕੜੇ);
+    ਨਹੀਂਤਾਂ ਜੇ (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, ਅੰਕੜੇ);
+    ਨਹੀਂਤਾਂ ਜੇ (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, ਅੰਕੜੇ, quality);
+    ਮੁਕਤ(ਅੰਕੜੇ);
+    ਜੇ(!success) fprintf(stderr, "Failed to write image %s\n", buff);
 }
 
-void save_image(image im, const char *name)
+ਖਾਲੀ save_image(image im, ਅਚਲ ਅੱਖਰ *name)
 {
     save_image_options(im, name, JPG, 80);
 }
 
-void show_image_layers(image p, char *name)
+ਖਾਲੀ show_image_layers(image p, ਅੱਖਰ *name)
 {
-    int i;
-    char buff[256];
-    for(i = 0; i < p.c; ++i){
+    ਪੂਰਨ i;
+    ਅੱਖਰ buff[256];
+    ਲਈ(i = 0; i < p.c; ++i){
         sprintf(buff, "%s - Layer %d", name, i);
         image layer = get_image_layer(p, i);
         show_image(layer, buff, 1);
@@ -588,219 +588,219 @@ void show_image_layers(image p, char *name)
     }
 }
 
-void show_image_collapsed(image p, char *name)
+ਖਾਲੀ show_image_collapsed(image p, ਅੱਖਰ *name)
 {
     image c = collapse_image_layers(p, 1);
     show_image(c, name, 1);
     free_image(c);
 }
 
-image make_empty_image(int w, int h, int c)
+image make_ਖਾਲੀ_ਥਾਵਾਂ_image(ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ c)
 {
-    image out;
-    out.data = 0;
-    out.h = h;
-    out.w = w;
-    out.c = c;
-    return out;
+    image ਬਾਹਰਲਾ;
+    ਬਾਹਰਲਾ.ਅੰਕੜੇ = 0;
+    ਬਾਹਰਲਾ.h = h;
+    ਬਾਹਰਲਾ.w = w;
+    ਬਾਹਰਲਾ.c = c;
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
 
-image make_image(int w, int h, int c)
+image make_image(ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ c)
 {
-    image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    return out;
+    image ਬਾਹਰਲਾ = make_ਖਾਲੀ_ਥਾਵਾਂ_image(w,h,c);
+    ਬਾਹਰਲਾ.ਅੰਕੜੇ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(h*w*c, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
 
-image make_random_image(int w, int h, int c)
+image make_random_image(ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ c)
 {
-    image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    int i;
-    for(i = 0; i < w*h*c; ++i){
-        out.data[i] = (rand_normal() * .25) + .5;
+    image ਬਾਹਰਲਾ = make_ਖਾਲੀ_ਥਾਵਾਂ_image(w,h,c);
+    ਬਾਹਰਲਾ.ਅੰਕੜੇ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(h*w*c, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < w*h*c; ++i){
+        ਬਾਹਰਲਾ.ਅੰਕੜੇ[i] = (rand_ਸਾਧਾਰਨ() * .25) + .5;
     }
-    return out;
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
 
-image float_to_image(int w, int h, int c, float *data)
+image float_ਮੰਜ਼ਿਲ_image(ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ c, ਦਸ਼ਮਲਵ *ਅੰਕੜੇ)
 {
-    image out = make_empty_image(w,h,c);
-    out.data = data;
-    return out;
+    image ਬਾਹਰਲਾ = make_ਖਾਲੀ_ਥਾਵਾਂ_image(w,h,c);
+    ਬਾਹਰਲਾ.ਅੰਕੜੇ = ਅੰਕੜੇ;
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
 
-void place_image(image im, int w, int h, int dx, int dy, image canvas)
+ਖਾਲੀ ਰੱਖੋ_image(image im, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ dx, ਪੂਰਨ dy, image canvas)
 {
-    int x, y, c;
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = ((float)x / w) * im.w;
-                float ry = ((float)y / h) * im.h;
-                float val = bilinear_interpolate(im, rx, ry, c);
-                set_pixel(canvas, x + dx, y + dy, c, val);
+    ਪੂਰਨ x, y, c;
+    ਲਈ(c = 0; c < im.c; ++c){
+        ਲਈ(y = 0; y < h; ++y){
+            ਲਈ(x = 0; x < w; ++x){
+                ਦਸ਼ਮਲਵ rx = ((ਦਸ਼ਮਲਵ)x / w) * im.w;
+                ਦਸ਼ਮਲਵ ry = ((ਦਸ਼ਮਲਵ)y / h) * im.h;
+                ਦਸ਼ਮਲਵ val = bilinear_interpolate(im, rx, ry, c);
+                ਸੈੱਟ_pixel(canvas, x + dx, y + dy, c, val);
             }
         }
     }
 }
 
-image center_crop_image(image im, int w, int h)
+image center_crop_image(image im, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    int m = (im.w < im.h) ? im.w : im.h;   
+    ਪੂਰਨ m = (im.w < im.h) ? im.w : im.h;   
     image c = crop_image(im, (im.w - m) / 2, (im.h - m)/2, m, m);
     image r = resize_image(c, w, h);
     free_image(c);
-    return r;
+    ਵਾਪਸ r;
 }
 
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect)
+image rotate_crop_image(image im, ਦਸ਼ਮਲਵ rad, ਦਸ਼ਮਲਵ s, ਪੂਰਨ w, ਪੂਰਨ h, ਦਸ਼ਮਲਵ dx, ਦਸ਼ਮਲਵ dy, ਦਸ਼ਮਲਵ aspect)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    ਪੂਰਨ x, y, c;
+    ਦਸ਼ਮਲਵ cx = im.w/2.;
+    ਦਸ਼ਮਲਵ cy = im.h/2.;
     image rot = make_image(w, h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
-                float ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
-                set_pixel(rot, x, y, c, val);
+    ਲਈ(c = 0; c < im.c; ++c){
+        ਲਈ(y = 0; y < h; ++y){
+            ਲਈ(x = 0; x < w; ++x){
+                ਦਸ਼ਮਲਵ rx = ਕੋਜੀਵਾ(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - ਜੀਵਾ(rad)*((y - h/2.)/s + dy/s) + cx;
+                ਦਸ਼ਮਲਵ ry = ਜੀਵਾ(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + ਕੋਜੀਵਾ(rad)*((y - h/2.)/s + dy/s) + cy;
+                ਦਸ਼ਮਲਵ val = bilinear_interpolate(im, rx, ry, c);
+                ਸੈੱਟ_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    ਵਾਪਸ rot;
 }
 
-image rotate_image(image im, float rad)
+image rotate_image(image im, ਦਸ਼ਮਲਵ rad)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    ਪੂਰਨ x, y, c;
+    ਦਸ਼ਮਲਵ cx = im.w/2.;
+    ਦਸ਼ਮਲਵ cy = im.h/2.;
     image rot = make_image(im.w, im.h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < im.h; ++y){
-            for(x = 0; x < im.w; ++x){
-                float rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
-                float ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
-                set_pixel(rot, x, y, c, val);
+    ਲਈ(c = 0; c < im.c; ++c){
+        ਲਈ(y = 0; y < im.h; ++y){
+            ਲਈ(x = 0; x < im.w; ++x){
+                ਦਸ਼ਮਲਵ rx = ਕੋਜੀਵਾ(rad)*(x-cx) - ਜੀਵਾ(rad)*(y-cy) + cx;
+                ਦਸ਼ਮਲਵ ry = ਜੀਵਾ(rad)*(x-cx) + ਕੋਜੀਵਾ(rad)*(y-cy) + cy;
+                ਦਸ਼ਮਲਵ val = bilinear_interpolate(im, rx, ry, c);
+                ਸੈੱਟ_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    ਵਾਪਸ rot;
 }
 
-void fill_image(image m, float s)
+ਖਾਲੀ fill_image(image m, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < m.h*m.w*m.c; ++i) m.ਅੰਕੜੇ[i] = s;
 }
 
-void translate_image(image m, float s)
+ਖਾਲੀ translate_image(image m, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < m.h*m.w*m.c; ++i) m.ਅੰਕੜੇ[i] += s;
 }
 
-void scale_image(image m, float s)
+ਖਾਲੀ scale_image(image m, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < m.h*m.w*m.c; ++i) m.ਅੰਕੜੇ[i] *= s;
 }
 
-image crop_image(image im, int dx, int dy, int w, int h)
+image crop_image(image im, ਪੂਰਨ dx, ਪੂਰਨ dy, ਪੂਰਨ w, ਪੂਰਨ h)
 {
     image cropped = make_image(w, h, im.c);
-    int i, j, k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int r = j + dy;
-                int c = i + dx;
-                float val = 0;
+    ਪੂਰਨ i, j, k;
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(j = 0; j < h; ++j){
+            ਲਈ(i = 0; i < w; ++i){
+                ਪੂਰਨ r = j + dy;
+                ਪੂਰਨ c = i + dx;
+                ਦਸ਼ਮਲਵ val = 0;
                 r = constrain_int(r, 0, im.h-1);
                 c = constrain_int(c, 0, im.w-1);
                 val = get_pixel(im, c, r, k);
-                set_pixel(cropped, i, j, k, val);
+                ਸੈੱਟ_pixel(cropped, i, j, k, val);
             }
         }
     }
-    return cropped;
+    ਵਾਪਸ cropped;
 }
 
-int best_3d_shift_r(image a, image b, int min, int max)
+ਪੂਰਨ ਉੱਤਮ_3d_ਖਿਸਕਾਓ_r(image a, image b, ਪੂਰਨ min, ਪੂਰਨ max)
 {
-    if(min == max) return min;
-    int mid = floor((min + max) / 2.);
+    ਜੇ(min == max) ਵਾਪਸ min;
+    ਪੂਰਨ mid = floor((min + max) / 2.);
     image c1 = crop_image(b, 0, mid, b.w, b.h);
     image c2 = crop_image(b, 0, mid+1, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
+    ਦਸ਼ਮਲਵ d1 = dist_array(c1.ਅੰਕੜੇ, a.ਅੰਕੜੇ, a.w*a.h*a.c, 10);
+    ਦਸ਼ਮਲਵ d2 = dist_array(c2.ਅੰਕੜੇ, a.ਅੰਕੜੇ, a.w*a.h*a.c, 10);
     free_image(c1);
     free_image(c2);
-    if(d1 < d2) return best_3d_shift_r(a, b, min, mid);
-    else return best_3d_shift_r(a, b, mid+1, max);
+    ਜੇ(d1 < d2) ਵਾਪਸ ਉੱਤਮ_3d_ਖਿਸਕਾਓ_r(a, b, min, mid);
+    ਨਹੀਂਤਾਂ ਵਾਪਸ ਉੱਤਮ_3d_ਖਿਸਕਾਓ_r(a, b, mid+1, max);
 }
 
-int best_3d_shift(image a, image b, int min, int max)
+ਪੂਰਨ ਉੱਤਮ_3d_ਖਿਸਕਾਓ(image a, image b, ਪੂਰਨ min, ਪੂਰਨ max)
 {
-    int i;
-    int best = 0;
-    float best_distance = FLT_MAX;
-    for(i = min; i <= max; i += 2){
+    ਪੂਰਨ i;
+    ਪੂਰਨ ਉੱਤਮ = 0;
+    ਦਸ਼ਮਲਵ ਉੱਤਮ_ਦੂਰੀ = FLT_MAX;
+    ਲਈ(i = min; i <= max; i += 2){
         image c = crop_image(b, 0, i, b.w, b.h);
-        float d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
-        if(d < best_distance){
-            best_distance = d;
-            best = i;
+        ਦਸ਼ਮਲਵ d = dist_array(c.ਅੰਕੜੇ, a.ਅੰਕੜੇ, a.w*a.h*a.c, 100);
+        ਜੇ(d < ਉੱਤਮ_ਦੂਰੀ){
+            ਉੱਤਮ_ਦੂਰੀ = d;
+            ਉੱਤਮ = i;
         }
-        printf("%d %f\n", i, d);
+        ਲਿਖੋ("%d %f\n", i, d);
         free_image(c);
     }
-    return best;
+    ਵਾਪਸ ਉੱਤਮ;
 }
 
-void composite_3d(char *f1, char *f2, char *out, int delta)
+ਖਾਲੀ ਸੰਯੁਕਤ_3d(ਅੱਖਰ *f1, ਅੱਖਰ *f2, ਅੱਖਰ *ਬਾਹਰਲਾ, ਪੂਰਨ delta)
 {
-    if(!out) out = "out";
-    image a = load_image(f1, 0,0,0);
-    image b = load_image(f2, 0,0,0);
-    int shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
+    ਜੇ(!ਬਾਹਰਲਾ) ਬਾਹਰਲਾ = "out";
+    image a = ਲੱਦੋ_image(f1, 0,0,0);
+    image b = ਲੱਦੋ_image(f2, 0,0,0);
+    ਪੂਰਨ ਖਿਸਕਾਓ = ਉੱਤਮ_3d_ਖਿਸਕਾਓ_r(a, b, -a.h/100, a.h/100);
 
-    image c1 = crop_image(b, 10, shift, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
-    image c2 = crop_image(b, -10, shift, b.w, b.h);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
+    image c1 = crop_image(b, 10, ਖਿਸਕਾਓ, b.w, b.h);
+    ਦਸ਼ਮਲਵ d1 = dist_array(c1.ਅੰਕੜੇ, a.ਅੰਕੜੇ, a.w*a.h*a.c, 100);
+    image c2 = crop_image(b, -10, ਖਿਸਕਾਓ, b.w, b.h);
+    ਦਸ਼ਮਲਵ d2 = dist_array(c2.ਅੰਕੜੇ, a.ਅੰਕੜੇ, a.w*a.h*a.c, 100);
 
-    if(d2 < d1 && 0){
-        image swap = a;
+    ਜੇ(d2 < d1 && 0){
+        image ਅਦਲਾ_ਬਦਲੀ = a;
         a = b;
-        b = swap;
-        shift = -shift;
-        printf("swapped, %d\n", shift);
+        b = ਅਦਲਾ_ਬਦਲੀ;
+        ਖਿਸਕਾਓ = -ਖਿਸਕਾਓ;
+        ਲਿਖੋ("swapped, %d\n", ਖਿਸਕਾਓ);
     }
-    else{
-        printf("%d\n", shift);
+    ਨਹੀਂਤਾਂ{
+        ਲਿਖੋ("%d\n", ਖਿਸਕਾਓ);
     }
 
-    image c = crop_image(b, delta, shift, a.w, a.h);
-    int i;
-    for(i = 0; i < c.w*c.h; ++i){
-        c.data[i] = a.data[i];
+    image c = crop_image(b, delta, ਖਿਸਕਾਓ, a.w, a.h);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < c.w*c.h; ++i){
+        c.ਅੰਕੜੇ[i] = a.ਅੰਕੜੇ[i];
     }
-    save_image(c, out);
+    save_image(c, ਬਾਹਰਲਾ);
 }
 
-void letterbox_image_into(image im, int w, int h, image boxed)
+ਖਾਲੀ letterbox_image_into(image im, ਪੂਰਨ w, ਪੂਰਨ h, image boxed)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    ਪੂਰਨ new_w = im.w;
+    ਪੂਰਨ new_h = im.h;
+    ਜੇ (((ਦਸ਼ਮਲਵ)w/im.w) < ((ਦਸ਼ਮਲਵ)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } ਨਹੀਂਤਾਂ {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -809,14 +809,14 @@ void letterbox_image_into(image im, int w, int h, image boxed)
     free_image(resized);
 }
 
-image letterbox_image(image im, int w, int h)
+image letterbox_image(image im, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    ਪੂਰਨ new_w = im.w;
+    ਪੂਰਨ new_h = im.h;
+    ਜੇ (((ਦਸ਼ਮਲਵ)w/im.w) < ((ਦਸ਼ਮਲਵ)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } ਨਹੀਂਤਾਂ {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -827,65 +827,65 @@ image letterbox_image(image im, int w, int h)
     //for(i = 0; i < boxed.w*boxed.h*boxed.c; ++i) boxed.data[i] = 0;
     embed_image(resized, boxed, (w-new_w)/2, (h-new_h)/2); 
     free_image(resized);
-    return boxed;
+    ਵਾਪਸ boxed;
 }
 
-image resize_max(image im, int max)
+image resize_max(image im, ਪੂਰਨ max)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w > h){
+    ਪੂਰਨ w = im.w;
+    ਪੂਰਨ h = im.h;
+    ਜੇ(w > h){
         h = (h * max) / w;
         w = max;
-    } else {
+    } ਨਹੀਂਤਾਂ {
         w = (w * max) / h;
         h = max;
     }
-    if(w == im.w && h == im.h) return im;
+    ਜੇ(w == im.w && h == im.h) ਵਾਪਸ im;
     image resized = resize_image(im, w, h);
-    return resized;
+    ਵਾਪਸ resized;
 }
 
-image resize_min(image im, int min)
+image resize_min(image im, ਪੂਰਨ min)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w < h){
+    ਪੂਰਨ w = im.w;
+    ਪੂਰਨ h = im.h;
+    ਜੇ(w < h){
         h = (h * min) / w;
         w = min;
-    } else {
+    } ਨਹੀਂਤਾਂ {
         w = (w * min) / h;
         h = min;
     }
-    if(w == im.w && h == im.h) return im;
+    ਜੇ(w == im.w && h == im.h) ਵਾਪਸ im;
     image resized = resize_image(im, w, h);
-    return resized;
+    ਵਾਪਸ resized;
 }
 
-image random_crop_image(image im, int w, int h)
+image random_crop_image(image im, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    int dx = rand_int(0, im.w - w);
-    int dy = rand_int(0, im.h - h);
+    ਪੂਰਨ dx = rand_int(0, im.w - w);
+    ਪੂਰਨ dy = rand_int(0, im.h - h);
     image crop = crop_image(im, dx, dy, w, h);
-    return crop;
+    ਵਾਪਸ crop;
 }
 
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h)
+augment_ਦਲੀਲਾਂ random_augment_ਦਲੀਲਾਂ(image im, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਪੂਰਨ ਨੀਵਾਂ, ਪੂਰਨ ਉੱਚਾ, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    augment_args a = {0};
+    augment_ਦਲੀਲਾਂ a = {0};
     aspect = rand_scale(aspect);
-    int r = rand_int(low, high);
-    int min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
-    float scale = (float)r / min;
+    ਪੂਰਨ r = rand_int(ਨੀਵਾਂ, ਉੱਚਾ);
+    ਪੂਰਨ min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
+    ਦਸ਼ਮਲਵ scale = (ਦਸ਼ਮਲਵ)r / min;
 
-    float rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
+    ਦਸ਼ਮਲਵ rad = rand_ਇਕਸਾਰ(-angle, angle) * TWO_PI / 360.;
 
-    float dx = (im.w*scale/aspect - w) / 2.;
-    float dy = (im.h*scale - w) / 2.;
+    ਦਸ਼ਮਲਵ dx = (im.w*scale/aspect - w) / 2.;
+    ਦਸ਼ਮਲਵ dy = (im.h*scale - w) / 2.;
     //if(dx < 0) dx = 0;
     //if(dy < 0) dy = 0;
-    dx = rand_uniform(-dx, dx);
-    dy = rand_uniform(-dy, dy);
+    dx = rand_ਇਕਸਾਰ(-dx, dx);
+    dy = rand_ਇਕਸਾਰ(-dy, dy);
 
     a.rad = rad;
     a.scale = scale;
@@ -894,34 +894,34 @@ augment_args random_augment_args(image im, float angle, float aspect, int low, i
     a.dx = dx;
     a.dy = dy;
     a.aspect = aspect;
-    return a;
+    ਵਾਪਸ a;
 }
 
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h)
+image random_augment_image(image im, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਪੂਰਨ ਨੀਵਾਂ, ਪੂਰਨ ਉੱਚਾ, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    augment_args a = random_augment_args(im, angle, aspect, low, high, w, h);
+    augment_ਦਲੀਲਾਂ a = random_augment_ਦਲੀਲਾਂ(im, angle, aspect, ਨੀਵਾਂ, ਉੱਚਾ, w, h);
     image crop = rotate_crop_image(im, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
-    return crop;
+    ਵਾਪਸ crop;
 }
 
-float three_way_max(float a, float b, float c)
+ਦਸ਼ਮਲਵ three_way_max(ਦਸ਼ਮਲਵ a, ਦਸ਼ਮਲਵ b, ਦਸ਼ਮਲਵ c)
 {
-    return (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
+    ਵਾਪਸ (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
 }
 
-float three_way_min(float a, float b, float c)
+ਦਸ਼ਮਲਵ three_way_min(ਦਸ਼ਮਲਵ a, ਦਸ਼ਮਲਵ b, ਦਸ਼ਮਲਵ c)
 {
-    return (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
+    ਵਾਪਸ (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
 }
 
-void yuv_to_rgb(image im)
+ਖਾਲੀ yuv_ਮੰਜ਼ਿਲ_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.c == 3);
+    ਪੂਰਨ i, j;
+    ਦਸ਼ਮਲਵ r, g, b;
+    ਦਸ਼ਮਲਵ y, u, v;
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
             y = get_pixel(im, i , j, 0);
             u = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
@@ -930,21 +930,21 @@ void yuv_to_rgb(image im)
             g = y + -.39465*u + -.58060*v;
             b = y + 2.03211*u;
 
-            set_pixel(im, i, j, 0, r);
-            set_pixel(im, i, j, 1, g);
-            set_pixel(im, i, j, 2, b);
+            ਸੈੱਟ_pixel(im, i, j, 0, r);
+            ਸੈੱਟ_pixel(im, i, j, 1, g);
+            ਸੈੱਟ_pixel(im, i, j, 2, b);
         }
     }
 }
 
-void rgb_to_yuv(image im)
+ਖਾਲੀ rgb_ਮੰਜ਼ਿਲ_yuv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.c == 3);
+    ਪੂਰਨ i, j;
+    ਦਸ਼ਮਲਵ r, g, b;
+    ਦਸ਼ਮਲਵ y, u, v;
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
@@ -953,173 +953,173 @@ void rgb_to_yuv(image im)
             u = -.14713*r + -.28886*g + .436*b;
             v = .615*r + -.51499*g + -.10001*b;
 
-            set_pixel(im, i, j, 0, y);
-            set_pixel(im, i, j, 1, u);
-            set_pixel(im, i, j, 2, v);
+            ਸੈੱਟ_pixel(im, i, j, 0, y);
+            ਸੈੱਟ_pixel(im, i, j, 1, u);
+            ਸੈੱਟ_pixel(im, i, j, 2, v);
         }
     }
 }
 
 // http://www.cs.rit.edu/~ncs/color/t_convert.html
-void rgb_to_hsv(image im)
+ਖਾਲੀ rgb_ਮੰਜ਼ਿਲ_hsv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.c == 3);
+    ਪੂਰਨ i, j;
+    ਦਸ਼ਮਲਵ r, g, b;
+    ਦਸ਼ਮਲਵ h, s, v;
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
-            float max = three_way_max(r,g,b);
-            float min = three_way_min(r,g,b);
-            float delta = max - min;
+            ਦਸ਼ਮਲਵ max = three_way_max(r,g,b);
+            ਦਸ਼ਮਲਵ min = three_way_min(r,g,b);
+            ਦਸ਼ਮਲਵ delta = max - min;
             v = max;
-            if(max == 0){
+            ਜੇ(max == 0){
                 s = 0;
                 h = 0;
-            }else{
+            }ਨਹੀਂਤਾਂ{
                 s = delta/max;
-                if(r == max){
+                ਜੇ(r == max){
                     h = (g - b) / delta;
-                } else if (g == max) {
+                } ਨਹੀਂਤਾਂ ਜੇ (g == max) {
                     h = 2 + (b - r) / delta;
-                } else {
+                } ਨਹੀਂਤਾਂ {
                     h = 4 + (r - g) / delta;
                 }
-                if (h < 0) h += 6;
+                ਜੇ (h < 0) h += 6;
                 h = h/6.;
             }
-            set_pixel(im, i, j, 0, h);
-            set_pixel(im, i, j, 1, s);
-            set_pixel(im, i, j, 2, v);
+            ਸੈੱਟ_pixel(im, i, j, 0, h);
+            ਸੈੱਟ_pixel(im, i, j, 1, s);
+            ਸੈੱਟ_pixel(im, i, j, 2, v);
         }
     }
 }
 
-void hsv_to_rgb(image im)
+ਖਾਲੀ hsv_ਮੰਜ਼ਿਲ_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    float f, p, q, t;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.c == 3);
+    ਪੂਰਨ i, j;
+    ਦਸ਼ਮਲਵ r, g, b;
+    ਦਸ਼ਮਲਵ h, s, v;
+    ਦਸ਼ਮਲਵ f, p, q, t;
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
             h = 6 * get_pixel(im, i , j, 0);
             s = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
-            if (s == 0) {
+            ਜੇ (s == 0) {
                 r = g = b = v;
-            } else {
-                int index = floor(h);
-                f = h - index;
+            } ਨਹੀਂਤਾਂ {
+                ਪੂਰਨ ਸੂਚਕਾਂਕ = floor(h);
+                f = h - ਸੂਚਕਾਂਕ;
                 p = v*(1-s);
                 q = v*(1-s*f);
                 t = v*(1-s*(1-f));
-                if(index == 0){
+                ਜੇ(ਸੂਚਕਾਂਕ == 0){
                     r = v; g = t; b = p;
-                } else if(index == 1){
+                } ਨਹੀਂਤਾਂ ਜੇ(ਸੂਚਕਾਂਕ == 1){
                     r = q; g = v; b = p;
-                } else if(index == 2){
+                } ਨਹੀਂਤਾਂ ਜੇ(ਸੂਚਕਾਂਕ == 2){
                     r = p; g = v; b = t;
-                } else if(index == 3){
+                } ਨਹੀਂਤਾਂ ਜੇ(ਸੂਚਕਾਂਕ == 3){
                     r = p; g = q; b = v;
-                } else if(index == 4){
+                } ਨਹੀਂਤਾਂ ਜੇ(ਸੂਚਕਾਂਕ == 4){
                     r = t; g = p; b = v;
-                } else {
+                } ਨਹੀਂਤਾਂ {
                     r = v; g = p; b = q;
                 }
             }
-            set_pixel(im, i, j, 0, r);
-            set_pixel(im, i, j, 1, g);
-            set_pixel(im, i, j, 2, b);
+            ਸੈੱਟ_pixel(im, i, j, 0, r);
+            ਸੈੱਟ_pixel(im, i, j, 1, g);
+            ਸੈੱਟ_pixel(im, i, j, 2, b);
         }
     }
 }
 
-void grayscale_image_3c(image im)
+ਖਾਲੀ grayscale_image_3c(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
-    float scale[] = {0.299, 0.587, 0.114};
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float val = 0;
-            for(k = 0; k < 3; ++k){
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.c == 3);
+    ਪੂਰਨ i, j, k;
+    ਦਸ਼ਮਲਵ scale[] = {0.299, 0.587, 0.114};
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
+            ਦਸ਼ਮਲਵ val = 0;
+            ਲਈ(k = 0; k < 3; ++k){
                 val += scale[k]*get_pixel(im, i, j, k);
             }
-            im.data[0*im.h*im.w + im.w*j + i] = val;
-            im.data[1*im.h*im.w + im.w*j + i] = val;
-            im.data[2*im.h*im.w + im.w*j + i] = val;
+            im.ਅੰਕੜੇ[0*im.h*im.w + im.w*j + i] = val;
+            im.ਅੰਕੜੇ[1*im.h*im.w + im.w*j + i] = val;
+            im.ਅੰਕੜੇ[2*im.h*im.w + im.w*j + i] = val;
         }
     }
 }
 
 image grayscale_image(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
-    image gray = make_image(im.w, im.h, 1);
-    float scale[] = {0.299, 0.587, 0.114};
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
-                gray.data[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
+    ਪ੍ਰਤਿਜ੍ਞਾ(im.c == 3);
+    ਪੂਰਨ i, j, k;
+    image ਸਲੇਟੀ = make_image(im.w, im.h, 1);
+    ਦਸ਼ਮਲਵ scale[] = {0.299, 0.587, 0.114};
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(j = 0; j < im.h; ++j){
+            ਲਈ(i = 0; i < im.w; ++i){
+                ਸਲੇਟੀ.ਅੰਕੜੇ[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
             }
         }
     }
-    return gray;
+    ਵਾਪਸ ਸਲੇਟੀ;
 }
 
-image threshold_image(image im, float thresh)
+image ਹੱਦ_image(image im, ਦਸ਼ਮਲਵ thresh)
 {
-    int i;
+    ਪੂਰਨ i;
     image t = make_image(im.w, im.h, im.c);
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        t.data[i] = im.data[i]>thresh ? 1 : 0;
+    ਲਈ(i = 0; i < im.w*im.h*im.c; ++i){
+        t.ਅੰਕੜੇ[i] = im.ਅੰਕੜੇ[i]>thresh ? 1 : 0;
     }
-    return t;
+    ਵਾਪਸ t;
 }
 
-image blend_image(image fore, image back, float alpha)
+image blend_image(image fore, image ਪਿੱਠ, ਦਸ਼ਮਲਵ alpha)
 {
-    assert(fore.w == back.w && fore.h == back.h && fore.c == back.c);
+    ਪ੍ਰਤਿਜ੍ਞਾ(fore.w == ਪਿੱਠ.w && fore.h == ਪਿੱਠ.h && fore.c == ਪਿੱਠ.c);
     image blend = make_image(fore.w, fore.h, fore.c);
-    int i, j, k;
-    for(k = 0; k < fore.c; ++k){
-        for(j = 0; j < fore.h; ++j){
-            for(i = 0; i < fore.w; ++i){
-                float val = alpha * get_pixel(fore, i, j, k) + 
-                    (1 - alpha)* get_pixel(back, i, j, k);
-                set_pixel(blend, i, j, k, val);
+    ਪੂਰਨ i, j, k;
+    ਲਈ(k = 0; k < fore.c; ++k){
+        ਲਈ(j = 0; j < fore.h; ++j){
+            ਲਈ(i = 0; i < fore.w; ++i){
+                ਦਸ਼ਮਲਵ val = alpha * get_pixel(fore, i, j, k) + 
+                    (1 - alpha)* get_pixel(ਪਿੱਠ, i, j, k);
+                ਸੈੱਟ_pixel(blend, i, j, k, val);
             }
         }
     }
-    return blend;
+    ਵਾਪਸ blend;
 }
 
-void scale_image_channel(image im, int c, float v)
+ਖਾਲੀ scale_image_channel(image im, ਪੂਰਨ c, ਦਸ਼ਮਲਵ v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    ਪੂਰਨ i, j;
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
+            ਦਸ਼ਮਲਵ pix = get_pixel(im, i, j, c);
             pix = pix*v;
-            set_pixel(im, i, j, c, pix);
+            ਸੈੱਟ_pixel(im, i, j, c, pix);
         }
     }
 }
 
-void translate_image_channel(image im, int c, float v)
+ਖਾਲੀ translate_image_channel(image im, ਪੂਰਨ c, ਦਸ਼ਮਲਵ v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    ਪੂਰਨ i, j;
+    ਲਈ(j = 0; j < im.h; ++j){
+        ਲਈ(i = 0; i < im.w; ++i){
+            ਦਸ਼ਮਲਵ pix = get_pixel(im, i, j, c);
             pix = pix+v;
-            set_pixel(im, i, j, c, pix);
+            ਸੈੱਟ_pixel(im, i, j, c, pix);
         }
     }
 }
@@ -1127,126 +1127,126 @@ void translate_image_channel(image im, int c, float v)
 image binarize_image(image im)
 {
     image c = copy_image(im);
-    int i;
-    for(i = 0; i < im.w * im.h * im.c; ++i){
-        if(c.data[i] > .5) c.data[i] = 1;
-        else c.data[i] = 0;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < im.w * im.h * im.c; ++i){
+        ਜੇ(c.ਅੰਕੜੇ[i] > .5) c.ਅੰਕੜੇ[i] = 1;
+        ਨਹੀਂਤਾਂ c.ਅੰਕੜੇ[i] = 0;
     }
-    return c;
+    ਵਾਪਸ c;
 }
 
-void saturate_image(image im, float sat)
+ਖਾਲੀ saturate_image(image im, ਦਸ਼ਮਲਵ sat)
 {
-    rgb_to_hsv(im);
+    rgb_ਮੰਜ਼ਿਲ_hsv(im);
     scale_image_channel(im, 1, sat);
-    hsv_to_rgb(im);
+    hsv_ਮੰਜ਼ਿਲ_rgb(im);
     constrain_image(im);
 }
 
-void hue_image(image im, float hue)
+ਖਾਲੀ hue_image(image im, ਦਸ਼ਮਲਵ hue)
 {
-    rgb_to_hsv(im);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+    rgb_ਮੰਜ਼ਿਲ_hsv(im);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < im.w*im.h; ++i){
+        im.ਅੰਕੜੇ[i] = im.ਅੰਕੜੇ[i] + hue;
+        ਜੇ (im.ਅੰਕੜੇ[i] > 1) im.ਅੰਕੜੇ[i] -= 1;
+        ਜੇ (im.ਅੰਕੜੇ[i] < 0) im.ਅੰਕੜੇ[i] += 1;
     }
-    hsv_to_rgb(im);
+    hsv_ਮੰਜ਼ਿਲ_rgb(im);
     constrain_image(im);
 }
 
-void exposure_image(image im, float sat)
+ਖਾਲੀ exposure_image(image im, ਦਸ਼ਮਲਵ sat)
 {
-    rgb_to_hsv(im);
+    rgb_ਮੰਜ਼ਿਲ_hsv(im);
     scale_image_channel(im, 2, sat);
-    hsv_to_rgb(im);
+    hsv_ਮੰਜ਼ਿਲ_rgb(im);
     constrain_image(im);
 }
 
-void distort_image(image im, float hue, float sat, float val)
+ਖਾਲੀ distort_image(image im, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ sat, ਦਸ਼ਮਲਵ val)
 {
-    rgb_to_hsv(im);
+    rgb_ਮੰਜ਼ਿਲ_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, val);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < im.w*im.h; ++i){
+        im.ਅੰਕੜੇ[i] = im.ਅੰਕੜੇ[i] + hue;
+        ਜੇ (im.ਅੰਕੜੇ[i] > 1) im.ਅੰਕੜੇ[i] -= 1;
+        ਜੇ (im.ਅੰਕੜੇ[i] < 0) im.ਅੰਕੜੇ[i] += 1;
     }
-    hsv_to_rgb(im);
+    hsv_ਮੰਜ਼ਿਲ_rgb(im);
     constrain_image(im);
 }
 
-void random_distort_image(image im, float hue, float saturation, float exposure)
+ਖਾਲੀ random_distort_image(image im, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    float dhue = rand_uniform(-hue, hue);
-    float dsat = rand_scale(saturation);
-    float dexp = rand_scale(exposure);
+    ਦਸ਼ਮਲਵ dhue = rand_ਇਕਸਾਰ(-hue, hue);
+    ਦਸ਼ਮਲਵ dsat = rand_scale(saturation);
+    ਦਸ਼ਮਲਵ dexp = rand_scale(exposure);
     distort_image(im, dhue, dsat, dexp);
 }
 
-void saturate_exposure_image(image im, float sat, float exposure)
+ਖਾਲੀ saturate_exposure_image(image im, ਦਸ਼ਮਲਵ sat, ਦਸ਼ਮਲਵ exposure)
 {
-    rgb_to_hsv(im);
+    rgb_ਮੰਜ਼ਿਲ_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, exposure);
-    hsv_to_rgb(im);
+    hsv_ਮੰਜ਼ਿਲ_rgb(im);
     constrain_image(im);
 }
 
-image resize_image(image im, int w, int h)
+image resize_image(image im, ਪੂਰਨ w, ਪੂਰਨ h)
 {
     image resized = make_image(w, h, im.c);   
     image part = make_image(w, im.h, im.c);
-    int r, c, k;
-    float w_scale = (float)(im.w - 1) / (w - 1);
-    float h_scale = (float)(im.h - 1) / (h - 1);
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < im.h; ++r){
-            for(c = 0; c < w; ++c){
-                float val = 0;
-                if(c == w-1 || im.w == 1){
+    ਪੂਰਨ r, c, k;
+    ਦਸ਼ਮਲਵ w_scale = (ਦਸ਼ਮਲਵ)(im.w - 1) / (w - 1);
+    ਦਸ਼ਮਲਵ h_scale = (ਦਸ਼ਮਲਵ)(im.h - 1) / (h - 1);
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(r = 0; r < im.h; ++r){
+            ਲਈ(c = 0; c < w; ++c){
+                ਦਸ਼ਮਲਵ val = 0;
+                ਜੇ(c == w-1 || im.w == 1){
                     val = get_pixel(im, im.w-1, r, k);
-                } else {
-                    float sx = c*w_scale;
-                    int ix = (int) sx;
-                    float dx = sx - ix;
+                } ਨਹੀਂਤਾਂ {
+                    ਦਸ਼ਮਲਵ sx = c*w_scale;
+                    ਪੂਰਨ ix = (ਪੂਰਨ) sx;
+                    ਦਸ਼ਮਲਵ dx = sx - ix;
                     val = (1 - dx) * get_pixel(im, ix, r, k) + dx * get_pixel(im, ix+1, r, k);
                 }
-                set_pixel(part, c, r, k, val);
+                ਸੈੱਟ_pixel(part, c, r, k, val);
             }
         }
     }
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < h; ++r){
-            float sy = r*h_scale;
-            int iy = (int) sy;
-            float dy = sy - iy;
-            for(c = 0; c < w; ++c){
-                float val = (1-dy) * get_pixel(part, c, iy, k);
-                set_pixel(resized, c, r, k, val);
+    ਲਈ(k = 0; k < im.c; ++k){
+        ਲਈ(r = 0; r < h; ++r){
+            ਦਸ਼ਮਲਵ sy = r*h_scale;
+            ਪੂਰਨ iy = (ਪੂਰਨ) sy;
+            ਦਸ਼ਮਲਵ dy = sy - iy;
+            ਲਈ(c = 0; c < w; ++c){
+                ਦਸ਼ਮਲਵ val = (1-dy) * get_pixel(part, c, iy, k);
+                ਸੈੱਟ_pixel(resized, c, r, k, val);
             }
-            if(r == h-1 || im.h == 1) continue;
-            for(c = 0; c < w; ++c){
-                float val = dy * get_pixel(part, c, iy+1, k);
-                add_pixel(resized, c, r, k, val);
+            ਜੇ(r == h-1 || im.h == 1) ਜਾਰੀ;
+            ਲਈ(c = 0; c < w; ++c){
+                ਦਸ਼ਮਲਵ val = dy * get_pixel(part, c, iy+1, k);
+                ਜੋੜੋ_pixel(resized, c, r, k, val);
             }
         }
     }
 
     free_image(part);
-    return resized;
+    ਵਾਪਸ resized;
 }
 
 
-void test_resize(char *filename)
+ਖਾਲੀ test_resize(ਅੱਖਰ *filename)
 {
-    image im = load_image(filename, 0,0, 3);
-    float mag = mag_array(im.data, im.w*im.h*im.c);
-    printf("L2 Norm: %f\n", mag);
-    image gray = grayscale_image(im);
+    image im = ਲੱਦੋ_image(filename, 0,0, 3);
+    ਦਸ਼ਮਲਵ mag = mag_array(im.ਅੰਕੜੇ, im.w*im.h*im.c);
+    ਲਿਖੋ("L2 Norm: %f\n", mag);
+    image ਸਲੇਟੀ = grayscale_image(im);
 
     image c1 = copy_image(im);
     image c2 = copy_image(im);
@@ -1259,180 +1259,180 @@ void test_resize(char *filename)
 
 
     show_image(im,   "Original", 1);
-    show_image(gray, "Gray", 1);
+    show_image(ਸਲੇਟੀ, "Gray", 1);
     show_image(c1, "C1", 1);
     show_image(c2, "C2", 1);
     show_image(c3, "C3", 1);
     show_image(c4, "C4", 1);
-#ifdef OPENCV
-    while(1){
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ OPENCV
+    ਜਦੋਂ(1){
         image aug = random_augment_image(im, 0, .75, 320, 448, 320, 320);
         show_image(aug, "aug", 1);
         free_image(aug);
 
 
-        float exposure = 1.15;
-        float saturation = 1.15;
-        float hue = .05;
+        ਦਸ਼ਮਲਵ exposure = 1.15;
+        ਦਸ਼ਮਲਵ saturation = 1.15;
+        ਦਸ਼ਮਲਵ hue = .05;
 
         image c = copy_image(im);
 
-        float dexp = rand_scale(exposure);
-        float dsat = rand_scale(saturation);
-        float dhue = rand_uniform(-hue, hue);
+        ਦਸ਼ਮਲਵ dexp = rand_scale(exposure);
+        ਦਸ਼ਮਲਵ dsat = rand_scale(saturation);
+        ਦਸ਼ਮਲਵ dhue = rand_ਇਕਸਾਰ(-hue, hue);
 
         distort_image(c, dhue, dsat, dexp);
         show_image(c, "rand", 1);
-        printf("%f %f %f\n", dhue, dsat, dexp);
+        ਲਿਖੋ("%f %f %f\n", dhue, dsat, dexp);
         free_image(c);
     }
-#endif
+#ਜੇ_ਅੰਤ
 }
 
 
-image load_image_stb(char *filename, int channels)
+image ਲੱਦੋ_image_stb(ਅੱਖਰ *filename, ਪੂਰਨ channels)
 {
-    int w, h, c;
-    unsigned char *data = stbi_load(filename, &w, &h, &c, channels);
-    if (!data) {
+    ਪੂਰਨ w, h, c;
+    ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ *ਅੰਕੜੇ = stbi_ਲੱਦੋ(filename, &w, &h, &c, channels);
+    ਜੇ (!ਅੰਕੜੇ) {
         fprintf(stderr, "Cannot load image \"%s\"\nSTB Reason: %s\n", filename, stbi_failure_reason());
-        exit(0);
+        ਬਾਹਰ_ਨਿਕਲੋ(0);
     }
-    if(channels) c = channels;
-    int i,j,k;
+    ਜੇ(channels) c = channels;
+    ਪੂਰਨ i,j,k;
     image im = make_image(w, h, c);
-    for(k = 0; k < c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int dst_index = i + w*j + w*h*k;
-                int src_index = k + c*i + c*w*j;
-                im.data[dst_index] = (float)data[src_index]/255.;
+    ਲਈ(k = 0; k < c; ++k){
+        ਲਈ(j = 0; j < h; ++j){
+            ਲਈ(i = 0; i < w; ++i){
+                ਪੂਰਨ dst_ਸੂਚਕਾਂਕ = i + w*j + w*h*k;
+                ਪੂਰਨ src_ਸੂਚਕਾਂਕ = k + c*i + c*w*j;
+                im.ਅੰਕੜੇ[dst_ਸੂਚਕਾਂਕ] = (ਦਸ਼ਮਲਵ)ਅੰਕੜੇ[src_ਸੂਚਕਾਂਕ]/255.;
             }
         }
     }
-    free(data);
-    return im;
+    ਮੁਕਤ(ਅੰਕੜੇ);
+    ਵਾਪਸ im;
 }
 
-image load_image(char *filename, int w, int h, int c)
+image ਲੱਦੋ_image(ਅੱਖਰ *filename, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ c)
 {
-#ifdef OPENCV
-    image out = load_image_cv(filename, c);
-#else
-    image out = load_image_stb(filename, c);
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ OPENCV
+    image ਬਾਹਰਲਾ = ਲੱਦੋ_image_cv(filename, c);
+#ਨਹੀਂਤਾਂ
+    image ਬਾਹਰਲਾ = ਲੱਦੋ_image_stb(filename, c);
+#ਜੇ_ਅੰਤ
 
-    if((h && w) && (h != out.h || w != out.w)){
-        image resized = resize_image(out, w, h);
-        free_image(out);
-        out = resized;
+    ਜੇ((h && w) && (h != ਬਾਹਰਲਾ.h || w != ਬਾਹਰਲਾ.w)){
+        image resized = resize_image(ਬਾਹਰਲਾ, w, h);
+        free_image(ਬਾਹਰਲਾ);
+        ਬਾਹਰਲਾ = resized;
     }
-    return out;
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
 
-image load_image_color(char *filename, int w, int h)
+image ਲੱਦੋ_image_color(ਅੱਖਰ *filename, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    return load_image(filename, w, h, 3);
+    ਵਾਪਸ ਲੱਦੋ_image(filename, w, h, 3);
 }
 
-image get_image_layer(image m, int l)
+image get_image_layer(image m, ਪੂਰਨ l)
 {
-    image out = make_image(m.w, m.h, 1);
-    int i;
-    for(i = 0; i < m.h*m.w; ++i){
-        out.data[i] = m.data[i+l*m.h*m.w];
+    image ਬਾਹਰਲਾ = make_image(m.w, m.h, 1);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < m.h*m.w; ++i){
+        ਬਾਹਰਲਾ.ਅੰਕੜੇ[i] = m.ਅੰਕੜੇ[i+l*m.h*m.w];
     }
-    return out;
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
-void print_image(image m)
+ਖਾਲੀ print_image(image m)
 {
-    int i, j, k;
-    for(i =0 ; i < m.c; ++i){
-        for(j =0 ; j < m.h; ++j){
-            for(k = 0; k < m.w; ++k){
-                printf("%.2lf, ", m.data[i*m.h*m.w + j*m.w + k]);
-                if(k > 30) break;
+    ਪੂਰਨ i, j, k;
+    ਲਈ(i =0 ; i < m.c; ++i){
+        ਲਈ(j =0 ; j < m.h; ++j){
+            ਲਈ(k = 0; k < m.w; ++k){
+                ਲਿਖੋ("%.2lf, ", m.ਅੰਕੜੇ[i*m.h*m.w + j*m.w + k]);
+                ਜੇ(k > 30) ਰੋਕੋ;
             }
-            printf("\n");
-            if(j > 30) break;
+            ਲਿਖੋ("\n");
+            ਜੇ(j > 30) ਰੋਕੋ;
         }
-        printf("\n");
+        ਲਿਖੋ("\n");
     }
-    printf("\n");
+    ਲਿਖੋ("\n");
 }
 
-image collapse_images_vert(image *ims, int n)
+image collapse_images_vert(image *ims, ਪੂਰਨ n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
+    ਪੂਰਨ color = 1;
+    ਪੂਰਨ border = 1;
+    ਪੂਰਨ h,w,c;
     w = ims[0].w;
     h = (ims[0].h + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    ਜੇ(c != 3 || !color){
         w = (w+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int h_offset = i*(ims[0].h+border);
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < n; ++i){
+        ਪੂਰਨ h_ਵਿੱਥ = i*(ims[0].h+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
-            embed_image(copy, filters, 0, h_offset);
+        ਜੇ(c == 3 && color){
+            embed_image(copy, filters, 0, h_ਵਿੱਥ);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int w_offset = j*(ims[0].w+border);
+        ਨਹੀਂਤਾਂ{
+            ਲਈ(j = 0; j < copy.c; ++j){
+                ਪੂਰਨ w_ਵਿੱਥ = j*(ims[0].w+border);
                 image layer = get_image_layer(copy, j);
-                embed_image(layer, filters, w_offset, h_offset);
+                embed_image(layer, filters, w_ਵਿੱਥ, h_ਵਿੱਥ);
                 free_image(layer);
             }
         }
         free_image(copy);
     }
-    return filters;
+    ਵਾਪਸ filters;
 } 
 
-image collapse_images_horz(image *ims, int n)
+image collapse_images_horz(image *ims, ਪੂਰਨ n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
-    int size = ims[0].h;
-    h = size;
+    ਪੂਰਨ color = 1;
+    ਪੂਰਨ border = 1;
+    ਪੂਰਨ h,w,c;
+    ਪੂਰਨ ਮਾਪ = ims[0].h;
+    h = ਮਾਪ;
     w = (ims[0].w + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    ਜੇ(c != 3 || !color){
         h = (h+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int w_offset = i*(size+border);
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < n; ++i){
+        ਪੂਰਨ w_ਵਿੱਥ = i*(ਮਾਪ+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
-            embed_image(copy, filters, w_offset, 0);
+        ਜੇ(c == 3 && color){
+            embed_image(copy, filters, w_ਵਿੱਥ, 0);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int h_offset = j*(size+border);
+        ਨਹੀਂਤਾਂ{
+            ਲਈ(j = 0; j < copy.c; ++j){
+                ਪੂਰਨ h_ਵਿੱਥ = j*(ਮਾਪ+border);
                 image layer = get_image_layer(copy, j);
-                embed_image(layer, filters, w_offset, h_offset);
+                embed_image(layer, filters, w_ਵਿੱਥ, h_ਵਿੱਥ);
                 free_image(layer);
             }
         }
         free_image(copy);
     }
-    return filters;
+    ਵਾਪਸ filters;
 } 
 
-void show_image_normalized(image im, const char *name)
+ਖਾਲੀ show_image_normalized(image im, ਅਚਲ ਅੱਖਰ *name)
 {
     image c = copy_image(im);
     normalize_image(c);
@@ -1440,7 +1440,7 @@ void show_image_normalized(image im, const char *name)
     free_image(c);
 }
 
-void show_images(image *ims, int n, char *window)
+ਖਾਲੀ show_images(image *ims, ਪੂਰਨ n, ਅੱਖਰ *ਖਿੜਕੀ)
 {
     image m = collapse_images_vert(ims, n);
     /*
@@ -1453,14 +1453,14 @@ void show_images(image *ims, int n, char *window)
        image sized = resize_image(m, w, h);
      */
     normalize_image(m);
-    save_image(m, window);
-    show_image(m, window, 1);
+    save_image(m, ਖਿੜਕੀ);
+    show_image(m, ਖਿੜਕੀ, 1);
     free_image(m);
 }
 
-void free_image(image m)
+ਖਾਲੀ free_image(image m)
 {
-    if(m.data){
-        free(m.data);
+    ਜੇ(m.ਅੰਕੜੇ){
+        ਮੁਕਤ(m.ਅੰਕੜੇ);
     }
 }

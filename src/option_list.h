@@ -1,19 +1,19 @@
-#ifndef OPTION_LIST_H
-#define OPTION_LIST_H
-#include "list.h"
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ OPTION_LIST_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ OPTION_LIST_H
+#ਅਨ੍ਤਰ੍ਭਾਵ "list.h"
 
-typedef struct{
-    char *key;
-    char *val;
-    int used;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ ਬਣਤਰ{
+    ਅੱਖਰ *ਕੁੰਜੀ;
+    ਅੱਖਰ *val;
+    ਪੂਰਨ ਵਰਤਿਆ;
 } kvp;
 
 
-int read_option(char *s, list *options);
-void option_insert(list *l, char *key, char *val);
-char *option_find(list *l, char *key);
-float option_find_float(list *l, char *key, float def);
-float option_find_float_quiet(list *l, char *key, float def);
-void option_unused(list *l);
+ਪੂਰਨ read_option(ਅੱਖਰ *s, list *options);
+ਖਾਲੀ option_ਪਾਓ(list *l, ਅੱਖਰ *ਕੁੰਜੀ, ਅੱਖਰ *val);
+ਅੱਖਰ *option_ਲੱਭੋ(list *l, ਅੱਖਰ *ਕੁੰਜੀ);
+ਦਸ਼ਮਲਵ option_ਲੱਭੋ_float(list *l, ਅੱਖਰ *ਕੁੰਜੀ, ਦਸ਼ਮਲਵ def);
+ਦਸ਼ਮਲਵ option_ਲੱਭੋ_float_quiet(list *l, ਅੱਖਰ *ਕੁੰਜੀ, ਦਸ਼ਮਲਵ def);
+ਖਾਲੀ option_ਅਣਵਰਤਿਆ(list *l);
 
-#endif
+#ਜੇ_ਅੰਤ

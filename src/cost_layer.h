@@ -1,20 +1,20 @@
-#ifndef COST_LAYER_H
-#define COST_LAYER_H
-#include "layer.h"
-#include "network.h"
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ ਲਾਗਤ_LAYER_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ਲਾਗਤ_LAYER_H
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "network.h"
 
-typedef layer cost_layer;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ layer ਲਾਗਤ_layer;
 
-COST_TYPE get_cost_type(char *s);
-char *get_cost_string(COST_TYPE a);
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE type, float scale);
-void forward_cost_layer(const cost_layer l, network net);
-void backward_cost_layer(const cost_layer l, network net);
-void resize_cost_layer(cost_layer *l, int inputs);
+ਲਾਗਤ_TYPE get_ਲਾਗਤ_type(ਅੱਖਰ *s);
+ਅੱਖਰ *get_ਲਾਗਤ_string(ਲਾਗਤ_TYPE a);
+ਲਾਗਤ_layer make_ਲਾਗਤ_layer(ਪੂਰਨ batch, ਪੂਰਨ inputs, ਲਾਗਤ_TYPE type, ਦਸ਼ਮਲਵ scale);
+ਖਾਲੀ forward_ਲਾਗਤ_layer(ਅਚਲ ਲਾਗਤ_layer l, ਜਾਲ net);
+ਖਾਲੀ backward_ਲਾਗਤ_layer(ਅਚਲ ਲਾਗਤ_layer l, ਜਾਲ net);
+ਖਾਲੀ resize_ਲਾਗਤ_layer(ਲਾਗਤ_layer *l, ਪੂਰਨ inputs);
 
-#ifdef GPU
-void forward_cost_layer_gpu(cost_layer l, network net);
-void backward_cost_layer_gpu(const cost_layer l, network net);
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_ਲਾਗਤ_layer_gpu(ਲਾਗਤ_layer l, ਜਾਲ net);
+ਖਾਲੀ backward_ਲਾਗਤ_layer_gpu(ਅਚਲ ਲਾਗਤ_layer l, ਜਾਲ net);
+#ਜੇ_ਅੰਤ
 
-#endif
+#ਜੇ_ਅੰਤ

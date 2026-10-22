@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ "tree.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+ਖਾਲੀ change_leaves(ਰੁੱਖ *t, ਅੱਖਰ *ਪੱਤੀ_list)
 {
-    list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
-        t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
-                t->leaf[i] = 1;
-                ++found;
-                break;
+    list *llist = get_paths(ਪੱਤੀ_list);
+    ਅੱਖਰ **leaves = (ਅੱਖਰ **)list_ਮੰਜ਼ਿਲ_array(llist);
+    ਪੂਰਨ n = llist->ਮਾਪ;
+    ਪੂਰਨ i,j;
+    ਪੂਰਨ ਮਿਲਿਆ = 0;
+    ਲਈ(i = 0; i < t->n; ++i){
+        t->ਪੱਤੀ[i] = 0;
+        ਲਈ(j = 0; j < n; ++j){
+            ਜੇ (0==strcmp(t->name[i], leaves[j])){
+                t->ਪੱਤੀ[i] = 1;
+                ++ਮਿਲਿਆ;
+                ਰੋਕੋ;
             }
         }
     }
-    fprintf(stderr, "Found %d leaves.\n", found);
+    fprintf(stderr, "Found %d leaves.\n", ਮਿਲਿਆ);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+ਦਸ਼ਮਲਵ get_hierarchy_probability(ਦਸ਼ਮਲਵ *x, ਰੁੱਖ *hier, ਪੂਰਨ c, ਪੂਰਨ stride)
 {
-    float p = 1;
-    while(c >= 0){
+    ਦਸ਼ਮਲਵ p = 1;
+    ਜਦੋਂ(c >= 0){
         p = p * x[c*stride];
-        c = hier->parent[c];
+        c = hier->ਮਾਪਾ[c];
     }
-    return p;
+    ਵਾਪਸ p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+ਖਾਲੀ hierarchy_predictions(ਦਸ਼ਮਲਵ *predictions, ਪੂਰਨ n, ਰੁੱਖ *hier, ਪੂਰਨ only_leaves, ਪੂਰਨ stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
-            predictions[j*stride] *= predictions[parent*stride]; 
+    ਪੂਰਨ j;
+    ਲਈ(j = 0; j < n; ++j){
+        ਪੂਰਨ ਮਾਪਾ = hier->ਮਾਪਾ[j];
+        ਜੇ(ਮਾਪਾ >= 0){
+            predictions[j*stride] *= predictions[ਮਾਪਾ*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    ਜੇ(only_leaves){
+        ਲਈ(j = 0; j < n; ++j){
+            ਜੇ(!hier->ਪੱਤੀ[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+ਪੂਰਨ hierarchy_ਸਿਖਰ_prediction(ਦਸ਼ਮਲਵ *predictions, ਰੁੱਖ *hier, ਦਸ਼ਮਲਵ thresh, ਪੂਰਨ stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    ਦਸ਼ਮਲਵ p = 1;
+    ਪੂਰਨ ਸਮੂਹ = 0;
+    ਪੂਰਨ i;
+    ਜਦੋਂ(1){
+        ਦਸ਼ਮਲਵ max = 0;
+        ਪੂਰਨ max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
-                max_i = index;
+        ਲਈ(i = 0; i < hier->ਸਮੂਹ_ਮਾਪ[ਸਮੂਹ]; ++i){
+            ਪੂਰਨ ਸੂਚਕਾਂਕ = i + hier->ਸਮੂਹ_ਵਿੱਥ[ਸਮੂਹ];
+            ਦਸ਼ਮਲਵ val = predictions[(i + hier->ਸਮੂਹ_ਵਿੱਥ[ਸਮੂਹ])*stride];
+            ਜੇ(val > max){
+                max_i = ਸੂਚਕਾਂਕ;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        ਜੇ(p*max > thresh){
             p = p*max;
-            group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            ਸਮੂਹ = hier->ਬੱਚਾ[max_i];
+            ਜੇ(hier->ਬੱਚਾ[max_i] < 0) ਵਾਪਸ max_i;
+        } ਨਹੀਂਤਾਂ ਜੇ (ਸਮੂਹ == 0){
+            ਵਾਪਸ max_i;
+        } ਨਹੀਂਤਾਂ {
+            ਵਾਪਸ hier->ਮਾਪਾ[hier->ਸਮੂਹ_ਵਿੱਥ[ਸਮੂਹ]];
         }
     }
-    return 0;
+    ਵਾਪਸ 0;
 }
 
-tree *read_tree(char *filename)
+ਰੁੱਖ *read_ਰੁੱਖ(ਅੱਖਰ *filename)
 {
-    tree t = {0};
+    ਰੁੱਖ t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
-        t.parent[n] = parent;
+    ਅੱਖਰ *ਸਤਰ;
+    ਪੂਰਨ ਆਖਰੀ_ਮਾਪਾ = -1;
+    ਪੂਰਨ ਸਮੂਹ_ਮਾਪ = 0;
+    ਪੂਰਨ groups = 0;
+    ਪੂਰਨ n = 0;
+    ਜਦੋਂ((ਸਤਰ=fgetl(fp)) != 0){
+        ਅੱਖਰ *id = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(256, ਆਕਾਰ(ਅੱਖਰ));
+        ਪੂਰਨ ਮਾਪਾ = -1;
+        ਲੜੀ_ਤੋਂ_ਪੜ੍ਹੋ(ਸਤਰ, "%s %d", id, &ਮਾਪਾ);
+        t.ਮਾਪਾ = realloc(t.ਮਾਪਾ, (n+1)*ਆਕਾਰ(ਪੂਰਨ));
+        t.ਮਾਪਾ[n] = ਮਾਪਾ;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
-        t.child[n] = -1;
+        t.ਬੱਚਾ = realloc(t.ਬੱਚਾ, (n+1)*ਆਕਾਰ(ਪੂਰਨ));
+        t.ਬੱਚਾ[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*ਆਕਾਰ(ਅੱਖਰ *));
         t.name[n] = id;
-        if(parent != last_parent){
+        ਜੇ(ਮਾਪਾ != ਆਖਰੀ_ਮਾਪਾ){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-            t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
-            t.group_size[groups - 1] = group_size;
-            group_size = 0;
-            last_parent = parent;
+            t.ਸਮੂਹ_ਵਿੱਥ = realloc(t.ਸਮੂਹ_ਵਿੱਥ, groups * ਆਕਾਰ(ਪੂਰਨ));
+            t.ਸਮੂਹ_ਵਿੱਥ[groups - 1] = n - ਸਮੂਹ_ਮਾਪ;
+            t.ਸਮੂਹ_ਮਾਪ = realloc(t.ਸਮੂਹ_ਮਾਪ, groups * ਆਕਾਰ(ਪੂਰਨ));
+            t.ਸਮੂਹ_ਮਾਪ[groups - 1] = ਸਮੂਹ_ਮਾਪ;
+            ਸਮੂਹ_ਮਾਪ = 0;
+            ਆਖਰੀ_ਮਾਪਾ = ਮਾਪਾ;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
-        t.group[n] = groups;
-        if (parent >= 0) {
-            t.child[parent] = groups;
+        t.ਸਮੂਹ = realloc(t.ਸਮੂਹ, (n+1)*ਆਕਾਰ(ਪੂਰਨ));
+        t.ਸਮੂਹ[n] = groups;
+        ਜੇ (ਮਾਪਾ >= 0) {
+            t.ਬੱਚਾ[ਮਾਪਾ] = groups;
         }
         ++n;
-        ++group_size;
+        ++ਸਮੂਹ_ਮਾਪ;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-    t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
-    t.group_size[groups - 1] = group_size;
+    t.ਸਮੂਹ_ਵਿੱਥ = realloc(t.ਸਮੂਹ_ਵਿੱਥ, groups * ਆਕਾਰ(ਪੂਰਨ));
+    t.ਸਮੂਹ_ਵਿੱਥ[groups - 1] = n - ਸਮੂਹ_ਮਾਪ;
+    t.ਸਮੂਹ_ਮਾਪ = realloc(t.ਸਮੂਹ_ਮਾਪ, groups * ਆਕਾਰ(ਪੂਰਨ));
+    t.ਸਮੂਹ_ਮਾਪ[groups - 1] = ਸਮੂਹ_ਮਾਪ;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.ਪੱਤੀ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਪੂਰਨ));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i) t.ਪੱਤੀ[i] = 1;
+    ਲਈ(i = 0; i < n; ++i) ਜੇ(t.ਮਾਪਾ[i] >= 0) t.ਪੱਤੀ[t.ਮਾਪਾ[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    ਰੁੱਖ *ਰੁੱਖ_ptr = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਰੁੱਖ));
+    *ਰੁੱਖ_ptr = t;
     //error(0);
-    return tree_ptr;
+    ਵਾਪਸ ਰੁੱਖ_ptr;
 }

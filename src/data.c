@@ -1,25 +1,25 @@
-#include "data.h"
-#include "utils.h"
-#include "image.h"
-#include "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "data.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "image.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string.h>
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-list *get_paths(char *filename)
+list *get_paths(ਅੱਖਰ *filename)
 {
-    char *path;
+    ਅੱਖਰ *ਰਸਤਾ;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    list *lines = make_list();
-    while((path=fgetl(file))){
-        list_insert(lines, path);
+    ਜੇ(!file) file_error(filename);
+    list *ਸਤਰਾਂ = make_list();
+    ਜਦੋਂ((ਰਸਤਾ=fgetl(file))){
+        list_ਪਾਓ(ਸਤਰਾਂ, ਰਸਤਾ);
     }
     fclose(file);
-    return lines;
+    ਵਾਪਸ ਸਤਰਾਂ;
 }
 
 /*
@@ -39,87 +39,87 @@ char **get_random_paths_indexes(char **paths, int n, int m, int *indexes)
 }
 */
 
-char **get_random_paths(char **paths, int n, int m)
+ਅੱਖਰ **get_random_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m)
 {
-    char **random_paths = calloc(n, sizeof(char*));
-    int i;
+    ਅੱਖਰ **random_paths = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਅੱਖਰ*));
+    ਪੂਰਨ i;
     pthread_mutex_lock(&mutex);
-    for(i = 0; i < n; ++i){
-        int index = rand()%m;
-        random_paths[i] = paths[index];
+    ਲਈ(i = 0; i < n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%m;
+        random_paths[i] = paths[ਸੂਚਕਾਂਕ];
         //if(i == 0) printf("%s\n", paths[index]);
     }
     pthread_mutex_unlock(&mutex);
-    return random_paths;
+    ਵਾਪਸ random_paths;
 }
 
-char **find_replace_paths(char **paths, int n, char *find, char *replace)
+ਅੱਖਰ **ਲੱਭੋ_replace_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਅੱਖਰ *ਲੱਭੋ, ਅੱਖਰ *replace)
 {
-    char **replace_paths = calloc(n, sizeof(char*));
-    int i;
-    for(i = 0; i < n; ++i){
-        char replaced[4096];
-        find_replace(paths[i], find, replace, replaced);
+    ਅੱਖਰ **replace_paths = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਅੱਖਰ*));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
+        ਅੱਖਰ replaced[4096];
+        ਲੱਭੋ_replace(paths[i], ਲੱਭੋ, replace, replaced);
         replace_paths[i] = copy_string(replaced);
     }
-    return replace_paths;
+    ਵਾਪਸ replace_paths;
 }
 
-matrix load_image_paths_gray(char **paths, int n, int w, int h)
+ਮੈਟ੍ਰਿਕਸ ਲੱਦੋ_image_paths_ਸਲੇਟੀ(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    ਪੂਰਨ i;
+    ਮੈਟ੍ਰਿਕਸ X;
+    X.ਪੰਕਤੀਆਂ = n;
+    X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    X.ਖਾਨੇ_ਗਿਣਤੀ = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image(paths[i], w, h, 3);
+    ਲਈ(i = 0; i < n; ++i){
+        image im = ਲੱਦੋ_image(paths[i], w, h, 3);
 
-        image gray = grayscale_image(im);
+        image ਸਲੇਟੀ = grayscale_image(im);
         free_image(im);
-        im = gray;
+        im = ਸਲੇਟੀ;
 
-        X.vals[i] = im.data;
-        X.cols = im.h*im.w*im.c;
+        X.vals[i] = im.ਅੰਕੜੇ;
+        X.ਖਾਨੇ_ਗਿਣਤੀ = im.h*im.w*im.c;
     }
-    return X;
+    ਵਾਪਸ X;
 }
 
-matrix load_image_paths(char **paths, int n, int w, int h)
+ਮੈਟ੍ਰਿਕਸ ਲੱਦੋ_image_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    ਪੂਰਨ i;
+    ਮੈਟ੍ਰਿਕਸ X;
+    X.ਪੰਕਤੀਆਂ = n;
+    X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    X.ਖਾਨੇ_ਗਿਣਤੀ = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], w, h);
-        X.vals[i] = im.data;
-        X.cols = im.h*im.w*im.c;
+    ਲਈ(i = 0; i < n; ++i){
+        image im = ਲੱਦੋ_image_color(paths[i], w, h);
+        X.vals[i] = im.ਅੰਕੜੇ;
+        X.ਖਾਨੇ_ਗਿਣਤੀ = im.h*im.w*im.c;
     }
-    return X;
+    ਵਾਪਸ X;
 }
 
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+ਮੈਟ੍ਰਿਕਸ ਲੱਦੋ_image_augment_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ min, ਪੂਰਨ max, ਪੂਰਨ ਮਾਪ, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure, ਪੂਰਨ center)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    ਪੂਰਨ i;
+    ਮੈਟ੍ਰਿਕਸ X;
+    X.ਪੰਕਤੀਆਂ = n;
+    X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    X.ਖਾਨੇ_ਗਿਣਤੀ = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], 0, 0);
+    ਲਈ(i = 0; i < n; ++i){
+        image im = ਲੱਦੋ_image_color(paths[i], 0, 0);
         image crop;
-        if(center){
-            crop = center_crop_image(im, size, size);
-        } else {
-            crop = random_augment_image(im, angle, aspect, min, max, size, size);
+        ਜੇ(center){
+            crop = center_crop_image(im, ਮਾਪ, ਮਾਪ);
+        } ਨਹੀਂਤਾਂ {
+            crop = random_augment_image(im, angle, aspect, min, max, ਮਾਪ, ਮਾਪ);
         }
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        ਪੂਰਨ flip = rand()%2;
+        ਜੇ (flip) flip_image(crop);
         random_distort_image(crop, hue, saturation, exposure);
 
         /*
@@ -129,210 +129,210 @@ matrix load_image_augment_paths(char **paths, int n, int min, int max, int size,
         */
         //grayscale_image_3c(crop);
         free_image(im);
-        X.vals[i] = crop.data;
-        X.cols = crop.h*crop.w*crop.c;
+        X.vals[i] = crop.ਅੰਕੜੇ;
+        X.ਖਾਨੇ_ਗਿਣਤੀ = crop.h*crop.w*crop.c;
     }
-    return X;
+    ਵਾਪਸ X;
 }
 
 
-box_label *read_boxes(char *filename, int *n)
+box_label *read_boxes(ਅੱਖਰ *filename, ਪੂਰਨ *n)
 {
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    float x, y, h, w;
-    int id;
-    int count = 0;
-    int size = 64;
-    box_label *boxes = calloc(size, sizeof(box_label));
-    while(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
-        if(count == size) {
-            size = size * 2;
-            boxes = realloc(boxes, size*sizeof(box_label));
+    ਜੇ(!file) file_error(filename);
+    ਦਸ਼ਮਲਵ x, y, h, w;
+    ਪੂਰਨ id;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਪੂਰਨ ਮਾਪ = 64;
+    box_label *boxes = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਮਾਪ, ਆਕਾਰ(box_label));
+    ਜਦੋਂ(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
+        ਜੇ(ਗਿਣਤੀ_2 == ਮਾਪ) {
+            ਮਾਪ = ਮਾਪ * 2;
+            boxes = realloc(boxes, ਮਾਪ*ਆਕਾਰ(box_label));
         }
-        boxes[count].id = id;
-        boxes[count].x = x;
-        boxes[count].y = y;
-        boxes[count].h = h;
-        boxes[count].w = w;
-        boxes[count].left   = x - w/2;
-        boxes[count].right  = x + w/2;
-        boxes[count].top    = y - h/2;
-        boxes[count].bottom = y + h/2;
-        ++count;
+        boxes[ਗਿਣਤੀ_2].id = id;
+        boxes[ਗਿਣਤੀ_2].x = x;
+        boxes[ਗਿਣਤੀ_2].y = y;
+        boxes[ਗਿਣਤੀ_2].h = h;
+        boxes[ਗਿਣਤੀ_2].w = w;
+        boxes[ਗਿਣਤੀ_2].ਖੱਬਾ   = x - w/2;
+        boxes[ਗਿਣਤੀ_2].ਸੱਜਾ  = x + w/2;
+        boxes[ਗਿਣਤੀ_2].ਸਿਖਰ    = y - h/2;
+        boxes[ਗਿਣਤੀ_2].bottom = y + h/2;
+        ++ਗਿਣਤੀ_2;
     }
     fclose(file);
-    *n = count;
-    return boxes;
+    *n = ਗਿਣਤੀ_2;
+    ਵਾਪਸ boxes;
 }
 
-void randomize_boxes(box_label *b, int n)
+ਖਾਲੀ randomize_boxes(box_label *b, ਪੂਰਨ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        box_label swap = b[i];
-        int index = rand()%n;
-        b[i] = b[index];
-        b[index] = swap;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
+        box_label ਅਦਲਾ_ਬਦਲੀ = b[i];
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%n;
+        b[i] = b[ਸੂਚਕਾਂਕ];
+        b[ਸੂਚਕਾਂਕ] = ਅਦਲਾ_ਬਦਲੀ;
     }
 }
 
-void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float sy, int flip)
+ਖਾਲੀ correct_boxes(box_label *boxes, ਪੂਰਨ n, ਦਸ਼ਮਲਵ dx, ਦਸ਼ਮਲਵ dy, ਦਸ਼ਮਲਵ sx, ਦਸ਼ਮਲਵ sy, ਪੂਰਨ flip)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(boxes[i].x == 0 && boxes[i].y == 0) {
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
+        ਜੇ(boxes[i].x == 0 && boxes[i].y == 0) {
             boxes[i].x = 999999;
             boxes[i].y = 999999;
             boxes[i].w = 999999;
             boxes[i].h = 999999;
-            continue;
+            ਜਾਰੀ;
         }
-        boxes[i].left   = boxes[i].left  * sx - dx;
-        boxes[i].right  = boxes[i].right * sx - dx;
-        boxes[i].top    = boxes[i].top   * sy - dy;
+        boxes[i].ਖੱਬਾ   = boxes[i].ਖੱਬਾ  * sx - dx;
+        boxes[i].ਸੱਜਾ  = boxes[i].ਸੱਜਾ * sx - dx;
+        boxes[i].ਸਿਖਰ    = boxes[i].ਸਿਖਰ   * sy - dy;
         boxes[i].bottom = boxes[i].bottom* sy - dy;
 
-        if(flip){
-            float swap = boxes[i].left;
-            boxes[i].left = 1. - boxes[i].right;
-            boxes[i].right = 1. - swap;
+        ਜੇ(flip){
+            ਦਸ਼ਮਲਵ ਅਦਲਾ_ਬਦਲੀ = boxes[i].ਖੱਬਾ;
+            boxes[i].ਖੱਬਾ = 1. - boxes[i].ਸੱਜਾ;
+            boxes[i].ਸੱਜਾ = 1. - ਅਦਲਾ_ਬਦਲੀ;
         }
 
-        boxes[i].left =  constrain(0, 1, boxes[i].left);
-        boxes[i].right = constrain(0, 1, boxes[i].right);
-        boxes[i].top =   constrain(0, 1, boxes[i].top);
+        boxes[i].ਖੱਬਾ =  constrain(0, 1, boxes[i].ਖੱਬਾ);
+        boxes[i].ਸੱਜਾ = constrain(0, 1, boxes[i].ਸੱਜਾ);
+        boxes[i].ਸਿਖਰ =   constrain(0, 1, boxes[i].ਸਿਖਰ);
         boxes[i].bottom =   constrain(0, 1, boxes[i].bottom);
 
-        boxes[i].x = (boxes[i].left+boxes[i].right)/2;
-        boxes[i].y = (boxes[i].top+boxes[i].bottom)/2;
-        boxes[i].w = (boxes[i].right - boxes[i].left);
-        boxes[i].h = (boxes[i].bottom - boxes[i].top);
+        boxes[i].x = (boxes[i].ਖੱਬਾ+boxes[i].ਸੱਜਾ)/2;
+        boxes[i].y = (boxes[i].ਸਿਖਰ+boxes[i].bottom)/2;
+        boxes[i].w = (boxes[i].ਸੱਜਾ - boxes[i].ਖੱਬਾ);
+        boxes[i].h = (boxes[i].bottom - boxes[i].ਸਿਖਰ);
 
         boxes[i].w = constrain(0, 1, boxes[i].w);
         boxes[i].h = constrain(0, 1, boxes[i].h);
     }
 }
 
-void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+ਖਾਲੀ fill_truth_swag(ਅੱਖਰ *ਰਸਤਾ, ਦਸ਼ਮਲਵ *truth, ਪੂਰਨ classes, ਪੂਰਨ flip, ਦਸ਼ਮਲਵ dx, ਦਸ਼ਮਲਵ dy, ਦਸ਼ਮਲਵ sx, ਦਸ਼ਮਲਵ sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "labels", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "labels", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    box_label *boxes = read_boxes(labelpath, &ਗਿਣਤੀ_2);
+    randomize_boxes(boxes, ਗਿਣਤੀ_2);
+    correct_boxes(boxes, ਗਿਣਤੀ_2, dx, dy, sx, sy, flip);
+    ਦਸ਼ਮਲਵ x,y,w,h;
+    ਪੂਰਨ id;
+    ਪੂਰਨ i;
 
-    for (i = 0; i < count && i < 90; ++i) {
+    ਲਈ (i = 0; i < ਗਿਣਤੀ_2 && i < 90; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .0 || h < .0) continue;
+        ਜੇ (w < .0 || h < .0) ਜਾਰੀ;
 
-        int index = (4+classes) * i;
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = (4+classes) * i;
 
-        truth[index++] = x;
-        truth[index++] = y;
-        truth[index++] = w;
-        truth[index++] = h;
+        truth[ਸੂਚਕਾਂਕ++] = x;
+        truth[ਸੂਚਕਾਂਕ++] = y;
+        truth[ਸੂਚਕਾਂਕ++] = w;
+        truth[ਸੂਚਕਾਂਕ++] = h;
 
-        if (id < classes) truth[index+id] = 1;
+        ਜੇ (id < classes) truth[ਸੂਚਕਾਂਕ+id] = 1;
     }
-    free(boxes);
+    ਮੁਕਤ(boxes);
 }
 
-void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
+ਖਾਲੀ fill_truth_region(ਅੱਖਰ *ਰਸਤਾ, ਦਸ਼ਮਲਵ *truth, ਪੂਰਨ classes, ਪੂਰਨ ਅੰਕ_boxes, ਪੂਰਨ flip, ਦਸ਼ਮਲਵ dx, ਦਸ਼ਮਲਵ dy, ਦਸ਼ਮਲਵ sx, ਦਸ਼ਮਲਵ sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "labels", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "labels", labelpath);
 
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".png", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".png", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    box_label *boxes = read_boxes(labelpath, &ਗਿਣਤੀ_2);
+    randomize_boxes(boxes, ਗਿਣਤੀ_2);
+    correct_boxes(boxes, ਗਿਣਤੀ_2, dx, dy, sx, sy, flip);
+    ਦਸ਼ਮਲਵ x,y,w,h;
+    ਪੂਰਨ id;
+    ਪੂਰਨ i;
 
-    for (i = 0; i < count; ++i) {
+    ਲਈ (i = 0; i < ਗਿਣਤੀ_2; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .005 || h < .005) continue;
+        ਜੇ (w < .005 || h < .005) ਜਾਰੀ;
 
-        int col = (int)(x*num_boxes);
-        int row = (int)(y*num_boxes);
+        ਪੂਰਨ ਖਾਨਾ = (ਪੂਰਨ)(x*ਅੰਕ_boxes);
+        ਪੂਰਨ ਪੰਕਤੀ = (ਪੂਰਨ)(y*ਅੰਕ_boxes);
 
-        x = x*num_boxes - col;
-        y = y*num_boxes - row;
+        x = x*ਅੰਕ_boxes - ਖਾਨਾ;
+        y = y*ਅੰਕ_boxes - ਪੰਕਤੀ;
 
-        int index = (col+row*num_boxes)*(5+classes);
-        if (truth[index]) continue;
-        truth[index++] = 1;
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = (ਖਾਨਾ+ਪੰਕਤੀ*ਅੰਕ_boxes)*(5+classes);
+        ਜੇ (truth[ਸੂਚਕਾਂਕ]) ਜਾਰੀ;
+        truth[ਸੂਚਕਾਂਕ++] = 1;
 
-        if (id < classes) truth[index+id] = 1;
-        index += classes;
+        ਜੇ (id < classes) truth[ਸੂਚਕਾਂਕ+id] = 1;
+        ਸੂਚਕਾਂਕ += classes;
 
-        truth[index++] = x;
-        truth[index++] = y;
-        truth[index++] = w;
-        truth[index++] = h;
+        truth[ਸੂਚਕਾਂਕ++] = x;
+        truth[ਸੂਚਕਾਂਕ++] = y;
+        truth[ਸੂਚਕਾਂਕ++] = w;
+        truth[ਸੂਚਕਾਂਕ++] = h;
     }
-    free(boxes);
+    ਮੁਕਤ(boxes);
 }
 
-void load_rle(image im, int *rle, int n)
+ਖਾਲੀ ਲੱਦੋ_rle(image im, ਪੂਰਨ *rle, ਪੂਰਨ n)
 {
-    int count = 0;
-    int curr = 0;
-    int i,j;
-    for(i = 0; i < n; ++i){
-        for(j = 0; j < rle[i]; ++j){
-            im.data[count++] = curr;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਪੂਰਨ curr = 0;
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < n; ++i){
+        ਲਈ(j = 0; j < rle[i]; ++j){
+            im.ਅੰਕੜੇ[ਗਿਣਤੀ_2++] = curr;
         }
         curr = 1 - curr;
     }
-    for(; count < im.h*im.w*im.c; ++count){
-        im.data[count] = curr;
+    ਲਈ(; ਗਿਣਤੀ_2 < im.h*im.w*im.c; ++ਗਿਣਤੀ_2){
+        im.ਅੰਕੜੇ[ਗਿਣਤੀ_2] = curr;
     }
 }
 
-void or_image(image src, image dest, int c)
+ਖਾਲੀ or_image(image src, image dest, ਪੂਰਨ c)
 {
-    int i;
-    for(i = 0; i < src.w*src.h; ++i){
-        if(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < src.w*src.h; ++i){
+        ਜੇ(src.ਅੰਕੜੇ[i]) dest.ਅੰਕੜੇ[dest.w*dest.h*c + i] = 1;
     }
 }
 
-void exclusive_image(image src)
+ਖਾਲੀ exclusive_image(image src)
 {
-    int k, j, i;
-    int s = src.w*src.h;
-    for(k = 0; k < src.c-1; ++k){
-        for(i = 0; i < s; ++i){
-            if (src.data[k*s + i]){
-                for(j = k+1; j < src.c; ++j){
-                    src.data[j*s + i] = 0;
+    ਪੂਰਨ k, j, i;
+    ਪੂਰਨ s = src.w*src.h;
+    ਲਈ(k = 0; k < src.c-1; ++k){
+        ਲਈ(i = 0; i < s; ++i){
+            ਜੇ (src.ਅੰਕੜੇ[k*s + i]){
+                ਲਈ(j = k+1; j < src.c; ++j){
+                    src.ਅੰਕੜੇ[j*s + i] = 0;
                 }
             }
         }
@@ -341,14 +341,14 @@ void exclusive_image(image src)
 
 box bound_image(image im)
 {
-    int x,y;
-    int minx = im.w;
-    int miny = im.h;
-    int maxx = 0;
-    int maxy = 0;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            if(im.data[y*im.w + x]){
+    ਪੂਰਨ x,y;
+    ਪੂਰਨ minx = im.w;
+    ਪੂਰਨ miny = im.h;
+    ਪੂਰਨ maxx = 0;
+    ਪੂਰਨ maxy = 0;
+    ਲਈ(y = 0; y < im.h; ++y){
+        ਲਈ(x = 0; x < im.w; ++x){
+            ਜੇ(im.ਅੰਕੜੇ[y*im.w + x]){
                 minx = (x < minx) ? x : minx;
                 miny = (y < miny) ? y : miny;
                 maxx = (x > maxx) ? x : maxx;
@@ -358,123 +358,123 @@ box bound_image(image im)
     }
     box b = {minx, miny, maxx-minx + 1, maxy-miny + 1};
     //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
-    return b;
+    ਵਾਪਸ b;
 }
 
-void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+ਖਾਲੀ fill_truth_iseg(ਅੱਖਰ *ਰਸਤਾ, ਪੂਰਨ ਅੰਕ_boxes, ਦਸ਼ਮਲਵ *truth, ਪੂਰਨ classes, ਪੂਰਨ w, ਪੂਰਨ h, augment_ਦਲੀਲਾਂ aug, ਪੂਰਨ flip, ਪੂਰਨ mw, ਪੂਰਨ mh)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
-    int j;
+    ਜੇ(!file) file_error(labelpath);
+    ਅੱਖਰ buff[32788];
+    ਪੂਰਨ id;
+    ਪੂਰਨ i = 0;
+    ਪੂਰਨ j;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
+    ਜਦੋਂ((fscanf(file, "%d %s", &id, buff) == 2) && i < ਅੰਕ_boxes){
+        ਪੂਰਨ n = 0;
+        ਪੂਰਨ *rle = read_intlist(buff, &n, 0);
+        ਲੱਦੋ_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        ਜੇ(flip) flip_image(sized);
 
-        image mask = resize_image(sized, mw, mh);
+        image ਨਕਾਬ = resize_image(sized, mw, mh);
         truth[i*(mw*mh+1)] = id;
-        for(j = 0; j < mw*mh; ++j){
-            truth[i*(mw*mh + 1) + 1 + j] = mask.data[j];
+        ਲਈ(j = 0; j < mw*mh; ++j){
+            truth[i*(mw*mh + 1) + 1 + j] = ਨਕਾਬ.ਅੰਕੜੇ[j];
         }
         ++i;
 
-        free_image(mask);
+        free_image(ਨਕਾਬ);
         free_image(sized);
-        free(rle);
+        ਮੁਕਤ(rle);
     }
-    if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
+    ਜੇ(i < ਅੰਕ_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
     free_image(part);
 }
 
-void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+ਖਾਲੀ fill_truth_ਨਕਾਬ(ਅੱਖਰ *ਰਸਤਾ, ਪੂਰਨ ਅੰਕ_boxes, ਦਸ਼ਮਲਵ *truth, ਪੂਰਨ classes, ਪੂਰਨ w, ਪੂਰਨ h, augment_ਦਲੀਲਾਂ aug, ਪੂਰਨ flip, ਪੂਰਨ mw, ਪੂਰਨ mh)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
+    ਜੇ(!file) file_error(labelpath);
+    ਅੱਖਰ buff[32788];
+    ਪੂਰਨ id;
+    ਪੂਰਨ i = 0;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
+    ਜਦੋਂ((fscanf(file, "%d %s", &id, buff) == 2) && i < ਅੰਕ_boxes){
+        ਪੂਰਨ n = 0;
+        ਪੂਰਨ *rle = read_intlist(buff, &n, 0);
+        ਲੱਦੋ_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        ਜੇ(flip) flip_image(sized);
         box b = bound_image(sized);
-        if(b.w > 0){
+        ਜੇ(b.w > 0){
             image crop = crop_image(sized, b.x, b.y, b.w, b.h);
-            image mask = resize_image(crop, mw, mh);
+            image ਨਕਾਬ = resize_image(crop, mw, mh);
             truth[i*(4 + mw*mh + 1) + 0] = (b.x + b.w/2.)/sized.w;
             truth[i*(4 + mw*mh + 1) + 1] = (b.y + b.h/2.)/sized.h;
             truth[i*(4 + mw*mh + 1) + 2] = b.w/sized.w;
             truth[i*(4 + mw*mh + 1) + 3] = b.h/sized.h;
-            int j;
-            for(j = 0; j < mw*mh; ++j){
-                truth[i*(4 + mw*mh + 1) + 4 + j] = mask.data[j];
+            ਪੂਰਨ j;
+            ਲਈ(j = 0; j < mw*mh; ++j){
+                truth[i*(4 + mw*mh + 1) + 4 + j] = ਨਕਾਬ.ਅੰਕੜੇ[j];
             }
             truth[i*(4 + mw*mh + 1) + 4 + mw*mh] = id;
             free_image(crop);
-            free_image(mask);
+            free_image(ਨਕਾਬ);
             ++i;
         }
         free_image(sized);
-        free(rle);
+        ਮੁਕਤ(rle);
     }
     fclose(file);
     free_image(part);
 }
 
 
-void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+ਖਾਲੀ fill_truth_detection(ਅੱਖਰ *ਰਸਤਾ, ਪੂਰਨ ਅੰਕ_boxes, ਦਸ਼ਮਲਵ *truth, ਪੂਰਨ classes, ਪੂਰਨ flip, ਦਸ਼ਮਲਵ dx, ਦਸ਼ਮਲਵ dy, ਦਸ਼ਮਲਵ sx, ਦਸ਼ਮਲਵ sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "labels", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "labels", labelpath);
 
-    find_replace(labelpath, "raw", "labels", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".png", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    if(count > num_boxes) count = num_boxes;
-    float x,y,w,h;
-    int id;
-    int i;
-    int sub = 0;
+    ਲੱਭੋ_replace(labelpath, "raw", "labels", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".png", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    box_label *boxes = read_boxes(labelpath, &ਗਿਣਤੀ_2);
+    randomize_boxes(boxes, ਗਿਣਤੀ_2);
+    correct_boxes(boxes, ਗਿਣਤੀ_2, dx, dy, sx, sy, flip);
+    ਜੇ(ਗਿਣਤੀ_2 > ਅੰਕ_boxes) ਗਿਣਤੀ_2 = ਅੰਕ_boxes;
+    ਦਸ਼ਮਲਵ x,y,w,h;
+    ਪੂਰਨ id;
+    ਪੂਰਨ i;
+    ਪੂਰਨ sub = 0;
 
-    for (i = 0; i < count; ++i) {
+    ਲਈ (i = 0; i < ਗਿਣਤੀ_2; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if ((w < .001 || h < .001)) {
+        ਜੇ ((w < .001 || h < .001)) {
             ++sub;
-            continue;
+            ਜਾਰੀ;
         }
 
         truth[(i-sub)*5+0] = x;
@@ -483,292 +483,292 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
         truth[(i-sub)*5+3] = h;
         truth[(i-sub)*5+4] = id;
     }
-    free(boxes);
+    ਮੁਕਤ(boxes);
 }
 
-#define NUMCHARS 37
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ NUMCHARS 37
 
-void print_letters(float *pred, int n)
+ਖਾਲੀ print_letters(ਦਸ਼ਮਲਵ *pred, ਪੂਰਨ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        int index = max_index(pred+i*NUMCHARS, NUMCHARS);
-        printf("%c", int_to_alphanum(index));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = max_ਸੂਚਕਾਂਕ(pred+i*NUMCHARS, NUMCHARS);
+        ਲਿਖੋ("%c", int_ਮੰਜ਼ਿਲ_alphanum(ਸੂਚਕਾਂਕ));
     }
-    printf("\n");
+    ਲਿਖੋ("\n");
 }
 
-void fill_truth_captcha(char *path, int n, float *truth)
+ਖਾਲੀ fill_truth_captcha(ਅੱਖਰ *ਰਸਤਾ, ਪੂਰਨ n, ਦਸ਼ਮਲਵ *truth)
 {
-    char *begin = strrchr(path, '/');
+    ਅੱਖਰ *begin = strrchr(ਰਸਤਾ, '/');
     ++begin;
-    int i;
-    for(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
-        int index = alphanum_to_int(begin[i]);
-        if(index > 35) printf("Bad %c\n", begin[i]);
-        truth[i*NUMCHARS+index] = 1;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < ਲੜੀ_ਲੰਬਾਈ(begin) && i < n && begin[i] != '.'; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = alphanum_ਮੰਜ਼ਿਲ_int(begin[i]);
+        ਜੇ(ਸੂਚਕਾਂਕ > 35) ਲਿਖੋ("Bad %c\n", begin[i]);
+        truth[i*NUMCHARS+ਸੂਚਕਾਂਕ] = 1;
     }
-    for(;i < n; ++i){
+    ਲਈ(;i < n; ++i){
         truth[i*NUMCHARS + NUMCHARS-1] = 1;
     }
 }
 
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_captcha(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਪੂਰਨ k, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = make_matrix(n, k*NUMCHARS);
-    int i;
-    for(i = 0; i < n; ++i){
+    d.X = ਲੱਦੋ_image_paths(paths, n, w, h);
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(n, k*NUMCHARS);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
         fill_truth_captcha(paths[i], k, d.y.vals[i]);
     }
-    if(m) free(paths);
-    return d;
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_captcha_encode(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.X.cols = 17100;
+    d.X = ਲੱਦੋ_image_paths(paths, n, w, h);
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = 17100;
     d.y = d.X;
-    if(m) free(paths);
-    return d;
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-void fill_truth(char *path, char **labels, int k, float *truth)
+ਖਾਲੀ fill_truth(ਅੱਖਰ *ਰਸਤਾ, ਅੱਖਰ **labels, ਪੂਰਨ k, ਦਸ਼ਮਲਵ *truth)
 {
-    int i;
-    memset(truth, 0, k*sizeof(float));
-    int count = 0;
-    for(i = 0; i < k; ++i){
-        if(strstr(path, labels[i])){
+    ਪੂਰਨ i;
+    memset(truth, 0, k*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਲਈ(i = 0; i < k; ++i){
+        ਜੇ(ਲੜੀ_ਖੋਜ(ਰਸਤਾ, labels[i])){
             truth[i] = 1;
-            ++count;
+            ++ਗਿਣਤੀ_2;
             //printf("%s %s %d\n", path, labels[i], i);
         }
     }
-    if(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
+    ਜੇ(ਗਿਣਤੀ_2 != 1 && (k != 1 || ਗਿਣਤੀ_2 != 0)) ਲਿਖੋ("Too many or too few labels: %d, %s\n", ਗਿਣਤੀ_2, ਰਸਤਾ);
 }
 
-void fill_hierarchy(float *truth, int k, tree *hierarchy)
+ਖਾਲੀ fill_hierarchy(ਦਸ਼ਮਲਵ *truth, ਪੂਰਨ k, ਰੁੱਖ *hierarchy)
 {
-    int j;
-    for(j = 0; j < k; ++j){
-        if(truth[j]){
-            int parent = hierarchy->parent[j];
-            while(parent >= 0){
-                truth[parent] = 1;
-                parent = hierarchy->parent[parent];
+    ਪੂਰਨ j;
+    ਲਈ(j = 0; j < k; ++j){
+        ਜੇ(truth[j]){
+            ਪੂਰਨ ਮਾਪਾ = hierarchy->ਮਾਪਾ[j];
+            ਜਦੋਂ(ਮਾਪਾ >= 0){
+                truth[ਮਾਪਾ] = 1;
+                ਮਾਪਾ = hierarchy->ਮਾਪਾ[ਮਾਪਾ];
             }
         }
     }
-    int i;
-    int count = 0;
-    for(j = 0; j < hierarchy->groups; ++j){
+    ਪੂਰਨ i;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਲਈ(j = 0; j < hierarchy->groups; ++j){
         //printf("%d\n", count);
-        int mask = 1;
-        for(i = 0; i < hierarchy->group_size[j]; ++i){
-            if(truth[count + i]){
-                mask = 0;
-                break;
+        ਪੂਰਨ ਨਕਾਬ = 1;
+        ਲਈ(i = 0; i < hierarchy->ਸਮੂਹ_ਮਾਪ[j]; ++i){
+            ਜੇ(truth[ਗਿਣਤੀ_2 + i]){
+                ਨਕਾਬ = 0;
+                ਰੋਕੋ;
             }
         }
-        if (mask) {
-            for(i = 0; i < hierarchy->group_size[j]; ++i){
-                truth[count + i] = SECRET_NUM;
+        ਜੇ (ਨਕਾਬ) {
+            ਲਈ(i = 0; i < hierarchy->ਸਮੂਹ_ਮਾਪ[j]; ++i){
+                truth[ਗਿਣਤੀ_2 + i] = SECRET_ਅੰਕ;
             }
         }
-        count += hierarchy->group_size[j];
+        ਗਿਣਤੀ_2 += hierarchy->ਸਮੂਹ_ਮਾਪ[j];
     }
 }
 
-matrix load_regression_labels_paths(char **paths, int n, int k)
+ਮੈਟ੍ਰਿਕਸ ਲੱਦੋ_regression_labels_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ k)
 {
-    matrix y = make_matrix(n, k);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        char labelpath[4096];
-        find_replace(paths[i], "images", "labels", labelpath);
-        find_replace(labelpath, "JPEGImages", "labels", labelpath);
-        find_replace(labelpath, ".BMP", ".txt", labelpath);
-        find_replace(labelpath, ".JPEG", ".txt", labelpath);
-        find_replace(labelpath, ".JPG", ".txt", labelpath);
-        find_replace(labelpath, ".JPeG", ".txt", labelpath);
-        find_replace(labelpath, ".Jpeg", ".txt", labelpath);
-        find_replace(labelpath, ".PNG", ".txt", labelpath);
-        find_replace(labelpath, ".TIF", ".txt", labelpath);
-        find_replace(labelpath, ".bmp", ".txt", labelpath);
-        find_replace(labelpath, ".jpeg", ".txt", labelpath);
-        find_replace(labelpath, ".jpg", ".txt", labelpath);
-        find_replace(labelpath, ".png", ".txt", labelpath);
-        find_replace(labelpath, ".tif", ".txt", labelpath);
+    ਮੈਟ੍ਰਿਕਸ y = make_ਮੈਟ੍ਰਿਕਸ(n, k);
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < n; ++i){
+        ਅੱਖਰ labelpath[4096];
+        ਲੱਭੋ_replace(paths[i], "images", "labels", labelpath);
+        ਲੱਭੋ_replace(labelpath, "JPEGImages", "labels", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".BMP", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".JPeG", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".Jpeg", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".PNG", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".TIF", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".bmp", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".jpeg", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".png", ".txt", labelpath);
+        ਲੱਭੋ_replace(labelpath, ".tif", ".txt", labelpath);
 
         FILE *file = fopen(labelpath, "r");
-        for(j = 0; j < k; ++j){
+        ਲਈ(j = 0; j < k; ++j){
             fscanf(file, "%f", &(y.vals[i][j]));
         }
         fclose(file);
     }
-    return y;
+    ਵਾਪਸ y;
 }
 
-matrix load_labels_paths(char **paths, int n, char **labels, int k, tree *hierarchy)
+ਮੈਟ੍ਰਿਕਸ ਲੱਦੋ_labels_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਅੱਖਰ **labels, ਪੂਰਨ k, ਰੁੱਖ *hierarchy)
 {
-    matrix y = make_matrix(n, k);
-    int i;
-    for(i = 0; i < n && labels; ++i){
+    ਮੈਟ੍ਰਿਕਸ y = make_ਮੈਟ੍ਰਿਕਸ(n, k);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n && labels; ++i){
         fill_truth(paths[i], labels, k, y.vals[i]);
-        if(hierarchy){
+        ਜੇ(hierarchy){
             fill_hierarchy(y.vals[i], k, hierarchy);
         }
     }
-    return y;
+    ਵਾਪਸ y;
 }
 
-matrix load_tags_paths(char **paths, int n, int k)
+ਮੈਟ੍ਰਿਕਸ ਲੱਦੋ_ਟੈਗ_ਸੂਚੀ_paths(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ k)
 {
-    matrix y = make_matrix(n, k);
-    int i;
+    ਮੈਟ੍ਰਿਕਸ y = make_ਮੈਟ੍ਰਿਕਸ(n, k);
+    ਪੂਰਨ i;
     //int count = 0;
-    for(i = 0; i < n; ++i){
-        char label[4096];
-        find_replace(paths[i], "images", "labels", label);
-        find_replace(label, ".jpg", ".txt", label);
+    ਲਈ(i = 0; i < n; ++i){
+        ਅੱਖਰ label[4096];
+        ਲੱਭੋ_replace(paths[i], "images", "labels", label);
+        ਲੱਭੋ_replace(label, ".jpg", ".txt", label);
         FILE *file = fopen(label, "r");
-        if (!file) continue;
+        ਜੇ (!file) ਜਾਰੀ;
         //++count;
-        int tag;
-        while(fscanf(file, "%d", &tag) == 1){
-            if(tag < k){
-                y.vals[i][tag] = 1;
+        ਪੂਰਨ ਟੈਗ;
+        ਜਦੋਂ(fscanf(file, "%d", &ਟੈਗ) == 1){
+            ਜੇ(ਟੈਗ < k){
+                y.vals[i][ਟੈਗ] = 1;
             }
         }
         fclose(file);
     }
     //printf("%d/%d\n", count, n);
-    return y;
+    ਵਾਪਸ y;
 }
 
-char **get_labels(char *filename)
+ਅੱਖਰ **get_labels(ਅੱਖਰ *filename)
 {
     list *plist = get_paths(filename);
-    char **labels = (char **)list_to_array(plist);
+    ਅੱਖਰ **labels = (ਅੱਖਰ **)list_ਮੰਜ਼ਿਲ_array(plist);
     free_list(plist);
-    return labels;
+    ਵਾਪਸ labels;
 }
 
-void free_data(data d)
+ਖਾਲੀ free_ਅੰਕੜੇ(ਅੰਕੜੇ d)
 {
-    if(!d.shallow){
-        free_matrix(d.X);
-        free_matrix(d.y);
-    }else{
-        free(d.X.vals);
-        free(d.y.vals);
+    ਜੇ(!d.shallow){
+        free_ਮੈਟ੍ਰਿਕਸ(d.X);
+        free_ਮੈਟ੍ਰਿਕਸ(d.y);
+    }ਨਹੀਂਤਾਂ{
+        ਮੁਕਤ(d.X.vals);
+        ਮੁਕਤ(d.y.vals);
     }
 }
 
-image get_segmentation_image(char *path, int w, int h, int classes)
+image get_segmentation_image(ਅੱਖਰ *ਰਸਤਾ, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ classes)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    image mask = make_image(w, h, classes);
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
+    image ਨਕਾਬ = make_image(w, h, classes);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    ਜੇ(!file) file_error(labelpath);
+    ਅੱਖਰ buff[32788];
+    ਪੂਰਨ id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
-        or_image(part, mask, id);
-        free(rle);
+    ਜਦੋਂ(fscanf(file, "%d %s", &id, buff) == 2){
+        ਪੂਰਨ n = 0;
+        ਪੂਰਨ *rle = read_intlist(buff, &n, 0);
+        ਲੱਦੋ_rle(part, rle, n);
+        or_image(part, ਨਕਾਬ, id);
+        ਮੁਕਤ(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    ਵਾਪਸ ਨਕਾਬ;
 }
 
-image get_segmentation_image2(char *path, int w, int h, int classes)
+image get_segmentation_image2(ਅੱਖਰ *ਰਸਤਾ, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ classes)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    image mask = make_image(w, h, classes+1);
-    int i;
-    for(i = 0; i < w*h; ++i){
-        mask.data[w*h*classes + i] = 1;
+    ਅੱਖਰ labelpath[4096];
+    ਲੱਭੋ_replace(ਰਸਤਾ, "images", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, "JPEGImages", "mask", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".jpg", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPG", ".txt", labelpath);
+    ਲੱਭੋ_replace(labelpath, ".JPEG", ".txt", labelpath);
+    image ਨਕਾਬ = make_image(w, h, classes+1);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < w*h; ++i){
+        ਨਕਾਬ.ਅੰਕੜੇ[w*h*classes + i] = 1;
     }
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    ਜੇ(!file) file_error(labelpath);
+    ਅੱਖਰ buff[32788];
+    ਪੂਰਨ id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
-        or_image(part, mask, id);
-        for(i = 0; i < w*h; ++i){
-            if(part.data[i]) mask.data[w*h*classes + i] = 0;
+    ਜਦੋਂ(fscanf(file, "%d %s", &id, buff) == 2){
+        ਪੂਰਨ n = 0;
+        ਪੂਰਨ *rle = read_intlist(buff, &n, 0);
+        ਲੱਦੋ_rle(part, rle, n);
+        or_image(part, ਨਕਾਬ, id);
+        ਲਈ(i = 0; i < w*h; ++i){
+            ਜੇ(part.ਅੰਕੜੇ[i]) ਨਕਾਬ.ਅੰਕੜੇ[w*h*classes + i] = 0;
         }
-        free(rle);
+        ਮੁਕਤ(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    ਵਾਪਸ ਨਕਾਬ;
 }
 
-data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure, int div)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_seg(ਪੂਰਨ n, ਅੱਖਰ **paths, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ classes, ਪੂਰਨ min, ਪੂਰਨ max, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure, ਪੂਰਨ div)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    ਅੱਖਰ **random_paths = get_random_paths(paths, n, m);
+    ਪੂਰਨ i;
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*3;
 
 
-    d.y.rows = n;
-    d.y.cols = h*w*classes/div/div;
-    d.y.vals = calloc(d.X.rows, sizeof(float*));
+    d.y.ਪੰਕਤੀਆਂ = n;
+    d.y.ਖਾਨੇ_ਗਿਣਤੀ = h*w*classes/div/div;
+    d.y.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    ਲਈ(i = 0; i < n; ++i){
+        image orig = ਲੱਦੋ_image_color(random_paths[i], 0, 0);
+        augment_ਦਲੀਲਾਂ a = random_augment_ਦਲੀਲਾਂ(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ਪੂਰਨ flip = rand()%2;
+        ਜੇ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.ਅੰਕੜੇ;
 
-        image mask = get_segmentation_image(random_paths[i], orig.w, orig.h, classes);
+        image ਨਕਾਬ = get_segmentation_image(random_paths[i], orig.w, orig.h, classes);
         //image mask = make_image(orig.w, orig.h, classes+1);
-        image sized_m = rotate_crop_image(mask, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
+        image sized_m = rotate_crop_image(ਨਕਾਬ, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
 
-        if(flip) flip_image(sized_m);
-        d.y.vals[i] = sized_m.data;
+        ਜੇ(flip) flip_image(sized_m);
+        d.y.vals[i] = sized_m.ਅੰਕੜੇ;
 
         free_image(orig);
-        free_image(mask);
+        free_image(ਨਕਾਬ);
 
         /*
            image rgb = mask_to_rgb(sized_m, classes);
@@ -778,32 +778,32 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    ਮੁਕਤ(random_paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int boxes, int div, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_iseg(ਪੂਰਨ n, ਅੱਖਰ **paths, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ classes, ਪੂਰਨ boxes, ਪੂਰਨ div, ਪੂਰਨ min, ਪੂਰਨ max, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    ਅੱਖਰ **random_paths = get_random_paths(paths, n, m);
+    ਪੂਰਨ i;
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*3;
 
-    d.y = make_matrix(n, (((w/div)*(h/div))+1)*boxes);
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(n, (((w/div)*(h/div))+1)*boxes);
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    ਲਈ(i = 0; i < n; ++i){
+        image orig = ਲੱਦੋ_image_color(random_paths[i], 0, 0);
+        augment_ਦਲੀਲਾਂ a = random_augment_ਦਲੀਲਾਂ(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ਪੂਰਨ flip = rand()%2;
+        ਜੇ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.ਅੰਕੜੇ;
         //show_image(sized, "image");
 
         fill_truth_iseg(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, w/div, h/div);
@@ -818,35 +818,35 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    ਮੁਕਤ(random_paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int boxes, int coords, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_ਨਕਾਬ(ਪੂਰਨ n, ਅੱਖਰ **paths, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ classes, ਪੂਰਨ boxes, ਪੂਰਨ coords, ਪੂਰਨ min, ਪੂਰਨ max, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    ਅੱਖਰ **random_paths = get_random_paths(paths, n, m);
+    ਪੂਰਨ i;
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*3;
 
-    d.y = make_matrix(n, (coords+1)*boxes);
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(n, (coords+1)*boxes);
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    ਲਈ(i = 0; i < n; ++i){
+        image orig = ਲੱਦੋ_image_color(random_paths[i], 0, 0);
+        augment_ਦਲੀਲਾਂ a = random_augment_ਦਲੀਲਾਂ(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ਪੂਰਨ flip = rand()%2;
+        ਜੇ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.ਅੰਕੜੇ;
         //show_image(sized, "image");
 
-        fill_truth_mask(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, 14, 14);
+        fill_truth_ਨਕਾਬ(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, 14, 14);
 
         free_image(orig);
 
@@ -858,116 +858,116 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    ਮੁਕਤ(random_paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_region(ਪੂਰਨ n, ਅੱਖਰ **paths, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ ਮਾਪ, ਪੂਰਨ classes, ਦਸ਼ਮਲਵ jitter, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    ਅੱਖਰ **random_paths = get_random_paths(paths, n, m);
+    ਪੂਰਨ i;
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*3;
 
 
-    int k = size*size*(5+classes);
-    d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
+    ਪੂਰਨ k = ਮਾਪ*ਮਾਪ*(5+classes);
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(n, k);
+    ਲਈ(i = 0; i < n; ++i){
+        image orig = ਲੱਦੋ_image_color(random_paths[i], 0, 0);
 
-        int oh = orig.h;
-        int ow = orig.w;
+        ਪੂਰਨ oh = orig.h;
+        ਪੂਰਨ ow = orig.w;
 
-        int dw = (ow*jitter);
-        int dh = (oh*jitter);
+        ਪੂਰਨ dw = (ow*jitter);
+        ਪੂਰਨ dh = (oh*jitter);
 
-        int pleft  = rand_uniform(-dw, dw);
-        int pright = rand_uniform(-dw, dw);
-        int ptop   = rand_uniform(-dh, dh);
-        int pbot   = rand_uniform(-dh, dh);
+        ਪੂਰਨ pleft  = rand_ਇਕਸਾਰ(-dw, dw);
+        ਪੂਰਨ pright = rand_ਇਕਸਾਰ(-dw, dw);
+        ਪੂਰਨ ptop   = rand_ਇਕਸਾਰ(-dh, dh);
+        ਪੂਰਨ pbot   = rand_ਇਕਸਾਰ(-dh, dh);
 
-        int swidth =  ow - pleft - pright;
-        int sheight = oh - ptop - pbot;
+        ਪੂਰਨ swidth =  ow - pleft - pright;
+        ਪੂਰਨ sheight = oh - ptop - pbot;
 
-        float sx = (float)swidth  / ow;
-        float sy = (float)sheight / oh;
+        ਦਸ਼ਮਲਵ sx = (ਦਸ਼ਮਲਵ)swidth  / ow;
+        ਦਸ਼ਮਲਵ sy = (ਦਸ਼ਮਲਵ)sheight / oh;
 
-        int flip = rand()%2;
+        ਪੂਰਨ flip = rand()%2;
         image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-        float dx = ((float)pleft/ow)/sx;
-        float dy = ((float)ptop /oh)/sy;
+        ਦਸ਼ਮਲਵ dx = ((ਦਸ਼ਮਲਵ)pleft/ow)/sx;
+        ਦਸ਼ਮਲਵ dy = ((ਦਸ਼ਮਲਵ)ptop /oh)/sy;
 
         image sized = resize_image(cropped, w, h);
-        if(flip) flip_image(sized);
+        ਜੇ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.ਅੰਕੜੇ;
 
-        fill_truth_region(random_paths[i], d.y.vals[i], classes, size, flip, dx, dy, 1./sx, 1./sy);
+        fill_truth_region(random_paths[i], d.y.vals[i], classes, ਮਾਪ, flip, dx, dy, 1./sx, 1./sy);
 
         free_image(orig);
         free_image(cropped);
     }
-    free(random_paths);
-    return d;
+    ਮੁਕਤ(random_paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_compare(ਪੂਰਨ n, ਅੱਖਰ **paths, ਪੂਰਨ m, ਪੂਰਨ classes, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    if(m) paths = get_random_paths(paths, 2*n, m);
-    int i,j;
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, 2*n, m);
+    ਪੂਰਨ i,j;
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*6;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*6;
 
-    int k = 2*(classes);
-    d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
-        image im1 = load_image_color(paths[i*2],   w, h);
-        image im2 = load_image_color(paths[i*2+1], w, h);
+    ਪੂਰਨ k = 2*(classes);
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(n, k);
+    ਲਈ(i = 0; i < n; ++i){
+        image im1 = ਲੱਦੋ_image_color(paths[i*2],   w, h);
+        image im2 = ਲੱਦੋ_image_color(paths[i*2+1], w, h);
 
-        d.X.vals[i] = calloc(d.X.cols, sizeof(float));
-        memcpy(d.X.vals[i],         im1.data, h*w*3*sizeof(float));
-        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*sizeof(float));
+        d.X.vals[i] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਖਾਨੇ_ਗਿਣਤੀ, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(d.X.vals[i],         im1.ਅੰਕੜੇ, h*w*3*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(d.X.vals[i] + h*w*3, im2.ਅੰਕੜੇ, h*w*3*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 
-        int id;
-        float iou;
+        ਪੂਰਨ id;
+        ਦਸ਼ਮਲਵ iou;
 
-        char imlabel1[4096];
-        char imlabel2[4096];
-        find_replace(paths[i*2],   "imgs", "labels", imlabel1);
-        find_replace(imlabel1, "jpg", "txt", imlabel1);
+        ਅੱਖਰ imlabel1[4096];
+        ਅੱਖਰ imlabel2[4096];
+        ਲੱਭੋ_replace(paths[i*2],   "imgs", "labels", imlabel1);
+        ਲੱਭੋ_replace(imlabel1, "jpg", "txt", imlabel1);
         FILE *fp1 = fopen(imlabel1, "r");
 
-        while(fscanf(fp1, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
+        ਜਦੋਂ(fscanf(fp1, "%d %f", &id, &iou) == 2){
+            ਜੇ (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
         }
 
-        find_replace(paths[i*2+1], "imgs", "labels", imlabel2);
-        find_replace(imlabel2, "jpg", "txt", imlabel2);
+        ਲੱਭੋ_replace(paths[i*2+1], "imgs", "labels", imlabel2);
+        ਲੱਭੋ_replace(imlabel2, "jpg", "txt", imlabel2);
         FILE *fp2 = fopen(imlabel2, "r");
 
-        while(fscanf(fp2, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
+        ਜਦੋਂ(fscanf(fp2, "%d %f", &id, &iou) == 2){
+            ਜੇ (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
         }
 
-        for (j = 0; j < classes; ++j){
-            if (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
+        ਲਈ (j = 0; j < classes; ++j){
+            ਜੇ (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
                 d.y.vals[i][2*j] = 1;
                 d.y.vals[i][2*j+1] = 0;
-            } else if (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
+            } ਨਹੀਂਤਾਂ ਜੇ (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
                 d.y.vals[i][2*j] = 0;
                 d.y.vals[i][2*j+1] = 1;
-            } else {
-                d.y.vals[i][2*j]   = SECRET_NUM;
-                d.y.vals[i][2*j+1] = SECRET_NUM;
+            } ਨਹੀਂਤਾਂ {
+                d.y.vals[i][2*j]   = SECRET_ਅੰਕ;
+                d.y.vals[i][2*j+1] = SECRET_ਅੰਕ;
             }
         }
         fclose(fp1);
@@ -976,240 +976,240 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
         free_image(im1);
         free_image(im2);
     }
-    if(m) free(paths);
-    return d;
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_swag(char **paths, int n, int classes, float jitter)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_swag(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ classes, ਦਸ਼ਮਲਵ jitter)
 {
-    int index = rand()%n;
-    char *random_path = paths[index];
+    ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%n;
+    ਅੱਖਰ *random_ਰਸਤਾ = paths[ਸੂਚਕਾਂਕ];
 
-    image orig = load_image_color(random_path, 0, 0);
-    int h = orig.h;
-    int w = orig.w;
+    image orig = ਲੱਦੋ_image_color(random_ਰਸਤਾ, 0, 0);
+    ਪੂਰਨ h = orig.h;
+    ਪੂਰਨ w = orig.w;
 
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
 
-    d.X.rows = 1;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ਪੰਕਤੀਆਂ = 1;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*3;
 
-    int k = (4+classes)*90;
-    d.y = make_matrix(1, k);
+    ਪੂਰਨ k = (4+classes)*90;
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(1, k);
 
-    int dw = w*jitter;
-    int dh = h*jitter;
+    ਪੂਰਨ dw = w*jitter;
+    ਪੂਰਨ dh = h*jitter;
 
-    int pleft  = rand_uniform(-dw, dw);
-    int pright = rand_uniform(-dw, dw);
-    int ptop   = rand_uniform(-dh, dh);
-    int pbot   = rand_uniform(-dh, dh);
+    ਪੂਰਨ pleft  = rand_ਇਕਸਾਰ(-dw, dw);
+    ਪੂਰਨ pright = rand_ਇਕਸਾਰ(-dw, dw);
+    ਪੂਰਨ ptop   = rand_ਇਕਸਾਰ(-dh, dh);
+    ਪੂਰਨ pbot   = rand_ਇਕਸਾਰ(-dh, dh);
 
-    int swidth =  w - pleft - pright;
-    int sheight = h - ptop - pbot;
+    ਪੂਰਨ swidth =  w - pleft - pright;
+    ਪੂਰਨ sheight = h - ptop - pbot;
 
-    float sx = (float)swidth  / w;
-    float sy = (float)sheight / h;
+    ਦਸ਼ਮਲਵ sx = (ਦਸ਼ਮਲਵ)swidth  / w;
+    ਦਸ਼ਮਲਵ sy = (ਦਸ਼ਮਲਵ)sheight / h;
 
-    int flip = rand()%2;
+    ਪੂਰਨ flip = rand()%2;
     image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-    float dx = ((float)pleft/w)/sx;
-    float dy = ((float)ptop /h)/sy;
+    ਦਸ਼ਮਲਵ dx = ((ਦਸ਼ਮਲਵ)pleft/w)/sx;
+    ਦਸ਼ਮਲਵ dy = ((ਦਸ਼ਮਲਵ)ptop /h)/sy;
 
     image sized = resize_image(cropped, w, h);
-    if(flip) flip_image(sized);
-    d.X.vals[0] = sized.data;
+    ਜੇ(flip) flip_image(sized);
+    d.X.vals[0] = sized.ਅੰਕੜੇ;
 
-    fill_truth_swag(random_path, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
+    fill_truth_swag(random_ਰਸਤਾ, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
 
     free_image(orig);
     free_image(cropped);
 
-    return d;
+    ਵਾਪਸ d;
 }
 
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_detection(ਪੂਰਨ n, ਅੱਖਰ **paths, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ boxes, ਪੂਰਨ classes, ਦਸ਼ਮਲਵ jitter, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    ਅੱਖਰ **random_paths = get_random_paths(paths, n, m);
+    ਪੂਰਨ i;
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = h*w*3;
 
-    d.y = make_matrix(n, 5*boxes);
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
+    d.y = make_ਮੈਟ੍ਰਿਕਸ(n, 5*boxes);
+    ਲਈ(i = 0; i < n; ++i){
+        image orig = ਲੱਦੋ_image_color(random_paths[i], 0, 0);
         image sized = make_image(w, h, orig.c);
         fill_image(sized, .5);
 
-        float dw = jitter * orig.w;
-        float dh = jitter * orig.h;
+        ਦਸ਼ਮਲਵ dw = jitter * orig.w;
+        ਦਸ਼ਮਲਵ dh = jitter * orig.h;
 
-        float new_ar = (orig.w + rand_uniform(-dw, dw)) / (orig.h + rand_uniform(-dh, dh));
+        ਦਸ਼ਮਲਵ new_ar = (orig.w + rand_ਇਕਸਾਰ(-dw, dw)) / (orig.h + rand_ਇਕਸਾਰ(-dh, dh));
         //float scale = rand_uniform(.25, 2);
-        float scale = 1;
+        ਦਸ਼ਮਲਵ scale = 1;
 
-        float nw, nh;
+        ਦਸ਼ਮਲਵ nw, nh;
 
-        if(new_ar < 1){
+        ਜੇ(new_ar < 1){
             nh = scale * h;
             nw = nh * new_ar;
-        } else {
+        } ਨਹੀਂਤਾਂ {
             nw = scale * w;
             nh = nw / new_ar;
         }
 
-        float dx = rand_uniform(0, w - nw);
-        float dy = rand_uniform(0, h - nh);
+        ਦਸ਼ਮਲਵ dx = rand_ਇਕਸਾਰ(0, w - nw);
+        ਦਸ਼ਮਲਵ dy = rand_ਇਕਸਾਰ(0, h - nh);
 
-        place_image(orig, nw, nh, dx, dy, sized);
+        ਰੱਖੋ_image(orig, nw, nh, dx, dy, sized);
 
         random_distort_image(sized, hue, saturation, exposure);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
-        d.X.vals[i] = sized.data;
+        ਪੂਰਨ flip = rand()%2;
+        ਜੇ(flip) flip_image(sized);
+        d.X.vals[i] = sized.ਅੰਕੜੇ;
 
 
         fill_truth_detection(random_paths[i], boxes, d.y.vals[i], classes, flip, -dx/w, -dy/h, nw/w, nh/h);
 
         free_image(orig);
     }
-    free(random_paths);
-    return d;
+    ਮੁਕਤ(random_paths);
+    ਵਾਪਸ d;
 }
 
-void *load_thread(void *ptr)
+ਖਾਲੀ *ਲੱਦੋ_thread(ਖਾਲੀ *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
-    if(a.exposure == 0) a.exposure = 1;
-    if(a.saturation == 0) a.saturation = 1;
-    if(a.aspect == 0) a.aspect = 1;
+    ਲੱਦੋ_ਦਲੀਲਾਂ a = *(ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ*)ptr;
+    ਜੇ(a.exposure == 0) a.exposure = 1;
+    ਜੇ(a.saturation == 0) a.saturation = 1;
+    ਜੇ(a.aspect == 0) a.aspect = 1;
 
-    if (a.type == OLD_CLASSIFICATION_DATA){
-        *a.d = load_data_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
-    } else if (a.type == REGRESSION_DATA){
-        *a.d = load_data_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == CLASSIFICATION_DATA){
-        *a.d = load_data_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
-    } else if (a.type == SUPER_DATA){
-        *a.d = load_data_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
-    } else if (a.type == WRITING_DATA){
-        *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
-    } else if (a.type == ISEG_DATA){
-        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == INSTANCE_DATA){
-        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SEGMENTATION_DATA){
-        *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
-    } else if (a.type == REGION_DATA){
-        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == DETECTION_DATA){
-        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SWAG_DATA){
-        *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
-    } else if (a.type == COMPARE_DATA){
-        *a.d = load_data_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
-    } else if (a.type == IMAGE_DATA){
-        *(a.im) = load_image_color(a.path, 0, 0);
+    ਜੇ (a.type == OLD_CLASSIFICATION_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == REGRESSION_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.ਮਾਪ, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == CLASSIFICATION_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.ਮਾਪ, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == SUPER_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == WRITING_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_writing(a.paths, a.n, a.m, a.w, a.h, a.ਬਾਹਰਲਾ_w, a.ਬਾਹਰਲਾ_h);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == ISEG_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.ਅੰਕ_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == INSTANCE_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_ਨਕਾਬ(a.n, a.paths, a.m, a.w, a.h, a.classes, a.ਅੰਕ_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == SEGMENTATION_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == REGION_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_region(a.n, a.paths, a.m, a.w, a.h, a.ਅੰਕ_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == DETECTION_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_detection(a.n, a.paths, a.m, a.w, a.h, a.ਅੰਕ_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == SWAG_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_swag(a.paths, a.n, a.classes, a.jitter);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == COMPARE_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == IMAGE_ਅੰਕੜੇ){
+        *(a.im) = ਲੱਦੋ_image_color(a.ਰਸਤਾ, 0, 0);
         *(a.resized) = resize_image(*(a.im), a.w, a.h);
-    } else if (a.type == LETTERBOX_DATA){
-        *(a.im) = load_image_color(a.path, 0, 0);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == LETTERBOX_ਅੰਕੜੇ){
+        *(a.im) = ਲੱਦੋ_image_color(a.ਰਸਤਾ, 0, 0);
         *(a.resized) = letterbox_image(*(a.im), a.w, a.h);
-    } else if (a.type == TAG_DATA){
-        *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } ਨਹੀਂਤਾਂ ਜੇ (a.type == ਟੈਗ_ਅੰਕੜੇ){
+        *a.d = ਲੱਦੋ_ਅੰਕੜੇ_ਟੈਗ(a.paths, a.n, a.m, a.classes, a.min, a.max, a.ਮਾਪ, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     }
-    free(ptr);
-    return 0;
+    ਮੁਕਤ(ptr);
+    ਵਾਪਸ 0;
 }
 
-pthread_t load_data_in_thread(load_args args)
+pthread_t ਲੱਦੋ_ਅੰਕੜੇ_ਵਿੱਚ_thread(ਲੱਦੋ_ਦਲੀਲਾਂ ਦਲੀਲਾਂ)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
-    return thread;
+    ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ *ptr = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ));
+    *ptr = ਦਲੀਲਾਂ;
+    ਜੇ(pthread_create(&thread, 0, ਲੱਦੋ_thread, ptr)) error("Thread creation failed");
+    ਵਾਪਸ thread;
 }
 
-void *load_threads(void *ptr)
+ਖਾਲੀ *ਲੱਦੋ_ਧਾਗੇ(ਖਾਲੀ *ptr)
 {
-    int i;
-    load_args args = *(load_args *)ptr;
-    if (args.threads == 0) args.threads = 1;
-    data *out = args.d;
-    int total = args.n;
-    free(ptr);
-    data *buffers = calloc(args.threads, sizeof(data));
-    pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
-    for(i = 0; i < args.threads; ++i){
-        args.d = buffers + i;
-        args.n = (i+1) * total/args.threads - i * total/args.threads;
-        threads[i] = load_data_in_thread(args);
+    ਪੂਰਨ i;
+    ਲੱਦੋ_ਦਲੀਲਾਂ ਦਲੀਲਾਂ = *(ਲੱਦੋ_ਦਲੀਲਾਂ *)ptr;
+    ਜੇ (ਦਲੀਲਾਂ.ਧਾਗੇ == 0) ਦਲੀਲਾਂ.ਧਾਗੇ = 1;
+    ਅੰਕੜੇ *ਬਾਹਰਲਾ = ਦਲੀਲਾਂ.d;
+    ਪੂਰਨ ਕੁੱਲ = ਦਲੀਲਾਂ.n;
+    ਮੁਕਤ(ptr);
+    ਅੰਕੜੇ *buffers = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਦਲੀਲਾਂ.ਧਾਗੇ, ਆਕਾਰ(ਅੰਕੜੇ));
+    pthread_t *ਧਾਗੇ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਦਲੀਲਾਂ.ਧਾਗੇ, ਆਕਾਰ(pthread_t));
+    ਲਈ(i = 0; i < ਦਲੀਲਾਂ.ਧਾਗੇ; ++i){
+        ਦਲੀਲਾਂ.d = buffers + i;
+        ਦਲੀਲਾਂ.n = (i+1) * ਕੁੱਲ/ਦਲੀਲਾਂ.ਧਾਗੇ - i * ਕੁੱਲ/ਦਲੀਲਾਂ.ਧਾਗੇ;
+        ਧਾਗੇ[i] = ਲੱਦੋ_ਅੰਕੜੇ_ਵਿੱਚ_thread(ਦਲੀਲਾਂ);
     }
-    for(i = 0; i < args.threads; ++i){
-        pthread_join(threads[i], 0);
+    ਲਈ(i = 0; i < ਦਲੀਲਾਂ.ਧਾਗੇ; ++i){
+        pthread_join(ਧਾਗੇ[i], 0);
     }
-    *out = concat_datas(buffers, args.threads);
-    out->shallow = 0;
-    for(i = 0; i < args.threads; ++i){
+    *ਬਾਹਰਲਾ = concat_datas(buffers, ਦਲੀਲਾਂ.ਧਾਗੇ);
+    ਬਾਹਰਲਾ->shallow = 0;
+    ਲਈ(i = 0; i < ਦਲੀਲਾਂ.ਧਾਗੇ; ++i){
         buffers[i].shallow = 1;
-        free_data(buffers[i]);
+        free_ਅੰਕੜੇ(buffers[i]);
     }
-    free(buffers);
-    free(threads);
-    return 0;
+    ਮੁਕਤ(buffers);
+    ਮੁਕਤ(ਧਾਗੇ);
+    ਵਾਪਸ 0;
 }
 
-void load_data_blocking(load_args args)
+ਖਾਲੀ ਲੱਦੋ_ਅੰਕੜੇ_blocking(ਲੱਦੋ_ਦਲੀਲਾਂ ਦਲੀਲਾਂ)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    load_thread(ptr);
+    ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ *ptr = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ));
+    *ptr = ਦਲੀਲਾਂ;
+    ਲੱਦੋ_thread(ptr);
 }
 
-pthread_t load_data(load_args args)
+pthread_t ਲੱਦੋ_ਅੰਕੜੇ(ਲੱਦੋ_ਦਲੀਲਾਂ ਦਲੀਲਾਂ)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
-    return thread;
+    ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ *ptr = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਬਣਤਰ ਲੱਦੋ_ਦਲੀਲਾਂ));
+    *ptr = ਦਲੀਲਾਂ;
+    ਜੇ(pthread_create(&thread, 0, ਲੱਦੋ_ਧਾਗੇ, ptr)) error("Thread creation failed");
+    ਵਾਪਸ thread;
 }
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_writing(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ ਬਾਹਰਲਾ_w, ਪੂਰਨ ਬਾਹਰਲਾ_h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    char **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੱਖਰ **replace_paths = ਲੱਭੋ_replace_paths(paths, n, ".png", "-label.png");
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = load_image_paths_gray(replace_paths, n, out_w, out_h);
-    if(m) free(paths);
-    int i;
-    for(i = 0; i < n; ++i) free(replace_paths[i]);
-    free(replace_paths);
-    return d;
+    d.X = ਲੱਦੋ_image_paths(paths, n, w, h);
+    d.y = ਲੱਦੋ_image_paths_ਸਲੇਟੀ(replace_paths, n, ਬਾਹਰਲਾ_w, ਬਾਹਰਲਾ_h);
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i) ਮੁਕਤ(replace_paths[i]);
+    ਮੁਕਤ(replace_paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int h)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_old(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਅੱਖਰ **labels, ਪੂਰਨ k, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = load_labels_paths(paths, n, labels, k, 0);
-    if(m) free(paths);
-    return d;
+    d.X = ਲੱਦੋ_image_paths(paths, n, w, h);
+    d.y = ਲੱਦੋ_labels_paths(paths, n, labels, k, 0);
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
 /*
@@ -1226,327 +1226,327 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    }
  */
 
-data load_data_super(char **paths, int n, int m, int w, int h, int scale)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_super(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ scale)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
 
-    int i;
-    d.X.rows = n;
-    d.X.vals = calloc(n, sizeof(float*));
-    d.X.cols = w*h*3;
+    ਪੂਰਨ i;
+    d.X.ਪੰਕਤੀਆਂ = n;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = w*h*3;
 
-    d.y.rows = n;
-    d.y.vals = calloc(n, sizeof(float*));
-    d.y.cols = w*scale * h*scale * 3;
+    d.y.ਪੰਕਤੀਆਂ = n;
+    d.y.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    d.y.ਖਾਨੇ_ਗਿਣਤੀ = w*scale * h*scale * 3;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], 0, 0);
+    ਲਈ(i = 0; i < n; ++i){
+        image im = ਲੱਦੋ_image_color(paths[i], 0, 0);
         image crop = random_crop_image(im, w*scale, h*scale);
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        ਪੂਰਨ flip = rand()%2;
+        ਜੇ (flip) flip_image(crop);
         image resize = resize_image(crop, w, h);
-        d.X.vals[i] = resize.data;
-        d.y.vals[i] = crop.data;
+        d.X.vals[i] = resize.ਅੰਕੜੇ;
+        d.y.vals[i] = crop.ਅੰਕੜੇ;
         free_image(im);
     }
 
-    if(m) free(paths);
-    return d;
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_regression(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_regression(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਪੂਰਨ k, ਪੂਰਨ min, ਪੂਰਨ max, ਪੂਰਨ ਮਾਪ, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
-    d.y = load_regression_labels_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    d.X = ਲੱਦੋ_image_augment_paths(paths, n, min, max, ਮਾਪ, angle, aspect, hue, saturation, exposure, 0);
+    d.y = ਲੱਦੋ_regression_labels_paths(paths, n, k);
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-data select_data(data *orig, int *inds)
+ਅੰਕੜੇ select_ਅੰਕੜੇ(ਅੰਕੜੇ *orig, ਪੂਰਨ *inds)
 {
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 1;
     d.w = orig[0].w;
     d.h = orig[0].h;
 
-    d.X.rows = orig[0].X.rows;
-    d.y.rows = orig[0].X.rows;
+    d.X.ਪੰਕਤੀਆਂ = orig[0].X.ਪੰਕਤੀਆਂ;
+    d.y.ਪੰਕਤੀਆਂ = orig[0].X.ਪੰਕਤੀਆਂ;
 
-    d.X.cols = orig[0].X.cols;
-    d.y.cols = orig[0].y.cols;
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = orig[0].X.ਖਾਨੇ_ਗਿਣਤੀ;
+    d.y.ਖਾਨੇ_ਗਿਣਤੀ = orig[0].y.ਖਾਨੇ_ਗਿਣਤੀ;
 
-    d.X.vals = calloc(orig[0].X.rows, sizeof(float *));
-    d.y.vals = calloc(orig[0].y.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(orig[0].X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
+    d.y.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(orig[0].y.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < d.X.ਪੰਕਤੀਆਂ; ++i){
         d.X.vals[i] = orig[inds[i]].X.vals[i];
         d.y.vals[i] = orig[inds[i]].y.vals[i];
     }
-    return d;
+    ਵਾਪਸ d;
 }
 
-data *tile_data(data orig, int divs, int size)
+ਅੰਕੜੇ *tile_ਅੰਕੜੇ(ਅੰਕੜੇ orig, ਪੂਰਨ divs, ਪੂਰਨ ਮਾਪ)
 {
-    data *ds = calloc(divs*divs, sizeof(data));
-    int i, j;
-#pragma omp parallel for
-    for(i = 0; i < divs*divs; ++i){
-        data d;
+    ਅੰਕੜੇ *ds = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(divs*divs, ਆਕਾਰ(ਅੰਕੜੇ));
+    ਪੂਰਨ i, j;
+#ਹਦਾਇਤ omp parallel ਲਈ
+    ਲਈ(i = 0; i < divs*divs; ++i){
+        ਅੰਕੜੇ d;
         d.shallow = 0;
-        d.w = orig.w/divs * size;
-        d.h = orig.h/divs * size;
-        d.X.rows = orig.X.rows;
-        d.X.cols = d.w*d.h*3;
-        d.X.vals = calloc(d.X.rows, sizeof(float*));
+        d.w = orig.w/divs * ਮਾਪ;
+        d.h = orig.h/divs * ਮਾਪ;
+        d.X.ਪੰਕਤੀਆਂ = orig.X.ਪੰਕਤੀਆਂ;
+        d.X.ਖਾਨੇ_ਗਿਣਤੀ = d.w*d.h*3;
+        d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
 
-        d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-        for(j = 0; j < orig.X.rows; ++j){
-            int x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
-            int y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
-            image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[j]);
-            d.X.vals[j] = crop_image(im, x, y, d.w, d.h).data;
+        d.y = copy_ਮੈਟ੍ਰਿਕਸ(orig.y);
+#ਹਦਾਇਤ omp parallel ਲਈ
+        ਲਈ(j = 0; j < orig.X.ਪੰਕਤੀਆਂ; ++j){
+            ਪੂਰਨ x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
+            ਪੂਰਨ y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
+            image im = float_ਮੰਜ਼ਿਲ_image(orig.w, orig.h, 3, orig.X.vals[j]);
+            d.X.vals[j] = crop_image(im, x, y, d.w, d.h).ਅੰਕੜੇ;
         }
         ds[i] = d;
     }
-    return ds;
+    ਵਾਪਸ ds;
 }
 
-data resize_data(data orig, int w, int h)
+ਅੰਕੜੇ resize_ਅੰਕੜੇ(ਅੰਕੜੇ orig, ਪੂਰਨ w, ਪੂਰਨ h)
 {
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
-    int i;
-    d.X.rows = orig.X.rows;
-    d.X.cols = w*h*3;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    ਪੂਰਨ i;
+    d.X.ਪੰਕਤੀਆਂ = orig.X.ਪੰਕਤੀਆਂ;
+    d.X.ਖਾਨੇ_ਗਿਣਤੀ = w*h*3;
+    d.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(d.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
 
-    d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-    for(i = 0; i < orig.X.rows; ++i){
-        image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[i]);
-        d.X.vals[i] = resize_image(im, w, h).data;
+    d.y = copy_ਮੈਟ੍ਰਿਕਸ(orig.y);
+#ਹਦਾਇਤ omp parallel ਲਈ
+    ਲਈ(i = 0; i < orig.X.ਪੰਕਤੀਆਂ; ++i){
+        image im = float_ਮੰਜ਼ਿਲ_image(orig.w, orig.h, 3, orig.X.vals[i]);
+        d.X.vals[i] = resize_image(im, w, h).ਅੰਕੜੇ;
     }
-    return d;
+    ਵਾਪਸ d;
 }
 
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_augment(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਅੱਖਰ **labels, ਪੂਰਨ k, ਰੁੱਖ *hierarchy, ਪੂਰਨ min, ਪੂਰਨ max, ਪੂਰਨ ਮਾਪ, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure, ਪੂਰਨ center)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    d.w=size;
-    d.h=size;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, center);
-    d.y = load_labels_paths(paths, n, labels, k, hierarchy);
-    if(m) free(paths);
-    return d;
+    d.w=ਮਾਪ;
+    d.h=ਮਾਪ;
+    d.X = ਲੱਦੋ_image_augment_paths(paths, n, min, max, ਮਾਪ, angle, aspect, hue, saturation, exposure, center);
+    d.y = ਲੱਦੋ_labels_paths(paths, n, labels, k, hierarchy);
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+ਅੰਕੜੇ ਲੱਦੋ_ਅੰਕੜੇ_ਟੈਗ(ਅੱਖਰ **paths, ਪੂਰਨ n, ਪੂਰਨ m, ਪੂਰਨ k, ਪੂਰਨ min, ਪੂਰਨ max, ਪੂਰਨ ਮਾਪ, ਦਸ਼ਮਲਵ angle, ਦਸ਼ਮਲਵ aspect, ਦਸ਼ਮਲਵ hue, ਦਸ਼ਮਲਵ saturation, ਦਸ਼ਮਲਵ exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
-    d.w = size;
-    d.h = size;
+    ਜੇ(m) paths = get_random_paths(paths, n, m);
+    ਅੰਕੜੇ d = {0};
+    d.w = ਮਾਪ;
+    d.h = ਮਾਪ;
     d.shallow = 0;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
-    d.y = load_tags_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    d.X = ਲੱਦੋ_image_augment_paths(paths, n, min, max, ਮਾਪ, angle, aspect, hue, saturation, exposure, 0);
+    d.y = ਲੱਦੋ_ਟੈਗ_ਸੂਚੀ_paths(paths, n, k);
+    ਜੇ(m) ਮੁਕਤ(paths);
+    ਵਾਪਸ d;
 }
 
-matrix concat_matrix(matrix m1, matrix m2)
+ਮੈਟ੍ਰਿਕਸ concat_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ m1, ਮੈਟ੍ਰਿਕਸ m2)
 {
-    int i, count = 0;
-    matrix m;
-    m.cols = m1.cols;
-    m.rows = m1.rows+m2.rows;
-    m.vals = calloc(m1.rows + m2.rows, sizeof(float*));
-    for(i = 0; i < m1.rows; ++i){
-        m.vals[count++] = m1.vals[i];
+    ਪੂਰਨ i, ਗਿਣਤੀ_2 = 0;
+    ਮੈਟ੍ਰਿਕਸ m;
+    m.ਖਾਨੇ_ਗਿਣਤੀ = m1.ਖਾਨੇ_ਗਿਣਤੀ;
+    m.ਪੰਕਤੀਆਂ = m1.ਪੰਕਤੀਆਂ+m2.ਪੰਕਤੀਆਂ;
+    m.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(m1.ਪੰਕਤੀਆਂ + m2.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    ਲਈ(i = 0; i < m1.ਪੰਕਤੀਆਂ; ++i){
+        m.vals[ਗਿਣਤੀ_2++] = m1.vals[i];
     }
-    for(i = 0; i < m2.rows; ++i){
-        m.vals[count++] = m2.vals[i];
+    ਲਈ(i = 0; i < m2.ਪੰਕਤੀਆਂ; ++i){
+        m.vals[ਗਿਣਤੀ_2++] = m2.vals[i];
     }
-    return m;
+    ਵਾਪਸ m;
 }
 
-data concat_data(data d1, data d2)
+ਅੰਕੜੇ concat_ਅੰਕੜੇ(ਅੰਕੜੇ d1, ਅੰਕੜੇ d2)
 {
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 1;
-    d.X = concat_matrix(d1.X, d2.X);
-    d.y = concat_matrix(d1.y, d2.y);
+    d.X = concat_ਮੈਟ੍ਰਿਕਸ(d1.X, d2.X);
+    d.y = concat_ਮੈਟ੍ਰਿਕਸ(d1.y, d2.y);
     d.w = d1.w;
     d.h = d1.h;
-    return d;
+    ਵਾਪਸ d;
 }
 
-data concat_datas(data *d, int n)
+ਅੰਕੜੇ concat_datas(ਅੰਕੜੇ *d, ਪੂਰਨ n)
 {
-    int i;
-    data out = {0};
-    for(i = 0; i < n; ++i){
-        data new = concat_data(d[i], out);
-        free_data(out);
-        out = new;
+    ਪੂਰਨ i;
+    ਅੰਕੜੇ ਬਾਹਰਲਾ = {0};
+    ਲਈ(i = 0; i < n; ++i){
+        ਅੰਕੜੇ new = concat_ਅੰਕੜੇ(d[i], ਬਾਹਰਲਾ);
+        free_ਅੰਕੜੇ(ਬਾਹਰਲਾ);
+        ਬਾਹਰਲਾ = new;
     }
-    return out;
+    ਵਾਪਸ ਬਾਹਰਲਾ;
 }
 
-data load_categorical_data_csv(char *filename, int target, int k)
+ਅੰਕੜੇ ਲੱਦੋ_categorical_ਅੰਕੜੇ_csv(ਅੱਖਰ *filename, ਪੂਰਨ ਨਿਸ਼ਾਨਾ, ਪੂਰਨ k)
 {
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    matrix X = csv_to_matrix(filename);
-    float *truth_1d = pop_column(&X, target);
-    float **truth = one_hot_encode(truth_1d, X.rows, k);
-    matrix y;
-    y.rows = X.rows;
-    y.cols = k;
+    ਮੈਟ੍ਰਿਕਸ X = csv_ਮੰਜ਼ਿਲ_ਮੈਟ੍ਰਿਕਸ(filename);
+    ਦਸ਼ਮਲਵ *truth_1d = ਕੱਢੋ_ਕਾਲਮ(&X, ਨਿਸ਼ਾਨਾ);
+    ਦਸ਼ਮਲਵ **truth = one_hot_encode(truth_1d, X.ਪੰਕਤੀਆਂ, k);
+    ਮੈਟ੍ਰਿਕਸ y;
+    y.ਪੰਕਤੀਆਂ = X.ਪੰਕਤੀਆਂ;
+    y.ਖਾਨੇ_ਗਿਣਤੀ = k;
     y.vals = truth;
     d.X = X;
     d.y = y;
-    free(truth_1d);
-    return d;
+    ਮੁਕਤ(truth_1d);
+    ਵਾਪਸ d;
 }
 
-data load_cifar10_data(char *filename)
+ਅੰਕੜੇ ਲੱਦੋ_cifar10_ਅੰਕੜੇ(ਅੱਖਰ *filename)
 {
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    long i,j;
-    matrix X = make_matrix(10000, 3072);
-    matrix y = make_matrix(10000, 10);
+    ਲੰਮਾ i,j;
+    ਮੈਟ੍ਰਿਕਸ X = make_ਮੈਟ੍ਰਿਕਸ(10000, 3072);
+    ਮੈਟ੍ਰਿਕਸ y = make_ਮੈਟ੍ਰਿਕਸ(10000, 10);
     d.X = X;
     d.y = y;
 
     FILE *fp = fopen(filename, "rb");
-    if(!fp) file_error(filename);
-    for(i = 0; i < 10000; ++i){
-        unsigned char bytes[3073];
-        fread(bytes, 1, 3073, fp);
-        int class = bytes[0];
+    ਜੇ(!fp) file_error(filename);
+    ਲਈ(i = 0; i < 10000; ++i){
+        ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ ਬਾਈਟਾਂ[3073];
+        fread(ਬਾਈਟਾਂ, 1, 3073, fp);
+        ਪੂਰਨ class = ਬਾਈਟਾਂ[0];
         y.vals[i][class] = 1;
-        for(j = 0; j < X.cols; ++j){
-            X.vals[i][j] = (double)bytes[j+1];
+        ਲਈ(j = 0; j < X.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
+            X.vals[i][j] = (ਦੁੱਗਣਾ)ਬਾਈਟਾਂ[j+1];
         }
     }
-    scale_data_rows(d, 1./255);
+    scale_ਅੰਕੜੇ_ਪੰਕਤੀਆਂ(d, 1./255);
     //normalize_data_rows(d);
     fclose(fp);
-    return d;
+    ਵਾਪਸ d;
 }
 
-void get_random_batch(data d, int n, float *X, float *y)
+ਖਾਲੀ get_random_batch(ਅੰਕੜੇ d, ਪੂਰਨ n, ਦਸ਼ਮਲਵ *X, ਦਸ਼ਮਲਵ *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = rand()%d.X.rows;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    ਪੂਰਨ j;
+    ਲਈ(j = 0; j < n; ++j){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%d.X.ਪੰਕਤੀਆਂ;
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(X+j*d.X.ਖਾਨੇ_ਗਿਣਤੀ, d.X.vals[ਸੂਚਕਾਂਕ], d.X.ਖਾਨੇ_ਗਿਣਤੀ*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(y+j*d.y.ਖਾਨੇ_ਗਿਣਤੀ, d.y.vals[ਸੂਚਕਾਂਕ], d.y.ਖਾਨੇ_ਗਿਣਤੀ*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
     }
 }
 
-void get_next_batch(data d, int n, int offset, float *X, float *y)
+ਖਾਲੀ get_ਅਗਲਾ_batch(ਅੰਕੜੇ d, ਪੂਰਨ n, ਪੂਰਨ ਵਿੱਥ, ਦਸ਼ਮਲਵ *X, ਦਸ਼ਮਲਵ *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = offset + j;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        if(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    ਪੂਰਨ j;
+    ਲਈ(j = 0; j < n; ++j){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = ਵਿੱਥ + j;
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(X+j*d.X.ਖਾਨੇ_ਗਿਣਤੀ, d.X.vals[ਸੂਚਕਾਂਕ], d.X.ਖਾਨੇ_ਗਿਣਤੀ*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        ਜੇ(y) ਸਮ੍ਰਿਤੀ_ਨਕਲ(y+j*d.y.ਖਾਨੇ_ਗਿਣਤੀ, d.y.vals[ਸੂਚਕਾਂਕ], d.y.ਖਾਨੇ_ਗਿਣਤੀ*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
     }
 }
 
-void smooth_data(data d)
+ਖਾਲੀ smooth_ਅੰਕੜੇ(ਅੰਕੜੇ d)
 {
-    int i, j;
-    float scale = 1. / d.y.cols;
-    float eps = .1;
-    for(i = 0; i < d.y.rows; ++i){
-        for(j = 0; j < d.y.cols; ++j){
+    ਪੂਰਨ i, j;
+    ਦਸ਼ਮਲਵ scale = 1. / d.y.ਖਾਨੇ_ਗਿਣਤੀ;
+    ਦਸ਼ਮਲਵ eps = .1;
+    ਲਈ(i = 0; i < d.y.ਪੰਕਤੀਆਂ; ++i){
+        ਲਈ(j = 0; j < d.y.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
             d.y.vals[i][j] = eps * scale + (1-eps) * d.y.vals[i][j];
         }
     }
 }
 
-data load_all_cifar10()
+ਅੰਕੜੇ ਲੱਦੋ_all_cifar10()
 {
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
-    int i,j,b;
-    matrix X = make_matrix(50000, 3072);
-    matrix y = make_matrix(50000, 10);
+    ਪੂਰਨ i,j,b;
+    ਮੈਟ੍ਰਿਕਸ X = make_ਮੈਟ੍ਰਿਕਸ(50000, 3072);
+    ਮੈਟ੍ਰਿਕਸ y = make_ਮੈਟ੍ਰਿਕਸ(50000, 10);
     d.X = X;
     d.y = y;
 
 
-    for(b = 0; b < 5; ++b){
-        char buff[256];
+    ਲਈ(b = 0; b < 5; ++b){
+        ਅੱਖਰ buff[256];
         sprintf(buff, "data/cifar/cifar-10-batches-bin/data_batch_%d.bin", b+1);
         FILE *fp = fopen(buff, "rb");
-        if(!fp) file_error(buff);
-        for(i = 0; i < 10000; ++i){
-            unsigned char bytes[3073];
-            fread(bytes, 1, 3073, fp);
-            int class = bytes[0];
+        ਜੇ(!fp) file_error(buff);
+        ਲਈ(i = 0; i < 10000; ++i){
+            ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ ਬਾਈਟਾਂ[3073];
+            fread(ਬਾਈਟਾਂ, 1, 3073, fp);
+            ਪੂਰਨ class = ਬਾਈਟਾਂ[0];
             y.vals[i+b*10000][class] = 1;
-            for(j = 0; j < X.cols; ++j){
-                X.vals[i+b*10000][j] = (double)bytes[j+1];
+            ਲਈ(j = 0; j < X.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
+                X.vals[i+b*10000][j] = (ਦੁੱਗਣਾ)ਬਾਈਟਾਂ[j+1];
             }
         }
         fclose(fp);
     }
     //normalize_data_rows(d);
-    scale_data_rows(d, 1./255);
-    smooth_data(d);
-    return d;
+    scale_ਅੰਕੜੇ_ਪੰਕਤੀਆਂ(d, 1./255);
+    smooth_ਅੰਕੜੇ(d);
+    ਵਾਪਸ d;
 }
 
-data load_go(char *filename)
+ਅੰਕੜੇ ਲੱਦੋ_go(ਅੱਖਰ *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    matrix X = make_matrix(3363059, 361);
-    matrix y = make_matrix(3363059, 361);
-    int row, col;
+    ਮੈਟ੍ਰਿਕਸ X = make_ਮੈਟ੍ਰਿਕਸ(3363059, 361);
+    ਮੈਟ੍ਰਿਕਸ y = make_ਮੈਟ੍ਰਿਕਸ(3363059, 361);
+    ਪੂਰਨ ਪੰਕਤੀ, ਖਾਨਾ;
 
-    if(!fp) file_error(filename);
-    char *label;
-    int count = 0;
-    while((label = fgetl(fp))){
-        int i;
-        if(count == X.rows){
-            X = resize_matrix(X, count*2);
-            y = resize_matrix(y, count*2);
+    ਜੇ(!fp) file_error(filename);
+    ਅੱਖਰ *label;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਜਦੋਂ((label = fgetl(fp))){
+        ਪੂਰਨ i;
+        ਜੇ(ਗਿਣਤੀ_2 == X.ਪੰਕਤੀਆਂ){
+            X = resize_ਮੈਟ੍ਰਿਕਸ(X, ਗਿਣਤੀ_2*2);
+            y = resize_ਮੈਟ੍ਰਿਕਸ(y, ਗਿਣਤੀ_2*2);
         }
-        sscanf(label, "%d %d", &row, &col);
-        char *board = fgetl(fp);
+        ਲੜੀ_ਤੋਂ_ਪੜ੍ਹੋ(label, "%d %d", &ਪੰਕਤੀ, &ਖਾਨਾ);
+        ਅੱਖਰ *board = fgetl(fp);
 
-        int index = row*19 + col;
-        y.vals[count][index] = 1;
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = ਪੰਕਤੀ*19 + ਖਾਨਾ;
+        y.vals[ਗਿਣਤੀ_2][ਸੂਚਕਾਂਕ] = 1;
 
-        for(i = 0; i < 19*19; ++i){
-            float val = 0;
-            if(board[i] == '1') val = 1;
-            else if(board[i] == '2') val = -1;
-            X.vals[count][i] = val;
+        ਲਈ(i = 0; i < 19*19; ++i){
+            ਦਸ਼ਮਲਵ val = 0;
+            ਜੇ(board[i] == '1') val = 1;
+            ਨਹੀਂਤਾਂ ਜੇ(board[i] == '2') val = -1;
+            X.vals[ਗਿਣਤੀ_2][i] = val;
         }
-        ++count;
-        free(label);
-        free(board);
+        ++ਗਿਣਤੀ_2;
+        ਮੁਕਤ(label);
+        ਮੁਕਤ(board);
     }
-    X = resize_matrix(X, count);
-    y = resize_matrix(y, count);
+    X = resize_ਮੈਟ੍ਰਿਕਸ(X, ਗਿਣਤੀ_2);
+    y = resize_ਮੈਟ੍ਰਿਕਸ(y, ਗਿਣਤੀ_2);
 
-    data d = {0};
+    ਅੰਕੜੇ d = {0};
     d.shallow = 0;
     d.X = X;
     d.y = y;
@@ -1554,132 +1554,132 @@ data load_go(char *filename)
 
     fclose(fp);
 
-    return d;
+    ਵਾਪਸ d;
 }
 
 
-void randomize_data(data d)
+ਖਾਲੀ randomize_ਅੰਕੜੇ(ਅੰਕੜੇ d)
 {
-    int i;
-    for(i = d.X.rows-1; i > 0; --i){
-        int index = rand()%i;
-        float *swap = d.X.vals[index];
-        d.X.vals[index] = d.X.vals[i];
-        d.X.vals[i] = swap;
+    ਪੂਰਨ i;
+    ਲਈ(i = d.X.ਪੰਕਤੀਆਂ-1; i > 0; --i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%i;
+        ਦਸ਼ਮਲਵ *ਅਦਲਾ_ਬਦਲੀ = d.X.vals[ਸੂਚਕਾਂਕ];
+        d.X.vals[ਸੂਚਕਾਂਕ] = d.X.vals[i];
+        d.X.vals[i] = ਅਦਲਾ_ਬਦਲੀ;
 
-        swap = d.y.vals[index];
-        d.y.vals[index] = d.y.vals[i];
-        d.y.vals[i] = swap;
+        ਅਦਲਾ_ਬਦਲੀ = d.y.vals[ਸੂਚਕਾਂਕ];
+        d.y.vals[ਸੂਚਕਾਂਕ] = d.y.vals[i];
+        d.y.vals[i] = ਅਦਲਾ_ਬਦਲੀ;
     }
 }
 
-void scale_data_rows(data d, float s)
+ਖਾਲੀ scale_ਅੰਕੜੇ_ਪੰਕਤੀਆਂ(ਅੰਕੜੇ d, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        scale_array(d.X.vals[i], d.X.cols, s);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < d.X.ਪੰਕਤੀਆਂ; ++i){
+        scale_array(d.X.vals[i], d.X.ਖਾਨੇ_ਗਿਣਤੀ, s);
     }
 }
 
-void translate_data_rows(data d, float s)
+ਖਾਲੀ translate_ਅੰਕੜੇ_ਪੰਕਤੀਆਂ(ਅੰਕੜੇ d, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        translate_array(d.X.vals[i], d.X.cols, s);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < d.X.ਪੰਕਤੀਆਂ; ++i){
+        translate_array(d.X.vals[i], d.X.ਖਾਨੇ_ਗਿਣਤੀ, s);
     }
 }
 
-data copy_data(data d)
+ਅੰਕੜੇ copy_ਅੰਕੜੇ(ਅੰਕੜੇ d)
 {
-    data c = {0};
+    ਅੰਕੜੇ c = {0};
     c.w = d.w;
     c.h = d.h;
     c.shallow = 0;
-    c.num_boxes = d.num_boxes;
+    c.ਅੰਕ_boxes = d.ਅੰਕ_boxes;
     c.boxes = d.boxes;
-    c.X = copy_matrix(d.X);
-    c.y = copy_matrix(d.y);
-    return c;
+    c.X = copy_ਮੈਟ੍ਰਿਕਸ(d.X);
+    c.y = copy_ਮੈਟ੍ਰਿਕਸ(d.y);
+    ਵਾਪਸ c;
 }
 
-void normalize_data_rows(data d)
+ਖਾਲੀ normalize_ਅੰਕੜੇ_ਪੰਕਤੀਆਂ(ਅੰਕੜੇ d)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        normalize_array(d.X.vals[i], d.X.cols);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < d.X.ਪੰਕਤੀਆਂ; ++i){
+        normalize_array(d.X.vals[i], d.X.ਖਾਨੇ_ਗਿਣਤੀ);
     }
 }
 
-data get_data_part(data d, int part, int total)
+ਅੰਕੜੇ get_ਅੰਕੜੇ_part(ਅੰਕੜੇ d, ਪੂਰਨ part, ਪੂਰਨ ਕੁੱਲ)
 {
-    data p = {0};
+    ਅੰਕੜੇ p = {0};
     p.shallow = 1;
-    p.X.rows = d.X.rows * (part + 1) / total - d.X.rows * part / total;
-    p.y.rows = d.y.rows * (part + 1) / total - d.y.rows * part / total;
-    p.X.cols = d.X.cols;
-    p.y.cols = d.y.cols;
-    p.X.vals = d.X.vals + d.X.rows * part / total;
-    p.y.vals = d.y.vals + d.y.rows * part / total;
-    return p;
+    p.X.ਪੰਕਤੀਆਂ = d.X.ਪੰਕਤੀਆਂ * (part + 1) / ਕੁੱਲ - d.X.ਪੰਕਤੀਆਂ * part / ਕੁੱਲ;
+    p.y.ਪੰਕਤੀਆਂ = d.y.ਪੰਕਤੀਆਂ * (part + 1) / ਕੁੱਲ - d.y.ਪੰਕਤੀਆਂ * part / ਕੁੱਲ;
+    p.X.ਖਾਨੇ_ਗਿਣਤੀ = d.X.ਖਾਨੇ_ਗਿਣਤੀ;
+    p.y.ਖਾਨੇ_ਗਿਣਤੀ = d.y.ਖਾਨੇ_ਗਿਣਤੀ;
+    p.X.vals = d.X.vals + d.X.ਪੰਕਤੀਆਂ * part / ਕੁੱਲ;
+    p.y.vals = d.y.vals + d.y.ਪੰਕਤੀਆਂ * part / ਕੁੱਲ;
+    ਵਾਪਸ p;
 }
 
-data get_random_data(data d, int num)
+ਅੰਕੜੇ get_random_ਅੰਕੜੇ(ਅੰਕੜੇ d, ਪੂਰਨ ਅੰਕ)
 {
-    data r = {0};
+    ਅੰਕੜੇ r = {0};
     r.shallow = 1;
 
-    r.X.rows = num;
-    r.y.rows = num;
+    r.X.ਪੰਕਤੀਆਂ = ਅੰਕ;
+    r.y.ਪੰਕਤੀਆਂ = ਅੰਕ;
 
-    r.X.cols = d.X.cols;
-    r.y.cols = d.y.cols;
+    r.X.ਖਾਨੇ_ਗਿਣਤੀ = d.X.ਖਾਨੇ_ਗਿਣਤੀ;
+    r.y.ਖਾਨੇ_ਗਿਣਤੀ = d.y.ਖਾਨੇ_ਗਿਣਤੀ;
 
-    r.X.vals = calloc(num, sizeof(float *));
-    r.y.vals = calloc(num, sizeof(float *));
+    r.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਅੰਕ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
+    r.y.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਅੰਕ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
 
-    int i;
-    for(i = 0; i < num; ++i){
-        int index = rand()%d.X.rows;
-        r.X.vals[i] = d.X.vals[index];
-        r.y.vals[i] = d.y.vals[index];
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < ਅੰਕ; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%d.X.ਪੰਕਤੀਆਂ;
+        r.X.vals[i] = d.X.vals[ਸੂਚਕਾਂਕ];
+        r.y.vals[i] = d.y.vals[ਸੂਚਕਾਂਕ];
     }
-    return r;
+    ਵਾਪਸ r;
 }
 
-data *split_data(data d, int part, int total)
+ਅੰਕੜੇ *ਵੰਡੋ_ਅੰਕੜੇ(ਅੰਕੜੇ d, ਪੂਰਨ part, ਪੂਰਨ ਕੁੱਲ)
 {
-    data *split = calloc(2, sizeof(data));
-    int i;
-    int start = part*d.X.rows/total;
-    int end = (part+1)*d.X.rows/total;
-    data train;
-    data test;
+    ਅੰਕੜੇ *ਵੰਡੋ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(2, ਆਕਾਰ(ਅੰਕੜੇ));
+    ਪੂਰਨ i;
+    ਪੂਰਨ ਸ਼ੁਰੂ = part*d.X.ਪੰਕਤੀਆਂ/ਕੁੱਲ;
+    ਪੂਰਨ ਸਿਰਾ = (part+1)*d.X.ਪੰਕਤੀਆਂ/ਕੁੱਲ;
+    ਅੰਕੜੇ train;
+    ਅੰਕੜੇ test;
     train.shallow = test.shallow = 1;
 
-    test.X.rows = test.y.rows = end-start;
-    train.X.rows = train.y.rows = d.X.rows - (end-start);
-    train.X.cols = test.X.cols = d.X.cols;
-    train.y.cols = test.y.cols = d.y.cols;
+    test.X.ਪੰਕਤੀਆਂ = test.y.ਪੰਕਤੀਆਂ = ਸਿਰਾ-ਸ਼ੁਰੂ;
+    train.X.ਪੰਕਤੀਆਂ = train.y.ਪੰਕਤੀਆਂ = d.X.ਪੰਕਤੀਆਂ - (ਸਿਰਾ-ਸ਼ੁਰੂ);
+    train.X.ਖਾਨੇ_ਗਿਣਤੀ = test.X.ਖਾਨੇ_ਗਿਣਤੀ = d.X.ਖਾਨੇ_ਗਿਣਤੀ;
+    train.y.ਖਾਨੇ_ਗਿਣਤੀ = test.y.ਖਾਨੇ_ਗਿਣਤੀ = d.y.ਖਾਨੇ_ਗਿਣਤੀ;
 
-    train.X.vals = calloc(train.X.rows, sizeof(float*));
-    test.X.vals = calloc(test.X.rows, sizeof(float*));
-    train.y.vals = calloc(train.y.rows, sizeof(float*));
-    test.y.vals = calloc(test.y.rows, sizeof(float*));
+    train.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(train.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    test.X.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(test.X.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    train.y.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(train.y.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    test.y.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(test.y.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
 
-    for(i = 0; i < start; ++i){
+    ਲਈ(i = 0; i < ਸ਼ੁਰੂ; ++i){
         train.X.vals[i] = d.X.vals[i];
         train.y.vals[i] = d.y.vals[i];
     }
-    for(i = start; i < end; ++i){
-        test.X.vals[i-start] = d.X.vals[i];
-        test.y.vals[i-start] = d.y.vals[i];
+    ਲਈ(i = ਸ਼ੁਰੂ; i < ਸਿਰਾ; ++i){
+        test.X.vals[i-ਸ਼ੁਰੂ] = d.X.vals[i];
+        test.y.vals[i-ਸ਼ੁਰੂ] = d.y.vals[i];
     }
-    for(i = end; i < d.X.rows; ++i){
-        train.X.vals[i-(end-start)] = d.X.vals[i];
-        train.y.vals[i-(end-start)] = d.y.vals[i];
+    ਲਈ(i = ਸਿਰਾ; i < d.X.ਪੰਕਤੀਆਂ; ++i){
+        train.X.vals[i-(ਸਿਰਾ-ਸ਼ੁਰੂ)] = d.X.vals[i];
+        train.y.vals[i-(ਸਿਰਾ-ਸ਼ੁਰੂ)] = d.y.vals[i];
     }
-    split[0] = train;
-    split[1] = test;
-    return split;
+    ਵੰਡੋ[0] = train;
+    ਵੰਡੋ[1] = test;
+    ਵਾਪਸ ਵੰਡੋ;
 }
 

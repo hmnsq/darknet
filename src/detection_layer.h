@@ -1,18 +1,18 @@
-#ifndef DETECTION_LAYER_H
-#define DETECTION_LAYER_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ DETECTION_LAYER_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ DETECTION_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "network.h"
 
-typedef layer detection_layer;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ layer detection_layer;
 
-detection_layer make_detection_layer(int batch, int inputs, int n, int size, int classes, int coords, int rescore);
-void forward_detection_layer(const detection_layer l, network net);
-void backward_detection_layer(const detection_layer l, network net);
+detection_layer make_detection_layer(ਪੂਰਨ batch, ਪੂਰਨ inputs, ਪੂਰਨ n, ਪੂਰਨ ਮਾਪ, ਪੂਰਨ classes, ਪੂਰਨ coords, ਪੂਰਨ rescore);
+ਖਾਲੀ forward_detection_layer(ਅਚਲ detection_layer l, ਜਾਲ net);
+ਖਾਲੀ backward_detection_layer(ਅਚਲ detection_layer l, ਜਾਲ net);
 
-#ifdef GPU
-void forward_detection_layer_gpu(const detection_layer l, network net);
-void backward_detection_layer_gpu(detection_layer l, network net);
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_detection_layer_gpu(ਅਚਲ detection_layer l, ਜਾਲ net);
+ਖਾਲੀ backward_detection_layer_gpu(detection_layer l, ਜਾਲ net);
+#ਜੇ_ਅੰਤ
 
-#endif
+#ਜੇ_ਅੰਤ

@@ -1,20 +1,20 @@
-#ifndef CUDA_H
-#define CUDA_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ CUDA_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ CUDA_H
 
-#include "darknet.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "darknet.h"
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
 
-void check_error(cudaError_t status);
+ਖਾਲੀ check_error(cudaError_t ਸਥਿਤੀ);
 cublasHandle_t blas_handle();
-int *cuda_make_int_array(int *x, size_t n);
-void cuda_random(float *x_gpu, size_t n);
-float cuda_compare(float *x_gpu, float *x, size_t n, char *s);
+ਪੂਰਨ *cuda_make_int_array(ਪੂਰਨ *x, size_t n);
+ਖਾਲੀ cuda_random(ਦਸ਼ਮਲਵ *x_gpu, size_t n);
+ਦਸ਼ਮਲਵ cuda_compare(ਦਸ਼ਮਲਵ *x_gpu, ਦਸ਼ਮਲਵ *x, size_t n, ਅੱਖਰ *s);
 dim3 cuda_gridsize(size_t n);
 
-#ifdef CUDNN
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ CUDNN
 cudnnHandle_t cudnn_handle();
-#endif
+#ਜੇ_ਅੰਤ
 
-#endif
-#endif
+#ਜੇ_ਅੰਤ
+#ਜੇ_ਅੰਤ

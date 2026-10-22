@@ -1,10 +1,10 @@
-#include "dropout_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include <stdlib.h>
-#include <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ "dropout_layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
 
-dropout_layer make_dropout_layer(int batch, int inputs, float probability)
+dropout_layer make_dropout_layer(ਪੂਰਨ batch, ਪੂਰਨ inputs, ਦਸ਼ਮਲਵ probability)
 {
     dropout_layer l = {0};
     l.type = DROPOUT;
@@ -12,49 +12,49 @@ dropout_layer make_dropout_layer(int batch, int inputs, float probability)
     l.inputs = inputs;
     l.outputs = inputs;
     l.batch = batch;
-    l.rand = calloc(inputs*batch, sizeof(float));
+    l.rand = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(inputs*batch, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
     l.scale = 1./(1.-probability);
     l.forward = forward_dropout_layer;
     l.backward = backward_dropout_layer;
-    #ifdef GPU
+    #ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     l.forward_gpu = forward_dropout_layer_gpu;
     l.backward_gpu = backward_dropout_layer_gpu;
     l.rand_gpu = cuda_make_array(l.rand, inputs*batch);
-    #endif
+    #ਜੇ_ਅੰਤ
     fprintf(stderr, "dropout       p = %.2f               %4d  ->  %4d\n", probability, inputs, inputs);
-    return l;
+    ਵਾਪਸ l;
 } 
 
-void resize_dropout_layer(dropout_layer *l, int inputs)
+ਖਾਲੀ resize_dropout_layer(dropout_layer *l, ਪੂਰਨ inputs)
 {
-    l->rand = realloc(l->rand, l->inputs*l->batch*sizeof(float));
-    #ifdef GPU
+    l->rand = realloc(l->rand, l->inputs*l->batch*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    #ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     cuda_free(l->rand_gpu);
 
     l->rand_gpu = cuda_make_array(l->rand, inputs*l->batch);
-    #endif
+    #ਜੇ_ਅੰਤ
 }
 
-void forward_dropout_layer(dropout_layer l, network net)
+ਖਾਲੀ forward_dropout_layer(dropout_layer l, ਜਾਲ net)
 {
-    int i;
-    if (!net.train) return;
-    for(i = 0; i < l.batch * l.inputs; ++i){
-        float r = rand_uniform(0, 1);
+    ਪੂਰਨ i;
+    ਜੇ (!net.train) ਵਾਪਸ;
+    ਲਈ(i = 0; i < l.batch * l.inputs; ++i){
+        ਦਸ਼ਮਲਵ r = rand_ਇਕਸਾਰ(0, 1);
         l.rand[i] = r;
-        if(r < l.probability) net.input[i] = 0;
-        else net.input[i] *= l.scale;
+        ਜੇ(r < l.probability) net.ਨਿਵੇਸ਼[i] = 0;
+        ਨਹੀਂਤਾਂ net.ਨਿਵੇਸ਼[i] *= l.scale;
     }
 }
 
-void backward_dropout_layer(dropout_layer l, network net)
+ਖਾਲੀ backward_dropout_layer(dropout_layer l, ਜਾਲ net)
 {
-    int i;
-    if(!net.delta) return;
-    for(i = 0; i < l.batch * l.inputs; ++i){
-        float r = l.rand[i];
-        if(r < l.probability) net.delta[i] = 0;
-        else net.delta[i] *= l.scale;
+    ਪੂਰਨ i;
+    ਜੇ(!net.delta) ਵਾਪਸ;
+    ਲਈ(i = 0; i < l.batch * l.inputs; ++i){
+        ਦਸ਼ਮਲਵ r = l.rand[i];
+        ਜੇ(r < l.probability) net.delta[i] = 0;
+        ਨਹੀਂਤਾਂ net.delta[i] *= l.scale;
     }
 }
 

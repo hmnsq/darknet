@@ -1,134 +1,134 @@
-#include "route_layer.h"
-#include "cuda.h"
-#include "blas.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "route_layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "blas.h"
 
-#include <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
 
-route_layer make_route_layer(int batch, int n, int *input_layers, int *input_sizes)
+route_layer make_route_layer(ਪੂਰਨ batch, ਪੂਰਨ n, ਪੂਰਨ *ਨਿਵੇਸ਼_layers, ਪੂਰਨ *ਨਿਵੇਸ਼_sizes)
 {
     fprintf(stderr,"route ");
     route_layer l = {0};
     l.type = ROUTE;
     l.batch = batch;
     l.n = n;
-    l.input_layers = input_layers;
-    l.input_sizes = input_sizes;
-    int i;
-    int outputs = 0;
-    for(i = 0; i < n; ++i){
-        fprintf(stderr," %d", input_layers[i]);
-        outputs += input_sizes[i];
+    l.ਨਿਵੇਸ਼_layers = ਨਿਵੇਸ਼_layers;
+    l.ਨਿਵੇਸ਼_sizes = ਨਿਵੇਸ਼_sizes;
+    ਪੂਰਨ i;
+    ਪੂਰਨ outputs = 0;
+    ਲਈ(i = 0; i < n; ++i){
+        fprintf(stderr," %d", ਨਿਵੇਸ਼_layers[i]);
+        outputs += ਨਿਵੇਸ਼_sizes[i];
     }
     fprintf(stderr, "\n");
     l.outputs = outputs;
     l.inputs = outputs;
-    l.delta =  calloc(outputs*batch, sizeof(float));
-    l.output = calloc(outputs*batch, sizeof(float));;
+    l.delta =  ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(outputs*batch, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l.output = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(outputs*batch, ਆਕਾਰ(ਦਸ਼ਮਲਵ));;
 
     l.forward = forward_route_layer;
     l.backward = backward_route_layer;
-    #ifdef GPU
+    #ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     l.forward_gpu = forward_route_layer_gpu;
     l.backward_gpu = backward_route_layer_gpu;
 
     l.delta_gpu =  cuda_make_array(l.delta, outputs*batch);
     l.output_gpu = cuda_make_array(l.output, outputs*batch);
-    #endif
-    return l;
+    #ਜੇ_ਅੰਤ
+    ਵਾਪਸ l;
 }
 
-void resize_route_layer(route_layer *l, network *net)
+ਖਾਲੀ resize_route_layer(route_layer *l, ਜਾਲ *net)
 {
-    int i;
-    layer first = net->layers[l->input_layers[0]];
-    l->out_w = first.out_w;
-    l->out_h = first.out_h;
-    l->out_c = first.out_c;
-    l->outputs = first.outputs;
-    l->input_sizes[0] = first.outputs;
-    for(i = 1; i < l->n; ++i){
-        int index = l->input_layers[i];
-        layer next = net->layers[index];
-        l->outputs += next.outputs;
-        l->input_sizes[i] = next.outputs;
-        if(next.out_w == first.out_w && next.out_h == first.out_h){
-            l->out_c += next.out_c;
-        }else{
-            printf("%d %d, %d %d\n", next.out_w, next.out_h, first.out_w, first.out_h);
-            l->out_h = l->out_w = l->out_c = 0;
+    ਪੂਰਨ i;
+    layer ਪਹਿਲਾ = net->layers[l->ਨਿਵੇਸ਼_layers[0]];
+    l->ਬਾਹਰਲਾ_w = ਪਹਿਲਾ.ਬਾਹਰਲਾ_w;
+    l->ਬਾਹਰਲਾ_h = ਪਹਿਲਾ.ਬਾਹਰਲਾ_h;
+    l->ਬਾਹਰਲਾ_c = ਪਹਿਲਾ.ਬਾਹਰਲਾ_c;
+    l->outputs = ਪਹਿਲਾ.outputs;
+    l->ਨਿਵੇਸ਼_sizes[0] = ਪਹਿਲਾ.outputs;
+    ਲਈ(i = 1; i < l->n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = l->ਨਿਵੇਸ਼_layers[i];
+        layer ਅਗਲਾ = net->layers[ਸੂਚਕਾਂਕ];
+        l->outputs += ਅਗਲਾ.outputs;
+        l->ਨਿਵੇਸ਼_sizes[i] = ਅਗਲਾ.outputs;
+        ਜੇ(ਅਗਲਾ.ਬਾਹਰਲਾ_w == ਪਹਿਲਾ.ਬਾਹਰਲਾ_w && ਅਗਲਾ.ਬਾਹਰਲਾ_h == ਪਹਿਲਾ.ਬਾਹਰਲਾ_h){
+            l->ਬਾਹਰਲਾ_c += ਅਗਲਾ.ਬਾਹਰਲਾ_c;
+        }ਨਹੀਂਤਾਂ{
+            ਲਿਖੋ("%d %d, %d %d\n", ਅਗਲਾ.ਬਾਹਰਲਾ_w, ਅਗਲਾ.ਬਾਹਰਲਾ_h, ਪਹਿਲਾ.ਬਾਹਰਲਾ_w, ਪਹਿਲਾ.ਬਾਹਰਲਾ_h);
+            l->ਬਾਹਰਲਾ_h = l->ਬਾਹਰਲਾ_w = l->ਬਾਹਰਲਾ_c = 0;
         }
     }
     l->inputs = l->outputs;
-    l->delta =  realloc(l->delta, l->outputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, l->outputs*l->batch*sizeof(float));
+    l->delta =  realloc(l->delta, l->outputs*l->batch*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l->output = realloc(l->output, l->outputs*l->batch*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
     l->output_gpu  = cuda_make_array(l->output, l->outputs*l->batch);
     l->delta_gpu   = cuda_make_array(l->delta,  l->outputs*l->batch);
-#endif
+#ਜੇ_ਅੰਤ
     
 }
 
-void forward_route_layer(const route_layer l, network net)
+ਖਾਲੀ forward_route_layer(ਅਚਲ route_layer l, ਜਾਲ net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *input = net.layers[index].output;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            copy_cpu(input_size, input + j*input_size, 1, l.output + offset + j*l.outputs, 1);
+    ਪੂਰਨ i, j;
+    ਪੂਰਨ ਵਿੱਥ = 0;
+    ਲਈ(i = 0; i < l.n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = l.ਨਿਵੇਸ਼_layers[i];
+        ਦਸ਼ਮਲਵ *ਨਿਵੇਸ਼ = net.layers[ਸੂਚਕਾਂਕ].output;
+        ਪੂਰਨ ਨਿਵੇਸ਼_ਮਾਪ = l.ਨਿਵੇਸ਼_sizes[i];
+        ਲਈ(j = 0; j < l.batch; ++j){
+            copy_cpu(ਨਿਵੇਸ਼_ਮਾਪ, ਨਿਵੇਸ਼ + j*ਨਿਵੇਸ਼_ਮਾਪ, 1, l.output + ਵਿੱਥ + j*l.outputs, 1);
         }
-        offset += input_size;
+        ਵਿੱਥ += ਨਿਵੇਸ਼_ਮਾਪ;
     }
 }
 
-void backward_route_layer(const route_layer l, network net)
+ਖਾਲੀ backward_route_layer(ਅਚਲ route_layer l, ਜਾਲ net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *delta = net.layers[index].delta;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            axpy_cpu(input_size, 1, l.delta + offset + j*l.outputs, 1, delta + j*input_size, 1);
+    ਪੂਰਨ i, j;
+    ਪੂਰਨ ਵਿੱਥ = 0;
+    ਲਈ(i = 0; i < l.n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = l.ਨਿਵੇਸ਼_layers[i];
+        ਦਸ਼ਮਲਵ *delta = net.layers[ਸੂਚਕਾਂਕ].delta;
+        ਪੂਰਨ ਨਿਵੇਸ਼_ਮਾਪ = l.ਨਿਵੇਸ਼_sizes[i];
+        ਲਈ(j = 0; j < l.batch; ++j){
+            axpy_cpu(ਨਿਵੇਸ਼_ਮਾਪ, 1, l.delta + ਵਿੱਥ + j*l.outputs, 1, delta + j*ਨਿਵੇਸ਼_ਮਾਪ, 1);
         }
-        offset += input_size;
+        ਵਿੱਥ += ਨਿਵੇਸ਼_ਮਾਪ;
     }
 }
 
-#ifdef GPU
-void forward_route_layer_gpu(const route_layer l, network net)
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_route_layer_gpu(ਅਚਲ route_layer l, ਜਾਲ net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *input = net.layers[index].output_gpu;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            copy_gpu(input_size, input + j*input_size, 1, l.output_gpu + offset + j*l.outputs, 1);
+    ਪੂਰਨ i, j;
+    ਪੂਰਨ ਵਿੱਥ = 0;
+    ਲਈ(i = 0; i < l.n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = l.ਨਿਵੇਸ਼_layers[i];
+        ਦਸ਼ਮਲਵ *ਨਿਵੇਸ਼ = net.layers[ਸੂਚਕਾਂਕ].output_gpu;
+        ਪੂਰਨ ਨਿਵੇਸ਼_ਮਾਪ = l.ਨਿਵੇਸ਼_sizes[i];
+        ਲਈ(j = 0; j < l.batch; ++j){
+            copy_gpu(ਨਿਵੇਸ਼_ਮਾਪ, ਨਿਵੇਸ਼ + j*ਨਿਵੇਸ਼_ਮਾਪ, 1, l.output_gpu + ਵਿੱਥ + j*l.outputs, 1);
         }
-        offset += input_size;
+        ਵਿੱਥ += ਨਿਵੇਸ਼_ਮਾਪ;
     }
 }
 
-void backward_route_layer_gpu(const route_layer l, network net)
+ਖਾਲੀ backward_route_layer_gpu(ਅਚਲ route_layer l, ਜਾਲ net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *delta = net.layers[index].delta_gpu;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            axpy_gpu(input_size, 1, l.delta_gpu + offset + j*l.outputs, 1, delta + j*input_size, 1);
+    ਪੂਰਨ i, j;
+    ਪੂਰਨ ਵਿੱਥ = 0;
+    ਲਈ(i = 0; i < l.n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = l.ਨਿਵੇਸ਼_layers[i];
+        ਦਸ਼ਮਲਵ *delta = net.layers[ਸੂਚਕਾਂਕ].delta_gpu;
+        ਪੂਰਨ ਨਿਵੇਸ਼_ਮਾਪ = l.ਨਿਵੇਸ਼_sizes[i];
+        ਲਈ(j = 0; j < l.batch; ++j){
+            axpy_gpu(ਨਿਵੇਸ਼_ਮਾਪ, 1, l.delta_gpu + ਵਿੱਥ + j*l.outputs, 1, delta + j*ਨਿਵੇਸ਼_ਮਾਪ, 1);
         }
-        offset += input_size;
+        ਵਿੱਥ += ਨਿਵੇਸ਼_ਮਾਪ;
     }
 }
-#endif
+#ਜੇ_ਅੰਤ

@@ -1,20 +1,20 @@
-#ifndef DROPOUT_LAYER_H
-#define DROPOUT_LAYER_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ DROPOUT_LAYER_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ DROPOUT_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "network.h"
 
-typedef layer dropout_layer;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ layer dropout_layer;
 
-dropout_layer make_dropout_layer(int batch, int inputs, float probability);
+dropout_layer make_dropout_layer(ਪੂਰਨ batch, ਪੂਰਨ inputs, ਦਸ਼ਮਲਵ probability);
 
-void forward_dropout_layer(dropout_layer l, network net);
-void backward_dropout_layer(dropout_layer l, network net);
-void resize_dropout_layer(dropout_layer *l, int inputs);
+ਖਾਲੀ forward_dropout_layer(dropout_layer l, ਜਾਲ net);
+ਖਾਲੀ backward_dropout_layer(dropout_layer l, ਜਾਲ net);
+ਖਾਲੀ resize_dropout_layer(dropout_layer *l, ਪੂਰਨ inputs);
 
-#ifdef GPU
-void forward_dropout_layer_gpu(dropout_layer l, network net);
-void backward_dropout_layer_gpu(dropout_layer l, network net);
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_dropout_layer_gpu(dropout_layer l, ਜਾਲ net);
+ਖਾਲੀ backward_dropout_layer_gpu(dropout_layer l, ਜਾਲ net);
 
-#endif
-#endif
+#ਜੇ_ਅੰਤ
+#ਜੇ_ਅੰਤ

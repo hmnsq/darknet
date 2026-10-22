@@ -1,34 +1,34 @@
-#ifndef GEMM_H
-#define GEMM_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ GEMM_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+ਖਾਲੀ gemm_bin(ਪੂਰਨ M, ਪੂਰਨ N, ਪੂਰਨ K, ਦਸ਼ਮਲਵ ALPHA, 
+        ਅੱਖਰ  *A, ਪੂਰਨ lda, 
+        ਦਸ਼ਮਲਵ *B, ਪੂਰਨ ldb,
+        ਦਸ਼ਮਲਵ *C, ਪੂਰਨ ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+ਖਾਲੀ gemm(ਪੂਰਨ TA, ਪੂਰਨ TB, ਪੂਰਨ M, ਪੂਰਨ N, ਪੂਰਨ K, ਦਸ਼ਮਲਵ ALPHA, 
+                    ਦਸ਼ਮਲਵ *A, ਪੂਰਨ lda, 
+                    ਦਸ਼ਮਲਵ *B, ਪੂਰਨ ldb,
+                    ਦਸ਼ਮਲਵ BETA,
+                    ਦਸ਼ਮਲਵ *C, ਪੂਰਨ ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ਖਾਲੀ gemm_cpu(ਪੂਰਨ TA, ਪੂਰਨ TB, ਪੂਰਨ M, ਪੂਰਨ N, ਪੂਰਨ K, ਦਸ਼ਮਲਵ ALPHA, 
+        ਦਸ਼ਮਲਵ *A, ਪੂਰਨ lda, 
+        ਦਸ਼ਮਲਵ *B, ਪੂਰਨ ldb,
+        ਦਸ਼ਮਲਵ BETA,
+        ਦਸ਼ਮਲਵ *C, ਪੂਰਨ ldc);
 
-#ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ gemm_gpu(ਪੂਰਨ TA, ਪੂਰਨ TB, ਪੂਰਨ M, ਪੂਰਨ N, ਪੂਰਨ K, ਦਸ਼ਮਲਵ ALPHA, 
+        ਦਸ਼ਮਲਵ *A_gpu, ਪੂਰਨ lda, 
+        ਦਸ਼ਮਲਵ *B_gpu, ਪੂਰਨ ldb,
+        ਦਸ਼ਮਲਵ BETA,
+        ਦਸ਼ਮਲਵ *C_gpu, ਪੂਰਨ ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
-#endif
-#endif
+ਖਾਲੀ gemm_gpu(ਪੂਰਨ TA, ਪੂਰਨ TB, ਪੂਰਨ M, ਪੂਰਨ N, ਪੂਰਨ K, ਦਸ਼ਮਲਵ ALPHA, 
+        ਦਸ਼ਮਲਵ *A, ਪੂਰਨ lda, 
+        ਦਸ਼ਮਲਵ *B, ਪੂਰਨ ldb,
+        ਦਸ਼ਮਲਵ BETA,
+        ਦਸ਼ਮਲਵ *C, ਪੂਰਨ ldc);
+#ਜੇ_ਅੰਤ
+#ਜੇ_ਅੰਤ

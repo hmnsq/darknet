@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <math.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <assert.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <unistd.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <float.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <limits.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <time.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <sys/time.h>
 
-#include "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
 
 
 /*
@@ -24,652 +24,652 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+ਦੁੱਗਣਾ what_ਸਮਾਂ_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    ਬਣਤਰ timeval ਸਮਾਂ;
+    ਜੇ (gettimeofday(&ਸਮਾਂ,ਨਿਰਾ)){
+        ਵਾਪਸ 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    ਵਾਪਸ (ਦੁੱਗਣਾ)ਸਮਾਂ.tv_sec + (ਦੁੱਗਣਾ)ਸਮਾਂ.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+ਪੂਰਨ *read_intlist(ਅੱਖਰ *gpu_list, ਪੂਰਨ *ngpus, ਪੂਰਨ d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    ਪੂਰਨ *gpus = 0;
+    ਜੇ(gpu_list){
+        ਪੂਰਨ len = ਲੜੀ_ਲੰਬਾਈ(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        ਪੂਰਨ i;
+        ਲਈ(i = 0; i < len; ++i){
+            ਜੇ (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(*ngpus, ਆਕਾਰ(ਪੂਰਨ));
+        ਲਈ(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } ਨਹੀਂਤਾਂ {
+        gpus = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    ਵਾਪਸ gpus;
 }
 
-int *read_map(char *filename)
+ਪੂਰਨ *read_map(ਅੱਖਰ *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    ਪੂਰਨ n = 0;
+    ਪੂਰਨ *map = 0;
+    ਅੱਖਰ *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    ਜੇ(!file) file_error(filename);
+    ਜਦੋਂ((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*ਆਕਾਰ(ਪੂਰਨ));
         map[n-1] = atoi(str);
     }
-    return map;
+    ਵਾਪਸ map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+ਖਾਲੀ sorta_shuffle(ਖਾਲੀ *arr, size_t n, size_t ਮਾਪ, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
-        size_t start = n*i/sections;
-        size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+    ਲਈ(i = 0; i < sections; ++i){
+        size_t ਸ਼ੁਰੂ = n*i/sections;
+        size_t ਸਿਰਾ = n*(i+1)/sections;
+        size_t ਅੰਕ = ਸਿਰਾ-ਸ਼ੁਰੂ;
+        shuffle(arr+(ਸ਼ੁਰੂ*ਮਾਪ), ਅੰਕ, ਮਾਪ);
     }
 }
 
-void shuffle(void *arr, size_t n, size_t size)
+ਖਾਲੀ shuffle(ਖਾਲੀ *arr, size_t n, size_t ਮਾਪ)
 {
     size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    ਖਾਲੀ *swp = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਮਾਪ);
+    ਲਈ(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
-        memcpy(swp,          arr+(j*size), size);
-        memcpy(arr+(j*size), arr+(i*size), size);
-        memcpy(arr+(i*size), swp,          size);
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(swp,          arr+(j*ਮਾਪ), ਮਾਪ);
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(arr+(j*ਮਾਪ), arr+(i*ਮਾਪ), ਮਾਪ);
+        ਸਮ੍ਰਿਤੀ_ਨਕਲ(arr+(i*ਮਾਪ), swp,          ਮਾਪ);
     }
 }
 
-int *random_index_order(int min, int max)
+ਪੂਰਨ *random_ਸੂਚਕਾਂਕ_ਕ੍ਰਮ(ਪੂਰਨ min, ਪੂਰਨ max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    ਪੂਰਨ *inds = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(max-min, ਆਕਾਰ(ਪੂਰਨ));
+    ਪੂਰਨ i;
+    ਲਈ(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
-        inds[i] = inds[index];
-        inds[index] = swap;
+    ਲਈ(i = min; i < max-1; ++i){
+        ਪੂਰਨ ਅਦਲਾ_ਬਦਲੀ = inds[i];
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = i + rand()%(max-i);
+        inds[i] = inds[ਸੂਚਕਾਂਕ];
+        inds[ਸੂਚਕਾਂਕ] = ਅਦਲਾ_ਬਦਲੀ;
     }
-    return inds;
+    ਵਾਪਸ inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+ਖਾਲੀ del_arg(ਪੂਰਨ argc, ਅੱਖਰ **argv, ਪੂਰਨ ਸੂਚਕਾਂਕ)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    ਪੂਰਨ i;
+    ਲਈ(i = ਸੂਚਕਾਂਕ; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+ਪੂਰਨ ਲੱਭੋ_arg(ਪੂਰਨ argc, ਅੱਖਰ* argv[], ਅੱਖਰ *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < argc; ++i) {
+        ਜੇ(!argv[i]) ਜਾਰੀ;
+        ਜੇ(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            ਵਾਪਸ 1;
         }
     }
-    return 0;
+    ਵਾਪਸ 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+ਪੂਰਨ ਲੱਭੋ_int_arg(ਪੂਰਨ argc, ਅੱਖਰ **argv, ਅੱਖਰ *arg, ਪੂਰਨ def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < argc-1; ++i){
+        ਜੇ(!argv[i]) ਜਾਰੀ;
+        ਜੇ(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ਰੋਕੋ;
         }
     }
-    return def;
+    ਵਾਪਸ def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+ਦਸ਼ਮਲਵ ਲੱਭੋ_float_arg(ਪੂਰਨ argc, ਅੱਖਰ **argv, ਅੱਖਰ *arg, ਦਸ਼ਮਲਵ def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < argc-1; ++i){
+        ਜੇ(!argv[i]) ਜਾਰੀ;
+        ਜੇ(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ਰੋਕੋ;
         }
     }
-    return def;
+    ਵਾਪਸ def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+ਅੱਖਰ *ਲੱਭੋ_char_arg(ਪੂਰਨ argc, ਅੱਖਰ **argv, ਅੱਖਰ *arg, ਅੱਖਰ *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < argc-1; ++i){
+        ਜੇ(!argv[i]) ਜਾਰੀ;
+        ਜੇ(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ਰੋਕੋ;
         }
     }
-    return def;
+    ਵਾਪਸ def;
 }
 
 
-char *basecfg(char *cfgfile)
+ਅੱਖਰ *basecfg(ਅੱਖਰ *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    ਅੱਖਰ *c = cfgfile;
+    ਅੱਖਰ *ਅਗਲਾ;
+    ਜਦੋਂ((ਅਗਲਾ = strchr(c, '/')))
     {
-        c = next+1;
+        c = ਅਗਲਾ+1;
     }
     c = copy_string(c);
-    next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    ਅਗਲਾ = strchr(c, '.');
+    ਜੇ (ਅਗਲਾ) *ਅਗਲਾ = 0;
+    ਵਾਪਸ c;
 }
 
-int alphanum_to_int(char c)
+ਪੂਰਨ alphanum_ਮੰਜ਼ਿਲ_int(ਅੱਖਰ c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    ਵਾਪਸ (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+ਅੱਖਰ int_ਮੰਜ਼ਿਲ_alphanum(ਪੂਰਨ i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    ਜੇ (i == 36) ਵਾਪਸ '.';
+    ਵਾਪਸ (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+ਖਾਲੀ pm(ਪੂਰਨ M, ਪੂਰਨ N, ਦਸ਼ਮਲਵ *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
-        printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
-            printf("%2.4f, ", A[i*N+j]);
+    ਪੂਰਨ i,j;
+    ਲਈ(i =0 ; i < M; ++i){
+        ਲਿਖੋ("%d ", i+1);
+        ਲਈ(j = 0; j < N; ++j){
+            ਲਿਖੋ("%2.4f, ", A[i*N+j]);
         }
-        printf("\n");
+        ਲਿਖੋ("\n");
     }
-    printf("\n");
+    ਲਿਖੋ("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+ਖਾਲੀ ਲੱਭੋ_replace(ਅੱਖਰ *str, ਅੱਖਰ *orig, ਅੱਖਰ *rep, ਅੱਖਰ *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    ਅੱਖਰ ਬਫਰ[4096] = {0};
+    ਅੱਖਰ *p;
 
-    sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    sprintf(ਬਫਰ, "%s", str);
+    ਜੇ(!(p = ਲੜੀ_ਖੋਜ(ਬਫਰ, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        ਵਾਪਸ;
     }
 
     *p = '\0';
 
-    sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
+    sprintf(output, "%s%s%s", ਬਫਰ, rep, p+ਲੜੀ_ਲੰਬਾਈ(orig));
 }
 
-float sec(clock_t clocks)
+ਦਸ਼ਮਲਵ sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    ਵਾਪਸ (ਦਸ਼ਮਲਵ)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+ਖਾਲੀ ਸਿਖਰ_k(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n, ਪੂਰਨ k, ਪੂਰਨ *ਸੂਚਕਾਂਕ)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
-                curr = index[j];
-                index[j] = swap;
+    ਪੂਰਨ i,j;
+    ਲਈ(j = 0; j < k; ++j) ਸੂਚਕਾਂਕ[j] = -1;
+    ਲਈ(i = 0; i < n; ++i){
+        ਪੂਰਨ curr = i;
+        ਲਈ(j = 0; j < k; ++j){
+            ਜੇ((ਸੂਚਕਾਂਕ[j] < 0) || a[curr] > a[ਸੂਚਕਾਂਕ[j]]){
+                ਪੂਰਨ ਅਦਲਾ_ਬਦਲੀ = curr;
+                curr = ਸੂਚਕਾਂਕ[j];
+                ਸੂਚਕਾਂਕ[j] = ਅਦਲਾ_ਬਦਲੀ;
             }
         }
     }
 }
 
-void error(const char *s)
+ਖਾਲੀ error(ਅਚਲ ਅੱਖਰ *s)
 {
     perror(s);
-    assert(0);
-    exit(-1);
+    ਪ੍ਰਤਿਜ੍ਞਾ(0);
+    ਬਾਹਰ_ਨਿਕਲੋ(-1);
 }
 
-unsigned char *read_file(char *filename)
+ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ *read_file(ਅੱਖਰ *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    size_t size;
+    size_t ਮਾਪ;
 
     fseek(fp, 0, SEEK_END); 
-    size = ftell(fp);
+    ਮਾਪ = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
-    fread(text, 1, size, fp);
+    ਬਿਨਾਨਿਸ਼ਾਨੀ ਅੱਖਰ *ਪਾਠ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਮਾਪ+1, ਆਕਾਰ(ਅੱਖਰ));
+    fread(ਪਾਠ, 1, ਮਾਪ, fp);
     fclose(fp);
-    return text;
+    ਵਾਪਸ ਪਾਠ;
 }
 
-void malloc_error()
+ਖਾਲੀ malloc_error()
 {
     fprintf(stderr, "Malloc error\n");
-    exit(-1);
+    ਬਾਹਰ_ਨਿਕਲੋ(-1);
 }
 
-void file_error(char *s)
+ਖਾਲੀ file_error(ਅੱਖਰ *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
-    exit(0);
+    ਬਾਹਰ_ਨਿਕਲੋ(0);
 }
 
-list *split_str(char *s, char delim)
+list *ਵੰਡੋ_str(ਅੱਖਰ *s, ਅੱਖਰ delim)
 {
     size_t i;
-    size_t len = strlen(s);
+    size_t len = ਲੜੀ_ਲੰਬਾਈ(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_ਪਾਓ(l, s);
+    ਲਈ(i = 0; i < len; ++i){
+        ਜੇ(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_ਪਾਓ(l, &(s[i+1]));
         }
     }
-    return l;
+    ਵਾਪਸ l;
 }
 
-void strip(char *s)
+ਖਾਲੀ strip(ਅੱਖਰ *s)
 {
     size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    size_t len = ਲੜੀ_ਲੰਬਾਈ(s);
+    size_t ਵਿੱਥ = 0;
+    ਲਈ(i = 0; i < len; ++i){
+        ਅੱਖਰ c = s[i];
+        ਜੇ(c==' '||c=='\t'||c=='\n') ++ਵਿੱਥ;
+        ਨਹੀਂਤਾਂ s[i-ਵਿੱਥ] = c;
     }
-    s[len-offset] = '\0';
+    s[len-ਵਿੱਥ] = '\0';
 }
 
-void strip_char(char *s, char bad)
+ਖਾਲੀ strip_char(ਅੱਖਰ *s, ਅੱਖਰ bad)
 {
     size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    size_t len = ਲੜੀ_ਲੰਬਾਈ(s);
+    size_t ਵਿੱਥ = 0;
+    ਲਈ(i = 0; i < len; ++i){
+        ਅੱਖਰ c = s[i];
+        ਜੇ(c==bad) ++ਵਿੱਥ;
+        ਨਹੀਂਤਾਂ s[i-ਵਿੱਥ] = c;
     }
-    s[len-offset] = '\0';
+    s[len-ਵਿੱਥ] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+ਖਾਲੀ free_ptrs(ਖਾਲੀ **ptrs, ਪੂਰਨ n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i) ਮੁਕਤ(ptrs[i]);
+    ਮੁਕਤ(ptrs);
 }
 
-char *fgetl(FILE *fp)
+ਅੱਖਰ *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
-    size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    ਜੇ(feof(fp)) ਵਾਪਸ 0;
+    size_t ਮਾਪ = 512;
+    ਅੱਖਰ *ਸਤਰ = ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਮਾਪ*ਆਕਾਰ(ਅੱਖਰ));
+    ਜੇ(!fgets(ਸਤਰ, ਮਾਪ, fp)){
+        ਮੁਕਤ(ਸਤਰ);
+        ਵਾਪਸ 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = ਲੜੀ_ਲੰਬਾਈ(ਸਤਰ);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
-            size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
-                printf("%ld\n", size);
+    ਜਦੋਂ((ਸਤਰ[curr-1] != '\n') && !feof(fp)){
+        ਜੇ(curr == ਮਾਪ-1){
+            ਮਾਪ *= 2;
+            ਸਤਰ = realloc(ਸਤਰ, ਮਾਪ*ਆਕਾਰ(ਅੱਖਰ));
+            ਜੇ(!ਸਤਰ) {
+                ਲਿਖੋ("%ld\n", ਮਾਪ);
                 malloc_error();
             }
         }
-        size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        size_t readsize = ਮਾਪ-curr;
+        ਜੇ(readsize > ਵੱਧ_ਤੋਂ_ਵੱਧ_ਅੰਕ) readsize = ਵੱਧ_ਤੋਂ_ਵੱਧ_ਅੰਕ-1;
+        fgets(&ਸਤਰ[curr], readsize, fp);
+        curr = ਲੜੀ_ਲੰਬਾਈ(ਸਤਰ);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    ਜੇ(ਸਤਰ[curr-1] == '\n') ਸਤਰ[curr-1] = '\0';
 
-    return line;
+    ਵਾਪਸ ਸਤਰ;
 }
 
-int read_int(int fd)
+ਪੂਰਨ read_int(ਪੂਰਨ fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    ਪੂਰਨ n = 0;
+    ਪੂਰਨ ਅਗਲਾ = ਪਠ(fd, &n, ਆਕਾਰ(ਪੂਰਨ));
+    ਜੇ(ਅਗਲਾ <= 0) ਵਾਪਸ -1;
+    ਵਾਪਸ n;
 }
 
-void write_int(int fd, int n)
+ਖਾਲੀ write_int(ਪੂਰਨ fd, ਪੂਰਨ n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    ਪੂਰਨ ਅਗਲਾ = ਲਿਖ(fd, &n, ਆਕਾਰ(ਪੂਰਨ));
+    ਜੇ(ਅਗਲਾ <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+ਪੂਰਨ read_all_fail(ਪੂਰਨ fd, ਅੱਖਰ *ਬਫਰ, size_t ਬਾਈਟਾਂ)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    ਜਦੋਂ(n < ਬਾਈਟਾਂ){
+        ਪੂਰਨ ਅਗਲਾ = ਪਠ(fd, ਬਫਰ + n, ਬਾਈਟਾਂ-n);
+        ਜੇ(ਅਗਲਾ <= 0) ਵਾਪਸ 1;
+        n += ਅਗਲਾ;
     }
-    return 0;
+    ਵਾਪਸ 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+ਪੂਰਨ write_all_fail(ਪੂਰਨ fd, ਅੱਖਰ *ਬਫਰ, size_t ਬਾਈਟਾਂ)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    ਜਦੋਂ(n < ਬਾਈਟਾਂ){
+        size_t ਅਗਲਾ = ਲਿਖ(fd, ਬਫਰ + n, ਬਾਈਟਾਂ-n);
+        ਜੇ(ਅਗਲਾ <= 0) ਵਾਪਸ 1;
+        n += ਅਗਲਾ;
     }
-    return 0;
+    ਵਾਪਸ 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+ਖਾਲੀ read_all(ਪੂਰਨ fd, ਅੱਖਰ *ਬਫਰ, size_t ਬਾਈਟਾਂ)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
+    ਜਦੋਂ(n < ਬਾਈਟਾਂ){
+        ਪੂਰਨ ਅਗਲਾ = ਪਠ(fd, ਬਫਰ + n, ਬਾਈਟਾਂ-n);
+        ਜੇ(ਅਗਲਾ <= 0) error("read failed");
+        n += ਅਗਲਾ;
     }
 }
 
-void write_all(int fd, char *buffer, size_t bytes)
+ਖਾਲੀ write_all(ਪੂਰਨ fd, ਅੱਖਰ *ਬਫਰ, size_t ਬਾਈਟਾਂ)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
-        n += next;
+    ਜਦੋਂ(n < ਬਾਈਟਾਂ){
+        size_t ਅਗਲਾ = ਲਿਖ(fd, ਬਫਰ + n, ਬਾਈਟਾਂ-n);
+        ਜੇ(ਅਗਲਾ <= 0) error("write failed");
+        n += ਅਗਲਾ;
     }
 }
 
 
-char *copy_string(char *s)
+ਅੱਖਰ *copy_string(ਅੱਖਰ *s)
 {
-    char *copy = malloc(strlen(s)+1);
-    strncpy(copy, s, strlen(s)+1);
-    return copy;
+    ਅੱਖਰ *copy = ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਲੜੀ_ਲੰਬਾਈ(s)+1);
+    strncpy(copy, s, ਲੜੀ_ਲੰਬਾਈ(s)+1);
+    ਵਾਪਸ copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_ਸਤਰ(ਅੱਖਰ *ਸਤਰ)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    ਅੱਖਰ *c, *p;
+    ਪੂਰਨ ਵਿੱਚ = 0;
+    ਲਈ(c = ਸਤਰ, p = ਸਤਰ; *c != '\0'; ++c){
+        ਜੇ(*c == '"') ਵਿੱਚ = !ਵਿੱਚ;
+        ਨਹੀਂਤਾਂ ਜੇ(*c == ',' && !ਵਿੱਚ){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_ਪਾਓ(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_ਪਾਓ(l, copy_string(p));
+    ਵਾਪਸ l;
 }
 
-int count_fields(char *line)
+ਪੂਰਨ ਗਿਣਤੀ_fields(ਅੱਖਰ *ਸਤਰ)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
-        done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਪੂਰਨ ਪੂਰਾ = 0;
+    ਅੱਖਰ *c;
+    ਲਈ(c = ਸਤਰ; !ਪੂਰਾ; ++c){
+        ਪੂਰਾ = (*c == '\0');
+        ਜੇ(*c == ',' || ਪੂਰਾ) ++ਗਿਣਤੀ_2;
     }
-    return count;
+    ਵਾਪਸ ਗਿਣਤੀ_2;
 }
 
-float *parse_fields(char *line, int n)
+ਦਸ਼ਮਲਵ *parse_fields(ਅੱਖਰ *ਸਤਰ, ਪੂਰਨ n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
-        done = (*c == '\0');
-        if(*c == ',' || done){
+    ਦਸ਼ਮਲਵ *ਖੇਤਰ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਅੱਖਰ *c, *p, *ਸਿਰਾ;
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਪੂਰਨ ਪੂਰਾ = 0;
+    ਲਈ(c = ਸਤਰ, p = ਸਤਰ; !ਪੂਰਾ; ++c){
+        ਪੂਰਾ = (*c == '\0');
+        ਜੇ(*c == ',' || ਪੂਰਾ){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            ਖੇਤਰ[ਗਿਣਤੀ_2] = strtod(p, &ਸਿਰਾ);
+            ਜੇ(p == c) ਖੇਤਰ[ਗਿਣਤੀ_2] = nan("");
+            ਜੇ(ਸਿਰਾ != c && (ਸਿਰਾ != c-1 || *ਸਿਰਾ != '\r')) ਖੇਤਰ[ਗਿਣਤੀ_2] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++ਗਿਣਤੀ_2;
         }
     }
-    return field;
+    ਵਾਪਸ ਖੇਤਰ;
 }
 
-float sum_array(float *a, int n)
+ਦਸ਼ਮਲਵ ਜੋੜ_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ ਜੋੜ = 0;
+    ਲਈ(i = 0; i < n; ++i) ਜੋੜ += a[i];
+    ਵਾਪਸ ਜੋੜ;
 }
 
-float mean_array(float *a, int n)
+ਦਸ਼ਮਲਵ ਔਸਤ_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    return sum_array(a,n)/n;
+    ਵਾਪਸ ਜੋੜ_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+ਖਾਲੀ ਔਸਤ_arrays(ਦਸ਼ਮਲਵ **a, ਪੂਰਨ n, ਪੂਰਨ els, ਦਸ਼ਮਲਵ *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    ਪੂਰਨ i;
+    ਪੂਰਨ j;
+    memset(avg, 0, els*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਲਈ(j = 0; j < n; ++j){
+        ਲਈ(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    ਲਈ(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+ਖਾਲੀ print_statistics(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
-    printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
+    ਦਸ਼ਮਲਵ m = ਔਸਤ_array(a, n);
+    ਦਸ਼ਮਲਵ v = variance_array(a, n);
+    ਲਿਖੋ("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+ਦਸ਼ਮਲਵ variance_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ ਜੋੜ = 0;
+    ਦਸ਼ਮਲਵ ਔਸਤ = ਔਸਤ_array(a, n);
+    ਲਈ(i = 0; i < n; ++i) ਜੋੜ += (a[i] - ਔਸਤ)*(a[i]-ਔਸਤ);
+    ਦਸ਼ਮਲਵ variance = ਜੋੜ/n;
+    ਵਾਪਸ variance;
 }
 
-int constrain_int(int a, int min, int max)
+ਪੂਰਨ constrain_int(ਪੂਰਨ a, ਪੂਰਨ min, ਪੂਰਨ max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ਜੇ (a < min) ਵਾਪਸ min;
+    ਜੇ (a > max) ਵਾਪਸ max;
+    ਵਾਪਸ a;
 }
 
-float constrain(float min, float max, float a)
+ਦਸ਼ਮਲਵ constrain(ਦਸ਼ਮਲਵ min, ਦਸ਼ਮਲਵ max, ਦਸ਼ਮਲਵ a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ਜੇ (a < min) ਵਾਪਸ min;
+    ਜੇ (a > max) ਵਾਪਸ max;
+    ਵਾਪਸ a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+ਦਸ਼ਮਲਵ dist_array(ਦਸ਼ਮਲਵ *a, ਦਸ਼ਮਲਵ *b, ਪੂਰਨ n, ਪੂਰਨ sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ ਜੋੜ = 0;
+    ਲਈ(i = 0; i < n; i += sub) ਜੋੜ += ਘਾਤ(a[i]-b[i], 2);
+    ਵਾਪਸ ਵਰਗਮੂਲ(ਜੋੜ);
 }
 
-float mse_array(float *a, int n)
+ਦਸ਼ਮਲਵ mse_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ ਜੋੜ = 0;
+    ਲਈ(i = 0; i < n; ++i) ਜੋੜ += a[i]*a[i];
+    ਵਾਪਸ ਵਰਗਮੂਲ(ਜੋੜ/n);
 }
 
-void normalize_array(float *a, int n)
+ਖਾਲੀ normalize_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ mu = ਔਸਤ_array(a,n);
+    ਦਸ਼ਮਲਵ sigma = ਵਰਗਮੂਲ(variance_array(a,n));
+    ਲਈ(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
-    mu = mean_array(a,n);
-    sigma = sqrt(variance_array(a,n));
+    mu = ਔਸਤ_array(a,n);
+    sigma = ਵਰਗਮੂਲ(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+ਖਾਲੀ translate_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+ਦਸ਼ਮਲਵ mag_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        sum += a[i]*a[i];   
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ ਜੋੜ = 0;
+    ਲਈ(i = 0; i < n; ++i){
+        ਜੋੜ += a[i]*a[i];   
     }
-    return sqrt(sum);
+    ਵਾਪਸ ਵਰਗਮੂਲ(ਜੋੜ);
 }
 
-void scale_array(float *a, int n, float s)
+ਖਾਲੀ scale_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n, ਦਸ਼ਮਲਵ s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+ਪੂਰਨ sample_array(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    float sum = sum_array(a, n);
-    scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    ਦਸ਼ਮਲਵ ਜੋੜ = ਜੋੜ_array(a, n);
+    scale_array(a, n, 1./ਜੋੜ);
+    ਦਸ਼ਮਲਵ r = rand_ਇਕਸਾਰ(0, 1);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        ਜੇ (r <= 0) ਵਾਪਸ i;
     }
-    return n-1;
+    ਵਾਪਸ n-1;
 }
 
-int max_int_index(int *a, int n)
+ਪੂਰਨ max_int_ਸੂਚਕਾਂਕ(ਪੂਰਨ *a, ਪੂਰਨ n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    ਜੇ(n <= 0) ਵਾਪਸ -1;
+    ਪੂਰਨ i, max_i = 0;
+    ਪੂਰਨ max = a[0];
+    ਲਈ(i = 1; i < n; ++i){
+        ਜੇ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    ਵਾਪਸ max_i;
 }
 
-int max_index(float *a, int n)
+ਪੂਰਨ max_ਸੂਚਕਾਂਕ(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    ਜੇ(n <= 0) ਵਾਪਸ -1;
+    ਪੂਰਨ i, max_i = 0;
+    ਦਸ਼ਮਲਵ max = a[0];
+    ਲਈ(i = 1; i < n; ++i){
+        ਜੇ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    ਵਾਪਸ max_i;
 }
 
-int int_index(int *a, int val, int n)
+ਪੂਰਨ int_ਸੂਚਕਾਂਕ(ਪੂਰਨ *a, ਪੂਰਨ val, ਪੂਰਨ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < n; ++i){
+        ਜੇ(a[i] == val) ਵਾਪਸ i;
     }
-    return -1;
+    ਵਾਪਸ -1;
 }
 
-int rand_int(int min, int max)
+ਪੂਰਨ rand_int(ਪੂਰਨ min, ਪੂਰਨ max)
 {
-    if (max < min){
-        int s = min;
+    ਜੇ (max < min){
+        ਪੂਰਨ s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    ਪੂਰਨ r = (rand()%(max - min + 1)) + min;
+    ਵਾਪਸ r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+ਦਸ਼ਮਲਵ rand_ਸਾਧਾਰਨ()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    ਸਥਿਰ ਪੂਰਨ have_ਵਾਧੂ = 0;
+    ਸਥਿਰ ਦੁੱਗਣਾ rand1, rand2;
 
-    if(haveSpare)
+    ਜੇ(have_ਵਾਧੂ)
     {
-        haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        have_ਵਾਧੂ = 0;
+        ਵਾਪਸ ਵਰਗਮੂਲ(rand1) * ਜੀਵਾ(rand2);
     }
 
-    haveSpare = 1;
+    have_ਵਾਧੂ = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
-    rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand1 = rand() / ((ਦੁੱਗਣਾ) RAND_MAX);
+    ਜੇ(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = -2 * ਲਘੂਗਣਕ(rand1);
+    rand2 = (rand() / ((ਦੁੱਗਣਾ) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    ਵਾਪਸ ਵਰਗਮੂਲ(rand1) * ਕੋਜੀਵਾ(rand2);
 }
 
 /*
@@ -683,9 +683,9 @@ float rand_normal()
    }
  */
 
-size_t rand_size_t()
+size_t rand_ਮਾਪ_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    ਵਾਪਸ  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -695,32 +695,32 @@ size_t rand_size_t()
         ((size_t)(rand()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+ਦਸ਼ਮਲਵ rand_ਇਕਸਾਰ(ਦਸ਼ਮਲਵ min, ਦਸ਼ਮਲਵ max)
 {
-    if(max < min){
-        float swap = min;
+    ਜੇ(max < min){
+        ਦਸ਼ਮਲਵ ਅਦਲਾ_ਬਦਲੀ = min;
         min = max;
-        max = swap;
+        max = ਅਦਲਾ_ਬਦਲੀ;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    ਵਾਪਸ ((ਦਸ਼ਮਲਵ)rand()/RAND_MAX * (max - min)) + min;
 }
 
-float rand_scale(float s)
+ਦਸ਼ਮਲਵ rand_scale(ਦਸ਼ਮਲਵ s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    ਦਸ਼ਮਲਵ scale = rand_ਇਕਸਾਰ(1, s);
+    ਜੇ(rand()%2) ਵਾਪਸ scale;
+    ਵਾਪਸ 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+ਦਸ਼ਮਲਵ **one_hot_encode(ਦਸ਼ਮਲਵ *a, ਪੂਰਨ n, ਪੂਰਨ k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
-        t[i][index] = 1;
+    ਪੂਰਨ i;
+    ਦਸ਼ਮਲਵ **t = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(n, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    ਲਈ(i = 0; i < n; ++i){
+        t[i] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(k, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = (ਪੂਰਨ)a[i];
+        t[i][ਸੂਚਕਾਂਕ] = 1;
     }
-    return t;
+    ਵਾਪਸ t;
 }
 

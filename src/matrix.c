@@ -1,196 +1,196 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ "matrix.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "blas.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <assert.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <math.h>
 
-void free_matrix(matrix m)
+ਖਾਲੀ free_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < m.ਪੰਕਤੀਆਂ; ++i) ਮੁਕਤ(m.vals[i]);
+    ਮੁਕਤ(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+ਦਸ਼ਮਲਵ ਮੈਟ੍ਰਿਕਸ_topk_accuracy(ਮੈਟ੍ਰਿਕਸ truth, ਮੈਟ੍ਰਿਕਸ guess, ਪੂਰਨ k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    ਪੂਰਨ *indexes = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(k, ਆਕਾਰ(ਪੂਰਨ));
+    ਪੂਰਨ n = truth.ਖਾਨੇ_ਗਿਣਤੀ;
+    ਪੂਰਨ i,j;
+    ਪੂਰਨ correct = 0;
+    ਲਈ(i = 0; i < truth.ਪੰਕਤੀਆਂ; ++i){
+        ਸਿਖਰ_k(guess.vals[i], n, k, indexes);
+        ਲਈ(j = 0; j < k; ++j){
+            ਪੂਰਨ class = indexes[j];
+            ਜੇ(truth.vals[i][class]){
                 ++correct;
-                break;
+                ਰੋਕੋ;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    ਮੁਕਤ(indexes);
+    ਵਾਪਸ (ਦਸ਼ਮਲਵ)correct/truth.ਪੰਕਤੀਆਂ;
 }
 
-void scale_matrix(matrix m, float scale)
+ਖਾਲੀ scale_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ m, ਦਸ਼ਮਲਵ scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < m.ਪੰਕਤੀਆਂ; ++i){
+        ਲਈ(j = 0; j < m.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+ਮੈਟ੍ਰਿਕਸ resize_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ m, ਪੂਰਨ ਮਾਪ)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    ਪੂਰਨ i;
+    ਜੇ (m.ਪੰਕਤੀਆਂ == ਮਾਪ) ਵਾਪਸ m;
+    ਜੇ (m.ਪੰਕਤੀਆਂ < ਮਾਪ) {
+        m.vals = realloc(m.vals, ਮਾਪ*ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+        ਲਈ (i = m.ਪੰਕਤੀਆਂ; i < ਮਾਪ; ++i) {
+            m.vals[i] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(m.ਖਾਨੇ_ਗਿਣਤੀ, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } ਨਹੀਂਤਾਂ ਜੇ (m.ਪੰਕਤੀਆਂ > ਮਾਪ) {
+        ਲਈ (i = ਮਾਪ; i < m.ਪੰਕਤੀਆਂ; ++i) {
+            ਮੁਕਤ(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, ਮਾਪ*ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
     }
-    m.rows = size;
-    return m;
+    m.ਪੰਕਤੀਆਂ = ਮਾਪ;
+    ਵਾਪਸ m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+ਖਾਲੀ ਮੈਟ੍ਰਿਕਸ_ਜੋੜੋ_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ from, ਮੈਟ੍ਰਿਕਸ ਮੰਜ਼ਿਲ)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
-            to.vals[i][j] += from.vals[i][j];
+    ਪ੍ਰਤਿਜ੍ਞਾ(from.ਪੰਕਤੀਆਂ == ਮੰਜ਼ਿਲ.ਪੰਕਤੀਆਂ && from.ਖਾਨੇ_ਗਿਣਤੀ == ਮੰਜ਼ਿਲ.ਖਾਨੇ_ਗਿਣਤੀ);
+    ਪੂਰਨ i,j;
+    ਲਈ(i = 0; i < from.ਪੰਕਤੀਆਂ; ++i){
+        ਲਈ(j = 0; j < from.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
+            ਮੰਜ਼ਿਲ.vals[i][j] += from.vals[i][j];
         }
     }
 }
 
-matrix copy_matrix(matrix m)
+ਮੈਟ੍ਰਿਕਸ copy_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ m)
 {
-    matrix c = {0};
-    c.rows = m.rows;
-    c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
-        copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
+    ਮੈਟ੍ਰਿਕਸ c = {0};
+    c.ਪੰਕਤੀਆਂ = m.ਪੰਕਤੀਆਂ;
+    c.ਖਾਨੇ_ਗਿਣਤੀ = m.ਖਾਨੇ_ਗਿਣਤੀ;
+    c.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(c.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
+    ਪੂਰਨ i;
+    ਲਈ(i = 0; i < c.ਪੰਕਤੀਆਂ; ++i){
+        c.vals[i] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(c.ਖਾਨੇ_ਗਿਣਤੀ, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        copy_cpu(c.ਖਾਨੇ_ਗਿਣਤੀ, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    ਵਾਪਸ c;
 }
 
-matrix make_matrix(int rows, int cols)
+ਮੈਟ੍ਰਿਕਸ make_ਮੈਟ੍ਰਿਕਸ(ਪੂਰਨ ਪੰਕਤੀਆਂ, ਪੂਰਨ ਖਾਨੇ_ਗਿਣਤੀ)
 {
-    int i;
-    matrix m;
-    m.rows = rows;
-    m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    ਪੂਰਨ i;
+    ਮੈਟ੍ਰਿਕਸ m;
+    m.ਪੰਕਤੀਆਂ = ਪੰਕਤੀਆਂ;
+    m.ਖਾਨੇ_ਗਿਣਤੀ = ਖਾਨੇ_ਗਿਣਤੀ;
+    m.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(m.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
+    ਲਈ(i = 0; i < m.ਪੰਕਤੀਆਂ; ++i){
+        m.vals[i] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(m.ਖਾਨੇ_ਗਿਣਤੀ, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
     }
-    return m;
+    ਵਾਪਸ m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+ਮੈਟ੍ਰਿਕਸ hold_ਬਾਹਰਲਾ_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ *m, ਪੂਰਨ n)
 {
-    int i;
-    matrix h;
-    h.rows = n;
-    h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
-        h.vals[i] = m->vals[index];
-        m->vals[index] = m->vals[--(m->rows)];
+    ਪੂਰਨ i;
+    ਮੈਟ੍ਰਿਕਸ h;
+    h.ਪੰਕਤੀਆਂ = n;
+    h.ਖਾਨੇ_ਗਿਣਤੀ = m->ਖਾਨੇ_ਗਿਣਤੀ;
+    h.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(h.ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ *));
+    ਲਈ(i = 0; i < n; ++i){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = rand()%m->ਪੰਕਤੀਆਂ;
+        h.vals[i] = m->vals[ਸੂਚਕਾਂਕ];
+        m->vals[ਸੂਚਕਾਂਕ] = m->vals[--(m->ਪੰਕਤੀਆਂ)];
     }
-    return h;
+    ਵਾਪਸ h;
 }
 
-float *pop_column(matrix *m, int c)
+ਦਸ਼ਮਲਵ *ਕੱਢੋ_ਕਾਲਮ(ਮੈਟ੍ਰਿਕਸ *m, ਪੂਰਨ c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
-        col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+    ਦਸ਼ਮਲਵ *ਖਾਨਾ = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(m->ਪੰਕਤੀਆਂ, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    ਪੂਰਨ i, j;
+    ਲਈ(i = 0; i < m->ਪੰਕਤੀਆਂ; ++i){
+        ਖਾਨਾ[i] = m->vals[i][c];
+        ਲਈ(j = c; j < m->ਖਾਨੇ_ਗਿਣਤੀ-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
-    --m->cols;
-    return col;
+    --m->ਖਾਨੇ_ਗਿਣਤੀ;
+    ਵਾਪਸ ਖਾਨਾ;
 }
 
-matrix csv_to_matrix(char *filename)
+ਮੈਟ੍ਰਿਕਸ csv_ਮੰਜ਼ਿਲ_ਮੈਟ੍ਰਿਕਸ(ਅੱਖਰ *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    ਜੇ(!fp) file_error(filename);
 
-    matrix m;
-    m.cols = -1;
+    ਮੈਟ੍ਰਿਕਸ m;
+    m.ਖਾਨੇ_ਗਿਣਤੀ = -1;
 
-    char *line;
+    ਅੱਖਰ *ਸਤਰ;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
-            size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+    ਪੂਰਨ n = 0;
+    ਪੂਰਨ ਮਾਪ = 1024;
+    m.vals = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਮਾਪ, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    ਜਦੋਂ((ਸਤਰ = fgetl(fp))){
+        ਜੇ(m.ਖਾਨੇ_ਗਿਣਤੀ == -1) m.ਖਾਨੇ_ਗਿਣਤੀ = ਗਿਣਤੀ_fields(ਸਤਰ);
+        ਜੇ(n == ਮਾਪ){
+            ਮਾਪ *= 2;
+            m.vals = realloc(m.vals, ਮਾਪ*ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(ਸਤਰ, m.ਖਾਨੇ_ਗਿਣਤੀ);
+        ਮੁਕਤ(ਸਤਰ);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
-    m.rows = n;
-    return m;
+    m.vals = realloc(m.vals, n*ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    m.ਪੰਕਤੀਆਂ = n;
+    ਵਾਪਸ m;
 }
 
-void matrix_to_csv(matrix m)
+ਖਾਲੀ ਮੈਟ੍ਰਿਕਸ_ਮੰਜ਼ਿਲ_csv(ਮੈਟ੍ਰਿਕਸ m)
 {
-    int i, j;
+    ਪੂਰਨ i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
-            printf("%.17g", m.vals[i][j]);
+    ਲਈ(i = 0; i < m.ਪੰਕਤੀਆਂ; ++i){
+        ਲਈ(j = 0; j < m.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
+            ਜੇ(j > 0) ਲਿਖੋ(",");
+            ਲਿਖੋ("%.17g", m.vals[i][j]);
         }
-        printf("\n");
+        ਲਿਖੋ("\n");
     }
 }
 
-void print_matrix(matrix m)
+ਖਾਲੀ print_ਮੈਟ੍ਰਿਕਸ(ਮੈਟ੍ਰਿਕਸ m)
 {
-    int i, j;
-    printf("%d X %d Matrix:\n",m.rows, m.cols);
-    printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__ \n");
+    ਪੂਰਨ i, j;
+    ਲਿਖੋ("%d X %d Matrix:\n",m.ਪੰਕਤੀਆਂ, m.ਖਾਨੇ_ਗਿਣਤੀ);
+    ਲਿਖੋ(" __");
+    ਲਈ(j = 0; j < 16*m.ਖਾਨੇ_ਗਿਣਤੀ-1; ++j) ਲਿਖੋ(" ");
+    ਲਿਖੋ("__ \n");
 
-    printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("  |\n");
+    ਲਿਖੋ("|  ");
+    ਲਈ(j = 0; j < 16*m.ਖਾਨੇ_ਗਿਣਤੀ-1; ++j) ਲਿਖੋ(" ");
+    ਲਿਖੋ("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
-        printf("|  ");
-        for(j = 0; j < m.cols; ++j){
-            printf("%15.7f ", m.vals[i][j]);
+    ਲਈ(i = 0; i < m.ਪੰਕਤੀਆਂ; ++i){
+        ਲਿਖੋ("|  ");
+        ਲਈ(j = 0; j < m.ਖਾਨੇ_ਗਿਣਤੀ; ++j){
+            ਲਿਖੋ("%15.7f ", m.vals[i][j]);
         }
-        printf(" |\n");
+        ਲਿਖੋ(" |\n");
     }
-    printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__|\n");
+    ਲਿਖੋ("|__");
+    ਲਈ(j = 0; j < 16*m.ਖਾਨੇ_ਗਿਣਤੀ-1; ++j) ਲਿਖੋ(" ");
+    ਲਿਖੋ("__|\n");
 }

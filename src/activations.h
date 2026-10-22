@@ -1,87 +1,87 @@
-#ifndef ACTIVATIONS_H
-#define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ ACTIVATIONS_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ ACTIVATIONS_H
+#ਅਨ੍ਤਰ੍ਭਾਵ "darknet.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(ਅੱਖਰ *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
-#ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
-#endif
+ਅੱਖਰ *get_activation_string(ACTIVATION a);
+ਦਸ਼ਮਲਵ activate(ਦਸ਼ਮਲਵ x, ACTIVATION a);
+ਦਸ਼ਮਲਵ gradient(ਦਸ਼ਮਲਵ x, ACTIVATION a);
+ਖਾਲੀ gradient_array(ਅਚਲ ਦਸ਼ਮਲਵ *x, ਅਚਲ ਪੂਰਨ n, ਅਚਲ ACTIVATION a, ਦਸ਼ਮਲਵ *delta);
+ਖਾਲੀ activate_array(ਦਸ਼ਮਲਵ *x, ਅਚਲ ਪੂਰਨ n, ਅਚਲ ACTIVATION a);
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ activate_array_gpu(ਦਸ਼ਮਲਵ *x, ਪੂਰਨ n, ACTIVATION a);
+ਖਾਲੀ gradient_array_gpu(ਦਸ਼ਮਲਵ *x, ਪੂਰਨ n, ACTIVATION a, ਦਸ਼ਮਲਵ *delta);
+#ਜੇ_ਅੰਤ
 
-static inline float stair_activate(float x)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ stair_activate(ਦਸ਼ਮਲਵ x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    ਪੂਰਨ n = floor(x);
+    ਜੇ (n%2 == 0) ਵਾਪਸ floor(x/2.);
+    ਨਹੀਂਤਾਂ ਵਾਪਸ (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ hardtan_activate(ਦਸ਼ਮਲਵ x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    ਜੇ (x < -1) ਵਾਪਸ -1;
+    ਜੇ (x > 1) ਵਾਪਸ 1;
+    ਵਾਪਸ x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ ਰੇਖਿਕ_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ x;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ logistic_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ 1./(1. + ਘਾਤਾਂਕ(-x));}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ loggy_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ 2./(1. + ਘਾਤਾਂਕ(-x)) - 1;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ relu_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ x*(x>0);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ elu_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x >= 0)*x + (x < 0)*(ਘਾਤਾਂਕ(x)-1);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ selu_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(ਘਾਤਾਂਕ(x)-1);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ relie_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x>0) ? x : .01*x;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ ramp_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ x*(x>0)+.1*x;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ leaky_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x>0) ? x : .1*x;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ tanh_activate(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (ਘਾਤਾਂਕ(2*x)-1)/(ਘਾਤਾਂਕ(2*x)+1);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ plse_activate(ਦਸ਼ਮਲਵ x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    ਜੇ(x < -4) ਵਾਪਸ .01 * (x + 4);
+    ਜੇ(x > 4)  ਵਾਪਸ .01 * (x - 4) + 1;
+    ਵਾਪਸ .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ lhtan_activate(ਦਸ਼ਮਲਵ x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    ਜੇ(x < 0) ਵਾਪਸ .001*x;
+    ਜੇ(x > 1) ਵਾਪਸ .001*(x-1) + 1;
+    ਵਾਪਸ x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ lhtan_gradient(ਦਸ਼ਮਲਵ x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    ਜੇ(x > 0 && x < 1) ਵਾਪਸ 1;
+    ਵਾਪਸ .001;
 }
-static inline float stair_gradient(float x)
-{
-    if (floor(x) == x) return 0;
-    return 1;
-}
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
 
-#endif
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ hardtan_gradient(ਦਸ਼ਮਲਵ x)
+{
+    ਜੇ (x > -1 && x < 1) ਵਾਪਸ 1;
+    ਵਾਪਸ 0;
+}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ ਰੇਖਿਕ_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ 1;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ logistic_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (1-x)*x;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ loggy_gradient(ਦਸ਼ਮਲਵ x)
+{
+    ਦਸ਼ਮਲਵ y = (x+1.)/2.;
+    ਵਾਪਸ 2*(1-y)*y;
+}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ stair_gradient(ਦਸ਼ਮਲਵ x)
+{
+    ਜੇ (floor(x) == x) ਵਾਪਸ 0;
+    ਵਾਪਸ 1;
+}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ relu_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x>0);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ elu_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x >= 0) + (x < 0)*(x + 1);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ selu_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ relie_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x>0) ? 1 : .01;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ ramp_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x>0)+.1;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ leaky_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x>0) ? 1 : .1;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ tanh_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ 1-x*x;}
+ਸਥਿਰ ਸਤਰਅੰਦਰ ਦਸ਼ਮਲਵ plse_gradient(ਦਸ਼ਮਲਵ x){ਵਾਪਸ (x < 0 || x > 1) ? .01 : .125;}
+
+#ਜੇ_ਅੰਤ
 

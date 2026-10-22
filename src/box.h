@@ -1,14 +1,14 @@
-#ifndef BOX_H
-#define BOX_H
-#include "darknet.h"
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ BOX_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ BOX_H
+#ਅਨ੍ਤਰ੍ਭਾਵ "darknet.h"
 
-typedef struct{
-    float dx, dy, dw, dh;
+ਕਿਸਮਪਰਿਭਾਸ਼ਾ ਬਣਤਰ{
+    ਦਸ਼ਮਲਵ dx, dy, dw, dh;
 } dbox;
 
-float box_rmse(box a, box b);
+ਦਸ਼ਮਲਵ box_rmse(box a, box b);
 dbox diou(box a, box b);
 box decode_box(box b, box anchor);
 box encode_box(box b, box anchor);
 
-#endif
+#ਜੇ_ਅੰਤ

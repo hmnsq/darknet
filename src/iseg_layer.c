@@ -1,16 +1,16 @@
-#include "iseg_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "iseg_layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "activations.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "blas.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "box.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <assert.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
+layer make_iseg_layer(ਪੂਰਨ batch, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ classes, ਪੂਰਨ ids)
 {
     layer l = {0};
     l.type = ISEG;
@@ -18,44 +18,44 @@ layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
     l.h = h;
     l.w = w;
     l.c = classes + ids;
-    l.out_w = l.w;
-    l.out_h = l.h;
-    l.out_c = l.c;
+    l.ਬਾਹਰਲਾ_w = l.w;
+    l.ਬਾਹਰਲਾ_h = l.h;
+    l.ਬਾਹਰਲਾ_c = l.c;
     l.classes = classes;
     l.batch = batch;
     l.extra = ids;
-    l.cost = calloc(1, sizeof(float));
+    l.ਲਾਗਤ_2 = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(1, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
     l.outputs = h*w*l.c;
     l.inputs = l.outputs;
     l.truths = 90*(l.w*l.h+1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
+    l.delta = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(batch*l.outputs, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l.output = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(batch*l.outputs, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 
-    l.counts = calloc(90, sizeof(int));
-    l.sums = calloc(90, sizeof(float*));
-    if(ids){
-        int i;
-        for(i = 0; i < 90; ++i){
-            l.sums[i] = calloc(ids, sizeof(float));
+    l.counts = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(90, ਆਕਾਰ(ਪੂਰਨ));
+    l.sums = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(90, ਆਕਾਰ(ਦਸ਼ਮਲਵ*));
+    ਜੇ(ids){
+        ਪੂਰਨ i;
+        ਲਈ(i = 0; i < 90; ++i){
+            l.sums[i] = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(ids, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
         }
     }
 
     l.forward = forward_iseg_layer;
     l.backward = backward_iseg_layer;
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     l.forward_gpu = forward_iseg_layer_gpu;
     l.backward_gpu = backward_iseg_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
     l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
-#endif
+#ਜੇ_ਅੰਤ
 
     fprintf(stderr, "iseg\n");
     srand(0);
 
-    return l;
+    ਵਾਪਸ l;
 }
 
-void resize_iseg_layer(layer *l, int w, int h)
+ਖਾਲੀ resize_iseg_layer(layer *l, ਪੂਰਨ w, ਪੂਰਨ h)
 {
     l->w = w;
     l->h = h;
@@ -63,163 +63,163 @@ void resize_iseg_layer(layer *l, int w, int h)
     l->outputs = h*w*l->c;
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    l->delta = realloc(l->delta, l->batch*l->outputs*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
 
     l->delta_gpu =     cuda_make_array(l->delta, l->batch*l->outputs);
     l->output_gpu =    cuda_make_array(l->output, l->batch*l->outputs);
-#endif
+#ਜੇ_ਅੰਤ
 }
 
-void forward_iseg_layer(const layer l, network net)
+ਖਾਲੀ forward_iseg_layer(ਅਚਲ layer l, ਜਾਲ net)
 {
 
-    double time = what_time_is_it_now();
-    int i,b,j,k;
-    int ids = l.extra;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
+    ਦੁੱਗਣਾ ਸਮਾਂ = what_ਸਮਾਂ_is_it_now();
+    ਪੂਰਨ i,b,j,k;
+    ਪੂਰਨ ids = l.extra;
+    ਸਮ੍ਰਿਤੀ_ਨਕਲ(l.output, net.ਨਿਵੇਸ਼, l.outputs*l.batch*ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+    memset(l.delta, 0, l.outputs * l.batch * ਆਕਾਰ(ਦਸ਼ਮਲਵ));
 
-#ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        int index = b*l.outputs;
-        activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ GPU
+    ਲਈ (b = 0; b < l.batch; ++b){
+        ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs;
+        activate_array(l.output + ਸੂਚਕਾਂਕ, l.classes*l.w*l.h, LOGISTIC);
     }
-#endif
+#ਜੇ_ਅੰਤ
 
-    for (b = 0; b < l.batch; ++b){
+    ਲਈ (b = 0; b < l.batch; ++b){
         // a priori, each pixel has no class
-        for(i = 0; i < l.classes; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + i*l.w*l.h + k;
-                l.delta[index] = 0 - l.output[index];
+        ਲਈ(i = 0; i < l.classes; ++i){
+            ਲਈ(k = 0; k < l.w*l.h; ++k){
+                ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs + i*l.w*l.h + k;
+                l.delta[ਸੂਚਕਾਂਕ] = 0 - l.output[ਸੂਚਕਾਂਕ];
             }
         }
 
         // a priori, embedding should be small magnitude
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
-                l.delta[index] = .1 * (0 - l.output[index]);
+        ਲਈ(i = 0; i < ids; ++i){
+            ਲਈ(k = 0; k < l.w*l.h; ++k){
+                ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+                l.delta[ਸੂਚਕਾਂਕ] = .1 * (0 - l.output[ਸੂਚਕਾਂਕ]);
             }
         }
 
 
-        memset(l.counts, 0, 90*sizeof(int));
-        for(i = 0; i < 90; ++i){
+        memset(l.counts, 0, 90*ਆਕਾਰ(ਪੂਰਨ));
+        ਲਈ(i = 0; i < 90; ++i){
             fill_cpu(ids, 0, l.sums[i], 1);
             
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
+            ਪੂਰਨ c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            ਜੇ(c < 0) ਰੋਕੋ;
             // add up metric embeddings for each instance
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + c*l.w*l.h + k;
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    l.delta[index] = v - l.output[index];
+            ਲਈ(k = 0; k < l.w*l.h; ++k){
+                ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs + c*l.w*l.h + k;
+                ਦਸ਼ਮਲਵ v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                ਜੇ(v){
+                    l.delta[ਸੂਚਕਾਂਕ] = v - l.output[ਸੂਚਕਾਂਕ];
                     axpy_cpu(ids, 1, l.output + b*l.outputs + l.classes*l.w*l.h + k, l.w*l.h, l.sums[i], 1);
                     ++l.counts[i];
                 }
             }
         }
 
-        float *mse = calloc(90, sizeof(float));
-        for(i = 0; i < 90; ++i){
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
-            for(k = 0; k < l.w*l.h; ++k){
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    int z;
-                    float sum = 0;
-                    for(z = 0; z < ids; ++z){
-                        int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
-                        sum += pow(l.sums[i][z]/l.counts[i] - l.output[index], 2);
+        ਦਸ਼ਮਲਵ *mse = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(90, ਆਕਾਰ(ਦਸ਼ਮਲਵ));
+        ਲਈ(i = 0; i < 90; ++i){
+            ਪੂਰਨ c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            ਜੇ(c < 0) ਰੋਕੋ;
+            ਲਈ(k = 0; k < l.w*l.h; ++k){
+                ਦਸ਼ਮਲਵ v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                ਜੇ(v){
+                    ਪੂਰਨ z;
+                    ਦਸ਼ਮਲਵ ਜੋੜ = 0;
+                    ਲਈ(z = 0; z < ids; ++z){
+                        ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                        ਜੋੜ += ਘਾਤ(l.sums[i][z]/l.counts[i] - l.output[ਸੂਚਕਾਂਕ], 2);
                     }
-                    mse[i] += sum;
+                    mse[i] += ਜੋੜ;
                 }
             }
             mse[i] /= l.counts[i];
         }
 
         // Calculate average embedding
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
+        ਲਈ(i = 0; i < 90; ++i){
+            ਜੇ(!l.counts[i]) ਜਾਰੀ;
             scal_cpu(ids, 1.f/l.counts[i], l.sums[i], 1);
-            if(b == 0 && net.gpu_index == 0){
-                printf("%4d, %6.3f, ", l.counts[i], mse[i]);
-                for(j = 0; j < ids; ++j){
-                    printf("%6.3f,", l.sums[i][j]);
+            ਜੇ(b == 0 && net.gpu_ਸੂਚਕਾਂਕ == 0){
+                ਲਿਖੋ("%4d, %6.3f, ", l.counts[i], mse[i]);
+                ਲਈ(j = 0; j < ids; ++j){
+                    ਲਿਖੋ("%6.3f,", l.sums[i][j]);
                 }
-                printf("\n");
+                ਲਿਖੋ("\n");
             }
         }
-        free(mse);
+        ਮੁਕਤ(mse);
 
         // Calculate embedding loss
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
-            for(k = 0; k < l.w*l.h; ++k){
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    for(j = 0; j < 90; ++j){
-                        if(!l.counts[j])continue;
-                        int z;
-                        for(z = 0; z < ids; ++z){
-                            int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
-                            float diff = l.sums[j][z] - l.output[index];
-                            if (j == i) l.delta[index] +=   diff < 0? -.1 : .1;
-                            else        l.delta[index] += -(diff < 0? -.1 : .1);
+        ਲਈ(i = 0; i < 90; ++i){
+            ਜੇ(!l.counts[i]) ਜਾਰੀ;
+            ਲਈ(k = 0; k < l.w*l.h; ++k){
+                ਦਸ਼ਮਲਵ v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                ਜੇ(v){
+                    ਲਈ(j = 0; j < 90; ++j){
+                        ਜੇ(!l.counts[j])ਜਾਰੀ;
+                        ਪੂਰਨ z;
+                        ਲਈ(z = 0; z < ids; ++z){
+                            ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                            ਦਸ਼ਮਲਵ diff = l.sums[j][z] - l.output[ਸੂਚਕਾਂਕ];
+                            ਜੇ (j == i) l.delta[ਸੂਚਕਾਂਕ] +=   diff < 0? -.1 : .1;
+                            ਨਹੀਂਤਾਂ        l.delta[ਸੂਚਕਾਂਕ] += -(diff < 0? -.1 : .1);
                         }
                     }
                 }
             }
         }
 
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
-                l.delta[index] *= .01;
+        ਲਈ(i = 0; i < ids; ++i){
+            ਲਈ(k = 0; k < l.w*l.h; ++k){
+                ਪੂਰਨ ਸੂਚਕਾਂਕ = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+                l.delta[ਸੂਚਕਾਂਕ] *= .01;
             }
         }
     }
 
-    *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("took %lf sec\n", what_time_is_it_now() - time);
+    *(l.ਲਾਗਤ_2) = ਘਾਤ(mag_array(l.delta, l.outputs * l.batch), 2);
+    ਲਿਖੋ("took %lf sec\n", what_ਸਮਾਂ_is_it_now() - ਸਮਾਂ);
 }
 
-void backward_iseg_layer(const layer l, network net)
+ਖਾਲੀ backward_iseg_layer(ਅਚਲ layer l, ਜਾਲ net)
 {
     axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
 
-void forward_iseg_layer_gpu(const layer l, network net)
+ਖਾਲੀ forward_iseg_layer_gpu(ਅਚਲ layer l, ਜਾਲ net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    copy_gpu(l.batch*l.inputs, net.ਨਿਵੇਸ਼_gpu, 1, l.output_gpu, 1);
+    ਪੂਰਨ b;
+    ਲਈ (b = 0; b < l.batch; ++b){
         activate_array_gpu(l.output_gpu + b*l.outputs, l.classes*l.w*l.h, LOGISTIC);
         //if(l.extra) activate_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC);
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.ਨਿਵੇਸ਼, l.batch*l.inputs);
     forward_iseg_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_ਧੱਕੋ_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_iseg_layer_gpu(const layer l, network net)
+ਖਾਲੀ backward_iseg_layer_gpu(ਅਚਲ layer l, ਜਾਲ net)
 {
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    ਪੂਰਨ b;
+    ਲਈ (b = 0; b < l.batch; ++b){
         //if(l.extra) gradient_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC, l.delta_gpu + b*l.outputs + l.classes*l.w*l.h);
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#ਜੇ_ਅੰਤ
 

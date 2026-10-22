@@ -1,15 +1,15 @@
-#ifndef IM2COL_H
-#define IM2COL_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ IM2_ਖਾਨਾ_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ IM2_ਖਾਨਾ_H
 
-void im2col_cpu(float* data_im,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_col);
+ਖਾਲੀ im2col_cpu(ਦਸ਼ਮਲਵ* ਅੰਕੜੇ_im,
+        ਪੂਰਨ channels, ਪੂਰਨ ਉਚਾਈ, ਪੂਰਨ ਚੌੜਾਈ,
+        ਪੂਰਨ ksize, ਪੂਰਨ stride, ਪੂਰਨ pad, ਦਸ਼ਮਲਵ* ਅੰਕੜੇ_ਖਾਨਾ);
 
-#ifdef GPU
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
 
-void im2col_gpu(float *im,
-         int channels, int height, int width,
-         int ksize, int stride, int pad,float *data_col);
+ਖਾਲੀ im2col_gpu(ਦਸ਼ਮਲਵ *im,
+         ਪੂਰਨ channels, ਪੂਰਨ ਉਚਾਈ, ਪੂਰਨ ਚੌੜਾਈ,
+         ਪੂਰਨ ksize, ਪੂਰਨ stride, ਪੂਰਨ pad,ਦਸ਼ਮਲਵ *ਅੰਕੜੇ_ਖਾਨਾ);
 
-#endif
-#endif
+#ਜੇ_ਅੰਤ
+#ਜੇ_ਅੰਤ

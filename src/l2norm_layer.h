@@ -1,15 +1,15 @@
-#ifndef L2NORM_LAYER_H
-#define L2NORM_LAYER_H
-#include "layer.h"
-#include "network.h"
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ L2NORM_LAYER_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ L2NORM_LAYER_H
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "network.h"
 
-layer make_l2norm_layer(int batch, int inputs);
-void forward_l2norm_layer(const layer l, network net);
-void backward_l2norm_layer(const layer l, network net);
+layer make_l2norm_layer(ਪੂਰਨ batch, ਪੂਰਨ inputs);
+ਖਾਲੀ forward_l2norm_layer(ਅਚਲ layer l, ਜਾਲ net);
+ਖਾਲੀ backward_l2norm_layer(ਅਚਲ layer l, ਜਾਲ net);
 
-#ifdef GPU
-void forward_l2norm_layer_gpu(const layer l, network net);
-void backward_l2norm_layer_gpu(const layer l, network net);
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_l2norm_layer_gpu(ਅਚਲ layer l, ਜਾਲ net);
+ਖਾਲੀ backward_l2norm_layer_gpu(ਅਚਲ layer l, ਜਾਲ net);
+#ਜੇ_ਅੰਤ
 
-#endif
+#ਜੇ_ਅੰਤ

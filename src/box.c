@@ -1,52 +1,52 @@
-#include "box.h"
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ "box.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdio.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <math.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
 
-int nms_comparator(const void *pa, const void *pb)
+ਪੂਰਨ nms_comparator(ਅਚਲ ਖਾਲੀ *pa, ਅਚਲ ਖਾਲੀ *pb)
 {
     detection a = *(detection *)pa;
     detection b = *(detection *)pb;
-    float diff = 0;
-    if(b.sort_class >= 0){
-        diff = a.prob[b.sort_class] - b.prob[b.sort_class];
-    } else {
+    ਦਸ਼ਮਲਵ diff = 0;
+    ਜੇ(b.ਛਾਂਟੋ_class >= 0){
+        diff = a.prob[b.ਛਾਂਟੋ_class] - b.prob[b.ਛਾਂਟੋ_class];
+    } ਨਹੀਂਤਾਂ {
         diff = a.objectness - b.objectness;
     }
-    if(diff < 0) return 1;
-    else if(diff > 0) return -1;
-    return 0;
+    ਜੇ(diff < 0) ਵਾਪਸ 1;
+    ਨਹੀਂਤਾਂ ਜੇ(diff > 0) ਵਾਪਸ -1;
+    ਵਾਪਸ 0;
 }
 
-void do_nms_obj(detection *dets, int total, int classes, float thresh)
+ਖਾਲੀ do_nms_obj(detection *dets, ਪੂਰਨ ਕੁੱਲ, ਪੂਰਨ classes, ਦਸ਼ਮਲਵ thresh)
 {
-    int i, j, k;
-    k = total-1;
-    for(i = 0; i <= k; ++i){
-        if(dets[i].objectness == 0){
-            detection swap = dets[i];
+    ਪੂਰਨ i, j, k;
+    k = ਕੁੱਲ-1;
+    ਲਈ(i = 0; i <= k; ++i){
+        ਜੇ(dets[i].objectness == 0){
+            detection ਅਦਲਾ_ਬਦਲੀ = dets[i];
             dets[i] = dets[k];
-            dets[k] = swap;
+            dets[k] = ਅਦਲਾ_ਬਦਲੀ;
             --k;
             --i;
         }
     }
-    total = k+1;
+    ਕੁੱਲ = k+1;
 
-    for(i = 0; i < total; ++i){
-        dets[i].sort_class = -1;
+    ਲਈ(i = 0; i < ਕੁੱਲ; ++i){
+        dets[i].ਛਾਂਟੋ_class = -1;
     }
 
-    qsort(dets, total, sizeof(detection), nms_comparator);
-    for(i = 0; i < total; ++i){
-        if(dets[i].objectness == 0) continue;
+    qsort(dets, ਕੁੱਲ, ਆਕਾਰ(detection), nms_comparator);
+    ਲਈ(i = 0; i < ਕੁੱਲ; ++i){
+        ਜੇ(dets[i].objectness == 0) ਜਾਰੀ;
         box a = dets[i].bbox;
-        for(j = i+1; j < total; ++j){
-            if(dets[j].objectness == 0) continue;
+        ਲਈ(j = i+1; j < ਕੁੱਲ; ++j){
+            ਜੇ(dets[j].objectness == 0) ਜਾਰੀ;
             box b = dets[j].bbox;
-            if (box_iou(a, b) > thresh){
+            ਜੇ (box_iou(a, b) > thresh){
                 dets[j].objectness = 0;
-                for(k = 0; k < classes; ++k){
+                ਲਈ(k = 0; k < classes; ++k){
                     dets[j].prob[k] = 0;
                 }
             }
@@ -55,32 +55,32 @@ void do_nms_obj(detection *dets, int total, int classes, float thresh)
 }
 
 
-void do_nms_sort(detection *dets, int total, int classes, float thresh)
+ਖਾਲੀ do_nms_ਛਾਂਟੋ(detection *dets, ਪੂਰਨ ਕੁੱਲ, ਪੂਰਨ classes, ਦਸ਼ਮਲਵ thresh)
 {
-    int i, j, k;
-    k = total-1;
-    for(i = 0; i <= k; ++i){
-        if(dets[i].objectness == 0){
-            detection swap = dets[i];
+    ਪੂਰਨ i, j, k;
+    k = ਕੁੱਲ-1;
+    ਲਈ(i = 0; i <= k; ++i){
+        ਜੇ(dets[i].objectness == 0){
+            detection ਅਦਲਾ_ਬਦਲੀ = dets[i];
             dets[i] = dets[k];
-            dets[k] = swap;
+            dets[k] = ਅਦਲਾ_ਬਦਲੀ;
             --k;
             --i;
         }
     }
-    total = k+1;
+    ਕੁੱਲ = k+1;
 
-    for(k = 0; k < classes; ++k){
-        for(i = 0; i < total; ++i){
-            dets[i].sort_class = k;
+    ਲਈ(k = 0; k < classes; ++k){
+        ਲਈ(i = 0; i < ਕੁੱਲ; ++i){
+            dets[i].ਛਾਂਟੋ_class = k;
         }
-        qsort(dets, total, sizeof(detection), nms_comparator);
-        for(i = 0; i < total; ++i){
-            if(dets[i].prob[k] == 0) continue;
+        qsort(dets, ਕੁੱਲ, ਆਕਾਰ(detection), nms_comparator);
+        ਲਈ(i = 0; i < ਕੁੱਲ; ++i){
+            ਜੇ(dets[i].prob[k] == 0) ਜਾਰੀ;
             box a = dets[i].bbox;
-            for(j = i+1; j < total; ++j){
+            ਲਈ(j = i+1; j < ਕੁੱਲ; ++j){
                 box b = dets[j].bbox;
-                if (box_iou(a, b) > thresh){
+                ਜੇ (box_iou(a, b) > thresh){
                     dets[j].prob[k] = 0;
                 }
             }
@@ -88,14 +88,14 @@ void do_nms_sort(detection *dets, int total, int classes, float thresh)
     }
 }
 
-box float_to_box(float *f, int stride)
+box float_ਮੰਜ਼ਿਲ_box(ਦਸ਼ਮਲਵ *f, ਪੂਰਨ stride)
 {
     box b = {0};
     b.x = f[0];
     b.y = f[1*stride];
     b.w = f[2*stride];
     b.h = f[3*stride];
-    return b;
+    ਵਾਪਸ b;
 }
 
 dbox derivative(box a, box b)
@@ -103,96 +103,96 @@ dbox derivative(box a, box b)
     dbox d;
     d.dx = 0;
     d.dw = 0;
-    float l1 = a.x - a.w/2;
-    float l2 = b.x - b.w/2;
-    if (l1 > l2){
+    ਦਸ਼ਮਲਵ l1 = a.x - a.w/2;
+    ਦਸ਼ਮਲਵ l2 = b.x - b.w/2;
+    ਜੇ (l1 > l2){
         d.dx -= 1;
         d.dw += .5;
     }
-    float r1 = a.x + a.w/2;
-    float r2 = b.x + b.w/2;
-    if(r1 < r2){
+    ਦਸ਼ਮਲਵ r1 = a.x + a.w/2;
+    ਦਸ਼ਮਲਵ r2 = b.x + b.w/2;
+    ਜੇ(r1 < r2){
         d.dx += 1;
         d.dw += .5;
     }
-    if (l1 > r2) {
+    ਜੇ (l1 > r2) {
         d.dx = -1;
         d.dw = 0;
     }
-    if (r1 < l2){
+    ਜੇ (r1 < l2){
         d.dx = 1;
         d.dw = 0;
     }
 
     d.dy = 0;
     d.dh = 0;
-    float t1 = a.y - a.h/2;
-    float t2 = b.y - b.h/2;
-    if (t1 > t2){
+    ਦਸ਼ਮਲਵ t1 = a.y - a.h/2;
+    ਦਸ਼ਮਲਵ t2 = b.y - b.h/2;
+    ਜੇ (t1 > t2){
         d.dy -= 1;
         d.dh += .5;
     }
-    float b1 = a.y + a.h/2;
-    float b2 = b.y + b.h/2;
-    if(b1 < b2){
+    ਦਸ਼ਮਲਵ b1 = a.y + a.h/2;
+    ਦਸ਼ਮਲਵ b2 = b.y + b.h/2;
+    ਜੇ(b1 < b2){
         d.dy += 1;
         d.dh += .5;
     }
-    if (t1 > b2) {
+    ਜੇ (t1 > b2) {
         d.dy = -1;
         d.dh = 0;
     }
-    if (b1 < t2){
+    ਜੇ (b1 < t2){
         d.dy = 1;
         d.dh = 0;
     }
-    return d;
+    ਵਾਪਸ d;
 }
 
-float overlap(float x1, float w1, float x2, float w2)
+ਦਸ਼ਮਲਵ overlap(ਦਸ਼ਮਲਵ x1, ਦਸ਼ਮਲਵ w1, ਦਸ਼ਮਲਵ x2, ਦਸ਼ਮਲਵ w2)
 {
-    float l1 = x1 - w1/2;
-    float l2 = x2 - w2/2;
-    float left = l1 > l2 ? l1 : l2;
-    float r1 = x1 + w1/2;
-    float r2 = x2 + w2/2;
-    float right = r1 < r2 ? r1 : r2;
-    return right - left;
+    ਦਸ਼ਮਲਵ l1 = x1 - w1/2;
+    ਦਸ਼ਮਲਵ l2 = x2 - w2/2;
+    ਦਸ਼ਮਲਵ ਖੱਬਾ = l1 > l2 ? l1 : l2;
+    ਦਸ਼ਮਲਵ r1 = x1 + w1/2;
+    ਦਸ਼ਮਲਵ r2 = x2 + w2/2;
+    ਦਸ਼ਮਲਵ ਸੱਜਾ = r1 < r2 ? r1 : r2;
+    ਵਾਪਸ ਸੱਜਾ - ਖੱਬਾ;
 }
 
-float box_intersection(box a, box b)
+ਦਸ਼ਮਲਵ box_intersection(box a, box b)
 {
-    float w = overlap(a.x, a.w, b.x, b.w);
-    float h = overlap(a.y, a.h, b.y, b.h);
-    if(w < 0 || h < 0) return 0;
-    float area = w*h;
-    return area;
+    ਦਸ਼ਮਲਵ w = overlap(a.x, a.w, b.x, b.w);
+    ਦਸ਼ਮਲਵ h = overlap(a.y, a.h, b.y, b.h);
+    ਜੇ(w < 0 || h < 0) ਵਾਪਸ 0;
+    ਦਸ਼ਮਲਵ area = w*h;
+    ਵਾਪਸ area;
 }
 
-float box_union(box a, box b)
+ਦਸ਼ਮਲਵ box_union(box a, box b)
 {
-    float i = box_intersection(a, b);
-    float u = a.w*a.h + b.w*b.h - i;
-    return u;
+    ਦਸ਼ਮਲਵ i = box_intersection(a, b);
+    ਦਸ਼ਮਲਵ u = a.w*a.h + b.w*b.h - i;
+    ਵਾਪਸ u;
 }
 
-float box_iou(box a, box b)
+ਦਸ਼ਮਲਵ box_iou(box a, box b)
 {
-    return box_intersection(a, b)/box_union(a, b);
+    ਵਾਪਸ box_intersection(a, b)/box_union(a, b);
 }
 
-float box_rmse(box a, box b)
+ਦਸ਼ਮਲਵ box_rmse(box a, box b)
 {
-    return sqrt(pow(a.x-b.x, 2) + 
-                pow(a.y-b.y, 2) + 
-                pow(a.w-b.w, 2) + 
-                pow(a.h-b.h, 2));
+    ਵਾਪਸ ਵਰਗਮੂਲ(ਘਾਤ(a.x-b.x, 2) + 
+                ਘਾਤ(a.y-b.y, 2) + 
+                ਘਾਤ(a.w-b.w, 2) + 
+                ਘਾਤ(a.h-b.h, 2));
 }
 
 dbox dintersect(box a, box b)
 {
-    float w = overlap(a.x, a.w, b.x, b.w);
-    float h = overlap(a.y, a.h, b.y, b.h);
+    ਦਸ਼ਮਲਵ w = overlap(a.x, a.w, b.x, b.w);
+    ਦਸ਼ਮਲਵ h = overlap(a.y, a.h, b.y, b.h);
     dbox dover = derivative(a, b);
     dbox di;
 
@@ -201,7 +201,7 @@ dbox dintersect(box a, box b)
     di.dh = dover.dh*w;
     di.dy = dover.dy*w;
 
-    return di;
+    ਵਾਪਸ di;
 }
 
 dbox dunion(box a, box b)
@@ -214,11 +214,11 @@ dbox dunion(box a, box b)
     du.dx = -di.dx;
     du.dy = -di.dy;
 
-    return du;
+    ਵਾਪਸ du;
 }
 
 
-void test_dunion()
+ਖਾਲੀ test_dunion()
 {
     box a = {0, 0, 1, 1};
     box dxa= {0+.0001, 0, 1, 1};
@@ -228,19 +228,19 @@ void test_dunion()
 
     box b = {.5, .5, .2, .2};
     dbox di = dunion(a,b);
-    printf("Union: %f %f %f %f\n", di.dx, di.dy, di.dw, di.dh);
-    float inter =  box_union(a, b);
-    float xinter = box_union(dxa, b);
-    float yinter = box_union(dya, b);
-    float winter = box_union(dwa, b);
-    float hinter = box_union(dha, b);
+    ਲਿਖੋ("Union: %f %f %f %f\n", di.dx, di.dy, di.dw, di.dh);
+    ਦਸ਼ਮਲਵ inter =  box_union(a, b);
+    ਦਸ਼ਮਲਵ xinter = box_union(dxa, b);
+    ਦਸ਼ਮਲਵ yinter = box_union(dya, b);
+    ਦਸ਼ਮਲਵ winter = box_union(dwa, b);
+    ਦਸ਼ਮਲਵ hinter = box_union(dha, b);
     xinter = (xinter - inter)/(.0001);
     yinter = (yinter - inter)/(.0001);
     winter = (winter - inter)/(.0001);
     hinter = (hinter - inter)/(.0001);
-    printf("Union Manual %f %f %f %f\n", xinter, yinter, winter, hinter);
+    ਲਿਖੋ("Union Manual %f %f %f %f\n", xinter, yinter, winter, hinter);
 }
-void test_dintersect()
+ਖਾਲੀ test_dintersect()
 {
     box a = {0, 0, 1, 1};
     box dxa= {0+.0001, 0, 1, 1};
@@ -250,20 +250,20 @@ void test_dintersect()
 
     box b = {.5, .5, .2, .2};
     dbox di = dintersect(a,b);
-    printf("Inter: %f %f %f %f\n", di.dx, di.dy, di.dw, di.dh);
-    float inter =  box_intersection(a, b);
-    float xinter = box_intersection(dxa, b);
-    float yinter = box_intersection(dya, b);
-    float winter = box_intersection(dwa, b);
-    float hinter = box_intersection(dha, b);
+    ਲਿਖੋ("Inter: %f %f %f %f\n", di.dx, di.dy, di.dw, di.dh);
+    ਦਸ਼ਮਲਵ inter =  box_intersection(a, b);
+    ਦਸ਼ਮਲਵ xinter = box_intersection(dxa, b);
+    ਦਸ਼ਮਲਵ yinter = box_intersection(dya, b);
+    ਦਸ਼ਮਲਵ winter = box_intersection(dwa, b);
+    ਦਸ਼ਮਲਵ hinter = box_intersection(dha, b);
     xinter = (xinter - inter)/(.0001);
     yinter = (yinter - inter)/(.0001);
     winter = (winter - inter)/(.0001);
     hinter = (hinter - inter)/(.0001);
-    printf("Inter Manual %f %f %f %f\n", xinter, yinter, winter, hinter);
+    ਲਿਖੋ("Inter Manual %f %f %f %f\n", xinter, yinter, winter, hinter);
 }
 
-void test_box()
+ਖਾਲੀ test_box()
 {
     test_dintersect();
     test_dunion();
@@ -275,61 +275,61 @@ void test_box()
 
     box b = {.5, 0, .2, .2};
 
-    float iou = box_iou(a,b);
+    ਦਸ਼ਮਲਵ iou = box_iou(a,b);
     iou = (1-iou)*(1-iou);
-    printf("%f\n", iou);
+    ਲਿਖੋ("%f\n", iou);
     dbox d = diou(a, b);
-    printf("%f %f %f %f\n", d.dx, d.dy, d.dw, d.dh);
+    ਲਿਖੋ("%f %f %f %f\n", d.dx, d.dy, d.dw, d.dh);
 
-    float xiou = box_iou(dxa, b);
-    float yiou = box_iou(dya, b);
-    float wiou = box_iou(dwa, b);
-    float hiou = box_iou(dha, b);
+    ਦਸ਼ਮਲਵ xiou = box_iou(dxa, b);
+    ਦਸ਼ਮਲਵ yiou = box_iou(dya, b);
+    ਦਸ਼ਮਲਵ wiou = box_iou(dwa, b);
+    ਦਸ਼ਮਲਵ hiou = box_iou(dha, b);
     xiou = ((1-xiou)*(1-xiou) - iou)/(.00001);
     yiou = ((1-yiou)*(1-yiou) - iou)/(.00001);
     wiou = ((1-wiou)*(1-wiou) - iou)/(.00001);
     hiou = ((1-hiou)*(1-hiou) - iou)/(.00001);
-    printf("manual %f %f %f %f\n", xiou, yiou, wiou, hiou);
+    ਲਿਖੋ("manual %f %f %f %f\n", xiou, yiou, wiou, hiou);
 }
 
 dbox diou(box a, box b)
 {
-    float u = box_union(a,b);
-    float i = box_intersection(a,b);
+    ਦਸ਼ਮਲਵ u = box_union(a,b);
+    ਦਸ਼ਮਲਵ i = box_intersection(a,b);
     dbox di = dintersect(a,b);
     dbox du = dunion(a,b);
     dbox dd = {0,0,0,0};
 
-    if(i <= 0 || 1) {
+    ਜੇ(i <= 0 || 1) {
         dd.dx = b.x - a.x;
         dd.dy = b.y - a.y;
         dd.dw = b.w - a.w;
         dd.dh = b.h - a.h;
-        return dd;
+        ਵਾਪਸ dd;
     }
 
-    dd.dx = 2*pow((1-(i/u)),1)*(di.dx*u - du.dx*i)/(u*u);
-    dd.dy = 2*pow((1-(i/u)),1)*(di.dy*u - du.dy*i)/(u*u);
-    dd.dw = 2*pow((1-(i/u)),1)*(di.dw*u - du.dw*i)/(u*u);
-    dd.dh = 2*pow((1-(i/u)),1)*(di.dh*u - du.dh*i)/(u*u);
-    return dd;
+    dd.dx = 2*ਘਾਤ((1-(i/u)),1)*(di.dx*u - du.dx*i)/(u*u);
+    dd.dy = 2*ਘਾਤ((1-(i/u)),1)*(di.dy*u - du.dy*i)/(u*u);
+    dd.dw = 2*ਘਾਤ((1-(i/u)),1)*(di.dw*u - du.dw*i)/(u*u);
+    dd.dh = 2*ਘਾਤ((1-(i/u)),1)*(di.dh*u - du.dh*i)/(u*u);
+    ਵਾਪਸ dd;
 }
 
 
-void do_nms(box *boxes, float **probs, int total, int classes, float thresh)
+ਖਾਲੀ do_nms(box *boxes, ਦਸ਼ਮਲਵ **probs, ਪੂਰਨ ਕੁੱਲ, ਪੂਰਨ classes, ਦਸ਼ਮਲਵ thresh)
 {
-    int i, j, k;
-    for(i = 0; i < total; ++i){
-        int any = 0;
-        for(k = 0; k < classes; ++k) any = any || (probs[i][k] > 0);
-        if(!any) {
-            continue;
+    ਪੂਰਨ i, j, k;
+    ਲਈ(i = 0; i < ਕੁੱਲ; ++i){
+        ਪੂਰਨ any = 0;
+        ਲਈ(k = 0; k < classes; ++k) any = any || (probs[i][k] > 0);
+        ਜੇ(!any) {
+            ਜਾਰੀ;
         }
-        for(j = i+1; j < total; ++j){
-            if (box_iou(boxes[i], boxes[j]) > thresh){
-                for(k = 0; k < classes; ++k){
-                    if (probs[i][k] < probs[j][k]) probs[i][k] = 0;
-                    else probs[j][k] = 0;
+        ਲਈ(j = i+1; j < ਕੁੱਲ; ++j){
+            ਜੇ (box_iou(boxes[i], boxes[j]) > thresh){
+                ਲਈ(k = 0; k < classes; ++k){
+                    ਜੇ (probs[i][k] < probs[j][k]) probs[i][k] = 0;
+                    ਨਹੀਂਤਾਂ probs[j][k] = 0;
                 }
             }
         }
@@ -343,7 +343,7 @@ box encode_box(box b, box anchor)
     encode.y = (b.y - anchor.y) / anchor.h;
     encode.w = log2(b.w / anchor.w);
     encode.h = log2(b.h / anchor.h);
-    return encode;
+    ਵਾਪਸ encode;
 }
 
 box decode_box(box b, box anchor)
@@ -351,7 +351,7 @@ box decode_box(box b, box anchor)
     box decode;
     decode.x = b.x * anchor.w + anchor.x;
     decode.y = b.y * anchor.h + anchor.y;
-    decode.w = pow(2., b.w) * anchor.w;
-    decode.h = pow(2., b.h) * anchor.h;
-    return decode;
+    decode.w = ਘਾਤ(2., b.w) * anchor.w;
+    decode.h = ਘਾਤ(2., b.h) * anchor.h;
+    ਵਾਪਸ decode;
 }

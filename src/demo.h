@@ -1,6 +1,6 @@
-#ifndef DEMO_H
-#define DEMO_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ DEMO_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ DEMO_H
 
-#include "image.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "image.h"
 
-#endif
+#ਜੇ_ਅੰਤ

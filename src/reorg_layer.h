@@ -1,20 +1,20 @@
-#ifndef REORG_LAYER_H
-#define REORG_LAYER_H
+#ਜੇ_ਅਪਰਿਭਾਸ਼ਿਤ REORG_LAYER_H
+#ਪਰਿਭਾਸ਼ਿਤ_ਕਰੋ REORG_LAYER_H
 
-#include "image.h"
-#include "cuda.h"
-#include "layer.h"
-#include "network.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "image.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "cuda.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "layer.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ "network.h"
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra);
-void resize_reorg_layer(layer *l, int w, int h);
-void forward_reorg_layer(const layer l, network net);
-void backward_reorg_layer(const layer l, network net);
+layer make_reorg_layer(ਪੂਰਨ batch, ਪੂਰਨ w, ਪੂਰਨ h, ਪੂਰਨ c, ਪੂਰਨ stride, ਪੂਰਨ ਉਲਟ, ਪੂਰਨ flatten, ਪੂਰਨ extra);
+ਖਾਲੀ resize_reorg_layer(layer *l, ਪੂਰਨ w, ਪੂਰਨ h);
+ਖਾਲੀ forward_reorg_layer(ਅਚਲ layer l, ਜਾਲ net);
+ਖਾਲੀ backward_reorg_layer(ਅਚਲ layer l, ਜਾਲ net);
 
-#ifdef GPU
-void forward_reorg_layer_gpu(layer l, network net);
-void backward_reorg_layer_gpu(layer l, network net);
-#endif
+#ਜੇ_ਪਰਿਭਾਸ਼ਿਤ GPU
+ਖਾਲੀ forward_reorg_layer_gpu(layer l, ਜਾਲ net);
+ਖਾਲੀ backward_reorg_layer_gpu(layer l, ਜਾਲ net);
+#ਜੇ_ਅੰਤ
 
-#endif
+#ਜੇ_ਅੰਤ
 

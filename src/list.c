@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ਅਨ੍ਤਰ੍ਭਾਵ <stdlib.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ <string.h>
+#ਅਨ੍ਤਰ੍ਭਾਵ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਆਕਾਰ(list));
+	l->ਮਾਪ = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->ਪਿੱਠ = 0;
+	ਵਾਪਸ l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+ਖਾਲੀ *list_ਕੱਢੋ(list *l){
+    ਜੇ(!l->ਪਿੱਠ) ਵਾਪਸ 0;
+    ਗੰਢ *b = l->ਪਿੱਠ;
+    ਖਾਲੀ *val = b->val;
+    l->ਪਿੱਠ = b->prev;
+    ਜੇ(l->ਪਿੱਠ) l->ਪਿੱਠ->ਅਗਲਾ = 0;
+    ਮੁਕਤ(b);
+    --l->ਮਾਪ;
     
-    return val;
+    ਵਾਪਸ val;
 }
 
-void list_insert(list *l, void *val)
+ਖਾਲੀ list_ਪਾਓ(list *l, ਖਾਲੀ *val)
 {
-	node *new = malloc(sizeof(node));
+	ਗੰਢ *new = ਸਮ੍ਰਿਤੀ_ਦਿਓ(ਆਕਾਰ(ਗੰਢ));
 	new->val = val;
-	new->next = 0;
+	new->ਅਗਲਾ = 0;
 
-	if(!l->back){
+	ਜੇ(!l->ਪਿੱਠ){
 		l->front = new;
 		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+	}ਨਹੀਂਤਾਂ{
+		l->ਪਿੱਠ->ਅਗਲਾ = new;
+		new->prev = l->ਪਿੱਠ;
 	}
-	l->back = new;
-	++l->size;
+	l->ਪਿੱਠ = new;
+	++l->ਮਾਪ;
 }
 
-void free_node(node *n)
+ਖਾਲੀ free_ਗੰਢ(ਗੰਢ *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	ਗੰਢ *ਅਗਲਾ;
+	ਜਦੋਂ(n) {
+		ਅਗਲਾ = n->ਅਗਲਾ;
+		ਮੁਕਤ(n);
+		n = ਅਗਲਾ;
 	}
 }
 
-void **list_to_array(list *l)
+ਖਾਲੀ free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_ਗੰਢ(l->front);
+	ਮੁਕਤ(l);
+}
+
+ਖਾਲੀ free_list_contents(list *l)
+{
+	ਗੰਢ *n = l->front;
+	ਜਦੋਂ(n){
+		ਮੁਕਤ(n->val);
+		n = n->ਅਗਲਾ;
+	}
+}
+
+ਖਾਲੀ **list_ਮੰਜ਼ਿਲ_array(list *l)
+{
+    ਖਾਲੀ **a = ਸਿਫਰ_ਸਮ੍ਰਿਤੀ_ਦਿਓ(l->ਮਾਪ, ਆਕਾਰ(ਖਾਲੀ*));
+    ਪੂਰਨ ਗਿਣਤੀ_2 = 0;
+    ਗੰਢ *n = l->front;
+    ਜਦੋਂ(n){
+        a[ਗਿਣਤੀ_2++] = n->val;
+        n = n->ਅਗਲਾ;
     }
-    return a;
+    ਵਾਪਸ a;
 }
