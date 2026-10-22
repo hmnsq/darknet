@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra)
+layer make_reorg_layer(정수 batch, 정수 w, 정수 h, 정수 c, 정수 stride, 정수 reverse, 정수 flatten, 정수 extra)
 {
     layer l = {0};
     l.type = REORG;
@@ -16,11 +16,11 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.w = w;
     l.c = c;
     l.flatten = flatten;
-    if(reverse){
+    만약(reverse){
         l.out_w = w*stride;
         l.out_h = h*stride;
         l.out_c = c/(stride*stride);
-    }else{
+    }아니면{
         l.out_w = w/stride;
         l.out_h = h/stride;
         l.out_c = c*(stride*stride);
@@ -29,17 +29,17 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
 
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = h*w*c;
-    if(l.extra){
+    만약(l.extra){
         l.out_w = l.out_h = l.out_c = 0;
         l.outputs = l.inputs + l.extra;
     }
 
-    if(extra){
+    만약(extra){
         fprintf(stderr, "reorg              %4d   ->  %4d\n",  l.inputs, l.outputs);
-    } else {
+    } 아니면 {
         fprintf(stderr, "reorg              /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n",  stride, w, h, c, l.out_w, l.out_h, l.out_c);
     }
-    int output_size = l.outputs * batch;
+    정수 output_size = l.outputs * batch;
     l.output =  calloc(output_size, sizeof(float));
     l.delta =   calloc(output_size, sizeof(float));
 
@@ -52,22 +52,22 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.output_gpu  = cuda_make_array(l.output, output_size);
     l.delta_gpu   = cuda_make_array(l.delta, output_size);
 #endif
-    return l;
+    반환 l;
 }
 
-void resize_reorg_layer(layer *l, int w, int h)
+void resize_reorg_layer(layer *l, 정수 w, 정수 h)
 {
-    int stride = l->stride;
-    int c = l->c;
+    정수 stride = l->stride;
+    정수 c = l->c;
 
     l->h = h;
     l->w = w;
 
-    if(l->reverse){
+    만약(l->reverse){
         l->out_w = w*stride;
         l->out_h = h*stride;
         l->out_c = c/(stride*stride);
-    }else{
+    }아니면{
         l->out_w = w/stride;
         l->out_h = h/stride;
         l->out_c = c*(stride*stride);
@@ -75,7 +75,7 @@ void resize_reorg_layer(layer *l, int w, int h)
 
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->outputs;
-    int output_size = l->outputs * l->batch;
+    정수 output_size = l->outputs * l->batch;
 
     l->output = realloc(l->output, output_size * sizeof(float));
     l->delta = realloc(l->delta, output_size * sizeof(float));
@@ -90,42 +90,42 @@ void resize_reorg_layer(layer *l, int w, int h)
 
 void forward_reorg_layer(const layer l, network net)
 {
-    int i;
-    if(l.flatten){
+    정수 i;
+    만약(l.flatten){
         memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+        만약(l.reverse){
             flatten(l.output, l.w*l.h, l.c, l.batch, 0);
-        }else{
+        }아니면{
             flatten(l.output, l.w*l.h, l.c, l.batch, 1);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } 아니면 만약 (l.extra) {
+        위해(i = 0; i < l.batch; ++i){
             copy_cpu(l.inputs, net.input + i*l.inputs, 1, l.output + i*l.outputs, 1);
         }
-    } else if (l.reverse){
+    } 아니면 만약 (l.reverse){
         reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
-    } else {
+    } 아니면 {
         reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
     }
 }
 
 void backward_reorg_layer(const layer l, network net)
 {
-    int i;
-    if(l.flatten){
+    정수 i;
+    만약(l.flatten){
         memcpy(net.delta, l.delta, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+        만약(l.reverse){
             flatten(net.delta, l.w*l.h, l.c, l.batch, 1);
-        }else{
+        }아니면{
             flatten(net.delta, l.w*l.h, l.c, l.batch, 0);
         }
-    } else if(l.reverse){
+    } 아니면 만약(l.reverse){
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta);
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } 아니면 만약 (l.extra) {
+        위해(i = 0; i < l.batch; ++i){
             copy_cpu(l.inputs, l.delta + i*l.outputs, 1, net.delta + i*l.inputs, 1);
         }
-    }else{
+    }아니면{
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta);
     }
 }
@@ -133,40 +133,40 @@ void backward_reorg_layer(const layer l, network net)
 #ifdef GPU
 void forward_reorg_layer_gpu(layer l, network net)
 {
-    int i;
-    if(l.flatten){
-        if(l.reverse){
+    정수 i;
+    만약(l.flatten){
+        만약(l.reverse){
             flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
-        }else{
+        }아니면{
             flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } 아니면 만약 (l.extra) {
+        위해(i = 0; i < l.batch; ++i){
             copy_gpu(l.inputs, net.input_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
         }
-    } else if (l.reverse) {
+    } 아니면 만약 (l.reverse) {
         reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
-    }else {
+    }아니면 {
         reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
     }
 }
 
 void backward_reorg_layer_gpu(layer l, network net)
 {
-    if(l.flatten){
-        if(l.reverse){
+    만약(l.flatten){
+        만약(l.reverse){
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 1, net.delta_gpu);
-        }else{
+        }아니면{
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 0, net.delta_gpu);
         }
-    } else if (l.extra) {
-        int i;
-        for(i = 0; i < l.batch; ++i){
+    } 아니면 만약 (l.extra) {
+        정수 i;
+        위해(i = 0; i < l.batch; ++i){
             copy_gpu(l.inputs, l.delta_gpu + i*l.outputs, 1, net.delta_gpu + i*l.inputs, 1);
         }
-    } else if(l.reverse){
+    } 아니면 만약(l.reverse){
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta_gpu);
-    } else {
+    } 아니면 {
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta_gpu);
     }
 }

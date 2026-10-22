@@ -1,4 +1,4 @@
-int gpu_index = 0;
+정수 gpu_index = 0;
 
 #ifdef GPU
 
@@ -9,26 +9,26 @@ int gpu_index = 0;
 #include <stdlib.h>
 #include <time.h>
 
-void cuda_set_device(int n)
+void cuda_set_device(정수 n)
 {
     gpu_index = n;
     cudaError_t status = cudaSetDevice(n);
     check_error(status);
 }
 
-int cuda_get_device()
+정수 cuda_get_device()
 {
-    int n = 0;
+    정수 n = 0;
     cudaError_t status = cudaGetDevice(&n);
     check_error(status);
-    return n;
+    반환 n;
 }
 
 void check_error(cudaError_t status)
 {
     //cudaDeviceSynchronize();
     cudaError_t status2 = cudaGetLastError();
-    if (status != cudaSuccess)
+    만약 (status != cudaSuccess)
     {   
         const char *s = cudaGetErrorString(status);
         char buffer[256];
@@ -37,7 +37,7 @@ void check_error(cudaError_t status)
         snprintf(buffer, 256, "CUDA Error: %s", s);
         error(buffer);
     } 
-    if (status2 != cudaSuccess)
+    만약 (status2 != cudaSuccess)
     {   
         const char *s = cudaGetErrorString(status);
         char buffer[256];
@@ -52,39 +52,39 @@ dim3 cuda_gridsize(size_t n){
     size_t k = (n-1) / BLOCK + 1;
     size_t x = k;
     size_t y = 1;
-    if(x > 65535){
+    만약(x > 65535){
         x = ceil(sqrt(k));
         y = (n-1)/(x*BLOCK) + 1;
     }
     dim3 d = {x, y, 1};
     //printf("%ld %ld %ld %ld\n", n, x, y, x*y*BLOCK);
-    return d;
+    반환 d;
 }
 
 #ifdef CUDNN
 cudnnHandle_t cudnn_handle()
 {
-    static int init[16] = {0};
+    static 정수 init[16] = {0};
     static cudnnHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    정수 i = cuda_get_device();
+    만약(!init[i]) {
         cudnnCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    반환 handle[i];
 }
 #endif
 
 cublasHandle_t blas_handle()
 {
-    static int init[16] = {0};
+    static 정수 init[16] = {0};
     static cublasHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    정수 i = cuda_get_device();
+    만약(!init[i]) {
         cublasCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    반환 handle[i];
 }
 
 float *cuda_make_array(float *x, size_t n)
@@ -93,22 +93,22 @@ float *cuda_make_array(float *x, size_t n)
     size_t size = sizeof(float)*n;
     cudaError_t status = cudaMalloc((void **)&x_gpu, size);
     check_error(status);
-    if(x){
+    만약(x){
         status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
         check_error(status);
-    } else {
+    } 아니면 {
         fill_gpu(n, 0, x_gpu, 1);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    만약(!x_gpu) error("Cuda malloc failed\n");
+    반환 x_gpu;
 }
 
 void cuda_random(float *x_gpu, size_t n)
 {
     static curandGenerator_t gen[16];
-    static int init[16] = {0};
-    int i = cuda_get_device();
-    if(!init[i]){
+    static 정수 init[16] = {0};
+    정수 i = cuda_get_device();
+    만약(!init[i]){
         curandCreateGenerator(&gen[i], CURAND_RNG_PSEUDO_DEFAULT);
         curandSetPseudoRandomGeneratorSeed(gen[i], time(0));
         init[i] = 1;
@@ -127,21 +127,21 @@ float cuda_compare(float *x_gpu, float *x, size_t n, char *s)
     float err = dot_cpu(n, tmp, 1, tmp, 1);
     printf("Error %s: %f\n", s, sqrt(err/n));
     free(tmp);
-    return err;
+    반환 err;
 }
 
-int *cuda_make_int_array(int *x, size_t n)
+정수 *cuda_make_int_array(정수 *x, size_t n)
 {
-    int *x_gpu;
-    size_t size = sizeof(int)*n;
+    정수 *x_gpu;
+    size_t size = sizeof(정수)*n;
     cudaError_t status = cudaMalloc((void **)&x_gpu, size);
     check_error(status);
-    if(x){
+    만약(x){
         status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
         check_error(status);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    만약(!x_gpu) error("Cuda malloc failed\n");
+    반환 x_gpu;
 }
 
 void cuda_free(float *x_gpu)
@@ -170,9 +170,9 @@ float cuda_mag_array(float *x_gpu, size_t n)
     cuda_pull_array(x_gpu, temp, n);
     float m = mag_array(temp, n);
     free(temp);
-    return m;
+    반환 m;
 }
-#else
-void cuda_set_device(int n){}
+#아니면
+void cuda_set_device(정수 n){}
 
 #endif

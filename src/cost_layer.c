@@ -9,36 +9,36 @@
 
 COST_TYPE get_cost_type(char *s)
 {
-    if (strcmp(s, "seg")==0) return SEG;
-    if (strcmp(s, "sse")==0) return SSE;
-    if (strcmp(s, "masked")==0) return MASKED;
-    if (strcmp(s, "smooth")==0) return SMOOTH;
-    if (strcmp(s, "L1")==0) return L1;
-    if (strcmp(s, "wgan")==0) return WGAN;
+    만약 (strcmp(s, "seg")==0) 반환 SEG;
+    만약 (strcmp(s, "sse")==0) 반환 SSE;
+    만약 (strcmp(s, "masked")==0) 반환 MASKED;
+    만약 (strcmp(s, "smooth")==0) 반환 SMOOTH;
+    만약 (strcmp(s, "L1")==0) 반환 L1;
+    만약 (strcmp(s, "wgan")==0) 반환 WGAN;
     fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
-    return SSE;
+    반환 SSE;
 }
 
 char *get_cost_string(COST_TYPE a)
 {
     switch(a){
         case SEG:
-            return "seg";
+            반환 "seg";
         case SSE:
-            return "sse";
+            반환 "sse";
         case MASKED:
-            return "masked";
+            반환 "masked";
         case SMOOTH:
-            return "smooth";
+            반환 "smooth";
         case L1:
-            return "L1";
+            반환 "L1";
         case WGAN:
-            return "wgan";
+            반환 "wgan";
     }
-    return "sse";
+    반환 "sse";
 }
 
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float scale)
+cost_layer make_cost_layer(정수 batch, 정수 inputs, COST_TYPE cost_type, float scale)
 {
     fprintf(stderr, "cost                                           %4d\n",  inputs);
     cost_layer l = {0};
@@ -62,10 +62,10 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.delta_gpu = cuda_make_array(l.output, inputs*batch);
     l.output_gpu = cuda_make_array(l.delta, inputs*batch);
     #endif
-    return l;
+    반환 l;
 }
 
-void resize_cost_layer(cost_layer *l, int inputs)
+void resize_cost_layer(cost_layer *l, 정수 inputs)
 {
     l->inputs = inputs;
     l->outputs = inputs;
@@ -81,18 +81,18 @@ void resize_cost_layer(cost_layer *l, int inputs)
 
 void forward_cost_layer(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.cost_type == MASKED){
-        int i;
-        for(i = 0; i < l.batch*l.inputs; ++i){
-            if(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
+    만약 (!net.truth) 반환;
+    만약(l.cost_type == MASKED){
+        정수 i;
+        위해(i = 0; i < l.batch*l.inputs; ++i){
+            만약(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
         }
     }
-    if(l.cost_type == SMOOTH){
+    만약(l.cost_type == SMOOTH){
         smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    }else if(l.cost_type == L1){
+    }아니면 만약(l.cost_type == L1){
         l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    } else {
+    } 아니면 {
         l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
     }
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
@@ -115,52 +115,52 @@ void push_cost_layer(cost_layer l)
     cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-int float_abs_compare (const void * a, const void * b)
+정수 float_abs_compare (const void * a, const void * b)
 {
     float fa = *(const float*) a;
-    if(fa < 0) fa = -fa;
+    만약(fa < 0) fa = -fa;
     float fb = *(const float*) b;
-    if(fb < 0) fb = -fb;
-    return (fa > fb) - (fa < fb);
+    만약(fb < 0) fb = -fb;
+    반환 (fa > fb) - (fa < fb);
 }
 
 void forward_cost_layer_gpu(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.smooth){
+    만약 (!net.truth) 반환;
+    만약(l.smooth){
         scal_gpu(l.batch*l.inputs, (1-l.smooth), net.truth_gpu, 1);
         add_gpu(l.batch*l.inputs, l.smooth * 1./l.inputs, net.truth_gpu, 1);
     }
 
-    if(l.cost_type == SMOOTH){
+    만약(l.cost_type == SMOOTH){
         smooth_l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == L1){
+    } 아니면 만약 (l.cost_type == L1){
         l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == WGAN){
+    } 아니면 만약 (l.cost_type == WGAN){
         wgan_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else {
+    } 아니면 {
         l2_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     }
 
-    if (l.cost_type == SEG && l.noobject_scale != 1) {
+    만약 (l.cost_type == SEG && l.noobject_scale != 1) {
         scale_mask_gpu(l.batch*l.inputs, l.delta_gpu, 0, net.truth_gpu, l.noobject_scale);
         scale_mask_gpu(l.batch*l.inputs, l.output_gpu, 0, net.truth_gpu, l.noobject_scale);
     }
-    if (l.cost_type == MASKED) {
+    만약 (l.cost_type == MASKED) {
         mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
     }
 
-    if(l.ratio){
+    만약(l.ratio){
         cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
         qsort(l.delta, l.batch*l.inputs, sizeof(float), float_abs_compare);
-        int n = (1-l.ratio) * l.batch*l.inputs;
+        정수 n = (1-l.ratio) * l.batch*l.inputs;
         float thresh = l.delta[n];
         thresh = 0;
         printf("%f\n", thresh);
         supp_gpu(l.batch*l.inputs, thresh, l.delta_gpu, 1);
     }
 
-    if(l.thresh){
+    만약(l.thresh){
         supp_gpu(l.batch*l.inputs, l.thresh*1./l.inputs, l.delta_gpu, 1);
     }
 

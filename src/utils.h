@@ -10,22 +10,22 @@
     double start = what_time_is_it_now(); \
     a; \
     printf("%s took: %f seconds\n", #a, what_time_is_it_now() - start); \
-    } while (0)
+    } 동안 (0)
 
 #define TWO_PI 6.2831853071795864769252866f
 
 double what_time_is_it_now();
 void shuffle(void *arr, size_t n, size_t size);
 void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections);
-void free_ptrs(void **ptrs, int n);
-int alphanum_to_int(char c);
-char int_to_alphanum(int i);
-int read_int(int fd);
-void write_int(int fd, int n);
-void read_all(int fd, char *buffer, size_t bytes);
-void write_all(int fd, char *buffer, size_t bytes);
-int read_all_fail(int fd, char *buffer, size_t bytes);
-int write_all_fail(int fd, char *buffer, size_t bytes);
+void free_ptrs(void **ptrs, 정수 n);
+정수 alphanum_to_int(char c);
+char int_to_alphanum(정수 i);
+정수 read_int(정수 fd);
+void write_int(정수 fd, 정수 n);
+void read_all(정수 fd, char *buffer, size_t bytes);
+void write_all(정수 fd, char *buffer, size_t bytes);
+정수 read_all_fail(정수 fd, char *buffer, size_t bytes);
+정수 write_all_fail(정수 fd, char *buffer, size_t bytes);
 void find_replace(char *str, char *orig, char *rep, char *output);
 void malloc_error();
 void file_error(char *s);
@@ -35,19 +35,19 @@ list *split_str(char *s, char delim);
 char *fgetl(FILE *fp);
 list *parse_csv_line(char *line);
 char *copy_string(char *s);
-int count_fields(char *line);
-float *parse_fields(char *line, int n);
-void translate_array(float *a, int n, float s);
+정수 count_fields(char *line);
+float *parse_fields(char *line, 정수 n);
+void translate_array(float *a, 정수 n, float s);
 float constrain(float min, float max, float a);
-int constrain_int(int a, int min, int max);
+정수 constrain_int(정수 a, 정수 min, 정수 max);
 float rand_scale(float s);
-int rand_int(int min, int max);
-void mean_arrays(float **a, int n, int els, float *avg);
-float dist_array(float *a, float *b, int n, int sub);
-float **one_hot_encode(float *a, int n, int k);
+정수 rand_int(정수 min, 정수 max);
+void mean_arrays(float **a, 정수 n, 정수 els, float *avg);
+float dist_array(float *a, float *b, 정수 n, 정수 sub);
+float **one_hot_encode(float *a, 정수 n, 정수 k);
 float sec(clock_t clocks);
-void print_statistics(float *a, int n);
-int int_index(int *a, int val, int n);
+void print_statistics(float *a, 정수 n);
+정수 int_index(정수 *a, 정수 val, 정수 n);
 
 #endif
 

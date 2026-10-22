@@ -25,67 +25,67 @@ void swap_binary(convolutional_layer *l)
 #endif
 }
 
-void binarize_weights(float *weights, int n, int size, float *binary)
+void binarize_weights(float *weights, 정수 n, 정수 size, float *binary)
 {
-    int i, f;
-    for(f = 0; f < n; ++f){
+    정수 i, f;
+    위해(f = 0; f < n; ++f){
         float mean = 0;
-        for(i = 0; i < size; ++i){
+        위해(i = 0; i < size; ++i){
             mean += fabs(weights[f*size + i]);
         }
         mean = mean / size;
-        for(i = 0; i < size; ++i){
+        위해(i = 0; i < size; ++i){
             binary[f*size + i] = (weights[f*size + i] > 0) ? mean : -mean;
         }
     }
 }
 
-void binarize_cpu(float *input, int n, float *binary)
+void binarize_cpu(float *input, 정수 n, float *binary)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    정수 i;
+    위해(i = 0; i < n; ++i){
         binary[i] = (input[i] > 0) ? 1 : -1;
     }
 }
 
-void binarize_input(float *input, int n, int size, float *binary)
+void binarize_input(float *input, 정수 n, 정수 size, float *binary)
 {
-    int i, s;
-    for(s = 0; s < size; ++s){
+    정수 i, s;
+    위해(s = 0; s < size; ++s){
         float mean = 0;
-        for(i = 0; i < n; ++i){
+        위해(i = 0; i < n; ++i){
             mean += fabs(input[i*size + s]);
         }
         mean = mean / n;
-        for(i = 0; i < n; ++i){
+        위해(i = 0; i < n; ++i){
             binary[i*size + s] = (input[i*size + s] > 0) ? mean : -mean;
         }
     }
 }
 
-int convolutional_out_height(convolutional_layer l)
+정수 convolutional_out_height(convolutional_layer l)
 {
-    return (l.h + 2*l.pad - l.size) / l.stride + 1;
+    반환 (l.h + 2*l.pad - l.size) / l.stride + 1;
 }
 
-int convolutional_out_width(convolutional_layer l)
+정수 convolutional_out_width(convolutional_layer l)
 {
-    return (l.w + 2*l.pad - l.size) / l.stride + 1;
+    반환 (l.w + 2*l.pad - l.size) / l.stride + 1;
 }
 
 image get_convolutional_image(convolutional_layer l)
 {
-    return float_to_image(l.out_w,l.out_h,l.out_c,l.output);
+    반환 float_to_image(l.out_w,l.out_h,l.out_c,l.output);
 }
 
 image get_convolutional_delta(convolutional_layer l)
 {
-    return float_to_image(l.out_w,l.out_h,l.out_c,l.delta);
+    반환 float_to_image(l.out_w,l.out_h,l.out_c,l.delta);
 }
 
 static size_t get_workspace_size(layer l){
 #ifdef CUDNN
-    if(gpu_index >= 0){
+    만약(gpu_index >= 0){
         size_t most = 0;
         size_t s = 0;
         cudnnGetConvolutionForwardWorkspaceSize(cudnn_handle(),
@@ -95,7 +95,7 @@ static size_t get_workspace_size(layer l){
                 l.dstTensorDesc,
                 l.fw_algo,
                 &s);
-        if (s > most) most = s;
+        만약 (s > most) most = s;
         cudnnGetConvolutionBackwardFilterWorkspaceSize(cudnn_handle(),
                 l.srcTensorDesc,
                 l.ddstTensorDesc,
@@ -103,7 +103,7 @@ static size_t get_workspace_size(layer l){
                 l.dweightDesc,
                 l.bf_algo,
                 &s);
-        if (s > most) most = s;
+        만약 (s > most) most = s;
         cudnnGetConvolutionBackwardDataWorkspaceSize(cudnn_handle(),
                 l.weightDesc,
                 l.ddstTensorDesc,
@@ -111,11 +111,11 @@ static size_t get_workspace_size(layer l){
                 l.dsrcTensorDesc,
                 l.bd_algo,
                 &s);
-        if (s > most) most = s;
-        return most;
+        만약 (s > most) most = s;
+        반환 most;
     }
 #endif
-    return (size_t)l.out_h*l.out_w*l.size*l.size*l.c/l.groups*sizeof(float);
+    반환 (size_t)l.out_h*l.out_w*l.size*l.size*l.c/l.groups*sizeof(float);
 }
 
 #ifdef GPU
@@ -131,16 +131,16 @@ void cudnn_convolutional_setup(layer *l)
 
     cudnnSetFilter4dDescriptor(l->dweightDesc, CUDNN_DATA_FLOAT, CUDNN_TENSOR_NCHW, l->n, l->c/l->groups, l->size, l->size); 
     cudnnSetFilter4dDescriptor(l->weightDesc, CUDNN_DATA_FLOAT, CUDNN_TENSOR_NCHW, l->n, l->c/l->groups, l->size, l->size); 
-    #if CUDNN_MAJOR >= 6
+    #만약 CUDNN_MAJOR >= 6
     cudnnSetConvolution2dDescriptor(l->convDesc, l->pad, l->pad, l->stride, l->stride, 1, 1, CUDNN_CROSS_CORRELATION, CUDNN_DATA_FLOAT);
-    #else
+    #아니면
     cudnnSetConvolution2dDescriptor(l->convDesc, l->pad, l->pad, l->stride, l->stride, 1, 1, CUDNN_CROSS_CORRELATION);
     #endif
 
-    #if CUDNN_MAJOR >= 7
+    #만약 CUDNN_MAJOR >= 7
     cudnnSetConvolutionGroupCount(l->convDesc, l->groups);
-    #else
-    if(l->groups > 1){
+    #아니면
+    만약(l->groups > 1){
         error("CUDNN < 7 doesn't support groups, please upgrade!");
     }
     #endif
@@ -173,9 +173,9 @@ void cudnn_convolutional_setup(layer *l)
 #endif
 #endif
 
-convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam)
+convolutional_layer make_convolutional_layer(정수 batch, 정수 h, 정수 w, 정수 c, 정수 n, 정수 groups, 정수 size, 정수 stride, 정수 padding, ACTIVATION activation, 정수 batch_normalize, 정수 binary, 정수 xnor, 정수 adam)
 {
-    int i;
+    정수 i;
     convolutional_layer l = {0};
     l.type = CONVOLUTIONAL;
 
@@ -206,9 +206,9 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
     //printf("convscale %f\n", scale);
     //scale = .02;
     //for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1, 1);
-    for(i = 0; i < l.nweights; ++i) l.weights[i] = scale*rand_normal();
-    int out_w = convolutional_out_width(l);
-    int out_h = convolutional_out_height(l);
+    위해(i = 0; i < l.nweights; ++i) l.weights[i] = scale*rand_normal();
+    정수 out_w = convolutional_out_width(l);
+    정수 out_h = convolutional_out_height(l);
     l.out_h = out_h;
     l.out_w = out_w;
     l.out_c = n;
@@ -221,20 +221,20 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
     l.forward = forward_convolutional_layer;
     l.backward = backward_convolutional_layer;
     l.update = update_convolutional_layer;
-    if(binary){
+    만약(binary){
         l.binary_weights = calloc(l.nweights, sizeof(float));
         l.cweights = calloc(l.nweights, sizeof(char));
         l.scales = calloc(n, sizeof(float));
     }
-    if(xnor){
+    만약(xnor){
         l.binary_weights = calloc(l.nweights, sizeof(float));
         l.binary_input = calloc(l.inputs*l.batch, sizeof(float));
     }
 
-    if(batch_normalize){
+    만약(batch_normalize){
         l.scales = calloc(n, sizeof(float));
         l.scale_updates = calloc(n, sizeof(float));
-        for(i = 0; i < n; ++i){
+        위해(i = 0; i < n; ++i){
             l.scales[i] = 1;
         }
 
@@ -249,7 +249,7 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
         l.x = calloc(l.batch*l.outputs, sizeof(float));
         l.x_norm = calloc(l.batch*l.outputs, sizeof(float));
     }
-    if(adam){
+    만약(adam){
         l.m = calloc(l.nweights, sizeof(float));
         l.v = calloc(l.nweights, sizeof(float));
         l.bias_m = calloc(n, sizeof(float));
@@ -263,8 +263,8 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
     l.backward_gpu = backward_convolutional_layer_gpu;
     l.update_gpu = update_convolutional_layer_gpu;
 
-    if(gpu_index >= 0){
-        if (adam) {
+    만약(gpu_index >= 0){
+        만약 (adam) {
             l.m_gpu = cuda_make_array(l.m, l.nweights);
             l.v_gpu = cuda_make_array(l.v, l.nweights);
             l.bias_m_gpu = cuda_make_array(l.bias_m, n);
@@ -282,15 +282,15 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
         l.delta_gpu = cuda_make_array(l.delta, l.batch*out_h*out_w*n);
         l.output_gpu = cuda_make_array(l.output, l.batch*out_h*out_w*n);
 
-        if(binary){
+        만약(binary){
             l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
         }
-        if(xnor){
+        만약(xnor){
             l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
             l.binary_input_gpu = cuda_make_array(0, l.inputs*l.batch);
         }
 
-        if(batch_normalize){
+        만약(batch_normalize){
             l.mean_gpu = cuda_make_array(l.mean, n);
             l.variance_gpu = cuda_make_array(l.variance, n);
 
@@ -324,15 +324,15 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
 
     fprintf(stderr, "conv  %5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.size*l.size*l.c/l.groups * l.out_h*l.out_w)/1000000000.);
 
-    return l;
+    반환 l;
 }
 
 void denormalize_convolutional_layer(convolutional_layer l)
 {
-    int i, j;
-    for(i = 0; i < l.n; ++i){
+    정수 i, j;
+    위해(i = 0; i < l.n; ++i){
         float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
-        for(j = 0; j < l.c/l.groups*l.size*l.size; ++j){
+        위해(j = 0; j < l.c/l.groups*l.size*l.size; ++j){
             l.weights[i*l.c/l.groups*l.size*l.size + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
@@ -367,12 +367,12 @@ void test_convolutional_layer()
 }
 */
 
-void resize_convolutional_layer(convolutional_layer *l, int w, int h)
+void resize_convolutional_layer(convolutional_layer *l, 정수 w, 정수 h)
 {
     l->w = w;
     l->h = h;
-    int out_w = convolutional_out_width(*l);
-    int out_h = convolutional_out_height(*l);
+    정수 out_w = convolutional_out_width(*l);
+    정수 out_h = convolutional_out_height(*l);
 
     l->out_w = out_w;
     l->out_h = out_h;
@@ -382,7 +382,7 @@ void resize_convolutional_layer(convolutional_layer *l, int w, int h)
 
     l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
     l->delta  = realloc(l->delta,  l->batch*l->outputs*sizeof(float));
-    if(l->batch_normalize){
+    만약(l->batch_normalize){
         l->x = realloc(l->x, l->batch*l->outputs*sizeof(float));
         l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*sizeof(float));
     }
@@ -394,7 +394,7 @@ void resize_convolutional_layer(convolutional_layer *l, int w, int h)
     l->delta_gpu =  cuda_make_array(l->delta,  l->batch*l->outputs);
     l->output_gpu = cuda_make_array(l->output, l->batch*l->outputs);
 
-    if(l->batch_normalize){
+    만약(l->batch_normalize){
         cuda_free(l->x_gpu);
         cuda_free(l->x_norm_gpu);
 
@@ -408,35 +408,35 @@ void resize_convolutional_layer(convolutional_layer *l, int w, int h)
     l->workspace_size = get_workspace_size(*l);
 }
 
-void add_bias(float *output, float *biases, int batch, int n, int size)
+void add_bias(float *output, float *biases, 정수 batch, 정수 n, 정수 size)
 {
-    int i,j,b;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < n; ++i){
-            for(j = 0; j < size; ++j){
+    정수 i,j,b;
+    위해(b = 0; b < batch; ++b){
+        위해(i = 0; i < n; ++i){
+            위해(j = 0; j < size; ++j){
                 output[(b*n + i)*size + j] += biases[i];
             }
         }
     }
 }
 
-void scale_bias(float *output, float *scales, int batch, int n, int size)
+void scale_bias(float *output, float *scales, 정수 batch, 정수 n, 정수 size)
 {
-    int i,j,b;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < n; ++i){
-            for(j = 0; j < size; ++j){
+    정수 i,j,b;
+    위해(b = 0; b < batch; ++b){
+        위해(i = 0; i < n; ++i){
+            위해(j = 0; j < size; ++j){
                 output[(b*n + i)*size + j] *= scales[i];
             }
         }
     }
 }
 
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size)
+void backward_bias(float *bias_updates, float *delta, 정수 batch, 정수 n, 정수 size)
 {
-    int i,b;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < n; ++i){
+    정수 i,b;
+    위해(b = 0; b < batch; ++b){
+        위해(i = 0; i < n; ++i){
             bias_updates[i] += sum_array(delta+size*(i+b*n), size);
         }
     }
@@ -444,63 +444,63 @@ void backward_bias(float *bias_updates, float *delta, int batch, int n, int size
 
 void forward_convolutional_layer(convolutional_layer l, network net)
 {
-    int i, j;
+    정수 i, j;
 
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
 
-    if(l.xnor){
+    만약(l.xnor){
         binarize_weights(l.weights, l.n, l.c/l.groups*l.size*l.size, l.binary_weights);
         swap_binary(&l);
         binarize_cpu(net.input, l.c*l.h*l.w*l.batch, l.binary_input);
         net.input = l.binary_input;
     }
 
-    int m = l.n/l.groups;
-    int k = l.size*l.size*l.c/l.groups;
-    int n = l.out_w*l.out_h;
-    for(i = 0; i < l.batch; ++i){
-        for(j = 0; j < l.groups; ++j){
+    정수 m = l.n/l.groups;
+    정수 k = l.size*l.size*l.c/l.groups;
+    정수 n = l.out_w*l.out_h;
+    위해(i = 0; i < l.batch; ++i){
+        위해(j = 0; j < l.groups; ++j){
             float *a = l.weights + j*l.nweights/l.groups;
             float *b = net.workspace;
             float *c = l.output + (i*l.groups + j)*n*m;
             float *im =  net.input + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
 
-            if (l.size == 1) {
+            만약 (l.size == 1) {
                 b = im;
-            } else {
+            } 아니면 {
                 im2col_cpu(im, l.c/l.groups, l.h, l.w, l.size, l.stride, l.pad, b);
             }
             gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);
         }
     }
 
-    if(l.batch_normalize){
+    만약(l.batch_normalize){
         forward_batchnorm_layer(l, net);
-    } else {
+    } 아니면 {
         add_bias(l.output, l.biases, l.batch, l.n, l.out_h*l.out_w);
     }
 
     activate_array(l.output, l.outputs*l.batch, l.activation);
-    if(l.binary || l.xnor) swap_binary(&l);
+    만약(l.binary || l.xnor) swap_binary(&l);
 }
 
 void backward_convolutional_layer(convolutional_layer l, network net)
 {
-    int i, j;
-    int m = l.n/l.groups;
-    int n = l.size*l.size*l.c/l.groups;
-    int k = l.out_w*l.out_h;
+    정수 i, j;
+    정수 m = l.n/l.groups;
+    정수 n = l.size*l.size*l.c/l.groups;
+    정수 k = l.out_w*l.out_h;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    만약(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } 아니면 {
         backward_bias(l.bias_updates, l.delta, l.batch, l.n, k);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        for(j = 0; j < l.groups; ++j){
+    위해(i = 0; i < l.batch; ++i){
+        위해(j = 0; j < l.groups; ++j){
             float *a = l.delta + (i*l.groups + j)*m*k;
             float *b = net.workspace;
             float *c = l.weight_updates + j*l.nweights/l.groups;
@@ -508,26 +508,26 @@ void backward_convolutional_layer(convolutional_layer l, network net)
             float *im  = net.input + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
             float *imd = net.delta + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
 
-            if(l.size == 1){
+            만약(l.size == 1){
                 b = im;
-            } else {
+            } 아니면 {
                 im2col_cpu(im, l.c/l.groups, l.h, l.w, 
                         l.size, l.stride, l.pad, b);
             }
 
             gemm(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-            if (net.delta) {
+            만약 (net.delta) {
                 a = l.weights + j*l.nweights/l.groups;
                 b = l.delta + (i*l.groups + j)*m*k;
                 c = net.workspace;
-                if (l.size == 1) {
+                만약 (l.size == 1) {
                     c = imd;
                 }
 
                 gemm(1,0,n,k,m,1,a,n,b,k,0,c,k);
 
-                if (l.size != 1) {
+                만약 (l.size != 1) {
                     col2im_cpu(net.workspace, l.c/l.groups, l.h, l.w, l.size, l.stride, l.pad, imd);
                 }
             }
@@ -540,12 +540,12 @@ void update_convolutional_layer(convolutional_layer l, update_args a)
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;
     float decay = a.decay;
-    int batch = a.batch;
+    정수 batch = a.batch;
 
     axpy_cpu(l.n, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.n, momentum, l.bias_updates, 1);
 
-    if(l.scales){
+    만약(l.scales){
         axpy_cpu(l.n, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.n, momentum, l.scale_updates, 1);
     }
@@ -556,20 +556,20 @@ void update_convolutional_layer(convolutional_layer l, update_args a)
 }
 
 
-image get_convolutional_weight(convolutional_layer l, int i)
+image get_convolutional_weight(convolutional_layer l, 정수 i)
 {
-    int h = l.size;
-    int w = l.size;
-    int c = l.c/l.groups;
-    return float_to_image(w,h,c,l.weights+i*h*w*c);
+    정수 h = l.size;
+    정수 w = l.size;
+    정수 c = l.c/l.groups;
+    반환 float_to_image(w,h,c,l.weights+i*h*w*c);
 }
 
 void rgbgr_weights(convolutional_layer l)
 {
-    int i;
-    for(i = 0; i < l.n; ++i){
+    정수 i;
+    위해(i = 0; i < l.n; ++i){
         image im = get_convolutional_weight(l, i);
-        if (im.c == 3) {
+        만약 (im.c == 3) {
             rgbgr_image(im);
         }
     }
@@ -577,10 +577,10 @@ void rgbgr_weights(convolutional_layer l)
 
 void rescale_weights(convolutional_layer l, float scale, float trans)
 {
-    int i;
-    for(i = 0; i < l.n; ++i){
+    정수 i;
+    위해(i = 0; i < l.n; ++i){
         image im = get_convolutional_weight(l, i);
-        if (im.c == 3) {
+        만약 (im.c == 3) {
             scale_image(im, scale);
             float sum = sum_array(im.data, im.w*im.h*im.c);
             l.biases[i] += sum*trans;
@@ -591,8 +591,8 @@ void rescale_weights(convolutional_layer l, float scale, float trans)
 image *get_weights(convolutional_layer l)
 {
     image *weights = calloc(l.n, sizeof(image));
-    int i;
-    for(i = 0; i < l.n; ++i){
+    정수 i;
+    위해(i = 0; i < l.n; ++i){
         weights[i] = copy_image(get_convolutional_weight(l, i));
         normalize_image(weights[i]);
         /*
@@ -602,7 +602,7 @@ image *get_weights(convolutional_layer l)
          */
     }
     //error("hey");
-    return weights;
+    반환 weights;
 }
 
 image *visualize_convolutional_layer(convolutional_layer l, char *window, image *prev_weights)
@@ -617,6 +617,6 @@ image *visualize_convolutional_layer(convolutional_layer l, char *window, image 
     //show_image(dc, buff);
     //save_image(dc, buff);
     free_image(dc);
-    return single_weights;
+    반환 single_weights;
 }
 

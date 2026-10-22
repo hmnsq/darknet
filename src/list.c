@@ -8,7 +8,7 @@ list *make_list()
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	반환 l;
 }
 
 /*
@@ -26,15 +26,15 @@ void transfer_node(list *s, list *d, node *n)
 */
 
 void *list_pop(list *l){
-    if(!l->back) return 0;
+    만약(!l->back) 반환 0;
     node *b = l->back;
     void *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
+    만약(l->back) l->back->next = 0;
     free(b);
     --l->size;
     
-    return val;
+    반환 val;
 }
 
 void list_insert(list *l, void *val)
@@ -43,10 +43,10 @@ void list_insert(list *l, void *val)
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	만약(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}아니면{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -57,7 +57,7 @@ void list_insert(list *l, void *val)
 void free_node(node *n)
 {
 	node *next;
-	while(n) {
+	동안(n) {
 		next = n->next;
 		free(n);
 		n = next;
@@ -73,7 +73,7 @@ void free_list(list *l)
 void free_list_contents(list *l)
 {
 	node *n = l->front;
-	while(n){
+	동안(n){
 		free(n->val);
 		n = n->next;
 	}
@@ -82,11 +82,11 @@ void free_list_contents(list *l)
 void **list_to_array(list *l)
 {
     void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
+    정수 count = 0;
     node *n = l->front;
-    while(n){
+    동안(n){
         a[count++] = n->val;
         n = n->next;
     }
-    return a;
+    반환 a;
 }

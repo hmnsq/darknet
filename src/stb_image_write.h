@@ -152,38 +152,38 @@ LICENSE
 #ifndef STBIWDEF
 #ifdef STB_IMAGE_WRITE_STATIC
 #define STBIWDEF  static
-#else
+#아니면
 #ifdef __cplusplus
 #define STBIWDEF  extern "C"
-#else
+#아니면
 #define STBIWDEF  extern
 #endif
 #endif
 #endif
 
 #ifndef STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
-extern int stbi_write_tga_with_rle;
-extern int stbi_write_png_compression_level;
-extern int stbi_write_force_png_filter;
+extern 정수 stbi_write_tga_with_rle;
+extern 정수 stbi_write_png_compression_level;
+extern 정수 stbi_write_force_png_filter;
 #endif
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF 정수 stbi_write_png(char const *filename, 정수 w, 정수 h, 정수 comp, const void  *data, 정수 stride_in_bytes);
+STBIWDEF 정수 stbi_write_bmp(char const *filename, 정수 w, 정수 h, 정수 comp, const void  *data);
+STBIWDEF 정수 stbi_write_tga(char const *filename, 정수 w, 정수 h, 정수 comp, const void  *data);
+STBIWDEF 정수 stbi_write_hdr(char const *filename, 정수 w, 정수 h, 정수 comp, const float *data);
+STBIWDEF 정수 stbi_write_jpg(char const *filename, 정수 x, 정수 y, 정수 comp, const void  *data, 정수 quality);
 #endif
 
-typedef void stbi_write_func(void *context, void *data, int size);
+typedef void stbi_write_func(void *context, void *data, 정수 size);
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF 정수 stbi_write_png_to_func(stbi_write_func *func, void *context, 정수 w, 정수 h, 정수 comp, const void  *data, 정수 stride_in_bytes);
+STBIWDEF 정수 stbi_write_bmp_to_func(stbi_write_func *func, void *context, 정수 w, 정수 h, 정수 comp, const void  *data);
+STBIWDEF 정수 stbi_write_tga_to_func(stbi_write_func *func, void *context, 정수 w, 정수 h, 정수 comp, const void  *data);
+STBIWDEF 정수 stbi_write_hdr_to_func(stbi_write_func *func, void *context, 정수 w, 정수 h, 정수 comp, const float *data);
+STBIWDEF 정수 stbi_write_jpg_to_func(stbi_write_func *func, void *context, 정수 x, 정수 y, 정수 comp, const void  *data, 정수 quality);
 
-STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
+STBIWDEF void stbi_flip_vertically_on_write(정수 flip_boolean);
 
 #endif//INCLUDE_STB_IMAGE_WRITE_H
 
@@ -207,11 +207,11 @@ STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
 #include <string.h>
 #include <math.h>
 
-#if defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
+#만약 defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
 // ok
 #elif !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
 // ok
-#else
+#아니면
 #error "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
 #endif
 
@@ -239,18 +239,18 @@ STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
 #define STBIW_UCHAR(x) (unsigned char) ((x) & 0xff)
 
 #ifdef STB_IMAGE_WRITE_STATIC
-static int stbi__flip_vertically_on_write=0;
-static int stbi_write_png_compression_level = 8;
-static int stbi_write_tga_with_rle = 1;
-static int stbi_write_force_png_filter = -1;
-#else
-int stbi_write_png_compression_level = 8;
-int stbi__flip_vertically_on_write=0;
-int stbi_write_tga_with_rle = 1;
-int stbi_write_force_png_filter = -1;
+static 정수 stbi__flip_vertically_on_write=0;
+static 정수 stbi_write_png_compression_level = 8;
+static 정수 stbi_write_tga_with_rle = 1;
+static 정수 stbi_write_force_png_filter = -1;
+#아니면
+정수 stbi_write_png_compression_level = 8;
+정수 stbi__flip_vertically_on_write=0;
+정수 stbi_write_tga_with_rle = 1;
+정수 stbi_write_force_png_filter = -1;
 #endif
 
-STBIWDEF void stbi_flip_vertically_on_write(int flag)
+STBIWDEF void stbi_flip_vertically_on_write(정수 flag)
 {
    stbi__flip_vertically_on_write = flag;
 }
@@ -270,22 +270,22 @@ static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func 
 
 #ifndef STBI_WRITE_NO_STDIO
 
-static void stbi__stdio_write(void *context, void *data, int size)
+static void stbi__stdio_write(void *context, void *data, 정수 size)
 {
    fwrite(data,1,size,(FILE*) context);
 }
 
-static int stbi__start_write_file(stbi__write_context *s, const char *filename)
+static 정수 stbi__start_write_file(stbi__write_context *s, const char *filename)
 {
    FILE *f;
 #ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
+   만약 (fopen_s(&f, filename, "wb"))
       f = NULL;
-#else
+#아니면
    f = fopen(filename, "wb");
 #endif
    stbi__start_write_callbacks(s, stbi__stdio_write, (void *) f);
-   return f != NULL;
+   반환 f != NULL;
 }
 
 static void stbi__end_write_file(stbi__write_context *s)
@@ -295,24 +295,24 @@ static void stbi__end_write_file(stbi__write_context *s)
 
 #endif // !STBI_WRITE_NO_STDIO
 
-typedef unsigned int stbiw_uint32;
-typedef int stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
+typedef unsigned 정수 stbiw_uint32;
+typedef 정수 stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
 
 static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
 {
-   while (*fmt) {
+   동안 (*fmt) {
       switch (*fmt++) {
          case ' ': break;
-         case '1': { unsigned char x = STBIW_UCHAR(va_arg(v, int));
+         case '1': { unsigned char x = STBIW_UCHAR(va_arg(v, 정수));
                      s->func(s->context,&x,1);
                      break; }
-         case '2': { int x = va_arg(v,int);
+         case '2': { 정수 x = va_arg(v,정수);
                      unsigned char b[2];
                      b[0] = STBIW_UCHAR(x);
                      b[1] = STBIW_UCHAR(x>>8);
                      s->func(s->context,b,2);
                      break; }
-         case '4': { stbiw_uint32 x = va_arg(v,int);
+         case '4': { stbiw_uint32 x = va_arg(v,정수);
                      unsigned char b[4];
                      b[0]=STBIW_UCHAR(x);
                      b[1]=STBIW_UCHAR(x>>8);
@@ -322,7 +322,7 @@ static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
                      break; }
          default:
             STBIW_ASSERT(0);
-            return;
+            반환;
       }
    }
 }
@@ -347,26 +347,26 @@ static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char
    s->func(s->context, arr, 3);
 }
 
-static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, int write_alpha, int expand_mono, unsigned char *d)
+static void stbiw__write_pixel(stbi__write_context *s, 정수 rgb_dir, 정수 comp, 정수 write_alpha, 정수 expand_mono, unsigned char *d)
 {
    unsigned char bg[3] = { 255, 0, 255}, px[3];
-   int k;
+   정수 k;
 
-   if (write_alpha < 0)
+   만약 (write_alpha < 0)
       s->func(s->context, &d[comp - 1], 1);
 
    switch (comp) {
       case 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
       case 1:
-         if (expand_mono)
+         만약 (expand_mono)
             stbiw__write3(s, d[0], d[0], d[0]); // monochrome bmp
-         else
+         아니면
             s->func(s->context, d, 1);  // monochrome TGA
          break;
       case 4:
-         if (!write_alpha) {
+         만약 (!write_alpha) {
             // composite against pink background
-            for (k = 0; k < 3; ++k)
+            위해 (k = 0; k < 3; ++k)
                px[k] = bg[k] + ((d[k] - bg[k]) * d[3]) / 255;
             stbiw__write3(s, px[1 - rgb_dir], px[1], px[1 + rgb_dir]);
             break;
@@ -376,28 +376,28 @@ static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, in
          stbiw__write3(s, d[1 - rgb_dir], d[1], d[1 + rgb_dir]);
          break;
    }
-   if (write_alpha > 0)
+   만약 (write_alpha > 0)
       s->func(s->context, &d[comp - 1], 1);
 }
 
-static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, void *data, int write_alpha, int scanline_pad, int expand_mono)
+static void stbiw__write_pixels(stbi__write_context *s, 정수 rgb_dir, 정수 vdir, 정수 x, 정수 y, 정수 comp, void *data, 정수 write_alpha, 정수 scanline_pad, 정수 expand_mono)
 {
    stbiw_uint32 zero = 0;
-   int i,j, j_end;
+   정수 i,j, j_end;
 
-   if (y <= 0)
-      return;
+   만약 (y <= 0)
+      반환;
 
-   if (stbi__flip_vertically_on_write)
+   만약 (stbi__flip_vertically_on_write)
       vdir *= -1;
 
-   if (vdir < 0)
+   만약 (vdir < 0)
       j_end = -1, j = y-1;
-   else
+   아니면
       j_end =  y, j = 0;
 
-   for (; j != j_end; j += vdir) {
-      for (i=0; i < x; ++i) {
+   위해 (; j != j_end; j += vdir) {
+      위해 (i=0; i < x; ++i) {
          unsigned char *d = (unsigned char *) data + (j*x+i)*comp;
          stbiw__write_pixel(s, rgb_dir, comp, write_alpha, expand_mono, d);
       }
@@ -405,117 +405,117 @@ static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, i
    }
 }
 
-static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, int expand_mono, void *data, int alpha, int pad, const char *fmt, ...)
+static 정수 stbiw__outfile(stbi__write_context *s, 정수 rgb_dir, 정수 vdir, 정수 x, 정수 y, 정수 comp, 정수 expand_mono, void *data, 정수 alpha, 정수 pad, const char *fmt, ...)
 {
-   if (y < 0 || x < 0) {
-      return 0;
-   } else {
+   만약 (y < 0 || x < 0) {
+      반환 0;
+   } 아니면 {
       va_list v;
       va_start(v, fmt);
       stbiw__writefv(s, fmt, v);
       va_end(v);
       stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,data,alpha,pad, expand_mono);
-      return 1;
+      반환 1;
    }
 }
 
-static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, const void *data)
+static 정수 stbi_write_bmp_core(stbi__write_context *s, 정수 x, 정수 y, 정수 comp, const void *data)
 {
-   int pad = (-x*3) & 3;
-   return stbiw__outfile(s,-1,-1,x,y,comp,1,(void *) data,0,pad,
+   정수 pad = (-x*3) & 3;
+   반환 stbiw__outfile(s,-1,-1,x,y,comp,1,(void *) data,0,pad,
            "11 4 22 4" "4 44 22 444444",
            'B', 'M', 14+40+(x*3+pad)*y, 0,0, 14+40,  // file header
             40, x,y, 1,24, 0,0,0,0,0,0);             // bitmap header
 }
 
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF 정수 stbi_write_bmp_to_func(stbi_write_func *func, void *context, 정수 x, 정수 y, 정수 comp, const void *data)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_bmp_core(&s, x, y, comp, data);
+   반환 stbi_write_bmp_core(&s, x, y, comp, data);
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *data)
+STBIWDEF 정수 stbi_write_bmp(char const *filename, 정수 x, 정수 y, 정수 comp, const void *data)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_bmp_core(&s, x, y, comp, data);
+   만약 (stbi__start_write_file(&s,filename)) {
+      정수 r = stbi_write_bmp_core(&s, x, y, comp, data);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      반환 r;
+   } 아니면
+      반환 0;
 }
 #endif //!STBI_WRITE_NO_STDIO
 
-static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, void *data)
+static 정수 stbi_write_tga_core(stbi__write_context *s, 정수 x, 정수 y, 정수 comp, void *data)
 {
-   int has_alpha = (comp == 2 || comp == 4);
-   int colorbytes = has_alpha ? comp-1 : comp;
-   int format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
+   정수 has_alpha = (comp == 2 || comp == 4);
+   정수 colorbytes = has_alpha ? comp-1 : comp;
+   정수 format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
 
-   if (y < 0 || x < 0)
-      return 0;
+   만약 (y < 0 || x < 0)
+      반환 0;
 
-   if (!stbi_write_tga_with_rle) {
-      return stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *) data, has_alpha, 0,
+   만약 (!stbi_write_tga_with_rle) {
+      반환 stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *) data, has_alpha, 0,
          "111 221 2222 11", 0, 0, format, 0, 0, 0, 0, 0, x, y, (colorbytes + has_alpha) * 8, has_alpha * 8);
-   } else {
-      int i,j,k;
-      int jend, jdir;
+   } 아니면 {
+      정수 i,j,k;
+      정수 jend, jdir;
 
       stbiw__writef(s, "111 221 2222 11", 0,0,format+8, 0,0,0, 0,0,x,y, (colorbytes + has_alpha) * 8, has_alpha * 8);
 
-      if (stbi__flip_vertically_on_write) {
+      만약 (stbi__flip_vertically_on_write) {
          j = 0;
          jend = y;
          jdir = 1;
-      } else {
+      } 아니면 {
          j = y-1;
          jend = -1;
          jdir = -1;
       }
-      for (; j != jend; j += jdir) {
+      위해 (; j != jend; j += jdir) {
          unsigned char *row = (unsigned char *) data + j * x * comp;
-         int len;
+         정수 len;
 
-         for (i = 0; i < x; i += len) {
+         위해 (i = 0; i < x; i += len) {
             unsigned char *begin = row + i * comp;
-            int diff = 1;
+            정수 diff = 1;
             len = 1;
 
-            if (i < x - 1) {
+            만약 (i < x - 1) {
                ++len;
                diff = memcmp(begin, row + (i + 1) * comp, comp);
-               if (diff) {
+               만약 (diff) {
                   const unsigned char *prev = begin;
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (memcmp(prev, row + k * comp, comp)) {
+                  위해 (k = i + 2; k < x && len < 128; ++k) {
+                     만약 (memcmp(prev, row + k * comp, comp)) {
                         prev += comp;
                         ++len;
-                     } else {
+                     } 아니면 {
                         --len;
                         break;
                      }
                   }
-               } else {
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (!memcmp(begin, row + k * comp, comp)) {
+               } 아니면 {
+                  위해 (k = i + 2; k < x && len < 128; ++k) {
+                     만약 (!memcmp(begin, row + k * comp, comp)) {
                         ++len;
-                     } else {
+                     } 아니면 {
                         break;
                      }
                   }
                }
             }
 
-            if (diff) {
+            만약 (diff) {
                unsigned char header = STBIW_UCHAR(len - 1);
                s->func(s->context, &header, 1);
-               for (k = 0; k < len; ++k) {
+               위해 (k = 0; k < len; ++k) {
                   stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin + k * comp);
                }
-            } else {
+            } 아니면 {
                unsigned char header = STBIW_UCHAR(len - 129);
                s->func(s->context, &header, 1);
                stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin);
@@ -523,26 +523,26 @@ static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, v
          }
       }
    }
-   return 1;
+   반환 1;
 }
 
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF 정수 stbi_write_tga_to_func(stbi_write_func *func, void *context, 정수 x, 정수 y, 정수 comp, const void *data)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   반환 stbi_write_tga_core(&s, x, y, comp, (void *) data);
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
+STBIWDEF 정수 stbi_write_tga(char const *filename, 정수 x, 정수 y, 정수 comp, const void *data)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   만약 (stbi__start_write_file(&s,filename)) {
+      정수 r = stbi_write_tga_core(&s, x, y, comp, (void *) data);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      반환 r;
+   } 아니면
+      반환 0;
 }
 #endif
 
@@ -554,12 +554,12 @@ STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const 
 
 void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
 {
-   int exponent;
+   정수 exponent;
    float maxcomp = stbiw__max(linear[0], stbiw__max(linear[1], linear[2]));
 
-   if (maxcomp < 1e-32f) {
+   만약 (maxcomp < 1e-32f) {
       rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
-   } else {
+   } 아니면 {
       float normalize = (float) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
 
       rgbe[0] = (unsigned char)(linear[0] * normalize);
@@ -569,7 +569,7 @@ void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
    }
 }
 
-void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char databyte)
+void stbiw__write_run_data(stbi__write_context *s, 정수 length, unsigned char databyte)
 {
    unsigned char lengthbyte = STBIW_UCHAR(length+128);
    STBIW_ASSERT(length+128 <= 255);
@@ -577,7 +577,7 @@ void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char dat
    s->func(s->context, &databyte, 1);
 }
 
-void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *data)
+void stbiw__write_dump_data(stbi__write_context *s, 정수 length, unsigned char *data)
 {
    unsigned char lengthbyte = STBIW_UCHAR(length);
    STBIW_ASSERT(length <= 128); // inconsistent with spec but consistent with official code
@@ -585,19 +585,19 @@ void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *d
    s->func(s->context, data, length);
 }
 
-void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, unsigned char *scratch, float *scanline)
+void stbiw__write_hdr_scanline(stbi__write_context *s, 정수 width, 정수 ncomp, unsigned char *scratch, float *scanline)
 {
    unsigned char scanlineheader[4] = { 2, 2, 0, 0 };
    unsigned char rgbe[4];
    float linear[3];
-   int x;
+   정수 x;
 
    scanlineheader[2] = (width&0xff00)>>8;
    scanlineheader[3] = (width&0x00ff);
 
    /* skip RLE for images too small or large */
-   if (width < 8 || width >= 32768) {
-      for (x=0; x < width; x++) {
+   만약 (width < 8 || width >= 32768) {
+      위해 (x=0; x < width; x++) {
          switch (ncomp) {
             case 4: /* fallthrough */
             case 3: linear[2] = scanline[x*ncomp + 2];
@@ -611,10 +611,10 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
          stbiw__linear_to_rgbe(rgbe, linear);
          s->func(s->context, rgbe, 4);
       }
-   } else {
-      int c,r;
+   } 아니면 {
+      정수 c,r;
       /* encode into scratch buffer */
-      for (x=0; x < width; x++) {
+      위해 (x=0; x < width; x++) {
          switch(ncomp) {
             case 4: /* fallthrough */
             case 3: linear[2] = scanline[x*ncomp + 2];
@@ -635,36 +635,36 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
       s->func(s->context, scanlineheader, 4);
 
       /* RLE each component separately */
-      for (c=0; c < 4; c++) {
+      위해 (c=0; c < 4; c++) {
          unsigned char *comp = &scratch[width*c];
 
          x = 0;
-         while (x < width) {
+         동안 (x < width) {
             // find first run
             r = x;
-            while (r+2 < width) {
-               if (comp[r] == comp[r+1] && comp[r] == comp[r+2])
+            동안 (r+2 < width) {
+               만약 (comp[r] == comp[r+1] && comp[r] == comp[r+2])
                   break;
                ++r;
             }
-            if (r+2 >= width)
+            만약 (r+2 >= width)
                r = width;
             // dump up to first run
-            while (x < r) {
-               int len = r-x;
-               if (len > 128) len = 128;
+            동안 (x < r) {
+               정수 len = r-x;
+               만약 (len > 128) len = 128;
                stbiw__write_dump_data(s, len, &comp[x]);
                x += len;
             }
             // if there's a run, output it
-            if (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
+            만약 (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
                // find next byte after run
-               while (r < width && comp[r] == comp[x])
+               동안 (r < width && comp[r] == comp[x])
                   ++r;
                // output run up to r
-               while (x < r) {
-                  int len = r-x;
-                  if (len > 127) len = 127;
+               동안 (x < r) {
+                  정수 len = r-x;
+                  만약 (len > 127) len = 127;
                   stbiw__write_run_data(s, len, comp[x]);
                   x += len;
                }
@@ -674,49 +674,49 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
    }
 }
 
-static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, float *data)
+static 정수 stbi_write_hdr_core(stbi__write_context *s, 정수 x, 정수 y, 정수 comp, float *data)
 {
-   if (y <= 0 || x <= 0 || data == NULL)
-      return 0;
-   else {
+   만약 (y <= 0 || x <= 0 || data == NULL)
+      반환 0;
+   아니면 {
       // Each component is stored separately. Allocate scratch space for full output scanline.
       unsigned char *scratch = (unsigned char *) STBIW_MALLOC(x*4);
-      int i, len;
+      정수 i, len;
       char buffer[128];
       char header[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
       s->func(s->context, header, sizeof(header)-1);
 
 #ifdef STBI_MSC_SECURE_CRT
       len = sprintf_s(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#else
+#아니면
       len = sprintf(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
 #endif
       s->func(s->context, buffer, len);
 
-      for(i=0; i < y; i++)
+      위해(i=0; i < y; i++)
          stbiw__write_hdr_scanline(s, x, comp, scratch, data + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
       STBIW_FREE(scratch);
-      return 1;
+      반환 1;
    }
 }
 
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const float *data)
+STBIWDEF 정수 stbi_write_hdr_to_func(stbi_write_func *func, void *context, 정수 x, 정수 y, 정수 comp, const float *data)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   반환 stbi_write_hdr_core(&s, x, y, comp, (float *) data);
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const float *data)
+STBIWDEF 정수 stbi_write_hdr(char const *filename, 정수 x, 정수 y, 정수 comp, const float *data)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   만약 (stbi__start_write_file(&s,filename)) {
+      정수 r = stbi_write_hdr_core(&s, x, y, comp, (float *) data);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      반환 r;
+   } 아니면
+      반환 0;
 }
 #endif // STBI_WRITE_NO_STDIO
 
@@ -728,7 +728,7 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 
 #ifndef STBIW_ZLIB_COMPRESS
 // stretchy buffer; stbiw__sbpush() == vector<>::push_back() -- stbiw__sbcount() == vector<>::size()
-#define stbiw__sbraw(a) ((int *) (a) - 2)
+#define stbiw__sbraw(a) ((정수 *) (a) - 2)
 #define stbiw__sbm(a)   stbiw__sbraw(a)[0]
 #define stbiw__sbn(a)   stbiw__sbraw(a)[1]
 
@@ -740,48 +740,48 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 #define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
 #define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
 
-static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
+static void *stbiw__sbgrowf(void **arr, 정수 increment, 정수 itemsize)
 {
-   int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
-   void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(int)*2) : 0, itemsize * m + sizeof(int)*2);
+   정수 m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
+   void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(정수)*2) : 0, itemsize * m + sizeof(정수)*2);
    STBIW_ASSERT(p);
-   if (p) {
-      if (!*arr) ((int *) p)[1] = 0;
-      *arr = (void *) ((int *) p + 2);
+   만약 (p) {
+      만약 (!*arr) ((정수 *) p)[1] = 0;
+      *arr = (void *) ((정수 *) p + 2);
       stbiw__sbm(*arr) = m;
    }
-   return *arr;
+   반환 *arr;
 }
 
-static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
+static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned 정수 *bitbuffer, 정수 *bitcount)
 {
-   while (*bitcount >= 8) {
+   동안 (*bitcount >= 8) {
       stbiw__sbpush(data, STBIW_UCHAR(*bitbuffer));
       *bitbuffer >>= 8;
       *bitcount -= 8;
    }
-   return data;
+   반환 data;
 }
 
-static int stbiw__zlib_bitrev(int code, int codebits)
+static 정수 stbiw__zlib_bitrev(정수 code, 정수 codebits)
 {
-   int res=0;
-   while (codebits--) {
+   정수 res=0;
+   동안 (codebits--) {
       res = (res << 1) | (code & 1);
       code >>= 1;
    }
-   return res;
+   반환 res;
 }
 
-static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
+static unsigned 정수 stbiw__zlib_countm(unsigned char *a, unsigned char *b, 정수 limit)
 {
-   int i;
-   for (i=0; i < limit && i < 258; ++i)
-      if (a[i] != b[i]) break;
-   return i;
+   정수 i;
+   위해 (i=0; i < limit && i < 258; ++i)
+      만약 (a[i] != b[i]) break;
+   반환 i;
 }
 
-static unsigned int stbiw__zhash(unsigned char *data)
+static unsigned 정수 stbiw__zhash(unsigned char *data)
 {
    stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
    hash ^= hash << 3;
@@ -790,7 +790,7 @@ static unsigned int stbiw__zhash(unsigned char *data)
    hash += hash >> 17;
    hash ^= hash << 25;
    hash += hash >> 6;
-   return hash;
+   반환 hash;
 }
 
 #define stbiw__zlib_flush() (out = stbiw__zlib_flushf(out, &bitbuf, &bitcount))
@@ -809,61 +809,61 @@ static unsigned int stbiw__zhash(unsigned char *data)
 
 #endif // STBIW_ZLIB_COMPRESS
 
-unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
+unsigned char * stbi_zlib_compress(unsigned char *data, 정수 data_len, 정수 *out_len, 정수 quality)
 {
 #ifdef STBIW_ZLIB_COMPRESS
    // user provided a zlib compress implementation, use that
-   return STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
-#else // use builtin
+   반환 STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
+#아니면 // use builtin
    static unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
    static unsigned char  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
    static unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
    static unsigned char  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
-   unsigned int bitbuf=0;
-   int i,j, bitcount=0;
+   unsigned 정수 bitbuf=0;
+   정수 i,j, bitcount=0;
    unsigned char *out = NULL;
    unsigned char ***hash_table = (unsigned char***) STBIW_MALLOC(stbiw__ZHASH * sizeof(char**));
-   if (hash_table == NULL)
-      return NULL;
-   if (quality < 5) quality = 5;
+   만약 (hash_table == NULL)
+      반환 NULL;
+   만약 (quality < 5) quality = 5;
 
    stbiw__sbpush(out, 0x78);   // DEFLATE 32K window
    stbiw__sbpush(out, 0x5e);   // FLEVEL = 1
    stbiw__zlib_add(1,1);  // BFINAL = 1
    stbiw__zlib_add(1,2);  // BTYPE = 1 -- fixed huffman
 
-   for (i=0; i < stbiw__ZHASH; ++i)
+   위해 (i=0; i < stbiw__ZHASH; ++i)
       hash_table[i] = NULL;
 
    i=0;
-   while (i < data_len-3) {
+   동안 (i < data_len-3) {
       // hash next 3 bytes of data to be compressed
-      int h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
+      정수 h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
       unsigned char *bestloc = 0;
       unsigned char **hlist = hash_table[h];
-      int n = stbiw__sbcount(hlist);
-      for (j=0; j < n; ++j) {
-         if (hlist[j]-data > i-32768) { // if entry lies within window
-            int d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
-            if (d >= best) best=d,bestloc=hlist[j];
+      정수 n = stbiw__sbcount(hlist);
+      위해 (j=0; j < n; ++j) {
+         만약 (hlist[j]-data > i-32768) { // if entry lies within window
+            정수 d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
+            만약 (d >= best) best=d,bestloc=hlist[j];
          }
       }
       // when hash table entry is too long, delete half the entries
-      if (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
+      만약 (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
          STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, sizeof(hash_table[h][0])*quality);
          stbiw__sbn(hash_table[h]) = quality;
       }
       stbiw__sbpush(hash_table[h],data+i);
 
-      if (bestloc) {
+      만약 (bestloc) {
          // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
          h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
          hlist = hash_table[h];
          n = stbiw__sbcount(hlist);
-         for (j=0; j < n; ++j) {
-            if (hlist[j]-data > i-32767) {
-               int e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
-               if (e > best) { // if next match is better, bail on current match
+         위해 (j=0; j < n; ++j) {
+            만약 (hlist[j]-data > i-32767) {
+               정수 e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
+               만약 (e > best) { // if next match is better, bail on current match
                   bestloc = NULL;
                   break;
                }
@@ -871,40 +871,40 @@ unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_l
          }
       }
 
-      if (bestloc) {
-         int d = (int) (data+i - bestloc); // distance back
+      만약 (bestloc) {
+         정수 d = (정수) (data+i - bestloc); // distance back
          STBIW_ASSERT(d <= 32767 && best <= 258);
-         for (j=0; best > lengthc[j+1]-1; ++j);
+         위해 (j=0; best > lengthc[j+1]-1; ++j);
          stbiw__zlib_huff(j+257);
-         if (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
-         for (j=0; d > distc[j+1]-1; ++j);
+         만약 (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
+         위해 (j=0; d > distc[j+1]-1; ++j);
          stbiw__zlib_add(stbiw__zlib_bitrev(j,5),5);
-         if (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
+         만약 (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
          i += best;
-      } else {
+      } 아니면 {
          stbiw__zlib_huffb(data[i]);
          ++i;
       }
    }
    // write out final bytes
-   for (;i < data_len; ++i)
+   위해 (;i < data_len; ++i)
       stbiw__zlib_huffb(data[i]);
    stbiw__zlib_huff(256); // end of block
    // pad with 0 bits to byte boundary
-   while (bitcount)
+   동안 (bitcount)
       stbiw__zlib_add(0,1);
 
-   for (i=0; i < stbiw__ZHASH; ++i)
+   위해 (i=0; i < stbiw__ZHASH; ++i)
       (void) stbiw__sbfree(hash_table[i]);
    STBIW_FREE(hash_table);
 
    {
       // compute adler32 on input
-      unsigned int s1=1, s2=0;
-      int blocklen = (int) (data_len % 5552);
+      unsigned 정수 s1=1, s2=0;
+      정수 blocklen = (정수) (data_len % 5552);
       j=0;
-      while (j < data_len) {
-         for (i=0; i < blocklen; ++i) s1 += data[j+i], s2 += s1;
+      동안 (j < data_len) {
+         위해 (i=0; i < blocklen; ++i) s1 += data[j+i], s2 += s1;
          s1 %= 65521, s2 %= 65521;
          j += blocklen;
          blocklen = 5552;
@@ -917,13 +917,13 @@ unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_l
    *out_len = stbiw__sbn(out);
    // make returned pointer freeable
    STBIW_MEMMOVE(stbiw__sbraw(out), out, *out_len);
-   return (unsigned char *) stbiw__sbraw(out);
+   반환 (unsigned char *) stbiw__sbraw(out);
 #endif // STBIW_ZLIB_COMPRESS
 }
 
-static unsigned int stbiw__crc32(unsigned char *buffer, int len)
+static unsigned 정수 stbiw__crc32(unsigned char *buffer, 정수 len)
 {
-   static unsigned int crc_table[256] =
+   static unsigned 정수 crc_table[256] =
    {
       0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
       0x0eDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -959,42 +959,42 @@ static unsigned int stbiw__crc32(unsigned char *buffer, int len)
       0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
    };
 
-   unsigned int crc = ~0u;
-   int i;
-   for (i=0; i < len; ++i)
+   unsigned 정수 crc = ~0u;
+   정수 i;
+   위해 (i=0; i < len; ++i)
       crc = (crc >> 8) ^ crc_table[buffer[i] ^ (crc & 0xff)];
-   return ~crc;
+   반환 ~crc;
 }
 
 #define stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
 #define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
 #define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
 
-static void stbiw__wpcrc(unsigned char **data, int len)
+static void stbiw__wpcrc(unsigned char **data, 정수 len)
 {
-   unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
+   unsigned 정수 crc = stbiw__crc32(*data - len - 4, len+4);
    stbiw__wp32(*data, crc);
 }
 
-static unsigned char stbiw__paeth(int a, int b, int c)
+static unsigned char stbiw__paeth(정수 a, 정수 b, 정수 c)
 {
-   int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
-   if (pa <= pb && pa <= pc) return STBIW_UCHAR(a);
-   if (pb <= pc) return STBIW_UCHAR(b);
-   return STBIW_UCHAR(c);
+   정수 p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
+   만약 (pa <= pb && pa <= pc) 반환 STBIW_UCHAR(a);
+   만약 (pb <= pc) 반환 STBIW_UCHAR(b);
+   반환 STBIW_UCHAR(c);
 }
 
 // @OPTIMIZE: provide an option that always forces left-predict or paeth predict
-static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
+static void stbiw__encode_png_line(unsigned char *pixels, 정수 stride_bytes, 정수 width, 정수 height, 정수 y, 정수 n, 정수 filter_type, signed char *line_buffer)
 {
-   static int mapping[] = { 0,1,2,3,4 };
-   static int firstmap[] = { 0,1,0,5,6 };
-   int *mymap = (y != 0) ? mapping : firstmap;
-   int i;
-   int type = mymap[filter_type];
+   static 정수 mapping[] = { 0,1,2,3,4 };
+   static 정수 firstmap[] = { 0,1,0,5,6 };
+   정수 *mymap = (y != 0) ? mapping : firstmap;
+   정수 i;
+   정수 type = mymap[filter_type];
    unsigned char *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
-   int signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
-   for (i = 0; i < n; ++i) {
+   정수 signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
+   위해 (i = 0; i < n; ++i) {
       switch (type) {
          case 0: line_buffer[i] = z[i]; break;
          case 1: line_buffer[i] = z[i]; break;
@@ -1005,7 +1005,7 @@ static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int 
          case 6: line_buffer[i] = z[i]; break;
       }
    }
-   for (i=n; i < width*n; ++i) {
+   위해 (i=n; i < width*n; ++i) {
       switch (type) {
          case 0: line_buffer[i] = z[i]; break;
          case 1: line_buffer[i] = z[i] - z[i-n]; break;
@@ -1018,45 +1018,45 @@ static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int 
    }
 }
 
-unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+unsigned char *stbi_write_png_to_mem(unsigned char *pixels, 정수 stride_bytes, 정수 x, 정수 y, 정수 n, 정수 *out_len)
 {
-   int force_filter = stbi_write_force_png_filter;
-   int ctype[5] = { -1, 0, 4, 2, 6 };
+   정수 force_filter = stbi_write_force_png_filter;
+   정수 ctype[5] = { -1, 0, 4, 2, 6 };
    unsigned char sig[8] = { 137,80,78,71,13,10,26,10 };
    unsigned char *out,*o, *filt, *zlib;
    signed char *line_buffer;
-   int j,zlen;
+   정수 j,zlen;
 
-   if (stride_bytes == 0)
+   만약 (stride_bytes == 0)
       stride_bytes = x * n;
 
-   if (force_filter >= 5) {
+   만약 (force_filter >= 5) {
       force_filter = -1;
    }
 
-   filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); if (!filt) return 0;
-   line_buffer = (signed char *) STBIW_MALLOC(x * n); if (!line_buffer) { STBIW_FREE(filt); return 0; }
-   for (j=0; j < y; ++j) {
-      int filter_type;
-      if (force_filter > -1) {
+   filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); 만약 (!filt) 반환 0;
+   line_buffer = (signed char *) STBIW_MALLOC(x * n); 만약 (!line_buffer) { STBIW_FREE(filt); 반환 0; }
+   위해 (j=0; j < y; ++j) {
+      정수 filter_type;
+      만약 (force_filter > -1) {
          filter_type = force_filter;
          stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, force_filter, line_buffer);
-      } else { // Estimate the best filter by running through all of them:
-         int best_filter = 0, best_filter_val = 0x7fffffff, est, i;
-         for (filter_type = 0; filter_type < 5; filter_type++) {
+      } 아니면 { // Estimate the best filter by running through all of them:
+         정수 best_filter = 0, best_filter_val = 0x7fffffff, est, i;
+         위해 (filter_type = 0; filter_type < 5; filter_type++) {
             stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, filter_type, line_buffer);
 
             // Estimate the entropy of the line using this filter; the less, the better.
             est = 0;
-            for (i = 0; i < x*n; ++i) {
+            위해 (i = 0; i < x*n; ++i) {
                est += abs((signed char) line_buffer[i]);
             }
-            if (est < best_filter_val) {
+            만약 (est < best_filter_val) {
                best_filter_val = est;
                best_filter = filter_type;
             }
          }
-         if (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
+         만약 (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
             stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, best_filter, line_buffer);
             filter_type = best_filter;
          }
@@ -1068,11 +1068,11 @@ unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, in
    STBIW_FREE(line_buffer);
    zlib = stbi_zlib_compress(filt, y*( x*n+1), &zlen, stbi_write_png_compression_level);
    STBIW_FREE(filt);
-   if (!zlib) return 0;
+   만약 (!zlib) 반환 0;
 
    // each tag requires 12 bytes of overhead
    out = (unsigned char *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
-   if (!out) return 0;
+   만약 (!out) 반환 0;
    *out_len = 8 + 12+13 + 12+zlen + 12;
 
    o=out;
@@ -1101,38 +1101,38 @@ unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, in
 
    STBIW_ASSERT(o == out + *out_len);
 
-   return out;
+   반환 out;
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF 정수 stbi_write_png(char const *filename, 정수 x, 정수 y, 정수 comp, const void *data, 정수 stride_bytes)
 {
    FILE *f;
-   int len;
+   정수 len;
    unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   만약 (png == NULL) 반환 0;
 #ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
+   만약 (fopen_s(&f, filename, "wb"))
       f = NULL;
-#else
+#아니면
    f = fopen(filename, "wb");
 #endif
-   if (!f) { STBIW_FREE(png); return 0; }
+   만약 (!f) { STBIW_FREE(png); 반환 0; }
    fwrite(png, 1, len, f);
    fclose(f);
    STBIW_FREE(png);
-   return 1;
+   반환 1;
 }
 #endif
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF 정수 stbi_write_png_to_func(stbi_write_func *func, void *context, 정수 x, 정수 y, 정수 comp, const void *data, 정수 stride_bytes)
 {
-   int len;
+   정수 len;
    unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   만약 (png == NULL) 반환 0;
    func(context, png, len);
    STBIW_FREE(png);
-   return 1;
+   반환 1;
 }
 
 
@@ -1147,14 +1147,14 @@ STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x,
 static const unsigned char stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
       24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
 
-static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitCntP, const unsigned short *bs) {
-   int bitBuf = *bitBufP, bitCnt = *bitCntP;
+static void stbiw__jpg_writeBits(stbi__write_context *s, 정수 *bitBufP, 정수 *bitCntP, const unsigned short *bs) {
+   정수 bitBuf = *bitBufP, bitCnt = *bitCntP;
    bitCnt += bs[1];
    bitBuf |= bs[0] << (24 - bitCnt);
-   while(bitCnt >= 8) {
+   동안(bitCnt >= 8) {
       unsigned char c = (bitBuf >> 16) & 255;
       stbiw__putc(s, c);
-      if(c == 255) {
+      만약(c == 255) {
          stbiw__putc(s, 0);
       }
       bitBuf <<= 8;
@@ -1212,43 +1212,43 @@ static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float
    *d0p = d0;  *d2p = d2;  *d4p = d4;  *d6p = d6;
 }
 
-static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
-   int tmp1 = val < 0 ? -val : val;
+static void stbiw__jpg_calcBits(정수 val, unsigned short bits[2]) {
+   정수 tmp1 = val < 0 ? -val : val;
    val = val < 0 ? val-1 : val;
    bits[1] = 1;
-   while(tmp1 >>= 1) {
+   동안(tmp1 >>= 1) {
       ++bits[1];
    }
    bits[0] = val & ((1<<bits[1])-1);
 }
 
-static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt, float *CDU, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
+static 정수 stbiw__jpg_processDU(stbi__write_context *s, 정수 *bitBuf, 정수 *bitCnt, float *CDU, float *fdtbl, 정수 DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
    const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
    const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
-   int dataOff, i, diff, end0pos;
-   int DU[64];
+   정수 dataOff, i, diff, end0pos;
+   정수 DU[64];
 
    // DCT rows
-   for(dataOff=0; dataOff<64; dataOff+=8) {
+   위해(dataOff=0; dataOff<64; dataOff+=8) {
       stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+1], &CDU[dataOff+2], &CDU[dataOff+3], &CDU[dataOff+4], &CDU[dataOff+5], &CDU[dataOff+6], &CDU[dataOff+7]);
    }
    // DCT columns
-   for(dataOff=0; dataOff<8; ++dataOff) {
+   위해(dataOff=0; dataOff<8; ++dataOff) {
       stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+8], &CDU[dataOff+16], &CDU[dataOff+24], &CDU[dataOff+32], &CDU[dataOff+40], &CDU[dataOff+48], &CDU[dataOff+56]);
    }
    // Quantize/descale/zigzag the coefficients
-   for(i=0; i<64; ++i) {
+   위해(i=0; i<64; ++i) {
       float v = CDU[i]*fdtbl[i];
       // DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? ceilf(v - 0.5f) : floorf(v + 0.5f));
       // ceilf() and floorf() are C99, not C89, but I /think/ they're not needed here anyway?
-      DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? v - 0.5f : v + 0.5f);
+      DU[stbiw__jpg_ZigZag[i]] = (정수)(v < 0 ? v - 0.5f : v + 0.5f);
    }
 
    // Encode DC
    diff = DU[0] - DC;
-   if (diff == 0) {
+   만약 (diff == 0) {
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[0]);
-   } else {
+   } 아니면 {
       unsigned short bits[2];
       stbiw__jpg_calcBits(diff, bits);
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[bits[1]]);
@@ -1256,24 +1256,24 @@ static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt
    }
    // Encode ACs
    end0pos = 63;
-   for(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
+   위해(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
    }
    // end0pos = first element in reverse order !=0
-   if(end0pos == 0) {
+   만약(end0pos == 0) {
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
-      return DU[0];
+      반환 DU[0];
    }
-   for(i = 1; i <= end0pos; ++i) {
-      int startpos = i;
-      int nrzeroes;
+   위해(i = 1; i <= end0pos; ++i) {
+      정수 startpos = i;
+      정수 nrzeroes;
       unsigned short bits[2];
-      for (; DU[i]==0 && i<=end0pos; ++i) {
+      위해 (; DU[i]==0 && i<=end0pos; ++i) {
       }
       nrzeroes = i-startpos;
-      if ( nrzeroes >= 16 ) {
-         int lng = nrzeroes>>4;
-         int nrmarker;
-         for (nrmarker=1; nrmarker <= lng; ++nrmarker)
+      만약 ( nrzeroes >= 16 ) {
+         정수 lng = nrzeroes>>4;
+         정수 nrmarker;
+         위해 (nrmarker=1; nrmarker <= lng; ++nrmarker)
             stbiw__jpg_writeBits(s, bitBuf, bitCnt, M16zeroes);
          nrzeroes &= 15;
       }
@@ -1281,13 +1281,13 @@ static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTAC[(nrzeroes<<4)+bits[1]]);
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
    }
-   if(end0pos != 63) {
+   만약(end0pos != 63) {
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
    }
-   return DU[0];
+   반환 DU[0];
 }
 
-static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, int comp, const void* data, int quality) {
+static 정수 stbi_write_jpg_core(stbi__write_context *s, 정수 width, 정수 height, 정수 comp, const void* data, 정수 quality) {
    // Constants that don't pollute global namespace
    static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
    static const unsigned char std_dc_luminance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
@@ -1352,34 +1352,34 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {16352,14},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{65525,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {1018,10},{32707,15},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const int YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
+   static const 정수 YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
                              37,56,68,109,103,77,24,35,55,64,81,104,113,92,49,64,78,87,103,121,120,101,72,92,95,98,112,100,103,99};
-   static const int UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
+   static const 정수 UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
                               99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
    static const float aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
                                  1.0f * 2.828427125f, 0.785694958f * 2.828427125f, 0.541196100f * 2.828427125f, 0.275899379f * 2.828427125f };
 
-   int row, col, i, k;
+   정수 row, col, i, k;
    float fdtbl_Y[64], fdtbl_UV[64];
    unsigned char YTable[64], UVTable[64];
 
-   if(!data || !width || !height || comp > 4 || comp < 1) {
-      return 0;
+   만약(!data || !width || !height || comp > 4 || comp < 1) {
+      반환 0;
    }
 
    quality = quality ? quality : 90;
    quality = quality < 1 ? 1 : quality > 100 ? 100 : quality;
    quality = quality < 50 ? 5000 / quality : 200 - quality * 2;
 
-   for(i = 0; i < 64; ++i) {
-      int uvti, yti = (YQT[i]*quality+50)/100;
+   위해(i = 0; i < 64; ++i) {
+      정수 uvti, yti = (YQT[i]*quality+50)/100;
       YTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
       uvti = (UVQT[i]*quality+50)/100;
       UVTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
    }
 
-   for(row = 0, k = 0; row < 8; ++row) {
-      for(col = 0; col < 8; ++col, ++k) {
+   위해(row = 0, k = 0; row < 8; ++row) {
+      위해(col = 0; col < 8; ++col, ++k) {
          fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
          fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
       }
@@ -1414,22 +1414,22 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
    {
       static const unsigned short fillBits[] = {0x7F, 7};
       const unsigned char *imageData = (const unsigned char *)data;
-      int DCY=0, DCU=0, DCV=0;
-      int bitBuf=0, bitCnt=0;
+      정수 DCY=0, DCU=0, DCV=0;
+      정수 bitBuf=0, bitCnt=0;
       // comp == 2 is grey+alpha (alpha is ignored)
-      int ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
-      int x, y, pos;
-      for(y = 0; y < height; y += 8) {
-         for(x = 0; x < width; x += 8) {
+      정수 ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
+      정수 x, y, pos;
+      위해(y = 0; y < height; y += 8) {
+         위해(x = 0; x < width; x += 8) {
             float YDU[64], UDU[64], VDU[64];
-            for(row = y, pos = 0; row < y+8; ++row) {
-               for(col = x; col < x+8; ++col, ++pos) {
-                  int p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
+            위해(row = y, pos = 0; row < y+8; ++row) {
+               위해(col = x; col < x+8; ++col, ++pos) {
+                  정수 p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
                   float r, g, b;
-                  if(row >= height) {
+                  만약(row >= height) {
                      p -= width*comp*(row+1 - height);
                   }
-                  if(col >= width) {
+                  만약(col >= width) {
                      p -= comp*(col+1 - width);
                   }
 
@@ -1456,27 +1456,27 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
    stbiw__putc(s, 0xFF);
    stbiw__putc(s, 0xD9);
 
-   return 1;
+   반환 1;
 }
 
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)
+STBIWDEF 정수 stbi_write_jpg_to_func(stbi_write_func *func, void *context, 정수 x, 정수 y, 정수 comp, const void *data, 정수 quality)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_jpg_core(&s, x, y, comp, (void *) data, quality);
+   반환 stbi_write_jpg_core(&s, x, y, comp, (void *) data, quality);
 }
 
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void *data, int quality)
+STBIWDEF 정수 stbi_write_jpg(char const *filename, 정수 x, 정수 y, 정수 comp, const void *data, 정수 quality)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_jpg_core(&s, x, y, comp, data, quality);
+   만약 (stbi__start_write_file(&s,filename)) {
+      정수 r = stbi_write_jpg_core(&s, x, y, comp, data, quality);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      반환 r;
+   } 아니면
+      반환 0;
 }
 #endif
 

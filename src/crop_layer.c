@@ -4,16 +4,16 @@
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    정수 h = l.out_h;
+    정수 w = l.out_w;
+    정수 c = l.out_c;
+    반환 float_to_image(w,h,c,l.output);
 }
 
 void backward_crop_layer(const crop_layer l, network net){}
 void backward_crop_layer_gpu(const crop_layer l, network net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(정수 batch, 정수 h, 정수 w, 정수 c, 정수 crop_height, 정수 crop_width, 정수 flip, float angle, float saturation, float exposure)
 {
     fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
     crop_layer l = {0};
@@ -42,10 +42,10 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
     #endif
-    return l;
+    반환 l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+void resize_crop_layer(layer *l, 정수 w, 정수 h)
 {
     l->w = w;
     l->h = h;
@@ -66,30 +66,30 @@ void resize_crop_layer(layer *l, int w, int h)
 
 void forward_crop_layer(const crop_layer l, network net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
+    정수 i,j,c,b,row,col;
+    정수 index;
+    정수 count = 0;
+    정수 flip = (l.flip && rand()%2);
+    정수 dh = rand()%(l.h - l.out_h + 1);
+    정수 dw = rand()%(l.w - l.out_w + 1);
     float scale = 2;
     float trans = -1;
-    if(l.noadjust){
+    만약(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    만약(!net.train){
         flip = 0;
         dh = (l.h - l.out_h)/2;
         dw = (l.w - l.out_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
+    위해(b = 0; b < l.batch; ++b){
+        위해(c = 0; c < l.c; ++c){
+            위해(i = 0; i < l.out_h; ++i){
+                위해(j = 0; j < l.out_w; ++j){
+                    만약(flip){
                         col = l.w - dw - j - 1;    
-                    }else{
+                    }아니면{
                         col = j + dw;
                     }
                     row = i + dh;

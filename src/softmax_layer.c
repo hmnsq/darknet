@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-softmax_layer make_softmax_layer(int batch, int inputs, int groups)
+softmax_layer make_softmax_layer(정수 batch, 정수 inputs, 정수 groups)
 {
     assert(inputs%groups == 0);
     fprintf(stderr, "softmax                                        %4d\n",  inputs);
@@ -33,24 +33,24 @@ softmax_layer make_softmax_layer(int batch, int inputs, int groups)
     l.loss_gpu = cuda_make_array(l.loss, inputs*batch); 
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch); 
     #endif
-    return l;
+    반환 l;
 }
 
 void forward_softmax_layer(const softmax_layer l, network net)
 {
-    if(l.softmax_tree){
-        int i;
-        int count = 0;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
+    만약(l.softmax_tree){
+        정수 i;
+        정수 count = 0;
+        위해 (i = 0; i < l.softmax_tree->groups; ++i) {
+            정수 group_size = l.softmax_tree->group_size[i];
             softmax_cpu(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + count);
             count += group_size;
         }
-    } else {
+    } 아니면 {
         softmax_cpu(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
     }
 
-    if(net.truth && !l.noloss){
+    만약(net.truth && !l.noloss){
         softmax_x_ent_cpu(l.batch*l.inputs, l.output, net.truth, l.delta, l.loss);
         l.cost[0] = sum_array(l.loss, l.batch*l.inputs);
     }
@@ -70,7 +70,7 @@ void pull_softmax_layer_output(const softmax_layer layer)
 
 void forward_softmax_layer_gpu(const softmax_layer l, network net)
 {
-    if(l.softmax_tree){
+    만약(l.softmax_tree){
         softmax_tree(net.input_gpu, 1, l.batch, l.inputs, l.temperature, l.output_gpu, *l.softmax_tree);
         /*
         int i;
@@ -81,16 +81,16 @@ void forward_softmax_layer_gpu(const softmax_layer l, network net)
             count += group_size;
         }
         */
-    } else {
-        if(l.spatial){
+    } 아니면 {
+        만약(l.spatial){
             softmax_gpu(net.input_gpu, l.c, l.batch*l.c, l.inputs/l.c, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu);
-        }else{
+        }아니면{
             softmax_gpu(net.input_gpu, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output_gpu);
         }
     }
-    if(net.truth && !l.noloss){
+    만약(net.truth && !l.noloss){
         softmax_x_ent_gpu(l.batch*l.inputs, l.output_gpu, net.truth_gpu, l.delta_gpu, l.loss_gpu);
-        if(l.softmax_tree){
+        만약(l.softmax_tree){
             mask_gpu(l.batch*l.inputs, l.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
             mask_gpu(l.batch*l.inputs, l.loss_gpu, SECRET_NUM, net.truth_gpu, 0);
         }
