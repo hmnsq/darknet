@@ -18,14 +18,14 @@ void push_local_layer(local_layer layer);
 void pull_local_layer(local_layer layer);
 #endif
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation);
+local_layer make_local_layer(ຈຳນວນເຕັມ batch, ຈຳນວນເຕັມ h, ຈຳນວນເຕັມ w, ຈຳນວນເຕັມ c, ຈຳນວນເຕັມ n, ຈຳນວນເຕັມ size, ຈຳນວນເຕັມ stride, ຈຳນວນເຕັມ pad, ACTIVATION activation);
 
 void forward_local_layer(const local_layer layer, network net);
 void backward_local_layer(local_layer layer, network net);
 void update_local_layer(local_layer layer, update_args a);
 
-void bias_output(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+void bias_output(float *output, float *biases, ຈຳນວນເຕັມ batch, ຈຳນວນເຕັມ n, ຈຳນວນເຕັມ size);
+void backward_bias(float *bias_updates, float *delta, ຈຳນວນເຕັມ batch, ຈຳນວນເຕັມ n, ຈຳນວນເຕັມ size);
 
 #endif
 

@@ -7,7 +7,7 @@
 #include "network.h"
 #define USET
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam);
+layer make_rnn_layer(ຈຳນວນເຕັມ batch, ຈຳນວນເຕັມ inputs, ຈຳນວນເຕັມ outputs, ຈຳນວນເຕັມ steps, ACTIVATION activation, ຈຳນວນເຕັມ batch_normalize, ຈຳນວນເຕັມ adam);
 
 void forward_rnn_layer(layer l, network net);
 void backward_rnn_layer(layer l, network net);

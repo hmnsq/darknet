@@ -2,12 +2,12 @@
 #define COL2IM_H
 
 void col2im_cpu(float* data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_im);
+        ຈຳນວນເຕັມ channels, ຈຳນວນເຕັມ height, ຈຳນວນເຕັມ width,
+        ຈຳນວນເຕັມ ksize, ຈຳນວນເຕັມ stride, ຈຳນວນເຕັມ pad, float* data_im);
 
 #ifdef GPU
 void col2im_gpu(float *data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float *data_im);
+        ຈຳນວນເຕັມ channels, ຈຳນວນເຕັມ height, ຈຳນວນເຕັມ width,
+        ຈຳນວນເຕັມ ksize, ຈຳນວນເຕັມ stride, ຈຳນວນເຕັມ pad, float *data_im);
 #endif
 #endif

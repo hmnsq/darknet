@@ -5,7 +5,7 @@
 
 typedef layer route_layer;
 
-route_layer make_route_layer(int batch, int n, int *input_layers, int *input_size);
+route_layer make_route_layer(ຈຳນວນເຕັມ batch, ຈຳນວນເຕັມ n, ຈຳນວນເຕັມ *input_layers, ຈຳນວນເຕັມ *input_size);
 void forward_route_layer(const route_layer l, network net);
 void backward_route_layer(const route_layer l, network net);
 void resize_route_layer(route_layer *l, network *net);

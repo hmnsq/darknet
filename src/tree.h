@@ -2,7 +2,7 @@
 #define TREE_H
 #include "darknet.h"
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride);
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride);
+ຈຳນວນເຕັມ hierarchy_top_prediction(float *predictions, tree *hier, float thresh, ຈຳນວນເຕັມ stride);
+float get_hierarchy_probability(float *x, tree *hier, ຈຳນວນເຕັມ c, ຈຳນວນເຕັມ stride);
 
 #endif

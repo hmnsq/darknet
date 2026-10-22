@@ -5,102 +5,102 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *get_activation_string(ACTIVATION a)
+var_na *get_activation_string(ACTIVATION a)
 {
     switch(a){
-        case LOGISTIC:
-            return "logistic";
-        case LOGGY:
-            return "loggy";
-        case RELU:
-            return "relu";
-        case ELU:
-            return "elu";
-        case SELU:
-            return "selu";
-        case RELIE:
-            return "relie";
-        case RAMP:
-            return "ramp";
-        case LINEAR:
-            return "linear";
-        case TANH:
-            return "tanh";
-        case PLSE:
-            return "plse";
-        case LEAKY:
-            return "leaky";
-        case STAIR:
-            return "stair";
-        case HARDTAN:
-            return "hardtan";
-        case LHTAN:
-            return "lhtan";
+        pak_sa LOGISTIC:
+            ສົ່ງຄືນ "logistic";
+        pak_sa LOGGY:
+            ສົ່ງຄືນ "loggy";
+        pak_sa RELU:
+            ສົ່ງຄືນ "relu";
+        pak_sa ELU:
+            ສົ່ງຄືນ "elu";
+        pak_sa SELU:
+            ສົ່ງຄືນ "selu";
+        pak_sa RELIE:
+            ສົ່ງຄືນ "relie";
+        pak_sa RAMP:
+            ສົ່ງຄືນ "ramp";
+        pak_sa LINEAR:
+            ສົ່ງຄືນ "linear";
+        pak_sa TANH:
+            ສົ່ງຄືນ "tanh";
+        pak_sa PLSE:
+            ສົ່ງຄືນ "plse";
+        pak_sa LEAKY:
+            ສົ່ງຄືນ "leaky";
+        pak_sa STAIR:
+            ສົ່ງຄືນ "stair";
+        pak_sa HARDTAN:
+            ສົ່ງຄືນ "hardtan";
+        pak_sa LHTAN:
+            ສົ່ງຄືນ "lhtan";
         default:
-            break;
+            bha_nga;
     }
-    return "relu";
+    ສົ່ງຄືນ "relu";
 }
 
-ACTIVATION get_activation(char *s)
+ACTIVATION get_activation(var_na *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    ຖ້າ (strcmp(s, "logistic")==0) ສົ່ງຄືນ LOGISTIC;
+    ຖ້າ (strcmp(s, "loggy")==0) ສົ່ງຄືນ LOGGY;
+    ຖ້າ (strcmp(s, "relu")==0) ສົ່ງຄືນ RELU;
+    ຖ້າ (strcmp(s, "elu")==0) ສົ່ງຄືນ ELU;
+    ຖ້າ (strcmp(s, "selu")==0) ສົ່ງຄືນ SELU;
+    ຖ້າ (strcmp(s, "relie")==0) ສົ່ງຄືນ RELIE;
+    ຖ້າ (strcmp(s, "plse")==0) ສົ່ງຄືນ PLSE;
+    ຖ້າ (strcmp(s, "hardtan")==0) ສົ່ງຄືນ HARDTAN;
+    ຖ້າ (strcmp(s, "lhtan")==0) ສົ່ງຄືນ LHTAN;
+    ຖ້າ (strcmp(s, "linear")==0) ສົ່ງຄືນ LINEAR;
+    ຖ້າ (strcmp(s, "ramp")==0) ສົ່ງຄືນ RAMP;
+    ຖ້າ (strcmp(s, "leaky")==0) ສົ່ງຄືນ LEAKY;
+    ຖ້າ (strcmp(s, "tanh")==0) ສົ່ງຄືນ TANH;
+    ຖ້າ (strcmp(s, "stair")==0) ສົ່ງຄືນ STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    ສົ່ງຄືນ RELU;
 }
 
 float activate(float x, ACTIVATION a)
 {
     switch(a){
-        case LINEAR:
-            return linear_activate(x);
-        case LOGISTIC:
-            return logistic_activate(x);
-        case LOGGY:
-            return loggy_activate(x);
-        case RELU:
-            return relu_activate(x);
-        case ELU:
-            return elu_activate(x);
-        case SELU:
-            return selu_activate(x);
-        case RELIE:
-            return relie_activate(x);
-        case RAMP:
-            return ramp_activate(x);
-        case LEAKY:
-            return leaky_activate(x);
-        case TANH:
-            return tanh_activate(x);
-        case PLSE:
-            return plse_activate(x);
-        case STAIR:
-            return stair_activate(x);
-        case HARDTAN:
-            return hardtan_activate(x);
-        case LHTAN:
-            return lhtan_activate(x);
+        pak_sa LINEAR:
+            ສົ່ງຄືນ linear_activate(x);
+        pak_sa LOGISTIC:
+            ສົ່ງຄືນ logistic_activate(x);
+        pak_sa LOGGY:
+            ສົ່ງຄືນ loggy_activate(x);
+        pak_sa RELU:
+            ສົ່ງຄືນ relu_activate(x);
+        pak_sa ELU:
+            ສົ່ງຄືນ elu_activate(x);
+        pak_sa SELU:
+            ສົ່ງຄືນ selu_activate(x);
+        pak_sa RELIE:
+            ສົ່ງຄືນ relie_activate(x);
+        pak_sa RAMP:
+            ສົ່ງຄືນ ramp_activate(x);
+        pak_sa LEAKY:
+            ສົ່ງຄືນ leaky_activate(x);
+        pak_sa TANH:
+            ສົ່ງຄືນ tanh_activate(x);
+        pak_sa PLSE:
+            ສົ່ງຄືນ plse_activate(x);
+        pak_sa STAIR:
+            ສົ່ງຄືນ stair_activate(x);
+        pak_sa HARDTAN:
+            ສົ່ງຄືນ hardtan_activate(x);
+        pak_sa LHTAN:
+            ສົ່ງຄືນ lhtan_activate(x);
     }
-    return 0;
+    ສົ່ງຄືນ 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+void activate_array(float *x, const ຈຳນວນເຕັມ n, const ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ຈຳນວນເຕັມ i;
+    ສຳລັບ(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
 }
@@ -108,42 +108,42 @@ void activate_array(float *x, const int n, const ACTIVATION a)
 float gradient(float x, ACTIVATION a)
 {
     switch(a){
-        case LINEAR:
-            return linear_gradient(x);
-        case LOGISTIC:
-            return logistic_gradient(x);
-        case LOGGY:
-            return loggy_gradient(x);
-        case RELU:
-            return relu_gradient(x);
-        case ELU:
-            return elu_gradient(x);
-        case SELU:
-            return selu_gradient(x);
-        case RELIE:
-            return relie_gradient(x);
-        case RAMP:
-            return ramp_gradient(x);
-        case LEAKY:
-            return leaky_gradient(x);
-        case TANH:
-            return tanh_gradient(x);
-        case PLSE:
-            return plse_gradient(x);
-        case STAIR:
-            return stair_gradient(x);
-        case HARDTAN:
-            return hardtan_gradient(x);
-        case LHTAN:
-            return lhtan_gradient(x);
+        pak_sa LINEAR:
+            ສົ່ງຄືນ linear_gradient(x);
+        pak_sa LOGISTIC:
+            ສົ່ງຄືນ logistic_gradient(x);
+        pak_sa LOGGY:
+            ສົ່ງຄືນ loggy_gradient(x);
+        pak_sa RELU:
+            ສົ່ງຄືນ relu_gradient(x);
+        pak_sa ELU:
+            ສົ່ງຄືນ elu_gradient(x);
+        pak_sa SELU:
+            ສົ່ງຄືນ selu_gradient(x);
+        pak_sa RELIE:
+            ສົ່ງຄືນ relie_gradient(x);
+        pak_sa RAMP:
+            ສົ່ງຄືນ ramp_gradient(x);
+        pak_sa LEAKY:
+            ສົ່ງຄືນ leaky_gradient(x);
+        pak_sa TANH:
+            ສົ່ງຄືນ tanh_gradient(x);
+        pak_sa PLSE:
+            ສົ່ງຄືນ plse_gradient(x);
+        pak_sa STAIR:
+            ສົ່ງຄືນ stair_gradient(x);
+        pak_sa HARDTAN:
+            ສົ່ງຄືນ hardtan_gradient(x);
+        pak_sa LHTAN:
+            ສົ່ງຄືນ lhtan_gradient(x);
     }
-    return 0;
+    ສົ່ງຄືນ 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+void gradient_array(const float *x, const ຈຳນວນເຕັມ n, const ACTIVATION a, float *delta)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ຈຳນວນເຕັມ i;
+    ສຳລັບ(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }
 } 
