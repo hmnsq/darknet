@@ -1,34 +1,34 @@
-#include "rnn_layer.h"
-#include "connected_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#अन्तर्भाव "rnn_layer.h"
+#अन्तर्भाव "connected_layer.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव "blas.h"
+#अन्तर्भाव "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#अन्तर्भाव <math.h>
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <string.h>
 
-static void increment_layer(layer *l, int steps)
+स्थिर शून्य increment_layer(layer *l, पूर्णाङ्क steps)
 {
-    int num = l->outputs*l->batch*steps;
-    l->output += num;
-    l->delta += num;
-    l->x += num;
-    l->x_norm += num;
+    पूर्णाङ्क अङ्क = l->outputs*l->batch*steps;
+    l->output += अङ्क;
+    l->delta += अङ्क;
+    l->x += अङ्क;
+    l->x_norm += अङ्क;
 
 #ifdef GPU
-    l->output_gpu += num;
-    l->delta_gpu += num;
-    l->x_gpu += num;
-    l->x_norm_gpu += num;
+    l->output_gpu += अङ्क;
+    l->delta_gpu += अङ्क;
+    l->x_gpu += अङ्क;
+    l->x_norm_gpu += अङ्क;
 #endif
 }
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam)
+layer make_rnn_layer(पूर्णाङ्क batch, पूर्णाङ्क inputs, पूर्णाङ्क outputs, पूर्णाङ्क steps, ACTIVATION activation, पूर्णाङ्क batch_normalize, पूर्णाङ्क adam)
 {
-    fprintf(stderr, "RNN Layer: %d inputs, %d outputs\n", inputs, outputs);
+    ख_लिखो(मानक_त्रुटि, "RNN Layer: %d inputs, %d outputs\n", inputs, outputs);
     batch = batch / steps;
     layer l = {0};
     l.batch = batch;
@@ -36,21 +36,21 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
     l.steps = steps;
     l.inputs = inputs;
 
-    l.state = calloc(batch*outputs, sizeof(float));
-    l.prev_state = calloc(batch*outputs, sizeof(float));
+    l.state = सुस्मृति(batch*outputs, परिमाण(भिन्न));
+    l.prev_state = सुस्मृति(batch*outputs, परिमाण(भिन्न));
 
-    l.input_layer = malloc(sizeof(layer));
-    fprintf(stderr, "\t\t");
-    *(l.input_layer) = make_connected_layer(batch*steps, inputs, outputs, activation, batch_normalize, adam);
-    l.input_layer->batch = batch;
+    l.आगत_layer = दो_स्मृति(परिमाण(layer));
+    ख_लिखो(मानक_त्रुटि, "\t\t");
+    *(l.आगत_layer) = make_connected_layer(batch*steps, inputs, outputs, activation, batch_normalize, adam);
+    l.आगत_layer->batch = batch;
 
-    l.self_layer = malloc(sizeof(layer));
-    fprintf(stderr, "\t\t");
+    l.self_layer = दो_स्मृति(परिमाण(layer));
+    ख_लिखो(मानक_त्रुटि, "\t\t");
     *(l.self_layer) = make_connected_layer(batch*steps, outputs, outputs, activation, batch_normalize, adam);
     l.self_layer->batch = batch;
 
-    l.output_layer = malloc(sizeof(layer));
-    fprintf(stderr, "\t\t");
+    l.output_layer = दो_स्मृति(परिमाण(layer));
+    ख_लिखो(मानक_त्रुटि, "\t\t");
     *(l.output_layer) = make_connected_layer(batch*steps, outputs, outputs, activation, batch_normalize, adam);
     l.output_layer->batch = batch;
 
@@ -70,82 +70,82 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
     l.output_gpu = l.output_layer->output_gpu;
     l.delta_gpu = l.output_layer->delta_gpu;
 #ifdef CUDNN
-    cudnnSetTensor4dDescriptor(l.input_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.input_layer->out_c, l.input_layer->out_h, l.input_layer->out_w); 
+    cudnnSetTensor4dDescriptor(l.आगत_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.आगत_layer->out_c, l.आगत_layer->out_h, l.आगत_layer->out_w); 
     cudnnSetTensor4dDescriptor(l.self_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.self_layer->out_c, l.self_layer->out_h, l.self_layer->out_w); 
     cudnnSetTensor4dDescriptor(l.output_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.output_layer->out_c, l.output_layer->out_h, l.output_layer->out_w); 
 #endif
 #endif
 
-    return l;
+    फर्काऊ l;
 }
 
-void update_rnn_layer(layer l, update_args a)
+शून्य update_rnn_layer(layer l, update_args a)
 {
-    update_connected_layer(*(l.input_layer),  a);
+    update_connected_layer(*(l.आगत_layer),  a);
     update_connected_layer(*(l.self_layer),   a);
     update_connected_layer(*(l.output_layer), a);
 }
 
-void forward_rnn_layer(layer l, network net)
+शून्य forward_rnn_layer(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    पूर्णाङ्क i;
+    layer आगत_layer = *(l.आगत_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
     fill_cpu(l.outputs * l.batch * l.steps, 0, output_layer.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, self_layer.delta, 1);
-    fill_cpu(l.outputs * l.batch * l.steps, 0, input_layer.delta, 1);
-    if(net.train) fill_cpu(l.outputs * l.batch, 0, l.state, 1);
+    fill_cpu(l.outputs * l.batch * l.steps, 0, आगत_layer.delta, 1);
+    यदि(net.train) fill_cpu(l.outputs * l.batch, 0, l.state, 1);
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input = net.input;
-        forward_connected_layer(input_layer, s);
+    लागि (i = 0; i < l.steps; ++i) {
+        s.आगत = net.आगत;
+        forward_connected_layer(आगत_layer, s);
 
-        s.input = l.state;
+        s.आगत = l.state;
         forward_connected_layer(self_layer, s);
 
-        float *old_state = l.state;
-        if(net.train) l.state += l.outputs*l.batch;
-        if(l.shortcut){
+        भिन्न *old_state = l.state;
+        यदि(net.train) l.state += l.outputs*l.batch;
+        यदि(l.shortcut){
             copy_cpu(l.outputs * l.batch, old_state, 1, l.state, 1);
-        }else{
+        }अन्यथा{
             fill_cpu(l.outputs * l.batch, 0, l.state, 1);
         }
-        axpy_cpu(l.outputs * l.batch, 1, input_layer.output, 1, l.state, 1);
+        axpy_cpu(l.outputs * l.batch, 1, आगत_layer.output, 1, l.state, 1);
         axpy_cpu(l.outputs * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.आगत = l.state;
         forward_connected_layer(output_layer, s);
 
-        net.input += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.आगत += l.inputs*l.batch;
+        increment_layer(&आगत_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_rnn_layer(layer l, network net)
+शून्य backward_rnn_layer(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    पूर्णाङ्क i;
+    layer आगत_layer = *(l.आगत_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
-    increment_layer(&input_layer, l.steps-1);
+    increment_layer(&आगत_layer, l.steps-1);
     increment_layer(&self_layer, l.steps-1);
     increment_layer(&output_layer, l.steps-1);
 
     l.state += l.outputs*l.batch*l.steps;
-    for (i = l.steps-1; i >= 0; --i) {
-        copy_cpu(l.outputs * l.batch, input_layer.output, 1, l.state, 1);
+    लागि (i = l.steps-1; i >= 0; --i) {
+        copy_cpu(l.outputs * l.batch, आगत_layer.output, 1, l.state, 1);
         axpy_cpu(l.outputs * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.आगत = l.state;
         s.delta = self_layer.delta;
         backward_connected_layer(output_layer, s);
 
@@ -159,19 +159,19 @@ void backward_rnn_layer(layer l, network net)
            }
          */
 
-        s.input = l.state;
+        s.आगत = l.state;
         s.delta = self_layer.delta - l.outputs*l.batch;
-        if (i == 0) s.delta = 0;
+        यदि (i == 0) s.delta = 0;
         backward_connected_layer(self_layer, s);
 
-        copy_cpu(l.outputs*l.batch, self_layer.delta, 1, input_layer.delta, 1);
-        if (i > 0 && l.shortcut) axpy_cpu(l.outputs*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.outputs*l.batch, 1);
-        s.input = net.input + i*l.inputs*l.batch;
-        if(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
-        else s.delta = 0;
-        backward_connected_layer(input_layer, s);
+        copy_cpu(l.outputs*l.batch, self_layer.delta, 1, आगत_layer.delta, 1);
+        यदि (i > 0 && l.shortcut) axpy_cpu(l.outputs*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.outputs*l.batch, 1);
+        s.आगत = net.आगत + i*l.inputs*l.batch;
+        यदि(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
+        अन्यथा s.delta = 0;
+        backward_connected_layer(आगत_layer, s);
 
-        increment_layer(&input_layer, -1);
+        increment_layer(&आगत_layer, -1);
         increment_layer(&self_layer, -1);
         increment_layer(&output_layer, -1);
     }
@@ -179,114 +179,114 @@ void backward_rnn_layer(layer l, network net)
 
 #ifdef GPU
 
-void pull_rnn_layer(layer l)
+शून्य pull_rnn_layer(layer l)
 {
-    pull_connected_layer(*(l.input_layer));
+    pull_connected_layer(*(l.आगत_layer));
     pull_connected_layer(*(l.self_layer));
     pull_connected_layer(*(l.output_layer));
 }
 
-void push_rnn_layer(layer l)
+शून्य थप_rnn_layer(layer l)
 {
-    push_connected_layer(*(l.input_layer));
-    push_connected_layer(*(l.self_layer));
-    push_connected_layer(*(l.output_layer));
+    थप_connected_layer(*(l.आगत_layer));
+    थप_connected_layer(*(l.self_layer));
+    थप_connected_layer(*(l.output_layer));
 }
 
-void update_rnn_layer_gpu(layer l, update_args a)
+शून्य update_rnn_layer_gpu(layer l, update_args a)
 {
-    update_connected_layer_gpu(*(l.input_layer),  a);
+    update_connected_layer_gpu(*(l.आगत_layer),  a);
     update_connected_layer_gpu(*(l.self_layer),   a);
     update_connected_layer_gpu(*(l.output_layer), a);
 }
 
-void forward_rnn_layer_gpu(layer l, network net)
+शून्य forward_rnn_layer_gpu(layer l, network net)
 {
     network s = {0};
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    पूर्णाङ्क i;
+    layer आगत_layer = *(l.आगत_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
     fill_gpu(l.outputs * l.batch * l.steps, 0, output_layer.delta_gpu, 1);
     fill_gpu(l.outputs * l.batch * l.steps, 0, self_layer.delta_gpu, 1);
-    fill_gpu(l.outputs * l.batch * l.steps, 0, input_layer.delta_gpu, 1);
+    fill_gpu(l.outputs * l.batch * l.steps, 0, आगत_layer.delta_gpu, 1);
 
-    if(net.train) {
+    यदि(net.train) {
         fill_gpu(l.outputs * l.batch * l.steps, 0, l.delta_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.state_gpu, 1, l.prev_state_gpu, 1);
     }
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input_gpu = net.input_gpu;
-        forward_connected_layer_gpu(input_layer, s);
+    लागि (i = 0; i < l.steps; ++i) {
+        s.आगत_gpu = net.आगत_gpu;
+        forward_connected_layer_gpu(आगत_layer, s);
 
-        s.input_gpu = l.state_gpu;
+        s.आगत_gpu = l.state_gpu;
         forward_connected_layer_gpu(self_layer, s);
 
         fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-        axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu, 1, l.state_gpu, 1);
+        axpy_gpu(l.outputs * l.batch, 1, आगत_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.आगत_gpu = l.state_gpu;
         forward_connected_layer_gpu(output_layer, s);
 
-        net.input_gpu += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.आगत_gpu += l.inputs*l.batch;
+        increment_layer(&आगत_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_rnn_layer_gpu(layer l, network net)
+शून्य backward_rnn_layer_gpu(layer l, network net)
 {
     network s = {0};
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    पूर्णाङ्क i;
+    layer आगत_layer = *(l.आगत_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
-    increment_layer(&input_layer,  l.steps - 1);
+    increment_layer(&आगत_layer,  l.steps - 1);
     increment_layer(&self_layer,   l.steps - 1);
     increment_layer(&output_layer, l.steps - 1);
-    float *last_input = input_layer.output_gpu;
-    float *last_self = self_layer.output_gpu;
-    for (i = l.steps-1; i >= 0; --i) {
+    भिन्न *last_आगत = आगत_layer.output_gpu;
+    भिन्न *last_self = self_layer.output_gpu;
+    लागि (i = l.steps-1; i >= 0; --i) {
         fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-        axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu, 1, l.state_gpu, 1);
+        axpy_gpu(l.outputs * l.batch, 1, आगत_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.आगत_gpu = l.state_gpu;
         s.delta_gpu = self_layer.delta_gpu;
         backward_connected_layer_gpu(output_layer, s);
 
-        if(i != 0) {
+        यदि(i != 0) {
             fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-            axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
+            axpy_gpu(l.outputs * l.batch, 1, आगत_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
             axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
-        }else {
+        }अन्यथा {
             copy_gpu(l.outputs*l.batch, l.prev_state_gpu, 1, l.state_gpu, 1);
         }
 
-        copy_gpu(l.outputs*l.batch, self_layer.delta_gpu, 1, input_layer.delta_gpu, 1);
+        copy_gpu(l.outputs*l.batch, self_layer.delta_gpu, 1, आगत_layer.delta_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.आगत_gpu = l.state_gpu;
         s.delta_gpu = (i > 0) ? self_layer.delta_gpu - l.outputs*l.batch : 0;
-        if (i == 0) s.delta_gpu = 0;
+        यदि (i == 0) s.delta_gpu = 0;
         backward_connected_layer_gpu(self_layer, s);
 
-        s.input_gpu = net.input_gpu + i*l.inputs*l.batch;
-        if(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
-        else s.delta_gpu = 0;
-        backward_connected_layer_gpu(input_layer, s);
+        s.आगत_gpu = net.आगत_gpu + i*l.inputs*l.batch;
+        यदि(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
+        अन्यथा s.delta_gpu = 0;
+        backward_connected_layer_gpu(आगत_layer, s);
 
-        increment_layer(&input_layer,  -1);
+        increment_layer(&आगत_layer,  -1);
         increment_layer(&self_layer,   -1);
         increment_layer(&output_layer, -1);
     }
     fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-    axpy_gpu(l.outputs * l.batch, 1, last_input, 1, l.state_gpu, 1);
+    axpy_gpu(l.outputs * l.batch, 1, last_आगत, 1, l.state_gpu, 1);
     axpy_gpu(l.outputs * l.batch, 1, last_self, 1, l.state_gpu, 1);
 }
 #endif

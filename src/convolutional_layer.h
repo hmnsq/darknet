@@ -1,50 +1,50 @@
 #ifndef CONVOLUTIONAL_LAYER_H
 #define CONVOLUTIONAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "activations.h"
+#अन्तर्भाव "layer.h"
+#अन्तर्भाव "network.h"
 
-typedef layer convolutional_layer;
+प्रकारनिर्देश layer convolutional_layer;
 
 #ifdef GPU
-void forward_convolutional_layer_gpu(convolutional_layer layer, network net);
-void backward_convolutional_layer_gpu(convolutional_layer layer, network net);
-void update_convolutional_layer_gpu(convolutional_layer layer, update_args a);
+शून्य forward_convolutional_layer_gpu(convolutional_layer layer, network net);
+शून्य backward_convolutional_layer_gpu(convolutional_layer layer, network net);
+शून्य update_convolutional_layer_gpu(convolutional_layer layer, update_args a);
 
-void push_convolutional_layer(convolutional_layer layer);
-void pull_convolutional_layer(convolutional_layer layer);
+शून्य थप_convolutional_layer(convolutional_layer layer);
+शून्य pull_convolutional_layer(convolutional_layer layer);
 
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
+शून्य add_bias_gpu(भिन्न *output, भिन्न *biases, पूर्णाङ्क batch, पूर्णाङ्क n, पूर्णाङ्क size);
+शून्य backward_bias_gpu(भिन्न *bias_updates, भिन्न *delta, पूर्णाङ्क batch, पूर्णाङ्क n, पूर्णाङ्क size);
+शून्य adam_update_gpu(भिन्न *w, भिन्न *d, भिन्न *m, भिन्न *v, भिन्न B1, भिन्न B2, भिन्न eps, भिन्न decay, भिन्न rate, पूर्णाङ्क n, पूर्णाङ्क batch, पूर्णाङ्क t);
 #ifdef CUDNN
-void cudnn_convolutional_setup(layer *l);
+शून्य cudnn_convolutional_setup(layer *l);
 #endif
 #endif
 
-convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam);
-void resize_convolutional_layer(convolutional_layer *layer, int w, int h);
-void forward_convolutional_layer(const convolutional_layer layer, network net);
-void update_convolutional_layer(convolutional_layer layer, update_args a);
-image *visualize_convolutional_layer(convolutional_layer layer, char *window, image *prev_weights);
-void binarize_weights(float *weights, int n, int size, float *binary);
-void swap_binary(convolutional_layer *l);
-void binarize_weights2(float *weights, int n, int size, char *binary, float *scales);
+convolutional_layer make_convolutional_layer(पूर्णाङ्क batch, पूर्णाङ्क h, पूर्णाङ्क w, पूर्णाङ्क c, पूर्णाङ्क n, पूर्णाङ्क groups, पूर्णाङ्क size, पूर्णाङ्क stride, पूर्णाङ्क padding, ACTIVATION activation, पूर्णाङ्क batch_normalize, पूर्णाङ्क द्विआधारी, पूर्णाङ्क xnor, पूर्णाङ्क adam);
+शून्य resize_convolutional_layer(convolutional_layer *layer, पूर्णाङ्क w, पूर्णाङ्क h);
+शून्य forward_convolutional_layer(अचर convolutional_layer layer, network net);
+शून्य update_convolutional_layer(convolutional_layer layer, update_args a);
+image *visualize_convolutional_layer(convolutional_layer layer, वर्ण *window, image *prev_weights);
+शून्य binarize_weights(भिन्न *weights, पूर्णाङ्क n, पूर्णाङ्क size, भिन्न *द्विआधारी);
+शून्य swap_द्विआधारी(convolutional_layer *l);
+शून्य binarize_weights2(भिन्न *weights, पूर्णाङ्क n, पूर्णाङ्क size, वर्ण *द्विआधारी, भिन्न *scales);
 
-void backward_convolutional_layer(convolutional_layer layer, network net);
+शून्य backward_convolutional_layer(convolutional_layer layer, network net);
 
-void add_bias(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+शून्य add_bias(भिन्न *output, भिन्न *biases, पूर्णाङ्क batch, पूर्णाङ्क n, पूर्णाङ्क size);
+शून्य backward_bias(भिन्न *bias_updates, भिन्न *delta, पूर्णाङ्क batch, पूर्णाङ्क n, पूर्णाङ्क size);
 
 image get_convolutional_image(convolutional_layer layer);
 image get_convolutional_delta(convolutional_layer layer);
-image get_convolutional_weight(convolutional_layer layer, int i);
+image get_convolutional_weight(convolutional_layer layer, पूर्णाङ्क i);
 
-int convolutional_out_height(convolutional_layer layer);
-int convolutional_out_width(convolutional_layer layer);
+पूर्णाङ्क convolutional_out_height(convolutional_layer layer);
+पूर्णाङ्क convolutional_out_width(convolutional_layer layer);
 
 #endif
 
