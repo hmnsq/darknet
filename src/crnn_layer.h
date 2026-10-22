@@ -2,22 +2,22 @@
 #ifndef CRNN_LAYER_H
 #define CRNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ଅନ୍ତର୍ଭାଵ "activations.h"
+#ଅନ୍ତର୍ଭାଵ "layer.h"
+#ଅନ୍ତର୍ଭାଵ "network.h"
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize);
+layer make_crnn_layer(ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c, ପୂର୍ଣ୍ଣସଂଖ୍ୟା hidden_filters, ପୂର୍ଣ୍ଣସଂଖ୍ୟା output_filters, ପୂର୍ଣ୍ଣସଂଖ୍ୟା steps, ACTIVATION activation, ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch_normalize);
 
-void forward_crnn_layer(layer l, network net);
-void backward_crnn_layer(layer l, network net);
-void update_crnn_layer(layer l, update_args a);
+ଶୂନ୍ୟ forward_crnn_layer(layer l, network net);
+ଶୂନ୍ୟ backward_crnn_layer(layer l, network net);
+ଶୂନ୍ୟ update_crnn_layer(layer l, update_args a);
 
 #ifdef GPU
-void forward_crnn_layer_gpu(layer l, network net);
-void backward_crnn_layer_gpu(layer l, network net);
-void update_crnn_layer_gpu(layer l, update_args a);
-void push_crnn_layer(layer l);
-void pull_crnn_layer(layer l);
+ଶୂନ୍ୟ forward_crnn_layer_gpu(layer l, network net);
+ଶୂନ୍ୟ backward_crnn_layer_gpu(layer l, network net);
+ଶୂନ୍ୟ update_crnn_layer_gpu(layer l, update_args a);
+ଶୂନ୍ୟ ଠେଲ_crnn_layer(layer l);
+ଶୂନ୍ୟ pull_crnn_layer(layer l);
 #endif
 
 #endif

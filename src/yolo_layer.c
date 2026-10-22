@@ -1,18 +1,18 @@
-#include "yolo_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ଅନ୍ତର୍ଭାଵ "yolo_layer.h"
+#ଅନ୍ତର୍ଭାଵ "activations.h"
+#ଅନ୍ତର୍ଭାଵ "blas.h"
+#ଅନ୍ତର୍ଭାଵ "box.h"
+#ଅନ୍ତର୍ଭାଵ "cuda.h"
+#ଅନ୍ତର୍ଭାଵ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ଅନ୍ତର୍ଭାଵ <stdio.h>
+#ଅନ୍ତର୍ଭାଵ <assert.h>
+#ଅନ୍ତର୍ଭାଵ <string.h>
+#ଅନ୍ତର୍ଭାଵ <stdlib.h>
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes)
+layer make_yolo_layer(ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା total, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *mask, ପୂର୍ଣ୍ଣସଂଖ୍ୟା classes)
 {
-    int i;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i;
     layer l = {0};
     l.type = YOLO;
 
@@ -26,22 +26,22 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     l.out_h = l.h;
     l.out_c = l.c;
     l.classes = classes;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(total*2, sizeof(float));
-    if(mask) l.mask = mask;
-    else{
-        l.mask = calloc(n, sizeof(int));
-        for(i = 0; i < n; ++i){
+    l.cost = calloc(1, ଆକାର(ଦଶମିକ));
+    l.biases = calloc(total*2, ଆକାର(ଦଶମିକ));
+    ଯଦି(mask) l.mask = mask;
+    ଅନ୍ୟଥା{
+        l.mask = calloc(n, ଆକାର(ପୂର୍ଣ୍ଣସଂଖ୍ୟା));
+        ପାଇଁ(i = 0; i < n; ++i){
             l.mask[i] = i;
         }
     }
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.bias_updates = calloc(n*2, ଆକାର(ଦଶମିକ));
     l.outputs = h*w*n*(classes + 4 + 1);
     l.inputs = l.outputs;
     l.truths = 90*(4 + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    for(i = 0; i < total*2; ++i){
+    l.delta = calloc(batch*l.outputs, ଆକାର(ଦଶମିକ));
+    l.output = calloc(batch*l.outputs, ଆକାର(ଦଶମିକ));
+    ପାଇଁ(i = 0; i < total*2; ++i){
         l.biases[i] = .5;
     }
 
@@ -57,10 +57,10 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     fprintf(stderr, "yolo\n");
     srand(0);
 
-    return l;
+    ଫେରନ୍ତୁ l;
 }
 
-void resize_yolo_layer(layer *l, int w, int h)
+ଶୂନ୍ୟ resize_yolo_layer(layer *l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h)
 {
     l->w = w;
     l->h = h;
@@ -68,8 +68,8 @@ void resize_yolo_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + 4 + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*ଆକାର(ଦଶମିକ));
+    l->delta = realloc(l->delta, l->batch*l->outputs*ଆକାର(ଦଶମିକ));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -80,64 +80,64 @@ void resize_yolo_layer(layer *l, int w, int h)
 #endif
 }
 
-box get_yolo_box(float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, int stride)
+box get_yolo_box(ଦଶମିକ *x, ଦଶମିକ *biases, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, ପୂର୍ଣ୍ଣସଂଖ୍ୟା j, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lw, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lh, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride)
 {
     box b;
     b.x = (i + x[index + 0*stride]) / lw;
     b.y = (j + x[index + 1*stride]) / lh;
     b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
     b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    ଫେରନ୍ତୁ b;
 }
 
-float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, float *delta, float scale, int stride)
+ଦଶମିକ delta_yolo_box(box truth, ଦଶମିକ *x, ଦଶମିକ *biases, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, ପୂର୍ଣ୍ଣସଂଖ୍ୟା j, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lw, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lh, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ଦଶମିକ *delta, ଦଶମିକ scale, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride)
 {
     box pred = get_yolo_box(x, biases, n, index, i, j, lw, lh, w, h, stride);
-    float iou = box_iou(pred, truth);
+    ଦଶମିକ iou = box_iou(pred, truth);
 
-    float tx = (truth.x*lw - i);
-    float ty = (truth.y*lh - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    ଦଶମିକ tx = (truth.x*lw - i);
+    ଦଶମିକ ty = (truth.y*lh - j);
+    ଦଶମିକ tw = log(truth.w*w / biases[2*n]);
+    ଦଶମିକ th = log(truth.h*h / biases[2*n + 1]);
 
     delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
     delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
     delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
     delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    ଫେରନ୍ତୁ iou;
 }
 
 
-void delta_yolo_class(float *output, float *delta, int index, int class, int classes, int stride, float *avg_cat)
+ଶୂନ୍ୟ delta_yolo_class(ଦଶମିକ *output, ଦଶମିକ *delta, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ପୂର୍ଣ୍ଣସଂଖ୍ୟା class, ପୂର୍ଣ୍ଣସଂଖ୍ୟା classes, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride, ଦଶମିକ *avg_cat)
 {
-    int n;
-    if (delta[index]){
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା n;
+    ଯଦି (delta[index]){
         delta[index + stride*class] = 1 - output[index + stride*class];
-        if(avg_cat) *avg_cat += output[index + stride*class];
-        return;
+        ଯଦି(avg_cat) *avg_cat += output[index + stride*class];
+        ଫେରନ୍ତୁ;
     }
-    for(n = 0; n < classes; ++n){
+    ପାଇଁ(n = 0; n < classes; ++n){
         delta[index + stride*n] = ((n == class)?1 : 0) - output[index + stride*n];
-        if(n == class && avg_cat) *avg_cat += output[index + stride*n];
+        ଯଦି(n == class && avg_cat) *avg_cat += output[index + stride*n];
     }
 }
 
-static int entry_index(layer l, int batch, int location, int entry)
+ସ୍ଥିର ପୂର୍ଣ୍ଣସଂଖ୍ୟା entry_index(layer l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା location, ପୂର୍ଣ୍ଣସଂଖ୍ୟା entry)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା n =   location / (l.w*l.h);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା loc = location % (l.w*l.h);
+    ଫେରନ୍ତୁ batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
 }
 
-void forward_yolo_layer(const layer l, network net)
+ଶୂନ୍ୟ forward_yolo_layer(ଅଚଳ layer l, network net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i,j,b,t,n;
+    memcpy(l.output, net.ନିବେଶ, l.outputs*l.batch*ଆକାର(ଦଶମିକ));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    ପାଇଁ (b = 0; b < l.batch; ++b){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, 4);
             activate_array(l.output + index, (1+l.classes)*l.w*l.h, LOGISTIC);
@@ -145,46 +145,46 @@ void forward_yolo_layer(const layer l, network net)
     }
 #endif
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float recall75 = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    memset(l.delta, 0, l.outputs * l.batch * ଆକାର(ଦଶମିକ));
+    ଯଦି(!net.train) ଫେରନ୍ତୁ;
+    ଦଶମିକ avg_iou = 0;
+    ଦଶମିକ recall = 0;
+    ଦଶମିକ recall75 = 0;
+    ଦଶମିକ avg_cat = 0;
+    ଦଶମିକ avg_obj = 0;
+    ଦଶମିକ avg_anyobj = 0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଗଣନା_2 = 0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_ଗଣନା = 0;
     *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+    ପାଇଁ (b = 0; b < l.batch; ++b) {
+        ପାଇଁ (j = 0; j < l.h; ++j) {
+            ପାଇଁ (i = 0; i < l.w; ++i) {
+                ପାଇଁ (n = 0; n < l.n; ++n) {
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                     box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
-                    float best_iou = 0;
-                    int best_t = 0;
-                    for(t = 0; t < l.max_boxes; ++t){
+                    ଦଶମିକ best_iou = 0;
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା best_t = 0;
+                    ପାଇଁ(t = 0; t < l.max_boxes; ++t){
                         box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
+                        ଯଦି(!truth.x) ଭାଙ୍ଗ;
+                        ଦଶମିକ iou = box_iou(pred, truth);
+                        ଯଦି (iou > best_iou) {
                             best_iou = iou;
                             best_t = t;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
                     avg_anyobj += l.output[obj_index];
                     l.delta[obj_index] = 0 - l.output[obj_index];
-                    if (best_iou > l.ignore_thresh) {
+                    ଯଦି (best_iou > l.ignore_thresh) {
                         l.delta[obj_index] = 0;
                     }
-                    if (best_iou > l.truth_thresh) {
+                    ଯଦି (best_iou > l.truth_thresh) {
                         l.delta[obj_index] = 1 - l.output[obj_index];
 
-                        int class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
-                        if (l.map) class = l.map[class];
-                        int class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
+                        ଯଦି (l.map) class = l.map[class];
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
                         delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, 0);
                         box truth = float_to_box(net.truth + best_t*(4 + 1) + b*l.truths, 1);
                         delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
@@ -192,77 +192,77 @@ void forward_yolo_layer(const layer l, network net)
                 }
             }
         }
-        for(t = 0; t < l.max_boxes; ++t){
+        ପାଇଁ(t = 0; t < l.max_boxes; ++t){
             box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            ଯଦି(!truth.x) ଭାଙ୍ଗ;
+            ଦଶମିକ best_iou = 0;
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା best_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
             box truth_shift = truth;
             truth_shift.x = truth_shift.y = 0;
-            for(n = 0; n < l.total; ++n){
+            ପାଇଁ(n = 0; n < l.total; ++n){
                 box pred = {0};
                 pred.w = l.biases[2*n]/net.w;
                 pred.h = l.biases[2*n+1]/net.h;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
+                ଦଶମିକ iou = box_iou(pred, truth_shift);
+                ଯଦି (iou > best_iou){
                     best_iou = iou;
                     best_n = n;
                 }
             }
 
-            int mask_n = int_index(l.mask, best_n, l.n);
-            if(mask_n >= 0){
-                int box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
-                float iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା mask_n = int_index(l.mask, best_n, l.n);
+            ଯଦି(mask_n >= 0){
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
+                ଦଶମିକ iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
 
-                int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
                 avg_obj += l.output[obj_index];
                 l.delta[obj_index] = 1 - l.output[obj_index];
 
-                int class = net.truth[t*(4 + 1) + b*l.truths + 4];
-                if (l.map) class = l.map[class];
-                int class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା class = net.truth[t*(4 + 1) + b*l.truths + 4];
+                ଯଦି (l.map) class = l.map[class];
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
                 delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, &avg_cat);
 
-                ++count;
-                ++class_count;
-                if(iou > .5) recall += 1;
-                if(iou > .75) recall75 += 1;
+                ++ଗଣନା_2;
+                ++class_ଗଣନା;
+                ଯଦି(iou > .5) recall += 1;
+                ଯଦି(iou > .75) recall75 += 1;
                 avg_iou += iou;
             }
         }
     }
     *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/ଗଣନା_2, avg_cat/class_ଗଣନା, avg_obj/ଗଣନା_2, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/ଗଣନା_2, recall75/ଗଣନା_2, ଗଣନା_2);
 }
 
-void backward_yolo_layer(const layer l, network net)
+ଶୂନ୍ୟ backward_yolo_layer(ଅଚଳ layer l, network net)
 {
    axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+ଶୂନ୍ୟ correct_yolo_boxes(detection *dets, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା netw, ପୂର୍ଣ୍ଣସଂଖ୍ୟା neth, ପୂର୍ଣ୍ଣସଂଖ୍ୟା relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା new_w=0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା new_h=0;
+    ଯଦି (((ଦଶମିକ)netw/w) < ((ଦଶମିକ)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } ଅନ୍ୟଥା {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    ପାଇଁ (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((ଦଶମିକ)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((ଦଶମିକ)new_h/neth); 
+        b.w *= (ଦଶମିକ)netw/new_w;
+        b.h *= (ଦଶମିକ)neth/new_h;
+        ଯଦି(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -272,35 +272,35 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
     }
 }
 
-int yolo_num_detections(layer l, float thresh)
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା yolo_ଅଙ୍କ_detections(layer l, ଦଶମିକ thresh)
 {
-    int i, n;
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            if(l.output[obj_index] > thresh){
-                ++count;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, n;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଗଣନା_2 = 0;
+    ପାଇଁ (i = 0; i < l.w*l.h; ++i){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ଯଦି(l.output[obj_index] > thresh){
+                ++ଗଣନା_2;
             }
         }
     }
-    return count;
+    ଫେରନ୍ତୁ ଗଣନା_2;
 }
 
-void avg_flipped_yolo(layer l)
+ଶୂନ୍ୟ avg_flipped_yolo(layer l)
 {
-    int i,j,n,z;
-    float *flip = l.output + l.outputs;
-    for (j = 0; j < l.h; ++j) {
-        for (i = 0; i < l.w/2; ++i) {
-            for (n = 0; n < l.n; ++n) {
-                for(z = 0; z < l.classes + 4 + 1; ++z){
-                    int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                    int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                    float swap = flip[i1];
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i,j,n,z;
+    ଦଶମିକ *flip = l.output + l.outputs;
+    ପାଇଁ (j = 0; j < l.h; ++j) {
+        ପାଇଁ (i = 0; i < l.w/2; ++i) {
+            ପାଇଁ (n = 0; n < l.n; ++n) {
+                ପାଇଁ(z = 0; z < l.classes + 4 + 1; ++z){
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                    ଦଶମିକ swap = flip[i1];
                     flip[i1] = flip[i2];
                     flip[i2] = swap;
-                    if(z == 0){
+                    ଯଦି(z == 0){
                         flip[i1] = -flip[i1];
                         flip[i2] = -flip[i2];
                     }
@@ -308,65 +308,65 @@ void avg_flipped_yolo(layer l)
             }
         }
     }
-    for(i = 0; i < l.outputs; ++i){
+    ପାଇଁ(i = 0; i < l.outputs; ++i){
         l.output[i] = (l.output[i] + flip[i])/2.;
     }
 }
 
-int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets)
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା get_yolo_detections(layer l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା netw, ପୂର୍ଣ୍ଣସଂଖ୍ୟା neth, ଦଶମିକ thresh, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *map, ପୂର୍ଣ୍ଣସଂଖ୍ୟା relative, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
-    if (l.batch == 2) avg_flipped_yolo(l);
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float objectness = predictions[obj_index];
-            if(objectness <= thresh) continue;
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            dets[count].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
-            dets[count].objectness = objectness;
-            dets[count].classes = l.classes;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
-                float prob = objectness*predictions[class_index];
-                dets[count].prob[j] = (prob > thresh) ? prob : 0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i,j,n;
+    ଦଶମିକ *predictions = l.output;
+    ଯଦି (l.batch == 2) avg_flipped_yolo(l);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଗଣନା_2 = 0;
+    ପାଇଁ (i = 0; i < l.w*l.h; ++i){
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା row = i / l.w;
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା col = i % l.w;
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ଦଶମିକ objectness = predictions[obj_index];
+            ଯଦି(objectness <= thresh) ଜାରି;
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
+            dets[ଗଣନା_2].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
+            dets[ଗଣନା_2].objectness = objectness;
+            dets[ଗଣନା_2].classes = l.classes;
+            ପାଇଁ(j = 0; j < l.classes; ++j){
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
+                ଦଶମିକ prob = objectness*predictions[class_index];
+                dets[ଗଣନା_2].prob[j] = (prob > thresh) ? prob : 0;
             }
-            ++count;
+            ++ଗଣନା_2;
         }
     }
-    correct_yolo_boxes(dets, count, w, h, netw, neth, relative);
-    return count;
+    correct_yolo_boxes(dets, ଗଣନା_2, w, h, netw, neth, relative);
+    ଫେରନ୍ତୁ ଗଣନା_2;
 }
 
 #ifdef GPU
 
-void forward_yolo_layer_gpu(const layer l, network net)
+ଶୂନ୍ୟ forward_yolo_layer_gpu(ଅଚଳ layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    copy_gpu(l.batch*l.inputs, net.ନିବେଶ_gpu, 1, l.output_gpu, 1);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା b, n;
+    ପାଇଁ (b = 0; b < l.batch; ++b){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, 4);
             activate_array_gpu(l.output_gpu + index, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-    if(!net.train || l.onlyforward){
+    ଯଦି(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ଫେରନ୍ତୁ;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.ନିବେଶ, l.batch*l.inputs);
     forward_yolo_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_ଠେଲ_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_yolo_layer_gpu(const layer l, network net)
+ଶୂନ୍ୟ backward_yolo_layer_gpu(ଅଚଳ layer l, network net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }

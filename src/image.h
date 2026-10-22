@@ -1,65 +1,65 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
-#include <string.h>
-#include <math.h>
-#include "box.h"
-#include "darknet.h"
+#ଅନ୍ତର୍ଭାଵ <stdlib.h>
+#ଅନ୍ତର୍ଭାଵ <stdio.h>
+#ଅନ୍ତର୍ଭାଵ <float.h>
+#ଅନ୍ତର୍ଭାଵ <string.h>
+#ଅନ୍ତର୍ଭାଵ <math.h>
+#ଅନ୍ତର୍ଭାଵ "box.h"
+#ଅନ୍ତର୍ଭାଵ "darknet.h"
 
 #ifdef __cplusplus
-extern "C" {
+ବାହ୍ୟ "C" {
 #endif
 
 #ifdef OPENCV
-void *open_video_stream(const char *f, int c, int w, int h, int fps);
-image get_image_from_stream(void *p);
-image load_image_cv(char *filename, int channels);
-int show_image_cv(image im, const char* name, int ms);
+ଶୂନ୍ୟ *open_video_stream(ଅଚଳ ଅକ୍ଷର *f, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା fps);
+image get_image_from_stream(ଶୂନ୍ୟ *p);
+image load_image_cv(ଅକ୍ଷର *filename, ପୂର୍ଣ୍ଣସଂଖ୍ୟା channels);
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା show_image_cv(image im, ଅଚଳ ଅକ୍ଷର* name, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ms);
 #endif
 
-float get_color(int c, int x, int max);
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b);
-void draw_bbox(image a, box bbox, int w, float r, float g, float b);
-void write_label(image a, int r, int c, image *characters, char *string, float *rgb);
+ଦଶମିକ get_color(ପୂର୍ଣ୍ଣସଂଖ୍ୟା c, ପୂର୍ଣ୍ଣସଂଖ୍ୟା x, ପୂର୍ଣ୍ଣସଂଖ୍ୟା max);
+ଶୂନ୍ୟ draw_box(image a, ପୂର୍ଣ୍ଣସଂଖ୍ୟା x1, ପୂର୍ଣ୍ଣସଂଖ୍ୟା y1, ପୂର୍ଣ୍ଣସଂଖ୍ୟା x2, ପୂର୍ଣ୍ଣସଂଖ୍ୟା y2, ଦଶମିକ r, ଦଶମିକ g, ଦଶମିକ b);
+ଶୂନ୍ୟ draw_bbox(image a, box bbox, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ଦଶମିକ r, ଦଶମିକ g, ଦଶମିକ b);
+ଶୂନ୍ୟ write_label(image a, ପୂର୍ଣ୍ଣସଂଖ୍ୟା r, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c, image *characters, ଅକ୍ଷର *string, ଦଶମିକ *rgb);
 image image_distance(image a, image b);
-void scale_image(image m, float s);
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect);
-image random_crop_image(image im, int w, int h);
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h);
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h);
-void letterbox_image_into(image im, int w, int h, image boxed);
-image resize_max(image im, int max);
-void translate_image(image m, float s);
-void embed_image(image source, image dest, int dx, int dy);
-void place_image(image im, int w, int h, int dx, int dy, image canvas);
-void saturate_image(image im, float sat);
-void exposure_image(image im, float sat);
-void distort_image(image im, float hue, float sat, float val);
-void saturate_exposure_image(image im, float sat, float exposure);
-void rgb_to_hsv(image im);
-void hsv_to_rgb(image im);
-void yuv_to_rgb(image im);
-void rgb_to_yuv(image im);
+ଶୂନ୍ୟ scale_image(image m, ଦଶମିକ s);
+image rotate_crop_image(image im, ଦଶମିକ rad, ଦଶମିକ s, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ଦଶମିକ dx, ଦଶମିକ dy, ଦଶମିକ aspect);
+image random_crop_image(image im, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h);
+image random_augment_image(image im, ଦଶମିକ angle, ଦଶମିକ aspect, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ତଳ, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଉପର, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h);
+augment_args random_augment_args(image im, ଦଶମିକ angle, ଦଶମିକ aspect, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ତଳ, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଉପର, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h);
+ଶୂନ୍ୟ letterbox_image_into(image im, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, image boxed);
+image resize_max(image im, ପୂର୍ଣ୍ଣସଂଖ୍ୟା max);
+ଶୂନ୍ୟ translate_image(image m, ଦଶମିକ s);
+ଶୂନ୍ୟ embed_image(image source, image dest, ପୂର୍ଣ୍ଣସଂଖ୍ୟା dx, ପୂର୍ଣ୍ଣସଂଖ୍ୟା dy);
+ଶୂନ୍ୟ place_image(image im, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା dx, ପୂର୍ଣ୍ଣସଂଖ୍ୟା dy, image canvas);
+ଶୂନ୍ୟ saturate_image(image im, ଦଶମିକ sat);
+ଶୂନ୍ୟ exposure_image(image im, ଦଶମିକ sat);
+ଶୂନ୍ୟ distort_image(image im, ଦଶମିକ hue, ଦଶମିକ sat, ଦଶମିକ val);
+ଶୂନ୍ୟ saturate_exposure_image(image im, ଦଶମିକ sat, ଦଶମିକ exposure);
+ଶୂନ୍ୟ rgb_to_hsv(image im);
+ଶୂନ୍ୟ hsv_to_rgb(image im);
+ଶୂନ୍ୟ yuv_to_rgb(image im);
+ଶୂନ୍ୟ rgb_to_yuv(image im);
 
 
-image collapse_image_layers(image source, int border);
-image collapse_images_horz(image *ims, int n);
-image collapse_images_vert(image *ims, int n);
+image collapse_image_layers(image source, ପୂର୍ଣ୍ଣସଂଖ୍ୟା border);
+image collapse_images_horz(image *ims, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n);
+image collapse_images_vert(image *ims, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n);
 
-void show_image_normalized(image im, const char *name);
-void show_images(image *ims, int n, char *window);
-void show_image_layers(image p, char *name);
-void show_image_collapsed(image p, char *name);
+ଶୂନ୍ୟ show_image_normalized(image im, ଅଚଳ ଅକ୍ଷର *name);
+ଶୂନ୍ୟ show_images(image *ims, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ଅକ୍ଷର *window);
+ଶୂନ୍ୟ show_image_layers(image p, ଅକ୍ଷର *name);
+ଶୂନ୍ୟ show_image_collapsed(image p, ଅକ୍ଷର *name);
 
-void print_image(image m);
+ଶୂନ୍ୟ print_image(image m);
 
-image make_empty_image(int w, int h, int c);
-void copy_image_into(image src, image dest);
+image make_empty_image(ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c);
+ଶୂନ୍ୟ copy_image_into(image src, image dest);
 
-image get_image_layer(image m, int l);
+image get_image_layer(image m, ପୂର୍ଣ୍ଣସଂଖ୍ୟା l);
 
 #ifdef __cplusplus
 }

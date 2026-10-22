@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+ଶୂନ୍ୟ gemm_bin(ପୂର୍ଣ୍ଣସଂଖ୍ୟା M, ପୂର୍ଣ୍ଣସଂଖ୍ୟା N, ପୂର୍ଣ୍ଣସଂଖ୍ୟା K, ଦଶମିକ ALPHA, 
+        ଅକ୍ଷର  *A, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lda, 
+        ଦଶମିକ *B, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldb,
+        ଦଶମିକ *C, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+ଶୂନ୍ୟ gemm(ପୂର୍ଣ୍ଣସଂଖ୍ୟା TA, ପୂର୍ଣ୍ଣସଂଖ୍ୟା TB, ପୂର୍ଣ୍ଣସଂଖ୍ୟା M, ପୂର୍ଣ୍ଣସଂଖ୍ୟା N, ପୂର୍ଣ୍ଣସଂଖ୍ୟା K, ଦଶମିକ ALPHA, 
+                    ଦଶମିକ *A, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lda, 
+                    ଦଶମିକ *B, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldb,
+                    ଦଶମିକ BETA,
+                    ଦଶମିକ *C, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ଶୂନ୍ୟ gemm_cpu(ପୂର୍ଣ୍ଣସଂଖ୍ୟା TA, ପୂର୍ଣ୍ଣସଂଖ୍ୟା TB, ପୂର୍ଣ୍ଣସଂଖ୍ୟା M, ପୂର୍ଣ୍ଣସଂଖ୍ୟା N, ପୂର୍ଣ୍ଣସଂଖ୍ୟା K, ଦଶମିକ ALPHA, 
+        ଦଶମିକ *A, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lda, 
+        ଦଶମିକ *B, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldb,
+        ଦଶମିକ BETA,
+        ଦଶମିକ *C, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+ଶୂନ୍ୟ gemm_gpu(ପୂର୍ଣ୍ଣସଂଖ୍ୟା TA, ପୂର୍ଣ୍ଣସଂଖ୍ୟା TB, ପୂର୍ଣ୍ଣସଂଖ୍ୟା M, ପୂର୍ଣ୍ଣସଂଖ୍ୟା N, ପୂର୍ଣ୍ଣସଂଖ୍ୟା K, ଦଶମିକ ALPHA, 
+        ଦଶମିକ *A_gpu, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lda, 
+        ଦଶମିକ *B_gpu, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldb,
+        ଦଶମିକ BETA,
+        ଦଶମିକ *C_gpu, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ଶୂନ୍ୟ gemm_gpu(ପୂର୍ଣ୍ଣସଂଖ୍ୟା TA, ପୂର୍ଣ୍ଣସଂଖ୍ୟା TB, ପୂର୍ଣ୍ଣସଂଖ୍ୟା M, ପୂର୍ଣ୍ଣସଂଖ୍ୟା N, ପୂର୍ଣ୍ଣସଂଖ୍ୟା K, ଦଶମିକ ALPHA, 
+        ଦଶମିକ *A, ପୂର୍ଣ୍ଣସଂଖ୍ୟା lda, 
+        ଦଶମିକ *B, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldb,
+        ଦଶମିକ BETA,
+        ଦଶମିକ *C, ପୂର୍ଣ୍ଣସଂଖ୍ୟା ldc);
 #endif
 #endif

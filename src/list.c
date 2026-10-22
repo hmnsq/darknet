@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ଅନ୍ତର୍ଭାଵ <stdlib.h>
+#ଅନ୍ତର୍ଭାଵ <string.h>
+#ଅନ୍ତର୍ଭାଵ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(ଆକାର(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	ଫେରନ୍ତୁ l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+ଶୂନ୍ୟ *list_କାଢ଼(list *l){
+    ଯଦି(!l->back) ଫେରନ୍ତୁ 0;
+    ଗଣ୍ଠି *b = l->back;
+    ଶୂନ୍ୟ *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    ଯଦି(l->back) l->back->next = 0;
+    ମୁକ୍ତ(b);
     --l->size;
     
-    return val;
+    ଫେରନ୍ତୁ val;
 }
 
-void list_insert(list *l, void *val)
+ଶୂନ୍ୟ list_ଭର୍ତ୍ତି(list *l, ଶୂନ୍ୟ *val)
 {
-	node *new = malloc(sizeof(node));
+	ଗଣ୍ଠି *new = malloc(ଆକାର(ଗଣ୍ଠି));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	ଯଦି(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}ଅନ୍ୟଥା{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+ଶୂନ୍ୟ free_ଗଣ୍ଠି(ଗଣ୍ଠି *n)
 {
-	node *next;
-	while(n) {
+	ଗଣ୍ଠି *next;
+	ଯେତେବେଳେ(n) {
 		next = n->next;
-		free(n);
+		ମୁକ୍ତ(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+ଶୂନ୍ୟ free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_ଗଣ୍ଠି(l->front);
+	ମୁକ୍ତ(l);
 }
 
-void free_list_contents(list *l)
+ଶୂନ୍ୟ free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	ଗଣ୍ଠି *n = l->front;
+	ଯେତେବେଳେ(n){
+		ମୁକ୍ତ(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+ଶୂନ୍ୟ **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    ଶୂନ୍ୟ **a = calloc(l->size, ଆକାର(ଶୂନ୍ୟ*));
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଗଣନା_2 = 0;
+    ଗଣ୍ଠି *n = l->front;
+    ଯେତେବେଳେ(n){
+        a[ଗଣନା_2++] = n->val;
         n = n->next;
     }
-    return a;
+    ଫେରନ୍ତୁ a;
 }

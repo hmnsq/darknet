@@ -1,16 +1,16 @@
-#include "region_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ଅନ୍ତର୍ଭାଵ "region_layer.h"
+#ଅନ୍ତର୍ଭାଵ "activations.h"
+#ଅନ୍ତର୍ଭାଵ "blas.h"
+#ଅନ୍ତର୍ଭାଵ "box.h"
+#ଅନ୍ତର୍ଭାଵ "cuda.h"
+#ଅନ୍ତର୍ଭାଵ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ଅନ୍ତର୍ଭାଵ <stdio.h>
+#ଅନ୍ତର୍ଭାଵ <assert.h>
+#ଅନ୍ତର୍ଭାଵ <string.h>
+#ଅନ୍ତର୍ଭାଵ <stdlib.h>
 
-layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
+layer make_region_layer(ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା classes, ପୂର୍ଣ୍ଣସଂଖ୍ୟା coords)
 {
     layer l = {0};
     l.type = REGION;
@@ -25,16 +25,16 @@ layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
     l.out_c = l.c;
     l.classes = classes;
     l.coords = coords;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(n*2, sizeof(float));
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.cost = calloc(1, ଆକାର(ଦଶମିକ));
+    l.biases = calloc(n*2, ଆକାର(ଦଶମିକ));
+    l.bias_updates = calloc(n*2, ଆକାର(ଦଶମିକ));
     l.outputs = h*w*n*(classes + coords + 1);
     l.inputs = l.outputs;
     l.truths = 30*(l.coords + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    int i;
-    for(i = 0; i < n*2; ++i){
+    l.delta = calloc(batch*l.outputs, ଆକାର(ଦଶମିକ));
+    l.output = calloc(batch*l.outputs, ଆକାର(ଦଶମିକ));
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i;
+    ପାଇଁ(i = 0; i < n*2; ++i){
         l.biases[i] = .5;
     }
 
@@ -50,10 +50,10 @@ layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
     fprintf(stderr, "detection\n");
     srand(0);
 
-    return l;
+    ଫେରନ୍ତୁ l;
 }
 
-void resize_region_layer(layer *l, int w, int h)
+ଶୂନ୍ୟ resize_region_layer(layer *l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h)
 {
     l->w = w;
     l->h = h;
@@ -61,8 +61,8 @@ void resize_region_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + l->coords + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*ଆକାର(ଦଶମିକ));
+    l->delta = realloc(l->delta, l->batch*l->outputs*ଆକାର(ଦଶମିକ));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -73,52 +73,52 @@ void resize_region_layer(layer *l, int w, int h)
 #endif
 }
 
-box get_region_box(float *x, float *biases, int n, int index, int i, int j, int w, int h, int stride)
+box get_region_box(ଦଶମିକ *x, ଦଶମିକ *biases, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, ପୂର୍ଣ୍ଣସଂଖ୍ୟା j, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride)
 {
     box b;
     b.x = (i + x[index + 0*stride]) / w;
     b.y = (j + x[index + 1*stride]) / h;
     b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
     b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    ଫେରନ୍ତୁ b;
 }
 
-float delta_region_box(box truth, float *x, float *biases, int n, int index, int i, int j, int w, int h, float *delta, float scale, int stride)
+ଦଶମିକ delta_region_box(box truth, ଦଶମିକ *x, ଦଶମିକ *biases, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, ପୂର୍ଣ୍ଣସଂଖ୍ୟା j, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ଦଶମିକ *delta, ଦଶମିକ scale, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride)
 {
     box pred = get_region_box(x, biases, n, index, i, j, w, h, stride);
-    float iou = box_iou(pred, truth);
+    ଦଶମିକ iou = box_iou(pred, truth);
 
-    float tx = (truth.x*w - i);
-    float ty = (truth.y*h - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    ଦଶମିକ tx = (truth.x*w - i);
+    ଦଶମିକ ty = (truth.y*h - j);
+    ଦଶମିକ tw = log(truth.w*w / biases[2*n]);
+    ଦଶମିକ th = log(truth.h*h / biases[2*n + 1]);
 
     delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
     delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
     delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
     delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    ଫେରନ୍ତୁ iou;
 }
 
-void delta_region_mask(float *truth, float *x, int n, int index, float *delta, int stride, int scale)
+ଶୂନ୍ୟ delta_region_mask(ଦଶମିକ *truth, ଦଶମିକ *x, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ଦଶମିକ *delta, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride, ପୂର୍ଣ୍ଣସଂଖ୍ୟା scale)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i;
+    ପାଇଁ(i = 0; i < n; ++i){
         delta[index + i*stride] = scale*(truth[i] - x[index + i*stride]);
     }
 }
 
 
-void delta_region_class(float *output, float *delta, int index, int class, int classes, tree *hier, float scale, int stride, float *avg_cat, int tag)
+ଶୂନ୍ୟ delta_region_class(ଦଶମିକ *output, ଦଶମିକ *delta, ପୂର୍ଣ୍ଣସଂଖ୍ୟା index, ପୂର୍ଣ୍ଣସଂଖ୍ୟା class, ପୂର୍ଣ୍ଣସଂଖ୍ୟା classes, ବୃକ୍ଷ *hier, ଦଶମିକ scale, ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride, ଦଶମିକ *avg_cat, ପୂର୍ଣ୍ଣସଂଖ୍ୟା tag)
 {
-    int i, n;
-    if(hier){
-        float pred = 1;
-        while(class >= 0){
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, n;
+    ଯଦି(hier){
+        ଦଶମିକ pred = 1;
+        ଯେତେବେଳେ(class >= 0){
             pred *= output[index + stride*class];
-            int g = hier->group[class];
-            int offset = hier->group_offset[g];
-            for(i = 0; i < hier->group_size[g]; ++i){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା g = hier->group[class];
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା offset = hier->group_offset[g];
+            ପାଇଁ(i = 0; i < hier->group_size[g]; ++i){
                 delta[index + stride*(offset + i)] = scale * (0 - output[index + stride*(offset + i)]);
             }
             delta[index + stride*class] = scale * (1 - output[index + stride*class]);
@@ -126,132 +126,132 @@ void delta_region_class(float *output, float *delta, int index, int class, int c
             class = hier->parent[class];
         }
         *avg_cat += pred;
-    } else {
-        if (delta[index] && tag){
+    } ଅନ୍ୟଥା {
+        ଯଦି (delta[index] && tag){
             delta[index + stride*class] = scale * (1 - output[index + stride*class]);
-            return;
+            ଫେରନ୍ତୁ;
         }
-        for(n = 0; n < classes; ++n){
+        ପାଇଁ(n = 0; n < classes; ++n){
             delta[index + stride*n] = scale * (((n == class)?1 : 0) - output[index + stride*n]);
-            if(n == class) *avg_cat += output[index + stride*n];
+            ଯଦି(n == class) *avg_cat += output[index + stride*n];
         }
     }
 }
 
-float logit(float x)
+ଦଶମିକ logit(ଦଶମିକ x)
 {
-    return log(x/(1.-x));
+    ଫେରନ୍ତୁ log(x/(1.-x));
 }
 
-float tisnan(float x)
+ଦଶମିକ tisnan(ଦଶମିକ x)
 {
-    return (x != x);
+    ଫେରନ୍ତୁ (x != x);
 }
 
-int entry_index(layer l, int batch, int location, int entry)
+ପୂର୍ଣ୍ଣସଂଖ୍ୟା entry_index(layer l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା location, ପୂର୍ଣ୍ଣସଂଖ୍ୟା entry)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(l.coords+l.classes+1) + entry*l.w*l.h + loc;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା n =   location / (l.w*l.h);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା loc = location % (l.w*l.h);
+    ଫେରନ୍ତୁ batch*l.outputs + n*l.w*l.h*(l.coords+l.classes+1) + entry*l.w*l.h + loc;
 }
 
-void forward_region_layer(const layer l, network net)
+ଶୂନ୍ୟ forward_region_layer(ଅଚଳ layer l, network net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i,j,b,t,n;
+    memcpy(l.output, net.ନିବେଶ, l.outputs*l.batch*ଆକାର(ଦଶମିକ));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    ପାଇଁ (b = 0; b < l.batch; ++b){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) activate_array(l.output + index,   l.w*l.h, LOGISTIC);
+            ଯଦି(!l.background) activate_array(l.output + index,   l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+            ଯଦି(!l.softmax && !l.softmax_ବୃକ୍ଷ) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
-        int i;
-        int count = l.coords + 1;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + count);
-            count += group_size;
+    ଯଦି (l.softmax_ବୃକ୍ଷ){
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା i;
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଗଣନା_2 = l.coords + 1;
+        ପାଇଁ (i = 0; i < l.softmax_ବୃକ୍ଷ->groups; ++i) {
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା group_size = l.softmax_ବୃକ୍ଷ->group_size[i];
+            softmax_cpu(net.ନିବେଶ + ଗଣନା_2, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + ଗଣନା_2);
+            ଗଣନା_2 += group_size;
         }
-    } else if (l.softmax){
-        int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_cpu(net.input + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
+    } ଅନ୍ୟଥା ଯଦି (l.softmax){
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, 0, 0, l.coords + !l.background);
+        softmax_cpu(net.ନିବେଶ + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
     }
 #endif
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    memset(l.delta, 0, l.outputs * l.batch * ଆକାର(ଦଶମିକ));
+    ଯଦି(!net.train) ଫେରନ୍ତୁ;
+    ଦଶମିକ avg_iou = 0;
+    ଦଶମିକ recall = 0;
+    ଦଶମିକ avg_cat = 0;
+    ଦଶମିକ avg_obj = 0;
+    ଦଶମିକ avg_anyobj = 0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା ଗଣନା_2 = 0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_ଗଣନା = 0;
     *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        if(l.softmax_tree){
-            int onlyclass = 0;
-            for(t = 0; t < 30; ++t){
+    ପାଇଁ (b = 0; b < l.batch; ++b) {
+        ଯଦି(l.softmax_ବୃକ୍ଷ){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା onlyclass = 0;
+            ପାଇଁ(t = 0; t < 30; ++t){
                 box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
-                if(!truth.x) break;
-                int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
-                float maxp = 0;
-                int maxi = 0;
-                if(truth.x > 100000 && truth.y > 100000){
-                    for(n = 0; n < l.n*l.w*l.h; ++n){
-                        int class_index = entry_index(l, b, n, l.coords + 1);
-                        int obj_index = entry_index(l, b, n, l.coords);
-                        float scale =  l.output[obj_index];
+                ଯଦି(!truth.x) ଭାଙ୍ଗ;
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
+                ଦଶମିକ maxp = 0;
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା maxi = 0;
+                ଯଦି(truth.x > 100000 && truth.y > 100000){
+                    ପାଇଁ(n = 0; n < l.n*l.w*l.h; ++n){
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, b, n, l.coords + 1);
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, b, n, l.coords);
+                        ଦଶମିକ scale =  l.output[obj_index];
                         l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                        float p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_tree, class, l.w*l.h);
-                        if(p > maxp){
+                        ଦଶମିକ p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_ବୃକ୍ଷ, class, l.w*l.h);
+                        ଯଦି(p > maxp){
                             maxp = p;
                             maxi = n;
                         }
                     }
-                    int class_index = entry_index(l, b, maxi, l.coords + 1);
-                    int obj_index = entry_index(l, b, maxi, l.coords);
-                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-                    if(l.output[obj_index] < .3) l.delta[obj_index] = l.object_scale * (.3 - l.output[obj_index]);
-                    else  l.delta[obj_index] = 0;
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, b, maxi, l.coords + 1);
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, b, maxi, l.coords);
+                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_ବୃକ୍ଷ, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+                    ଯଦି(l.output[obj_index] < .3) l.delta[obj_index] = l.object_scale * (.3 - l.output[obj_index]);
+                    ଅନ୍ୟଥା  l.delta[obj_index] = 0;
                     l.delta[obj_index] = 0;
-                    ++class_count;
+                    ++class_ଗଣନା;
                     onlyclass = 1;
-                    break;
+                    ଭାଙ୍ଗ;
                 }
             }
-            if(onlyclass) continue;
+            ଯଦି(onlyclass) ଜାରି;
         }
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+        ପାଇଁ (j = 0; j < l.h; ++j) {
+            ପାଇଁ (i = 0; i < l.w; ++i) {
+                ପାଇଁ (n = 0; n < l.n; ++n) {
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                     box pred = get_region_box(l.output, l.biases, n, box_index, i, j, l.w, l.h, l.w*l.h);
-                    float best_iou = 0;
-                    for(t = 0; t < 30; ++t){
+                    ଦଶମିକ best_iou = 0;
+                    ପାଇଁ(t = 0; t < 30; ++t){
                         box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
+                        ଯଦି(!truth.x) ଭାଙ୍ଗ;
+                        ଦଶମିକ iou = box_iou(pred, truth);
+                        ଯଦି (iou > best_iou) {
                             best_iou = iou;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, l.coords);
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, l.coords);
                     avg_anyobj += l.output[obj_index];
                     l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                    if(l.background) l.delta[obj_index] = l.noobject_scale * (1 - l.output[obj_index]);
-                    if (best_iou > l.thresh) {
+                    ଯଦି(l.background) l.delta[obj_index] = l.noobject_scale * (1 - l.output[obj_index]);
+                    ଯଦି (best_iou > l.thresh) {
                         l.delta[obj_index] = 0;
                     }
 
-                    if(*(net.seen) < 12800){
+                    ଯଦି(*(net.seen) < 12800){
                         box truth = {0};
                         truth.x = (i + .5)/l.w;
                         truth.y = (j + .5)/l.h;
@@ -262,65 +262,65 @@ void forward_region_layer(const layer l, network net)
                 }
             }
         }
-        for(t = 0; t < 30; ++t){
+        ପାଇଁ(t = 0; t < 30; ++t){
             box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            ଯଦି(!truth.x) ଭାଙ୍ଗ;
+            ଦଶମିକ best_iou = 0;
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା best_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
             box truth_shift = truth;
             truth_shift.x = 0;
             truth_shift.y = 0;
-            for(n = 0; n < l.n; ++n){
-                int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+            ପାଇଁ(n = 0; n < l.n; ++n){
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                 box pred = get_region_box(l.output, l.biases, n, box_index, i, j, l.w, l.h, l.w*l.h);
-                if(l.bias_match){
+                ଯଦି(l.bias_match){
                     pred.w = l.biases[2*n]/l.w;
                     pred.h = l.biases[2*n+1]/l.h;
                 }
                 pred.x = 0;
                 pred.y = 0;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
+                ଦଶମିକ iou = box_iou(pred, truth_shift);
+                ଯଦି (iou > best_iou){
                     best_iou = iou;
                     best_n = n;
                 }
             }
 
-            int box_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 0);
-            float iou = delta_region_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, l.delta, l.coord_scale *  (2 - truth.w*truth.h), l.w*l.h);
-            if(l.coords > 4){
-                int mask_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 4);
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 0);
+            ଦଶମିକ iou = delta_region_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, l.delta, l.coord_scale *  (2 - truth.w*truth.h), l.w*l.h);
+            ଯଦି(l.coords > 4){
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା mask_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 4);
                 delta_region_mask(net.truth + t*(l.coords + 1) + b*l.truths + 5, l.output, l.coords - 4, mask_index, l.delta, l.w*l.h, l.mask_scale);
             }
-            if(iou > .5) recall += 1;
+            ଯଦି(iou > .5) recall += 1;
             avg_iou += iou;
 
-            int obj_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords);
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords);
             avg_obj += l.output[obj_index];
             l.delta[obj_index] = l.object_scale * (1 - l.output[obj_index]);
-            if (l.rescore) {
+            ଯଦି (l.rescore) {
                 l.delta[obj_index] = l.object_scale * (iou - l.output[obj_index]);
             }
-            if(l.background){
+            ଯଦି(l.background){
                 l.delta[obj_index] = l.object_scale * (0 - l.output[obj_index]);
             }
 
-            int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
-            if (l.map) class = l.map[class];
-            int class_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords + 1);
-            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-            ++count;
-            ++class_count;
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
+            ଯଦି (l.map) class = l.map[class];
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords + 1);
+            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_ବୃକ୍ଷ, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+            ++ଗଣନା_2;
+            ++class_ଗଣନା;
         }
     }
     *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, count);
+    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/ଗଣନା_2, avg_cat/class_ଗଣନା, avg_obj/ଗଣନା_2, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/ଗଣନା_2, ଗଣନା_2);
 }
 
-void backward_region_layer(const layer l, network net)
+ଶୂନ୍ୟ backward_region_layer(ଅଚଳ layer l, network net)
 {
     /*
        int b;
@@ -333,25 +333,25 @@ void backward_region_layer(const layer l, network net)
      */
 }
 
-void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+ଶୂନ୍ୟ correct_region_boxes(detection *dets, ପୂର୍ଣ୍ଣସଂଖ୍ୟା n, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା netw, ପୂର୍ଣ୍ଣସଂଖ୍ୟା neth, ପୂର୍ଣ୍ଣସଂଖ୍ୟା relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା new_w=0;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା new_h=0;
+    ଯଦି (((ଦଶମିକ)netw/w) < ((ଦଶମିକ)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } ଅନ୍ୟଥା {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    ପାଇଁ (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((ଦଶମିକ)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((ଦଶମିକ)new_h/neth); 
+        b.w *= (ଦଶମିକ)netw/new_w;
+        b.h *= (ଦଶମିକ)neth/new_h;
+        ଯଦି(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -361,22 +361,22 @@ void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int ne
     }
 }
 
-void get_region_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, float tree_thresh, int relative, detection *dets)
+ଶୂନ୍ୟ get_region_detections(layer l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା netw, ପୂର୍ଣ୍ଣସଂଖ୍ୟା neth, ଦଶମିକ thresh, ପୂର୍ଣ୍ଣସଂଖ୍ୟା *map, ଦଶମିକ ବୃକ୍ଷ_thresh, ପୂର୍ଣ୍ଣସଂଖ୍ୟା relative, detection *dets)
 {
-    int i,j,n,z;
-    float *predictions = l.output;
-    if (l.batch == 2) {
-        float *flip = l.output + l.outputs;
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w/2; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    for(z = 0; z < l.classes + l.coords + 1; ++z){
-                        int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                        int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                        float swap = flip[i1];
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i,j,n,z;
+    ଦଶମିକ *predictions = l.output;
+    ଯଦି (l.batch == 2) {
+        ଦଶମିକ *flip = l.output + l.outputs;
+        ପାଇଁ (j = 0; j < l.h; ++j) {
+            ପାଇଁ (i = 0; i < l.w/2; ++i) {
+                ପାଇଁ (n = 0; n < l.n; ++n) {
+                    ପାଇଁ(z = 0; z < l.classes + l.coords + 1; ++z){
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                        ଦଶମିକ swap = flip[i1];
                         flip[i1] = flip[i2];
                         flip[i2] = swap;
-                        if(z == 0){
+                        ଯଦି(z == 0){
                             flip[i1] = -flip[i1];
                             flip[i2] = -flip[i2];
                         }
@@ -384,49 +384,49 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
                 }
             }
         }
-        for(i = 0; i < l.outputs; ++i){
+        ପାଇଁ(i = 0; i < l.outputs; ++i){
             l.output[i] = (l.output[i] + flip[i])/2.;
         }
     }
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int index = n*l.w*l.h + i;
-            for(j = 0; j < l.classes; ++j){
+    ପାଇଁ (i = 0; i < l.w*l.h; ++i){
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା row = i / l.w;
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା col = i % l.w;
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = n*l.w*l.h + i;
+            ପାଇଁ(j = 0; j < l.classes; ++j){
                 dets[index].prob[j] = 0;
             }
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, l.coords);
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            int mask_index = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float scale = l.background ? 1 : predictions[obj_index];
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index  = entry_index(l, 0, n*l.w*l.h + i, l.coords);
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା mask_index = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ଦଶମିକ scale = l.background ? 1 : predictions[obj_index];
             dets[index].bbox = get_region_box(predictions, l.biases, n, box_index, col, row, l.w, l.h, l.w*l.h);
             dets[index].objectness = scale > thresh ? scale : 0;
-            if(dets[index].mask){
-                for(j = 0; j < l.coords - 4; ++j){
+            ଯଦି(dets[index].mask){
+                ପାଇଁ(j = 0; j < l.coords - 4; ++j){
                     dets[index].mask[j] = l.output[mask_index + j*l.w*l.h];
                 }
             }
 
-            int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + !l.background);
-            if(l.softmax_tree){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + !l.background);
+            ଯଦି(l.softmax_ବୃକ୍ଷ){
 
-                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_tree, 0, l.w*l.h);
-                if(map){
-                    for(j = 0; j < 200; ++j){
-                        int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
-                        float prob = scale*predictions[class_index];
+                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_ବୃକ୍ଷ, 0, l.w*l.h);
+                ଯଦି(map){
+                    ପାଇଁ(j = 0; j < 200; ++j){
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
+                        ଦଶମିକ prob = scale*predictions[class_index];
                         dets[index].prob[j] = (prob > thresh) ? prob : 0;
                     }
-                } else {
-                    int j =  hierarchy_top_prediction(predictions + class_index, l.softmax_tree, tree_thresh, l.w*l.h);
+                } ଅନ୍ୟଥା {
+                    ପୂର୍ଣ୍ଣସଂଖ୍ୟା j =  hierarchy_ଶୀର୍ଷ_prediction(predictions + class_index, l.softmax_ବୃକ୍ଷ, ବୃକ୍ଷ_thresh, l.w*l.h);
                     dets[index].prob[j] = (scale > thresh) ? scale : 0;
                 }
-            } else {
-                if(dets[index].objectness){
-                    for(j = 0; j < l.classes; ++j){
-                        int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + j);
-                        float prob = scale*predictions[class_index];
+            } ଅନ୍ୟଥା {
+                ଯଦି(dets[index].objectness){
+                    ପାଇଁ(j = 0; j < l.classes; ++j){
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + j);
+                        ଦଶମିକ prob = scale*predictions[class_index];
                         dets[index].prob[j] = (prob > thresh) ? prob : 0;
                     }
                 }
@@ -438,68 +438,68 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
 
 #ifdef GPU
 
-void forward_region_layer_gpu(const layer l, network net)
+ଶୂନ୍ୟ forward_region_layer_gpu(ଅଚଳ layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    copy_gpu(l.batch*l.inputs, net.ନିବେଶ_gpu, 1, l.output_gpu, 1);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା b, n;
+    ପାଇଁ (b = 0; b < l.batch; ++b){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
-            if(l.coords > 4){
+            ଯଦି(l.coords > 4){
                 index = entry_index(l, b, n*l.w*l.h, 4);
                 activate_array_gpu(l.output_gpu + index, (l.coords - 4)*l.w*l.h, LOGISTIC);
             }
             index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) activate_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC);
+            ଯଦି(!l.background) activate_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
+            ଯଦି(!l.softmax && !l.softmax_ବୃକ୍ଷ) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
-        int index = entry_index(l, 0, 0, l.coords + 1);
-        softmax_tree(net.input_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_tree);
-    } else if (l.softmax) {
-        int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_gpu(net.input_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
+    ଯଦି (l.softmax_ବୃକ୍ଷ){
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, 0, 0, l.coords + 1);
+        softmax_ବୃକ୍ଷ(net.ନିବେଶ_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_ବୃକ୍ଷ);
+    } ଅନ୍ୟଥା ଯଦି (l.softmax) {
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, 0, 0, l.coords + !l.background);
+        softmax_gpu(net.ନିବେଶ_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
     }
-    if(!net.train || l.onlyforward){
+    ଯଦି(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ଫେରନ୍ତୁ;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.ନିବେଶ, l.batch*l.inputs);
     forward_region_layer(l, net);
     //cuda_push_array(l.output_gpu, l.output, l.batch*l.outputs);
-    if(!net.train) return;
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    ଯଦି(!net.train) ଫେରନ୍ତୁ;
+    cuda_ଠେଲ_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_region_layer_gpu(const layer l, network net)
+ଶୂନ୍ୟ backward_region_layer_gpu(ଅଚଳ layer l, network net)
 {
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା b, n;
+    ପାଇଁ (b = 0; b < l.batch; ++b){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା index = entry_index(l, b, n*l.w*l.h, 0);
             gradient_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC, l.delta_gpu + index);
-            if(l.coords > 4){
+            ଯଦି(l.coords > 4){
                 index = entry_index(l, b, n*l.w*l.h, 4);
                 gradient_array_gpu(l.output_gpu + index, (l.coords - 4)*l.w*l.h, LOGISTIC, l.delta_gpu + index);
             }
             index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) gradient_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC, l.delta_gpu + index);
+            ଯଦି(!l.background) gradient_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC, l.delta_gpu + index);
         }
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
 #endif
 
-void zero_objectness(layer l)
+ଶୂନ୍ୟ zero_objectness(layer l)
 {
-    int i, n;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index = entry_index(l, 0, n*l.w*l.h + i, l.coords);
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା i, n;
+    ପାଇଁ (i = 0; i < l.w*l.h; ++i){
+        ପାଇଁ(n = 0; n < l.n; ++n){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା obj_index = entry_index(l, 0, n*l.w*l.h + i, l.coords);
             l.output[obj_index] = 0;
         }
     }

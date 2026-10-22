@@ -1,36 +1,36 @@
-#include "im2col.h"
-#include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+#ଅନ୍ତର୍ଭାଵ "im2col.h"
+#ଅନ୍ତର୍ଭାଵ <stdio.h>
+ଦଶମିକ im2col_get_pixel(ଦଶମିକ *im, ପୂର୍ଣ୍ଣସଂଖ୍ୟା height, ପୂର୍ଣ୍ଣସଂଖ୍ୟା width, ପୂର୍ଣ୍ଣସଂଖ୍ୟା channels,
+                        ପୂର୍ଣ୍ଣସଂଖ୍ୟା row, ପୂର୍ଣ୍ଣସଂଖ୍ୟା col, ପୂର୍ଣ୍ଣସଂଖ୍ୟା channel, ପୂର୍ଣ୍ଣସଂଖ୍ୟା pad)
 {
     row -= pad;
     col -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    ଯଦି (row < 0 || col < 0 ||
+        row >= height || col >= width) ଫେରନ୍ତୁ 0;
+    ଫେରନ୍ତୁ im[col + width*(row + height*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
-void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+ଶୂନ୍ୟ im2col_cpu(ଦଶମିକ* data_im,
+     ପୂର୍ଣ୍ଣସଂଖ୍ୟା channels,  ପୂର୍ଣ୍ଣସଂଖ୍ୟା height,  ପୂର୍ଣ୍ଣସଂଖ୍ୟା width,
+     ପୂର୍ଣ୍ଣସଂଖ୍ୟା ksize,  ପୂର୍ଣ୍ଣସଂଖ୍ୟା stride, ପୂର୍ଣ୍ଣସଂଖ୍ୟା pad, ଦଶମିକ* data_col) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା c,h,w;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା height_col = (height + 2*pad - ksize) / stride + 1;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା width_col = (width + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା channels_col = channels * ksize * ksize;
+    ପାଇଁ (c = 0; c < channels_col; ++c) {
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା w_offset = c % ksize;
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା h_offset = (c / ksize) % ksize;
+        ପୂର୍ଣ୍ଣସଂଖ୍ୟା c_im = c / ksize / ksize;
+        ପାଇଁ (h = 0; h < height_col; ++h) {
+            ପାଇଁ (w = 0; w < width_col; ++w) {
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା im_row = h_offset + h * stride;
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା im_col = w_offset + w * stride;
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା col_index = (c * height_col + h) * width_col + w;
                 data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
                         im_row, im_col, c_im, pad);
             }

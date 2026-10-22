@@ -1,8 +1,8 @@
-#include "avgpool_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#ଅନ୍ତର୍ଭାଵ "avgpool_layer.h"
+#ଅନ୍ତର୍ଭାଵ "cuda.h"
+#ଅନ୍ତର୍ଭାଵ <stdio.h>
 
-avgpool_layer make_avgpool_layer(int batch, int w, int h, int c)
+avgpool_layer make_avgpool_layer(ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c)
 {
     fprintf(stderr, "avg                     %4d x%4d x%4d   ->  %4d\n",  w, h, c, c);
     avgpool_layer l = {0};
@@ -16,9 +16,9 @@ avgpool_layer make_avgpool_layer(int batch, int w, int h, int c)
     l.out_c = c;
     l.outputs = l.out_c;
     l.inputs = h*w*c;
-    int output_size = l.outputs * batch;
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା output_size = l.outputs * batch;
+    l.output =  calloc(output_size, ଆକାର(ଦଶମିକ));
+    l.delta =   calloc(output_size, ଆକାର(ଦଶମିକ));
     l.forward = forward_avgpool_layer;
     l.backward = backward_avgpool_layer;
     #ifdef GPU
@@ -27,42 +27,42 @@ avgpool_layer make_avgpool_layer(int batch, int w, int h, int c)
     l.output_gpu  = cuda_make_array(l.output, output_size);
     l.delta_gpu   = cuda_make_array(l.delta, output_size);
     #endif
-    return l;
+    ଫେରନ୍ତୁ l;
 }
 
-void resize_avgpool_layer(avgpool_layer *l, int w, int h)
+ଶୂନ୍ୟ resize_avgpool_layer(avgpool_layer *l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h)
 {
     l->w = w;
     l->h = h;
     l->inputs = h*w*l->c;
 }
 
-void forward_avgpool_layer(const avgpool_layer l, network net)
+ଶୂନ୍ୟ forward_avgpool_layer(ଅଚଳ avgpool_layer l, network net)
 {
-    int b,i,k;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା b,i,k;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < l.c; ++k){
-            int out_index = k + b*l.c;
+    ପାଇଁ(b = 0; b < l.batch; ++b){
+        ପାଇଁ(k = 0; k < l.c; ++k){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା out_index = k + b*l.c;
             l.output[out_index] = 0;
-            for(i = 0; i < l.h*l.w; ++i){
-                int in_index = i + l.h*l.w*(k + b*l.c);
-                l.output[out_index] += net.input[in_index];
+            ପାଇଁ(i = 0; i < l.h*l.w; ++i){
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା in_index = i + l.h*l.w*(k + b*l.c);
+                l.output[out_index] += net.ନିବେଶ[in_index];
             }
             l.output[out_index] /= l.h*l.w;
         }
     }
 }
 
-void backward_avgpool_layer(const avgpool_layer l, network net)
+ଶୂନ୍ୟ backward_avgpool_layer(ଅଚଳ avgpool_layer l, network net)
 {
-    int b,i,k;
+    ପୂର୍ଣ୍ଣସଂଖ୍ୟା b,i,k;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < l.c; ++k){
-            int out_index = k + b*l.c;
-            for(i = 0; i < l.h*l.w; ++i){
-                int in_index = i + l.h*l.w*(k + b*l.c);
+    ପାଇଁ(b = 0; b < l.batch; ++b){
+        ପାଇଁ(k = 0; k < l.c; ++k){
+            ପୂର୍ଣ୍ଣସଂଖ୍ୟା out_index = k + b*l.c;
+            ପାଇଁ(i = 0; i < l.h*l.w; ++i){
+                ପୂର୍ଣ୍ଣସଂଖ୍ୟା in_index = i + l.h*l.w*(k + b*l.c);
                 net.delta[in_index] += l.delta[out_index] / (l.h*l.w);
             }
         }

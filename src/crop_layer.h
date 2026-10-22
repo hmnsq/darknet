@@ -1,19 +1,19 @@
 #ifndef CROP_LAYER_H
 #define CROP_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#ଅନ୍ତର୍ଭାଵ "image.h"
+#ଅନ୍ତର୍ଭାଵ "layer.h"
+#ଅନ୍ତର୍ଭାଵ "network.h"
 
-typedef layer crop_layer;
+ପ୍ରକାରବ୍ୟାଖ୍ୟା layer crop_layer;
 
 image get_crop_image(crop_layer l);
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure);
-void forward_crop_layer(const crop_layer l, network net);
-void resize_crop_layer(layer *l, int w, int h);
+crop_layer make_crop_layer(ପୂର୍ଣ୍ଣସଂଖ୍ୟା batch, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା c, ପୂର୍ଣ୍ଣସଂଖ୍ୟା crop_height, ପୂର୍ଣ୍ଣସଂଖ୍ୟା crop_width, ପୂର୍ଣ୍ଣସଂଖ୍ୟା flip, ଦଶମିକ angle, ଦଶମିକ saturation, ଦଶମିକ exposure);
+ଶୂନ୍ୟ forward_crop_layer(ଅଚଳ crop_layer l, network net);
+ଶୂନ୍ୟ resize_crop_layer(layer *l, ପୂର୍ଣ୍ଣସଂଖ୍ୟା w, ପୂର୍ଣ୍ଣସଂଖ୍ୟା h);
 
 #ifdef GPU
-void forward_crop_layer_gpu(crop_layer l, network net);
+ଶୂନ୍ୟ forward_crop_layer_gpu(crop_layer l, network net);
 #endif
 
 #endif
