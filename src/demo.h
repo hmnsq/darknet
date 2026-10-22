@@ -1,6 +1,6 @@
 #ifndef DEMO_H
 #define DEMO_H
 
-#include "image.h"
+#अन्तर्भाव "image.h"
 
 #endif
