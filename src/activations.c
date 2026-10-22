@@ -9,98 +9,98 @@ char *get_activation_string(ACTIVATION a)
 {
     switch(a){
         case LOGISTIC:
-            return "logistic";
+            返回 "logistic";
         case LOGGY:
-            return "loggy";
+            返回 "loggy";
         case RELU:
-            return "relu";
+            返回 "relu";
         case ELU:
-            return "elu";
+            返回 "elu";
         case SELU:
-            return "selu";
+            返回 "selu";
         case RELIE:
-            return "relie";
+            返回 "relie";
         case RAMP:
-            return "ramp";
+            返回 "ramp";
         case LINEAR:
-            return "linear";
+            返回 "linear";
         case TANH:
-            return "tanh";
+            返回 "tanh";
         case PLSE:
-            return "plse";
+            返回 "plse";
         case LEAKY:
-            return "leaky";
+            返回 "leaky";
         case STAIR:
-            return "stair";
+            返回 "stair";
         case HARDTAN:
-            return "hardtan";
+            返回 "hardtan";
         case LHTAN:
-            return "lhtan";
+            返回 "lhtan";
         default:
             break;
     }
-    return "relu";
+    返回 "relu";
 }
 
 ACTIVATION get_activation(char *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    如果 (strcmp(s, "logistic")==0) 返回 LOGISTIC;
+    如果 (strcmp(s, "loggy")==0) 返回 LOGGY;
+    如果 (strcmp(s, "relu")==0) 返回 RELU;
+    如果 (strcmp(s, "elu")==0) 返回 ELU;
+    如果 (strcmp(s, "selu")==0) 返回 SELU;
+    如果 (strcmp(s, "relie")==0) 返回 RELIE;
+    如果 (strcmp(s, "plse")==0) 返回 PLSE;
+    如果 (strcmp(s, "hardtan")==0) 返回 HARDTAN;
+    如果 (strcmp(s, "lhtan")==0) 返回 LHTAN;
+    如果 (strcmp(s, "linear")==0) 返回 LINEAR;
+    如果 (strcmp(s, "ramp")==0) 返回 RAMP;
+    如果 (strcmp(s, "leaky")==0) 返回 LEAKY;
+    如果 (strcmp(s, "tanh")==0) 返回 TANH;
+    如果 (strcmp(s, "stair")==0) 返回 STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    返回 RELU;
 }
 
 float activate(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_activate(x);
+            返回 linear_activate(x);
         case LOGISTIC:
-            return logistic_activate(x);
+            返回 logistic_activate(x);
         case LOGGY:
-            return loggy_activate(x);
+            返回 loggy_activate(x);
         case RELU:
-            return relu_activate(x);
+            返回 relu_activate(x);
         case ELU:
-            return elu_activate(x);
+            返回 elu_activate(x);
         case SELU:
-            return selu_activate(x);
+            返回 selu_activate(x);
         case RELIE:
-            return relie_activate(x);
+            返回 relie_activate(x);
         case RAMP:
-            return ramp_activate(x);
+            返回 ramp_activate(x);
         case LEAKY:
-            return leaky_activate(x);
+            返回 leaky_activate(x);
         case TANH:
-            return tanh_activate(x);
+            返回 tanh_activate(x);
         case PLSE:
-            return plse_activate(x);
+            返回 plse_activate(x);
         case STAIR:
-            return stair_activate(x);
+            返回 stair_activate(x);
         case HARDTAN:
-            return hardtan_activate(x);
+            返回 hardtan_activate(x);
         case LHTAN:
-            return lhtan_activate(x);
+            返回 lhtan_activate(x);
     }
-    return 0;
+    返回 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+void activate_array(float *x, const 整数 n, const ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    整数 i;
+    为(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
 }
@@ -109,41 +109,41 @@ float gradient(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_gradient(x);
+            返回 linear_gradient(x);
         case LOGISTIC:
-            return logistic_gradient(x);
+            返回 logistic_gradient(x);
         case LOGGY:
-            return loggy_gradient(x);
+            返回 loggy_gradient(x);
         case RELU:
-            return relu_gradient(x);
+            返回 relu_gradient(x);
         case ELU:
-            return elu_gradient(x);
+            返回 elu_gradient(x);
         case SELU:
-            return selu_gradient(x);
+            返回 selu_gradient(x);
         case RELIE:
-            return relie_gradient(x);
+            返回 relie_gradient(x);
         case RAMP:
-            return ramp_gradient(x);
+            返回 ramp_gradient(x);
         case LEAKY:
-            return leaky_gradient(x);
+            返回 leaky_gradient(x);
         case TANH:
-            return tanh_gradient(x);
+            返回 tanh_gradient(x);
         case PLSE:
-            return plse_gradient(x);
+            返回 plse_gradient(x);
         case STAIR:
-            return stair_gradient(x);
+            返回 stair_gradient(x);
         case HARDTAN:
-            return hardtan_gradient(x);
+            返回 hardtan_gradient(x);
         case LHTAN:
-            return lhtan_gradient(x);
+            返回 lhtan_gradient(x);
     }
-    return 0;
+    返回 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+void gradient_array(const float *x, const 整数 n, const ACTIVATION a, float *delta)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    整数 i;
+    为(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }
 } 

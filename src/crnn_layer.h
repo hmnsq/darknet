@@ -6,7 +6,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize);
+layer make_crnn_layer(整数 batch, 整数 h, 整数 w, 整数 c, 整数 hidden_filters, 整数 output_filters, 整数 steps, ACTIVATION activation, 整数 batch_normalize);
 
 void forward_crnn_layer(layer l, network net);
 void backward_crnn_layer(layer l, network net);

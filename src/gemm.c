@@ -5,21 +5,21 @@
 #include <stdio.h>
 #include <math.h>
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_bin(整数 M, 整数 N, 整数 K, float ALPHA, 
+        char  *A, 整数 lda, 
+        float *B, 整数 ldb,
+        float *C, 整数 ldc)
 {
-    int i,j,k;
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
+    整数 i,j,k;
+    为(i = 0; i < M; ++i){
+        为(k = 0; k < K; ++k){
             char A_PART = A[i*lda+k];
-            if(A_PART){
-                for(j = 0; j < N; ++j){
+            如果(A_PART){
+                为(j = 0; j < N; ++j){
                     C[i*ldc+j] += B[k*ldb+j];
                 }
-            } else {
-                for(j = 0; j < N; ++j){
+            } 否则 {
+                为(j = 0; j < N; ++j){
                     C[i*ldc+j] -= B[k*ldb+j];
                 }
             }
@@ -27,31 +27,31 @@ void gemm_bin(int M, int N, int K, float ALPHA,
     }
 }
 
-float *random_matrix(int rows, int cols)
+float *random_matrix(整数 rows, 整数 cols)
 {
-    int i;
+    整数 i;
     float *m = calloc(rows*cols, sizeof(float));
-    for(i = 0; i < rows*cols; ++i){
+    为(i = 0; i < rows*cols; ++i){
         m[i] = (float)rand()/RAND_MAX;
     }
-    return m;
+    返回 m;
 }
 
-void time_random_matrix(int TA, int TB, int m, int k, int n)
+void time_random_matrix(整数 TA, 整数 TB, 整数 m, 整数 k, 整数 n)
 {
     float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
+    如果(!TA) a = random_matrix(m,k);
+    否则 a = random_matrix(k,m);
+    整数 lda = (!TA)?k:m;
     float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    如果(!TB) b = random_matrix(k,n);
+    否则 b = random_matrix(n,k);
+    整数 ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
-    int i;
+    整数 i;
     clock_t start = clock(), end;
-    for(i = 0; i<10; ++i){
+    为(i = 0; i<10; ++i){
         gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
@@ -62,43 +62,43 @@ void time_random_matrix(int TA, int TB, int m, int k, int n)
 }
 
 
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
         float BETA,
-        float *C, int ldc)
+        float *C, 整数 ldc)
 {
     gemm_cpu( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
 }
 
-void gemm_nn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_nn(整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
+        float *C, 整数 ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
+    整数 i,j,k;
+    #pragma omp parallel 为
+    为(i = 0; i < M; ++i){
+        为(k = 0; k < K; ++k){
             register float A_PART = ALPHA*A[i*lda+k];
-            for(j = 0; j < N; ++j){
+            为(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_nt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_nt(整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
+        float *C, 整数 ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    整数 i,j,k;
+    #pragma omp parallel 为
+    为(i = 0; i < M; ++i){
+        为(j = 0; j < N; ++j){
             register float sum = 0;
-            for(k = 0; k < K; ++k){
+            为(k = 0; k < K; ++k){
                 sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
             }
             C[i*ldc+j] += sum;
@@ -106,34 +106,34 @@ void gemm_nt(int M, int N, int K, float ALPHA,
     }
 }
 
-void gemm_tn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_tn(整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
+        float *C, 整数 ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
+    整数 i,j,k;
+    #pragma omp parallel 为
+    为(i = 0; i < M; ++i){
+        为(k = 0; k < K; ++k){
             register float A_PART = ALPHA*A[k*lda+i];
-            for(j = 0; j < N; ++j){
+            为(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_tt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_tt(整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
+        float *C, 整数 ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    整数 i,j,k;
+    #pragma omp parallel 为
+    为(i = 0; i < M; ++i){
+        为(j = 0; j < N; ++j){
             register float sum = 0;
-            for(k = 0; k < K; ++k){
+            为(k = 0; k < K; ++k){
                 sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
             }
             C[i*ldc+j] += sum;
@@ -142,26 +142,26 @@ void gemm_tt(int M, int N, int K, float ALPHA,
 }
 
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_cpu(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
         float BETA,
-        float *C, int ldc)
+        float *C, 整数 ldc)
 {
     //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
-    int i, j;
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    整数 i, j;
+    为(i = 0; i < M; ++i){
+        为(j = 0; j < N; ++j){
             C[i*ldc + j] *= BETA;
         }
     }
-    if(!TA && !TB)
+    如果(!TA && !TB)
         gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(TA && !TB)
+    否则 如果(TA && !TB)
         gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(!TA && TB)
+    否则 如果(!TA && TB)
         gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else
+    否则
         gemm_tt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
 }
 
@@ -169,11 +169,11 @@ void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA,
 
 #include <math.h>
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
+void gemm_gpu(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A_gpu, 整数 lda, 
+        float *B_gpu, 整数 ldb,
         float BETA,
-        float *C_gpu, int ldc)
+        float *C_gpu, 整数 ldc)
 {
     cublasHandle_t handle = blas_handle();
     cudaError_t status = cublasSgemm(handle, (TB ? CUBLAS_OP_T : CUBLAS_OP_N), 
@@ -186,21 +186,21 @@ void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA,
 #include <string.h>
 #include <time.h>
 
-void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
+void time_gpu_random_matrix(整数 TA, 整数 TB, 整数 m, 整数 k, 整数 n)
 {
     float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
+    如果(!TA) a = random_matrix(m,k);
+    否则 a = random_matrix(k,m);
+    整数 lda = (!TA)?k:m;
     float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    如果(!TB) b = random_matrix(k,n);
+    否则 b = random_matrix(n,k);
+    整数 ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
-    int i;
+    整数 i;
     clock_t start = clock(), end;
-    for(i = 0; i<32; ++i){
+    为(i = 0; i<32; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
@@ -210,14 +210,14 @@ void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
     free(c);
 }
 
-void time_gpu(int TA, int TB, int m, int k, int n)
+void time_gpu(整数 TA, 整数 TB, 整数 m, 整数 k, 整数 n)
 {
-    int iter = 10;
+    整数 iter = 10;
     float *a = random_matrix(m,k);
     float *b = random_matrix(k,n);
 
-    int lda = (!TA)?k:m;
-    int ldb = (!TB)?n:k;
+    整数 lda = (!TA)?k:m;
+    整数 ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
 
@@ -225,9 +225,9 @@ void time_gpu(int TA, int TB, int m, int k, int n)
     float *b_cl = cuda_make_array(b, k*n);
     float *c_cl = cuda_make_array(c, m*n);
 
-    int i;
+    整数 i;
     clock_t start = clock(), end;
-    for(i = 0; i<iter; ++i){
+    为(i = 0; i<iter; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a_cl,lda,b_cl,ldb,1,c_cl,n);
         cudaThreadSynchronize();
     }
@@ -245,23 +245,23 @@ void time_gpu(int TA, int TB, int m, int k, int n)
 }
 
 
-void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
+void test_gpu_accuracy(整数 TA, 整数 TB, 整数 m, 整数 k, 整数 n)
 {
     srand(0);
     float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
+    如果(!TA) a = random_matrix(m,k);
+    否则 a = random_matrix(k,m);
+    整数 lda = (!TA)?k:m;
     float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    如果(!TB) b = random_matrix(k,n);
+    否则 b = random_matrix(n,k);
+    整数 ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
     float *c_gpu = random_matrix(m,n);
     memset(c, 0, m*n*sizeof(float));
     memset(c_gpu, 0, m*n*sizeof(float));
-    int i;
+    整数 i;
     //pm(m,k,b);
     gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c_gpu,n);
     //printf("GPU\n");
@@ -271,7 +271,7 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     //printf("\n\nCPU\n");
     //pm(m, n, c);
     double sse = 0;
-    for(i = 0; i < m*n; ++i) {
+    为(i = 0; i < m*n; ++i) {
         //printf("%f %f\n", c[i], c_gpu[i]);
         sse += pow(c[i]-c_gpu[i], 2);
     }
@@ -282,7 +282,7 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     free(c_gpu);
 }
 
-int test_gpu_blas()
+整数 test_gpu_blas()
 {
     /*
        test_gpu_accuracy(0,0,10,576,75); 
@@ -318,7 +318,7 @@ int test_gpu_blas()
     time_gpu(0,0,512,4608,196); 
     time_gpu(1,1,4608,512,196); 
 
-    return 0;
+    返回 0;
 }
 #endif
 
