@@ -24,51 +24,51 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+dviguu_na what_time_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    sa_nracanaa timeval time;
+    ᯀᯮᯝ (gettimeofday(&time,NULL)){
+        ᯀᯮᯞ 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    ᯀᯮᯞ (dviguu_na)time.tv_sec + (dviguu_na)time.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+puur_naa_nka *read_intlist(var_na *gpu_list, puur_naa_nka *ngpus, puur_naa_nka d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    puur_naa_nka *gpus = 0;
+    ᯀᯮᯝ(gpu_list){
+        puur_naa_nka len = strlen(gpu_list);
         *ngpus = 1;
-        int i;
+        puur_naa_nka i;
         for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+            ᯀᯮᯝ (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
+        gpus = calloc(*ngpus, parimaa_na(puur_naa_nka));
         for(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } ᯀᯮᯝᯂᯪ {
+        gpus = calloc(1, parimaa_na(float));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    ᯀᯮᯞ gpus;
 }
 
-int *read_map(char *filename)
+puur_naa_nka *read_map(var_na *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    puur_naa_nka n = 0;
+    puur_naa_nka *map = 0;
+    var_na *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    ᯀᯮᯝ(!file) file_error(filename);
+    ᯀᯬᯝ((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*parimaa_na(puur_naa_nka));
         map[n-1] = atoi(str);
     }
-    return map;
+    ᯀᯮᯞ map;
 }
 
 void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
@@ -94,115 +94,115 @@ void shuffle(void *arr, size_t n, size_t size)
     }
 }
 
-int *random_index_order(int min, int max)
+puur_naa_nka *random_index_order(puur_naa_nka min, puur_naa_nka max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
+    puur_naa_nka *inds = calloc(max-min, parimaa_na(puur_naa_nka));
+    puur_naa_nka i;
     for(i = min; i < max; ++i){
         inds[i] = i;
     }
     for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
+        puur_naa_nka swap = inds[i];
+        puur_naa_nka index = i + rand()%(max-i);
         inds[i] = inds[index];
         inds[index] = swap;
     }
-    return inds;
+    ᯀᯮᯞ inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+void del_arg(puur_naa_nka argc, var_na **argv, puur_naa_nka index)
 {
-    int i;
+    puur_naa_nka i;
     for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+puur_naa_nka find_arg(puur_naa_nka argc, var_na* argv[], var_na *arg)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+        ᯀᯮᯝ(!argv[i]) continue;
+        ᯀᯮᯝ(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            ᯀᯮᯞ 1;
         }
     }
-    return 0;
+    ᯀᯮᯞ 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+puur_naa_nka find_int_arg(puur_naa_nka argc, var_na **argv, var_na *arg, puur_naa_nka def)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+        ᯀᯮᯝ(!argv[i]) continue;
+        ᯀᯮᯝ(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            bha_nga;
         }
     }
-    return def;
+    ᯀᯮᯞ def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+float find_float_arg(puur_naa_nka argc, var_na **argv, var_na *arg, float def)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+        ᯀᯮᯝ(!argv[i]) continue;
+        ᯀᯮᯝ(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            bha_nga;
         }
     }
-    return def;
+    ᯀᯮᯞ def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+var_na *find_char_arg(puur_naa_nka argc, var_na **argv, var_na *arg, var_na *def)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+        ᯀᯮᯝ(!argv[i]) continue;
+        ᯀᯮᯝ(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            bha_nga;
         }
     }
-    return def;
+    ᯀᯮᯞ def;
 }
 
 
-char *basecfg(char *cfgfile)
+var_na *basecfg(var_na *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    var_na *c = cfgfile;
+    var_na *next;
+    ᯀᯬᯝ((next = strchr(c, '/')))
     {
         c = next+1;
     }
     c = copy_string(c);
     next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    ᯀᯮᯝ (next) *next = 0;
+    ᯀᯮᯞ c;
 }
 
-int alphanum_to_int(char c)
+puur_naa_nka alphanum_to_int(var_na c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    ᯀᯮᯞ (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+var_na int_to_alphanum(puur_naa_nka i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    ᯀᯮᯝ (i == 36) ᯀᯮᯞ '.';
+    ᯀᯮᯞ (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+void pm(puur_naa_nka M, puur_naa_nka N, float *A)
 {
-    int i,j;
+    puur_naa_nka i,j;
     for(i =0 ; i < M; ++i){
         printf("%d ", i+1);
         for(j = 0; j < N; ++j){
@@ -213,15 +213,15 @@ void pm(int M, int N, float *A)
     printf("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+void find_replace(var_na *str, var_na *orig, var_na *rep, var_na *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    var_na buffer[4096] = {0};
+    var_na *p;
 
     sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    ᯀᯮᯝ(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        ᯀᯮᯞ;
     }
 
     *p = '\0';
@@ -231,18 +231,18 @@ void find_replace(char *str, char *orig, char *rep, char *output)
 
 float sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    ᯀᯮᯞ (float)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+void top_k(float *a, puur_naa_nka n, puur_naa_nka k, puur_naa_nka *index)
 {
-    int i,j;
+    puur_naa_nka i,j;
     for(j = 0; j < k; ++j) index[j] = -1;
     for(i = 0; i < n; ++i){
-        int curr = i;
+        puur_naa_nka curr = i;
         for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
+            ᯀᯮᯝ((index[j] < 0) || a[curr] > a[index[j]]){
+                puur_naa_nka swap = curr;
                 curr = index[j];
                 index[j] = swap;
             }
@@ -250,14 +250,14 @@ void top_k(float *a, int n, int k, int *index)
     }
 }
 
-void error(const char *s)
+void error(const var_na *s)
 {
     perror(s);
     assert(0);
     exit(-1);
 }
 
-unsigned char *read_file(char *filename)
+unsigned var_na *read_file(var_na *filename)
 {
     FILE *fp = fopen(filename, "rb");
     size_t size;
@@ -266,10 +266,10 @@ unsigned char *read_file(char *filename)
     size = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
+    unsigned var_na *text = calloc(size+1, parimaa_na(var_na));
     fread(text, 1, size, fp);
     fclose(fp);
-    return text;
+    ᯀᯮᯞ text;
 }
 
 void malloc_error()
@@ -278,222 +278,222 @@ void malloc_error()
     exit(-1);
 }
 
-void file_error(char *s)
+void file_error(var_na *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
     exit(0);
 }
 
-list *split_str(char *s, char delim)
+list *split_str(var_na *s, var_na delim)
 {
     size_t i;
     size_t len = strlen(s);
     list *l = make_list();
     list_insert(l, s);
     for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+        ᯀᯮᯝ(s[i] == delim){
             s[i] = '\0';
             list_insert(l, &(s[i+1]));
         }
     }
-    return l;
+    ᯀᯮᯞ l;
 }
 
-void strip(char *s)
+void strip(var_na *s)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
     for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+        var_na c = s[i];
+        ᯀᯮᯝ(c==' '||c=='\t'||c=='\n') ++offset;
+        ᯀᯮᯝᯂᯪ s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void strip_char(char *s, char bad)
+void strip_char(var_na *s, var_na bad)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
     for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+        var_na c = s[i];
+        ᯀᯮᯝ(c==bad) ++offset;
+        ᯀᯮᯝᯂᯪ s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+void free_ptrs(void **ptrs, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i) free(ptrs[i]);
     free(ptrs);
 }
 
-char *fgetl(FILE *fp)
+var_na *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
+    ᯀᯮᯝ(feof(fp)) ᯀᯮᯞ 0;
     size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
+    var_na *line = malloc(size*parimaa_na(var_na));
+    ᯀᯮᯝ(!fgets(line, size, fp)){
         free(line);
-        return 0;
+        ᯀᯮᯞ 0;
     }
 
     size_t curr = strlen(line);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
+    ᯀᯬᯝ((line[curr-1] != '\n') && !feof(fp)){
+        ᯀᯮᯝ(curr == size-1){
             size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
+            line = realloc(line, size*parimaa_na(var_na));
+            ᯀᯮᯝ(!line) {
                 printf("%ld\n", size);
                 malloc_error();
             }
         }
         size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
+        ᯀᯮᯝ(readsize > INT_MAX) readsize = INT_MAX-1;
         fgets(&line[curr], readsize, fp);
         curr = strlen(line);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    ᯀᯮᯝ(line[curr-1] == '\n') line[curr-1] = '\0';
 
-    return line;
+    ᯀᯮᯞ line;
 }
 
-int read_int(int fd)
+puur_naa_nka read_int(puur_naa_nka fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    puur_naa_nka n = 0;
+    puur_naa_nka next = read(fd, &n, parimaa_na(puur_naa_nka));
+    ᯀᯮᯝ(next <= 0) ᯀᯮᯞ -1;
+    ᯀᯮᯞ n;
 }
 
-void write_int(int fd, int n)
+void write_int(puur_naa_nka fd, puur_naa_nka n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    puur_naa_nka next = write(fd, &n, parimaa_na(puur_naa_nka));
+    ᯀᯮᯝ(next <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+puur_naa_nka read_all_fail(puur_naa_nka fd, var_na *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    ᯀᯬᯝ(n < bytes){
+        puur_naa_nka next = read(fd, buffer + n, bytes-n);
+        ᯀᯮᯝ(next <= 0) ᯀᯮᯞ 1;
         n += next;
     }
-    return 0;
+    ᯀᯮᯞ 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+puur_naa_nka write_all_fail(puur_naa_nka fd, var_na *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
+    ᯀᯬᯝ(n < bytes){
         size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+        ᯀᯮᯝ(next <= 0) ᯀᯮᯞ 1;
         n += next;
     }
-    return 0;
+    ᯀᯮᯞ 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+void read_all(puur_naa_nka fd, var_na *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
+    ᯀᯬᯝ(n < bytes){
+        puur_naa_nka next = read(fd, buffer + n, bytes-n);
+        ᯀᯮᯝ(next <= 0) error("read failed");
         n += next;
     }
 }
 
-void write_all(int fd, char *buffer, size_t bytes)
+void write_all(puur_naa_nka fd, var_na *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
+    ᯀᯬᯝ(n < bytes){
         size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
+        ᯀᯮᯝ(next <= 0) error("write failed");
         n += next;
     }
 }
 
 
-char *copy_string(char *s)
+var_na *copy_string(var_na *s)
 {
-    char *copy = malloc(strlen(s)+1);
+    var_na *copy = malloc(strlen(s)+1);
     strncpy(copy, s, strlen(s)+1);
-    return copy;
+    ᯀᯮᯞ copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_line(var_na *line)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
+    var_na *c, *p;
+    puur_naa_nka in = 0;
     for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+        ᯀᯮᯝ(*c == '"') in = !in;
+        ᯀᯮᯝᯂᯪ ᯀᯮᯝ(*c == ',' && !in){
             *c = '\0';
             list_insert(l, copy_string(p));
             p = c+1;
         }
     }
     list_insert(l, copy_string(p));
-    return l;
+    ᯀᯮᯞ l;
 }
 
-int count_fields(char *line)
+puur_naa_nka count_fields(var_na *line)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
+    puur_naa_nka count = 0;
+    puur_naa_nka done = 0;
+    var_na *c;
     for(c = line; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        ᯀᯮᯝ(*c == ',' || done) ++count;
     }
-    return count;
+    ᯀᯮᯞ count;
 }
 
-float *parse_fields(char *line, int n)
+float *parse_fields(var_na *line, puur_naa_nka n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
+    float *field = calloc(n, parimaa_na(float));
+    var_na *c, *p, *end;
+    puur_naa_nka count = 0;
+    puur_naa_nka done = 0;
     for(c = line, p = line; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done){
+        ᯀᯮᯝ(*c == ',' || done){
             *c = '\0';
             field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            ᯀᯮᯝ(p == c) field[count] = nan("");
+            ᯀᯮᯝ(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
             p = c+1;
             ++count;
         }
     }
-    return field;
+    ᯀᯮᯞ field;
 }
 
-float sum_array(float *a, int n)
+float sum_array(float *a, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     float sum = 0;
     for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    ᯀᯮᯞ sum;
 }
 
-float mean_array(float *a, int n)
+float mean_array(float *a, puur_naa_nka n)
 {
-    return sum_array(a,n)/n;
+    ᯀᯮᯞ sum_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+void mean_arrays(float **a, puur_naa_nka n, puur_naa_nka els, float *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
+    puur_naa_nka i;
+    puur_naa_nka j;
+    memset(avg, 0, els*parimaa_na(float));
     for(j = 0; j < n; ++j){
         for(i = 0; i < els; ++i){
             avg[i] += a[j][i];
@@ -504,56 +504,56 @@ void mean_arrays(float **a, int n, int els, float *avg)
     }
 }
 
-void print_statistics(float *a, int n)
+void print_statistics(float *a, puur_naa_nka n)
 {
     float m = mean_array(a, n);
     float v = variance_array(a, n);
     printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+float variance_array(float *a, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     float sum = 0;
     float mean = mean_array(a, n);
     for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
     float variance = sum/n;
-    return variance;
+    ᯀᯮᯞ variance;
 }
 
-int constrain_int(int a, int min, int max)
+puur_naa_nka constrain_int(puur_naa_nka a, puur_naa_nka min, puur_naa_nka max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ᯀᯮᯝ (a < min) ᯀᯮᯞ min;
+    ᯀᯮᯝ (a > max) ᯀᯮᯞ max;
+    ᯀᯮᯞ a;
 }
 
 float constrain(float min, float max, float a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ᯀᯮᯝ (a < min) ᯀᯮᯞ min;
+    ᯀᯮᯝ (a > max) ᯀᯮᯞ max;
+    ᯀᯮᯞ a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+float dist_array(float *a, float *b, puur_naa_nka n, puur_naa_nka sub)
 {
-    int i;
+    puur_naa_nka i;
     float sum = 0;
     for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    ᯀᯮᯞ sqrt(sum);
 }
 
-float mse_array(float *a, int n)
+float mse_array(float *a, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     float sum = 0;
     for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    ᯀᯮᯞ sqrt(sum/n);
 }
 
-void normalize_array(float *a, int n)
+void normalize_array(float *a, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     float mu = mean_array(a,n);
     float sigma = sqrt(variance_array(a,n));
     for(i = 0; i < n; ++i){
@@ -563,113 +563,113 @@ void normalize_array(float *a, int n)
     sigma = sqrt(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+void translate_array(float *a, puur_naa_nka n, float s)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+float mag_array(float *a, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     float sum = 0;
     for(i = 0; i < n; ++i){
         sum += a[i]*a[i];   
     }
-    return sqrt(sum);
+    ᯀᯮᯞ sqrt(sum);
 }
 
-void scale_array(float *a, int n, float s)
+void scale_array(float *a, puur_naa_nka n, float s)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+puur_naa_nka sample_array(float *a, puur_naa_nka n)
 {
     float sum = sum_array(a, n);
     scale_array(a, n, 1./sum);
     float r = rand_uniform(0, 1);
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        ᯀᯮᯝ (r <= 0) ᯀᯮᯞ i;
     }
-    return n-1;
+    ᯀᯮᯞ n-1;
 }
 
-int max_int_index(int *a, int n)
+puur_naa_nka max_int_index(puur_naa_nka *a, puur_naa_nka n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
+    ᯀᯮᯝ(n <= 0) ᯀᯮᯞ -1;
+    puur_naa_nka i, max_i = 0;
+    puur_naa_nka max = a[0];
     for(i = 1; i < n; ++i){
-        if(a[i] > max){
+        ᯀᯮᯝ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    ᯀᯮᯞ max_i;
 }
 
-int max_index(float *a, int n)
+puur_naa_nka max_index(float *a, puur_naa_nka n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
+    ᯀᯮᯝ(n <= 0) ᯀᯮᯞ -1;
+    puur_naa_nka i, max_i = 0;
     float max = a[0];
     for(i = 1; i < n; ++i){
-        if(a[i] > max){
+        ᯀᯮᯝ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    ᯀᯮᯞ max_i;
 }
 
-int int_index(int *a, int val, int n)
+puur_naa_nka int_index(puur_naa_nka *a, puur_naa_nka val, puur_naa_nka n)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+        ᯀᯮᯝ(a[i] == val) ᯀᯮᯞ i;
     }
-    return -1;
+    ᯀᯮᯞ -1;
 }
 
-int rand_int(int min, int max)
+puur_naa_nka rand_int(puur_naa_nka min, puur_naa_nka max)
 {
-    if (max < min){
-        int s = min;
+    ᯀᯮᯝ (max < min){
+        puur_naa_nka s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    puur_naa_nka r = (rand()%(max - min + 1)) + min;
+    ᯀᯮᯞ r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
 float rand_normal()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    static puur_naa_nka haveSpare = 0;
+    static dviguu_na rand1, rand2;
 
-    if(haveSpare)
+    ᯀᯮᯝ(haveSpare)
     {
         haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        ᯀᯮᯞ sqrt(rand1) * sin(rand2);
     }
 
     haveSpare = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = rand() / ((dviguu_na) RAND_MAX);
+    ᯀᯮᯝ(rand1 < 1e-100) rand1 = 1e-100;
     rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand2 = (rand() / ((dviguu_na) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    ᯀᯮᯞ sqrt(rand1) * cos(rand2);
 }
 
 /*
@@ -685,7 +685,7 @@ float rand_normal()
 
 size_t rand_size_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    ᯀᯮᯞ  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -697,30 +697,30 @@ size_t rand_size_t()
 
 float rand_uniform(float min, float max)
 {
-    if(max < min){
+    ᯀᯮᯝ(max < min){
         float swap = min;
         min = max;
         max = swap;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    ᯀᯮᯞ ((float)rand()/RAND_MAX * (max - min)) + min;
 }
 
 float rand_scale(float s)
 {
     float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    ᯀᯮᯝ(rand()%2) ᯀᯮᯞ scale;
+    ᯀᯮᯞ 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+float **one_hot_encode(float *a, puur_naa_nka n, puur_naa_nka k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
+    puur_naa_nka i;
+    float **t = calloc(n, parimaa_na(float*));
     for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
+        t[i] = calloc(k, parimaa_na(float));
+        puur_naa_nka index = (puur_naa_nka)a[i];
         t[i][index] = 1;
     }
-    return t;
+    ᯀᯮᯞ t;
 }
 
