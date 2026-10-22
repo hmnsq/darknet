@@ -1,24 +1,24 @@
 
-#ifndef CRNN_LAYER_H
-#define CRNN_LAYER_H
+#اگر_تعریف_نشده CRNN_LAYER_H
+#تعریف_کن CRNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize);
+layer make_crnn_layer(صحيح batch, صحيح h, صحيح w, صحيح c, صحيح hidden_filters, صحيح output_filters, صحيح گامها, ACTIVATION activation, صحيح batch_normalize);
 
-void forward_crnn_layer(layer l, network net);
-void backward_crnn_layer(layer l, network net);
-void update_crnn_layer(layer l, update_args a);
+فراغ forward_crnn_layer(layer l, شبکه net);
+فراغ backward_crnn_layer(layer l, شبکه net);
+فراغ update_crnn_layer(layer l, update_آرگومانها a);
 
-#ifdef GPU
-void forward_crnn_layer_gpu(layer l, network net);
-void backward_crnn_layer_gpu(layer l, network net);
-void update_crnn_layer_gpu(layer l, update_args a);
-void push_crnn_layer(layer l);
-void pull_crnn_layer(layer l);
-#endif
+#اگر_تعریف_شده GPU
+فراغ forward_crnn_layer_gpu(layer l, شبکه net);
+فراغ backward_crnn_layer_gpu(layer l, شبکه net);
+فراغ update_crnn_layer_gpu(layer l, update_آرگومانها a);
+فراغ افزودن_crnn_layer(layer l);
+فراغ pull_crnn_layer(layer l);
+#پایان_اگر
 
-#endif
+#پایان_اگر
 

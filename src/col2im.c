@@ -1,37 +1,37 @@
-#include <stdio.h>
-#include <math.h>
-void col2im_add_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad, float val)
+#ضمن <stdio.h>
+#ضمن <math.h>
+فراغ col2im_جمع_کن_pixel(عائم *im, صحيح ارتفاع, صحيح عرض, صحيح channels,
+                        صحيح ردیف, صحيح ستون, صحيح channel, صحيح pad, عائم val)
 {
-    row -= pad;
-    col -= pad;
+    ردیف -= pad;
+    ستون -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return;
-    im[col + width*(row + height*channel)] += val;
+    إذا (ردیف < 0 || ستون < 0 ||
+        ردیف >= ارتفاع || ستون >= عرض) أرجع;
+    im[ستون + عرض*(ردیف + ارتفاع*channel)] += val;
 }
 //This one might be too, can't remember.
-void col2im_cpu(float* data_col,
-         int channels,  int height,  int width,
-         int ksize,  int stride, int pad, float* data_im) 
+فراغ col2im_cpu(عائم* داده_ستون,
+         صحيح channels,  صحيح ارتفاع,  صحيح عرض,
+         صحيح ksize,  صحيح stride, صحيح pad, عائم* داده_im) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    صحيح c,h,w;
+    صحيح ارتفاع_ستون = (ارتفاع + 2*pad - ksize) / stride + 1;
+    صحيح عرض_ستون = (عرض + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                double val = data_col[col_index];
-                col2im_add_pixel(data_im, height, width, channels,
-                        im_row, im_col, c_im, pad, val);
+    صحيح channels_ستون = channels * ksize * ksize;
+    لكل (c = 0; c < channels_ستون; ++c) {
+        صحيح w_جابه_جایی = c % ksize;
+        صحيح h_جابه_جایی = (c / ksize) % ksize;
+        صحيح c_im = c / ksize / ksize;
+        لكل (h = 0; h < ارتفاع_ستون; ++h) {
+            لكل (w = 0; w < عرض_ستون; ++w) {
+                صحيح im_ردیف = h_جابه_جایی + h * stride;
+                صحيح im_ستون = w_جابه_جایی + w * stride;
+                صحيح ستون_شاخص = (c * ارتفاع_ستون + h) * عرض_ستون + w;
+                مزدوج val = داده_ستون[ستون_شاخص];
+                col2im_جمع_کن_pixel(داده_im, ارتفاع, عرض, channels,
+                        im_ردیف, im_ستون, c_im, pad, val);
             }
         }
     }

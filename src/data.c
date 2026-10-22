@@ -1,25 +1,25 @@
-#include "data.h"
-#include "utils.h"
-#include "image.h"
-#include "cuda.h"
+#ضمن "data.h"
+#ضمن "utils.h"
+#ضمن "image.h"
+#ضمن "cuda.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-list *get_paths(char *filename)
+list *get_paths(حرف *filename)
 {
-    char *path;
+    حرف *مسیر;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    list *lines = make_list();
-    while((path=fgetl(file))){
-        list_insert(lines, path);
+    إذا(!file) file_error(filename);
+    list *سطرها = make_list();
+    طالما((مسیر=fgetl(file))){
+        list_درج(سطرها, مسیر);
     }
     fclose(file);
-    return lines;
+    أرجع سطرها;
 }
 
 /*
@@ -39,87 +39,87 @@ char **get_random_paths_indexes(char **paths, int n, int m, int *indexes)
 }
 */
 
-char **get_random_paths(char **paths, int n, int m)
+حرف **get_random_paths(حرف **paths, صحيح n, صحيح m)
 {
-    char **random_paths = calloc(n, sizeof(char*));
-    int i;
+    حرف **random_paths = حافظه_صفر_بده(n, حجم(حرف*));
+    صحيح i;
     pthread_mutex_lock(&mutex);
-    for(i = 0; i < n; ++i){
-        int index = rand()%m;
-        random_paths[i] = paths[index];
+    لكل(i = 0; i < n; ++i){
+        صحيح شاخص = rand()%m;
+        random_paths[i] = paths[شاخص];
         //if(i == 0) printf("%s\n", paths[index]);
     }
     pthread_mutex_unlock(&mutex);
-    return random_paths;
+    أرجع random_paths;
 }
 
-char **find_replace_paths(char **paths, int n, char *find, char *replace)
+حرف **پیدا_کن_replace_paths(حرف **paths, صحيح n, حرف *پیدا_کن, حرف *replace)
 {
-    char **replace_paths = calloc(n, sizeof(char*));
-    int i;
-    for(i = 0; i < n; ++i){
-        char replaced[4096];
-        find_replace(paths[i], find, replace, replaced);
+    حرف **replace_paths = حافظه_صفر_بده(n, حجم(حرف*));
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        حرف replaced[4096];
+        پیدا_کن_replace(paths[i], پیدا_کن, replace, replaced);
         replace_paths[i] = copy_string(replaced);
     }
-    return replace_paths;
+    أرجع replace_paths;
 }
 
-matrix load_image_paths_gray(char **paths, int n, int w, int h)
+ماتریس بارگیری_image_paths_خاکستری(حرف **paths, صحيح n, صحيح w, صحيح h)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    صحيح i;
+    ماتریس X;
+    X.ردیفها = n;
+    X.vals = حافظه_صفر_بده(X.ردیفها, حجم(عائم*));
+    X.تعداد_ستون = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image(paths[i], w, h, 3);
+    لكل(i = 0; i < n; ++i){
+        image im = بارگیری_image(paths[i], w, h, 3);
 
-        image gray = grayscale_image(im);
+        image خاکستری = grayscale_image(im);
         free_image(im);
-        im = gray;
+        im = خاکستری;
 
-        X.vals[i] = im.data;
-        X.cols = im.h*im.w*im.c;
+        X.vals[i] = im.داده;
+        X.تعداد_ستون = im.h*im.w*im.c;
     }
-    return X;
+    أرجع X;
 }
 
-matrix load_image_paths(char **paths, int n, int w, int h)
+ماتریس بارگیری_image_paths(حرف **paths, صحيح n, صحيح w, صحيح h)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    صحيح i;
+    ماتریس X;
+    X.ردیفها = n;
+    X.vals = حافظه_صفر_بده(X.ردیفها, حجم(عائم*));
+    X.تعداد_ستون = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], w, h);
-        X.vals[i] = im.data;
-        X.cols = im.h*im.w*im.c;
+    لكل(i = 0; i < n; ++i){
+        image im = بارگیری_image_color(paths[i], w, h);
+        X.vals[i] = im.داده;
+        X.تعداد_ستون = im.h*im.w*im.c;
     }
-    return X;
+    أرجع X;
 }
 
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+ماتریس بارگیری_image_augment_paths(حرف **paths, صحيح n, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح center)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    صحيح i;
+    ماتریس X;
+    X.ردیفها = n;
+    X.vals = حافظه_صفر_بده(X.ردیفها, حجم(عائم*));
+    X.تعداد_ستون = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], 0, 0);
+    لكل(i = 0; i < n; ++i){
+        image im = بارگیری_image_color(paths[i], 0, 0);
         image crop;
-        if(center){
-            crop = center_crop_image(im, size, size);
-        } else {
-            crop = random_augment_image(im, angle, aspect, min, max, size, size);
+        إذا(center){
+            crop = center_crop_image(im, اندازه, اندازه);
+        } وإلا {
+            crop = random_augment_image(im, angle, aspect, min, max, اندازه, اندازه);
         }
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        صحيح flip = rand()%2;
+        إذا (flip) flip_image(crop);
         random_distort_image(crop, hue, saturation, exposure);
 
         /*
@@ -129,210 +129,210 @@ matrix load_image_augment_paths(char **paths, int n, int min, int max, int size,
         */
         //grayscale_image_3c(crop);
         free_image(im);
-        X.vals[i] = crop.data;
-        X.cols = crop.h*crop.w*crop.c;
+        X.vals[i] = crop.داده;
+        X.تعداد_ستون = crop.h*crop.w*crop.c;
     }
-    return X;
+    أرجع X;
 }
 
 
-box_label *read_boxes(char *filename, int *n)
+box_label *read_boxes(حرف *filename, صحيح *n)
 {
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    float x, y, h, w;
-    int id;
-    int count = 0;
-    int size = 64;
-    box_label *boxes = calloc(size, sizeof(box_label));
-    while(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
-        if(count == size) {
-            size = size * 2;
-            boxes = realloc(boxes, size*sizeof(box_label));
+    إذا(!file) file_error(filename);
+    عائم x, y, h, w;
+    صحيح id;
+    صحيح شمار = 0;
+    صحيح اندازه = 64;
+    box_label *boxes = حافظه_صفر_بده(اندازه, حجم(box_label));
+    طالما(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
+        إذا(شمار == اندازه) {
+            اندازه = اندازه * 2;
+            boxes = realloc(boxes, اندازه*حجم(box_label));
         }
-        boxes[count].id = id;
-        boxes[count].x = x;
-        boxes[count].y = y;
-        boxes[count].h = h;
-        boxes[count].w = w;
-        boxes[count].left   = x - w/2;
-        boxes[count].right  = x + w/2;
-        boxes[count].top    = y - h/2;
-        boxes[count].bottom = y + h/2;
-        ++count;
+        boxes[شمار].id = id;
+        boxes[شمار].x = x;
+        boxes[شمار].y = y;
+        boxes[شمار].h = h;
+        boxes[شمار].w = w;
+        boxes[شمار].چپ   = x - w/2;
+        boxes[شمار].راست  = x + w/2;
+        boxes[شمار].بالاترین    = y - h/2;
+        boxes[شمار].bottom = y + h/2;
+        ++شمار;
     }
     fclose(file);
-    *n = count;
-    return boxes;
+    *n = شمار;
+    أرجع boxes;
 }
 
-void randomize_boxes(box_label *b, int n)
+فراغ randomize_boxes(box_label *b, صحيح n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        box_label swap = b[i];
-        int index = rand()%n;
-        b[i] = b[index];
-        b[index] = swap;
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        box_label جابجا = b[i];
+        صحيح شاخص = rand()%n;
+        b[i] = b[شاخص];
+        b[شاخص] = جابجا;
     }
 }
 
-void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float sy, int flip)
+فراغ correct_boxes(box_label *boxes, صحيح n, عائم dx, عائم dy, عائم sx, عائم sy, صحيح flip)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(boxes[i].x == 0 && boxes[i].y == 0) {
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        إذا(boxes[i].x == 0 && boxes[i].y == 0) {
             boxes[i].x = 999999;
             boxes[i].y = 999999;
             boxes[i].w = 999999;
             boxes[i].h = 999999;
-            continue;
+            استمر;
         }
-        boxes[i].left   = boxes[i].left  * sx - dx;
-        boxes[i].right  = boxes[i].right * sx - dx;
-        boxes[i].top    = boxes[i].top   * sy - dy;
+        boxes[i].چپ   = boxes[i].چپ  * sx - dx;
+        boxes[i].راست  = boxes[i].راست * sx - dx;
+        boxes[i].بالاترین    = boxes[i].بالاترین   * sy - dy;
         boxes[i].bottom = boxes[i].bottom* sy - dy;
 
-        if(flip){
-            float swap = boxes[i].left;
-            boxes[i].left = 1. - boxes[i].right;
-            boxes[i].right = 1. - swap;
+        إذا(flip){
+            عائم جابجا = boxes[i].چپ;
+            boxes[i].چپ = 1. - boxes[i].راست;
+            boxes[i].راست = 1. - جابجا;
         }
 
-        boxes[i].left =  constrain(0, 1, boxes[i].left);
-        boxes[i].right = constrain(0, 1, boxes[i].right);
-        boxes[i].top =   constrain(0, 1, boxes[i].top);
+        boxes[i].چپ =  constrain(0, 1, boxes[i].چپ);
+        boxes[i].راست = constrain(0, 1, boxes[i].راست);
+        boxes[i].بالاترین =   constrain(0, 1, boxes[i].بالاترین);
         boxes[i].bottom =   constrain(0, 1, boxes[i].bottom);
 
-        boxes[i].x = (boxes[i].left+boxes[i].right)/2;
-        boxes[i].y = (boxes[i].top+boxes[i].bottom)/2;
-        boxes[i].w = (boxes[i].right - boxes[i].left);
-        boxes[i].h = (boxes[i].bottom - boxes[i].top);
+        boxes[i].x = (boxes[i].چپ+boxes[i].راست)/2;
+        boxes[i].y = (boxes[i].بالاترین+boxes[i].bottom)/2;
+        boxes[i].w = (boxes[i].راست - boxes[i].چپ);
+        boxes[i].h = (boxes[i].bottom - boxes[i].بالاترین);
 
         boxes[i].w = constrain(0, 1, boxes[i].w);
         boxes[i].h = constrain(0, 1, boxes[i].h);
     }
 }
 
-void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+فراغ fill_truth_swag(حرف *مسیر, عائم *truth, صحيح classes, صحيح flip, عائم dx, عائم dy, عائم sx, عائم sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "labels", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "labels", labelpath);
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    صحيح شمار = 0;
+    box_label *boxes = read_boxes(labelpath, &شمار);
+    randomize_boxes(boxes, شمار);
+    correct_boxes(boxes, شمار, dx, dy, sx, sy, flip);
+    عائم x,y,w,h;
+    صحيح id;
+    صحيح i;
 
-    for (i = 0; i < count && i < 90; ++i) {
+    لكل (i = 0; i < شمار && i < 90; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .0 || h < .0) continue;
+        إذا (w < .0 || h < .0) استمر;
 
-        int index = (4+classes) * i;
+        صحيح شاخص = (4+classes) * i;
 
-        truth[index++] = x;
-        truth[index++] = y;
-        truth[index++] = w;
-        truth[index++] = h;
+        truth[شاخص++] = x;
+        truth[شاخص++] = y;
+        truth[شاخص++] = w;
+        truth[شاخص++] = h;
 
-        if (id < classes) truth[index+id] = 1;
+        إذا (id < classes) truth[شاخص+id] = 1;
     }
-    free(boxes);
+    حرر(boxes);
 }
 
-void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
+فراغ fill_truth_region(حرف *مسیر, عائم *truth, صحيح classes, صحيح رقم_boxes, صحيح flip, عائم dx, عائم dy, عائم sx, عائم sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "labels", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "labels", labelpath);
 
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".png", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".png", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
+    صحيح شمار = 0;
+    box_label *boxes = read_boxes(labelpath, &شمار);
+    randomize_boxes(boxes, شمار);
+    correct_boxes(boxes, شمار, dx, dy, sx, sy, flip);
+    عائم x,y,w,h;
+    صحيح id;
+    صحيح i;
 
-    for (i = 0; i < count; ++i) {
+    لكل (i = 0; i < شمار; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .005 || h < .005) continue;
+        إذا (w < .005 || h < .005) استمر;
 
-        int col = (int)(x*num_boxes);
-        int row = (int)(y*num_boxes);
+        صحيح ستون = (صحيح)(x*رقم_boxes);
+        صحيح ردیف = (صحيح)(y*رقم_boxes);
 
-        x = x*num_boxes - col;
-        y = y*num_boxes - row;
+        x = x*رقم_boxes - ستون;
+        y = y*رقم_boxes - ردیف;
 
-        int index = (col+row*num_boxes)*(5+classes);
-        if (truth[index]) continue;
-        truth[index++] = 1;
+        صحيح شاخص = (ستون+ردیف*رقم_boxes)*(5+classes);
+        إذا (truth[شاخص]) استمر;
+        truth[شاخص++] = 1;
 
-        if (id < classes) truth[index+id] = 1;
-        index += classes;
+        إذا (id < classes) truth[شاخص+id] = 1;
+        شاخص += classes;
 
-        truth[index++] = x;
-        truth[index++] = y;
-        truth[index++] = w;
-        truth[index++] = h;
+        truth[شاخص++] = x;
+        truth[شاخص++] = y;
+        truth[شاخص++] = w;
+        truth[شاخص++] = h;
     }
-    free(boxes);
+    حرر(boxes);
 }
 
-void load_rle(image im, int *rle, int n)
+فراغ بارگیری_rle(image im, صحيح *rle, صحيح n)
 {
-    int count = 0;
-    int curr = 0;
-    int i,j;
-    for(i = 0; i < n; ++i){
-        for(j = 0; j < rle[i]; ++j){
-            im.data[count++] = curr;
+    صحيح شمار = 0;
+    صحيح curr = 0;
+    صحيح i,j;
+    لكل(i = 0; i < n; ++i){
+        لكل(j = 0; j < rle[i]; ++j){
+            im.داده[شمار++] = curr;
         }
         curr = 1 - curr;
     }
-    for(; count < im.h*im.w*im.c; ++count){
-        im.data[count] = curr;
+    لكل(; شمار < im.h*im.w*im.c; ++شمار){
+        im.داده[شمار] = curr;
     }
 }
 
-void or_image(image src, image dest, int c)
+فراغ or_image(image src, image dest, صحيح c)
 {
-    int i;
-    for(i = 0; i < src.w*src.h; ++i){
-        if(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
+    صحيح i;
+    لكل(i = 0; i < src.w*src.h; ++i){
+        إذا(src.داده[i]) dest.داده[dest.w*dest.h*c + i] = 1;
     }
 }
 
-void exclusive_image(image src)
+فراغ exclusive_image(image src)
 {
-    int k, j, i;
-    int s = src.w*src.h;
-    for(k = 0; k < src.c-1; ++k){
-        for(i = 0; i < s; ++i){
-            if (src.data[k*s + i]){
-                for(j = k+1; j < src.c; ++j){
-                    src.data[j*s + i] = 0;
+    صحيح k, j, i;
+    صحيح s = src.w*src.h;
+    لكل(k = 0; k < src.c-1; ++k){
+        لكل(i = 0; i < s; ++i){
+            إذا (src.داده[k*s + i]){
+                لكل(j = k+1; j < src.c; ++j){
+                    src.داده[j*s + i] = 0;
                 }
             }
         }
@@ -341,14 +341,14 @@ void exclusive_image(image src)
 
 box bound_image(image im)
 {
-    int x,y;
-    int minx = im.w;
-    int miny = im.h;
-    int maxx = 0;
-    int maxy = 0;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            if(im.data[y*im.w + x]){
+    صحيح x,y;
+    صحيح minx = im.w;
+    صحيح miny = im.h;
+    صحيح maxx = 0;
+    صحيح maxy = 0;
+    لكل(y = 0; y < im.h; ++y){
+        لكل(x = 0; x < im.w; ++x){
+            إذا(im.داده[y*im.w + x]){
                 minx = (x < minx) ? x : minx;
                 miny = (y < miny) ? y : miny;
                 maxx = (x > maxx) ? x : maxx;
@@ -358,123 +358,123 @@ box bound_image(image im)
     }
     box b = {minx, miny, maxx-minx + 1, maxy-miny + 1};
     //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
-    return b;
+    أرجع b;
 }
 
-void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+فراغ fill_truth_iseg(حرف *مسیر, صحيح رقم_boxes, عائم *truth, صحيح classes, صحيح w, صحيح h, augment_آرگومانها aug, صحيح flip, صحيح mw, صحيح mh)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "mask", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "mask", labelpath);
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
-    int j;
+    إذا(!file) file_error(labelpath);
+    حرف buff[32788];
+    صحيح id;
+    صحيح i = 0;
+    صحيح j;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
+    طالما((fscanf(file, "%d %s", &id, buff) == 2) && i < رقم_boxes){
+        صحيح n = 0;
+        صحيح *rle = read_intlist(buff, &n, 0);
+        بارگیری_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        إذا(flip) flip_image(sized);
 
-        image mask = resize_image(sized, mw, mh);
+        image ماسک = resize_image(sized, mw, mh);
         truth[i*(mw*mh+1)] = id;
-        for(j = 0; j < mw*mh; ++j){
-            truth[i*(mw*mh + 1) + 1 + j] = mask.data[j];
+        لكل(j = 0; j < mw*mh; ++j){
+            truth[i*(mw*mh + 1) + 1 + j] = ماسک.داده[j];
         }
         ++i;
 
-        free_image(mask);
+        free_image(ماسک);
         free_image(sized);
-        free(rle);
+        حرر(rle);
     }
-    if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
+    إذا(i < رقم_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
     free_image(part);
 }
 
-void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+فراغ fill_truth_ماسک(حرف *مسیر, صحيح رقم_boxes, عائم *truth, صحيح classes, صحيح w, صحيح h, augment_آرگومانها aug, صحيح flip, صحيح mw, صحيح mh)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "mask", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "mask", labelpath);
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
+    إذا(!file) file_error(labelpath);
+    حرف buff[32788];
+    صحيح id;
+    صحيح i = 0;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
+    طالما((fscanf(file, "%d %s", &id, buff) == 2) && i < رقم_boxes){
+        صحيح n = 0;
+        صحيح *rle = read_intlist(buff, &n, 0);
+        بارگیری_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        إذا(flip) flip_image(sized);
         box b = bound_image(sized);
-        if(b.w > 0){
+        إذا(b.w > 0){
             image crop = crop_image(sized, b.x, b.y, b.w, b.h);
-            image mask = resize_image(crop, mw, mh);
+            image ماسک = resize_image(crop, mw, mh);
             truth[i*(4 + mw*mh + 1) + 0] = (b.x + b.w/2.)/sized.w;
             truth[i*(4 + mw*mh + 1) + 1] = (b.y + b.h/2.)/sized.h;
             truth[i*(4 + mw*mh + 1) + 2] = b.w/sized.w;
             truth[i*(4 + mw*mh + 1) + 3] = b.h/sized.h;
-            int j;
-            for(j = 0; j < mw*mh; ++j){
-                truth[i*(4 + mw*mh + 1) + 4 + j] = mask.data[j];
+            صحيح j;
+            لكل(j = 0; j < mw*mh; ++j){
+                truth[i*(4 + mw*mh + 1) + 4 + j] = ماسک.داده[j];
             }
             truth[i*(4 + mw*mh + 1) + 4 + mw*mh] = id;
             free_image(crop);
-            free_image(mask);
+            free_image(ماسک);
             ++i;
         }
         free_image(sized);
-        free(rle);
+        حرر(rle);
     }
     fclose(file);
     free_image(part);
 }
 
 
-void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+فراغ fill_truth_detection(حرف *مسیر, صحيح رقم_boxes, عائم *truth, صحيح classes, صحيح flip, عائم dx, عائم dy, عائم sx, عائم sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "labels", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "labels", labelpath);
 
-    find_replace(labelpath, "raw", "labels", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".png", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    if(count > num_boxes) count = num_boxes;
-    float x,y,w,h;
-    int id;
-    int i;
-    int sub = 0;
+    پیدا_کن_replace(labelpath, "raw", "labels", labelpath);
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".png", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
+    صحيح شمار = 0;
+    box_label *boxes = read_boxes(labelpath, &شمار);
+    randomize_boxes(boxes, شمار);
+    correct_boxes(boxes, شمار, dx, dy, sx, sy, flip);
+    إذا(شمار > رقم_boxes) شمار = رقم_boxes;
+    عائم x,y,w,h;
+    صحيح id;
+    صحيح i;
+    صحيح sub = 0;
 
-    for (i = 0; i < count; ++i) {
+    لكل (i = 0; i < شمار; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if ((w < .001 || h < .001)) {
+        إذا ((w < .001 || h < .001)) {
             ++sub;
-            continue;
+            استمر;
         }
 
         truth[(i-sub)*5+0] = x;
@@ -483,292 +483,292 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
         truth[(i-sub)*5+3] = h;
         truth[(i-sub)*5+4] = id;
     }
-    free(boxes);
+    حرر(boxes);
 }
 
-#define NUMCHARS 37
+#تعریف_کن NUMCHARS 37
 
-void print_letters(float *pred, int n)
+فراغ print_letters(عائم *pred, صحيح n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        int index = max_index(pred+i*NUMCHARS, NUMCHARS);
-        printf("%c", int_to_alphanum(index));
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        صحيح شاخص = max_شاخص(pred+i*NUMCHARS, NUMCHARS);
+        چاپ_کن("%c", int_مقصد_alphanum(شاخص));
     }
-    printf("\n");
+    چاپ_کن("\n");
 }
 
-void fill_truth_captcha(char *path, int n, float *truth)
+فراغ fill_truth_captcha(حرف *مسیر, صحيح n, عائم *truth)
 {
-    char *begin = strrchr(path, '/');
+    حرف *begin = strrchr(مسیر, '/');
     ++begin;
-    int i;
-    for(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
-        int index = alphanum_to_int(begin[i]);
-        if(index > 35) printf("Bad %c\n", begin[i]);
-        truth[i*NUMCHARS+index] = 1;
+    صحيح i;
+    لكل(i = 0; i < طول_رشته(begin) && i < n && begin[i] != '.'; ++i){
+        صحيح شاخص = alphanum_مقصد_int(begin[i]);
+        إذا(شاخص > 35) چاپ_کن("Bad %c\n", begin[i]);
+        truth[i*NUMCHARS+شاخص] = 1;
     }
-    for(;i < n; ++i){
+    لكل(;i < n; ++i){
         truth[i*NUMCHARS + NUMCHARS-1] = 1;
     }
 }
 
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
+داده بارگیری_داده_captcha(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح w, صحيح h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = make_matrix(n, k*NUMCHARS);
-    int i;
-    for(i = 0; i < n; ++i){
+    d.X = بارگیری_image_paths(paths, n, w, h);
+    d.y = make_ماتریس(n, k*NUMCHARS);
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
         fill_truth_captcha(paths[i], k, d.y.vals[i]);
     }
-    if(m) free(paths);
-    return d;
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
+داده بارگیری_داده_captcha_encode(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.X.cols = 17100;
+    d.X = بارگیری_image_paths(paths, n, w, h);
+    d.X.تعداد_ستون = 17100;
     d.y = d.X;
-    if(m) free(paths);
-    return d;
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-void fill_truth(char *path, char **labels, int k, float *truth)
+فراغ fill_truth(حرف *مسیر, حرف **labels, صحيح k, عائم *truth)
 {
-    int i;
-    memset(truth, 0, k*sizeof(float));
-    int count = 0;
-    for(i = 0; i < k; ++i){
-        if(strstr(path, labels[i])){
+    صحيح i;
+    memset(truth, 0, k*حجم(عائم));
+    صحيح شمار = 0;
+    لكل(i = 0; i < k; ++i){
+        إذا(جستجوی_رشته(مسیر, labels[i])){
             truth[i] = 1;
-            ++count;
+            ++شمار;
             //printf("%s %s %d\n", path, labels[i], i);
         }
     }
-    if(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
+    إذا(شمار != 1 && (k != 1 || شمار != 0)) چاپ_کن("Too many or too few labels: %d, %s\n", شمار, مسیر);
 }
 
-void fill_hierarchy(float *truth, int k, tree *hierarchy)
+فراغ fill_hierarchy(عائم *truth, صحيح k, درخت *hierarchy)
 {
-    int j;
-    for(j = 0; j < k; ++j){
-        if(truth[j]){
-            int parent = hierarchy->parent[j];
-            while(parent >= 0){
-                truth[parent] = 1;
-                parent = hierarchy->parent[parent];
+    صحيح j;
+    لكل(j = 0; j < k; ++j){
+        إذا(truth[j]){
+            صحيح والد = hierarchy->والد[j];
+            طالما(والد >= 0){
+                truth[والد] = 1;
+                والد = hierarchy->والد[والد];
             }
         }
     }
-    int i;
-    int count = 0;
-    for(j = 0; j < hierarchy->groups; ++j){
+    صحيح i;
+    صحيح شمار = 0;
+    لكل(j = 0; j < hierarchy->groups; ++j){
         //printf("%d\n", count);
-        int mask = 1;
-        for(i = 0; i < hierarchy->group_size[j]; ++i){
-            if(truth[count + i]){
-                mask = 0;
-                break;
+        صحيح ماسک = 1;
+        لكل(i = 0; i < hierarchy->گروه_اندازه[j]; ++i){
+            إذا(truth[شمار + i]){
+                ماسک = 0;
+                اكسر;
             }
         }
-        if (mask) {
-            for(i = 0; i < hierarchy->group_size[j]; ++i){
-                truth[count + i] = SECRET_NUM;
+        إذا (ماسک) {
+            لكل(i = 0; i < hierarchy->گروه_اندازه[j]; ++i){
+                truth[شمار + i] = SECRET_رقم;
             }
         }
-        count += hierarchy->group_size[j];
+        شمار += hierarchy->گروه_اندازه[j];
     }
 }
 
-matrix load_regression_labels_paths(char **paths, int n, int k)
+ماتریس بارگیری_regression_labels_paths(حرف **paths, صحيح n, صحيح k)
 {
-    matrix y = make_matrix(n, k);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        char labelpath[4096];
-        find_replace(paths[i], "images", "labels", labelpath);
-        find_replace(labelpath, "JPEGImages", "labels", labelpath);
-        find_replace(labelpath, ".BMP", ".txt", labelpath);
-        find_replace(labelpath, ".JPEG", ".txt", labelpath);
-        find_replace(labelpath, ".JPG", ".txt", labelpath);
-        find_replace(labelpath, ".JPeG", ".txt", labelpath);
-        find_replace(labelpath, ".Jpeg", ".txt", labelpath);
-        find_replace(labelpath, ".PNG", ".txt", labelpath);
-        find_replace(labelpath, ".TIF", ".txt", labelpath);
-        find_replace(labelpath, ".bmp", ".txt", labelpath);
-        find_replace(labelpath, ".jpeg", ".txt", labelpath);
-        find_replace(labelpath, ".jpg", ".txt", labelpath);
-        find_replace(labelpath, ".png", ".txt", labelpath);
-        find_replace(labelpath, ".tif", ".txt", labelpath);
+    ماتریس y = make_ماتریس(n, k);
+    صحيح i,j;
+    لكل(i = 0; i < n; ++i){
+        حرف labelpath[4096];
+        پیدا_کن_replace(paths[i], "images", "labels", labelpath);
+        پیدا_کن_replace(labelpath, "JPEGImages", "labels", labelpath);
+        پیدا_کن_replace(labelpath, ".BMP", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".JPeG", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".Jpeg", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".PNG", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".TIF", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".bmp", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".jpeg", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".png", ".txt", labelpath);
+        پیدا_کن_replace(labelpath, ".tif", ".txt", labelpath);
 
         FILE *file = fopen(labelpath, "r");
-        for(j = 0; j < k; ++j){
+        لكل(j = 0; j < k; ++j){
             fscanf(file, "%f", &(y.vals[i][j]));
         }
         fclose(file);
     }
-    return y;
+    أرجع y;
 }
 
-matrix load_labels_paths(char **paths, int n, char **labels, int k, tree *hierarchy)
+ماتریس بارگیری_labels_paths(حرف **paths, صحيح n, حرف **labels, صحيح k, درخت *hierarchy)
 {
-    matrix y = make_matrix(n, k);
-    int i;
-    for(i = 0; i < n && labels; ++i){
+    ماتریس y = make_ماتریس(n, k);
+    صحيح i;
+    لكل(i = 0; i < n && labels; ++i){
         fill_truth(paths[i], labels, k, y.vals[i]);
-        if(hierarchy){
+        إذا(hierarchy){
             fill_hierarchy(y.vals[i], k, hierarchy);
         }
     }
-    return y;
+    أرجع y;
 }
 
-matrix load_tags_paths(char **paths, int n, int k)
+ماتریس بارگیری_برچسبها_paths(حرف **paths, صحيح n, صحيح k)
 {
-    matrix y = make_matrix(n, k);
-    int i;
+    ماتریس y = make_ماتریس(n, k);
+    صحيح i;
     //int count = 0;
-    for(i = 0; i < n; ++i){
-        char label[4096];
-        find_replace(paths[i], "images", "labels", label);
-        find_replace(label, ".jpg", ".txt", label);
+    لكل(i = 0; i < n; ++i){
+        حرف label[4096];
+        پیدا_کن_replace(paths[i], "images", "labels", label);
+        پیدا_کن_replace(label, ".jpg", ".txt", label);
         FILE *file = fopen(label, "r");
-        if (!file) continue;
+        إذا (!file) استمر;
         //++count;
-        int tag;
-        while(fscanf(file, "%d", &tag) == 1){
-            if(tag < k){
-                y.vals[i][tag] = 1;
+        صحيح برچسب;
+        طالما(fscanf(file, "%d", &برچسب) == 1){
+            إذا(برچسب < k){
+                y.vals[i][برچسب] = 1;
             }
         }
         fclose(file);
     }
     //printf("%d/%d\n", count, n);
-    return y;
+    أرجع y;
 }
 
-char **get_labels(char *filename)
+حرف **get_labels(حرف *filename)
 {
     list *plist = get_paths(filename);
-    char **labels = (char **)list_to_array(plist);
+    حرف **labels = (حرف **)list_مقصد_array(plist);
     free_list(plist);
-    return labels;
+    أرجع labels;
 }
 
-void free_data(data d)
+فراغ free_داده(داده d)
 {
-    if(!d.shallow){
-        free_matrix(d.X);
-        free_matrix(d.y);
-    }else{
-        free(d.X.vals);
-        free(d.y.vals);
+    إذا(!d.shallow){
+        free_ماتریس(d.X);
+        free_ماتریس(d.y);
+    }وإلا{
+        حرر(d.X.vals);
+        حرر(d.y.vals);
     }
 }
 
-image get_segmentation_image(char *path, int w, int h, int classes)
+image get_segmentation_image(حرف *مسیر, صحيح w, صحيح h, صحيح classes)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    image mask = make_image(w, h, classes);
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "mask", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "mask", labelpath);
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
+    image ماسک = make_image(w, h, classes);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    إذا(!file) file_error(labelpath);
+    حرف buff[32788];
+    صحيح id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
-        or_image(part, mask, id);
-        free(rle);
+    طالما(fscanf(file, "%d %s", &id, buff) == 2){
+        صحيح n = 0;
+        صحيح *rle = read_intlist(buff, &n, 0);
+        بارگیری_rle(part, rle, n);
+        or_image(part, ماسک, id);
+        حرر(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    أرجع ماسک;
 }
 
-image get_segmentation_image2(char *path, int w, int h, int classes)
+image get_segmentation_image2(حرف *مسیر, صحيح w, صحيح h, صحيح classes)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    image mask = make_image(w, h, classes+1);
-    int i;
-    for(i = 0; i < w*h; ++i){
-        mask.data[w*h*classes + i] = 1;
+    حرف labelpath[4096];
+    پیدا_کن_replace(مسیر, "images", "mask", labelpath);
+    پیدا_کن_replace(labelpath, "JPEGImages", "mask", labelpath);
+    پیدا_کن_replace(labelpath, ".jpg", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPG", ".txt", labelpath);
+    پیدا_کن_replace(labelpath, ".JPEG", ".txt", labelpath);
+    image ماسک = make_image(w, h, classes+1);
+    صحيح i;
+    لكل(i = 0; i < w*h; ++i){
+        ماسک.داده[w*h*classes + i] = 1;
     }
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    إذا(!file) file_error(labelpath);
+    حرف buff[32788];
+    صحيح id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
-        or_image(part, mask, id);
-        for(i = 0; i < w*h; ++i){
-            if(part.data[i]) mask.data[w*h*classes + i] = 0;
+    طالما(fscanf(file, "%d %s", &id, buff) == 2){
+        صحيح n = 0;
+        صحيح *rle = read_intlist(buff, &n, 0);
+        بارگیری_rle(part, rle, n);
+        or_image(part, ماسک, id);
+        لكل(i = 0; i < w*h; ++i){
+            إذا(part.داده[i]) ماسک.داده[w*h*classes + i] = 0;
         }
-        free(rle);
+        حرر(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    أرجع ماسک;
 }
 
-data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure, int div)
+داده بارگیری_داده_seg(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح classes, صحيح min, صحيح max, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح div)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    حرف **random_paths = get_random_paths(paths, n, m);
+    صحيح i;
+    داده d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*3;
 
 
-    d.y.rows = n;
-    d.y.cols = h*w*classes/div/div;
-    d.y.vals = calloc(d.X.rows, sizeof(float*));
+    d.y.ردیفها = n;
+    d.y.تعداد_ستون = h*w*classes/div/div;
+    d.y.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    لكل(i = 0; i < n; ++i){
+        image orig = بارگیری_image_color(random_paths[i], 0, 0);
+        augment_آرگومانها a = random_augment_آرگومانها(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        صحيح flip = rand()%2;
+        إذا(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.داده;
 
-        image mask = get_segmentation_image(random_paths[i], orig.w, orig.h, classes);
+        image ماسک = get_segmentation_image(random_paths[i], orig.w, orig.h, classes);
         //image mask = make_image(orig.w, orig.h, classes+1);
-        image sized_m = rotate_crop_image(mask, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
+        image sized_m = rotate_crop_image(ماسک, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
 
-        if(flip) flip_image(sized_m);
-        d.y.vals[i] = sized_m.data;
+        إذا(flip) flip_image(sized_m);
+        d.y.vals[i] = sized_m.داده;
 
         free_image(orig);
-        free_image(mask);
+        free_image(ماسک);
 
         /*
            image rgb = mask_to_rgb(sized_m, classes);
@@ -778,32 +778,32 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    حرر(random_paths);
+    أرجع d;
 }
 
-data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int boxes, int div, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+داده بارگیری_داده_iseg(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح classes, صحيح boxes, صحيح div, صحيح min, صحيح max, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    حرف **random_paths = get_random_paths(paths, n, m);
+    صحيح i;
+    داده d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*3;
 
-    d.y = make_matrix(n, (((w/div)*(h/div))+1)*boxes);
+    d.y = make_ماتریس(n, (((w/div)*(h/div))+1)*boxes);
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    لكل(i = 0; i < n; ++i){
+        image orig = بارگیری_image_color(random_paths[i], 0, 0);
+        augment_آرگومانها a = random_augment_آرگومانها(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        صحيح flip = rand()%2;
+        إذا(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.داده;
         //show_image(sized, "image");
 
         fill_truth_iseg(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, w/div, h/div);
@@ -818,35 +818,35 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    حرر(random_paths);
+    أرجع d;
 }
 
-data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int boxes, int coords, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+داده بارگیری_داده_ماسک(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح classes, صحيح boxes, صحيح coords, صحيح min, صحيح max, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    حرف **random_paths = get_random_paths(paths, n, m);
+    صحيح i;
+    داده d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*3;
 
-    d.y = make_matrix(n, (coords+1)*boxes);
+    d.y = make_ماتریس(n, (coords+1)*boxes);
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    لكل(i = 0; i < n; ++i){
+        image orig = بارگیری_image_color(random_paths[i], 0, 0);
+        augment_آرگومانها a = random_augment_آرگومانها(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        صحيح flip = rand()%2;
+        إذا(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.داده;
         //show_image(sized, "image");
 
-        fill_truth_mask(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, 14, 14);
+        fill_truth_ماسک(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, 14, 14);
 
         free_image(orig);
 
@@ -858,116 +858,116 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    حرر(random_paths);
+    أرجع d;
 }
 
-data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure)
+داده بارگیری_داده_region(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح اندازه, صحيح classes, عائم jitter, عائم hue, عائم saturation, عائم exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    حرف **random_paths = get_random_paths(paths, n, m);
+    صحيح i;
+    داده d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*3;
 
 
-    int k = size*size*(5+classes);
-    d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
+    صحيح k = اندازه*اندازه*(5+classes);
+    d.y = make_ماتریس(n, k);
+    لكل(i = 0; i < n; ++i){
+        image orig = بارگیری_image_color(random_paths[i], 0, 0);
 
-        int oh = orig.h;
-        int ow = orig.w;
+        صحيح oh = orig.h;
+        صحيح ow = orig.w;
 
-        int dw = (ow*jitter);
-        int dh = (oh*jitter);
+        صحيح dw = (ow*jitter);
+        صحيح dh = (oh*jitter);
 
-        int pleft  = rand_uniform(-dw, dw);
-        int pright = rand_uniform(-dw, dw);
-        int ptop   = rand_uniform(-dh, dh);
-        int pbot   = rand_uniform(-dh, dh);
+        صحيح pleft  = rand_یکنواخت(-dw, dw);
+        صحيح pright = rand_یکنواخت(-dw, dw);
+        صحيح ptop   = rand_یکنواخت(-dh, dh);
+        صحيح pbot   = rand_یکنواخت(-dh, dh);
 
-        int swidth =  ow - pleft - pright;
-        int sheight = oh - ptop - pbot;
+        صحيح swidth =  ow - pleft - pright;
+        صحيح sheight = oh - ptop - pbot;
 
-        float sx = (float)swidth  / ow;
-        float sy = (float)sheight / oh;
+        عائم sx = (عائم)swidth  / ow;
+        عائم sy = (عائم)sheight / oh;
 
-        int flip = rand()%2;
+        صحيح flip = rand()%2;
         image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-        float dx = ((float)pleft/ow)/sx;
-        float dy = ((float)ptop /oh)/sy;
+        عائم dx = ((عائم)pleft/ow)/sx;
+        عائم dy = ((عائم)ptop /oh)/sy;
 
         image sized = resize_image(cropped, w, h);
-        if(flip) flip_image(sized);
+        إذا(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.داده;
 
-        fill_truth_region(random_paths[i], d.y.vals[i], classes, size, flip, dx, dy, 1./sx, 1./sy);
+        fill_truth_region(random_paths[i], d.y.vals[i], classes, اندازه, flip, dx, dy, 1./sx, 1./sy);
 
         free_image(orig);
         free_image(cropped);
     }
-    free(random_paths);
-    return d;
+    حرر(random_paths);
+    أرجع d;
 }
 
-data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
+داده بارگیری_داده_compare(صحيح n, حرف **paths, صحيح m, صحيح classes, صحيح w, صحيح h)
 {
-    if(m) paths = get_random_paths(paths, 2*n, m);
-    int i,j;
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, 2*n, m);
+    صحيح i,j;
+    داده d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*6;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*6;
 
-    int k = 2*(classes);
-    d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
-        image im1 = load_image_color(paths[i*2],   w, h);
-        image im2 = load_image_color(paths[i*2+1], w, h);
+    صحيح k = 2*(classes);
+    d.y = make_ماتریس(n, k);
+    لكل(i = 0; i < n; ++i){
+        image im1 = بارگیری_image_color(paths[i*2],   w, h);
+        image im2 = بارگیری_image_color(paths[i*2+1], w, h);
 
-        d.X.vals[i] = calloc(d.X.cols, sizeof(float));
-        memcpy(d.X.vals[i],         im1.data, h*w*3*sizeof(float));
-        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*sizeof(float));
+        d.X.vals[i] = حافظه_صفر_بده(d.X.تعداد_ستون, حجم(عائم));
+        کپی_حافظه(d.X.vals[i],         im1.داده, h*w*3*حجم(عائم));
+        کپی_حافظه(d.X.vals[i] + h*w*3, im2.داده, h*w*3*حجم(عائم));
 
-        int id;
-        float iou;
+        صحيح id;
+        عائم iou;
 
-        char imlabel1[4096];
-        char imlabel2[4096];
-        find_replace(paths[i*2],   "imgs", "labels", imlabel1);
-        find_replace(imlabel1, "jpg", "txt", imlabel1);
+        حرف imlabel1[4096];
+        حرف imlabel2[4096];
+        پیدا_کن_replace(paths[i*2],   "imgs", "labels", imlabel1);
+        پیدا_کن_replace(imlabel1, "jpg", "txt", imlabel1);
         FILE *fp1 = fopen(imlabel1, "r");
 
-        while(fscanf(fp1, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
+        طالما(fscanf(fp1, "%d %f", &id, &iou) == 2){
+            إذا (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
         }
 
-        find_replace(paths[i*2+1], "imgs", "labels", imlabel2);
-        find_replace(imlabel2, "jpg", "txt", imlabel2);
+        پیدا_کن_replace(paths[i*2+1], "imgs", "labels", imlabel2);
+        پیدا_کن_replace(imlabel2, "jpg", "txt", imlabel2);
         FILE *fp2 = fopen(imlabel2, "r");
 
-        while(fscanf(fp2, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
+        طالما(fscanf(fp2, "%d %f", &id, &iou) == 2){
+            إذا (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
         }
 
-        for (j = 0; j < classes; ++j){
-            if (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
+        لكل (j = 0; j < classes; ++j){
+            إذا (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
                 d.y.vals[i][2*j] = 1;
                 d.y.vals[i][2*j+1] = 0;
-            } else if (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
+            } وإلا إذا (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
                 d.y.vals[i][2*j] = 0;
                 d.y.vals[i][2*j+1] = 1;
-            } else {
-                d.y.vals[i][2*j]   = SECRET_NUM;
-                d.y.vals[i][2*j+1] = SECRET_NUM;
+            } وإلا {
+                d.y.vals[i][2*j]   = SECRET_رقم;
+                d.y.vals[i][2*j+1] = SECRET_رقم;
             }
         }
         fclose(fp1);
@@ -976,240 +976,240 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
         free_image(im1);
         free_image(im2);
     }
-    if(m) free(paths);
-    return d;
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-data load_data_swag(char **paths, int n, int classes, float jitter)
+داده بارگیری_داده_swag(حرف **paths, صحيح n, صحيح classes, عائم jitter)
 {
-    int index = rand()%n;
-    char *random_path = paths[index];
+    صحيح شاخص = rand()%n;
+    حرف *random_مسیر = paths[شاخص];
 
-    image orig = load_image_color(random_path, 0, 0);
-    int h = orig.h;
-    int w = orig.w;
+    image orig = بارگیری_image_color(random_مسیر, 0, 0);
+    صحيح h = orig.h;
+    صحيح w = orig.w;
 
-    data d = {0};
+    داده d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
 
-    d.X.rows = 1;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ردیفها = 1;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*3;
 
-    int k = (4+classes)*90;
-    d.y = make_matrix(1, k);
+    صحيح k = (4+classes)*90;
+    d.y = make_ماتریس(1, k);
 
-    int dw = w*jitter;
-    int dh = h*jitter;
+    صحيح dw = w*jitter;
+    صحيح dh = h*jitter;
 
-    int pleft  = rand_uniform(-dw, dw);
-    int pright = rand_uniform(-dw, dw);
-    int ptop   = rand_uniform(-dh, dh);
-    int pbot   = rand_uniform(-dh, dh);
+    صحيح pleft  = rand_یکنواخت(-dw, dw);
+    صحيح pright = rand_یکنواخت(-dw, dw);
+    صحيح ptop   = rand_یکنواخت(-dh, dh);
+    صحيح pbot   = rand_یکنواخت(-dh, dh);
 
-    int swidth =  w - pleft - pright;
-    int sheight = h - ptop - pbot;
+    صحيح swidth =  w - pleft - pright;
+    صحيح sheight = h - ptop - pbot;
 
-    float sx = (float)swidth  / w;
-    float sy = (float)sheight / h;
+    عائم sx = (عائم)swidth  / w;
+    عائم sy = (عائم)sheight / h;
 
-    int flip = rand()%2;
+    صحيح flip = rand()%2;
     image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-    float dx = ((float)pleft/w)/sx;
-    float dy = ((float)ptop /h)/sy;
+    عائم dx = ((عائم)pleft/w)/sx;
+    عائم dy = ((عائم)ptop /h)/sy;
 
     image sized = resize_image(cropped, w, h);
-    if(flip) flip_image(sized);
-    d.X.vals[0] = sized.data;
+    إذا(flip) flip_image(sized);
+    d.X.vals[0] = sized.داده;
 
-    fill_truth_swag(random_path, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
+    fill_truth_swag(random_مسیر, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
 
     free_image(orig);
     free_image(cropped);
 
-    return d;
+    أرجع d;
 }
 
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure)
+داده بارگیری_داده_detection(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح boxes, صحيح classes, عائم jitter, عائم hue, عائم saturation, عائم exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    حرف **random_paths = get_random_paths(paths, n, m);
+    صحيح i;
+    داده d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
+    d.X.تعداد_ستون = h*w*3;
 
-    d.y = make_matrix(n, 5*boxes);
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
+    d.y = make_ماتریس(n, 5*boxes);
+    لكل(i = 0; i < n; ++i){
+        image orig = بارگیری_image_color(random_paths[i], 0, 0);
         image sized = make_image(w, h, orig.c);
         fill_image(sized, .5);
 
-        float dw = jitter * orig.w;
-        float dh = jitter * orig.h;
+        عائم dw = jitter * orig.w;
+        عائم dh = jitter * orig.h;
 
-        float new_ar = (orig.w + rand_uniform(-dw, dw)) / (orig.h + rand_uniform(-dh, dh));
+        عائم new_ar = (orig.w + rand_یکنواخت(-dw, dw)) / (orig.h + rand_یکنواخت(-dh, dh));
         //float scale = rand_uniform(.25, 2);
-        float scale = 1;
+        عائم scale = 1;
 
-        float nw, nh;
+        عائم nw, nh;
 
-        if(new_ar < 1){
+        إذا(new_ar < 1){
             nh = scale * h;
             nw = nh * new_ar;
-        } else {
+        } وإلا {
             nw = scale * w;
             nh = nw / new_ar;
         }
 
-        float dx = rand_uniform(0, w - nw);
-        float dy = rand_uniform(0, h - nh);
+        عائم dx = rand_یکنواخت(0, w - nw);
+        عائم dy = rand_یکنواخت(0, h - nh);
 
-        place_image(orig, nw, nh, dx, dy, sized);
+        قراربده_image(orig, nw, nh, dx, dy, sized);
 
         random_distort_image(sized, hue, saturation, exposure);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
-        d.X.vals[i] = sized.data;
+        صحيح flip = rand()%2;
+        إذا(flip) flip_image(sized);
+        d.X.vals[i] = sized.داده;
 
 
         fill_truth_detection(random_paths[i], boxes, d.y.vals[i], classes, flip, -dx/w, -dy/h, nw/w, nh/h);
 
         free_image(orig);
     }
-    free(random_paths);
-    return d;
+    حرر(random_paths);
+    أرجع d;
 }
 
-void *load_thread(void *ptr)
+فراغ *بارگیری_thread(فراغ *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
-    if(a.exposure == 0) a.exposure = 1;
-    if(a.saturation == 0) a.saturation = 1;
-    if(a.aspect == 0) a.aspect = 1;
+    بارگیری_آرگومانها a = *(بنية بارگیری_آرگومانها*)ptr;
+    إذا(a.exposure == 0) a.exposure = 1;
+    إذا(a.saturation == 0) a.saturation = 1;
+    إذا(a.aspect == 0) a.aspect = 1;
 
-    if (a.type == OLD_CLASSIFICATION_DATA){
-        *a.d = load_data_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
-    } else if (a.type == REGRESSION_DATA){
-        *a.d = load_data_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == CLASSIFICATION_DATA){
-        *a.d = load_data_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
-    } else if (a.type == SUPER_DATA){
-        *a.d = load_data_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
-    } else if (a.type == WRITING_DATA){
-        *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
-    } else if (a.type == ISEG_DATA){
-        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == INSTANCE_DATA){
-        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SEGMENTATION_DATA){
-        *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
-    } else if (a.type == REGION_DATA){
-        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == DETECTION_DATA){
-        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SWAG_DATA){
-        *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
-    } else if (a.type == COMPARE_DATA){
-        *a.d = load_data_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
-    } else if (a.type == IMAGE_DATA){
-        *(a.im) = load_image_color(a.path, 0, 0);
+    إذا (a.type == OLD_CLASSIFICATION_داده){
+        *a.d = بارگیری_داده_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
+    } وإلا إذا (a.type == REGRESSION_داده){
+        *a.d = بارگیری_داده_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.اندازه, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } وإلا إذا (a.type == CLASSIFICATION_داده){
+        *a.d = بارگیری_داده_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.اندازه, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
+    } وإلا إذا (a.type == SUPER_داده){
+        *a.d = بارگیری_داده_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
+    } وإلا إذا (a.type == WRITING_داده){
+        *a.d = بارگیری_داده_writing(a.paths, a.n, a.m, a.w, a.h, a.بیرون_w, a.بیرون_h);
+    } وإلا إذا (a.type == ISEG_داده){
+        *a.d = بارگیری_داده_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.رقم_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } وإلا إذا (a.type == INSTANCE_داده){
+        *a.d = بارگیری_داده_ماسک(a.n, a.paths, a.m, a.w, a.h, a.classes, a.رقم_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } وإلا إذا (a.type == SEGMENTATION_داده){
+        *a.d = بارگیری_داده_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
+    } وإلا إذا (a.type == REGION_داده){
+        *a.d = بارگیری_داده_region(a.n, a.paths, a.m, a.w, a.h, a.رقم_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } وإلا إذا (a.type == DETECTION_داده){
+        *a.d = بارگیری_داده_detection(a.n, a.paths, a.m, a.w, a.h, a.رقم_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } وإلا إذا (a.type == SWAG_داده){
+        *a.d = بارگیری_داده_swag(a.paths, a.n, a.classes, a.jitter);
+    } وإلا إذا (a.type == COMPARE_داده){
+        *a.d = بارگیری_داده_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
+    } وإلا إذا (a.type == IMAGE_داده){
+        *(a.im) = بارگیری_image_color(a.مسیر, 0, 0);
         *(a.resized) = resize_image(*(a.im), a.w, a.h);
-    } else if (a.type == LETTERBOX_DATA){
-        *(a.im) = load_image_color(a.path, 0, 0);
+    } وإلا إذا (a.type == LETTERBOX_داده){
+        *(a.im) = بارگیری_image_color(a.مسیر, 0, 0);
         *(a.resized) = letterbox_image(*(a.im), a.w, a.h);
-    } else if (a.type == TAG_DATA){
-        *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } وإلا إذا (a.type == برچسب_داده){
+        *a.d = بارگیری_داده_برچسب(a.paths, a.n, a.m, a.classes, a.min, a.max, a.اندازه, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     }
-    free(ptr);
-    return 0;
+    حرر(ptr);
+    أرجع 0;
 }
 
-pthread_t load_data_in_thread(load_args args)
+pthread_t بارگیری_داده_درون_thread(بارگیری_آرگومانها آرگومانها)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
-    return thread;
+    بنية بارگیری_آرگومانها *ptr = حافظه_صفر_بده(1, حجم(بنية بارگیری_آرگومانها));
+    *ptr = آرگومانها;
+    إذا(pthread_create(&thread, 0, بارگیری_thread, ptr)) error("Thread creation failed");
+    أرجع thread;
 }
 
-void *load_threads(void *ptr)
+فراغ *بارگیری_نخها(فراغ *ptr)
 {
-    int i;
-    load_args args = *(load_args *)ptr;
-    if (args.threads == 0) args.threads = 1;
-    data *out = args.d;
-    int total = args.n;
-    free(ptr);
-    data *buffers = calloc(args.threads, sizeof(data));
-    pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
-    for(i = 0; i < args.threads; ++i){
-        args.d = buffers + i;
-        args.n = (i+1) * total/args.threads - i * total/args.threads;
-        threads[i] = load_data_in_thread(args);
+    صحيح i;
+    بارگیری_آرگومانها آرگومانها = *(بارگیری_آرگومانها *)ptr;
+    إذا (آرگومانها.نخها == 0) آرگومانها.نخها = 1;
+    داده *بیرون = آرگومانها.d;
+    صحيح مجموع = آرگومانها.n;
+    حرر(ptr);
+    داده *buffers = حافظه_صفر_بده(آرگومانها.نخها, حجم(داده));
+    pthread_t *نخها = حافظه_صفر_بده(آرگومانها.نخها, حجم(pthread_t));
+    لكل(i = 0; i < آرگومانها.نخها; ++i){
+        آرگومانها.d = buffers + i;
+        آرگومانها.n = (i+1) * مجموع/آرگومانها.نخها - i * مجموع/آرگومانها.نخها;
+        نخها[i] = بارگیری_داده_درون_thread(آرگومانها);
     }
-    for(i = 0; i < args.threads; ++i){
-        pthread_join(threads[i], 0);
+    لكل(i = 0; i < آرگومانها.نخها; ++i){
+        pthread_join(نخها[i], 0);
     }
-    *out = concat_datas(buffers, args.threads);
-    out->shallow = 0;
-    for(i = 0; i < args.threads; ++i){
+    *بیرون = concat_datas(buffers, آرگومانها.نخها);
+    بیرون->shallow = 0;
+    لكل(i = 0; i < آرگومانها.نخها; ++i){
         buffers[i].shallow = 1;
-        free_data(buffers[i]);
+        free_داده(buffers[i]);
     }
-    free(buffers);
-    free(threads);
-    return 0;
+    حرر(buffers);
+    حرر(نخها);
+    أرجع 0;
 }
 
-void load_data_blocking(load_args args)
+فراغ بارگیری_داده_blocking(بارگیری_آرگومانها آرگومانها)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    load_thread(ptr);
+    بنية بارگیری_آرگومانها *ptr = حافظه_صفر_بده(1, حجم(بنية بارگیری_آرگومانها));
+    *ptr = آرگومانها;
+    بارگیری_thread(ptr);
 }
 
-pthread_t load_data(load_args args)
+pthread_t بارگیری_داده(بارگیری_آرگومانها آرگومانها)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
-    return thread;
+    بنية بارگیری_آرگومانها *ptr = حافظه_صفر_بده(1, حجم(بنية بارگیری_آرگومانها));
+    *ptr = آرگومانها;
+    إذا(pthread_create(&thread, 0, بارگیری_نخها, ptr)) error("Thread creation failed");
+    أرجع thread;
 }
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h)
+داده بارگیری_داده_writing(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h, صحيح بیرون_w, صحيح بیرون_h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    char **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    حرف **replace_paths = پیدا_کن_replace_paths(paths, n, ".png", "-label.png");
+    داده d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = load_image_paths_gray(replace_paths, n, out_w, out_h);
-    if(m) free(paths);
-    int i;
-    for(i = 0; i < n; ++i) free(replace_paths[i]);
-    free(replace_paths);
-    return d;
+    d.X = بارگیری_image_paths(paths, n, w, h);
+    d.y = بارگیری_image_paths_خاکستری(replace_paths, n, بیرون_w, بیرون_h);
+    إذا(m) حرر(paths);
+    صحيح i;
+    لكل(i = 0; i < n; ++i) حرر(replace_paths[i]);
+    حرر(replace_paths);
+    أرجع d;
 }
 
-data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int h)
+داده بارگیری_داده_old(حرف **paths, صحيح n, صحيح m, حرف **labels, صحيح k, صحيح w, صحيح h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = load_labels_paths(paths, n, labels, k, 0);
-    if(m) free(paths);
-    return d;
+    d.X = بارگیری_image_paths(paths, n, w, h);
+    d.y = بارگیری_labels_paths(paths, n, labels, k, 0);
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
 /*
@@ -1226,327 +1226,327 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    }
  */
 
-data load_data_super(char **paths, int n, int m, int w, int h, int scale)
+داده بارگیری_داده_super(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h, صحيح scale)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
     d.shallow = 0;
 
-    int i;
-    d.X.rows = n;
-    d.X.vals = calloc(n, sizeof(float*));
-    d.X.cols = w*h*3;
+    صحيح i;
+    d.X.ردیفها = n;
+    d.X.vals = حافظه_صفر_بده(n, حجم(عائم*));
+    d.X.تعداد_ستون = w*h*3;
 
-    d.y.rows = n;
-    d.y.vals = calloc(n, sizeof(float*));
-    d.y.cols = w*scale * h*scale * 3;
+    d.y.ردیفها = n;
+    d.y.vals = حافظه_صفر_بده(n, حجم(عائم*));
+    d.y.تعداد_ستون = w*scale * h*scale * 3;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], 0, 0);
+    لكل(i = 0; i < n; ++i){
+        image im = بارگیری_image_color(paths[i], 0, 0);
         image crop = random_crop_image(im, w*scale, h*scale);
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        صحيح flip = rand()%2;
+        إذا (flip) flip_image(crop);
         image resize = resize_image(crop, w, h);
-        d.X.vals[i] = resize.data;
-        d.y.vals[i] = crop.data;
+        d.X.vals[i] = resize.داده;
+        d.y.vals[i] = crop.داده;
         free_image(im);
     }
 
-    if(m) free(paths);
-    return d;
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-data load_data_regression(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+داده بارگیری_داده_regression(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
     d.shallow = 0;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
-    d.y = load_regression_labels_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    d.X = بارگیری_image_augment_paths(paths, n, min, max, اندازه, angle, aspect, hue, saturation, exposure, 0);
+    d.y = بارگیری_regression_labels_paths(paths, n, k);
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-data select_data(data *orig, int *inds)
+داده select_داده(داده *orig, صحيح *inds)
 {
-    data d = {0};
+    داده d = {0};
     d.shallow = 1;
     d.w = orig[0].w;
     d.h = orig[0].h;
 
-    d.X.rows = orig[0].X.rows;
-    d.y.rows = orig[0].X.rows;
+    d.X.ردیفها = orig[0].X.ردیفها;
+    d.y.ردیفها = orig[0].X.ردیفها;
 
-    d.X.cols = orig[0].X.cols;
-    d.y.cols = orig[0].y.cols;
+    d.X.تعداد_ستون = orig[0].X.تعداد_ستون;
+    d.y.تعداد_ستون = orig[0].y.تعداد_ستون;
 
-    d.X.vals = calloc(orig[0].X.rows, sizeof(float *));
-    d.y.vals = calloc(orig[0].y.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    d.X.vals = حافظه_صفر_بده(orig[0].X.ردیفها, حجم(عائم *));
+    d.y.vals = حافظه_صفر_بده(orig[0].y.ردیفها, حجم(عائم *));
+    صحيح i;
+    لكل(i = 0; i < d.X.ردیفها; ++i){
         d.X.vals[i] = orig[inds[i]].X.vals[i];
         d.y.vals[i] = orig[inds[i]].y.vals[i];
     }
-    return d;
+    أرجع d;
 }
 
-data *tile_data(data orig, int divs, int size)
+داده *tile_داده(داده orig, صحيح divs, صحيح اندازه)
 {
-    data *ds = calloc(divs*divs, sizeof(data));
-    int i, j;
-#pragma omp parallel for
-    for(i = 0; i < divs*divs; ++i){
-        data d;
+    داده *ds = حافظه_صفر_بده(divs*divs, حجم(داده));
+    صحيح i, j;
+#رهنمود omp parallel لكل
+    لكل(i = 0; i < divs*divs; ++i){
+        داده d;
         d.shallow = 0;
-        d.w = orig.w/divs * size;
-        d.h = orig.h/divs * size;
-        d.X.rows = orig.X.rows;
-        d.X.cols = d.w*d.h*3;
-        d.X.vals = calloc(d.X.rows, sizeof(float*));
+        d.w = orig.w/divs * اندازه;
+        d.h = orig.h/divs * اندازه;
+        d.X.ردیفها = orig.X.ردیفها;
+        d.X.تعداد_ستون = d.w*d.h*3;
+        d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
 
-        d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-        for(j = 0; j < orig.X.rows; ++j){
-            int x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
-            int y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
-            image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[j]);
-            d.X.vals[j] = crop_image(im, x, y, d.w, d.h).data;
+        d.y = copy_ماتریس(orig.y);
+#رهنمود omp parallel لكل
+        لكل(j = 0; j < orig.X.ردیفها; ++j){
+            صحيح x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
+            صحيح y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
+            image im = float_مقصد_image(orig.w, orig.h, 3, orig.X.vals[j]);
+            d.X.vals[j] = crop_image(im, x, y, d.w, d.h).داده;
         }
         ds[i] = d;
     }
-    return ds;
+    أرجع ds;
 }
 
-data resize_data(data orig, int w, int h)
+داده resize_داده(داده orig, صحيح w, صحيح h)
 {
-    data d = {0};
+    داده d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
-    int i;
-    d.X.rows = orig.X.rows;
-    d.X.cols = w*h*3;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    صحيح i;
+    d.X.ردیفها = orig.X.ردیفها;
+    d.X.تعداد_ستون = w*h*3;
+    d.X.vals = حافظه_صفر_بده(d.X.ردیفها, حجم(عائم*));
 
-    d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-    for(i = 0; i < orig.X.rows; ++i){
-        image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[i]);
-        d.X.vals[i] = resize_image(im, w, h).data;
+    d.y = copy_ماتریس(orig.y);
+#رهنمود omp parallel لكل
+    لكل(i = 0; i < orig.X.ردیفها; ++i){
+        image im = float_مقصد_image(orig.w, orig.h, 3, orig.X.vals[i]);
+        d.X.vals[i] = resize_image(im, w, h).داده;
     }
-    return d;
+    أرجع d;
 }
 
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+داده بارگیری_داده_augment(حرف **paths, صحيح n, صحيح m, حرف **labels, صحيح k, درخت *hierarchy, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح center)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
     d.shallow = 0;
-    d.w=size;
-    d.h=size;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, center);
-    d.y = load_labels_paths(paths, n, labels, k, hierarchy);
-    if(m) free(paths);
-    return d;
+    d.w=اندازه;
+    d.h=اندازه;
+    d.X = بارگیری_image_augment_paths(paths, n, min, max, اندازه, angle, aspect, hue, saturation, exposure, center);
+    d.y = بارگیری_labels_paths(paths, n, labels, k, hierarchy);
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+داده بارگیری_داده_برچسب(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
-    d.w = size;
-    d.h = size;
+    إذا(m) paths = get_random_paths(paths, n, m);
+    داده d = {0};
+    d.w = اندازه;
+    d.h = اندازه;
     d.shallow = 0;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
-    d.y = load_tags_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    d.X = بارگیری_image_augment_paths(paths, n, min, max, اندازه, angle, aspect, hue, saturation, exposure, 0);
+    d.y = بارگیری_برچسبها_paths(paths, n, k);
+    إذا(m) حرر(paths);
+    أرجع d;
 }
 
-matrix concat_matrix(matrix m1, matrix m2)
+ماتریس concat_ماتریس(ماتریس m1, ماتریس m2)
 {
-    int i, count = 0;
-    matrix m;
-    m.cols = m1.cols;
-    m.rows = m1.rows+m2.rows;
-    m.vals = calloc(m1.rows + m2.rows, sizeof(float*));
-    for(i = 0; i < m1.rows; ++i){
-        m.vals[count++] = m1.vals[i];
+    صحيح i, شمار = 0;
+    ماتریس m;
+    m.تعداد_ستون = m1.تعداد_ستون;
+    m.ردیفها = m1.ردیفها+m2.ردیفها;
+    m.vals = حافظه_صفر_بده(m1.ردیفها + m2.ردیفها, حجم(عائم*));
+    لكل(i = 0; i < m1.ردیفها; ++i){
+        m.vals[شمار++] = m1.vals[i];
     }
-    for(i = 0; i < m2.rows; ++i){
-        m.vals[count++] = m2.vals[i];
+    لكل(i = 0; i < m2.ردیفها; ++i){
+        m.vals[شمار++] = m2.vals[i];
     }
-    return m;
+    أرجع m;
 }
 
-data concat_data(data d1, data d2)
+داده concat_داده(داده d1, داده d2)
 {
-    data d = {0};
+    داده d = {0};
     d.shallow = 1;
-    d.X = concat_matrix(d1.X, d2.X);
-    d.y = concat_matrix(d1.y, d2.y);
+    d.X = concat_ماتریس(d1.X, d2.X);
+    d.y = concat_ماتریس(d1.y, d2.y);
     d.w = d1.w;
     d.h = d1.h;
-    return d;
+    أرجع d;
 }
 
-data concat_datas(data *d, int n)
+داده concat_datas(داده *d, صحيح n)
 {
-    int i;
-    data out = {0};
-    for(i = 0; i < n; ++i){
-        data new = concat_data(d[i], out);
-        free_data(out);
-        out = new;
+    صحيح i;
+    داده بیرون = {0};
+    لكل(i = 0; i < n; ++i){
+        داده new = concat_داده(d[i], بیرون);
+        free_داده(بیرون);
+        بیرون = new;
     }
-    return out;
+    أرجع بیرون;
 }
 
-data load_categorical_data_csv(char *filename, int target, int k)
+داده بارگیری_categorical_داده_csv(حرف *filename, صحيح هدف, صحيح k)
 {
-    data d = {0};
+    داده d = {0};
     d.shallow = 0;
-    matrix X = csv_to_matrix(filename);
-    float *truth_1d = pop_column(&X, target);
-    float **truth = one_hot_encode(truth_1d, X.rows, k);
-    matrix y;
-    y.rows = X.rows;
-    y.cols = k;
+    ماتریس X = csv_مقصد_ماتریس(filename);
+    عائم *truth_1d = برداشت_ستونی(&X, هدف);
+    عائم **truth = one_hot_encode(truth_1d, X.ردیفها, k);
+    ماتریس y;
+    y.ردیفها = X.ردیفها;
+    y.تعداد_ستون = k;
     y.vals = truth;
     d.X = X;
     d.y = y;
-    free(truth_1d);
-    return d;
+    حرر(truth_1d);
+    أرجع d;
 }
 
-data load_cifar10_data(char *filename)
+داده بارگیری_cifar10_داده(حرف *filename)
 {
-    data d = {0};
+    داده d = {0};
     d.shallow = 0;
-    long i,j;
-    matrix X = make_matrix(10000, 3072);
-    matrix y = make_matrix(10000, 10);
+    دراز i,j;
+    ماتریس X = make_ماتریس(10000, 3072);
+    ماتریس y = make_ماتریس(10000, 10);
     d.X = X;
     d.y = y;
 
     FILE *fp = fopen(filename, "rb");
-    if(!fp) file_error(filename);
-    for(i = 0; i < 10000; ++i){
-        unsigned char bytes[3073];
-        fread(bytes, 1, 3073, fp);
-        int class = bytes[0];
+    إذا(!fp) file_error(filename);
+    لكل(i = 0; i < 10000; ++i){
+        بیعلامت حرف بایتها[3073];
+        fread(بایتها, 1, 3073, fp);
+        صحيح class = بایتها[0];
         y.vals[i][class] = 1;
-        for(j = 0; j < X.cols; ++j){
-            X.vals[i][j] = (double)bytes[j+1];
+        لكل(j = 0; j < X.تعداد_ستون; ++j){
+            X.vals[i][j] = (مزدوج)بایتها[j+1];
         }
     }
-    scale_data_rows(d, 1./255);
+    scale_داده_ردیفها(d, 1./255);
     //normalize_data_rows(d);
     fclose(fp);
-    return d;
+    أرجع d;
 }
 
-void get_random_batch(data d, int n, float *X, float *y)
+فراغ get_random_batch(داده d, صحيح n, عائم *X, عائم *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = rand()%d.X.rows;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    صحيح j;
+    لكل(j = 0; j < n; ++j){
+        صحيح شاخص = rand()%d.X.ردیفها;
+        کپی_حافظه(X+j*d.X.تعداد_ستون, d.X.vals[شاخص], d.X.تعداد_ستون*حجم(عائم));
+        کپی_حافظه(y+j*d.y.تعداد_ستون, d.y.vals[شاخص], d.y.تعداد_ستون*حجم(عائم));
     }
 }
 
-void get_next_batch(data d, int n, int offset, float *X, float *y)
+فراغ get_بعدی_batch(داده d, صحيح n, صحيح جابه_جایی, عائم *X, عائم *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = offset + j;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        if(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    صحيح j;
+    لكل(j = 0; j < n; ++j){
+        صحيح شاخص = جابه_جایی + j;
+        کپی_حافظه(X+j*d.X.تعداد_ستون, d.X.vals[شاخص], d.X.تعداد_ستون*حجم(عائم));
+        إذا(y) کپی_حافظه(y+j*d.y.تعداد_ستون, d.y.vals[شاخص], d.y.تعداد_ستون*حجم(عائم));
     }
 }
 
-void smooth_data(data d)
+فراغ smooth_داده(داده d)
 {
-    int i, j;
-    float scale = 1. / d.y.cols;
-    float eps = .1;
-    for(i = 0; i < d.y.rows; ++i){
-        for(j = 0; j < d.y.cols; ++j){
+    صحيح i, j;
+    عائم scale = 1. / d.y.تعداد_ستون;
+    عائم eps = .1;
+    لكل(i = 0; i < d.y.ردیفها; ++i){
+        لكل(j = 0; j < d.y.تعداد_ستون; ++j){
             d.y.vals[i][j] = eps * scale + (1-eps) * d.y.vals[i][j];
         }
     }
 }
 
-data load_all_cifar10()
+داده بارگیری_all_cifar10()
 {
-    data d = {0};
+    داده d = {0};
     d.shallow = 0;
-    int i,j,b;
-    matrix X = make_matrix(50000, 3072);
-    matrix y = make_matrix(50000, 10);
+    صحيح i,j,b;
+    ماتریس X = make_ماتریس(50000, 3072);
+    ماتریس y = make_ماتریس(50000, 10);
     d.X = X;
     d.y = y;
 
 
-    for(b = 0; b < 5; ++b){
-        char buff[256];
+    لكل(b = 0; b < 5; ++b){
+        حرف buff[256];
         sprintf(buff, "data/cifar/cifar-10-batches-bin/data_batch_%d.bin", b+1);
         FILE *fp = fopen(buff, "rb");
-        if(!fp) file_error(buff);
-        for(i = 0; i < 10000; ++i){
-            unsigned char bytes[3073];
-            fread(bytes, 1, 3073, fp);
-            int class = bytes[0];
+        إذا(!fp) file_error(buff);
+        لكل(i = 0; i < 10000; ++i){
+            بیعلامت حرف بایتها[3073];
+            fread(بایتها, 1, 3073, fp);
+            صحيح class = بایتها[0];
             y.vals[i+b*10000][class] = 1;
-            for(j = 0; j < X.cols; ++j){
-                X.vals[i+b*10000][j] = (double)bytes[j+1];
+            لكل(j = 0; j < X.تعداد_ستون; ++j){
+                X.vals[i+b*10000][j] = (مزدوج)بایتها[j+1];
             }
         }
         fclose(fp);
     }
     //normalize_data_rows(d);
-    scale_data_rows(d, 1./255);
-    smooth_data(d);
-    return d;
+    scale_داده_ردیفها(d, 1./255);
+    smooth_داده(d);
+    أرجع d;
 }
 
-data load_go(char *filename)
+داده بارگیری_go(حرف *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    matrix X = make_matrix(3363059, 361);
-    matrix y = make_matrix(3363059, 361);
-    int row, col;
+    ماتریس X = make_ماتریس(3363059, 361);
+    ماتریس y = make_ماتریس(3363059, 361);
+    صحيح ردیف, ستون;
 
-    if(!fp) file_error(filename);
-    char *label;
-    int count = 0;
-    while((label = fgetl(fp))){
-        int i;
-        if(count == X.rows){
-            X = resize_matrix(X, count*2);
-            y = resize_matrix(y, count*2);
+    إذا(!fp) file_error(filename);
+    حرف *label;
+    صحيح شمار = 0;
+    طالما((label = fgetl(fp))){
+        صحيح i;
+        إذا(شمار == X.ردیفها){
+            X = resize_ماتریس(X, شمار*2);
+            y = resize_ماتریس(y, شمار*2);
         }
-        sscanf(label, "%d %d", &row, &col);
-        char *board = fgetl(fp);
+        از_رشته_بخوان(label, "%d %d", &ردیف, &ستون);
+        حرف *board = fgetl(fp);
 
-        int index = row*19 + col;
-        y.vals[count][index] = 1;
+        صحيح شاخص = ردیف*19 + ستون;
+        y.vals[شمار][شاخص] = 1;
 
-        for(i = 0; i < 19*19; ++i){
-            float val = 0;
-            if(board[i] == '1') val = 1;
-            else if(board[i] == '2') val = -1;
-            X.vals[count][i] = val;
+        لكل(i = 0; i < 19*19; ++i){
+            عائم val = 0;
+            إذا(board[i] == '1') val = 1;
+            وإلا إذا(board[i] == '2') val = -1;
+            X.vals[شمار][i] = val;
         }
-        ++count;
-        free(label);
-        free(board);
+        ++شمار;
+        حرر(label);
+        حرر(board);
     }
-    X = resize_matrix(X, count);
-    y = resize_matrix(y, count);
+    X = resize_ماتریس(X, شمار);
+    y = resize_ماتریس(y, شمار);
 
-    data d = {0};
+    داده d = {0};
     d.shallow = 0;
     d.X = X;
     d.y = y;
@@ -1554,132 +1554,132 @@ data load_go(char *filename)
 
     fclose(fp);
 
-    return d;
+    أرجع d;
 }
 
 
-void randomize_data(data d)
+فراغ randomize_داده(داده d)
 {
-    int i;
-    for(i = d.X.rows-1; i > 0; --i){
-        int index = rand()%i;
-        float *swap = d.X.vals[index];
-        d.X.vals[index] = d.X.vals[i];
-        d.X.vals[i] = swap;
+    صحيح i;
+    لكل(i = d.X.ردیفها-1; i > 0; --i){
+        صحيح شاخص = rand()%i;
+        عائم *جابجا = d.X.vals[شاخص];
+        d.X.vals[شاخص] = d.X.vals[i];
+        d.X.vals[i] = جابجا;
 
-        swap = d.y.vals[index];
-        d.y.vals[index] = d.y.vals[i];
-        d.y.vals[i] = swap;
+        جابجا = d.y.vals[شاخص];
+        d.y.vals[شاخص] = d.y.vals[i];
+        d.y.vals[i] = جابجا;
     }
 }
 
-void scale_data_rows(data d, float s)
+فراغ scale_داده_ردیفها(داده d, عائم s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        scale_array(d.X.vals[i], d.X.cols, s);
+    صحيح i;
+    لكل(i = 0; i < d.X.ردیفها; ++i){
+        scale_array(d.X.vals[i], d.X.تعداد_ستون, s);
     }
 }
 
-void translate_data_rows(data d, float s)
+فراغ translate_داده_ردیفها(داده d, عائم s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        translate_array(d.X.vals[i], d.X.cols, s);
+    صحيح i;
+    لكل(i = 0; i < d.X.ردیفها; ++i){
+        translate_array(d.X.vals[i], d.X.تعداد_ستون, s);
     }
 }
 
-data copy_data(data d)
+داده copy_داده(داده d)
 {
-    data c = {0};
+    داده c = {0};
     c.w = d.w;
     c.h = d.h;
     c.shallow = 0;
-    c.num_boxes = d.num_boxes;
+    c.رقم_boxes = d.رقم_boxes;
     c.boxes = d.boxes;
-    c.X = copy_matrix(d.X);
-    c.y = copy_matrix(d.y);
-    return c;
+    c.X = copy_ماتریس(d.X);
+    c.y = copy_ماتریس(d.y);
+    أرجع c;
 }
 
-void normalize_data_rows(data d)
+فراغ normalize_داده_ردیفها(داده d)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        normalize_array(d.X.vals[i], d.X.cols);
+    صحيح i;
+    لكل(i = 0; i < d.X.ردیفها; ++i){
+        normalize_array(d.X.vals[i], d.X.تعداد_ستون);
     }
 }
 
-data get_data_part(data d, int part, int total)
+داده get_داده_part(داده d, صحيح part, صحيح مجموع)
 {
-    data p = {0};
+    داده p = {0};
     p.shallow = 1;
-    p.X.rows = d.X.rows * (part + 1) / total - d.X.rows * part / total;
-    p.y.rows = d.y.rows * (part + 1) / total - d.y.rows * part / total;
-    p.X.cols = d.X.cols;
-    p.y.cols = d.y.cols;
-    p.X.vals = d.X.vals + d.X.rows * part / total;
-    p.y.vals = d.y.vals + d.y.rows * part / total;
-    return p;
+    p.X.ردیفها = d.X.ردیفها * (part + 1) / مجموع - d.X.ردیفها * part / مجموع;
+    p.y.ردیفها = d.y.ردیفها * (part + 1) / مجموع - d.y.ردیفها * part / مجموع;
+    p.X.تعداد_ستون = d.X.تعداد_ستون;
+    p.y.تعداد_ستون = d.y.تعداد_ستون;
+    p.X.vals = d.X.vals + d.X.ردیفها * part / مجموع;
+    p.y.vals = d.y.vals + d.y.ردیفها * part / مجموع;
+    أرجع p;
 }
 
-data get_random_data(data d, int num)
+داده get_random_داده(داده d, صحيح رقم)
 {
-    data r = {0};
+    داده r = {0};
     r.shallow = 1;
 
-    r.X.rows = num;
-    r.y.rows = num;
+    r.X.ردیفها = رقم;
+    r.y.ردیفها = رقم;
 
-    r.X.cols = d.X.cols;
-    r.y.cols = d.y.cols;
+    r.X.تعداد_ستون = d.X.تعداد_ستون;
+    r.y.تعداد_ستون = d.y.تعداد_ستون;
 
-    r.X.vals = calloc(num, sizeof(float *));
-    r.y.vals = calloc(num, sizeof(float *));
+    r.X.vals = حافظه_صفر_بده(رقم, حجم(عائم *));
+    r.y.vals = حافظه_صفر_بده(رقم, حجم(عائم *));
 
-    int i;
-    for(i = 0; i < num; ++i){
-        int index = rand()%d.X.rows;
-        r.X.vals[i] = d.X.vals[index];
-        r.y.vals[i] = d.y.vals[index];
+    صحيح i;
+    لكل(i = 0; i < رقم; ++i){
+        صحيح شاخص = rand()%d.X.ردیفها;
+        r.X.vals[i] = d.X.vals[شاخص];
+        r.y.vals[i] = d.y.vals[شاخص];
     }
-    return r;
+    أرجع r;
 }
 
-data *split_data(data d, int part, int total)
+داده *تقسیم_داده(داده d, صحيح part, صحيح مجموع)
 {
-    data *split = calloc(2, sizeof(data));
-    int i;
-    int start = part*d.X.rows/total;
-    int end = (part+1)*d.X.rows/total;
-    data train;
-    data test;
+    داده *تقسیم = حافظه_صفر_بده(2, حجم(داده));
+    صحيح i;
+    صحيح شروع = part*d.X.ردیفها/مجموع;
+    صحيح انتها = (part+1)*d.X.ردیفها/مجموع;
+    داده train;
+    داده test;
     train.shallow = test.shallow = 1;
 
-    test.X.rows = test.y.rows = end-start;
-    train.X.rows = train.y.rows = d.X.rows - (end-start);
-    train.X.cols = test.X.cols = d.X.cols;
-    train.y.cols = test.y.cols = d.y.cols;
+    test.X.ردیفها = test.y.ردیفها = انتها-شروع;
+    train.X.ردیفها = train.y.ردیفها = d.X.ردیفها - (انتها-شروع);
+    train.X.تعداد_ستون = test.X.تعداد_ستون = d.X.تعداد_ستون;
+    train.y.تعداد_ستون = test.y.تعداد_ستون = d.y.تعداد_ستون;
 
-    train.X.vals = calloc(train.X.rows, sizeof(float*));
-    test.X.vals = calloc(test.X.rows, sizeof(float*));
-    train.y.vals = calloc(train.y.rows, sizeof(float*));
-    test.y.vals = calloc(test.y.rows, sizeof(float*));
+    train.X.vals = حافظه_صفر_بده(train.X.ردیفها, حجم(عائم*));
+    test.X.vals = حافظه_صفر_بده(test.X.ردیفها, حجم(عائم*));
+    train.y.vals = حافظه_صفر_بده(train.y.ردیفها, حجم(عائم*));
+    test.y.vals = حافظه_صفر_بده(test.y.ردیفها, حجم(عائم*));
 
-    for(i = 0; i < start; ++i){
+    لكل(i = 0; i < شروع; ++i){
         train.X.vals[i] = d.X.vals[i];
         train.y.vals[i] = d.y.vals[i];
     }
-    for(i = start; i < end; ++i){
-        test.X.vals[i-start] = d.X.vals[i];
-        test.y.vals[i-start] = d.y.vals[i];
+    لكل(i = شروع; i < انتها; ++i){
+        test.X.vals[i-شروع] = d.X.vals[i];
+        test.y.vals[i-شروع] = d.y.vals[i];
     }
-    for(i = end; i < d.X.rows; ++i){
-        train.X.vals[i-(end-start)] = d.X.vals[i];
-        train.y.vals[i-(end-start)] = d.y.vals[i];
+    لكل(i = انتها; i < d.X.ردیفها; ++i){
+        train.X.vals[i-(انتها-شروع)] = d.X.vals[i];
+        train.y.vals[i-(انتها-شروع)] = d.y.vals[i];
     }
-    split[0] = train;
-    split[1] = test;
-    return split;
+    تقسیم[0] = train;
+    تقسیم[1] = test;
+    أرجع تقسیم;
 }
 

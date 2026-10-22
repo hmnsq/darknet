@@ -1,178 +1,178 @@
-int gpu_index = 0;
+صحيح gpu_شاخص = 0;
 
-#ifdef GPU
+#اگر_تعریف_شده GPU
 
-#include "cuda.h"
-#include "utils.h"
-#include "blas.h"
-#include <assert.h>
-#include <stdlib.h>
-#include <time.h>
+#ضمن "cuda.h"
+#ضمن "utils.h"
+#ضمن "blas.h"
+#ضمن <assert.h>
+#ضمن <stdlib.h>
+#ضمن <time.h>
 
-void cuda_set_device(int n)
+فراغ cuda_مجموعه_device(صحيح n)
 {
-    gpu_index = n;
-    cudaError_t status = cudaSetDevice(n);
-    check_error(status);
+    gpu_شاخص = n;
+    cudaError_t وضعیت = cuda_مجموعه_Device(n);
+    check_error(وضعیت);
 }
 
-int cuda_get_device()
+صحيح cuda_get_device()
 {
-    int n = 0;
-    cudaError_t status = cudaGetDevice(&n);
-    check_error(status);
-    return n;
+    صحيح n = 0;
+    cudaError_t وضعیت = cudaGetDevice(&n);
+    check_error(وضعیت);
+    أرجع n;
 }
 
-void check_error(cudaError_t status)
+فراغ check_error(cudaError_t وضعیت)
 {
     //cudaDeviceSynchronize();
-    cudaError_t status2 = cudaGetLastError();
-    if (status != cudaSuccess)
+    cudaError_t status2 = cuda_Get_آخرین_Error();
+    إذا (وضعیت != cudaSuccess)
     {   
-        const char *s = cudaGetErrorString(status);
-        char buffer[256];
-        printf("CUDA Error: %s\n", s);
-        assert(0);
-        snprintf(buffer, 256, "CUDA Error: %s", s);
-        error(buffer);
+        ثابت حرف *s = cudaGetErrorString(وضعیت);
+        حرف میانگیر[256];
+        چاپ_کن("CUDA Error: %s\n", s);
+        أكد(0);
+        snprintf(میانگیر, 256, "CUDA Error: %s", s);
+        error(میانگیر);
     } 
-    if (status2 != cudaSuccess)
+    إذا (status2 != cudaSuccess)
     {   
-        const char *s = cudaGetErrorString(status);
-        char buffer[256];
-        printf("CUDA Error Prev: %s\n", s);
-        assert(0);
-        snprintf(buffer, 256, "CUDA Error Prev: %s", s);
-        error(buffer);
+        ثابت حرف *s = cudaGetErrorString(وضعیت);
+        حرف میانگیر[256];
+        چاپ_کن("CUDA Error Prev: %s\n", s);
+        أكد(0);
+        snprintf(میانگیر, 256, "CUDA Error Prev: %s", s);
+        error(میانگیر);
     } 
 }
 
 dim3 cuda_gridsize(size_t n){
-    size_t k = (n-1) / BLOCK + 1;
+    size_t k = (n-1) / بلوک + 1;
     size_t x = k;
     size_t y = 1;
-    if(x > 65535){
-        x = ceil(sqrt(k));
-        y = (n-1)/(x*BLOCK) + 1;
+    إذا(x > 65535){
+        x = ceil(جذر(k));
+        y = (n-1)/(x*بلوک) + 1;
     }
     dim3 d = {x, y, 1};
     //printf("%ld %ld %ld %ld\n", n, x, y, x*y*BLOCK);
-    return d;
+    أرجع d;
 }
 
-#ifdef CUDNN
+#اگر_تعریف_شده CUDNN
 cudnnHandle_t cudnn_handle()
 {
-    static int init[16] = {0};
-    static cudnnHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    ساكن صحيح init[16] = {0};
+    ساكن cudnnHandle_t handle[16];
+    صحيح i = cuda_get_device();
+    إذا(!init[i]) {
         cudnnCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    أرجع handle[i];
 }
-#endif
+#پایان_اگر
 
 cublasHandle_t blas_handle()
 {
-    static int init[16] = {0};
-    static cublasHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    ساكن صحيح init[16] = {0};
+    ساكن cublasHandle_t handle[16];
+    صحيح i = cuda_get_device();
+    إذا(!init[i]) {
         cublasCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    أرجع handle[i];
 }
 
-float *cuda_make_array(float *x, size_t n)
+عائم *cuda_make_array(عائم *x, size_t n)
 {
-    float *x_gpu;
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMalloc((void **)&x_gpu, size);
-    check_error(status);
-    if(x){
-        status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-        check_error(status);
-    } else {
+    عائم *x_gpu;
+    size_t اندازه = حجم(عائم)*n;
+    cudaError_t وضعیت = cudaMalloc((فراغ **)&x_gpu, اندازه);
+    check_error(وضعیت);
+    إذا(x){
+        وضعیت = cudaMemcpy(x_gpu, x, اندازه, cuda_Memcpy_Host_مقصد_Device);
+        check_error(وضعیت);
+    } وإلا {
         fill_gpu(n, 0, x_gpu, 1);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    إذا(!x_gpu) error("Cuda malloc failed\n");
+    أرجع x_gpu;
 }
 
-void cuda_random(float *x_gpu, size_t n)
+فراغ cuda_random(عائم *x_gpu, size_t n)
 {
-    static curandGenerator_t gen[16];
-    static int init[16] = {0};
-    int i = cuda_get_device();
-    if(!init[i]){
+    ساكن curandGenerator_t gen[16];
+    ساكن صحيح init[16] = {0};
+    صحيح i = cuda_get_device();
+    إذا(!init[i]){
         curandCreateGenerator(&gen[i], CURAND_RNG_PSEUDO_DEFAULT);
-        curandSetPseudoRandomGeneratorSeed(gen[i], time(0));
+        curand_مجموعه_Pseudo_Random_Generator_دانه(gen[i], زمان(0));
         init[i] = 1;
     }
-    curandGenerateUniform(gen[i], x_gpu, n);
-    check_error(cudaPeekAtLastError());
+    curand_Generate_یکنواخت(gen[i], x_gpu, n);
+    check_error(cuda_Peek_At_آخرین_Error());
 }
 
-float cuda_compare(float *x_gpu, float *x, size_t n, char *s)
+عائم cuda_compare(عائم *x_gpu, عائم *x, size_t n, حرف *s)
 {
-    float *tmp = calloc(n, sizeof(float));
+    عائم *tmp = حافظه_صفر_بده(n, حجم(عائم));
     cuda_pull_array(x_gpu, tmp, n);
     //int i;
     //for(i = 0; i < n; ++i) printf("%f %f\n", tmp[i], x[i]);
     axpy_cpu(n, -1, x, 1, tmp, 1);
-    float err = dot_cpu(n, tmp, 1, tmp, 1);
-    printf("Error %s: %f\n", s, sqrt(err/n));
-    free(tmp);
-    return err;
+    عائم err = dot_cpu(n, tmp, 1, tmp, 1);
+    چاپ_کن("Error %s: %f\n", s, جذر(err/n));
+    حرر(tmp);
+    أرجع err;
 }
 
-int *cuda_make_int_array(int *x, size_t n)
+صحيح *cuda_make_int_array(صحيح *x, size_t n)
 {
-    int *x_gpu;
-    size_t size = sizeof(int)*n;
-    cudaError_t status = cudaMalloc((void **)&x_gpu, size);
-    check_error(status);
-    if(x){
-        status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-        check_error(status);
+    صحيح *x_gpu;
+    size_t اندازه = حجم(صحيح)*n;
+    cudaError_t وضعیت = cudaMalloc((فراغ **)&x_gpu, اندازه);
+    check_error(وضعیت);
+    إذا(x){
+        وضعیت = cudaMemcpy(x_gpu, x, اندازه, cuda_Memcpy_Host_مقصد_Device);
+        check_error(وضعیت);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    إذا(!x_gpu) error("Cuda malloc failed\n");
+    أرجع x_gpu;
 }
 
-void cuda_free(float *x_gpu)
+فراغ cuda_free(عائم *x_gpu)
 {
-    cudaError_t status = cudaFree(x_gpu);
-    check_error(status);
+    cudaError_t وضعیت = cudaFree(x_gpu);
+    check_error(وضعیت);
 }
 
-void cuda_push_array(float *x_gpu, float *x, size_t n)
+فراغ cuda_افزودن_array(عائم *x_gpu, عائم *x, size_t n)
 {
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-    check_error(status);
+    size_t اندازه = حجم(عائم)*n;
+    cudaError_t وضعیت = cudaMemcpy(x_gpu, x, اندازه, cuda_Memcpy_Host_مقصد_Device);
+    check_error(وضعیت);
 }
 
-void cuda_pull_array(float *x_gpu, float *x, size_t n)
+فراغ cuda_pull_array(عائم *x_gpu, عائم *x, size_t n)
 {
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMemcpy(x, x_gpu, size, cudaMemcpyDeviceToHost);
-    check_error(status);
+    size_t اندازه = حجم(عائم)*n;
+    cudaError_t وضعیت = cudaMemcpy(x, x_gpu, اندازه, cuda_Memcpy_Device_مقصد_Host);
+    check_error(وضعیت);
 }
 
-float cuda_mag_array(float *x_gpu, size_t n)
+عائم cuda_mag_array(عائم *x_gpu, size_t n)
 {
-    float *temp = calloc(n, sizeof(float));
-    cuda_pull_array(x_gpu, temp, n);
-    float m = mag_array(temp, n);
-    free(temp);
-    return m;
+    عائم *موقت = حافظه_صفر_بده(n, حجم(عائم));
+    cuda_pull_array(x_gpu, موقت, n);
+    عائم m = mag_array(موقت, n);
+    حرر(موقت);
+    أرجع m;
 }
-#else
-void cuda_set_device(int n){}
+#وإلا
+فراغ cuda_مجموعه_device(صحيح n){}
 
-#endif
+#پایان_اگر

@@ -1,18 +1,18 @@
-#ifndef DETECTION_LAYER_H
-#define DETECTION_LAYER_H
+#اگر_تعریف_نشده DETECTION_LAYER_H
+#تعریف_کن DETECTION_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-typedef layer detection_layer;
+تعريفنوع layer detection_layer;
 
-detection_layer make_detection_layer(int batch, int inputs, int n, int size, int classes, int coords, int rescore);
-void forward_detection_layer(const detection_layer l, network net);
-void backward_detection_layer(const detection_layer l, network net);
+detection_layer make_detection_layer(صحيح batch, صحيح inputs, صحيح n, صحيح اندازه, صحيح classes, صحيح coords, صحيح rescore);
+فراغ forward_detection_layer(ثابت detection_layer l, شبکه net);
+فراغ backward_detection_layer(ثابت detection_layer l, شبکه net);
 
-#ifdef GPU
-void forward_detection_layer_gpu(const detection_layer l, network net);
-void backward_detection_layer_gpu(detection_layer l, network net);
-#endif
+#اگر_تعریف_شده GPU
+فراغ forward_detection_layer_gpu(ثابت detection_layer l, شبکه net);
+فراغ backward_detection_layer_gpu(detection_layer l, شبکه net);
+#پایان_اگر
 
-#endif
+#پایان_اگر

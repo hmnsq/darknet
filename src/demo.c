@@ -1,103 +1,103 @@
-#include "network.h"
-#include "detection_layer.h"
-#include "region_layer.h"
-#include "cost_layer.h"
-#include "utils.h"
-#include "parser.h"
-#include "box.h"
-#include "image.h"
-#include "demo.h"
-#include <sys/time.h>
+#ضمن "network.h"
+#ضمن "detection_layer.h"
+#ضمن "region_layer.h"
+#ضمن "cost_layer.h"
+#ضمن "utils.h"
+#ضمن "parser.h"
+#ضمن "box.h"
+#ضمن "image.h"
+#ضمن "demo.h"
+#ضمن <sys/time.h>
 
-#define DEMO 1
+#تعریف_کن DEMO 1
 
-#ifdef OPENCV
+#اگر_تعریف_شده OPENCV
 
-static char **demo_names;
-static image **demo_alphabet;
-static int demo_classes;
+ساكن حرف **demo_نامها;
+ساكن image **demo_alphabet;
+ساكن صحيح demo_classes;
 
-static network *net;
-static image buff [3];
-static image buff_letter[3];
-static int buff_index = 0;
-static void * cap;
-static float fps = 0;
-static float demo_thresh = 0;
-static float demo_hier = .5;
-static int running = 0;
+ساكن شبکه *net;
+ساكن image buff [3];
+ساكن image buff_letter[3];
+ساكن صحيح buff_شاخص = 0;
+ساكن فراغ * cap;
+ساكن عائم fps = 0;
+ساكن عائم demo_thresh = 0;
+ساكن عائم demo_hier = .5;
+ساكن صحيح running = 0;
 
-static int demo_frame = 3;
-static int demo_index = 0;
-static float **predictions;
-static float *avg;
-static int demo_done = 0;
-static int demo_total = 0;
-double demo_time;
+ساكن صحيح demo_قاب = 3;
+ساكن صحيح demo_شاخص = 0;
+ساكن عائم **predictions;
+ساكن عائم *avg;
+ساكن صحيح demo_انجامشده = 0;
+ساكن صحيح demo_مجموع = 0;
+مزدوج demo_زمان;
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num);
+detection *get_شبکه_boxes(شبکه *net, صحيح w, صحيح h, عائم thresh, عائم hier, صحيح *map, صحيح relative, صحيح *رقم);
 
-int size_network(network *net)
+صحيح اندازه_شبکه(شبکه *net)
 {
-    int i;
-    int count = 0;
-    for(i = 0; i < net->n; ++i){
+    صحيح i;
+    صحيح شمار = 0;
+    لكل(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            count += l.outputs;
+        إذا(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            شمار += l.outputs;
         }
     }
-    return count;
+    أرجع شمار;
 }
 
-void remember_network(network *net)
+فراغ remember_شبکه(شبکه *net)
 {
-    int i;
-    int count = 0;
-    for(i = 0; i < net->n; ++i){
+    صحيح i;
+    صحيح شمار = 0;
+    لكل(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(predictions[demo_index] + count, net->layers[i].output, sizeof(float) * l.outputs);
-            count += l.outputs;
+        إذا(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            کپی_حافظه(predictions[demo_شاخص] + شمار, net->layers[i].output, حجم(عائم) * l.outputs);
+            شمار += l.outputs;
         }
     }
 }
 
-detection *avg_predictions(network *net, int *nboxes)
+detection *avg_predictions(شبکه *net, صحيح *nboxes)
 {
-    int i, j;
-    int count = 0;
-    fill_cpu(demo_total, 0, avg, 1);
-    for(j = 0; j < demo_frame; ++j){
-        axpy_cpu(demo_total, 1./demo_frame, predictions[j], 1, avg, 1);
+    صحيح i, j;
+    صحيح شمار = 0;
+    fill_cpu(demo_مجموع, 0, avg, 1);
+    لكل(j = 0; j < demo_قاب; ++j){
+        axpy_cpu(demo_مجموع, 1./demo_قاب, predictions[j], 1, avg, 1);
     }
-    for(i = 0; i < net->n; ++i){
+    لكل(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(l.output, avg + count, sizeof(float) * l.outputs);
-            count += l.outputs;
+        إذا(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            کپی_حافظه(l.output, avg + شمار, حجم(عائم) * l.outputs);
+            شمار += l.outputs;
         }
     }
-    detection *dets = get_network_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
-    return dets;
+    detection *dets = get_شبکه_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
+    أرجع dets;
 }
 
-void *detect_in_thread(void *ptr)
+فراغ *detect_درون_thread(فراغ *ptr)
 {
     running = 1;
-    float nms = .4;
+    عائم nms = .4;
 
     layer l = net->layers[net->n-1];
-    float *X = buff_letter[(buff_index+2)%3].data;
-    network_predict(net, X);
+    عائم *X = buff_letter[(buff_شاخص+2)%3].داده;
+    شبکه_predict(net, X);
 
     /*
        if(l.type == DETECTION){
        get_detection_boxes(l, 1, 1, demo_thresh, probs, boxes, 0);
        } else */
-    remember_network(net);
+    remember_شبکه(net);
     detection *dets = 0;
-    int nboxes = 0;
+    صحيح nboxes = 0;
     dets = avg_predictions(net, &nboxes);
 
 
@@ -122,132 +122,132 @@ void *detect_in_thread(void *ptr)
     }
      */
 
-    if (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
+    إذا (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
 
-    printf("\033[2J");
-    printf("\033[1;1H");
-    printf("\nFPS:%.1f\n",fps);
-    printf("Objects:\n\n");
-    image display = buff[(buff_index+2) % 3];
-    draw_detections(display, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes);
+    چاپ_کن("\033[2J");
+    چاپ_کن("\033[1;1H");
+    چاپ_کن("\nFPS:%.1f\n",fps);
+    چاپ_کن("Objects:\n\n");
+    image display = buff[(buff_شاخص+2) % 3];
+    draw_detections(display, dets, nboxes, demo_thresh, demo_نامها, demo_alphabet, demo_classes);
     free_detections(dets, nboxes);
 
-    demo_index = (demo_index + 1)%demo_frame;
+    demo_شاخص = (demo_شاخص + 1)%demo_قاب;
     running = 0;
-    return 0;
+    أرجع 0;
 }
 
-void *fetch_in_thread(void *ptr)
+فراغ *fetch_درون_thread(فراغ *ptr)
 {
-    free_image(buff[buff_index]);
-    buff[buff_index] = get_image_from_stream(cap);
-    if(buff[buff_index].data == 0) {
-        demo_done = 1;
-        return 0;
+    free_image(buff[buff_شاخص]);
+    buff[buff_شاخص] = get_image_from_جریان(cap);
+    إذا(buff[buff_شاخص].داده == 0) {
+        demo_انجامشده = 1;
+        أرجع 0;
     }
-    letterbox_image_into(buff[buff_index], net->w, net->h, buff_letter[buff_index]);
-    return 0;
+    letterbox_image_into(buff[buff_شاخص], net->w, net->h, buff_letter[buff_شاخص]);
+    أرجع 0;
 }
 
-void *display_in_thread(void *ptr)
+فراغ *display_درون_thread(فراغ *ptr)
 {
-    int c = show_image(buff[(buff_index + 1)%3], "Demo", 1);
-    if (c != -1) c = c%256;
-    if (c == 27) {
-        demo_done = 1;
-        return 0;
-    } else if (c == 82) {
+    صحيح c = show_image(buff[(buff_شاخص + 1)%3], "Demo", 1);
+    إذا (c != -1) c = c%256;
+    إذا (c == 27) {
+        demo_انجامشده = 1;
+        أرجع 0;
+    } وإلا إذا (c == 82) {
         demo_thresh += .02;
-    } else if (c == 84) {
+    } وإلا إذا (c == 84) {
         demo_thresh -= .02;
-        if(demo_thresh <= .02) demo_thresh = .02;
-    } else if (c == 83) {
+        إذا(demo_thresh <= .02) demo_thresh = .02;
+    } وإلا إذا (c == 83) {
         demo_hier += .02;
-    } else if (c == 81) {
+    } وإلا إذا (c == 81) {
         demo_hier -= .02;
-        if(demo_hier <= .0) demo_hier = .0;
+        إذا(demo_hier <= .0) demo_hier = .0;
     }
-    return 0;
+    أرجع 0;
 }
 
-void *display_loop(void *ptr)
+فراغ *display_loop(فراغ *ptr)
 {
-    while(1){
-        display_in_thread(0);
+    طالما(1){
+        display_درون_thread(0);
     }
 }
 
-void *detect_loop(void *ptr)
+فراغ *detect_loop(فراغ *ptr)
 {
-    while(1){
-        detect_in_thread(0);
+    طالما(1){
+        detect_درون_thread(0);
     }
 }
 
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg_frames, float hier, int w, int h, int frames, int fullscreen)
+فراغ demo(حرف *cfgfile, حرف *weightfile, عائم thresh, صحيح cam_شاخص, ثابت حرف *filename, حرف **نامها, صحيح classes, صحيح delay, حرف *پیشوند, صحيح avg_قابها, عائم hier, صحيح w, صحيح h, صحيح قابها, صحيح fullscreen)
 {
     //demo_frame = avg_frames;
-    image **alphabet = load_alphabet();
-    demo_names = names;
+    image **alphabet = بارگیری_alphabet();
+    demo_نامها = نامها;
     demo_alphabet = alphabet;
     demo_classes = classes;
     demo_thresh = thresh;
     demo_hier = hier;
-    printf("Demo\n");
-    net = load_network(cfgfile, weightfile, 0);
-    set_batch_network(net, 1);
+    چاپ_کن("Demo\n");
+    net = بارگیری_شبکه(cfgfile, weightfile, 0);
+    مجموعه_batch_شبکه(net, 1);
     pthread_t detect_thread;
     pthread_t fetch_thread;
 
     srand(2222222);
 
-    int i;
-    demo_total = size_network(net);
-    predictions = calloc(demo_frame, sizeof(float*));
-    for (i = 0; i < demo_frame; ++i){
-        predictions[i] = calloc(demo_total, sizeof(float));
+    صحيح i;
+    demo_مجموع = اندازه_شبکه(net);
+    predictions = حافظه_صفر_بده(demo_قاب, حجم(عائم*));
+    لكل (i = 0; i < demo_قاب; ++i){
+        predictions[i] = حافظه_صفر_بده(demo_مجموع, حجم(عائم));
     }
-    avg = calloc(demo_total, sizeof(float));
+    avg = حافظه_صفر_بده(demo_مجموع, حجم(عائم));
 
-    if(filename){
-        printf("video file: %s\n", filename);
-        cap = open_video_stream(filename, 0, 0, 0, 0);
-    }else{
-        cap = open_video_stream(0, cam_index, w, h, frames);
+    إذا(filename){
+        چاپ_کن("video file: %s\n", filename);
+        cap = open_video_جریان(filename, 0, 0, 0, 0);
+    }وإلا{
+        cap = open_video_جریان(0, cam_شاخص, w, h, قابها);
     }
 
-    if(!cap) error("Couldn't connect to webcam.\n");
+    إذا(!cap) error("Couldn't connect to webcam.\n");
 
-    buff[0] = get_image_from_stream(cap);
+    buff[0] = get_image_from_جریان(cap);
     buff[1] = copy_image(buff[0]);
     buff[2] = copy_image(buff[0]);
     buff_letter[0] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[1] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[2] = letterbox_image(buff[0], net->w, net->h);
 
-    int count = 0;
-    if(!prefix){
-        make_window("Demo", 1352, 1013, fullscreen);
+    صحيح شمار = 0;
+    إذا(!پیشوند){
+        make_پنجره("Demo", 1352, 1013, fullscreen);
     }
 
-    demo_time = what_time_is_it_now();
+    demo_زمان = what_زمان_is_it_now();
 
-    while(!demo_done){
-        buff_index = (buff_index + 1) %3;
-        if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
-        if(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
-        if(!prefix){
-            fps = 1./(what_time_is_it_now() - demo_time);
-            demo_time = what_time_is_it_now();
-            display_in_thread(0);
-        }else{
-            char name[256];
-            sprintf(name, "%s_%08d", prefix, count);
-            save_image(buff[(buff_index + 1)%3], name);
+    طالما(!demo_انجامشده){
+        buff_شاخص = (buff_شاخص + 1) %3;
+        إذا(pthread_create(&fetch_thread, 0, fetch_درون_thread, 0)) error("Thread creation failed");
+        إذا(pthread_create(&detect_thread, 0, detect_درون_thread, 0)) error("Thread creation failed");
+        إذا(!پیشوند){
+            fps = 1./(what_زمان_is_it_now() - demo_زمان);
+            demo_زمان = what_زمان_is_it_now();
+            display_درون_thread(0);
+        }وإلا{
+            حرف name[256];
+            sprintf(name, "%s_%08d", پیشوند, شمار);
+            save_image(buff[(buff_شاخص + 1)%3], name);
         }
         pthread_join(fetch_thread, 0);
         pthread_join(detect_thread, 0);
-        ++count;
+        ++شمار;
     }
 }
 
@@ -340,10 +340,10 @@ pthread_join(detect_thread, 0);
 }
 }
 */
-#else
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg, float hier, int w, int h, int frames, int fullscreen)
+#وإلا
+فراغ demo(حرف *cfgfile, حرف *weightfile, عائم thresh, صحيح cam_شاخص, ثابت حرف *filename, حرف **نامها, صحيح classes, صحيح delay, حرف *پیشوند, صحيح avg, عائم hier, صحيح w, صحيح h, صحيح قابها, صحيح fullscreen)
 {
     fprintf(stderr, "Demo needs OpenCV for webcam images.\n");
 }
-#endif
+#پایان_اگر
 

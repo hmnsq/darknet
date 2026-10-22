@@ -1,24 +1,24 @@
 
-#ifndef GRU_LAYER_H
-#define GRU_LAYER_H
+#اگر_تعریف_نشده GRU_LAYER_H
+#تعریف_کن GRU_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_gru_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_gru_layer(صحيح batch, صحيح inputs, صحيح outputs, صحيح گامها, صحيح batch_normalize, صحيح adam);
 
-void forward_gru_layer(layer l, network state);
-void backward_gru_layer(layer l, network state);
-void update_gru_layer(layer l, update_args a);
+فراغ forward_gru_layer(layer l, شبکه state);
+فراغ backward_gru_layer(layer l, شبکه state);
+فراغ update_gru_layer(layer l, update_آرگومانها a);
 
-#ifdef GPU
-void forward_gru_layer_gpu(layer l, network state);
-void backward_gru_layer_gpu(layer l, network state);
-void update_gru_layer_gpu(layer l, update_args a);
-void push_gru_layer(layer l);
-void pull_gru_layer(layer l);
-#endif
+#اگر_تعریف_شده GPU
+فراغ forward_gru_layer_gpu(layer l, شبکه state);
+فراغ backward_gru_layer_gpu(layer l, شبکه state);
+فراغ update_gru_layer_gpu(layer l, update_آرگومانها a);
+فراغ افزودن_gru_layer(layer l);
+فراغ pull_gru_layer(layer l);
+#پایان_اگر
 
-#endif
+#پایان_اگر
 

@@ -1,13 +1,13 @@
-#ifndef LIST_H
-#define LIST_H
-#include "darknet.h"
+#اگر_تعریف_نشده LIST_H
+#تعریف_کن LIST_H
+#ضمن "darknet.h"
 
 list *make_list();
-int list_find(list *l, void *val);
+صحيح list_پیدا_کن(list *l, فراغ *val);
 
-void list_insert(list *, void *);
+فراغ list_درج(list *, فراغ *);
 
 
-void free_list_contents(list *l);
+فراغ free_list_contents(list *l);
 
-#endif
+#پایان_اگر

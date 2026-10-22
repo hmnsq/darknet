@@ -1,20 +1,20 @@
-#ifndef LSTM_LAYER_H
-#define LSTM_LAYER_H
+#اگر_تعریف_نشده LSTM_LAYER_H
+#تعریف_کن LSTM_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
-#define USET
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
+#تعریف_کن USET
 
-layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_lstm_layer(صحيح batch, صحيح inputs, صحيح outputs, صحيح گامها, صحيح batch_normalize, صحيح adam);
 
-void forward_lstm_layer(layer l, network net); 
-void update_lstm_layer(layer l, update_args a);
+فراغ forward_lstm_layer(layer l, شبکه net); 
+فراغ update_lstm_layer(layer l, update_آرگومانها a);
 
-#ifdef GPU
-void forward_lstm_layer_gpu(layer l, network net);
-void backward_lstm_layer_gpu(layer l, network net);
-void update_lstm_layer_gpu(layer l, update_args a); 
+#اگر_تعریف_شده GPU
+فراغ forward_lstm_layer_gpu(layer l, شبکه net);
+فراغ backward_lstm_layer_gpu(layer l, شبکه net);
+فراغ update_lstm_layer_gpu(layer l, update_آرگومانها a); 
 
-#endif
-#endif
+#پایان_اگر
+#پایان_اگر

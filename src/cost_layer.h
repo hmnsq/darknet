@@ -1,20 +1,20 @@
-#ifndef COST_LAYER_H
-#define COST_LAYER_H
-#include "layer.h"
-#include "network.h"
+#اگر_تعریف_نشده هزینه_LAYER_H
+#تعریف_کن هزینه_LAYER_H
+#ضمن "layer.h"
+#ضمن "network.h"
 
-typedef layer cost_layer;
+تعريفنوع layer هزینه_layer;
 
-COST_TYPE get_cost_type(char *s);
-char *get_cost_string(COST_TYPE a);
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE type, float scale);
-void forward_cost_layer(const cost_layer l, network net);
-void backward_cost_layer(const cost_layer l, network net);
-void resize_cost_layer(cost_layer *l, int inputs);
+هزینه_TYPE get_هزینه_type(حرف *s);
+حرف *get_هزینه_string(هزینه_TYPE a);
+هزینه_layer make_هزینه_layer(صحيح batch, صحيح inputs, هزینه_TYPE type, عائم scale);
+فراغ forward_هزینه_layer(ثابت هزینه_layer l, شبکه net);
+فراغ backward_هزینه_layer(ثابت هزینه_layer l, شبکه net);
+فراغ resize_هزینه_layer(هزینه_layer *l, صحيح inputs);
 
-#ifdef GPU
-void forward_cost_layer_gpu(cost_layer l, network net);
-void backward_cost_layer_gpu(const cost_layer l, network net);
-#endif
+#اگر_تعریف_شده GPU
+فراغ forward_هزینه_layer_gpu(هزینه_layer l, شبکه net);
+فراغ backward_هزینه_layer_gpu(ثابت هزینه_layer l, شبکه net);
+#پایان_اگر
 
-#endif
+#پایان_اگر

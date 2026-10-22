@@ -1,17 +1,17 @@
-#ifndef SHORTCUT_LAYER_H
-#define SHORTCUT_LAYER_H
+#اگر_تعریف_نشده SHORTCUT_LAYER_H
+#تعریف_کن SHORTCUT_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2);
-void forward_shortcut_layer(const layer l, network net);
-void backward_shortcut_layer(const layer l, network net);
-void resize_shortcut_layer(layer *l, int w, int h);
+layer make_shortcut_layer(صحيح batch, صحيح شاخص, صحيح w, صحيح h, صحيح c, صحيح w2, صحيح h2, صحيح c2);
+فراغ forward_shortcut_layer(ثابت layer l, شبکه net);
+فراغ backward_shortcut_layer(ثابت layer l, شبکه net);
+فراغ resize_shortcut_layer(layer *l, صحيح w, صحيح h);
 
-#ifdef GPU
-void forward_shortcut_layer_gpu(const layer l, network net);
-void backward_shortcut_layer_gpu(const layer l, network net);
-#endif
+#اگر_تعریف_شده GPU
+فراغ forward_shortcut_layer_gpu(ثابت layer l, شبکه net);
+فراغ backward_shortcut_layer_gpu(ثابت layer l, شبکه net);
+#پایان_اگر
 
-#endif
+#پایان_اگر

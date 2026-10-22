@@ -1,16 +1,16 @@
-#include "iseg_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ضمن "iseg_layer.h"
+#ضمن "activations.h"
+#ضمن "blas.h"
+#ضمن "box.h"
+#ضمن "cuda.h"
+#ضمن "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ضمن <stdio.h>
+#ضمن <assert.h>
+#ضمن <string.h>
+#ضمن <stdlib.h>
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
+layer make_iseg_layer(صحيح batch, صحيح w, صحيح h, صحيح classes, صحيح ids)
 {
     layer l = {0};
     l.type = ISEG;
@@ -18,44 +18,44 @@ layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
     l.h = h;
     l.w = w;
     l.c = classes + ids;
-    l.out_w = l.w;
-    l.out_h = l.h;
-    l.out_c = l.c;
+    l.بیرون_w = l.w;
+    l.بیرون_h = l.h;
+    l.بیرون_c = l.c;
     l.classes = classes;
     l.batch = batch;
     l.extra = ids;
-    l.cost = calloc(1, sizeof(float));
+    l.هزینه_2 = حافظه_صفر_بده(1, حجم(عائم));
     l.outputs = h*w*l.c;
     l.inputs = l.outputs;
     l.truths = 90*(l.w*l.h+1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
+    l.delta = حافظه_صفر_بده(batch*l.outputs, حجم(عائم));
+    l.output = حافظه_صفر_بده(batch*l.outputs, حجم(عائم));
 
-    l.counts = calloc(90, sizeof(int));
-    l.sums = calloc(90, sizeof(float*));
-    if(ids){
-        int i;
-        for(i = 0; i < 90; ++i){
-            l.sums[i] = calloc(ids, sizeof(float));
+    l.counts = حافظه_صفر_بده(90, حجم(صحيح));
+    l.sums = حافظه_صفر_بده(90, حجم(عائم*));
+    إذا(ids){
+        صحيح i;
+        لكل(i = 0; i < 90; ++i){
+            l.sums[i] = حافظه_صفر_بده(ids, حجم(عائم));
         }
     }
 
     l.forward = forward_iseg_layer;
     l.backward = backward_iseg_layer;
-#ifdef GPU
+#اگر_تعریف_شده GPU
     l.forward_gpu = forward_iseg_layer_gpu;
     l.backward_gpu = backward_iseg_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
     l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
-#endif
+#پایان_اگر
 
     fprintf(stderr, "iseg\n");
     srand(0);
 
-    return l;
+    أرجع l;
 }
 
-void resize_iseg_layer(layer *l, int w, int h)
+فراغ resize_iseg_layer(layer *l, صحيح w, صحيح h)
 {
     l->w = w;
     l->h = h;
@@ -63,163 +63,163 @@ void resize_iseg_layer(layer *l, int w, int h)
     l->outputs = h*w*l->c;
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*حجم(عائم));
+    l->delta = realloc(l->delta, l->batch*l->outputs*حجم(عائم));
 
-#ifdef GPU
+#اگر_تعریف_شده GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
 
     l->delta_gpu =     cuda_make_array(l->delta, l->batch*l->outputs);
     l->output_gpu =    cuda_make_array(l->output, l->batch*l->outputs);
-#endif
+#پایان_اگر
 }
 
-void forward_iseg_layer(const layer l, network net)
+فراغ forward_iseg_layer(ثابت layer l, شبکه net)
 {
 
-    double time = what_time_is_it_now();
-    int i,b,j,k;
-    int ids = l.extra;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
+    مزدوج زمان = what_زمان_is_it_now();
+    صحيح i,b,j,k;
+    صحيح ids = l.extra;
+    کپی_حافظه(l.output, net.درون_داد, l.outputs*l.batch*حجم(عائم));
+    memset(l.delta, 0, l.outputs * l.batch * حجم(عائم));
 
-#ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        int index = b*l.outputs;
-        activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+#اگر_تعریف_نشده GPU
+    لكل (b = 0; b < l.batch; ++b){
+        صحيح شاخص = b*l.outputs;
+        activate_array(l.output + شاخص, l.classes*l.w*l.h, LOGISTIC);
     }
-#endif
+#پایان_اگر
 
-    for (b = 0; b < l.batch; ++b){
+    لكل (b = 0; b < l.batch; ++b){
         // a priori, each pixel has no class
-        for(i = 0; i < l.classes; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + i*l.w*l.h + k;
-                l.delta[index] = 0 - l.output[index];
+        لكل(i = 0; i < l.classes; ++i){
+            لكل(k = 0; k < l.w*l.h; ++k){
+                صحيح شاخص = b*l.outputs + i*l.w*l.h + k;
+                l.delta[شاخص] = 0 - l.output[شاخص];
             }
         }
 
         // a priori, embedding should be small magnitude
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
-                l.delta[index] = .1 * (0 - l.output[index]);
+        لكل(i = 0; i < ids; ++i){
+            لكل(k = 0; k < l.w*l.h; ++k){
+                صحيح شاخص = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+                l.delta[شاخص] = .1 * (0 - l.output[شاخص]);
             }
         }
 
 
-        memset(l.counts, 0, 90*sizeof(int));
-        for(i = 0; i < 90; ++i){
+        memset(l.counts, 0, 90*حجم(صحيح));
+        لكل(i = 0; i < 90; ++i){
             fill_cpu(ids, 0, l.sums[i], 1);
             
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
+            صحيح c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            إذا(c < 0) اكسر;
             // add up metric embeddings for each instance
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + c*l.w*l.h + k;
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    l.delta[index] = v - l.output[index];
+            لكل(k = 0; k < l.w*l.h; ++k){
+                صحيح شاخص = b*l.outputs + c*l.w*l.h + k;
+                عائم v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                إذا(v){
+                    l.delta[شاخص] = v - l.output[شاخص];
                     axpy_cpu(ids, 1, l.output + b*l.outputs + l.classes*l.w*l.h + k, l.w*l.h, l.sums[i], 1);
                     ++l.counts[i];
                 }
             }
         }
 
-        float *mse = calloc(90, sizeof(float));
-        for(i = 0; i < 90; ++i){
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
-            for(k = 0; k < l.w*l.h; ++k){
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    int z;
-                    float sum = 0;
-                    for(z = 0; z < ids; ++z){
-                        int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
-                        sum += pow(l.sums[i][z]/l.counts[i] - l.output[index], 2);
+        عائم *mse = حافظه_صفر_بده(90, حجم(عائم));
+        لكل(i = 0; i < 90; ++i){
+            صحيح c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            إذا(c < 0) اكسر;
+            لكل(k = 0; k < l.w*l.h; ++k){
+                عائم v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                إذا(v){
+                    صحيح z;
+                    عائم جمع = 0;
+                    لكل(z = 0; z < ids; ++z){
+                        صحيح شاخص = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                        جمع += توان(l.sums[i][z]/l.counts[i] - l.output[شاخص], 2);
                     }
-                    mse[i] += sum;
+                    mse[i] += جمع;
                 }
             }
             mse[i] /= l.counts[i];
         }
 
         // Calculate average embedding
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
+        لكل(i = 0; i < 90; ++i){
+            إذا(!l.counts[i]) استمر;
             scal_cpu(ids, 1.f/l.counts[i], l.sums[i], 1);
-            if(b == 0 && net.gpu_index == 0){
-                printf("%4d, %6.3f, ", l.counts[i], mse[i]);
-                for(j = 0; j < ids; ++j){
-                    printf("%6.3f,", l.sums[i][j]);
+            إذا(b == 0 && net.gpu_شاخص == 0){
+                چاپ_کن("%4d, %6.3f, ", l.counts[i], mse[i]);
+                لكل(j = 0; j < ids; ++j){
+                    چاپ_کن("%6.3f,", l.sums[i][j]);
                 }
-                printf("\n");
+                چاپ_کن("\n");
             }
         }
-        free(mse);
+        حرر(mse);
 
         // Calculate embedding loss
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
-            for(k = 0; k < l.w*l.h; ++k){
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    for(j = 0; j < 90; ++j){
-                        if(!l.counts[j])continue;
-                        int z;
-                        for(z = 0; z < ids; ++z){
-                            int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
-                            float diff = l.sums[j][z] - l.output[index];
-                            if (j == i) l.delta[index] +=   diff < 0? -.1 : .1;
-                            else        l.delta[index] += -(diff < 0? -.1 : .1);
+        لكل(i = 0; i < 90; ++i){
+            إذا(!l.counts[i]) استمر;
+            لكل(k = 0; k < l.w*l.h; ++k){
+                عائم v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                إذا(v){
+                    لكل(j = 0; j < 90; ++j){
+                        إذا(!l.counts[j])استمر;
+                        صحيح z;
+                        لكل(z = 0; z < ids; ++z){
+                            صحيح شاخص = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                            عائم diff = l.sums[j][z] - l.output[شاخص];
+                            إذا (j == i) l.delta[شاخص] +=   diff < 0? -.1 : .1;
+                            وإلا        l.delta[شاخص] += -(diff < 0? -.1 : .1);
                         }
                     }
                 }
             }
         }
 
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
-                l.delta[index] *= .01;
+        لكل(i = 0; i < ids; ++i){
+            لكل(k = 0; k < l.w*l.h; ++k){
+                صحيح شاخص = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+                l.delta[شاخص] *= .01;
             }
         }
     }
 
-    *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("took %lf sec\n", what_time_is_it_now() - time);
+    *(l.هزینه_2) = توان(mag_array(l.delta, l.outputs * l.batch), 2);
+    چاپ_کن("took %lf sec\n", what_زمان_is_it_now() - زمان);
 }
 
-void backward_iseg_layer(const layer l, network net)
+فراغ backward_iseg_layer(ثابت layer l, شبکه net)
 {
     axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-#ifdef GPU
+#اگر_تعریف_شده GPU
 
-void forward_iseg_layer_gpu(const layer l, network net)
+فراغ forward_iseg_layer_gpu(ثابت layer l, شبکه net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    copy_gpu(l.batch*l.inputs, net.درون_داد_gpu, 1, l.output_gpu, 1);
+    صحيح b;
+    لكل (b = 0; b < l.batch; ++b){
         activate_array_gpu(l.output_gpu + b*l.outputs, l.classes*l.w*l.h, LOGISTIC);
         //if(l.extra) activate_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC);
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.درون_داد, l.batch*l.inputs);
     forward_iseg_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_افزودن_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_iseg_layer_gpu(const layer l, network net)
+فراغ backward_iseg_layer_gpu(ثابت layer l, شبکه net)
 {
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    صحيح b;
+    لكل (b = 0; b < l.batch; ++b){
         //if(l.extra) gradient_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC, l.delta_gpu + b*l.outputs + l.classes*l.w*l.h);
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#پایان_اگر
 
