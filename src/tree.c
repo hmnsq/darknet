@@ -4,136 +4,136 @@
 #include "utils.h"
 #include "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+void change_leaves(tree *t, var_na *leaf_list)
 {
     list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
+    var_na **leaves = (var_na **)list_to_array(llist);
+    ཧྲིལ n = llist->size;
+    ཧྲིལ i,j;
+    ཧྲིལ found = 0;
+    ཆེད་དུ(i = 0; i < t->n; ++i){
         t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
+        ཆེད་དུ(j = 0; j < n; ++j){
+            གལ་ཏེ (0==strcmp(t->name[i], leaves[j])){
                 t->leaf[i] = 1;
                 ++found;
-                break;
+                bha_nga;
             }
         }
     }
     fprintf(stderr, "Found %d leaves.\n", found);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+float get_hierarchy_probability(float *x, tree *hier, ཧྲིལ c, ཧྲིལ stride)
 {
     float p = 1;
-    while(c >= 0){
+    སྐབས(c >= 0){
         p = p * x[c*stride];
         c = hier->parent[c];
     }
-    return p;
+    ཕྱིར p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+void hierarchy_predictions(float *predictions, ཧྲིལ n, tree *hier, ཧྲིལ only_leaves, ཧྲིལ stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
+    ཧྲིལ j;
+    ཆེད་དུ(j = 0; j < n; ++j){
+        ཧྲིལ parent = hier->parent[j];
+        གལ་ཏེ(parent >= 0){
             predictions[j*stride] *= predictions[parent*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    གལ་ཏེ(only_leaves){
+        ཆེད་དུ(j = 0; j < n; ++j){
+            གལ་ཏེ(!hier->leaf[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+ཧྲིལ hierarchy_top_prediction(float *predictions, tree *hier, float thresh, ཧྲིལ stride)
 {
     float p = 1;
-    int group = 0;
-    int i;
-    while(1){
+    ཧྲིལ group = 0;
+    ཧྲིལ i;
+    སྐབས(1){
         float max = 0;
-        int max_i = 0;
+        ཧྲིལ max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
+        ཆེད་དུ(i = 0; i < hier->group_size[group]; ++i){
+            ཧྲིལ index = i + hier->group_offset[group];
             float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
+            གལ་ཏེ(val > max){
                 max_i = index;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        གལ་ཏེ(p*max > thresh){
             p = p*max;
             group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            གལ་ཏེ(hier->child[max_i] < 0) ཕྱིར max_i;
+        } དེ་མིན གལ་ཏེ (group == 0){
+            ཕྱིར max_i;
+        } དེ་མིན {
+            ཕྱིར hier->parent[hier->group_offset[group]];
         }
     }
-    return 0;
+    ཕྱིར 0;
 }
 
-tree *read_tree(char *filename)
+tree *read_tree(var_na *filename)
 {
     tree t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
+    var_na *line;
+    ཧྲིལ last_parent = -1;
+    ཧྲིལ group_size = 0;
+    ཧྲིལ groups = 0;
+    ཧྲིལ n = 0;
+    སྐབས((line=fgetl(fp)) != 0){
+        var_na *id = calloc(256, parimaa_na(var_na));
+        ཧྲིལ parent = -1;
         sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
+        t.parent = realloc(t.parent, (n+1)*parimaa_na(ཧྲིལ));
         t.parent[n] = parent;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
+        t.child = realloc(t.child, (n+1)*parimaa_na(ཧྲིལ));
         t.child[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*parimaa_na(var_na *));
         t.name[n] = id;
-        if(parent != last_parent){
+        གལ་ཏེ(parent != last_parent){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
+            t.group_offset = realloc(t.group_offset, groups * parimaa_na(ཧྲིལ));
             t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
+            t.group_size = realloc(t.group_size, groups * parimaa_na(ཧྲིལ));
             t.group_size[groups - 1] = group_size;
             group_size = 0;
             last_parent = parent;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
+        t.group = realloc(t.group, (n+1)*parimaa_na(ཧྲིལ));
         t.group[n] = groups;
-        if (parent >= 0) {
+        གལ་ཏེ (parent >= 0) {
             t.child[parent] = groups;
         }
         ++n;
         ++group_size;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
+    t.group_offset = realloc(t.group_offset, groups * parimaa_na(ཧྲིལ));
     t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
+    t.group_size = realloc(t.group_size, groups * parimaa_na(ཧྲིལ));
     t.group_size[groups - 1] = group_size;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.leaf = calloc(n, parimaa_na(ཧྲིལ));
+    ཧྲིལ i;
+    ཆེད་དུ(i = 0; i < n; ++i) t.leaf[i] = 1;
+    ཆེད་དུ(i = 0; i < n; ++i) གལ་ཏེ(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
+    tree *tree_ptr = calloc(1, parimaa_na(tree));
     *tree_ptr = t;
     //error(0);
-    return tree_ptr;
+    ཕྱིར tree_ptr;
 }

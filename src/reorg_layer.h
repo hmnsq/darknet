@@ -6,8 +6,8 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra);
-void resize_reorg_layer(layer *l, int w, int h);
+layer make_reorg_layer(ཧྲིལ batch, ཧྲིལ w, ཧྲིལ h, ཧྲིལ c, ཧྲིལ stride, ཧྲིལ reverse, ཧྲིལ flatten, ཧྲིལ extra);
+void resize_reorg_layer(layer *l, ཧྲིལ w, ཧྲིལ h);
 void forward_reorg_layer(const layer l, network net);
 void backward_reorg_layer(const layer l, network net);
 
