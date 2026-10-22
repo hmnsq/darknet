@@ -1,31 +1,31 @@
-#include "local_layer.h"
-#include "utils.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
-#include <stdio.h>
-#include <time.h>
+#ضمن "local_layer.h"
+#ضمن "utils.h"
+#ضمن "im2col.h"
+#ضمن "col2im.h"
+#ضمن "blas.h"
+#ضمن "gemm.h"
+#ضمن <stdio.h>
+#ضمن <time.h>
 
-int local_out_height(local_layer l)
+صحيح local_out_height(local_layer l)
 {
-    int h = l.h;
-    if (!l.pad) h -= l.size;
-    else h -= 1;
-    return h/l.stride + 1;
+    صحيح h = l.h;
+    אם (!l.pad) h -= l.size;
+    אחרת h -= 1;
+    החזר h/l.stride + 1;
 }
 
-int local_out_width(local_layer l)
+صحيح local_out_width(local_layer l)
 {
-    int w = l.w;
-    if (!l.pad) w -= l.size;
-    else w -= 1;
-    return w/l.stride + 1;
+    صحيح w = l.w;
+    אם (!l.pad) w -= l.size;
+    אחרת w -= 1;
+    החזר w/l.stride + 1;
 }
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation)
+local_layer make_local_layer(صحيح batch, صحيح h, صحيح w, صحيح c, صحيح n, صحيح size, صحيح stride, صحيح pad, ACTIVATION activation)
 {
-    int i;
+    صحيح i;
     local_layer l = {0};
     l.type = LOCAL;
 
@@ -38,27 +38,27 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
     l.size = size;
     l.pad = pad;
 
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int locations = out_h*out_w;
+    صحيح out_h = local_out_height(l);
+    صحيح out_w = local_out_width(l);
+    صحيح locations = out_h*out_w;
     l.out_h = out_h;
     l.out_w = out_w;
     l.out_c = n;
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    l.weights = calloc(c*n*size*size*locations, sizeof(float));
-    l.weight_updates = calloc(c*n*size*size*locations, sizeof(float));
+    l.weights = calloc(c*n*size*size*locations, حجم(عائم));
+    l.weight_updates = calloc(c*n*size*size*locations, حجم(عائم));
 
-    l.biases = calloc(l.outputs, sizeof(float));
-    l.bias_updates = calloc(l.outputs, sizeof(float));
+    l.biases = calloc(l.outputs, حجم(عائم));
+    l.bias_updates = calloc(l.outputs, حجم(عائم));
 
     // float scale = 1./sqrt(size*size*c);
-    float scale = sqrt(2./(size*size*c));
-    for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1,1);
+    عائم scale = sqrt(2./(size*size*c));
+    עבור(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1,1);
 
-    l.output = calloc(l.batch*out_h * out_w * n, sizeof(float));
-    l.delta  = calloc(l.batch*out_h * out_w * n, sizeof(float));
+    l.output = calloc(l.batch*out_h * out_w * n, حجم(عائم));
+    l.delta  = calloc(l.batch*out_h * out_w * n, حجم(عائم));
 
     l.workspace_size = out_h*out_w*size*size*c;
     
@@ -85,33 +85,33 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
 
     fprintf(stderr, "Local Layer: %d x %d x %d image, %d filters -> %d x %d x %d image\n", h,w,c,n, out_h, out_w, n);
 
-    return l;
+    החזר l;
 }
 
-void forward_local_layer(const local_layer l, network net)
+فراغ forward_local_layer(ثابت local_layer l, network net)
 {
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int i, j;
-    int locations = out_h * out_w;
+    صحيح out_h = local_out_height(l);
+    صحيح out_w = local_out_width(l);
+    صحيح i, j;
+    صحيح locations = out_h * out_w;
 
-    for(i = 0; i < l.batch; ++i){
+    עבור(i = 0; i < l.batch; ++i){
         copy_cpu(l.outputs, l.biases, 1, l.output + i*l.outputs, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
+    עבור(i = 0; i < l.batch; ++i){
+        عائم *input = net.input + i*l.w*l.h*l.c;
         im2col_cpu(input, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
-        float *output = l.output + i*l.outputs;
-        for(j = 0; j < locations; ++j){
-            float *a = l.weights + j*l.size*l.size*l.c*l.n;
-            float *b = net.workspace + j;
-            float *c = output + j;
+        عائم *output = l.output + i*l.outputs;
+        עבור(j = 0; j < locations; ++j){
+            عائم *a = l.weights + j*l.size*l.size*l.c*l.n;
+            عائم *b = net.workspace + j;
+            عائم *c = output + j;
 
-            int m = l.n;
-            int n = 1;
-            int k = l.size*l.size*l.c;
+            صحيح m = l.n;
+            صحيح n = 1;
+            صحيح k = l.size*l.size*l.c;
 
             gemm(0,0,m,n,k,1,a,k,b,locations,1,c,locations);
         }
@@ -119,42 +119,42 @@ void forward_local_layer(const local_layer l, network net)
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_local_layer(local_layer l, network net)
+فراغ backward_local_layer(local_layer l, network net)
 {
-    int i, j;
-    int locations = l.out_w*l.out_h;
+    صحيح i, j;
+    صحيح locations = l.out_w*l.out_h;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    for(i = 0; i < l.batch; ++i){
+    עבור(i = 0; i < l.batch; ++i){
         axpy_cpu(l.outputs, 1, l.delta + i*l.outputs, 1, l.bias_updates, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
+    עבור(i = 0; i < l.batch; ++i){
+        عائم *input = net.input + i*l.w*l.h*l.c;
         im2col_cpu(input, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
 
-        for(j = 0; j < locations; ++j){ 
-            float *a = l.delta + i*l.outputs + j;
-            float *b = net.workspace + j;
-            float *c = l.weight_updates + j*l.size*l.size*l.c*l.n;
-            int m = l.n;
-            int n = l.size*l.size*l.c;
-            int k = 1;
+        עבור(j = 0; j < locations; ++j){ 
+            عائم *a = l.delta + i*l.outputs + j;
+            عائم *b = net.workspace + j;
+            عائم *c = l.weight_updates + j*l.size*l.size*l.c*l.n;
+            صحيح m = l.n;
+            صحيح n = l.size*l.size*l.c;
+            صحيح k = 1;
 
             gemm(0,1,m,n,k,1,a,locations,b,locations,1,c,n);
         }
 
-        if(net.delta){
-            for(j = 0; j < locations; ++j){ 
-                float *a = l.weights + j*l.size*l.size*l.c*l.n;
-                float *b = l.delta + i*l.outputs + j;
-                float *c = net.workspace + j;
+        אם(net.delta){
+            עבור(j = 0; j < locations; ++j){ 
+                عائم *a = l.weights + j*l.size*l.size*l.c*l.n;
+                عائم *b = l.delta + i*l.outputs + j;
+                عائم *c = net.workspace + j;
 
-                int m = l.size*l.size*l.c;
-                int n = 1;
-                int k = l.n;
+                صحيح m = l.size*l.size*l.c;
+                صحيح n = 1;
+                صحيح k = l.n;
 
                 gemm(1,0,m,n,k,1,a,m,b,locations,0,c,locations);
             }
@@ -164,15 +164,15 @@ void backward_local_layer(local_layer l, network net)
     }
 }
 
-void update_local_layer(local_layer l, update_args a)
+فراغ update_local_layer(local_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    عائم learning_rate = a.learning_rate*l.learning_rate_scale;
+    عائم momentum = a.momentum;
+    عائم decay = a.decay;
+    صحيح batch = a.batch;
 
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    صحيح locations = l.out_w*l.out_h;
+    صحيح size = l.size*l.size*l.c*l.n*locations;
     axpy_cpu(l.outputs, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.outputs, momentum, l.bias_updates, 1);
 
@@ -183,30 +183,30 @@ void update_local_layer(local_layer l, update_args a)
 
 #ifdef GPU
 
-void forward_local_layer_gpu(const local_layer l, network net)
+فراغ forward_local_layer_gpu(ثابت local_layer l, network net)
 {
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int i, j;
-    int locations = out_h * out_w;
+    صحيح out_h = local_out_height(l);
+    صحيح out_w = local_out_width(l);
+    صحيح i, j;
+    صحيح locations = out_h * out_w;
 
-    for(i = 0; i < l.batch; ++i){
+    עבור(i = 0; i < l.batch; ++i){
         copy_gpu(l.outputs, l.biases_gpu, 1, l.output_gpu + i*l.outputs, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
+    עבור(i = 0; i < l.batch; ++i){
+        عائم *input = net.input_gpu + i*l.w*l.h*l.c;
         im2col_gpu(input, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
-        float *output = l.output_gpu + i*l.outputs;
-        for(j = 0; j < locations; ++j){
-            float *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
-            float *b = net.workspace + j;
-            float *c = output + j;
+        عائم *output = l.output_gpu + i*l.outputs;
+        עבור(j = 0; j < locations; ++j){
+            عائم *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
+            عائم *b = net.workspace + j;
+            عائم *c = output + j;
 
-            int m = l.n;
-            int n = 1;
-            int k = l.size*l.size*l.c;
+            صحيح m = l.n;
+            صحيح n = 1;
+            صحيح k = l.size*l.size*l.c;
 
             gemm_gpu(0,0,m,n,k,1,a,k,b,locations,1,c,locations);
         }
@@ -214,41 +214,41 @@ void forward_local_layer_gpu(const local_layer l, network net)
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_local_layer_gpu(local_layer l, network net)
+فراغ backward_local_layer_gpu(local_layer l, network net)
 {
-    int i, j;
-    int locations = l.out_w*l.out_h;
+    صحيح i, j;
+    صحيح locations = l.out_w*l.out_h;
 
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
-    for(i = 0; i < l.batch; ++i){
+    עבור(i = 0; i < l.batch; ++i){
         axpy_gpu(l.outputs, 1, l.delta_gpu + i*l.outputs, 1, l.bias_updates_gpu, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
+    עבור(i = 0; i < l.batch; ++i){
+        عائم *input = net.input_gpu + i*l.w*l.h*l.c;
         im2col_gpu(input, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
 
-        for(j = 0; j < locations; ++j){ 
-            float *a = l.delta_gpu + i*l.outputs + j;
-            float *b = net.workspace + j;
-            float *c = l.weight_updates_gpu + j*l.size*l.size*l.c*l.n;
-            int m = l.n;
-            int n = l.size*l.size*l.c;
-            int k = 1;
+        עבור(j = 0; j < locations; ++j){ 
+            عائم *a = l.delta_gpu + i*l.outputs + j;
+            عائم *b = net.workspace + j;
+            عائم *c = l.weight_updates_gpu + j*l.size*l.size*l.c*l.n;
+            صحيح m = l.n;
+            صحيح n = l.size*l.size*l.c;
+            صحيح k = 1;
 
             gemm_gpu(0,1,m,n,k,1,a,locations,b,locations,1,c,n);
         }
 
-        if(net.delta_gpu){
-            for(j = 0; j < locations; ++j){ 
-                float *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
-                float *b = l.delta_gpu + i*l.outputs + j;
-                float *c = net.workspace + j;
+        אם(net.delta_gpu){
+            עבור(j = 0; j < locations; ++j){ 
+                عائم *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
+                عائم *b = l.delta_gpu + i*l.outputs + j;
+                عائم *c = net.workspace + j;
 
-                int m = l.size*l.size*l.c;
-                int n = 1;
-                int k = l.n;
+                صحيح m = l.size*l.size*l.c;
+                صحيح n = 1;
+                صحيح k = l.n;
 
                 gemm_gpu(1,0,m,n,k,1,a,m,b,locations,0,c,locations);
             }
@@ -258,15 +258,15 @@ void backward_local_layer_gpu(local_layer l, network net)
     }
 }
 
-void update_local_layer_gpu(local_layer l, update_args a)
+فراغ update_local_layer_gpu(local_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    عائم learning_rate = a.learning_rate*l.learning_rate_scale;
+    عائم momentum = a.momentum;
+    عائم decay = a.decay;
+    صحيح batch = a.batch;
 
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    صحيح locations = l.out_w*l.out_h;
+    صحيح size = l.size*l.size*l.c*l.n*locations;
     axpy_gpu(l.outputs, learning_rate/batch, l.bias_updates_gpu, 1, l.biases_gpu, 1);
     scal_gpu(l.outputs, momentum, l.bias_updates_gpu, 1);
 
@@ -275,18 +275,18 @@ void update_local_layer_gpu(local_layer l, update_args a)
     scal_gpu(size, momentum, l.weight_updates_gpu, 1);
 }
 
-void pull_local_layer(local_layer l)
+فراغ pull_local_layer(local_layer l)
 {
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    صحيح locations = l.out_w*l.out_h;
+    صحيح size = l.size*l.size*l.c*l.n*locations;
     cuda_pull_array(l.weights_gpu, l.weights, size);
     cuda_pull_array(l.biases_gpu, l.biases, l.outputs);
 }
 
-void push_local_layer(local_layer l)
+فراغ push_local_layer(local_layer l)
 {
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    صحيح locations = l.out_w*l.out_h;
+    صحيح size = l.size*l.size*l.c*l.n*locations;
     cuda_push_array(l.weights_gpu, l.weights, size);
     cuda_push_array(l.biases_gpu, l.biases, l.outputs);
 }

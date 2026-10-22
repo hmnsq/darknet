@@ -1,17 +1,17 @@
-#include "detection_layer.h"
-#include "activations.h"
-#include "softmax_layer.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ضمن "detection_layer.h"
+#ضمن "activations.h"
+#ضمن "softmax_layer.h"
+#ضمن "blas.h"
+#ضمن "box.h"
+#ضمن "cuda.h"
+#ضمن "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ضمن <stdio.h>
+#ضمن <assert.h>
+#ضمن <string.h>
+#ضمن <stdlib.h>
 
-detection_layer make_detection_layer(int batch, int inputs, int n, int side, int classes, int coords, int rescore)
+detection_layer make_detection_layer(صحيح batch, صحيح inputs, صحيح n, صحيح side, صحيح classes, صحيح coords, صحيح rescore)
 {
     detection_layer l = {0};
     l.type = DETECTION;
@@ -25,12 +25,12 @@ detection_layer make_detection_layer(int batch, int inputs, int n, int side, int
     l.side = side;
     l.w = side;
     l.h = side;
-    assert(side*side*((1 + l.coords)*l.n + l.classes) == inputs);
-    l.cost = calloc(1, sizeof(float));
+    أكد(side*side*((1 + l.coords)*l.n + l.classes) == inputs);
+    l.cost = calloc(1, حجم(عائم));
     l.outputs = l.inputs;
     l.truths = l.side*l.side*(1+l.coords+l.classes);
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    l.delta = calloc(batch*l.outputs, sizeof(float));
+    l.output = calloc(batch*l.outputs, حجم(عائم));
+    l.delta = calloc(batch*l.outputs, حجم(عائم));
 
     l.forward = forward_detection_layer;
     l.backward = backward_detection_layer;
@@ -44,61 +44,61 @@ detection_layer make_detection_layer(int batch, int inputs, int n, int side, int
     fprintf(stderr, "Detection Layer\n");
     srand(0);
 
-    return l;
+    החזר l;
 }
 
-void forward_detection_layer(const detection_layer l, network net)
+فراغ forward_detection_layer(ثابت detection_layer l, network net)
 {
-    int locations = l.side*l.side;
-    int i,j;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    صحيح locations = l.side*l.side;
+    صحيح i,j;
+    memcpy(l.output, net.input, l.outputs*l.batch*حجم(عائم));
     //if(l.reorg) reorg(l.output, l.w*l.h, size*l.n, l.batch, 1);
-    int b;
-    if (l.softmax){
-        for(b = 0; b < l.batch; ++b){
-            int index = b*l.inputs;
-            for (i = 0; i < locations; ++i) {
-                int offset = i*l.classes;
+    صحيح b;
+    אם (l.softmax){
+        עבור(b = 0; b < l.batch; ++b){
+            صحيح index = b*l.inputs;
+            עבור (i = 0; i < locations; ++i) {
+                صحيح offset = i*l.classes;
                 softmax(l.output + index + offset, l.classes, 1, 1,
                         l.output + index + offset);
             }
         }
     }
-    if(net.train){
-        float avg_iou = 0;
-        float avg_cat = 0;
-        float avg_allcat = 0;
-        float avg_obj = 0;
-        float avg_anyobj = 0;
-        int count = 0;
+    אם(net.train){
+        عائم avg_iou = 0;
+        عائم avg_cat = 0;
+        عائم avg_allcat = 0;
+        عائم avg_obj = 0;
+        عائم avg_anyobj = 0;
+        صحيح count = 0;
         *(l.cost) = 0;
-        int size = l.inputs * l.batch;
-        memset(l.delta, 0, size * sizeof(float));
-        for (b = 0; b < l.batch; ++b){
-            int index = b*l.inputs;
-            for (i = 0; i < locations; ++i) {
-                int truth_index = (b*locations + i)*(1+l.coords+l.classes);
-                int is_obj = net.truth[truth_index];
-                for (j = 0; j < l.n; ++j) {
-                    int p_index = index + locations*l.classes + i*l.n + j;
+        صحيح size = l.inputs * l.batch;
+        memset(l.delta, 0, size * حجم(عائم));
+        עבור (b = 0; b < l.batch; ++b){
+            صحيح index = b*l.inputs;
+            עבור (i = 0; i < locations; ++i) {
+                صحيح truth_index = (b*locations + i)*(1+l.coords+l.classes);
+                صحيح is_obj = net.truth[truth_index];
+                עבור (j = 0; j < l.n; ++j) {
+                    صحيح p_index = index + locations*l.classes + i*l.n + j;
                     l.delta[p_index] = l.noobject_scale*(0 - l.output[p_index]);
                     *(l.cost) += l.noobject_scale*pow(l.output[p_index], 2);
                     avg_anyobj += l.output[p_index];
                 }
 
-                int best_index = -1;
-                float best_iou = 0;
-                float best_rmse = 20;
+                صحيح best_index = -1;
+                عائم best_iou = 0;
+                عائم best_rmse = 20;
 
-                if (!is_obj){
-                    continue;
+                אם (!is_obj){
+                    استمر;
                 }
 
-                int class_index = index + i*l.classes;
-                for(j = 0; j < l.classes; ++j) {
+                صحيح class_index = index + i*l.classes;
+                עבור(j = 0; j < l.classes; ++j) {
                     l.delta[class_index+j] = l.class_scale * (net.truth[truth_index+1+j] - l.output[class_index+j]);
                     *(l.cost) += l.class_scale * pow(net.truth[truth_index+1+j] - l.output[class_index+j], 2);
-                    if(net.truth[truth_index + 1 + j]) avg_cat += l.output[class_index+j];
+                    אם(net.truth[truth_index + 1 + j]) avg_cat += l.output[class_index+j];
                     avg_allcat += l.output[class_index+j];
                 }
 
@@ -106,64 +106,64 @@ void forward_detection_layer(const detection_layer l, network net)
                 truth.x /= l.side;
                 truth.y /= l.side;
 
-                for(j = 0; j < l.n; ++j){
-                    int box_index = index + locations*(l.classes + l.n) + (i*l.n + j) * l.coords;
+                עבור(j = 0; j < l.n; ++j){
+                    صحيح box_index = index + locations*(l.classes + l.n) + (i*l.n + j) * l.coords;
                     box out = float_to_box(l.output + box_index, 1);
                     out.x /= l.side;
                     out.y /= l.side;
 
-                    if (l.sqrt){
+                    אם (l.sqrt){
                         out.w = out.w*out.w;
                         out.h = out.h*out.h;
                     }
 
-                    float iou  = box_iou(out, truth);
+                    عائم iou  = box_iou(out, truth);
                     //iou = 0;
-                    float rmse = box_rmse(out, truth);
-                    if(best_iou > 0 || iou > 0){
-                        if(iou > best_iou){
+                    عائم rmse = box_rmse(out, truth);
+                    אם(best_iou > 0 || iou > 0){
+                        אם(iou > best_iou){
                             best_iou = iou;
                             best_index = j;
                         }
-                    }else{
-                        if(rmse < best_rmse){
+                    }אחרת{
+                        אם(rmse < best_rmse){
                             best_rmse = rmse;
                             best_index = j;
                         }
                     }
                 }
 
-                if(l.forced){
-                    if(truth.w*truth.h < .1){
+                אם(l.forced){
+                    אם(truth.w*truth.h < .1){
                         best_index = 1;
-                    }else{
+                    }אחרת{
                         best_index = 0;
                     }
                 }
-                if(l.random && *(net.seen) < 64000){
+                אם(l.random && *(net.seen) < 64000){
                     best_index = rand()%l.n;
                 }
 
-                int box_index = index + locations*(l.classes + l.n) + (i*l.n + best_index) * l.coords;
-                int tbox_index = truth_index + 1 + l.classes;
+                صحيح box_index = index + locations*(l.classes + l.n) + (i*l.n + best_index) * l.coords;
+                صحيح tbox_index = truth_index + 1 + l.classes;
 
                 box out = float_to_box(l.output + box_index, 1);
                 out.x /= l.side;
                 out.y /= l.side;
-                if (l.sqrt) {
+                אם (l.sqrt) {
                     out.w = out.w*out.w;
                     out.h = out.h*out.h;
                 }
-                float iou  = box_iou(out, truth);
+                عائم iou  = box_iou(out, truth);
 
                 //printf("%d,", best_index);
-                int p_index = index + locations*l.classes + i*l.n + best_index;
+                صحيح p_index = index + locations*l.classes + i*l.n + best_index;
                 *(l.cost) -= l.noobject_scale * pow(l.output[p_index], 2);
                 *(l.cost) += l.object_scale * pow(1-l.output[p_index], 2);
                 avg_obj += l.output[p_index];
                 l.delta[p_index] = l.object_scale * (1.-l.output[p_index]);
 
-                if(l.rescore){
+                אם(l.rescore){
                     l.delta[p_index] = l.object_scale * (iou - l.output[p_index]);
                 }
 
@@ -171,7 +171,7 @@ void forward_detection_layer(const detection_layer l, network net)
                 l.delta[box_index+1] = l.coord_scale*(net.truth[tbox_index + 1] - l.output[box_index + 1]);
                 l.delta[box_index+2] = l.coord_scale*(net.truth[tbox_index + 2] - l.output[box_index + 2]);
                 l.delta[box_index+3] = l.coord_scale*(net.truth[tbox_index + 3] - l.output[box_index + 3]);
-                if(l.sqrt){
+                אם(l.sqrt){
                     l.delta[box_index+2] = l.coord_scale*(sqrt(net.truth[tbox_index + 2]) - l.output[box_index + 2]);
                     l.delta[box_index+3] = l.coord_scale*(sqrt(net.truth[tbox_index + 3]) - l.output[box_index + 3]);
                 }
@@ -182,30 +182,30 @@ void forward_detection_layer(const detection_layer l, network net)
             }
         }
 
-        if(0){
-            float *costs = calloc(l.batch*locations*l.n, sizeof(float));
-            for (b = 0; b < l.batch; ++b) {
-                int index = b*l.inputs;
-                for (i = 0; i < locations; ++i) {
-                    for (j = 0; j < l.n; ++j) {
-                        int p_index = index + locations*l.classes + i*l.n + j;
+        אם(0){
+            عائم *costs = calloc(l.batch*locations*l.n, حجم(عائم));
+            עבור (b = 0; b < l.batch; ++b) {
+                صحيح index = b*l.inputs;
+                עבור (i = 0; i < locations; ++i) {
+                    עבור (j = 0; j < l.n; ++j) {
+                        صحيح p_index = index + locations*l.classes + i*l.n + j;
                         costs[b*locations*l.n + i*l.n + j] = l.delta[p_index]*l.delta[p_index];
                     }
                 }
             }
-            int indexes[100];
+            صحيح indexes[100];
             top_k(costs, l.batch*locations*l.n, 100, indexes);
-            float cutoff = costs[indexes[99]];
-            for (b = 0; b < l.batch; ++b) {
-                int index = b*l.inputs;
-                for (i = 0; i < locations; ++i) {
-                    for (j = 0; j < l.n; ++j) {
-                        int p_index = index + locations*l.classes + i*l.n + j;
-                        if (l.delta[p_index]*l.delta[p_index] < cutoff) l.delta[p_index] = 0;
+            عائم cutoff = costs[indexes[99]];
+            עבור (b = 0; b < l.batch; ++b) {
+                صحيح index = b*l.inputs;
+                עבור (i = 0; i < locations; ++i) {
+                    עבור (j = 0; j < l.n; ++j) {
+                        صحيح p_index = index + locations*l.classes + i*l.n + j;
+                        אם (l.delta[p_index]*l.delta[p_index] < cutoff) l.delta[p_index] = 0;
                     }
                 }
             }
-            free(costs);
+            حرر(costs);
         }
 
 
@@ -217,24 +217,24 @@ void forward_detection_layer(const detection_layer l, network net)
     }
 }
 
-void backward_detection_layer(const detection_layer l, network net)
+فراغ backward_detection_layer(ثابت detection_layer l, network net)
 {
     axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void get_detection_detections(layer l, int w, int h, float thresh, detection *dets)
+فراغ get_detection_detections(layer l, صحيح w, صحيح h, عائم thresh, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
+    صحيح i,j,n;
+    عائم *predictions = l.output;
     //int per_cell = 5*num+classes;
-    for (i = 0; i < l.side*l.side; ++i){
-        int row = i / l.side;
-        int col = i % l.side;
-        for(n = 0; n < l.n; ++n){
-            int index = i*l.n + n;
-            int p_index = l.side*l.side*l.classes + i*l.n + n;
-            float scale = predictions[p_index];
-            int box_index = l.side*l.side*(l.classes + l.n) + (i*l.n + n)*4;
+    עבור (i = 0; i < l.side*l.side; ++i){
+        صحيح row = i / l.side;
+        صحيح col = i % l.side;
+        עבור(n = 0; n < l.n; ++n){
+            صحيح index = i*l.n + n;
+            صحيح p_index = l.side*l.side*l.classes + i*l.n + n;
+            عائم scale = predictions[p_index];
+            صحيح box_index = l.side*l.side*(l.classes + l.n) + (i*l.n + n)*4;
             box b;
             b.x = (predictions[box_index + 0] + col) / l.side * w;
             b.y = (predictions[box_index + 1] + row) / l.side * h;
@@ -242,9 +242,9 @@ void get_detection_detections(layer l, int w, int h, float thresh, detection *de
             b.h = pow(predictions[box_index + 3], (l.sqrt?2:1)) * h;
             dets[index].bbox = b;
             dets[index].objectness = scale;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = i*l.classes;
-                float prob = scale*predictions[class_index+j];
+            עבור(j = 0; j < l.classes; ++j){
+                صحيح class_index = i*l.classes;
+                عائم prob = scale*predictions[class_index+j];
                 dets[index].prob[j] = (prob > thresh) ? prob : 0;
             }
         }
@@ -253,11 +253,11 @@ void get_detection_detections(layer l, int w, int h, float thresh, detection *de
 
 #ifdef GPU
 
-void forward_detection_layer_gpu(const detection_layer l, network net)
+فراغ forward_detection_layer_gpu(ثابت detection_layer l, network net)
 {
-    if(!net.train){
+    אם(!net.train){
         copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-        return;
+        החזר;
     }
 
     cuda_pull_array(net.input_gpu, net.input, l.batch*l.inputs);
@@ -266,7 +266,7 @@ void forward_detection_layer_gpu(const detection_layer l, network net)
     cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-void backward_detection_layer_gpu(detection_layer l, network net)
+فراغ backward_detection_layer_gpu(detection_layer l, network net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
     //copy_gpu(l.batch*l.inputs, l.delta_gpu, 1, net.delta_gpu, 1);
