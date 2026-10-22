@@ -1,105 +1,105 @@
 #ifndef BLAS_H
 #define BLAS_H
-#include "darknet.h"
+#ضمن "darknet.h"
 
-void flatten(float *x, int size, int layers, int batch, int forward);
-void pm(int M, int N, float *A);
-float *random_matrix(int rows, int cols);
-void time_random_matrix(int TA, int TB, int m, int k, int n);
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+فراغ flatten(عائم *x, صحيح size, صحيح layers, صحيح batch, صحيح forward);
+فراغ pm(صحيح M, صحيح N, عائم *A);
+عائم *random_matrix(صحيح rows, صحيح cols);
+فراغ time_random_matrix(صحيح TA, صحيح TB, صحيح m, صحيح k, صحيح n);
+فراغ reorg_cpu(عائم *x, صحيح w, صحيح h, صحيح c, صحيح batch, صحيح stride, صحيح forward, عائم *out);
 
-void test_blas();
+فراغ test_blas();
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z);
+فراغ inter_cpu(صحيح NX, عائم *X, صحيح NY, عائم *Y, صحيح B, عائم *OUT);
+فراغ deinter_cpu(صحيح NX, عائم *X, صحيح NY, عائم *Y, صحيح B, عائم *OUT);
+فراغ mult_add_into_cpu(صحيح N, عائم *X, عائم *Y, عائم *Z);
 
-void const_cpu(int N, float ALPHA, float *X, int INCX);
-void constrain_gpu(int N, float ALPHA, float * X, int INCX);
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY);
+فراغ const_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX);
+فراغ constrain_gpu(صحيح N, عائم ALPHA, عائم * X, صحيح INCX);
+فراغ pow_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX, عائم *Y, صحيح INCY);
+فراغ mul_cpu(صحيح N, عائم *X, صحيح INCX, عائم *Y, صحيح INCY);
 
-int test_gpu_blas();
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
+صحيح test_gpu_blas();
+فراغ shortcut_cpu(صحيح batch, صحيح w1, صحيح h1, صحيح c1, عائم *add, صحيح w2, صحيح h2, صحيح c2, عائم s1, عائم s2, عائم *out);
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
+فراغ mean_cpu(عائم *x, صحيح batch, صحيح filters, صحيح spatial, عائم *mean);
+فراغ variance_cpu(عائم *x, عائم *mean, صحيح batch, صحيح filters, صحيح spatial, عائم *variance);
 
-void scale_bias(float *output, float *scales, int batch, int n, int size);
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial);
+فراغ scale_bias(عائم *output, عائم *scales, صحيح batch, صحيح n, صحيح size);
+فراغ backward_scale_cpu(عائم *x_norm, عائم *delta, صحيح batch, صحيح n, صحيح size, عائم *scale_updates);
+فراغ mean_delta_cpu(عائم *delta, عائم *variance, صحيح batch, صحيح filters, صحيح spatial, عائم *mean_delta);
+فراغ  variance_delta_cpu(عائم *x, عائم *delta, عائم *mean, عائم *variance, صحيح batch, صحيح filters, صحيح spatial, عائم *variance_delta);
+فراغ normalize_delta_cpu(عائم *x, عائم *mean, عائم *variance, عائم *mean_delta, عائم *variance_delta, صحيح batch, صحيح filters, صحيح spatial, عائم *delta);
+فراغ l2normalize_cpu(عائم *x, عائم *dx, صحيح batch, صحيح filters, صحيح spatial);
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_sum_cpu(float *a, float *b, float *s, int num, float *c);
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc);
+فراغ smooth_l1_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ l2_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ l1_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ logistic_x_ent_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ softmax_x_ent_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ weighted_sum_cpu(عائم *a, عائم *b, عائم *s, صحيح اڠک, عائم *c);
+فراغ weighted_delta_cpu(عائم *a, عائم *b, عائم *s, عائم *da, عائم *db, عائم *ds, صحيح n, عائم *dc);
 
-void softmax(float *input, int n, float temp, int stride, float *output);
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+فراغ softmax(عائم *ماسوقن, صحيح n, عائم temp, صحيح stride, عائم *output);
+فراغ softmax_cpu(عائم *ماسوقن, صحيح n, صحيح batch, صحيح batch_offset, صحيح groups, صحيح group_offset, صحيح stride, عائم temp, عائم *output);
+فراغ upsample_cpu(عائم *in, صحيح w, صحيح h, صحيح c, صحيح batch, صحيح stride, صحيح forward, عائم scale, عائم *out);
 
 #ifdef GPU
-#include "cuda.h"
-#include "tree.h"
+#ضمن "cuda.h"
+#ضمن "tree.h"
 
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void axpy_gpu_offset(int N, float ALPHA, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
-void copy_gpu_offset(int N, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void add_gpu(int N, float ALPHA, float * X, int INCX);
-void supp_gpu(int N, float ALPHA, float * X, int INCX);
-void mask_gpu(int N, float * X, float mask_num, float * mask, float val);
-void scale_mask_gpu(int N, float * X, float mask_num, float * mask, float scale);
-void const_gpu(int N, float ALPHA, float *X, int INCX);
-void pow_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_gpu(int N, float *X, int INCX, float *Y, int INCY);
+فراغ axpy_gpu(صحيح N, عائم ALPHA, عائم * X, صحيح INCX, عائم * Y, صحيح INCY);
+فراغ axpy_gpu_offset(صحيح N, عائم ALPHA, عائم * X, صحيح OFFX, صحيح INCX, عائم * Y, صحيح OFFY, صحيح INCY);
+فراغ copy_gpu(صحيح N, عائم * X, صحيح INCX, عائم * Y, صحيح INCY);
+فراغ copy_gpu_offset(صحيح N, عائم * X, صحيح OFFX, صحيح INCX, عائم * Y, صحيح OFFY, صحيح INCY);
+فراغ add_gpu(صحيح N, عائم ALPHA, عائم * X, صحيح INCX);
+فراغ supp_gpu(صحيح N, عائم ALPHA, عائم * X, صحيح INCX);
+فراغ mask_gpu(صحيح N, عائم * X, عائم mask_اڠک, عائم * mask, عائم val);
+فراغ scale_mask_gpu(صحيح N, عائم * X, عائم mask_اڠک, عائم * mask, عائم scale);
+فراغ const_gpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX);
+فراغ pow_gpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX, عائم *Y, صحيح INCY);
+فراغ mul_gpu(صحيح N, عائم *X, صحيح INCX, عائم *Y, صحيح INCY);
 
-void mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void normalize_gpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
-void l2normalize_gpu(float *x, float *dx, int batch, int filters, int spatial);
+فراغ mean_gpu(عائم *x, صحيح batch, صحيح filters, صحيح spatial, عائم *mean);
+فراغ variance_gpu(عائم *x, عائم *mean, صحيح batch, صحيح filters, صحيح spatial, عائم *variance);
+فراغ normalize_gpu(عائم *x, عائم *mean, عائم *variance, صحيح batch, صحيح filters, صحيح spatial);
+فراغ l2normalize_gpu(عائم *x, عائم *dx, صحيح batch, صحيح filters, صحيح spatial);
 
-void normalize_delta_gpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
+فراغ normalize_delta_gpu(عائم *x, عائم *mean, عائم *variance, عائم *mean_delta, عائم *variance_delta, صحيح batch, صحيح filters, صحيح spatial, عائم *delta);
 
-void fast_mean_delta_gpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void fast_variance_delta_gpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
+فراغ fast_mean_delta_gpu(عائم *delta, عائم *variance, صحيح batch, صحيح filters, صحيح spatial, عائم *mean_delta);
+فراغ fast_variance_delta_gpu(عائم *x, عائم *delta, عائم *mean, عائم *variance, صحيح batch, صحيح filters, صحيح spatial, عائم *variance_delta);
 
-void fast_variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void fast_mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void shortcut_gpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_scale_gpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
+فراغ fast_variance_gpu(عائم *x, عائم *mean, صحيح batch, صحيح filters, صحيح spatial, عائم *variance);
+فراغ fast_mean_gpu(عائم *x, صحيح batch, صحيح filters, صحيح spatial, عائم *mean);
+فراغ shortcut_gpu(صحيح batch, صحيح w1, صحيح h1, صحيح c1, عائم *add, صحيح w2, صحيح h2, صحيح c2, عائم s1, عائم s2, عائم *out);
+فراغ scale_bias_gpu(عائم *output, عائم *biases, صحيح batch, صحيح n, صحيح size);
+فراغ backward_scale_gpu(عائم *x_norm, عائم *delta, صحيح batch, صحيح n, صحيح size, عائم *scale_updates);
+فراغ scale_bias_gpu(عائم *output, عائم *biases, صحيح batch, صحيح n, صحيح size);
+فراغ add_bias_gpu(عائم *output, عائم *biases, صحيح batch, صحيح n, صحيح size);
+فراغ backward_bias_gpu(عائم *bias_updates, عائم *delta, صحيح batch, صحيح n, صحيح size);
 
-void logistic_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void smooth_l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void wgan_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_delta_gpu(float *a, float *b, float *s, float *da, float *db, float *ds, int num, float *dc);
-void weighted_sum_gpu(float *a, float *b, float *s, int num, float *c);
-void mult_add_into_gpu(int num, float *a, float *b, float *c);
-void inter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
+فراغ logistic_x_ent_gpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ softmax_x_ent_gpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ smooth_l1_gpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ l2_gpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ l1_gpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ wgan_gpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error);
+فراغ weighted_delta_gpu(عائم *a, عائم *b, عائم *s, عائم *da, عائم *db, عائم *ds, صحيح اڠک, عائم *dc);
+فراغ weighted_sum_gpu(عائم *a, عائم *b, عائم *s, صحيح اڠک, عائم *c);
+فراغ mult_add_into_gpu(صحيح اڠک, عائم *a, عائم *b, عائم *c);
+فراغ inter_gpu(صحيح NX, عائم *X, صحيح NY, عائم *Y, صحيح B, عائم *OUT);
+فراغ deinter_gpu(صحيح NX, عائم *X, صحيح NY, عائم *Y, صحيح B, عائم *OUT);
 
-void reorg_gpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+فراغ reorg_gpu(عائم *x, صحيح w, صحيح h, صحيح c, صحيح batch, صحيح stride, صحيح forward, عائم *out);
 
-void softmax_gpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-void adam_gpu(int n, float *x, float *m, float *v, float B1, float B2, float rate, float eps, int t);
+فراغ softmax_gpu(عائم *ماسوقن, صحيح n, صحيح batch, صحيح batch_offset, صحيح groups, صحيح group_offset, صحيح stride, عائم temp, عائم *output);
+فراغ adam_update_gpu(عائم *w, عائم *d, عائم *m, عائم *v, عائم B1, عائم B2, عائم eps, عائم decay, عائم rate, صحيح n, صحيح batch, صحيح t);
+فراغ adam_gpu(صحيح n, عائم *x, عائم *m, عائم *v, عائم B1, عائم B2, عائم rate, عائم eps, صحيح t);
 
-void flatten_gpu(float *x, int spatial, int layers, int batch, int forward, float *out);
-void softmax_tree(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
-void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+فراغ flatten_gpu(عائم *x, صحيح spatial, صحيح layers, صحيح batch, صحيح forward, عائم *out);
+فراغ softmax_ڤوکوق(عائم *ماسوقن, صحيح spatial, صحيح batch, صحيح stride, عائم temp, عائم *output, ڤوکوق hier);
+فراغ upsample_gpu(عائم *in, صحيح w, صحيح h, صحيح c, صحيح batch, صحيح stride, صحيح forward, عائم scale, عائم *out);
 
 #endif
 #endif

@@ -1,89 +1,89 @@
-#include "blas.h"
+#ضمن "blas.h"
 
-#include <math.h>
-#include <assert.h>
-#include <float.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out)
+#ضمن <math.h>
+#ضمن <assert.h>
+#ضمن <float.h>
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
+فراغ reorg_cpu(عائم *x, صحيح w, صحيح h, صحيح c, صحيح batch, صحيح stride, صحيح forward, عائم *out)
 {
-    int b,i,j,k;
-    int out_c = c/(stride*stride);
+    صحيح b,i,j,k;
+    صحيح out_c = c/(stride*stride);
 
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h; ++j){
-                for(i = 0; i < w; ++i){
-                    int in_index  = i + w*(j + h*(k + c*b));
-                    int c2 = k % out_c;
-                    int offset = k / out_c;
-                    int w2 = i*stride + offset % stride;
-                    int h2 = j*stride + offset / stride;
-                    int out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
-                    if(forward) out[out_index] = x[in_index];
-                    else out[in_index] = x[out_index];
+    لكل(b = 0; b < batch; ++b){
+        لكل(k = 0; k < c; ++k){
+            لكل(j = 0; j < h; ++j){
+                لكل(i = 0; i < w; ++i){
+                    صحيح in_index  = i + w*(j + h*(k + c*b));
+                    صحيح c2 = k % out_c;
+                    صحيح offset = k / out_c;
+                    صحيح w2 = i*stride + offset % stride;
+                    صحيح h2 = j*stride + offset / stride;
+                    صحيح out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
+                    إذا(forward) out[out_index] = x[in_index];
+                    وإلا out[in_index] = x[out_index];
                 }
             }
         }
     }
 }
 
-void flatten(float *x, int size, int layers, int batch, int forward)
+فراغ flatten(عائم *x, صحيح size, صحيح layers, صحيح batch, صحيح forward)
 {
-    float *swap = calloc(size*layers*batch, sizeof(float));
-    int i,c,b;
-    for(b = 0; b < batch; ++b){
-        for(c = 0; c < layers; ++c){
-            for(i = 0; i < size; ++i){
-                int i1 = b*layers*size + c*size + i;
-                int i2 = b*layers*size + i*layers + c;
-                if (forward) swap[i2] = x[i1];
-                else swap[i1] = x[i2];
+    عائم *swap = calloc(size*layers*batch, حجم(عائم));
+    صحيح i,c,b;
+    لكل(b = 0; b < batch; ++b){
+        لكل(c = 0; c < layers; ++c){
+            لكل(i = 0; i < size; ++i){
+                صحيح i1 = b*layers*size + c*size + i;
+                صحيح i2 = b*layers*size + i*layers + c;
+                إذا (forward) swap[i2] = x[i1];
+                وإلا swap[i1] = x[i2];
             }
         }
     }
-    memcpy(x, swap, size*layers*batch*sizeof(float));
-    free(swap);
+    memcpy(x, swap, size*layers*batch*حجم(عائم));
+    حرر(swap);
 }
 
-void weighted_sum_cpu(float *a, float *b, float *s, int n, float *c)
+فراغ weighted_sum_cpu(عائم *a, عائم *b, عائم *s, صحيح n, عائم *c)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
         c[i] = s[i]*a[i] + (1-s[i])*(b ? b[i] : 0);
     }
 }
 
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc)
+فراغ weighted_delta_cpu(عائم *a, عائم *b, عائم *s, عائم *da, عائم *db, عائم *ds, صحيح n, عائم *dc)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(da) da[i] += dc[i] * s[i];
-        if(db) db[i] += dc[i] * (1-s[i]);
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        إذا(da) da[i] += dc[i] * s[i];
+        إذا(db) db[i] += dc[i] * (1-s[i]);
         ds[i] += dc[i] * (a[i] - b[i]);
     }
 }
 
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out)
+فراغ shortcut_cpu(صحيح batch, صحيح w1, صحيح h1, صحيح c1, عائم *add, صحيح w2, صحيح h2, صحيح c2, عائم s1, عائم s2, عائم *out)
 {
-    int stride = w1/w2;
-    int sample = w2/w1;
-    assert(stride == h1/h2);
-    assert(sample == h2/h1);
-    if(stride < 1) stride = 1;
-    if(sample < 1) sample = 1;
-    int minw = (w1 < w2) ? w1 : w2;
-    int minh = (h1 < h2) ? h1 : h2;
-    int minc = (c1 < c2) ? c1 : c2;
+    صحيح stride = w1/w2;
+    صحيح sample = w2/w1;
+    أكد(stride == h1/h2);
+    أكد(sample == h2/h1);
+    إذا(stride < 1) stride = 1;
+    إذا(sample < 1) sample = 1;
+    صحيح minw = (w1 < w2) ? w1 : w2;
+    صحيح minh = (h1 < h2) ? h1 : h2;
+    صحيح minc = (c1 < c2) ? c1 : c2;
 
-    int i,j,k,b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < minc; ++k){
-            for(j = 0; j < minh; ++j){
-                for(i = 0; i < minw; ++i){
-                    int out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
-                    int add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
+    صحيح i,j,k,b;
+    لكل(b = 0; b < batch; ++b){
+        لكل(k = 0; k < minc; ++k){
+            لكل(j = 0; j < minh; ++j){
+                لكل(i = 0; i < minw; ++i){
+                    صحيح out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
+                    صحيح add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
                     out[out_index] = s1*out[out_index] + s2*add[add_index];
                 }
             }
@@ -91,15 +91,15 @@ void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2,
     }
 }
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
+فراغ mean_cpu(عائم *x, صحيح batch, صحيح filters, صحيح spatial, عائم *mean)
 {
-    float scale = 1./(batch * spatial);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    عائم scale = 1./(batch * spatial);
+    صحيح i,j,k;
+    لكل(i = 0; i < filters; ++i){
         mean[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
+        لكل(j = 0; j < batch; ++j){
+            لكل(k = 0; k < spatial; ++k){
+                صحيح index = j*filters*spatial + i*spatial + k;
                 mean[i] += x[index];
             }
         }
@@ -107,15 +107,15 @@ void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
     }
 }
 
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance)
+فراغ variance_cpu(عائم *x, عائم *mean, صحيح batch, صحيح filters, صحيح spatial, عائم *variance)
 {
-    float scale = 1./(batch * spatial - 1);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    عائم scale = 1./(batch * spatial - 1);
+    صحيح i,j,k;
+    لكل(i = 0; i < filters; ++i){
         variance[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
+        لكل(j = 0; j < batch; ++j){
+            لكل(k = 0; k < spatial; ++k){
+                صحيح index = j*filters*spatial + i*spatial + k;
                 variance[i] += pow((x[index] - mean[i]), 2);
             }
         }
@@ -123,19 +123,19 @@ void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, fl
     }
 }
 
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
+فراغ l2normalize_cpu(عائم *x, عائم *dx, صحيح batch, صحيح filters, صحيح spatial)
 {
-    int b,f,i;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < spatial; ++i){
-            float sum = 0;
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
+    صحيح b,f,i;
+    لكل(b = 0; b < batch; ++b){
+        لكل(i = 0; i < spatial; ++i){
+            عائم sum = 0;
+            لكل(f = 0; f < filters; ++f){
+                صحيح index = b*filters*spatial + f*spatial + i;
                 sum += powf(x[index], 2);
             }
             sum = sqrtf(sum);
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
+            لكل(f = 0; f < filters; ++f){
+                صحيح index = b*filters*spatial + f*spatial + i;
                 x[index] /= sum;
                 dx[index] = (1 - x[index]) / sum;
             }
@@ -144,204 +144,204 @@ void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
 }
 
 
-void normalize_cpu(float *x, float *mean, float *variance, int batch, int filters, int spatial)
+فراغ normalize_cpu(عائم *x, عائم *mean, عائم *variance, صحيح batch, صحيح filters, صحيح spatial)
 {
-    int b, f, i;
-    for(b = 0; b < batch; ++b){
-        for(f = 0; f < filters; ++f){
-            for(i = 0; i < spatial; ++i){
-                int index = b*filters*spatial + f*spatial + i;
+    صحيح b, f, i;
+    لكل(b = 0; b < batch; ++b){
+        لكل(f = 0; f < filters; ++f){
+            لكل(i = 0; i < spatial; ++i){
+                صحيح index = b*filters*spatial + f*spatial + i;
                 x[index] = (x[index] - mean[f])/(sqrt(variance[f]) + .000001f);
             }
         }
     }
 }
 
-void const_cpu(int N, float ALPHA, float *X, int INCX)
+فراغ const_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+    صحيح i;
+    لكل(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
 }
 
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY)
+فراغ mul_cpu(صحيح N, عائم *X, صحيح INCX, عائم *Y, صحيح INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
+    صحيح i;
+    لكل(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
 }
 
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
+فراغ pow_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX, عائم *Y, صحيح INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = pow(X[i*INCX], ALPHA);
+    صحيح i;
+    لكل(i = 0; i < N; ++i) Y[i*INCY] = pow(X[i*INCX], ALPHA);
 }
 
-void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
+فراغ axpy_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX, عائم *Y, صحيح INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
+    صحيح i;
+    لكل(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
 }
 
-void scal_cpu(int N, float ALPHA, float *X, int INCX)
+فراغ scal_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
+    صحيح i;
+    لكل(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
 }
 
-void fill_cpu(int N, float ALPHA, float *X, int INCX)
+فراغ fill_cpu(صحيح N, عائم ALPHA, عائم *X, صحيح INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+    صحيح i;
+    لكل(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
 }
 
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+فراغ deinter_cpu(صحيح NX, عائم *X, صحيح NY, عائم *Y, صحيح B, عائم *OUT)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
-            if(X) X[j*NX + i] += OUT[index];
+    صحيح i, j;
+    صحيح index = 0;
+    لكل(j = 0; j < B; ++j) {
+        لكل(i = 0; i < NX; ++i){
+            إذا(X) X[j*NX + i] += OUT[index];
             ++index;
         }
-        for(i = 0; i < NY; ++i){
-            if(Y) Y[j*NY + i] += OUT[index];
+        لكل(i = 0; i < NY; ++i){
+            إذا(Y) Y[j*NY + i] += OUT[index];
             ++index;
         }
     }
 }
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+فراغ inter_cpu(صحيح NX, عائم *X, صحيح NY, عائم *Y, صحيح B, عائم *OUT)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
+    صحيح i, j;
+    صحيح index = 0;
+    لكل(j = 0; j < B; ++j) {
+        لكل(i = 0; i < NX; ++i){
             OUT[index++] = X[j*NX + i];
         }
-        for(i = 0; i < NY; ++i){
+        لكل(i = 0; i < NY; ++i){
             OUT[index++] = Y[j*NY + i];
         }
     }
 }
 
-void copy_cpu(int N, float *X, int INCX, float *Y, int INCY)
+فراغ copy_cpu(صحيح N, عائم *X, صحيح INCX, عائم *Y, صحيح INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
+    صحيح i;
+    لكل(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
 }
 
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z)
+فراغ mult_add_into_cpu(صحيح N, عائم *X, عائم *Y, عائم *Z)
 {
-    int i;
-    for(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
+    صحيح i;
+    لكل(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
 }
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+فراغ smooth_l1_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
-        float abs_val = fabs(diff);
-        if(abs_val < 1) {
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        عائم diff = truth[i] - pred[i];
+        عائم abs_val = fabs(diff);
+        إذا(abs_val < 1) {
             error[i] = diff * diff;
             delta[i] = diff;
         }
-        else {
+        وإلا {
             error[i] = 2*abs_val - 1;
             delta[i] = (diff < 0) ? 1 : -1;
         }
     }
 }
 
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+فراغ l1_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        عائم diff = truth[i] - pred[i];
         error[i] = fabs(diff);
         delta[i] = diff > 0 ? 1 : -1;
     }
 }
 
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+فراغ softmax_x_ent_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float t = truth[i];
-        float p = pred[i];
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        عائم t = truth[i];
+        عائم p = pred[i];
         error[i] = (t) ? -log(p) : 0;
         delta[i] = t-p;
     }
 }
 
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+فراغ logistic_x_ent_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float t = truth[i];
-        float p = pred[i];
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        عائم t = truth[i];
+        عائم p = pred[i];
         error[i] = -t*log(p) - (1-t)*log(1-p);
         delta[i] = t-p;
     }
 }
 
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error)
+فراغ l2_cpu(صحيح n, عائم *pred, عائم *truth, عائم *delta, عائم *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        عائم diff = truth[i] - pred[i];
         error[i] = diff * diff;
         delta[i] = diff;
     }
 }
 
-float dot_cpu(int N, float *X, int INCX, float *Y, int INCY)
+عائم dot_cpu(صحيح N, عائم *X, صحيح INCX, عائم *Y, صحيح INCY)
 {
-    int i;
-    float dot = 0;
-    for(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
-    return dot;
+    صحيح i;
+    عائم dot = 0;
+    لكل(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
+    أرجع dot;
 }
 
-void softmax(float *input, int n, float temp, int stride, float *output)
+فراغ softmax(عائم *ماسوقن, صحيح n, عائم temp, صحيح stride, عائم *output)
 {
-    int i;
-    float sum = 0;
-    float largest = -FLT_MAX;
-    for(i = 0; i < n; ++i){
-        if(input[i*stride] > largest) largest = input[i*stride];
+    صحيح i;
+    عائم sum = 0;
+    عائم largest = -FLT_MAX;
+    لكل(i = 0; i < n; ++i){
+        إذا(ماسوقن[i*stride] > largest) largest = ماسوقن[i*stride];
     }
-    for(i = 0; i < n; ++i){
-        float e = exp(input[i*stride]/temp - largest/temp);
+    لكل(i = 0; i < n; ++i){
+        عائم e = exp(ماسوقن[i*stride]/temp - largest/temp);
         sum += e;
         output[i*stride] = e;
     }
-    for(i = 0; i < n; ++i){
+    لكل(i = 0; i < n; ++i){
         output[i*stride] /= sum;
     }
 }
 
 
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output)
+فراغ softmax_cpu(عائم *ماسوقن, صحيح n, صحيح batch, صحيح batch_offset, صحيح groups, صحيح group_offset, صحيح stride, عائم temp, عائم *output)
 {
-    int g, b;
-    for(b = 0; b < batch; ++b){
-        for(g = 0; g < groups; ++g){
-            softmax(input + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
+    صحيح g, b;
+    لكل(b = 0; b < batch; ++b){
+        لكل(g = 0; g < groups; ++g){
+            softmax(ماسوقن + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
         }
     }
 }
 
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out)
+فراغ upsample_cpu(عائم *in, صحيح w, صحيح h, صحيح c, صحيح batch, صحيح stride, صحيح forward, عائم scale, عائم *out)
 {
-    int i, j, k, b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h*stride; ++j){
-                for(i = 0; i < w*stride; ++i){
-                    int in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
-                    int out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
-                    if(forward) out[out_index] = scale*in[in_index];
-                    else in[in_index] += scale*out[out_index];
+    صحيح i, j, k, b;
+    لكل(b = 0; b < batch; ++b){
+        لكل(k = 0; k < c; ++k){
+            لكل(j = 0; j < h*stride; ++j){
+                لكل(i = 0; i < w*stride; ++i){
+                    صحيح in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
+                    صحيح out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
+                    إذا(forward) out[out_index] = scale*in[in_index];
+                    وإلا in[in_index] += scale*out[out_index];
                 }
             }
         }
