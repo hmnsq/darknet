@@ -3,27 +3,27 @@
 #include <math.h>
 #include <stdlib.h>
 
-int nms_comparator(const void *pa, const void *pb)
+целое nms_comparator(const void *pa, const void *pb)
 {
     detection a = *(detection *)pa;
     detection b = *(detection *)pb;
     float diff = 0;
-    if(b.sort_class >= 0){
+    если(b.sort_class >= 0){
         diff = a.prob[b.sort_class] - b.prob[b.sort_class];
-    } else {
+    } иначе {
         diff = a.objectness - b.objectness;
     }
-    if(diff < 0) return 1;
-    else if(diff > 0) return -1;
-    return 0;
+    если(diff < 0) вернуть 1;
+    иначе если(diff > 0) вернуть -1;
+    вернуть 0;
 }
 
-void do_nms_obj(detection *dets, int total, int classes, float thresh)
+void do_nms_obj(detection *dets, целое total, целое classes, float thresh)
 {
-    int i, j, k;
+    целое i, j, k;
     k = total-1;
-    for(i = 0; i <= k; ++i){
-        if(dets[i].objectness == 0){
+    для(i = 0; i <= k; ++i){
+        если(dets[i].objectness == 0){
             detection swap = dets[i];
             dets[i] = dets[k];
             dets[k] = swap;
@@ -33,20 +33,20 @@ void do_nms_obj(detection *dets, int total, int classes, float thresh)
     }
     total = k+1;
 
-    for(i = 0; i < total; ++i){
+    для(i = 0; i < total; ++i){
         dets[i].sort_class = -1;
     }
 
     qsort(dets, total, sizeof(detection), nms_comparator);
-    for(i = 0; i < total; ++i){
-        if(dets[i].objectness == 0) continue;
+    для(i = 0; i < total; ++i){
+        если(dets[i].objectness == 0) continue;
         box a = dets[i].bbox;
-        for(j = i+1; j < total; ++j){
-            if(dets[j].objectness == 0) continue;
+        для(j = i+1; j < total; ++j){
+            если(dets[j].objectness == 0) continue;
             box b = dets[j].bbox;
-            if (box_iou(a, b) > thresh){
+            если (box_iou(a, b) > thresh){
                 dets[j].objectness = 0;
-                for(k = 0; k < classes; ++k){
+                для(k = 0; k < classes; ++k){
                     dets[j].prob[k] = 0;
                 }
             }
@@ -55,12 +55,12 @@ void do_nms_obj(detection *dets, int total, int classes, float thresh)
 }
 
 
-void do_nms_sort(detection *dets, int total, int classes, float thresh)
+void do_nms_sort(detection *dets, целое total, целое classes, float thresh)
 {
-    int i, j, k;
+    целое i, j, k;
     k = total-1;
-    for(i = 0; i <= k; ++i){
-        if(dets[i].objectness == 0){
+    для(i = 0; i <= k; ++i){
+        если(dets[i].objectness == 0){
             detection swap = dets[i];
             dets[i] = dets[k];
             dets[k] = swap;
@@ -70,17 +70,17 @@ void do_nms_sort(detection *dets, int total, int classes, float thresh)
     }
     total = k+1;
 
-    for(k = 0; k < classes; ++k){
-        for(i = 0; i < total; ++i){
+    для(k = 0; k < classes; ++k){
+        для(i = 0; i < total; ++i){
             dets[i].sort_class = k;
         }
         qsort(dets, total, sizeof(detection), nms_comparator);
-        for(i = 0; i < total; ++i){
-            if(dets[i].prob[k] == 0) continue;
+        для(i = 0; i < total; ++i){
+            если(dets[i].prob[k] == 0) continue;
             box a = dets[i].bbox;
-            for(j = i+1; j < total; ++j){
+            для(j = i+1; j < total; ++j){
                 box b = dets[j].bbox;
-                if (box_iou(a, b) > thresh){
+                если (box_iou(a, b) > thresh){
                     dets[j].prob[k] = 0;
                 }
             }
@@ -88,14 +88,14 @@ void do_nms_sort(detection *dets, int total, int classes, float thresh)
     }
 }
 
-box float_to_box(float *f, int stride)
+box float_to_box(float *f, целое stride)
 {
     box b = {0};
     b.x = f[0];
     b.y = f[1*stride];
     b.w = f[2*stride];
     b.h = f[3*stride];
-    return b;
+    вернуть b;
 }
 
 dbox derivative(box a, box b)
@@ -105,21 +105,21 @@ dbox derivative(box a, box b)
     d.dw = 0;
     float l1 = a.x - a.w/2;
     float l2 = b.x - b.w/2;
-    if (l1 > l2){
+    если (l1 > l2){
         d.dx -= 1;
         d.dw += .5;
     }
     float r1 = a.x + a.w/2;
     float r2 = b.x + b.w/2;
-    if(r1 < r2){
+    если(r1 < r2){
         d.dx += 1;
         d.dw += .5;
     }
-    if (l1 > r2) {
+    если (l1 > r2) {
         d.dx = -1;
         d.dw = 0;
     }
-    if (r1 < l2){
+    если (r1 < l2){
         d.dx = 1;
         d.dw = 0;
     }
@@ -128,25 +128,25 @@ dbox derivative(box a, box b)
     d.dh = 0;
     float t1 = a.y - a.h/2;
     float t2 = b.y - b.h/2;
-    if (t1 > t2){
+    если (t1 > t2){
         d.dy -= 1;
         d.dh += .5;
     }
     float b1 = a.y + a.h/2;
     float b2 = b.y + b.h/2;
-    if(b1 < b2){
+    если(b1 < b2){
         d.dy += 1;
         d.dh += .5;
     }
-    if (t1 > b2) {
+    если (t1 > b2) {
         d.dy = -1;
         d.dh = 0;
     }
-    if (b1 < t2){
+    если (b1 < t2){
         d.dy = 1;
         d.dh = 0;
     }
-    return d;
+    вернуть d;
 }
 
 float overlap(float x1, float w1, float x2, float w2)
@@ -157,33 +157,33 @@ float overlap(float x1, float w1, float x2, float w2)
     float r1 = x1 + w1/2;
     float r2 = x2 + w2/2;
     float right = r1 < r2 ? r1 : r2;
-    return right - left;
+    вернуть right - left;
 }
 
 float box_intersection(box a, box b)
 {
     float w = overlap(a.x, a.w, b.x, b.w);
     float h = overlap(a.y, a.h, b.y, b.h);
-    if(w < 0 || h < 0) return 0;
+    если(w < 0 || h < 0) вернуть 0;
     float area = w*h;
-    return area;
+    вернуть area;
 }
 
 float box_union(box a, box b)
 {
     float i = box_intersection(a, b);
     float u = a.w*a.h + b.w*b.h - i;
-    return u;
+    вернуть u;
 }
 
 float box_iou(box a, box b)
 {
-    return box_intersection(a, b)/box_union(a, b);
+    вернуть box_intersection(a, b)/box_union(a, b);
 }
 
 float box_rmse(box a, box b)
 {
-    return sqrt(pow(a.x-b.x, 2) + 
+    вернуть sqrt(pow(a.x-b.x, 2) + 
                 pow(a.y-b.y, 2) + 
                 pow(a.w-b.w, 2) + 
                 pow(a.h-b.h, 2));
@@ -201,7 +201,7 @@ dbox dintersect(box a, box b)
     di.dh = dover.dh*w;
     di.dy = dover.dy*w;
 
-    return di;
+    вернуть di;
 }
 
 dbox dunion(box a, box b)
@@ -214,7 +214,7 @@ dbox dunion(box a, box b)
     du.dx = -di.dx;
     du.dy = -di.dy;
 
-    return du;
+    вернуть du;
 }
 
 
@@ -300,36 +300,36 @@ dbox diou(box a, box b)
     dbox du = dunion(a,b);
     dbox dd = {0,0,0,0};
 
-    if(i <= 0 || 1) {
+    если(i <= 0 || 1) {
         dd.dx = b.x - a.x;
         dd.dy = b.y - a.y;
         dd.dw = b.w - a.w;
         dd.dh = b.h - a.h;
-        return dd;
+        вернуть dd;
     }
 
     dd.dx = 2*pow((1-(i/u)),1)*(di.dx*u - du.dx*i)/(u*u);
     dd.dy = 2*pow((1-(i/u)),1)*(di.dy*u - du.dy*i)/(u*u);
     dd.dw = 2*pow((1-(i/u)),1)*(di.dw*u - du.dw*i)/(u*u);
     dd.dh = 2*pow((1-(i/u)),1)*(di.dh*u - du.dh*i)/(u*u);
-    return dd;
+    вернуть dd;
 }
 
 
-void do_nms(box *boxes, float **probs, int total, int classes, float thresh)
+void do_nms(box *boxes, float **probs, целое total, целое classes, float thresh)
 {
-    int i, j, k;
-    for(i = 0; i < total; ++i){
-        int any = 0;
-        for(k = 0; k < classes; ++k) any = any || (probs[i][k] > 0);
-        if(!any) {
+    целое i, j, k;
+    для(i = 0; i < total; ++i){
+        целое any = 0;
+        для(k = 0; k < classes; ++k) any = any || (probs[i][k] > 0);
+        если(!any) {
             continue;
         }
-        for(j = i+1; j < total; ++j){
-            if (box_iou(boxes[i], boxes[j]) > thresh){
-                for(k = 0; k < classes; ++k){
-                    if (probs[i][k] < probs[j][k]) probs[i][k] = 0;
-                    else probs[j][k] = 0;
+        для(j = i+1; j < total; ++j){
+            если (box_iou(boxes[i], boxes[j]) > thresh){
+                для(k = 0; k < classes; ++k){
+                    если (probs[i][k] < probs[j][k]) probs[i][k] = 0;
+                    иначе probs[j][k] = 0;
                 }
             }
         }
@@ -343,7 +343,7 @@ box encode_box(box b, box anchor)
     encode.y = (b.y - anchor.y) / anchor.h;
     encode.w = log2(b.w / anchor.w);
     encode.h = log2(b.h / anchor.h);
-    return encode;
+    вернуть encode;
 }
 
 box decode_box(box b, box anchor)
@@ -353,5 +353,5 @@ box decode_box(box b, box anchor)
     decode.y = b.y * anchor.h + anchor.y;
     decode.w = pow(2., b.w) * anchor.w;
     decode.h = pow(2., b.h) * anchor.h;
-    return decode;
+    вернуть decode;
 }

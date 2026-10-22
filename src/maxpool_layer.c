@@ -4,21 +4,21 @@
 
 image get_maxpool_image(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.output);
+    целое h = l.out_h;
+    целое w = l.out_w;
+    целое c = l.c;
+    вернуть float_to_image(w,h,c,l.output);
 }
 
 image get_maxpool_delta(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.delta);
+    целое h = l.out_h;
+    целое w = l.out_w;
+    целое c = l.c;
+    вернуть float_to_image(w,h,c,l.delta);
 }
 
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding)
+maxpool_layer make_maxpool_layer(целое batch, целое h, целое w, целое c, целое size, целое stride, целое padding)
 {
     maxpool_layer l = {0};
     l.type = MAXPOOL;
@@ -34,8 +34,8 @@ maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int s
     l.inputs = h*w*c;
     l.size = size;
     l.stride = stride;
-    int output_size = l.out_h * l.out_w * l.out_c * batch;
-    l.indexes = calloc(output_size, sizeof(int));
+    целое output_size = l.out_h * l.out_w * l.out_c * batch;
+    l.indexes = calloc(output_size, sizeof(целое));
     l.output =  calloc(output_size, sizeof(float));
     l.delta =   calloc(output_size, sizeof(float));
     l.forward = forward_maxpool_layer;
@@ -48,10 +48,10 @@ maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int s
     l.delta_gpu   = cuda_make_array(l.delta, output_size);
     #endif
     fprintf(stderr, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    return l;
+    вернуть l;
 }
 
-void resize_maxpool_layer(maxpool_layer *l, int w, int h)
+void resize_maxpool_layer(maxpool_layer *l, целое w, целое h)
 {
     l->h = h;
     l->w = w;
@@ -60,9 +60,9 @@ void resize_maxpool_layer(maxpool_layer *l, int w, int h)
     l->out_w = (w + l->pad - l->size)/l->stride + 1;
     l->out_h = (h + l->pad - l->size)/l->stride + 1;
     l->outputs = l->out_w * l->out_h * l->c;
-    int output_size = l->outputs * l->batch;
+    целое output_size = l->outputs * l->batch;
 
-    l->indexes = realloc(l->indexes, output_size * sizeof(int));
+    l->indexes = realloc(l->indexes, output_size * sizeof(целое));
     l->output = realloc(l->output, output_size * sizeof(float));
     l->delta = realloc(l->delta, output_size * sizeof(float));
 
@@ -78,27 +78,27 @@ void resize_maxpool_layer(maxpool_layer *l, int w, int h)
 
 void forward_maxpool_layer(const maxpool_layer l, network net)
 {
-    int b,i,j,k,m,n;
-    int w_offset = -l.pad/2;
-    int h_offset = -l.pad/2;
+    целое b,i,j,k,m,n;
+    целое w_offset = -l.pad/2;
+    целое h_offset = -l.pad/2;
 
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
+    целое h = l.out_h;
+    целое w = l.out_w;
+    целое c = l.c;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(i = 0; i < h; ++i){
-                for(j = 0; j < w; ++j){
-                    int out_index = j + w*(i + h*(k + c*b));
+    для(b = 0; b < l.batch; ++b){
+        для(k = 0; k < c; ++k){
+            для(i = 0; i < h; ++i){
+                для(j = 0; j < w; ++j){
+                    целое out_index = j + w*(i + h*(k + c*b));
                     float max = -FLT_MAX;
-                    int max_i = -1;
-                    for(n = 0; n < l.size; ++n){
-                        for(m = 0; m < l.size; ++m){
-                            int cur_h = h_offset + i*l.stride + n;
-                            int cur_w = w_offset + j*l.stride + m;
-                            int index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
-                            int valid = (cur_h >= 0 && cur_h < l.h &&
+                    целое max_i = -1;
+                    для(n = 0; n < l.size; ++n){
+                        для(m = 0; m < l.size; ++m){
+                            целое cur_h = h_offset + i*l.stride + n;
+                            целое cur_w = w_offset + j*l.stride + m;
+                            целое index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
+                            целое valid = (cur_h >= 0 && cur_h < l.h &&
                                          cur_w >= 0 && cur_w < l.w);
                             float val = (valid != 0) ? net.input[index] : -FLT_MAX;
                             max_i = (val > max) ? index : max_i;
@@ -115,12 +115,12 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
 
 void backward_maxpool_layer(const maxpool_layer l, network net)
 {
-    int i;
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    for(i = 0; i < h*w*c*l.batch; ++i){
-        int index = l.indexes[i];
+    целое i;
+    целое h = l.out_h;
+    целое w = l.out_w;
+    целое c = l.c;
+    для(i = 0; i < h*w*c*l.batch; ++i){
+        целое index = l.indexes[i];
         net.delta[index] += l.delta[i];
     }
 }

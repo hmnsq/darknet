@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
+layer make_activation_layer(целое batch, целое inputs, ACTIVATION activation)
 {
     layer l = {0};
     l.type = ACTIVE;
@@ -32,7 +32,7 @@ layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
 #endif
     l.activation = activation;
     fprintf(stderr, "Activation Layer: %d inputs\n", inputs);
-    return l;
+    вернуть l;
 }
 
 void forward_activation_layer(layer l, network net)

@@ -8,43 +8,43 @@
 #include "image.h"
 #include "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+static inline float distance_from_edge(целое x, целое max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    целое dx = (max/2) - x;
+    если (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
     float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    если (dist > 1) dist = 1;
+    вернуть dist;
 }
 void load_data_blocking(load_args args);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
+void print_letters(float *pred, целое n);
+data load_data_captcha(char **paths, целое n, целое m, целое k, целое w, целое h);
+data load_data_captcha_encode(char **paths, целое n, целое m, целое w, целое h);
+data load_data_detection(целое n, char **paths, целое m, целое w, целое h, целое boxes, целое classes, float jitter, float hue, float saturation, float exposure);
+data load_data_tag(char **paths, целое n, целое m, целое k, целое min, целое max, целое size, float angle, float aspect, float hue, float saturation, float exposure);
+matrix load_image_augment_paths(char **paths, целое n, целое min, целое max, целое size, float angle, float aspect, float hue, float saturation, float exposure, целое center);
+data load_data_super(char **paths, целое n, целое m, целое w, целое h, целое scale);
+data load_data_augment(char **paths, целое n, целое m, char **labels, целое k, tree *hierarchy, целое min, целое max, целое size, float angle, float aspect, float hue, float saturation, float exposure, целое center);
+data load_data_regression(char **paths, целое n, целое m, целое classes, целое min, целое max, целое size, float angle, float aspect, float hue, float saturation, float exposure);
 data load_go(char *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+data load_data_writing(char **paths, целое n, целое m, целое w, целое h, целое out_w, целое out_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
+void get_random_batch(data d, целое n, float *X, float *y);
+data get_data_part(data d, целое part, целое total);
+data get_random_data(data d, целое num);
+data load_categorical_data_csv(char *filename, целое target, целое k);
 void normalize_data_rows(data d);
 void scale_data_rows(data d, float s);
 void translate_data_rows(data d, float s);
 void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+data *split_data(data d, целое part, целое total);
+data concat_datas(data *d, целое n);
+void fill_truth(char *path, char **labels, целое k, float *truth);
 
 #endif

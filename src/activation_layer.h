@@ -5,7 +5,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_activation_layer(int batch, int inputs, ACTIVATION activation);
+layer make_activation_layer(целое batch, целое inputs, ACTIVATION activation);
 
 void forward_activation_layer(layer l, network net);
 void backward_activation_layer(layer l, network net);

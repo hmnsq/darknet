@@ -2,14 +2,14 @@
 #define IM2COL_H
 
 void im2col_cpu(float* data_im,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_col);
+        целое channels, целое height, целое width,
+        целое ksize, целое stride, целое pad, float* data_col);
 
 #ifdef GPU
 
 void im2col_gpu(float *im,
-         int channels, int height, int width,
-         int ksize, int stride, int pad,float *data_col);
+         целое channels, целое height, целое width,
+         целое ksize, целое stride, целое pad,float *data_col);
 
 #endif
 #endif
