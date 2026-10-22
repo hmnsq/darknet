@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-layer make_l2norm_layer(int batch, int inputs)
+layer make_l2norm_layer(puur_naa_nka batch, puur_naa_nka inputs)
 {
     fprintf(stderr, "l2norm                                         %4d\n",  inputs);
     layer l = {0};
@@ -17,9 +17,9 @@ layer make_l2norm_layer(int batch, int inputs)
     l.batch = batch;
     l.inputs = inputs;
     l.outputs = inputs;
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.scales = calloc(inputs*batch, sizeof(float));
-    l.delta = calloc(inputs*batch, sizeof(float));
+    l.output = calloc(inputs*batch, parimaa_na(float));
+    l.scales = calloc(inputs*batch, parimaa_na(float));
+    l.delta = calloc(inputs*batch, parimaa_na(float));
 
     l.forward = forward_l2norm_layer;
     l.backward = backward_l2norm_layer;
@@ -31,7 +31,7 @@ layer make_l2norm_layer(int batch, int inputs)
     l.scales_gpu = cuda_make_array(l.output, inputs*batch); 
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch); 
     #endif
-    return l;
+    ᱨᱩᱣᱟᱹᱲ l;
 }
 
 void forward_l2norm_layer(const layer l, network net)
