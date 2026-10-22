@@ -1,36 +1,36 @@
-#include "im2col.h"
-#include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+#ضمن "im2col.h"
+#ضمن <stdio.h>
+عائم im2col_get_pixel(عائم *im, صحيح height, صحيح width, صحيح channels,
+                        صحيح row, صحيح col, صحيح channel, صحيح pad)
 {
     row -= pad;
     col -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    إذا (row < 0 || col < 0 ||
+        row >= height || col >= width) إرجاع 0;
+    إرجاع im[col + width*(row + height*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
-void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+فراغ im2col_cpu(عائم* data_im,
+     صحيح channels,  صحيح height,  صحيح width,
+     صحيح ksize,  صحيح stride, صحيح pad, عائم* data_col) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    صحيح c,h,w;
+    صحيح height_col = (height + 2*pad - ksize) / stride + 1;
+    صحيح width_col = (width + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
+    صحيح channels_col = channels * ksize * ksize;
+    لكل (c = 0; c < channels_col; ++c) {
+        صحيح w_offset = c % ksize;
+        صحيح h_offset = (c / ksize) % ksize;
+        صحيح c_im = c / ksize / ksize;
+        لكل (h = 0; h < height_col; ++h) {
+            لكل (w = 0; w < width_col; ++w) {
+                صحيح im_row = h_offset + h * stride;
+                صحيح im_col = w_offset + w * stride;
+                صحيح col_index = (c * height_col + h) * width_col + w;
                 data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
                         im_row, im_col, c_im, pad);
             }
