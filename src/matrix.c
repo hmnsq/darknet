@@ -1,74 +1,74 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#અન્તર્ભાવ "matrix.h"
+#અન્તર્ભાવ "utils.h"
+#અન્તર્ભાવ "blas.h"
+#અન્તર્ભાવ <stdio.h>
+#અન્તર્ભાવ <stdlib.h>
+#અન્તર્ભાવ <string.h>
+#અન્તર્ભાવ <assert.h>
+#અન્તર્ભાવ <math.h>
 
-void free_matrix(matrix m)
+શૂન્ય free_matrix(matrix m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    પૂર્ણાંક i;
+    માટે(i = 0; i < m.rows; ++i) મુક્ત(m.vals[i]);
+    મુક્ત(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+દશાંશ matrix_topk_accuracy(matrix truth, matrix guess, પૂર્ણાંક k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    પૂર્ણાંક *indexes = calloc(k, કદ(પૂર્ણાંક));
+    પૂર્ણાંક n = truth.cols;
+    પૂર્ણાંક i,j;
+    પૂર્ણાંક correct = 0;
+    માટે(i = 0; i < truth.rows; ++i){
+        ટોચ_k(guess.vals[i], n, k, indexes);
+        માટે(j = 0; j < k; ++j){
+            પૂર્ણાંક class = indexes[j];
+            જો(truth.vals[i][class]){
                 ++correct;
-                break;
+                તોડો;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    મુક્ત(indexes);
+    પાછા (દશાંશ)correct/truth.rows;
 }
 
-void scale_matrix(matrix m, float scale)
+શૂન્ય scale_matrix(matrix m, દશાંશ scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    પૂર્ણાંક i,j;
+    માટે(i = 0; i < m.rows; ++i){
+        માટે(j = 0; j < m.cols; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+matrix resize_matrix(matrix m, પૂર્ણાંક size)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    પૂર્ણાંક i;
+    જો (m.rows == size) પાછા m;
+    જો (m.rows < size) {
+        m.vals = realloc(m.vals, size*કદ(દશાંશ*));
+        માટે (i = m.rows; i < size; ++i) {
+            m.vals[i] = calloc(m.cols, કદ(દશાંશ));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } નહીંતર જો (m.rows > size) {
+        માટે (i = size; i < m.rows; ++i) {
+            મુક્ત(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, size*કદ(દશાંશ*));
     }
     m.rows = size;
-    return m;
+    પાછા m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+શૂન્ય matrix_add_matrix(matrix from, matrix to)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
+    પ્રતિજ્ઞા(from.rows == to.rows && from.cols == to.cols);
+    પૂર્ણાંક i,j;
+    માટે(i = 0; i < from.rows; ++i){
+        માટે(j = 0; j < from.cols; ++j){
             to.vals[i][j] += from.vals[i][j];
         }
     }
@@ -79,118 +79,118 @@ matrix copy_matrix(matrix m)
     matrix c = {0};
     c.rows = m.rows;
     c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
+    c.vals = calloc(c.rows, કદ(દશાંશ *));
+    પૂર્ણાંક i;
+    માટે(i = 0; i < c.rows; ++i){
+        c.vals[i] = calloc(c.cols, કદ(દશાંશ));
         copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    પાછા c;
 }
 
-matrix make_matrix(int rows, int cols)
+matrix make_matrix(પૂર્ણાંક rows, પૂર્ણાંક cols)
 {
-    int i;
+    પૂર્ણાંક i;
     matrix m;
     m.rows = rows;
     m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    m.vals = calloc(m.rows, કદ(દશાંશ *));
+    માટે(i = 0; i < m.rows; ++i){
+        m.vals[i] = calloc(m.cols, કદ(દશાંશ));
     }
-    return m;
+    પાછા m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+matrix hold_out_matrix(matrix *m, પૂર્ણાંક n)
 {
-    int i;
+    પૂર્ણાંક i;
     matrix h;
     h.rows = n;
     h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
+    h.vals = calloc(h.rows, કદ(દશાંશ *));
+    માટે(i = 0; i < n; ++i){
+        પૂર્ણાંક index = rand()%m->rows;
         h.vals[i] = m->vals[index];
         m->vals[index] = m->vals[--(m->rows)];
     }
-    return h;
+    પાછા h;
 }
 
-float *pop_column(matrix *m, int c)
+દશાંશ *કાઢો_column(matrix *m, પૂર્ણાંક c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
+    દશાંશ *col = calloc(m->rows, કદ(દશાંશ));
+    પૂર્ણાંક i, j;
+    માટે(i = 0; i < m->rows; ++i){
         col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+        માટે(j = c; j < m->cols-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
     --m->cols;
-    return col;
+    પાછા col;
 }
 
-matrix csv_to_matrix(char *filename)
+matrix csv_to_matrix(અક્ષર *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    જો(!fp) file_error(filename);
 
     matrix m;
     m.cols = -1;
 
-    char *line;
+    અક્ષર *લીટી;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
+    પૂર્ણાંક n = 0;
+    પૂર્ણાંક size = 1024;
+    m.vals = calloc(size, કદ(દશાંશ*));
+    જ્યારે((લીટી = fgetl(fp))){
+        જો(m.cols == -1) m.cols = ગણતરી_fields(લીટી);
+        જો(n == size){
             size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+            m.vals = realloc(m.vals, size*કદ(દશાંશ*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(લીટી, m.cols);
+        મુક્ત(લીટી);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
+    m.vals = realloc(m.vals, n*કદ(દશાંશ*));
     m.rows = n;
-    return m;
+    પાછા m;
 }
 
-void matrix_to_csv(matrix m)
+શૂન્ય matrix_to_csv(matrix m)
 {
-    int i, j;
+    પૂર્ણાંક i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
+    માટે(i = 0; i < m.rows; ++i){
+        માટે(j = 0; j < m.cols; ++j){
+            જો(j > 0) printf(",");
             printf("%.17g", m.vals[i][j]);
         }
         printf("\n");
     }
 }
 
-void print_matrix(matrix m)
+શૂન્ય print_matrix(matrix m)
 {
-    int i, j;
+    પૂર્ણાંક i, j;
     printf("%d X %d Matrix:\n",m.rows, m.cols);
     printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    માટે(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("__ \n");
 
     printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    માટે(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
+    માટે(i = 0; i < m.rows; ++i){
         printf("|  ");
-        for(j = 0; j < m.cols; ++j){
+        માટે(j = 0; j < m.cols; ++j){
             printf("%15.7f ", m.vals[i][j]);
         }
         printf(" |\n");
     }
     printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    માટે(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("__|\n");
 }

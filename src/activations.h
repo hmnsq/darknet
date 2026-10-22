@@ -1,87 +1,87 @@
 #ifndef ACTIVATIONS_H
 #define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#અન્તર્ભાવ "darknet.h"
+#અન્તર્ભાવ "cuda.h"
+#અન્તર્ભાવ "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(અક્ષર *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
+અક્ષર *get_activation_string(ACTIVATION a);
+દશાંશ activate(દશાંશ x, ACTIVATION a);
+દશાંશ gradient(દશાંશ x, ACTIVATION a);
+શૂન્ય gradient_array(અચલ દશાંશ *x, અચલ પૂર્ણાંક n, અચલ ACTIVATION a, દશાંશ *delta);
+શૂન્ય activate_array(દશાંશ *x, અચલ પૂર્ણાંક n, અચલ ACTIVATION a);
 #ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
+શૂન્ય activate_array_gpu(દશાંશ *x, પૂર્ણાંક n, ACTIVATION a);
+શૂન્ય gradient_array_gpu(દશાંશ *x, પૂર્ણાંક n, ACTIVATION a, દશાંશ *delta);
 #endif
 
-static inline float stair_activate(float x)
+સ્થિર અંતઃરેખ દશાંશ stair_activate(દશાંશ x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    પૂર્ણાંક n = floor(x);
+    જો (n%2 == 0) પાછા floor(x/2.);
+    નહીંતર પાછા (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+સ્થિર અંતઃરેખ દશાંશ hardtan_activate(દશાંશ x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    જો (x < -1) પાછા -1;
+    જો (x > 1) પાછા 1;
+    પાછા x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+સ્થિર અંતઃરેખ દશાંશ linear_activate(દશાંશ x){પાછા x;}
+સ્થિર અંતઃરેખ દશાંશ logistic_activate(દશાંશ x){પાછા 1./(1. + exp(-x));}
+સ્થિર અંતઃરેખ દશાંશ loggy_activate(દશાંશ x){પાછા 2./(1. + exp(-x)) - 1;}
+સ્થિર અંતઃરેખ દશાંશ relu_activate(દશાંશ x){પાછા x*(x>0);}
+સ્થિર અંતઃરેખ દશાંશ elu_activate(દશાંશ x){પાછા (x >= 0)*x + (x < 0)*(exp(x)-1);}
+સ્થિર અંતઃરેખ દશાંશ selu_activate(દશાંશ x){પાછા (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
+સ્થિર અંતઃરેખ દશાંશ relie_activate(દશાંશ x){પાછા (x>0) ? x : .01*x;}
+સ્થિર અંતઃરેખ દશાંશ ramp_activate(દશાંશ x){પાછા x*(x>0)+.1*x;}
+સ્થિર અંતઃરેખ દશાંશ leaky_activate(દશાંશ x){પાછા (x>0) ? x : .1*x;}
+સ્થિર અંતઃરેખ દશાંશ tanh_activate(દશાંશ x){પાછા (exp(2*x)-1)/(exp(2*x)+1);}
+સ્થિર અંતઃરેખ દશાંશ plse_activate(દશાંશ x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    જો(x < -4) પાછા .01 * (x + 4);
+    જો(x > 4)  પાછા .01 * (x - 4) + 1;
+    પાછા .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+સ્થિર અંતઃરેખ દશાંશ lhtan_activate(દશાંશ x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    જો(x < 0) પાછા .001*x;
+    જો(x > 1) પાછા .001*(x-1) + 1;
+    પાછા x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+સ્થિર અંતઃરેખ દશાંશ lhtan_gradient(દશાંશ x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    જો(x > 0 && x < 1) પાછા 1;
+    પાછા .001;
 }
-static inline float stair_gradient(float x)
+
+સ્થિર અંતઃરેખ દશાંશ hardtan_gradient(દશાંશ x)
 {
-    if (floor(x) == x) return 0;
-    return 1;
+    જો (x > -1 && x < 1) પાછા 1;
+    પાછા 0;
 }
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
+સ્થિર અંતઃરેખ દશાંશ linear_gradient(દશાંશ x){પાછા 1;}
+સ્થિર અંતઃરેખ દશાંશ logistic_gradient(દશાંશ x){પાછા (1-x)*x;}
+સ્થિર અંતઃરેખ દશાંશ loggy_gradient(દશાંશ x)
+{
+    દશાંશ y = (x+1.)/2.;
+    પાછા 2*(1-y)*y;
+}
+સ્થિર અંતઃરેખ દશાંશ stair_gradient(દશાંશ x)
+{
+    જો (floor(x) == x) પાછા 0;
+    પાછા 1;
+}
+સ્થિર અંતઃરેખ દશાંશ relu_gradient(દશાંશ x){પાછા (x>0);}
+સ્થિર અંતઃરેખ દશાંશ elu_gradient(દશાંશ x){પાછા (x >= 0) + (x < 0)*(x + 1);}
+સ્થિર અંતઃરેખ દશાંશ selu_gradient(દશાંશ x){પાછા (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+સ્થિર અંતઃરેખ દશાંશ relie_gradient(દશાંશ x){પાછા (x>0) ? 1 : .01;}
+સ્થિર અંતઃરેખ દશાંશ ramp_gradient(દશાંશ x){પાછા (x>0)+.1;}
+સ્થિર અંતઃરેખ દશાંશ leaky_gradient(દશાંશ x){પાછા (x>0) ? 1 : .1;}
+સ્થિર અંતઃરેખ દશાંશ tanh_gradient(દશાંશ x){પાછા 1-x*x;}
+સ્થિર અંતઃરેખ દશાંશ plse_gradient(દશાંશ x){પાછા (x < 0 || x > 1) ? .01 : .125;}
 
 #endif
 

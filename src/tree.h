@@ -1,8 +1,8 @@
-#ifndef TREE_H
-#define TREE_H
-#include "darknet.h"
+#ifndef વૃક્ષ_H
+#define વૃક્ષ_H
+#અન્તર્ભાવ "darknet.h"
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride);
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride);
+પૂર્ણાંક hierarchy_ટોચ_prediction(દશાંશ *predictions, વૃક્ષ *hier, દશાંશ thresh, પૂર્ણાંક stride);
+દશાંશ get_hierarchy_probability(દશાંશ *x, વૃક્ષ *hier, પૂર્ણાંક c, પૂર્ણાંક stride);
 
 #endif

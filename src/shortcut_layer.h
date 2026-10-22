@@ -1,17 +1,17 @@
 #ifndef SHORTCUT_LAYER_H
 #define SHORTCUT_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#અન્તર્ભાવ "layer.h"
+#અન્તર્ભાવ "network.h"
 
-layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2);
-void forward_shortcut_layer(const layer l, network net);
-void backward_shortcut_layer(const layer l, network net);
-void resize_shortcut_layer(layer *l, int w, int h);
+layer make_shortcut_layer(પૂર્ણાંક batch, પૂર્ણાંક index, પૂર્ણાંક w, પૂર્ણાંક h, પૂર્ણાંક c, પૂર્ણાંક w2, પૂર્ણાંક h2, પૂર્ણાંક c2);
+શૂન્ય forward_shortcut_layer(અચલ layer l, network net);
+શૂન્ય backward_shortcut_layer(અચલ layer l, network net);
+શૂન્ય resize_shortcut_layer(layer *l, પૂર્ણાંક w, પૂર્ણાંક h);
 
 #ifdef GPU
-void forward_shortcut_layer_gpu(const layer l, network net);
-void backward_shortcut_layer_gpu(const layer l, network net);
+શૂન્ય forward_shortcut_layer_gpu(અચલ layer l, network net);
+શૂન્ય backward_shortcut_layer_gpu(અચલ layer l, network net);
 #endif
 
 #endif

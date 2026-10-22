@@ -1,140 +1,140 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "option_list.h"
-#include "utils.h"
+#અન્તર્ભાવ <stdlib.h>
+#અન્તર્ભાવ <stdio.h>
+#અન્તર્ભાવ <string.h>
+#અન્તર્ભાવ "option_list.h"
+#અન્તર્ભાવ "utils.h"
 
-list *read_data_cfg(char *filename)
+list *read_data_cfg(અક્ષર *filename)
 {
     FILE *file = fopen(filename, "r");
-    if(file == 0) file_error(filename);
-    char *line;
-    int nu = 0;
+    જો(file == 0) file_error(filename);
+    અક્ષર *લીટી;
+    પૂર્ણાંક nu = 0;
     list *options = make_list();
-    while((line=fgetl(file)) != 0){
+    જ્યારે((લીટી=fgetl(file)) != 0){
         ++ nu;
-        strip(line);
-        switch(line[0]){
-            case '\0':
-            case '#':
-            case ';':
-                free(line);
-                break;
-            default:
-                if(!read_option(line, options)){
-                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+        strip(લીટી);
+        પસંદગી(લીટી[0]){
+            સ્થિતિ '\0':
+            સ્થિતિ '#':
+            સ્થિતિ ';':
+                મુક્ત(લીટી);
+                તોડો;
+            મૂળભૂત:
+                જો(!read_option(લીટી, options)){
+                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, લીટી);
+                    મુક્ત(લીટી);
                 }
-                break;
+                તોડો;
         }
     }
     fclose(file);
-    return options;
+    પાછા options;
 }
 
-metadata get_metadata(char *file)
+metadata get_metadata(અક્ષર *file)
 {
     metadata m = {0};
     list *options = read_data_cfg(file);
 
-    char *name_list = option_find_str(options, "names", 0);
-    if(!name_list) name_list = option_find_str(options, "labels", 0);
-    if(!name_list) {
+    અક્ષર *name_list = option_find_str(options, "names", 0);
+    જો(!name_list) name_list = option_find_str(options, "labels", 0);
+    જો(!name_list) {
         fprintf(stderr, "No names or labels found\n");
-    } else {
+    } નહીંતર {
         m.names = get_labels(name_list);
     }
     m.classes = option_find_int(options, "classes", 2);
     free_list(options);
-    return m;
+    પાછા m;
 }
 
-int read_option(char *s, list *options)
+પૂર્ણાંક read_option(અક્ષર *s, list *options)
 {
     size_t i;
     size_t len = strlen(s);
-    char *val = 0;
-    for(i = 0; i < len; ++i){
-        if(s[i] == '='){
+    અક્ષર *val = 0;
+    માટે(i = 0; i < len; ++i){
+        જો(s[i] == '='){
             s[i] = '\0';
             val = s+i+1;
-            break;
+            તોડો;
         }
     }
-    if(i == len-1) return 0;
-    char *key = s;
-    option_insert(options, key, val);
-    return 1;
+    જો(i == len-1) પાછા 0;
+    અક્ષર *ચાવી = s;
+    option_ઉમેરો(options, ચાવી, val);
+    પાછા 1;
 }
 
-void option_insert(list *l, char *key, char *val)
+શૂન્ય option_ઉમેરો(list *l, અક્ષર *ચાવી, અક્ષર *val)
 {
-    kvp *p = malloc(sizeof(kvp));
-    p->key = key;
+    kvp *p = malloc(કદ(kvp));
+    p->ચાવી = ચાવી;
     p->val = val;
     p->used = 0;
-    list_insert(l, p);
+    list_ઉમેરો(l, p);
 }
 
-void option_unused(list *l)
+શૂન્ય option_unused(list *l)
 {
-    node *n = l->front;
-    while(n){
+    ગાંઠ *n = l->front;
+    જ્યારે(n){
         kvp *p = (kvp *)n->val;
-        if(!p->used){
-            fprintf(stderr, "Unused field: '%s = %s'\n", p->key, p->val);
+        જો(!p->used){
+            fprintf(stderr, "Unused field: '%s = %s'\n", p->ચાવી, p->val);
         }
         n = n->next;
     }
 }
 
-char *option_find(list *l, char *key)
+અક્ષર *option_find(list *l, અક્ષર *ચાવી)
 {
-    node *n = l->front;
-    while(n){
+    ગાંઠ *n = l->front;
+    જ્યારે(n){
         kvp *p = (kvp *)n->val;
-        if(strcmp(p->key, key) == 0){
+        જો(strcmp(p->ચાવી, ચાવી) == 0){
             p->used = 1;
-            return p->val;
+            પાછા p->val;
         }
         n = n->next;
     }
-    return 0;
+    પાછા 0;
 }
-char *option_find_str(list *l, char *key, char *def)
+અક્ષર *option_find_str(list *l, અક્ષર *ચાવી, અક્ષર *def)
 {
-    char *v = option_find(l, key);
-    if(v) return v;
-    if(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
-    return def;
-}
-
-int option_find_int(list *l, char *key, int def)
-{
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    fprintf(stderr, "%s: Using default '%d'\n", key, def);
-    return def;
+    અક્ષર *v = option_find(l, ચાવી);
+    જો(v) પાછા v;
+    જો(def) fprintf(stderr, "%s: Using default '%s'\n", ચાવી, def);
+    પાછા def;
 }
 
-int option_find_int_quiet(list *l, char *key, int def)
+પૂર્ણાંક option_find_int(list *l, અક્ષર *ચાવી, પૂર્ણાંક def)
 {
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    return def;
+    અક્ષર *v = option_find(l, ચાવી);
+    જો(v) પાછા atoi(v);
+    fprintf(stderr, "%s: Using default '%d'\n", ચાવી, def);
+    પાછા def;
 }
 
-float option_find_float_quiet(list *l, char *key, float def)
+પૂર્ણાંક option_find_int_quiet(list *l, અક્ષર *ચાવી, પૂર્ણાંક def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    return def;
+    અક્ષર *v = option_find(l, ચાવી);
+    જો(v) પાછા atoi(v);
+    પાછા def;
 }
 
-float option_find_float(list *l, char *key, float def)
+દશાંશ option_find_float_quiet(list *l, અક્ષર *ચાવી, દશાંશ def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    fprintf(stderr, "%s: Using default '%lf'\n", key, def);
-    return def;
+    અક્ષર *v = option_find(l, ચાવી);
+    જો(v) પાછા atof(v);
+    પાછા def;
+}
+
+દશાંશ option_find_float(list *l, અક્ષર *ચાવી, દશાંશ def)
+{
+    અક્ષર *v = option_find(l, ચાવી);
+    જો(v) પાછા atof(v);
+    fprintf(stderr, "%s: Using default '%lf'\n", ચાવી, def);
+    પાછા def;
 }
