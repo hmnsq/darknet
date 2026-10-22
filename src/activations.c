@@ -9,98 +9,98 @@ char *get_activation_string(ACTIVATION a)
 {
     switch(a){
         case LOGISTIC:
-            return "logistic";
+            повернути "logistic";
         case LOGGY:
-            return "loggy";
+            повернути "loggy";
         case RELU:
-            return "relu";
+            повернути "relu";
         case ELU:
-            return "elu";
+            повернути "elu";
         case SELU:
-            return "selu";
+            повернути "selu";
         case RELIE:
-            return "relie";
+            повернути "relie";
         case RAMP:
-            return "ramp";
+            повернути "ramp";
         case LINEAR:
-            return "linear";
+            повернути "linear";
         case TANH:
-            return "tanh";
+            повернути "tanh";
         case PLSE:
-            return "plse";
+            повернути "plse";
         case LEAKY:
-            return "leaky";
+            повернути "leaky";
         case STAIR:
-            return "stair";
+            повернути "stair";
         case HARDTAN:
-            return "hardtan";
+            повернути "hardtan";
         case LHTAN:
-            return "lhtan";
+            повернути "lhtan";
         default:
             break;
     }
-    return "relu";
+    повернути "relu";
 }
 
 ACTIVATION get_activation(char *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    якщо (strcmp(s, "logistic")==0) повернути LOGISTIC;
+    якщо (strcmp(s, "loggy")==0) повернути LOGGY;
+    якщо (strcmp(s, "relu")==0) повернути RELU;
+    якщо (strcmp(s, "elu")==0) повернути ELU;
+    якщо (strcmp(s, "selu")==0) повернути SELU;
+    якщо (strcmp(s, "relie")==0) повернути RELIE;
+    якщо (strcmp(s, "plse")==0) повернути PLSE;
+    якщо (strcmp(s, "hardtan")==0) повернути HARDTAN;
+    якщо (strcmp(s, "lhtan")==0) повернути LHTAN;
+    якщо (strcmp(s, "linear")==0) повернути LINEAR;
+    якщо (strcmp(s, "ramp")==0) повернути RAMP;
+    якщо (strcmp(s, "leaky")==0) повернути LEAKY;
+    якщо (strcmp(s, "tanh")==0) повернути TANH;
+    якщо (strcmp(s, "stair")==0) повернути STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    повернути RELU;
 }
 
 float activate(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_activate(x);
+            повернути linear_activate(x);
         case LOGISTIC:
-            return logistic_activate(x);
+            повернути logistic_activate(x);
         case LOGGY:
-            return loggy_activate(x);
+            повернути loggy_activate(x);
         case RELU:
-            return relu_activate(x);
+            повернути relu_activate(x);
         case ELU:
-            return elu_activate(x);
+            повернути elu_activate(x);
         case SELU:
-            return selu_activate(x);
+            повернути selu_activate(x);
         case RELIE:
-            return relie_activate(x);
+            повернути relie_activate(x);
         case RAMP:
-            return ramp_activate(x);
+            повернути ramp_activate(x);
         case LEAKY:
-            return leaky_activate(x);
+            повернути leaky_activate(x);
         case TANH:
-            return tanh_activate(x);
+            повернути tanh_activate(x);
         case PLSE:
-            return plse_activate(x);
+            повернути plse_activate(x);
         case STAIR:
-            return stair_activate(x);
+            повернути stair_activate(x);
         case HARDTAN:
-            return hardtan_activate(x);
+            повернути hardtan_activate(x);
         case LHTAN:
-            return lhtan_activate(x);
+            повернути lhtan_activate(x);
     }
-    return 0;
+    повернути 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+void activate_array(float *x, const ціле n, const ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ціле i;
+    для(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
 }
@@ -109,41 +109,41 @@ float gradient(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_gradient(x);
+            повернути linear_gradient(x);
         case LOGISTIC:
-            return logistic_gradient(x);
+            повернути logistic_gradient(x);
         case LOGGY:
-            return loggy_gradient(x);
+            повернути loggy_gradient(x);
         case RELU:
-            return relu_gradient(x);
+            повернути relu_gradient(x);
         case ELU:
-            return elu_gradient(x);
+            повернути elu_gradient(x);
         case SELU:
-            return selu_gradient(x);
+            повернути selu_gradient(x);
         case RELIE:
-            return relie_gradient(x);
+            повернути relie_gradient(x);
         case RAMP:
-            return ramp_gradient(x);
+            повернути ramp_gradient(x);
         case LEAKY:
-            return leaky_gradient(x);
+            повернути leaky_gradient(x);
         case TANH:
-            return tanh_gradient(x);
+            повернути tanh_gradient(x);
         case PLSE:
-            return plse_gradient(x);
+            повернути plse_gradient(x);
         case STAIR:
-            return stair_gradient(x);
+            повернути stair_gradient(x);
         case HARDTAN:
-            return hardtan_gradient(x);
+            повернути hardtan_gradient(x);
         case LHTAN:
-            return lhtan_gradient(x);
+            повернути lhtan_gradient(x);
     }
-    return 0;
+    повернути 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+void gradient_array(const float *x, const ціле n, const ACTIVATION a, float *delta)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ціле i;
+    для(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }
 } 

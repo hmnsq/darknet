@@ -9,36 +9,36 @@
 
 COST_TYPE get_cost_type(char *s)
 {
-    if (strcmp(s, "seg")==0) return SEG;
-    if (strcmp(s, "sse")==0) return SSE;
-    if (strcmp(s, "masked")==0) return MASKED;
-    if (strcmp(s, "smooth")==0) return SMOOTH;
-    if (strcmp(s, "L1")==0) return L1;
-    if (strcmp(s, "wgan")==0) return WGAN;
+    якщо (strcmp(s, "seg")==0) повернути SEG;
+    якщо (strcmp(s, "sse")==0) повернути SSE;
+    якщо (strcmp(s, "masked")==0) повернути MASKED;
+    якщо (strcmp(s, "smooth")==0) повернути SMOOTH;
+    якщо (strcmp(s, "L1")==0) повернути L1;
+    якщо (strcmp(s, "wgan")==0) повернути WGAN;
     fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
-    return SSE;
+    повернути SSE;
 }
 
 char *get_cost_string(COST_TYPE a)
 {
     switch(a){
         case SEG:
-            return "seg";
+            повернути "seg";
         case SSE:
-            return "sse";
+            повернути "sse";
         case MASKED:
-            return "masked";
+            повернути "masked";
         case SMOOTH:
-            return "smooth";
+            повернути "smooth";
         case L1:
-            return "L1";
+            повернути "L1";
         case WGAN:
-            return "wgan";
+            повернути "wgan";
     }
-    return "sse";
+    повернути "sse";
 }
 
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float scale)
+cost_layer make_cost_layer(ціле batch, ціле inputs, COST_TYPE cost_type, float scale)
 {
     fprintf(stderr, "cost                                           %4d\n",  inputs);
     cost_layer l = {0};
@@ -62,10 +62,10 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.delta_gpu = cuda_make_array(l.output, inputs*batch);
     l.output_gpu = cuda_make_array(l.delta, inputs*batch);
     #endif
-    return l;
+    повернути l;
 }
 
-void resize_cost_layer(cost_layer *l, int inputs)
+void resize_cost_layer(cost_layer *l, ціле inputs)
 {
     l->inputs = inputs;
     l->outputs = inputs;
@@ -81,18 +81,18 @@ void resize_cost_layer(cost_layer *l, int inputs)
 
 void forward_cost_layer(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.cost_type == MASKED){
-        int i;
-        for(i = 0; i < l.batch*l.inputs; ++i){
-            if(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
+    якщо (!net.truth) повернути;
+    якщо(l.cost_type == MASKED){
+        ціле i;
+        для(i = 0; i < l.batch*l.inputs; ++i){
+            якщо(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
         }
     }
-    if(l.cost_type == SMOOTH){
+    якщо(l.cost_type == SMOOTH){
         smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    }else if(l.cost_type == L1){
+    }інакше якщо(l.cost_type == L1){
         l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    } else {
+    } інакше {
         l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
     }
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
@@ -115,52 +115,52 @@ void push_cost_layer(cost_layer l)
     cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-int float_abs_compare (const void * a, const void * b)
+ціле float_abs_compare (const void * a, const void * b)
 {
     float fa = *(const float*) a;
-    if(fa < 0) fa = -fa;
+    якщо(fa < 0) fa = -fa;
     float fb = *(const float*) b;
-    if(fb < 0) fb = -fb;
-    return (fa > fb) - (fa < fb);
+    якщо(fb < 0) fb = -fb;
+    повернути (fa > fb) - (fa < fb);
 }
 
 void forward_cost_layer_gpu(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.smooth){
+    якщо (!net.truth) повернути;
+    якщо(l.smooth){
         scal_gpu(l.batch*l.inputs, (1-l.smooth), net.truth_gpu, 1);
         add_gpu(l.batch*l.inputs, l.smooth * 1./l.inputs, net.truth_gpu, 1);
     }
 
-    if(l.cost_type == SMOOTH){
+    якщо(l.cost_type == SMOOTH){
         smooth_l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == L1){
+    } інакше якщо (l.cost_type == L1){
         l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == WGAN){
+    } інакше якщо (l.cost_type == WGAN){
         wgan_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else {
+    } інакше {
         l2_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     }
 
-    if (l.cost_type == SEG && l.noobject_scale != 1) {
+    якщо (l.cost_type == SEG && l.noobject_scale != 1) {
         scale_mask_gpu(l.batch*l.inputs, l.delta_gpu, 0, net.truth_gpu, l.noobject_scale);
         scale_mask_gpu(l.batch*l.inputs, l.output_gpu, 0, net.truth_gpu, l.noobject_scale);
     }
-    if (l.cost_type == MASKED) {
+    якщо (l.cost_type == MASKED) {
         mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
     }
 
-    if(l.ratio){
+    якщо(l.ratio){
         cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
         qsort(l.delta, l.batch*l.inputs, sizeof(float), float_abs_compare);
-        int n = (1-l.ratio) * l.batch*l.inputs;
+        ціле n = (1-l.ratio) * l.batch*l.inputs;
         float thresh = l.delta[n];
         thresh = 0;
         printf("%f\n", thresh);
         supp_gpu(l.batch*l.inputs, thresh, l.delta_gpu, 1);
     }
 
-    if(l.thresh){
+    якщо(l.thresh){
         supp_gpu(l.batch*l.inputs, l.thresh*1./l.inputs, l.delta_gpu, 1);
     }
 

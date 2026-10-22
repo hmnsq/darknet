@@ -3,7 +3,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_l2norm_layer(int batch, int inputs);
+layer make_l2norm_layer(ціле batch, ціле inputs);
 void forward_l2norm_layer(const layer l, network net);
 void backward_l2norm_layer(const layer l, network net);
 

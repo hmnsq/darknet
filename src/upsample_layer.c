@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-layer make_upsample_layer(int batch, int w, int h, int c, int stride)
+layer make_upsample_layer(ціле batch, ціле w, ціле h, ціле c, ціле stride)
 {
     layer l = {0};
     l.type = UPSAMPLE;
@@ -15,7 +15,7 @@ layer make_upsample_layer(int batch, int w, int h, int c, int stride)
     l.out_w = w*stride;
     l.out_h = h*stride;
     l.out_c = c;
-    if(stride < 0){
+    якщо(stride < 0){
         stride = -stride;
         l.reverse=1;
         l.out_w = w/stride;
@@ -36,18 +36,18 @@ layer make_upsample_layer(int batch, int w, int h, int c, int stride)
     l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     #endif
-    if(l.reverse) fprintf(stderr, "downsample         %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    else fprintf(stderr, "upsample           %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    return l;
+    якщо(l.reverse) fprintf(stderr, "downsample         %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
+    інакше fprintf(stderr, "upsample           %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
+    повернути l;
 }
 
-void resize_upsample_layer(layer *l, int w, int h)
+void resize_upsample_layer(layer *l, ціле w, ціле h)
 {
     l->w = w;
     l->h = h;
     l->out_w = w*l->stride;
     l->out_h = h*l->stride;
-    if(l->reverse){
+    якщо(l->reverse){
         l->out_w = w/l->stride;
         l->out_h = h/l->stride;
     }
@@ -68,18 +68,18 @@ void resize_upsample_layer(layer *l, int w, int h)
 void forward_upsample_layer(const layer l, network net)
 {
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
-    if(l.reverse){
+    якщо(l.reverse){
         upsample_cpu(l.output, l.out_w, l.out_h, l.c, l.batch, l.stride, 0, l.scale, net.input);
-    }else{
+    }інакше{
         upsample_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.scale, l.output);
     }
 }
 
 void backward_upsample_layer(const layer l, network net)
 {
-    if(l.reverse){
+    якщо(l.reverse){
         upsample_cpu(l.delta, l.out_w, l.out_h, l.c, l.batch, l.stride, 1, l.scale, net.delta);
-    }else{
+    }інакше{
         upsample_cpu(net.delta, l.w, l.h, l.c, l.batch, l.stride, 0, l.scale, l.delta);
     }
 }
@@ -88,18 +88,18 @@ void backward_upsample_layer(const layer l, network net)
 void forward_upsample_layer_gpu(const layer l, network net)
 {
     fill_gpu(l.outputs*l.batch, 0, l.output_gpu, 1);
-    if(l.reverse){
+    якщо(l.reverse){
         upsample_gpu(l.output_gpu, l.out_w, l.out_h, l.c, l.batch, l.stride, 0, l.scale, net.input_gpu);
-    }else{
+    }інакше{
         upsample_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.scale, l.output_gpu);
     }
 }
 
 void backward_upsample_layer_gpu(const layer l, network net)
 {
-    if(l.reverse){
+    якщо(l.reverse){
         upsample_gpu(l.delta_gpu, l.out_w, l.out_h, l.c, l.batch, l.stride, 1, l.scale, net.delta_gpu);
-    }else{
+    }інакше{
         upsample_gpu(net.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.scale, l.delta_gpu);
     }
 }
