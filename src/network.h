@@ -1,29 +1,29 @@
 // Oh boy, why am I about to do this....
 #ifndef NETWORK_H
 #define NETWORK_H
-#include "darknet.h"
+#ضمن "darknet.h"
 
-#include "image.h"
-#include "layer.h"
-#include "data.h"
-#include "tree.h"
+#ضمن "image.h"
+#ضمن "layer.h"
+#ضمن "data.h"
+#ضمن "tree.h"
 
 
 #ifdef GPU
-void pull_network_output(network *net);
+فراغ pull_network_output(network *net);
 #endif
 
-void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
+فراغ compare_networks(network *n1, network *n2, data d);
+حرف *get_layer_string(LAYER_TYPE a);
 
-network *make_network(int n);
+network *make_network(صحيح n);
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
-void print_network(network *net);
-int resize_network(network *net, int w, int h);
-void calc_network_cost(network *net);
+عائم network_accuracy_multi(network *net, data d, صحيح n);
+صحيح get_predicted_class_network(network *net);
+فراغ اطبع_network(network *net);
+صحيح resize_network(network *net, صحيح w, صحيح h);
+فراغ calc_network_cost(network *net);
 
 #endif
 
