@@ -4,72 +4,72 @@
 #include "option_list.h"
 #include "utils.h"
 
-list *read_data_cfg(char *filename)
+list *read_data_cfg(var_na *filename)
 {
     FILE *file = fopen(filename, "r");
-    if(file == 0) file_error(filename);
-    char *line;
-    int nu = 0;
+    ᮚᮦᮔ᮪(file == 0) file_error(filename);
+    var_na *line;
+    puur_naa_nka nu = 0;
     list *options = make_list();
-    while((line=fgetl(file)) != 0){
+    ᮞᮨᮓᮨᮜ((line=fgetl(file)) != 0){
         ++ nu;
         strip(line);
         switch(line[0]){
-            case '\0':
-            case '#':
-            case ';':
+            pak_sa '\0':
+            pak_sa '#':
+            pak_sa ';':
                 free(line);
-                break;
+                bha_nga;
             default:
-                if(!read_option(line, options)){
+                ᮚᮦᮔ᮪(!read_option(line, options)){
                     fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
                     free(line);
                 }
-                break;
+                bha_nga;
         }
     }
     fclose(file);
-    return options;
+    ᮝᮜᮤ options;
 }
 
-metadata get_metadata(char *file)
+metadata get_metadata(var_na *file)
 {
     metadata m = {0};
     list *options = read_data_cfg(file);
 
-    char *name_list = option_find_str(options, "names", 0);
-    if(!name_list) name_list = option_find_str(options, "labels", 0);
-    if(!name_list) {
+    var_na *name_list = option_find_str(options, "names", 0);
+    ᮚᮦᮔ᮪(!name_list) name_list = option_find_str(options, "labels", 0);
+    ᮚᮦᮔ᮪(!name_list) {
         fprintf(stderr, "No names or labels found\n");
-    } else {
+    } ᮜᮤᮚ {
         m.names = get_labels(name_list);
     }
     m.classes = option_find_int(options, "classes", 2);
     free_list(options);
-    return m;
+    ᮝᮜᮤ m;
 }
 
-int read_option(char *s, list *options)
+puur_naa_nka read_option(var_na *s, list *options)
 {
     size_t i;
     size_t len = strlen(s);
-    char *val = 0;
+    var_na *val = 0;
     for(i = 0; i < len; ++i){
-        if(s[i] == '='){
+        ᮚᮦᮔ᮪(s[i] == '='){
             s[i] = '\0';
             val = s+i+1;
-            break;
+            bha_nga;
         }
     }
-    if(i == len-1) return 0;
-    char *key = s;
+    ᮚᮦᮔ᮪(i == len-1) ᮝᮜᮤ 0;
+    var_na *key = s;
     option_insert(options, key, val);
-    return 1;
+    ᮝᮜᮤ 1;
 }
 
-void option_insert(list *l, char *key, char *val)
+void option_insert(list *l, var_na *key, var_na *val)
 {
-    kvp *p = malloc(sizeof(kvp));
+    kvp *p = malloc(parimaa_na(kvp));
     p->key = key;
     p->val = val;
     p->used = 0;
@@ -79,62 +79,62 @@ void option_insert(list *l, char *key, char *val)
 void option_unused(list *l)
 {
     node *n = l->front;
-    while(n){
+    ᮞᮨᮓᮨᮜ(n){
         kvp *p = (kvp *)n->val;
-        if(!p->used){
+        ᮚᮦᮔ᮪(!p->used){
             fprintf(stderr, "Unused field: '%s = %s'\n", p->key, p->val);
         }
         n = n->next;
     }
 }
 
-char *option_find(list *l, char *key)
+var_na *option_find(list *l, var_na *key)
 {
     node *n = l->front;
-    while(n){
+    ᮞᮨᮓᮨᮜ(n){
         kvp *p = (kvp *)n->val;
-        if(strcmp(p->key, key) == 0){
+        ᮚᮦᮔ᮪(strcmp(p->key, key) == 0){
             p->used = 1;
-            return p->val;
+            ᮝᮜᮤ p->val;
         }
         n = n->next;
     }
-    return 0;
+    ᮝᮜᮤ 0;
 }
-char *option_find_str(list *l, char *key, char *def)
+var_na *option_find_str(list *l, var_na *key, var_na *def)
 {
-    char *v = option_find(l, key);
-    if(v) return v;
-    if(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
-    return def;
+    var_na *v = option_find(l, key);
+    ᮚᮦᮔ᮪(v) ᮝᮜᮤ v;
+    ᮚᮦᮔ᮪(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
+    ᮝᮜᮤ def;
 }
 
-int option_find_int(list *l, char *key, int def)
+puur_naa_nka option_find_int(list *l, var_na *key, puur_naa_nka def)
 {
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
+    var_na *v = option_find(l, key);
+    ᮚᮦᮔ᮪(v) ᮝᮜᮤ atoi(v);
     fprintf(stderr, "%s: Using default '%d'\n", key, def);
-    return def;
+    ᮝᮜᮤ def;
 }
 
-int option_find_int_quiet(list *l, char *key, int def)
+puur_naa_nka option_find_int_quiet(list *l, var_na *key, puur_naa_nka def)
 {
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    return def;
+    var_na *v = option_find(l, key);
+    ᮚᮦᮔ᮪(v) ᮝᮜᮤ atoi(v);
+    ᮝᮜᮤ def;
 }
 
-float option_find_float_quiet(list *l, char *key, float def)
+float option_find_float_quiet(list *l, var_na *key, float def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    return def;
+    var_na *v = option_find(l, key);
+    ᮚᮦᮔ᮪(v) ᮝᮜᮤ atof(v);
+    ᮝᮜᮤ def;
 }
 
-float option_find_float(list *l, char *key, float def)
+float option_find_float(list *l, var_na *key, float def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
+    var_na *v = option_find(l, key);
+    ᮚᮦᮔ᮪(v) ᮝᮜᮤ atof(v);
     fprintf(stderr, "%s: Using default '%lf'\n", key, def);
-    return def;
+    ᮝᮜᮤ def;
 }
