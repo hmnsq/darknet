@@ -1,16 +1,16 @@
-#include "softmax_layer.h"
-#include "blas.h"
-#include "cuda.h"
+#ಅನ್ತರ್ಭಾವ "softmax_layer.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
 
-#include <float.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
+#ಅನ್ತರ್ಭಾವ <float.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <assert.h>
 
-softmax_layer make_softmax_layer(int batch, int inputs, int groups)
+softmax_layer make_softmax_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ inputs, ಪೂರ್ಣಾಙ್ಕ groups)
 {
-    assert(inputs%groups == 0);
+    ಪ್ರತಿಜ್ಞಾ(inputs%groups == 0);
     fprintf(stderr, "softmax                                        %4d\n",  inputs);
     softmax_layer l = {0};
     l.type = SOFTMAX;
@@ -18,10 +18,10 @@ softmax_layer make_softmax_layer(int batch, int inputs, int groups)
     l.groups = groups;
     l.inputs = inputs;
     l.outputs = inputs;
-    l.loss = calloc(inputs*batch, sizeof(float));
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.delta = calloc(inputs*batch, sizeof(float));
-    l.cost = calloc(1, sizeof(float));
+    l.loss = calloc(inputs*batch, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.output = calloc(inputs*batch, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.delta = calloc(inputs*batch, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.cost = calloc(1, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
     l.forward = forward_softmax_layer;
     l.backward = backward_softmax_layer;
@@ -33,45 +33,45 @@ softmax_layer make_softmax_layer(int batch, int inputs, int groups)
     l.loss_gpu = cuda_make_array(l.loss, inputs*batch); 
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch); 
     #endif
-    return l;
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-void forward_softmax_layer(const softmax_layer l, network net)
+ಶೂನ್ಯ forward_softmax_layer(ಧ್ರುವ softmax_layer l, network net)
 {
-    if(l.softmax_tree){
-        int i;
-        int count = 0;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + count);
-            count += group_size;
+    ಯದಿ(l.softmax_ವೃಕ್ಷ){
+        ಪೂರ್ಣಾಙ್ಕ i;
+        ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+        ಪ್ರತಿ (i = 0; i < l.softmax_ವೃಕ್ಷ->groups; ++i) {
+            ಪೂರ್ಣಾಙ್ಕ group_size = l.softmax_ವೃಕ್ಷ->group_size[i];
+            softmax_cpu(net.ಒಳಹರಿವು + ಎಣಿಕೆ, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + ಎಣಿಕೆ);
+            ಎಣಿಕೆ += group_size;
         }
-    } else {
-        softmax_cpu(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
+    } ಅನ್ಯಥಾ {
+        softmax_cpu(net.ಒಳಹರಿವು, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
     }
 
-    if(net.truth && !l.noloss){
+    ಯದಿ(net.truth && !l.noloss){
         softmax_x_ent_cpu(l.batch*l.inputs, l.output, net.truth, l.delta, l.loss);
         l.cost[0] = sum_array(l.loss, l.batch*l.inputs);
     }
 }
 
-void backward_softmax_layer(const softmax_layer l, network net)
+ಶೂನ್ಯ backward_softmax_layer(ಧ್ರುವ softmax_layer l, network net)
 {
     axpy_cpu(l.inputs*l.batch, 1, l.delta, 1, net.delta, 1);
 }
 
 #ifdef GPU
 
-void pull_softmax_layer_output(const softmax_layer layer)
+ಶೂನ್ಯ pull_softmax_layer_output(ಧ್ರುವ softmax_layer layer)
 {
     cuda_pull_array(layer.output_gpu, layer.output, layer.inputs*layer.batch);
 }
 
-void forward_softmax_layer_gpu(const softmax_layer l, network net)
+ಶೂನ್ಯ forward_softmax_layer_gpu(ಧ್ರುವ softmax_layer l, network net)
 {
-    if(l.softmax_tree){
-        softmax_tree(net.input_gpu, 1, l.batch, l.inputs, l.temperature, l.output_gpu, *l.softmax_tree);
+    ಯದಿ(l.softmax_ವೃಕ್ಷ){
+        softmax_ವೃಕ್ಷ(net.ಒಳಹರಿವು_gpu, 1, l.batch, l.inputs, l.temperature, l.output_gpu, *l.softmax_ವೃಕ್ಷ);
         /*
         int i;
         int count = 0;
@@ -81,25 +81,25 @@ void forward_softmax_layer_gpu(const softmax_layer l, network net)
             count += group_size;
         }
         */
-    } else {
-        if(l.spatial){
-            softmax_gpu(net.input_gpu, l.c, l.batch*l.c, l.inputs/l.c, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu);
-        }else{
-            softmax_gpu(net.input_gpu, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output_gpu);
+    } ಅನ್ಯಥಾ {
+        ಯದಿ(l.spatial){
+            softmax_gpu(net.ಒಳಹರಿವು_gpu, l.c, l.batch*l.c, l.inputs/l.c, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu);
+        }ಅನ್ಯಥಾ{
+            softmax_gpu(net.ಒಳಹರಿವು_gpu, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output_gpu);
         }
     }
-    if(net.truth && !l.noloss){
+    ಯದಿ(net.truth && !l.noloss){
         softmax_x_ent_gpu(l.batch*l.inputs, l.output_gpu, net.truth_gpu, l.delta_gpu, l.loss_gpu);
-        if(l.softmax_tree){
-            mask_gpu(l.batch*l.inputs, l.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
-            mask_gpu(l.batch*l.inputs, l.loss_gpu, SECRET_NUM, net.truth_gpu, 0);
+        ಯದಿ(l.softmax_ವೃಕ್ಷ){
+            mask_gpu(l.batch*l.inputs, l.delta_gpu, SECRET_ಅಂಕೆ, net.truth_gpu, 0);
+            mask_gpu(l.batch*l.inputs, l.loss_gpu, SECRET_ಅಂಕೆ, net.truth_gpu, 0);
         }
         cuda_pull_array(l.loss_gpu, l.loss, l.batch*l.inputs);
         l.cost[0] = sum_array(l.loss, l.batch*l.inputs);
     }
 }
 
-void backward_softmax_layer_gpu(const softmax_layer layer, network net)
+ಶೂನ್ಯ backward_softmax_layer_gpu(ಧ್ರುವ softmax_layer layer, network net)
 {
     axpy_gpu(layer.batch*layer.inputs, 1, layer.delta_gpu, 1, net.delta_gpu, 1);
 }

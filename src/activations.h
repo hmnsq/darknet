@@ -1,87 +1,87 @@
 #ifndef ACTIVATIONS_H
 #define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#ಅನ್ತರ್ಭಾವ "darknet.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(ವರ್ಣ *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
+ವರ್ಣ *get_activation_string(ACTIVATION a);
+ಭಿನ್ನ activate(ಭಿನ್ನ x, ACTIVATION a);
+ಭಿನ್ನ gradient(ಭಿನ್ನ x, ACTIVATION a);
+ಶೂನ್ಯ gradient_array(ಧ್ರುವ ಭಿನ್ನ *x, ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ n, ಧ್ರುವ ACTIVATION a, ಭಿನ್ನ *delta);
+ಶೂನ್ಯ activate_array(ಭಿನ್ನ *x, ಧ್ರುವ ಪೂರ್ಣಾಙ್ಕ n, ಧ್ರುವ ACTIVATION a);
 #ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
+ಶೂನ್ಯ activate_array_gpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ n, ACTIVATION a);
+ಶೂನ್ಯ gradient_array_gpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ n, ACTIVATION a, ಭಿನ್ನ *delta);
 #endif
 
-static inline float stair_activate(float x)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ stair_activate(ಭಿನ್ನ x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    ಪೂರ್ಣಾಙ್ಕ n = floor(x);
+    ಯದಿ (n%2 == 0) ಪ್ರತ್ಯಾಗಮ floor(x/2.);
+    ಅನ್ಯಥಾ ಪ್ರತ್ಯಾಗಮ (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ hardtan_activate(ಭಿನ್ನ x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    ಯದಿ (x < -1) ಪ್ರತ್ಯಾಗಮ -1;
+    ಯದಿ (x > 1) ಪ್ರತ್ಯಾಗಮ 1;
+    ಪ್ರತ್ಯಾಗಮ x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ linear_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ x;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ logistic_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ 1./(1. + exp(-x));}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ loggy_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ 2./(1. + exp(-x)) - 1;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ relu_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ x*(x>0);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ elu_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x >= 0)*x + (x < 0)*(exp(x)-1);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ selu_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ relie_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x>0) ? x : .01*x;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ ramp_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ x*(x>0)+.1*x;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ leaky_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x>0) ? x : .1*x;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ tanh_activate(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (exp(2*x)-1)/(exp(2*x)+1);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ plse_activate(ಭಿನ್ನ x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    ಯದಿ(x < -4) ಪ್ರತ್ಯಾಗಮ .01 * (x + 4);
+    ಯದಿ(x > 4)  ಪ್ರತ್ಯಾಗಮ .01 * (x - 4) + 1;
+    ಪ್ರತ್ಯಾಗಮ .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ lhtan_activate(ಭಿನ್ನ x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    ಯದಿ(x < 0) ಪ್ರತ್ಯಾಗಮ .001*x;
+    ಯದಿ(x > 1) ಪ್ರತ್ಯಾಗಮ .001*(x-1) + 1;
+    ಪ್ರತ್ಯಾಗಮ x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ lhtan_gradient(ಭಿನ್ನ x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    ಯದಿ(x > 0 && x < 1) ಪ್ರತ್ಯಾಗಮ 1;
+    ಪ್ರತ್ಯಾಗಮ .001;
 }
-static inline float stair_gradient(float x)
+
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ hardtan_gradient(ಭಿನ್ನ x)
 {
-    if (floor(x) == x) return 0;
-    return 1;
+    ಯದಿ (x > -1 && x < 1) ಪ್ರತ್ಯಾಗಮ 1;
+    ಪ್ರತ್ಯಾಗಮ 0;
 }
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ linear_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ 1;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ logistic_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (1-x)*x;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ loggy_gradient(ಭಿನ್ನ x)
+{
+    ಭಿನ್ನ y = (x+1.)/2.;
+    ಪ್ರತ್ಯಾಗಮ 2*(1-y)*y;
+}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ stair_gradient(ಭಿನ್ನ x)
+{
+    ಯದಿ (floor(x) == x) ಪ್ರತ್ಯಾಗಮ 0;
+    ಪ್ರತ್ಯಾಗಮ 1;
+}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ relu_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x>0);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ elu_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x >= 0) + (x < 0)*(x + 1);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ selu_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ relie_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x>0) ? 1 : .01;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ ramp_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x>0)+.1;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ leaky_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x>0) ? 1 : .1;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ tanh_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ 1-x*x;}
+ಸ್ಥಿರ ಅನ್ತಃಸ್ಥ ಭಿನ್ನ plse_gradient(ಭಿನ್ನ x){ಪ್ರತ್ಯಾಗಮ (x < 0 || x > 1) ? .01 : .125;}
 
 #endif
 

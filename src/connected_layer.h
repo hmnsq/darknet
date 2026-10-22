@@ -1,22 +1,22 @@
 #ifndef CONNECTED_LAYER_H
 #define CONNECTED_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ಅನ್ತರ್ಭಾವ "activations.h"
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
 
-layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activation, int batch_normalize, int adam);
+layer make_connected_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ inputs, ಪೂರ್ಣಾಙ್ಕ outputs, ACTIVATION activation, ಪೂರ್ಣಾಙ್ಕ batch_normalize, ಪೂರ್ಣಾಙ್ಕ adam);
 
-void forward_connected_layer(layer l, network net);
-void backward_connected_layer(layer l, network net);
-void update_connected_layer(layer l, update_args a);
+ಶೂನ್ಯ forward_connected_layer(layer l, network net);
+ಶೂನ್ಯ backward_connected_layer(layer l, network net);
+ಶೂನ್ಯ update_connected_layer(layer l, update_args a);
 
 #ifdef GPU
-void forward_connected_layer_gpu(layer l, network net);
-void backward_connected_layer_gpu(layer l, network net);
-void update_connected_layer_gpu(layer l, update_args a);
-void push_connected_layer(layer l);
-void pull_connected_layer(layer l);
+ಶೂನ್ಯ forward_connected_layer_gpu(layer l, network net);
+ಶೂನ್ಯ backward_connected_layer_gpu(layer l, network net);
+ಶೂನ್ಯ update_connected_layer_gpu(layer l, update_args a);
+ಶೂನ್ಯ ತಳ್ಳು_connected_layer(layer l);
+ಶೂನ್ಯ pull_connected_layer(layer l);
 #endif
 
 #endif

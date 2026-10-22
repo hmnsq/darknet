@@ -1,25 +1,25 @@
-#include "gemm.h"
-#include "utils.h"
-#include "cuda.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#ಅನ್ತರ್ಭಾವ "gemm.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm_bin(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ವರ್ಣ  *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
-    int i,j,k;
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            char A_PART = A[i*lda+k];
-            if(A_PART){
-                for(j = 0; j < N; ++j){
+    ಪೂರ್ಣಾಙ್ಕ i,j,k;
+    ಪ್ರತಿ(i = 0; i < M; ++i){
+        ಪ್ರತಿ(k = 0; k < K; ++k){
+            ವರ್ಣ A_PART = A[i*lda+k];
+            ಯದಿ(A_PART){
+                ಪ್ರತಿ(j = 0; j < N; ++j){
                     C[i*ldc+j] += B[k*ldb+j];
                 }
-            } else {
-                for(j = 0; j < N; ++j){
+            } ಅನ್ಯಥಾ {
+                ಪ್ರತಿ(j = 0; j < N; ++j){
                     C[i*ldc+j] -= B[k*ldb+j];
                 }
             }
@@ -27,78 +27,78 @@ void gemm_bin(int M, int N, int K, float ALPHA,
     }
 }
 
-float *random_matrix(int rows, int cols)
+ಭಿನ್ನ *random_matrix(ಪೂರ್ಣಾಙ್ಕ rows, ಪೂರ್ಣಾಙ್ಕ cols)
 {
-    int i;
-    float *m = calloc(rows*cols, sizeof(float));
-    for(i = 0; i < rows*cols; ++i){
-        m[i] = (float)rand()/RAND_MAX;
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ *m = calloc(rows*cols, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಪ್ರತಿ(i = 0; i < rows*cols; ++i){
+        m[i] = (ಭಿನ್ನ)rand()/RAND_MAX;
     }
-    return m;
+    ಪ್ರತ್ಯಾಗಮ m;
 }
 
-void time_random_matrix(int TA, int TB, int m, int k, int n)
+ಶೂನ್ಯ time_random_matrix(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ m, ಪೂರ್ಣಾಙ್ಕ k, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    ಭಿನ್ನ *a;
+    ಯದಿ(!TA) a = random_matrix(m,k);
+    ಅನ್ಯಥಾ a = random_matrix(k,m);
+    ಪೂರ್ಣಾಙ್ಕ lda = (!TA)?k:m;
+    ಭಿನ್ನ *b;
+    ಯದಿ(!TB) b = random_matrix(k,n);
+    ಅನ್ಯಥಾ b = random_matrix(n,k);
+    ಪೂರ್ಣಾಙ್ಕ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    int i;
+    ಭಿನ್ನ *c = random_matrix(m,n);
+    ಪೂರ್ಣಾಙ್ಕ i;
     clock_t start = clock(), end;
-    for(i = 0; i<10; ++i){
+    ಪ್ರತಿ(i = 0; i<10; ++i){
         gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
-    free(a);
-    free(b);
-    free(c);
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (ಭಿನ್ನ)(end-start)/CLOCKS_PER_SEC);
+    ಮುಕ್ತ(a);
+    ಮುಕ್ತ(b);
+    ಮುಕ್ತ(c);
 }
 
 
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ BETA,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
     gemm_cpu( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
 }
 
-void gemm_nn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm_nn(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[i*lda+k];
-            for(j = 0; j < N; ++j){
+    ಪೂರ್ಣಾಙ್ಕ i,j,k;
+    #pragma omp parallel ಪ್ರತಿ
+    ಪ್ರತಿ(i = 0; i < M; ++i){
+        ಪ್ರತಿ(k = 0; k < K; ++k){
+            ಪಞ್ಜಿಕಾ ಭಿನ್ನ A_PART = ALPHA*A[i*lda+k];
+            ಪ್ರತಿ(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_nt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm_nt(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
+    ಪೂರ್ಣಾಙ್ಕ i,j,k;
+    #pragma omp parallel ಪ್ರತಿ
+    ಪ್ರತಿ(i = 0; i < M; ++i){
+        ಪ್ರತಿ(j = 0; j < N; ++j){
+            ಪಞ್ಜಿಕಾ ಭಿನ್ನ sum = 0;
+            ಪ್ರತಿ(k = 0; k < K; ++k){
                 sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
             }
             C[i*ldc+j] += sum;
@@ -106,34 +106,34 @@ void gemm_nt(int M, int N, int K, float ALPHA,
     }
 }
 
-void gemm_tn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm_tn(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[k*lda+i];
-            for(j = 0; j < N; ++j){
+    ಪೂರ್ಣಾಙ್ಕ i,j,k;
+    #pragma omp parallel ಪ್ರತಿ
+    ಪ್ರತಿ(i = 0; i < M; ++i){
+        ಪ್ರತಿ(k = 0; k < K; ++k){
+            ಪಞ್ಜಿಕಾ ಭಿನ್ನ A_PART = ALPHA*A[k*lda+i];
+            ಪ್ರತಿ(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_tt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm_tt(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
+    ಪೂರ್ಣಾಙ್ಕ i,j,k;
+    #pragma omp parallel ಪ್ರತಿ
+    ಪ್ರತಿ(i = 0; i < M; ++i){
+        ಪ್ರತಿ(j = 0; j < N; ++j){
+            ಪಞ್ಜಿಕಾ ಭಿನ್ನ sum = 0;
+            ಪ್ರತಿ(k = 0; k < K; ++k){
                 sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
             }
             C[i*ldc+j] += sum;
@@ -142,38 +142,38 @@ void gemm_tt(int M, int N, int K, float ALPHA,
 }
 
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc)
+ಶೂನ್ಯ gemm_cpu(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ BETA,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
     //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
-    int i, j;
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    ಪೂರ್ಣಾಙ್ಕ i, j;
+    ಪ್ರತಿ(i = 0; i < M; ++i){
+        ಪ್ರತಿ(j = 0; j < N; ++j){
             C[i*ldc + j] *= BETA;
         }
     }
-    if(!TA && !TB)
+    ಯದಿ(!TA && !TB)
         gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(TA && !TB)
+    ಅನ್ಯಥಾ ಯದಿ(TA && !TB)
         gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(!TA && TB)
+    ಅನ್ಯಥಾ ಯದಿ(!TA && TB)
         gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else
+    ಅನ್ಯಥಾ
         gemm_tt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
 }
 
 #ifdef GPU
 
-#include <math.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc)
+ಶೂನ್ಯ gemm_gpu(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A_gpu, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B_gpu, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ BETA,
+        ಭಿನ್ನ *C_gpu, ಪೂರ್ಣಾಙ್ಕ ldc)
 {
     cublasHandle_t handle = blas_handle();
     cudaError_t status = cublasSgemm(handle, (TB ? CUBLAS_OP_T : CUBLAS_OP_N), 
@@ -181,87 +181,87 @@ void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA,
     check_error(status);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <time.h>
 
-void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
+ಶೂನ್ಯ time_gpu_random_matrix(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ m, ಪೂರ್ಣಾಙ್ಕ k, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    ಭಿನ್ನ *a;
+    ಯದಿ(!TA) a = random_matrix(m,k);
+    ಅನ್ಯಥಾ a = random_matrix(k,m);
+    ಪೂರ್ಣಾಙ್ಕ lda = (!TA)?k:m;
+    ಭಿನ್ನ *b;
+    ಯದಿ(!TB) b = random_matrix(k,n);
+    ಅನ್ಯಥಾ b = random_matrix(n,k);
+    ಪೂರ್ಣಾಙ್ಕ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    int i;
+    ಭಿನ್ನ *c = random_matrix(m,n);
+    ಪೂರ್ಣಾಙ್ಕ i;
     clock_t start = clock(), end;
-    for(i = 0; i<32; ++i){
+    ಪ್ರತಿ(i = 0; i<32; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
-    free(a);
-    free(b);
-    free(c);
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s\n",m,k,k,n, TA, TB, (ಭಿನ್ನ)(end-start)/CLOCKS_PER_SEC);
+    ಮುಕ್ತ(a);
+    ಮುಕ್ತ(b);
+    ಮುಕ್ತ(c);
 }
 
-void time_gpu(int TA, int TB, int m, int k, int n)
+ಶೂನ್ಯ time_gpu(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ m, ಪೂರ್ಣಾಙ್ಕ k, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int iter = 10;
-    float *a = random_matrix(m,k);
-    float *b = random_matrix(k,n);
+    ಪೂರ್ಣಾಙ್ಕ iter = 10;
+    ಭಿನ್ನ *a = random_matrix(m,k);
+    ಭಿನ್ನ *b = random_matrix(k,n);
 
-    int lda = (!TA)?k:m;
-    int ldb = (!TB)?n:k;
+    ಪೂರ್ಣಾಙ್ಕ lda = (!TA)?k:m;
+    ಪೂರ್ಣಾಙ್ಕ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
+    ಭಿನ್ನ *c = random_matrix(m,n);
 
-    float *a_cl = cuda_make_array(a, m*k);
-    float *b_cl = cuda_make_array(b, k*n);
-    float *c_cl = cuda_make_array(c, m*n);
+    ಭಿನ್ನ *a_cl = cuda_make_array(a, m*k);
+    ಭಿನ್ನ *b_cl = cuda_make_array(b, k*n);
+    ಭಿನ್ನ *c_cl = cuda_make_array(c, m*n);
 
-    int i;
+    ಪೂರ್ಣಾಙ್ಕ i;
     clock_t start = clock(), end;
-    for(i = 0; i<iter; ++i){
+    ಪ್ರತಿ(i = 0; i<iter; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a_cl,lda,b_cl,ldb,1,c_cl,n);
         cudaThreadSynchronize();
     }
-    double flop = ((double)m)*n*(2.*k + 2.)*iter;
-    double gflop = flop/pow(10., 9);
+    ದ್ವಿಗುಣ flop = ((ದ್ವಿಗುಣ)m)*n*(2.*k + 2.)*iter;
+    ದ್ವಿಗುಣ gflop = flop/pow(10., 9);
     end = clock();
-    double seconds = sec(end-start);
+    ದ್ವಿಗುಣ seconds = sec(end-start);
     printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s, %lf GFLOPS\n",m,k,k,n, TA, TB, seconds, gflop/seconds);
     cuda_free(a_cl);
     cuda_free(b_cl);
     cuda_free(c_cl);
-    free(a);
-    free(b);
-    free(c);
+    ಮುಕ್ತ(a);
+    ಮುಕ್ತ(b);
+    ಮುಕ್ತ(c);
 }
 
 
-void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
+ಶೂನ್ಯ test_gpu_accuracy(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ m, ಪೂರ್ಣಾಙ್ಕ k, ಪೂರ್ಣಾಙ್ಕ n)
 {
     srand(0);
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    ಭಿನ್ನ *a;
+    ಯದಿ(!TA) a = random_matrix(m,k);
+    ಅನ್ಯಥಾ a = random_matrix(k,m);
+    ಪೂರ್ಣಾಙ್ಕ lda = (!TA)?k:m;
+    ಭಿನ್ನ *b;
+    ಯದಿ(!TB) b = random_matrix(k,n);
+    ಅನ್ಯಥಾ b = random_matrix(n,k);
+    ಪೂರ್ಣಾಙ್ಕ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    float *c_gpu = random_matrix(m,n);
-    memset(c, 0, m*n*sizeof(float));
-    memset(c_gpu, 0, m*n*sizeof(float));
-    int i;
+    ಭಿನ್ನ *c = random_matrix(m,n);
+    ಭಿನ್ನ *c_gpu = random_matrix(m,n);
+    memset(c, 0, m*n*ಪರಿಮಾಣ(ಭಿನ್ನ));
+    memset(c_gpu, 0, m*n*ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಪೂರ್ಣಾಙ್ಕ i;
     //pm(m,k,b);
     gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c_gpu,n);
     //printf("GPU\n");
@@ -270,19 +270,19 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     //printf("\n\nCPU\n");
     //pm(m, n, c);
-    double sse = 0;
-    for(i = 0; i < m*n; ++i) {
+    ದ್ವಿಗುಣ sse = 0;
+    ಪ್ರತಿ(i = 0; i < m*n; ++i) {
         //printf("%f %f\n", c[i], c_gpu[i]);
         sse += pow(c[i]-c_gpu[i], 2);
     }
     printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %g SSE\n",m,k,k,n, TA, TB, sse/(m*n));
-    free(a);
-    free(b);
-    free(c);
-    free(c_gpu);
+    ಮುಕ್ತ(a);
+    ಮುಕ್ತ(b);
+    ಮುಕ್ತ(c);
+    ಮುಕ್ತ(c_gpu);
 }
 
-int test_gpu_blas()
+ಪೂರ್ಣಾಙ್ಕ test_gpu_blas()
 {
     /*
        test_gpu_accuracy(0,0,10,576,75); 
@@ -318,7 +318,7 @@ int test_gpu_blas()
     time_gpu(0,0,512,4608,196); 
     time_gpu(1,1,4608,512,196); 
 
-    return 0;
+    ಪ್ರತ್ಯಾಗಮ 0;
 }
 #endif
 

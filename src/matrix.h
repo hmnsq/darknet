@@ -1,13 +1,13 @@
 #ifndef MATRIX_H
 #define MATRIX_H
-#include "darknet.h"
+#ಅನ್ತರ್ಭಾವ "darknet.h"
 
 matrix copy_matrix(matrix m);
-void print_matrix(matrix m);
+ಶೂನ್ಯ print_matrix(matrix m);
 
-matrix hold_out_matrix(matrix *m, int n);
-matrix resize_matrix(matrix m, int size);
+matrix hold_out_matrix(matrix *m, ಪೂರ್ಣಾಙ್ಕ n);
+matrix resize_matrix(matrix m, ಪೂರ್ಣಾಙ್ಕ size);
 
-float *pop_column(matrix *m, int c);
+ಭಿನ್ನ *ತೆಗೆ_column(matrix *m, ಪೂರ್ಣಾಙ್ಕ c);
 
 #endif

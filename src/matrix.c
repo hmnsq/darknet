@@ -1,74 +1,74 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#ಅನ್ತರ್ಭಾವ "matrix.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <assert.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
 
-void free_matrix(matrix m)
+ಶೂನ್ಯ free_matrix(matrix m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < m.rows; ++i) ಮುಕ್ತ(m.vals[i]);
+    ಮುಕ್ತ(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+ಭಿನ್ನ matrix_topk_accuracy(matrix truth, matrix guess, ಪೂರ್ಣಾಙ್ಕ k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    ಪೂರ್ಣಾಙ್ಕ *indexes = calloc(k, ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
+    ಪೂರ್ಣಾಙ್ಕ n = truth.cols;
+    ಪೂರ್ಣಾಙ್ಕ i,j;
+    ಪೂರ್ಣಾಙ್ಕ correct = 0;
+    ಪ್ರತಿ(i = 0; i < truth.rows; ++i){
+        ತುದಿ_k(guess.vals[i], n, k, indexes);
+        ಪ್ರತಿ(j = 0; j < k; ++j){
+            ಪೂರ್ಣಾಙ್ಕ class = indexes[j];
+            ಯದಿ(truth.vals[i][class]){
                 ++correct;
-                break;
+                ಭಙ್ಗ;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    ಮುಕ್ತ(indexes);
+    ಪ್ರತ್ಯಾಗಮ (ಭಿನ್ನ)correct/truth.rows;
 }
 
-void scale_matrix(matrix m, float scale)
+ಶೂನ್ಯ scale_matrix(matrix m, ಭಿನ್ನ scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    ಪೂರ್ಣಾಙ್ಕ i,j;
+    ಪ್ರತಿ(i = 0; i < m.rows; ++i){
+        ಪ್ರತಿ(j = 0; j < m.cols; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+matrix resize_matrix(matrix m, ಪೂರ್ಣಾಙ್ಕ size)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಯದಿ (m.rows == size) ಪ್ರತ್ಯಾಗಮ m;
+    ಯದಿ (m.rows < size) {
+        m.vals = realloc(m.vals, size*ಪರಿಮಾಣ(ಭಿನ್ನ*));
+        ಪ್ರತಿ (i = m.rows; i < size; ++i) {
+            m.vals[i] = calloc(m.cols, ಪರಿಮಾಣ(ಭಿನ್ನ));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } ಅನ್ಯಥಾ ಯದಿ (m.rows > size) {
+        ಪ್ರತಿ (i = size; i < m.rows; ++i) {
+            ಮುಕ್ತ(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, size*ಪರಿಮಾಣ(ಭಿನ್ನ*));
     }
     m.rows = size;
-    return m;
+    ಪ್ರತ್ಯಾಗಮ m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+ಶೂನ್ಯ matrix_add_matrix(matrix from, matrix to)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
+    ಪ್ರತಿಜ್ಞಾ(from.rows == to.rows && from.cols == to.cols);
+    ಪೂರ್ಣಾಙ್ಕ i,j;
+    ಪ್ರತಿ(i = 0; i < from.rows; ++i){
+        ಪ್ರತಿ(j = 0; j < from.cols; ++j){
             to.vals[i][j] += from.vals[i][j];
         }
     }
@@ -79,118 +79,118 @@ matrix copy_matrix(matrix m)
     matrix c = {0};
     c.rows = m.rows;
     c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
+    c.vals = calloc(c.rows, ಪರಿಮಾಣ(ಭಿನ್ನ *));
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < c.rows; ++i){
+        c.vals[i] = calloc(c.cols, ಪರಿಮಾಣ(ಭಿನ್ನ));
         copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    ಪ್ರತ್ಯಾಗಮ c;
 }
 
-matrix make_matrix(int rows, int cols)
+matrix make_matrix(ಪೂರ್ಣಾಙ್ಕ rows, ಪೂರ್ಣಾಙ್ಕ cols)
 {
-    int i;
+    ಪೂರ್ಣಾಙ್ಕ i;
     matrix m;
     m.rows = rows;
     m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    m.vals = calloc(m.rows, ಪರಿಮಾಣ(ಭಿನ್ನ *));
+    ಪ್ರತಿ(i = 0; i < m.rows; ++i){
+        m.vals[i] = calloc(m.cols, ಪರಿಮಾಣ(ಭಿನ್ನ));
     }
-    return m;
+    ಪ್ರತ್ಯಾಗಮ m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+matrix hold_out_matrix(matrix *m, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
+    ಪೂರ್ಣಾಙ್ಕ i;
     matrix h;
     h.rows = n;
     h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
+    h.vals = calloc(h.rows, ಪರಿಮಾಣ(ಭಿನ್ನ *));
+    ಪ್ರತಿ(i = 0; i < n; ++i){
+        ಪೂರ್ಣಾಙ್ಕ index = rand()%m->rows;
         h.vals[i] = m->vals[index];
         m->vals[index] = m->vals[--(m->rows)];
     }
-    return h;
+    ಪ್ರತ್ಯಾಗಮ h;
 }
 
-float *pop_column(matrix *m, int c)
+ಭಿನ್ನ *ತೆಗೆ_column(matrix *m, ಪೂರ್ಣಾಙ್ಕ c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
+    ಭಿನ್ನ *col = calloc(m->rows, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಪೂರ್ಣಾಙ್ಕ i, j;
+    ಪ್ರತಿ(i = 0; i < m->rows; ++i){
         col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+        ಪ್ರತಿ(j = c; j < m->cols-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
     --m->cols;
-    return col;
+    ಪ್ರತ್ಯಾಗಮ col;
 }
 
-matrix csv_to_matrix(char *filename)
+matrix csv_to_matrix(ವರ್ಣ *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    ಯದಿ(!fp) file_error(filename);
 
     matrix m;
     m.cols = -1;
 
-    char *line;
+    ವರ್ಣ *ಸಾಲು;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
+    ಪೂರ್ಣಾಙ್ಕ n = 0;
+    ಪೂರ್ಣಾಙ್ಕ size = 1024;
+    m.vals = calloc(size, ಪರಿಮಾಣ(ಭಿನ್ನ*));
+    ಯಾವತ್((ಸಾಲು = fgetl(fp))){
+        ಯದಿ(m.cols == -1) m.cols = ಎಣಿಕೆ_fields(ಸಾಲು);
+        ಯದಿ(n == size){
             size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+            m.vals = realloc(m.vals, size*ಪರಿಮಾಣ(ಭಿನ್ನ*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(ಸಾಲು, m.cols);
+        ಮುಕ್ತ(ಸಾಲು);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
+    m.vals = realloc(m.vals, n*ಪರಿಮಾಣ(ಭಿನ್ನ*));
     m.rows = n;
-    return m;
+    ಪ್ರತ್ಯಾಗಮ m;
 }
 
-void matrix_to_csv(matrix m)
+ಶೂನ್ಯ matrix_to_csv(matrix m)
 {
-    int i, j;
+    ಪೂರ್ಣಾಙ್ಕ i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
+    ಪ್ರತಿ(i = 0; i < m.rows; ++i){
+        ಪ್ರತಿ(j = 0; j < m.cols; ++j){
+            ಯದಿ(j > 0) printf(",");
             printf("%.17g", m.vals[i][j]);
         }
         printf("\n");
     }
 }
 
-void print_matrix(matrix m)
+ಶೂನ್ಯ print_matrix(matrix m)
 {
-    int i, j;
+    ಪೂರ್ಣಾಙ್ಕ i, j;
     printf("%d X %d Matrix:\n",m.rows, m.cols);
     printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    ಪ್ರತಿ(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("__ \n");
 
     printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    ಪ್ರತಿ(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
+    ಪ್ರತಿ(i = 0; i < m.rows; ++i){
         printf("|  ");
-        for(j = 0; j < m.cols; ++j){
+        ಪ್ರತಿ(j = 0; j < m.cols; ++j){
             printf("%15.7f ", m.vals[i][j]);
         }
         printf(" |\n");
     }
     printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    ಪ್ರತಿ(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("__|\n");
 }

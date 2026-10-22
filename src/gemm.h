@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+ಶೂನ್ಯ gemm_bin(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ವರ್ಣ  *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+ಶೂನ್ಯ gemm(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+                    ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+                    ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+                    ಭಿನ್ನ BETA,
+                    ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ಶೂನ್ಯ gemm_cpu(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ BETA,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+ಶೂನ್ಯ gemm_gpu(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A_gpu, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B_gpu, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ BETA,
+        ಭಿನ್ನ *C_gpu, ಪೂರ್ಣಾಙ್ಕ ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ಶೂನ್ಯ gemm_gpu(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಪೂರ್ಣಾಙ್ಕ K, ಭಿನ್ನ ALPHA, 
+        ಭಿನ್ನ *A, ಪೂರ್ಣಾಙ್ಕ lda, 
+        ಭಿನ್ನ *B, ಪೂರ್ಣಾಙ್ಕ ldb,
+        ಭಿನ್ನ BETA,
+        ಭಿನ್ನ *C, ಪೂರ್ಣಾಙ್ಕ ldc);
 #endif
 #endif

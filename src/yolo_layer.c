@@ -1,18 +1,18 @@
-#include "yolo_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#ಅನ್ತರ್ಭಾವ "yolo_layer.h"
+#ಅನ್ತರ್ಭಾವ "activations.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
+#ಅನ್ತರ್ಭಾವ "box.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <assert.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes)
+layer make_yolo_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ total, ಪೂರ್ಣಾಙ್ಕ *mask, ಪೂರ್ಣಾಙ್ಕ classes)
 {
-    int i;
+    ಪೂರ್ಣಾಙ್ಕ i;
     layer l = {0};
     l.type = YOLO;
 
@@ -26,22 +26,22 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     l.out_h = l.h;
     l.out_c = l.c;
     l.classes = classes;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(total*2, sizeof(float));
-    if(mask) l.mask = mask;
-    else{
-        l.mask = calloc(n, sizeof(int));
-        for(i = 0; i < n; ++i){
+    l.cost = calloc(1, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.biases = calloc(total*2, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಯದಿ(mask) l.mask = mask;
+    ಅನ್ಯಥಾ{
+        l.mask = calloc(n, ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
+        ಪ್ರತಿ(i = 0; i < n; ++i){
             l.mask[i] = i;
         }
     }
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.bias_updates = calloc(n*2, ಪರಿಮಾಣ(ಭಿನ್ನ));
     l.outputs = h*w*n*(classes + 4 + 1);
     l.inputs = l.outputs;
     l.truths = 90*(4 + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    for(i = 0; i < total*2; ++i){
+    l.delta = calloc(batch*l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.output = calloc(batch*l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಪ್ರತಿ(i = 0; i < total*2; ++i){
         l.biases[i] = .5;
     }
 
@@ -57,10 +57,10 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     fprintf(stderr, "yolo\n");
     srand(0);
 
-    return l;
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-void resize_yolo_layer(layer *l, int w, int h)
+ಶೂನ್ಯ resize_yolo_layer(layer *l, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h)
 {
     l->w = w;
     l->h = h;
@@ -68,8 +68,8 @@ void resize_yolo_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + 4 + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l->delta = realloc(l->delta, l->batch*l->outputs*ಪರಿಮಾಣ(ಭಿನ್ನ));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -80,64 +80,64 @@ void resize_yolo_layer(layer *l, int w, int h)
 #endif
 }
 
-box get_yolo_box(float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, int stride)
+box get_yolo_box(ಭಿನ್ನ *x, ಭಿನ್ನ *biases, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ index, ಪೂರ್ಣಾಙ್ಕ i, ಪೂರ್ಣಾಙ್ಕ j, ಪೂರ್ಣಾಙ್ಕ lw, ಪೂರ್ಣಾಙ್ಕ lh, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ stride)
 {
     box b;
     b.x = (i + x[index + 0*stride]) / lw;
     b.y = (j + x[index + 1*stride]) / lh;
     b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
     b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    ಪ್ರತ್ಯಾಗಮ b;
 }
 
-float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, float *delta, float scale, int stride)
+ಭಿನ್ನ delta_yolo_box(box truth, ಭಿನ್ನ *x, ಭಿನ್ನ *biases, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ index, ಪೂರ್ಣಾಙ್ಕ i, ಪೂರ್ಣಾಙ್ಕ j, ಪೂರ್ಣಾಙ್ಕ lw, ಪೂರ್ಣಾಙ್ಕ lh, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಭಿನ್ನ *delta, ಭಿನ್ನ scale, ಪೂರ್ಣಾಙ್ಕ stride)
 {
     box pred = get_yolo_box(x, biases, n, index, i, j, lw, lh, w, h, stride);
-    float iou = box_iou(pred, truth);
+    ಭಿನ್ನ iou = box_iou(pred, truth);
 
-    float tx = (truth.x*lw - i);
-    float ty = (truth.y*lh - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    ಭಿನ್ನ tx = (truth.x*lw - i);
+    ಭಿನ್ನ ty = (truth.y*lh - j);
+    ಭಿನ್ನ tw = log(truth.w*w / biases[2*n]);
+    ಭಿನ್ನ th = log(truth.h*h / biases[2*n + 1]);
 
     delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
     delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
     delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
     delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    ಪ್ರತ್ಯಾಗಮ iou;
 }
 
 
-void delta_yolo_class(float *output, float *delta, int index, int class, int classes, int stride, float *avg_cat)
+ಶೂನ್ಯ delta_yolo_class(ಭಿನ್ನ *output, ಭಿನ್ನ *delta, ಪೂರ್ಣಾಙ್ಕ index, ಪೂರ್ಣಾಙ್ಕ class, ಪೂರ್ಣಾಙ್ಕ classes, ಪೂರ್ಣಾಙ್ಕ stride, ಭಿನ್ನ *avg_cat)
 {
-    int n;
-    if (delta[index]){
+    ಪೂರ್ಣಾಙ್ಕ n;
+    ಯದಿ (delta[index]){
         delta[index + stride*class] = 1 - output[index + stride*class];
-        if(avg_cat) *avg_cat += output[index + stride*class];
-        return;
+        ಯದಿ(avg_cat) *avg_cat += output[index + stride*class];
+        ಪ್ರತ್ಯಾಗಮ;
     }
-    for(n = 0; n < classes; ++n){
+    ಪ್ರತಿ(n = 0; n < classes; ++n){
         delta[index + stride*n] = ((n == class)?1 : 0) - output[index + stride*n];
-        if(n == class && avg_cat) *avg_cat += output[index + stride*n];
+        ಯದಿ(n == class && avg_cat) *avg_cat += output[index + stride*n];
     }
 }
 
-static int entry_index(layer l, int batch, int location, int entry)
+ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ entry_index(layer l, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ location, ಪೂರ್ಣಾಙ್ಕ entry)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
+    ಪೂರ್ಣಾಙ್ಕ n =   location / (l.w*l.h);
+    ಪೂರ್ಣಾಙ್ಕ loc = location % (l.w*l.h);
+    ಪ್ರತ್ಯಾಗಮ batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
 }
 
-void forward_yolo_layer(const layer l, network net)
+ಶೂನ್ಯ forward_yolo_layer(ಧ್ರುವ layer l, network net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    ಪೂರ್ಣಾಙ್ಕ i,j,b,t,n;
+    memcpy(l.output, net.ಒಳಹರಿವು, l.outputs*l.batch*ಪರಿಮಾಣ(ಭಿನ್ನ));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    ಪ್ರತಿ (b = 0; b < l.batch; ++b){
+        ಪ್ರತಿ(n = 0; n < l.n; ++n){
+            ಪೂರ್ಣಾಙ್ಕ index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, 4);
             activate_array(l.output + index, (1+l.classes)*l.w*l.h, LOGISTIC);
@@ -145,46 +145,46 @@ void forward_yolo_layer(const layer l, network net)
     }
 #endif
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float recall75 = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    memset(l.delta, 0, l.outputs * l.batch * ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಯದಿ(!net.train) ಪ್ರತ್ಯಾಗಮ;
+    ಭಿನ್ನ avg_iou = 0;
+    ಭಿನ್ನ recall = 0;
+    ಭಿನ್ನ recall75 = 0;
+    ಭಿನ್ನ avg_cat = 0;
+    ಭಿನ್ನ avg_obj = 0;
+    ಭಿನ್ನ avg_anyobj = 0;
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಪೂರ್ಣಾಙ್ಕ class_ಎಣಿಕೆ = 0;
     *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+    ಪ್ರತಿ (b = 0; b < l.batch; ++b) {
+        ಪ್ರತಿ (j = 0; j < l.h; ++j) {
+            ಪ್ರತಿ (i = 0; i < l.w; ++i) {
+                ಪ್ರತಿ (n = 0; n < l.n; ++n) {
+                    ಪೂರ್ಣಾಙ್ಕ box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                     box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
-                    float best_iou = 0;
-                    int best_t = 0;
-                    for(t = 0; t < l.max_boxes; ++t){
+                    ಭಿನ್ನ best_iou = 0;
+                    ಪೂರ್ಣಾಙ್ಕ best_t = 0;
+                    ಪ್ರತಿ(t = 0; t < l.max_boxes; ++t){
                         box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
+                        ಯದಿ(!truth.x) ಭಙ್ಗ;
+                        ಭಿನ್ನ iou = box_iou(pred, truth);
+                        ಯದಿ (iou > best_iou) {
                             best_iou = iou;
                             best_t = t;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
+                    ಪೂರ್ಣಾಙ್ಕ obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
                     avg_anyobj += l.output[obj_index];
                     l.delta[obj_index] = 0 - l.output[obj_index];
-                    if (best_iou > l.ignore_thresh) {
+                    ಯದಿ (best_iou > l.ignore_thresh) {
                         l.delta[obj_index] = 0;
                     }
-                    if (best_iou > l.truth_thresh) {
+                    ಯದಿ (best_iou > l.truth_thresh) {
                         l.delta[obj_index] = 1 - l.output[obj_index];
 
-                        int class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
-                        if (l.map) class = l.map[class];
-                        int class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
+                        ಪೂರ್ಣಾಙ್ಕ class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
+                        ಯದಿ (l.map) class = l.map[class];
+                        ಪೂರ್ಣಾಙ್ಕ class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
                         delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, 0);
                         box truth = float_to_box(net.truth + best_t*(4 + 1) + b*l.truths, 1);
                         delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
@@ -192,77 +192,77 @@ void forward_yolo_layer(const layer l, network net)
                 }
             }
         }
-        for(t = 0; t < l.max_boxes; ++t){
+        ಪ್ರತಿ(t = 0; t < l.max_boxes; ++t){
             box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            ಯದಿ(!truth.x) ಭಙ್ಗ;
+            ಭಿನ್ನ best_iou = 0;
+            ಪೂರ್ಣಾಙ್ಕ best_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
             box truth_shift = truth;
             truth_shift.x = truth_shift.y = 0;
-            for(n = 0; n < l.total; ++n){
+            ಪ್ರತಿ(n = 0; n < l.total; ++n){
                 box pred = {0};
                 pred.w = l.biases[2*n]/net.w;
                 pred.h = l.biases[2*n+1]/net.h;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
+                ಭಿನ್ನ iou = box_iou(pred, truth_shift);
+                ಯದಿ (iou > best_iou){
                     best_iou = iou;
                     best_n = n;
                 }
             }
 
-            int mask_n = int_index(l.mask, best_n, l.n);
-            if(mask_n >= 0){
-                int box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
-                float iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+            ಪೂರ್ಣಾಙ್ಕ mask_n = int_index(l.mask, best_n, l.n);
+            ಯದಿ(mask_n >= 0){
+                ಪೂರ್ಣಾಙ್ಕ box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
+                ಭಿನ್ನ iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
 
-                int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
+                ಪೂರ್ಣಾಙ್ಕ obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
                 avg_obj += l.output[obj_index];
                 l.delta[obj_index] = 1 - l.output[obj_index];
 
-                int class = net.truth[t*(4 + 1) + b*l.truths + 4];
-                if (l.map) class = l.map[class];
-                int class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
+                ಪೂರ್ಣಾಙ್ಕ class = net.truth[t*(4 + 1) + b*l.truths + 4];
+                ಯದಿ (l.map) class = l.map[class];
+                ಪೂರ್ಣಾಙ್ಕ class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
                 delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, &avg_cat);
 
-                ++count;
-                ++class_count;
-                if(iou > .5) recall += 1;
-                if(iou > .75) recall75 += 1;
+                ++ಎಣಿಕೆ;
+                ++class_ಎಣಿಕೆ;
+                ಯದಿ(iou > .5) recall += 1;
+                ಯದಿ(iou > .75) recall75 += 1;
                 avg_iou += iou;
             }
         }
     }
     *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/ಎಣಿಕೆ, avg_cat/class_ಎಣಿಕೆ, avg_obj/ಎಣಿಕೆ, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/ಎಣಿಕೆ, recall75/ಎಣಿಕೆ, ಎಣಿಕೆ);
 }
 
-void backward_yolo_layer(const layer l, network net)
+ಶೂನ್ಯ backward_yolo_layer(ಧ್ರುವ layer l, network net)
 {
    axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+ಶೂನ್ಯ correct_yolo_boxes(detection *dets, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ netw, ಪೂರ್ಣಾಙ್ಕ neth, ಪೂರ್ಣಾಙ್ಕ relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪೂರ್ಣಾಙ್ಕ new_w=0;
+    ಪೂರ್ಣಾಙ್ಕ new_h=0;
+    ಯದಿ (((ಭಿನ್ನ)netw/w) < ((ಭಿನ್ನ)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } ಅನ್ಯಥಾ {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    ಪ್ರತಿ (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((ಭಿನ್ನ)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((ಭಿನ್ನ)new_h/neth); 
+        b.w *= (ಭಿನ್ನ)netw/new_w;
+        b.h *= (ಭಿನ್ನ)neth/new_h;
+        ಯದಿ(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -272,35 +272,35 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
     }
 }
 
-int yolo_num_detections(layer l, float thresh)
+ಪೂರ್ಣಾಙ್ಕ yolo_ಅಂಕೆ_detections(layer l, ಭಿನ್ನ thresh)
 {
-    int i, n;
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            if(l.output[obj_index] > thresh){
-                ++count;
+    ಪೂರ್ಣಾಙ್ಕ i, n;
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಪ್ರತಿ (i = 0; i < l.w*l.h; ++i){
+        ಪ್ರತಿ(n = 0; n < l.n; ++n){
+            ಪೂರ್ಣಾಙ್ಕ obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ಯದಿ(l.output[obj_index] > thresh){
+                ++ಎಣಿಕೆ;
             }
         }
     }
-    return count;
+    ಪ್ರತ್ಯಾಗಮ ಎಣಿಕೆ;
 }
 
-void avg_flipped_yolo(layer l)
+ಶೂನ್ಯ avg_flipped_yolo(layer l)
 {
-    int i,j,n,z;
-    float *flip = l.output + l.outputs;
-    for (j = 0; j < l.h; ++j) {
-        for (i = 0; i < l.w/2; ++i) {
-            for (n = 0; n < l.n; ++n) {
-                for(z = 0; z < l.classes + 4 + 1; ++z){
-                    int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                    int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                    float swap = flip[i1];
+    ಪೂರ್ಣಾಙ್ಕ i,j,n,z;
+    ಭಿನ್ನ *flip = l.output + l.outputs;
+    ಪ್ರತಿ (j = 0; j < l.h; ++j) {
+        ಪ್ರತಿ (i = 0; i < l.w/2; ++i) {
+            ಪ್ರತಿ (n = 0; n < l.n; ++n) {
+                ಪ್ರತಿ(z = 0; z < l.classes + 4 + 1; ++z){
+                    ಪೂರ್ಣಾಙ್ಕ i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                    ಪೂರ್ಣಾಙ್ಕ i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                    ಭಿನ್ನ swap = flip[i1];
                     flip[i1] = flip[i2];
                     flip[i2] = swap;
-                    if(z == 0){
+                    ಯದಿ(z == 0){
                         flip[i1] = -flip[i1];
                         flip[i2] = -flip[i2];
                     }
@@ -308,65 +308,65 @@ void avg_flipped_yolo(layer l)
             }
         }
     }
-    for(i = 0; i < l.outputs; ++i){
+    ಪ್ರತಿ(i = 0; i < l.outputs; ++i){
         l.output[i] = (l.output[i] + flip[i])/2.;
     }
 }
 
-int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets)
+ಪೂರ್ಣಾಙ್ಕ get_yolo_detections(layer l, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ netw, ಪೂರ್ಣಾಙ್ಕ neth, ಭಿನ್ನ thresh, ಪೂರ್ಣಾಙ್ಕ *map, ಪೂರ್ಣಾಙ್ಕ relative, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
-    if (l.batch == 2) avg_flipped_yolo(l);
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float objectness = predictions[obj_index];
-            if(objectness <= thresh) continue;
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            dets[count].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
-            dets[count].objectness = objectness;
-            dets[count].classes = l.classes;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
-                float prob = objectness*predictions[class_index];
-                dets[count].prob[j] = (prob > thresh) ? prob : 0;
+    ಪೂರ್ಣಾಙ್ಕ i,j,n;
+    ಭಿನ್ನ *predictions = l.output;
+    ಯದಿ (l.batch == 2) avg_flipped_yolo(l);
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಪ್ರತಿ (i = 0; i < l.w*l.h; ++i){
+        ಪೂರ್ಣಾಙ್ಕ row = i / l.w;
+        ಪೂರ್ಣಾಙ್ಕ col = i % l.w;
+        ಪ್ರತಿ(n = 0; n < l.n; ++n){
+            ಪೂರ್ಣಾಙ್ಕ obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ಭಿನ್ನ objectness = predictions[obj_index];
+            ಯದಿ(objectness <= thresh) ಅನುವರ್ತ;
+            ಪೂರ್ಣಾಙ್ಕ box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
+            dets[ಎಣಿಕೆ].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
+            dets[ಎಣಿಕೆ].objectness = objectness;
+            dets[ಎಣಿಕೆ].classes = l.classes;
+            ಪ್ರತಿ(j = 0; j < l.classes; ++j){
+                ಪೂರ್ಣಾಙ್ಕ class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
+                ಭಿನ್ನ prob = objectness*predictions[class_index];
+                dets[ಎಣಿಕೆ].prob[j] = (prob > thresh) ? prob : 0;
             }
-            ++count;
+            ++ಎಣಿಕೆ;
         }
     }
-    correct_yolo_boxes(dets, count, w, h, netw, neth, relative);
-    return count;
+    correct_yolo_boxes(dets, ಎಣಿಕೆ, w, h, netw, neth, relative);
+    ಪ್ರತ್ಯಾಗಮ ಎಣಿಕೆ;
 }
 
 #ifdef GPU
 
-void forward_yolo_layer_gpu(const layer l, network net)
+ಶೂನ್ಯ forward_yolo_layer_gpu(ಧ್ರುವ layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    copy_gpu(l.batch*l.inputs, net.ಒಳಹರಿವು_gpu, 1, l.output_gpu, 1);
+    ಪೂರ್ಣಾಙ್ಕ b, n;
+    ಪ್ರತಿ (b = 0; b < l.batch; ++b){
+        ಪ್ರತಿ(n = 0; n < l.n; ++n){
+            ಪೂರ್ಣಾಙ್ಕ index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, 4);
             activate_array_gpu(l.output_gpu + index, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-    if(!net.train || l.onlyforward){
+    ಯದಿ(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ಪ್ರತ್ಯಾಗಮ;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.ಒಳಹರಿವು, l.batch*l.inputs);
     forward_yolo_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_ತಳ್ಳು_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_yolo_layer_gpu(const layer l, network net)
+ಶೂನ್ಯ backward_yolo_layer_gpu(ಧ್ರುವ layer l, network net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }

@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
+#ಅನ್ತರ್ಭಾವ <assert.h>
+#ಅನ್ತರ್ಭಾವ <unistd.h>
+#ಅನ್ತರ್ಭಾವ <float.h>
+#ಅನ್ತರ್ಭಾವ <limits.h>
+#ಅನ್ತರ್ಭಾವ <time.h>
+#ಅನ್ತರ್ಭಾವ <sys/time.h>
 
-#include "utils.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
 
 
 /*
@@ -24,69 +24,69 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+ದ್ವಿಗುಣ what_time_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    ಸಂರಚನಾ timeval time;
+    ಯದಿ (gettimeofday(&time,ರಿಕ್ತ)){
+        ಪ್ರತ್ಯಾಗಮ 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    ಪ್ರತ್ಯಾಗಮ (ದ್ವಿಗುಣ)time.tv_sec + (ದ್ವಿಗುಣ)time.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+ಪೂರ್ಣಾಙ್ಕ *read_intlist(ವರ್ಣ *gpu_list, ಪೂರ್ಣಾಙ್ಕ *ngpus, ಪೂರ್ಣಾಙ್ಕ d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    ಪೂರ್ಣಾಙ್ಕ *gpus = 0;
+    ಯದಿ(gpu_list){
+        ಪೂರ್ಣಾಙ್ಕ len = strlen(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        ಪೂರ್ಣಾಙ್ಕ i;
+        ಪ್ರತಿ(i = 0; i < len; ++i){
+            ಯದಿ (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = calloc(*ngpus, ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
+        ಪ್ರತಿ(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } ಅನ್ಯಥಾ {
+        gpus = calloc(1, ಪರಿಮಾಣ(ಭಿನ್ನ));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    ಪ್ರತ್ಯಾಗಮ gpus;
 }
 
-int *read_map(char *filename)
+ಪೂರ್ಣಾಙ್ಕ *read_map(ವರ್ಣ *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    ಪೂರ್ಣಾಙ್ಕ n = 0;
+    ಪೂರ್ಣಾಙ್ಕ *map = 0;
+    ವರ್ಣ *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    ಯದಿ(!file) file_error(filename);
+    ಯಾವತ್((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
         map[n-1] = atoi(str);
     }
-    return map;
+    ಪ್ರತ್ಯಾಗಮ map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+ಶೂನ್ಯ sorta_shuffle(ಶೂನ್ಯ *arr, size_t n, size_t size, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
+    ಪ್ರತಿ(i = 0; i < sections; ++i){
         size_t start = n*i/sections;
         size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+        size_t ಅಂಕೆ = end-start;
+        shuffle(arr+(start*size), ಅಂಕೆ, size);
     }
 }
 
-void shuffle(void *arr, size_t n, size_t size)
+ಶೂನ್ಯ shuffle(ಶೂನ್ಯ *arr, size_t n, size_t size)
 {
     size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    ಶೂನ್ಯ *swp = calloc(1, size);
+    ಪ್ರತಿ(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
         memcpy(swp,          arr+(j*size), size);
         memcpy(arr+(j*size), arr+(i*size), size);
@@ -94,118 +94,118 @@ void shuffle(void *arr, size_t n, size_t size)
     }
 }
 
-int *random_index_order(int min, int max)
+ಪೂರ್ಣಾಙ್ಕ *random_index_order(ಪೂರ್ಣಾಙ್ಕ min, ಪೂರ್ಣಾಙ್ಕ max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    ಪೂರ್ಣಾಙ್ಕ *inds = calloc(max-min, ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
+    ಪ್ರತಿ(i = min; i < max-1; ++i){
+        ಪೂರ್ಣಾಙ್ಕ swap = inds[i];
+        ಪೂರ್ಣಾಙ್ಕ index = i + rand()%(max-i);
         inds[i] = inds[index];
         inds[index] = swap;
     }
-    return inds;
+    ಪ್ರತ್ಯಾಗಮ inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+ಶೂನ್ಯ del_arg(ಪೂರ್ಣಾಙ್ಕ argc, ವರ್ಣ **argv, ಪೂರ್ಣಾಙ್ಕ index)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+ಪೂರ್ಣಾಙ್ಕ find_arg(ಪೂರ್ಣಾಙ್ಕ argc, ವರ್ಣ* argv[], ವರ್ಣ *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < argc; ++i) {
+        ಯದಿ(!argv[i]) ಅನುವರ್ತ;
+        ಯದಿ(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            ಪ್ರತ್ಯಾಗಮ 1;
         }
     }
-    return 0;
+    ಪ್ರತ್ಯಾಗಮ 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+ಪೂರ್ಣಾಙ್ಕ find_int_arg(ಪೂರ್ಣಾಙ್ಕ argc, ವರ್ಣ **argv, ವರ್ಣ *arg, ಪೂರ್ಣಾಙ್ಕ def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < argc-1; ++i){
+        ಯದಿ(!argv[i]) ಅನುವರ್ತ;
+        ಯದಿ(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ಭಙ್ಗ;
         }
     }
-    return def;
+    ಪ್ರತ್ಯಾಗಮ def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+ಭಿನ್ನ find_float_arg(ಪೂರ್ಣಾಙ್ಕ argc, ವರ್ಣ **argv, ವರ್ಣ *arg, ಭಿನ್ನ def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < argc-1; ++i){
+        ಯದಿ(!argv[i]) ಅನುವರ್ತ;
+        ಯದಿ(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ಭಙ್ಗ;
         }
     }
-    return def;
+    ಪ್ರತ್ಯಾಗಮ def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+ವರ್ಣ *find_char_arg(ಪೂರ್ಣಾಙ್ಕ argc, ವರ್ಣ **argv, ವರ್ಣ *arg, ವರ್ಣ *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < argc-1; ++i){
+        ಯದಿ(!argv[i]) ಅನುವರ್ತ;
+        ಯದಿ(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ಭಙ್ಗ;
         }
     }
-    return def;
+    ಪ್ರತ್ಯಾಗಮ def;
 }
 
 
-char *basecfg(char *cfgfile)
+ವರ್ಣ *basecfg(ವರ್ಣ *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    ವರ್ಣ *c = cfgfile;
+    ವರ್ಣ *next;
+    ಯಾವತ್((next = strchr(c, '/')))
     {
         c = next+1;
     }
     c = copy_string(c);
     next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    ಯದಿ (next) *next = 0;
+    ಪ್ರತ್ಯಾಗಮ c;
 }
 
-int alphanum_to_int(char c)
+ಪೂರ್ಣಾಙ್ಕ alphanum_to_int(ವರ್ಣ c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    ಪ್ರತ್ಯಾಗಮ (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+ವರ್ಣ int_to_alphanum(ಪೂರ್ಣಾಙ್ಕ i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    ಯದಿ (i == 36) ಪ್ರತ್ಯಾಗಮ '.';
+    ಪ್ರತ್ಯಾಗಮ (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+ಶೂನ್ಯ pm(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
+    ಪೂರ್ಣಾಙ್ಕ i,j;
+    ಪ್ರತಿ(i =0 ; i < M; ++i){
         printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
+        ಪ್ರತಿ(j = 0; j < N; ++j){
             printf("%2.4f, ", A[i*N+j]);
         }
         printf("\n");
@@ -213,15 +213,15 @@ void pm(int M, int N, float *A)
     printf("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+ಶೂನ್ಯ find_replace(ವರ್ಣ *str, ವರ್ಣ *orig, ವರ್ಣ *rep, ವರ್ಣ *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    ವರ್ಣ buffer[4096] = {0};
+    ವರ್ಣ *p;
 
     sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    ಯದಿ(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        ಪ್ರತ್ಯಾಗಮ;
     }
 
     *p = '\0';
@@ -229,20 +229,20 @@ void find_replace(char *str, char *orig, char *rep, char *output)
     sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
 }
 
-float sec(clock_t clocks)
+ಭಿನ್ನ sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    ಪ್ರತ್ಯಾಗಮ (ಭಿನ್ನ)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+ಶೂನ್ಯ ತುದಿ_k(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ k, ಪೂರ್ಣಾಙ್ಕ *index)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
+    ಪೂರ್ಣಾಙ್ಕ i,j;
+    ಪ್ರತಿ(j = 0; j < k; ++j) index[j] = -1;
+    ಪ್ರತಿ(i = 0; i < n; ++i){
+        ಪೂರ್ಣಾಙ್ಕ curr = i;
+        ಪ್ರತಿ(j = 0; j < k; ++j){
+            ಯದಿ((index[j] < 0) || a[curr] > a[index[j]]){
+                ಪೂರ್ಣಾಙ್ಕ swap = curr;
                 curr = index[j];
                 index[j] = swap;
             }
@@ -250,14 +250,14 @@ void top_k(float *a, int n, int k, int *index)
     }
 }
 
-void error(const char *s)
+ಶೂನ್ಯ error(ಧ್ರುವ ವರ್ಣ *s)
 {
     perror(s);
-    assert(0);
+    ಪ್ರತಿಜ್ಞಾ(0);
     exit(-1);
 }
 
-unsigned char *read_file(char *filename)
+unsigned ವರ್ಣ *read_file(ವರ್ಣ *filename)
 {
     FILE *fp = fopen(filename, "rb");
     size_t size;
@@ -266,410 +266,410 @@ unsigned char *read_file(char *filename)
     size = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
+    unsigned ವರ್ಣ *text = calloc(size+1, ಪರಿಮಾಣ(ವರ್ಣ));
     fread(text, 1, size, fp);
     fclose(fp);
-    return text;
+    ಪ್ರತ್ಯಾಗಮ text;
 }
 
-void malloc_error()
+ಶೂನ್ಯ malloc_error()
 {
     fprintf(stderr, "Malloc error\n");
     exit(-1);
 }
 
-void file_error(char *s)
+ಶೂನ್ಯ file_error(ವರ್ಣ *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
     exit(0);
 }
 
-list *split_str(char *s, char delim)
+list *split_str(ವರ್ಣ *s, ವರ್ಣ delim)
 {
     size_t i;
     size_t len = strlen(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_ಸೇರಿಸು(l, s);
+    ಪ್ರತಿ(i = 0; i < len; ++i){
+        ಯದಿ(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_ಸೇರಿಸು(l, &(s[i+1]));
         }
     }
-    return l;
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-void strip(char *s)
+ಶೂನ್ಯ strip(ವರ್ಣ *s)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    ಪ್ರತಿ(i = 0; i < len; ++i){
+        ವರ್ಣ c = s[i];
+        ಯದಿ(c==' '||c=='\t'||c=='\n') ++offset;
+        ಅನ್ಯಥಾ s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void strip_char(char *s, char bad)
+ಶೂನ್ಯ strip_char(ವರ್ಣ *s, ವರ್ಣ bad)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    ಪ್ರತಿ(i = 0; i < len; ++i){
+        ವರ್ಣ c = s[i];
+        ಯದಿ(c==bad) ++offset;
+        ಅನ್ಯಥಾ s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+ಶೂನ್ಯ free_ptrs(ಶೂನ್ಯ **ptrs, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < n; ++i) ಮುಕ್ತ(ptrs[i]);
+    ಮುಕ್ತ(ptrs);
 }
 
-char *fgetl(FILE *fp)
+ವರ್ಣ *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
+    ಯದಿ(feof(fp)) ಪ್ರತ್ಯಾಗಮ 0;
     size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    ವರ್ಣ *ಸಾಲು = malloc(size*ಪರಿಮಾಣ(ವರ್ಣ));
+    ಯದಿ(!fgets(ಸಾಲು, size, fp)){
+        ಮುಕ್ತ(ಸಾಲು);
+        ಪ್ರತ್ಯಾಗಮ 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = strlen(ಸಾಲು);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
+    ಯಾವತ್((ಸಾಲು[curr-1] != '\n') && !feof(fp)){
+        ಯದಿ(curr == size-1){
             size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
+            ಸಾಲು = realloc(ಸಾಲು, size*ಪರಿಮಾಣ(ವರ್ಣ));
+            ಯದಿ(!ಸಾಲು) {
                 printf("%ld\n", size);
                 malloc_error();
             }
         }
         size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        ಯದಿ(readsize > INT_MAX) readsize = INT_MAX-1;
+        fgets(&ಸಾಲು[curr], readsize, fp);
+        curr = strlen(ಸಾಲು);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    ಯದಿ(ಸಾಲು[curr-1] == '\n') ಸಾಲು[curr-1] = '\0';
 
-    return line;
+    ಪ್ರತ್ಯಾಗಮ ಸಾಲು;
 }
 
-int read_int(int fd)
+ಪೂರ್ಣಾಙ್ಕ read_int(ಪೂರ್ಣಾಙ್ಕ fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    ಪೂರ್ಣಾಙ್ಕ n = 0;
+    ಪೂರ್ಣಾಙ್ಕ next = ಪಠ(fd, &n, ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
+    ಯದಿ(next <= 0) ಪ್ರತ್ಯಾಗಮ -1;
+    ಪ್ರತ್ಯಾಗಮ n;
 }
 
-void write_int(int fd, int n)
+ಶೂನ್ಯ write_int(ಪೂರ್ಣಾಙ್ಕ fd, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    ಪೂರ್ಣಾಙ್ಕ next = ಲಿಖ(fd, &n, ಪರಿಮಾಣ(ಪೂರ್ಣಾಙ್ಕ));
+    ಯದಿ(next <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+ಪೂರ್ಣಾಙ್ಕ read_all_fail(ಪೂರ್ಣಾಙ್ಕ fd, ವರ್ಣ *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    ಯಾವತ್(n < bytes){
+        ಪೂರ್ಣಾಙ್ಕ next = ಪಠ(fd, buffer + n, bytes-n);
+        ಯದಿ(next <= 0) ಪ್ರತ್ಯಾಗಮ 1;
         n += next;
     }
-    return 0;
+    ಪ್ರತ್ಯಾಗಮ 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+ಪೂರ್ಣಾಙ್ಕ write_all_fail(ಪೂರ್ಣಾಙ್ಕ fd, ವರ್ಣ *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    ಯಾವತ್(n < bytes){
+        size_t next = ಲಿಖ(fd, buffer + n, bytes-n);
+        ಯದಿ(next <= 0) ಪ್ರತ್ಯಾಗಮ 1;
         n += next;
     }
-    return 0;
+    ಪ್ರತ್ಯಾಗಮ 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+ಶೂನ್ಯ read_all(ಪೂರ್ಣಾಙ್ಕ fd, ವರ್ಣ *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
-    }
-}
-
-void write_all(int fd, char *buffer, size_t bytes)
-{
-    size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
+    ಯಾವತ್(n < bytes){
+        ಪೂರ್ಣಾಙ್ಕ next = ಪಠ(fd, buffer + n, bytes-n);
+        ಯದಿ(next <= 0) error("read failed");
         n += next;
     }
 }
 
-
-char *copy_string(char *s)
+ಶೂನ್ಯ write_all(ಪೂರ್ಣಾಙ್ಕ fd, ವರ್ಣ *buffer, size_t bytes)
 {
-    char *copy = malloc(strlen(s)+1);
+    size_t n = 0;
+    ಯಾವತ್(n < bytes){
+        size_t next = ಲಿಖ(fd, buffer + n, bytes-n);
+        ಯದಿ(next <= 0) error("write failed");
+        n += next;
+    }
+}
+
+
+ವರ್ಣ *copy_string(ವರ್ಣ *s)
+{
+    ವರ್ಣ *copy = malloc(strlen(s)+1);
     strncpy(copy, s, strlen(s)+1);
-    return copy;
+    ಪ್ರತ್ಯಾಗಮ copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_ಸಾಲು(ವರ್ಣ *ಸಾಲು)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    ವರ್ಣ *c, *p;
+    ಪೂರ್ಣಾಙ್ಕ in = 0;
+    ಪ್ರತಿ(c = ಸಾಲು, p = ಸಾಲು; *c != '\0'; ++c){
+        ಯದಿ(*c == '"') in = !in;
+        ಅನ್ಯಥಾ ಯದಿ(*c == ',' && !in){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_ಸೇರಿಸು(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_ಸೇರಿಸು(l, copy_string(p));
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-int count_fields(char *line)
+ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ_fields(ವರ್ಣ *ಸಾಲು)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಪೂರ್ಣಾಙ್ಕ done = 0;
+    ವರ್ಣ *c;
+    ಪ್ರತಿ(c = ಸಾಲು; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        ಯದಿ(*c == ',' || done) ++ಎಣಿಕೆ;
     }
-    return count;
+    ಪ್ರತ್ಯಾಗಮ ಎಣಿಕೆ;
 }
 
-float *parse_fields(char *line, int n)
+ಭಿನ್ನ *parse_fields(ವರ್ಣ *ಸಾಲು, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
+    ಭಿನ್ನ *field = calloc(n, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ವರ್ಣ *c, *p, *end;
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಪೂರ್ಣಾಙ್ಕ done = 0;
+    ಪ್ರತಿ(c = ಸಾಲು, p = ಸಾಲು; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done){
+        ಯದಿ(*c == ',' || done){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            field[ಎಣಿಕೆ] = strtod(p, &end);
+            ಯದಿ(p == c) field[ಎಣಿಕೆ] = nan("");
+            ಯದಿ(end != c && (end != c-1 || *end != '\r')) field[ಎಣಿಕೆ] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++ಎಣಿಕೆ;
         }
     }
-    return field;
+    ಪ್ರತ್ಯಾಗಮ field;
 }
 
-float sum_array(float *a, int n)
+ಭಿನ್ನ sum_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ sum = 0;
+    ಪ್ರತಿ(i = 0; i < n; ++i) sum += a[i];
+    ಪ್ರತ್ಯಾಗಮ sum;
 }
 
-float mean_array(float *a, int n)
+ಭಿನ್ನ mean_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    return sum_array(a,n)/n;
+    ಪ್ರತ್ಯಾಗಮ sum_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+ಶೂನ್ಯ mean_arrays(ಭಿನ್ನ **a, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ els, ಭಿನ್ನ *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪೂರ್ಣಾಙ್ಕ j;
+    memset(avg, 0, els*ಪರಿಮಾಣ(ಭಿನ್ನ));
+    ಪ್ರತಿ(j = 0; j < n; ++j){
+        ಪ್ರತಿ(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    ಪ್ರತಿ(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+ಶೂನ್ಯ print_statistics(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
+    ಭಿನ್ನ m = mean_array(a, n);
+    ಭಿನ್ನ v = variance_array(a, n);
     printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+ಭಿನ್ನ variance_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ sum = 0;
+    ಭಿನ್ನ mean = mean_array(a, n);
+    ಪ್ರತಿ(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
+    ಭಿನ್ನ variance = sum/n;
+    ಪ್ರತ್ಯಾಗಮ variance;
 }
 
-int constrain_int(int a, int min, int max)
+ಪೂರ್ಣಾಙ್ಕ constrain_int(ಪೂರ್ಣಾಙ್ಕ a, ಪೂರ್ಣಾಙ್ಕ min, ಪೂರ್ಣಾಙ್ಕ max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ಯದಿ (a < min) ಪ್ರತ್ಯಾಗಮ min;
+    ಯದಿ (a > max) ಪ್ರತ್ಯಾಗಮ max;
+    ಪ್ರತ್ಯಾಗಮ a;
 }
 
-float constrain(float min, float max, float a)
+ಭಿನ್ನ constrain(ಭಿನ್ನ min, ಭಿನ್ನ max, ಭಿನ್ನ a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ಯದಿ (a < min) ಪ್ರತ್ಯಾಗಮ min;
+    ಯದಿ (a > max) ಪ್ರತ್ಯಾಗಮ max;
+    ಪ್ರತ್ಯಾಗಮ a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+ಭಿನ್ನ dist_array(ಭಿನ್ನ *a, ಭಿನ್ನ *b, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ sum = 0;
+    ಪ್ರತಿ(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
+    ಪ್ರತ್ಯಾಗಮ sqrt(sum);
 }
 
-float mse_array(float *a, int n)
+ಭಿನ್ನ mse_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ sum = 0;
+    ಪ್ರತಿ(i = 0; i < n; ++i) sum += a[i]*a[i];
+    ಪ್ರತ್ಯಾಗಮ sqrt(sum/n);
 }
 
-void normalize_array(float *a, int n)
+ಶೂನ್ಯ normalize_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ mu = mean_array(a,n);
+    ಭಿನ್ನ sigma = sqrt(variance_array(a,n));
+    ಪ್ರತಿ(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
     mu = mean_array(a,n);
     sigma = sqrt(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+ಶೂನ್ಯ translate_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+ಭಿನ್ನ mag_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ sum = 0;
+    ಪ್ರತಿ(i = 0; i < n; ++i){
         sum += a[i]*a[i];   
     }
-    return sqrt(sum);
+    ಪ್ರತ್ಯಾಗಮ sqrt(sum);
 }
 
-void scale_array(float *a, int n, float s)
+ಶೂನ್ಯ scale_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+ಪೂರ್ಣಾಙ್ಕ sample_array(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    float sum = sum_array(a, n);
+    ಭಿನ್ನ sum = sum_array(a, n);
     scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    ಭಿನ್ನ r = rand_uniform(0, 1);
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        ಯದಿ (r <= 0) ಪ್ರತ್ಯಾಗಮ i;
     }
-    return n-1;
+    ಪ್ರತ್ಯಾಗಮ n-1;
 }
 
-int max_int_index(int *a, int n)
+ಪೂರ್ಣಾಙ್ಕ max_int_index(ಪೂರ್ಣಾಙ್ಕ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    ಯದಿ(n <= 0) ಪ್ರತ್ಯಾಗಮ -1;
+    ಪೂರ್ಣಾಙ್ಕ i, max_i = 0;
+    ಪೂರ್ಣಾಙ್ಕ max = a[0];
+    ಪ್ರತಿ(i = 1; i < n; ++i){
+        ಯದಿ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    ಪ್ರತ್ಯಾಗಮ max_i;
 }
 
-int max_index(float *a, int n)
+ಪೂರ್ಣಾಙ್ಕ max_index(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    ಯದಿ(n <= 0) ಪ್ರತ್ಯಾಗಮ -1;
+    ಪೂರ್ಣಾಙ್ಕ i, max_i = 0;
+    ಭಿನ್ನ max = a[0];
+    ಪ್ರತಿ(i = 1; i < n; ++i){
+        ಯದಿ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    ಪ್ರತ್ಯಾಗಮ max_i;
 }
 
-int int_index(int *a, int val, int n)
+ಪೂರ್ಣಾಙ್ಕ int_index(ಪೂರ್ಣಾಙ್ಕ *a, ಪೂರ್ಣಾಙ್ಕ val, ಪೂರ್ಣಾಙ್ಕ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಪ್ರತಿ(i = 0; i < n; ++i){
+        ಯದಿ(a[i] == val) ಪ್ರತ್ಯಾಗಮ i;
     }
-    return -1;
+    ಪ್ರತ್ಯಾಗಮ -1;
 }
 
-int rand_int(int min, int max)
+ಪೂರ್ಣಾಙ್ಕ rand_int(ಪೂರ್ಣಾಙ್ಕ min, ಪೂರ್ಣಾಙ್ಕ max)
 {
-    if (max < min){
-        int s = min;
+    ಯದಿ (max < min){
+        ಪೂರ್ಣಾಙ್ಕ s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    ಪೂರ್ಣಾಙ್ಕ r = (rand()%(max - min + 1)) + min;
+    ಪ್ರತ್ಯಾಗಮ r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+ಭಿನ್ನ rand_normal()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    ಸ್ಥಿರ ಪೂರ್ಣಾಙ್ಕ haveSpare = 0;
+    ಸ್ಥಿರ ದ್ವಿಗುಣ rand1, rand2;
 
-    if(haveSpare)
+    ಯದಿ(haveSpare)
     {
         haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        ಪ್ರತ್ಯಾಗಮ sqrt(rand1) * sin(rand2);
     }
 
     haveSpare = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = rand() / ((ದ್ವಿಗುಣ) RAND_MAX);
+    ಯದಿ(rand1 < 1e-100) rand1 = 1e-100;
     rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand2 = (rand() / ((ದ್ವಿಗುಣ) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    ಪ್ರತ್ಯಾಗಮ sqrt(rand1) * cos(rand2);
 }
 
 /*
@@ -685,7 +685,7 @@ float rand_normal()
 
 size_t rand_size_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    ಪ್ರತ್ಯಾಗಮ  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -695,32 +695,32 @@ size_t rand_size_t()
         ((size_t)(rand()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+ಭಿನ್ನ rand_uniform(ಭಿನ್ನ min, ಭಿನ್ನ max)
 {
-    if(max < min){
-        float swap = min;
+    ಯದಿ(max < min){
+        ಭಿನ್ನ swap = min;
         min = max;
         max = swap;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    ಪ್ರತ್ಯಾಗಮ ((ಭಿನ್ನ)rand()/RAND_MAX * (max - min)) + min;
 }
 
-float rand_scale(float s)
+ಭಿನ್ನ rand_scale(ಭಿನ್ನ s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    ಭಿನ್ನ scale = rand_uniform(1, s);
+    ಯದಿ(rand()%2) ಪ್ರತ್ಯಾಗಮ scale;
+    ಪ್ರತ್ಯಾಗಮ 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+ಭಿನ್ನ **one_hot_encode(ಭಿನ್ನ *a, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಭಿನ್ನ **t = calloc(n, ಪರಿಮಾಣ(ಭಿನ್ನ*));
+    ಪ್ರತಿ(i = 0; i < n; ++i){
+        t[i] = calloc(k, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        ಪೂರ್ಣಾಙ್ಕ index = (ಪೂರ್ಣಾಙ್ಕ)a[i];
         t[i][index] = 1;
     }
-    return t;
+    ಪ್ರತ್ಯಾಗಮ t;
 }
 

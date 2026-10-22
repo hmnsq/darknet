@@ -1,105 +1,105 @@
 #ifndef BLAS_H
 #define BLAS_H
-#include "darknet.h"
+#ಅನ್ತರ್ಭಾವ "darknet.h"
 
-void flatten(float *x, int size, int layers, int batch, int forward);
-void pm(int M, int N, float *A);
-float *random_matrix(int rows, int cols);
-void time_random_matrix(int TA, int TB, int m, int k, int n);
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+ಶೂನ್ಯ flatten(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ size, ಪೂರ್ಣಾಙ್ಕ layers, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ forward);
+ಶೂನ್ಯ pm(ಪೂರ್ಣಾಙ್ಕ M, ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ *A);
+ಭಿನ್ನ *random_matrix(ಪೂರ್ಣಾಙ್ಕ rows, ಪೂರ್ಣಾಙ್ಕ cols);
+ಶೂನ್ಯ time_random_matrix(ಪೂರ್ಣಾಙ್ಕ TA, ಪೂರ್ಣಾಙ್ಕ TB, ಪೂರ್ಣಾಙ್ಕ m, ಪೂರ್ಣಾಙ್ಕ k, ಪೂರ್ಣಾಙ್ಕ n);
+ಶೂನ್ಯ reorg_cpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ c, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ stride, ಪೂರ್ಣಾಙ್ಕ forward, ಭಿನ್ನ *out);
 
-void test_blas();
+ಶೂನ್ಯ test_blas();
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z);
+ಶೂನ್ಯ inter_cpu(ಪೂರ್ಣಾಙ್ಕ NX, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ NY, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ B, ಭಿನ್ನ *OUT);
+ಶೂನ್ಯ deinter_cpu(ಪೂರ್ಣಾಙ್ಕ NX, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ NY, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ B, ಭಿನ್ನ *OUT);
+ಶೂನ್ಯ mult_add_into_cpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ *X, ಭಿನ್ನ *Y, ಭಿನ್ನ *Z);
 
-void const_cpu(int N, float ALPHA, float *X, int INCX);
-void constrain_gpu(int N, float ALPHA, float * X, int INCX);
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY);
+ಶೂನ್ಯ const_cpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ INCX);
+ಶೂನ್ಯ constrain_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ INCX);
+ಶೂನ್ಯ pow_cpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ INCY);
+ಶೂನ್ಯ mul_cpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ INCY);
 
-int test_gpu_blas();
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
+ಪೂರ್ಣಾಙ್ಕ test_gpu_blas();
+ಶೂನ್ಯ shortcut_cpu(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ w1, ಪೂರ್ಣಾಙ್ಕ h1, ಪೂರ್ಣಾಙ್ಕ c1, ಭಿನ್ನ *add, ಪೂರ್ಣಾಙ್ಕ w2, ಪೂರ್ಣಾಙ್ಕ h2, ಪೂರ್ಣಾಙ್ಕ c2, ಭಿನ್ನ s1, ಭಿನ್ನ s2, ಭಿನ್ನ *out);
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
+ಶೂನ್ಯ mean_cpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *mean);
+ಶೂನ್ಯ variance_cpu(ಭಿನ್ನ *x, ಭಿನ್ನ *mean, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *variance);
 
-void scale_bias(float *output, float *scales, int batch, int n, int size);
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial);
+ಶೂನ್ಯ scale_bias(ಭಿನ್ನ *output, ಭಿನ್ನ *scales, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size);
+ಶೂನ್ಯ backward_scale_cpu(ಭಿನ್ನ *x_norm, ಭಿನ್ನ *delta, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size, ಭಿನ್ನ *scale_updates);
+ಶೂನ್ಯ mean_delta_cpu(ಭಿನ್ನ *delta, ಭಿನ್ನ *variance, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *mean_delta);
+ಶೂನ್ಯ  variance_delta_cpu(ಭಿನ್ನ *x, ಭಿನ್ನ *delta, ಭಿನ್ನ *mean, ಭಿನ್ನ *variance, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *variance_delta);
+ಶೂನ್ಯ normalize_delta_cpu(ಭಿನ್ನ *x, ಭಿನ್ನ *mean, ಭಿನ್ನ *variance, ಭಿನ್ನ *mean_delta, ಭಿನ್ನ *variance_delta, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *delta);
+ಶೂನ್ಯ l2normalize_cpu(ಭಿನ್ನ *x, ಭಿನ್ನ *dx, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial);
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_sum_cpu(float *a, float *b, float *s, int num, float *c);
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc);
+ಶೂನ್ಯ smooth_l1_cpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ l2_cpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ l1_cpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ logistic_x_ent_cpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ softmax_x_ent_cpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ weighted_sum_cpu(ಭಿನ್ನ *a, ಭಿನ್ನ *b, ಭಿನ್ನ *s, ಪೂರ್ಣಾಙ್ಕ ಅಂಕೆ, ಭಿನ್ನ *c);
+ಶೂನ್ಯ weighted_delta_cpu(ಭಿನ್ನ *a, ಭಿನ್ನ *b, ಭಿನ್ನ *s, ಭಿನ್ನ *da, ಭಿನ್ನ *db, ಭಿನ್ನ *ds, ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *dc);
 
-void softmax(float *input, int n, float temp, int stride, float *output);
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+ಶೂನ್ಯ softmax(ಭಿನ್ನ *ಒಳಹರಿವು, ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ temp, ಪೂರ್ಣಾಙ್ಕ stride, ಭಿನ್ನ *output);
+ಶೂನ್ಯ softmax_cpu(ಭಿನ್ನ *ಒಳಹರಿವು, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ batch_offset, ಪೂರ್ಣಾಙ್ಕ groups, ಪೂರ್ಣಾಙ್ಕ group_offset, ಪೂರ್ಣಾಙ್ಕ stride, ಭಿನ್ನ temp, ಭಿನ್ನ *output);
+ಶೂನ್ಯ upsample_cpu(ಭಿನ್ನ *in, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ c, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ stride, ಪೂರ್ಣಾಙ್ಕ forward, ಭಿನ್ನ scale, ಭಿನ್ನ *out);
 
 #ifdef GPU
-#include "cuda.h"
-#include "tree.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "tree.h"
 
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void axpy_gpu_offset(int N, float ALPHA, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
-void copy_gpu_offset(int N, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void add_gpu(int N, float ALPHA, float * X, int INCX);
-void supp_gpu(int N, float ALPHA, float * X, int INCX);
-void mask_gpu(int N, float * X, float mask_num, float * mask, float val);
-void scale_mask_gpu(int N, float * X, float mask_num, float * mask, float scale);
-void const_gpu(int N, float ALPHA, float *X, int INCX);
-void pow_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_gpu(int N, float *X, int INCX, float *Y, int INCY);
+ಶೂನ್ಯ axpy_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ * Y, ಪೂರ್ಣಾಙ್ಕ INCY);
+ಶೂನ್ಯ axpy_gpu_offset(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ OFFX, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ * Y, ಪೂರ್ಣಾಙ್ಕ OFFY, ಪೂರ್ಣಾಙ್ಕ INCY);
+ಶೂನ್ಯ copy_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ * Y, ಪೂರ್ಣಾಙ್ಕ INCY);
+ಶೂನ್ಯ copy_gpu_offset(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ OFFX, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ * Y, ಪೂರ್ಣಾಙ್ಕ OFFY, ಪೂರ್ಣಾಙ್ಕ INCY);
+ಶೂನ್ಯ add_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ INCX);
+ಶೂನ್ಯ supp_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ * X, ಪೂರ್ಣಾಙ್ಕ INCX);
+ಶೂನ್ಯ mask_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ * X, ಭಿನ್ನ mask_ಅಂಕೆ, ಭಿನ್ನ * mask, ಭಿನ್ನ val);
+ಶೂನ್ಯ scale_mask_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ * X, ಭಿನ್ನ mask_ಅಂಕೆ, ಭಿನ್ನ * mask, ಭಿನ್ನ scale);
+ಶೂನ್ಯ const_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ INCX);
+ಶೂನ್ಯ pow_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ ALPHA, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ INCY);
+ಶೂನ್ಯ mul_gpu(ಪೂರ್ಣಾಙ್ಕ N, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ INCX, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ INCY);
 
-void mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void normalize_gpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
-void l2normalize_gpu(float *x, float *dx, int batch, int filters, int spatial);
+ಶೂನ್ಯ mean_gpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *mean);
+ಶೂನ್ಯ variance_gpu(ಭಿನ್ನ *x, ಭಿನ್ನ *mean, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *variance);
+ಶೂನ್ಯ normalize_gpu(ಭಿನ್ನ *x, ಭಿನ್ನ *mean, ಭಿನ್ನ *variance, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial);
+ಶೂನ್ಯ l2normalize_gpu(ಭಿನ್ನ *x, ಭಿನ್ನ *dx, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial);
 
-void normalize_delta_gpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
+ಶೂನ್ಯ normalize_delta_gpu(ಭಿನ್ನ *x, ಭಿನ್ನ *mean, ಭಿನ್ನ *variance, ಭಿನ್ನ *mean_delta, ಭಿನ್ನ *variance_delta, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *delta);
 
-void fast_mean_delta_gpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void fast_variance_delta_gpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
+ಶೂನ್ಯ fast_mean_delta_gpu(ಭಿನ್ನ *delta, ಭಿನ್ನ *variance, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *mean_delta);
+ಶೂನ್ಯ fast_variance_delta_gpu(ಭಿನ್ನ *x, ಭಿನ್ನ *delta, ಭಿನ್ನ *mean, ಭಿನ್ನ *variance, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *variance_delta);
 
-void fast_variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void fast_mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void shortcut_gpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_scale_gpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
+ಶೂನ್ಯ fast_variance_gpu(ಭಿನ್ನ *x, ಭಿನ್ನ *mean, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *variance);
+ಶೂನ್ಯ fast_mean_gpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ filters, ಪೂರ್ಣಾಙ್ಕ spatial, ಭಿನ್ನ *mean);
+ಶೂನ್ಯ shortcut_gpu(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ w1, ಪೂರ್ಣಾಙ್ಕ h1, ಪೂರ್ಣಾಙ್ಕ c1, ಭಿನ್ನ *add, ಪೂರ್ಣಾಙ್ಕ w2, ಪೂರ್ಣಾಙ್ಕ h2, ಪೂರ್ಣಾಙ್ಕ c2, ಭಿನ್ನ s1, ಭಿನ್ನ s2, ಭಿನ್ನ *out);
+ಶೂನ್ಯ scale_bias_gpu(ಭಿನ್ನ *output, ಭಿನ್ನ *biases, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size);
+ಶೂನ್ಯ backward_scale_gpu(ಭಿನ್ನ *x_norm, ಭಿನ್ನ *delta, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size, ಭಿನ್ನ *scale_updates);
+ಶೂನ್ಯ scale_bias_gpu(ಭಿನ್ನ *output, ಭಿನ್ನ *biases, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size);
+ಶೂನ್ಯ add_bias_gpu(ಭಿನ್ನ *output, ಭಿನ್ನ *biases, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size);
+ಶೂನ್ಯ backward_bias_gpu(ಭಿನ್ನ *bias_updates, ಭಿನ್ನ *delta, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ size);
 
-void logistic_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void smooth_l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void wgan_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_delta_gpu(float *a, float *b, float *s, float *da, float *db, float *ds, int num, float *dc);
-void weighted_sum_gpu(float *a, float *b, float *s, int num, float *c);
-void mult_add_into_gpu(int num, float *a, float *b, float *c);
-void inter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
+ಶೂನ್ಯ logistic_x_ent_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ softmax_x_ent_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ smooth_l1_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ l2_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ l1_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ wgan_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *pred, ಭಿನ್ನ *truth, ಭಿನ್ನ *delta, ಭಿನ್ನ *error);
+ಶೂನ್ಯ weighted_delta_gpu(ಭಿನ್ನ *a, ಭಿನ್ನ *b, ಭಿನ್ನ *s, ಭಿನ್ನ *da, ಭಿನ್ನ *db, ಭಿನ್ನ *ds, ಪೂರ್ಣಾಙ್ಕ ಅಂಕೆ, ಭಿನ್ನ *dc);
+ಶೂನ್ಯ weighted_sum_gpu(ಭಿನ್ನ *a, ಭಿನ್ನ *b, ಭಿನ್ನ *s, ಪೂರ್ಣಾಙ್ಕ ಅಂಕೆ, ಭಿನ್ನ *c);
+ಶೂನ್ಯ mult_add_into_gpu(ಪೂರ್ಣಾಙ್ಕ ಅಂಕೆ, ಭಿನ್ನ *a, ಭಿನ್ನ *b, ಭಿನ್ನ *c);
+ಶೂನ್ಯ inter_gpu(ಪೂರ್ಣಾಙ್ಕ NX, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ NY, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ B, ಭಿನ್ನ *OUT);
+ಶೂನ್ಯ deinter_gpu(ಪೂರ್ಣಾಙ್ಕ NX, ಭಿನ್ನ *X, ಪೂರ್ಣಾಙ್ಕ NY, ಭಿನ್ನ *Y, ಪೂರ್ಣಾಙ್ಕ B, ಭಿನ್ನ *OUT);
 
-void reorg_gpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+ಶೂನ್ಯ reorg_gpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ c, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ stride, ಪೂರ್ಣಾಙ್ಕ forward, ಭಿನ್ನ *out);
 
-void softmax_gpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-void adam_gpu(int n, float *x, float *m, float *v, float B1, float B2, float rate, float eps, int t);
+ಶೂನ್ಯ softmax_gpu(ಭಿನ್ನ *ಒಳಹರಿವು, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ batch_offset, ಪೂರ್ಣಾಙ್ಕ groups, ಪೂರ್ಣಾಙ್ಕ group_offset, ಪೂರ್ಣಾಙ್ಕ stride, ಭಿನ್ನ temp, ಭಿನ್ನ *output);
+ಶೂನ್ಯ adam_update_gpu(ಭಿನ್ನ *w, ಭಿನ್ನ *d, ಭಿನ್ನ *m, ಭಿನ್ನ *v, ಭಿನ್ನ B1, ಭಿನ್ನ B2, ಭಿನ್ನ eps, ಭಿನ್ನ decay, ಭಿನ್ನ rate, ಪೂರ್ಣಾಙ್ಕ n, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ t);
+ಶೂನ್ಯ adam_gpu(ಪೂರ್ಣಾಙ್ಕ n, ಭಿನ್ನ *x, ಭಿನ್ನ *m, ಭಿನ್ನ *v, ಭಿನ್ನ B1, ಭಿನ್ನ B2, ಭಿನ್ನ rate, ಭಿನ್ನ eps, ಪೂರ್ಣಾಙ್ಕ t);
 
-void flatten_gpu(float *x, int spatial, int layers, int batch, int forward, float *out);
-void softmax_tree(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
-void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+ಶೂನ್ಯ flatten_gpu(ಭಿನ್ನ *x, ಪೂರ್ಣಾಙ್ಕ spatial, ಪೂರ್ಣಾಙ್ಕ layers, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ forward, ಭಿನ್ನ *out);
+ಶೂನ್ಯ softmax_ವೃಕ್ಷ(ಭಿನ್ನ *ಒಳಹರಿವು, ಪೂರ್ಣಾಙ್ಕ spatial, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ stride, ಭಿನ್ನ temp, ಭಿನ್ನ *output, ವೃಕ್ಷ hier);
+ಶೂನ್ಯ upsample_gpu(ಭಿನ್ನ *in, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ c, ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ stride, ಪೂರ್ಣಾಙ್ಕ forward, ಭಿನ್ನ scale, ಭಿನ್ನ *out);
 
 #endif
 #endif

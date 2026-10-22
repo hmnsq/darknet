@@ -1,12 +1,12 @@
 #ifndef BOX_H
 #define BOX_H
-#include "darknet.h"
+#ಅನ್ತರ್ಭಾವ "darknet.h"
 
-typedef struct{
-    float dx, dy, dw, dh;
+ಪ್ರಕಾರನಿರ್ದೇಶ ಸಂರಚನಾ{
+    ಭಿನ್ನ dx, dy, dw, dh;
 } dbox;
 
-float box_rmse(box a, box b);
+ಭಿನ್ನ box_rmse(box a, box b);
 dbox diou(box a, box b);
 box decode_box(box b, box anchor);
 box encode_box(box b, box anchor);

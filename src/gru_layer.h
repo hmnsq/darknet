@@ -2,22 +2,22 @@
 #ifndef GRU_LAYER_H
 #define GRU_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ಅನ್ತರ್ಭಾವ "activations.h"
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
 
-layer make_gru_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_gru_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ inputs, ಪೂರ್ಣಾಙ್ಕ outputs, ಪೂರ್ಣಾಙ್ಕ steps, ಪೂರ್ಣಾಙ್ಕ batch_normalize, ಪೂರ್ಣಾಙ್ಕ adam);
 
-void forward_gru_layer(layer l, network state);
-void backward_gru_layer(layer l, network state);
-void update_gru_layer(layer l, update_args a);
+ಶೂನ್ಯ forward_gru_layer(layer l, network state);
+ಶೂನ್ಯ backward_gru_layer(layer l, network state);
+ಶೂನ್ಯ update_gru_layer(layer l, update_args a);
 
 #ifdef GPU
-void forward_gru_layer_gpu(layer l, network state);
-void backward_gru_layer_gpu(layer l, network state);
-void update_gru_layer_gpu(layer l, update_args a);
-void push_gru_layer(layer l);
-void pull_gru_layer(layer l);
+ಶೂನ್ಯ forward_gru_layer_gpu(layer l, network state);
+ಶೂನ್ಯ backward_gru_layer_gpu(layer l, network state);
+ಶೂನ್ಯ update_gru_layer_gpu(layer l, update_args a);
+ಶೂನ್ಯ ತಳ್ಳು_gru_layer(layer l);
+ಶೂನ್ಯ pull_gru_layer(layer l);
 #endif
 
 #endif

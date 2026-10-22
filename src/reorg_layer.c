@@ -1,11 +1,11 @@
-#include "reorg_layer.h"
-#include "cuda.h"
-#include "blas.h"
+#ಅನ್ತರ್ಭಾವ "reorg_layer.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
 
-#include <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
 
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra)
+layer make_reorg_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ c, ಪೂರ್ಣಾಙ್ಕ stride, ಪೂರ್ಣಾಙ್ಕ reverse, ಪೂರ್ಣಾಙ್ಕ flatten, ಪೂರ್ಣಾಙ್ಕ extra)
 {
     layer l = {0};
     l.type = REORG;
@@ -16,11 +16,11 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.w = w;
     l.c = c;
     l.flatten = flatten;
-    if(reverse){
+    ಯದಿ(reverse){
         l.out_w = w*stride;
         l.out_h = h*stride;
         l.out_c = c/(stride*stride);
-    }else{
+    }ಅನ್ಯಥಾ{
         l.out_w = w/stride;
         l.out_h = h/stride;
         l.out_c = c*(stride*stride);
@@ -29,19 +29,19 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
 
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = h*w*c;
-    if(l.extra){
+    ಯದಿ(l.extra){
         l.out_w = l.out_h = l.out_c = 0;
         l.outputs = l.inputs + l.extra;
     }
 
-    if(extra){
+    ಯದಿ(extra){
         fprintf(stderr, "reorg              %4d   ->  %4d\n",  l.inputs, l.outputs);
-    } else {
+    } ಅನ್ಯಥಾ {
         fprintf(stderr, "reorg              /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n",  stride, w, h, c, l.out_w, l.out_h, l.out_c);
     }
-    int output_size = l.outputs * batch;
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    ಪೂರ್ಣಾಙ್ಕ output_size = l.outputs * batch;
+    l.output =  calloc(output_size, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.delta =   calloc(output_size, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
     l.forward = forward_reorg_layer;
     l.backward = backward_reorg_layer;
@@ -52,22 +52,22 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.output_gpu  = cuda_make_array(l.output, output_size);
     l.delta_gpu   = cuda_make_array(l.delta, output_size);
 #endif
-    return l;
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-void resize_reorg_layer(layer *l, int w, int h)
+ಶೂನ್ಯ resize_reorg_layer(layer *l, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h)
 {
-    int stride = l->stride;
-    int c = l->c;
+    ಪೂರ್ಣಾಙ್ಕ stride = l->stride;
+    ಪೂರ್ಣಾಙ್ಕ c = l->c;
 
     l->h = h;
     l->w = w;
 
-    if(l->reverse){
+    ಯದಿ(l->reverse){
         l->out_w = w*stride;
         l->out_h = h*stride;
         l->out_c = c/(stride*stride);
-    }else{
+    }ಅನ್ಯಥಾ{
         l->out_w = w/stride;
         l->out_h = h/stride;
         l->out_c = c*(stride*stride);
@@ -75,10 +75,10 @@ void resize_reorg_layer(layer *l, int w, int h)
 
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->outputs;
-    int output_size = l->outputs * l->batch;
+    ಪೂರ್ಣಾಙ್ಕ output_size = l->outputs * l->batch;
 
-    l->output = realloc(l->output, output_size * sizeof(float));
-    l->delta = realloc(l->delta, output_size * sizeof(float));
+    l->output = realloc(l->output, output_size * ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l->delta = realloc(l->delta, output_size * ಪರಿಮಾಣ(ಭಿನ್ನ));
 
 #ifdef GPU
     cuda_free(l->output_gpu);
@@ -88,85 +88,85 @@ void resize_reorg_layer(layer *l, int w, int h)
 #endif
 }
 
-void forward_reorg_layer(const layer l, network net)
+ಶೂನ್ಯ forward_reorg_layer(ಧ್ರುವ layer l, network net)
 {
-    int i;
-    if(l.flatten){
-        memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಯದಿ(l.flatten){
+        memcpy(l.output, net.ಒಳಹರಿವು, l.outputs*l.batch*ಪರಿಮಾಣ(ಭಿನ್ನ));
+        ಯದಿ(l.reverse){
             flatten(l.output, l.w*l.h, l.c, l.batch, 0);
-        }else{
+        }ಅನ್ಯಥಾ{
             flatten(l.output, l.w*l.h, l.c, l.batch, 1);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
-            copy_cpu(l.inputs, net.input + i*l.inputs, 1, l.output + i*l.outputs, 1);
+    } ಅನ್ಯಥಾ ಯದಿ (l.extra) {
+        ಪ್ರತಿ(i = 0; i < l.batch; ++i){
+            copy_cpu(l.inputs, net.ಒಳಹರಿವು + i*l.inputs, 1, l.output + i*l.outputs, 1);
         }
-    } else if (l.reverse){
-        reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
-    } else {
-        reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
+    } ಅನ್ಯಥಾ ಯದಿ (l.reverse){
+        reorg_cpu(net.ಒಳಹರಿವು, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
+    } ಅನ್ಯಥಾ {
+        reorg_cpu(net.ಒಳಹರಿವು, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
     }
 }
 
-void backward_reorg_layer(const layer l, network net)
+ಶೂನ್ಯ backward_reorg_layer(ಧ್ರುವ layer l, network net)
 {
-    int i;
-    if(l.flatten){
-        memcpy(net.delta, l.delta, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಯದಿ(l.flatten){
+        memcpy(net.delta, l.delta, l.outputs*l.batch*ಪರಿಮಾಣ(ಭಿನ್ನ));
+        ಯದಿ(l.reverse){
             flatten(net.delta, l.w*l.h, l.c, l.batch, 1);
-        }else{
+        }ಅನ್ಯಥಾ{
             flatten(net.delta, l.w*l.h, l.c, l.batch, 0);
         }
-    } else if(l.reverse){
+    } ಅನ್ಯಥಾ ಯದಿ(l.reverse){
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta);
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } ಅನ್ಯಥಾ ಯದಿ (l.extra) {
+        ಪ್ರತಿ(i = 0; i < l.batch; ++i){
             copy_cpu(l.inputs, l.delta + i*l.outputs, 1, net.delta + i*l.inputs, 1);
         }
-    }else{
+    }ಅನ್ಯಥಾ{
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta);
     }
 }
 
 #ifdef GPU
-void forward_reorg_layer_gpu(layer l, network net)
+ಶೂನ್ಯ forward_reorg_layer_gpu(layer l, network net)
 {
-    int i;
-    if(l.flatten){
-        if(l.reverse){
-            flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
-        }else{
-            flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
+    ಪೂರ್ಣಾಙ್ಕ i;
+    ಯದಿ(l.flatten){
+        ಯದಿ(l.reverse){
+            flatten_gpu(net.ಒಳಹರಿವು_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
+        }ಅನ್ಯಥಾ{
+            flatten_gpu(net.ಒಳಹರಿವು_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
-            copy_gpu(l.inputs, net.input_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
+    } ಅನ್ಯಥಾ ಯದಿ (l.extra) {
+        ಪ್ರತಿ(i = 0; i < l.batch; ++i){
+            copy_gpu(l.inputs, net.ಒಳಹರಿವು_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
         }
-    } else if (l.reverse) {
-        reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
-    }else {
-        reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
+    } ಅನ್ಯಥಾ ಯದಿ (l.reverse) {
+        reorg_gpu(net.ಒಳಹರಿವು_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
+    }ಅನ್ಯಥಾ {
+        reorg_gpu(net.ಒಳಹರಿವು_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
     }
 }
 
-void backward_reorg_layer_gpu(layer l, network net)
+ಶೂನ್ಯ backward_reorg_layer_gpu(layer l, network net)
 {
-    if(l.flatten){
-        if(l.reverse){
+    ಯದಿ(l.flatten){
+        ಯದಿ(l.reverse){
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 1, net.delta_gpu);
-        }else{
+        }ಅನ್ಯಥಾ{
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 0, net.delta_gpu);
         }
-    } else if (l.extra) {
-        int i;
-        for(i = 0; i < l.batch; ++i){
+    } ಅನ್ಯಥಾ ಯದಿ (l.extra) {
+        ಪೂರ್ಣಾಙ್ಕ i;
+        ಪ್ರತಿ(i = 0; i < l.batch; ++i){
             copy_gpu(l.inputs, l.delta_gpu + i*l.outputs, 1, net.delta_gpu + i*l.inputs, 1);
         }
-    } else if(l.reverse){
+    } ಅನ್ಯಥಾ ಯದಿ(l.reverse){
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta_gpu);
-    } else {
+    } ಅನ್ಯಥಾ {
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta_gpu);
     }
 }

@@ -1,19 +1,19 @@
-#include "crop_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#ಅನ್ತರ್ಭಾವ "crop_layer.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    ಪೂರ್ಣಾಙ್ಕ h = l.out_h;
+    ಪೂರ್ಣಾಙ್ಕ w = l.out_w;
+    ಪೂರ್ಣಾಙ್ಕ c = l.out_c;
+    ಪ್ರತ್ಯಾಗಮ float_to_image(w,h,c,l.output);
 }
 
-void backward_crop_layer(const crop_layer l, network net){}
-void backward_crop_layer_gpu(const crop_layer l, network net){}
+ಶೂನ್ಯ backward_crop_layer(ಧ್ರುವ crop_layer l, network net){}
+ಶೂನ್ಯ backward_crop_layer_gpu(ಧ್ರುವ crop_layer l, network net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ h, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ c, ಪೂರ್ಣಾಙ್ಕ crop_height, ಪೂರ್ಣಾಙ್ಕ crop_width, ಪೂರ್ಣಾಙ್ಕ flip, ಭಿನ್ನ angle, ಭಿನ್ನ saturation, ಭಿನ್ನ exposure)
 {
     fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
     crop_layer l = {0};
@@ -22,7 +22,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.h = h;
     l.w = w;
     l.c = c;
-    l.scale = (float)crop_height / h;
+    l.scale = (ಭಿನ್ನ)crop_height / h;
     l.flip = flip;
     l.angle = angle;
     l.saturation = saturation;
@@ -32,7 +32,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.out_c = c;
     l.inputs = l.w * l.h * l.c;
     l.outputs = l.out_w * l.out_h * l.out_c;
-    l.output = calloc(l.outputs*batch, sizeof(float));
+    l.output = calloc(l.outputs*batch, ಪರಿಮಾಣ(ಭಿನ್ನ));
     l.forward = forward_crop_layer;
     l.backward = backward_crop_layer;
 
@@ -42,10 +42,10 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
     #endif
-    return l;
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+ಶೂನ್ಯ resize_crop_layer(layer *l, ಪೂರ್ಣಾಙ್ಕ w, ಪೂರ್ಣಾಙ್ಕ h)
 {
     l->w = w;
     l->h = h;
@@ -56,7 +56,7 @@ void resize_crop_layer(layer *l, int w, int h)
     l->inputs = l->w * l->h * l->c;
     l->outputs = l->out_h * l->out_w * l->out_c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*ಪರಿಮಾಣ(ಭಿನ್ನ));
     #ifdef GPU
     cuda_free(l->output_gpu);
     l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
@@ -64,37 +64,37 @@ void resize_crop_layer(layer *l, int w, int h)
 }
 
 
-void forward_crop_layer(const crop_layer l, network net)
+ಶೂನ್ಯ forward_crop_layer(ಧ್ರುವ crop_layer l, network net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
-    float scale = 2;
-    float trans = -1;
-    if(l.noadjust){
+    ಪೂರ್ಣಾಙ್ಕ i,j,c,b,row,col;
+    ಪೂರ್ಣಾಙ್ಕ index;
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಪೂರ್ಣಾಙ್ಕ flip = (l.flip && rand()%2);
+    ಪೂರ್ಣಾಙ್ಕ dh = rand()%(l.h - l.out_h + 1);
+    ಪೂರ್ಣಾಙ್ಕ dw = rand()%(l.w - l.out_w + 1);
+    ಭಿನ್ನ scale = 2;
+    ಭಿನ್ನ trans = -1;
+    ಯದಿ(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    ಯದಿ(!net.train){
         flip = 0;
         dh = (l.h - l.out_h)/2;
         dw = (l.w - l.out_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
+    ಪ್ರತಿ(b = 0; b < l.batch; ++b){
+        ಪ್ರತಿ(c = 0; c < l.c; ++c){
+            ಪ್ರತಿ(i = 0; i < l.out_h; ++i){
+                ಪ್ರತಿ(j = 0; j < l.out_w; ++j){
+                    ಯದಿ(flip){
                         col = l.w - dw - j - 1;    
-                    }else{
+                    }ಅನ್ಯಥಾ{
                         col = j + dw;
                     }
                     row = i + dh;
                     index = col+l.w*(row+l.h*(c + l.c*b)); 
-                    l.output[count++] = net.input[index]*scale + trans;
+                    l.output[ಎಣಿಕೆ++] = net.ಒಳಹರಿವು[index]*scale + trans;
                 }
             }
         }

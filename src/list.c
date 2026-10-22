@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(ಪರಿಮಾಣ(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	ಪ್ರತ್ಯಾಗಮ l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+ಶೂನ್ಯ *list_ತೆಗೆ(list *l){
+    ಯದಿ(!l->back) ಪ್ರತ್ಯಾಗಮ 0;
+    ಗಂಟು *b = l->back;
+    ಶೂನ್ಯ *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    ಯದಿ(l->back) l->back->next = 0;
+    ಮುಕ್ತ(b);
     --l->size;
     
-    return val;
+    ಪ್ರತ್ಯಾಗಮ val;
 }
 
-void list_insert(list *l, void *val)
+ಶೂನ್ಯ list_ಸೇರಿಸು(list *l, ಶೂನ್ಯ *val)
 {
-	node *new = malloc(sizeof(node));
+	ಗಂಟು *new = malloc(ಪರಿಮಾಣ(ಗಂಟು));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	ಯದಿ(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}ಅನ್ಯಥಾ{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+ಶೂನ್ಯ free_ಗಂಟು(ಗಂಟು *n)
 {
-	node *next;
-	while(n) {
+	ಗಂಟು *next;
+	ಯಾವತ್(n) {
 		next = n->next;
-		free(n);
+		ಮುಕ್ತ(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+ಶೂನ್ಯ free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_ಗಂಟು(l->front);
+	ಮುಕ್ತ(l);
 }
 
-void free_list_contents(list *l)
+ಶೂನ್ಯ free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	ಗಂಟು *n = l->front;
+	ಯಾವತ್(n){
+		ಮುಕ್ತ(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+ಶೂನ್ಯ **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    ಶೂನ್ಯ **a = calloc(l->size, ಪರಿಮಾಣ(ಶೂನ್ಯ*));
+    ಪೂರ್ಣಾಙ್ಕ ಎಣಿಕೆ = 0;
+    ಗಂಟು *n = l->front;
+    ಯಾವತ್(n){
+        a[ಎಣಿಕೆ++] = n->val;
         n = n->next;
     }
-    return a;
+    ಪ್ರತ್ಯಾಗಮ a;
 }

@@ -1,19 +1,19 @@
-#include "connected_layer.h"
-#include "convolutional_layer.h"
-#include "batchnorm_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#ಅನ್ತರ್ಭಾವ "connected_layer.h"
+#ಅನ್ತರ್ಭಾವ "convolutional_layer.h"
+#ಅನ್ತರ್ಭಾವ "batchnorm_layer.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
+#ಅನ್ತರ್ಭಾವ "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
 
-layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activation, int batch_normalize, int adam)
+layer make_connected_layer(ಪೂರ್ಣಾಙ್ಕ batch, ಪೂರ್ಣಾಙ್ಕ inputs, ಪೂರ್ಣಾಙ್ಕ outputs, ACTIVATION activation, ಪೂರ್ಣಾಙ್ಕ batch_normalize, ಪೂರ್ಣಾಙ್ಕ adam)
 {
-    int i;
+    ಪೂರ್ಣಾಙ್ಕ i;
     layer l = {0};
     l.learning_rate_scale = 1;
     l.type = CONNECTED;
@@ -29,54 +29,54 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     l.out_w = 1;
     l.out_c = outputs;
 
-    l.output = calloc(batch*outputs, sizeof(float));
-    l.delta = calloc(batch*outputs, sizeof(float));
+    l.output = calloc(batch*outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.delta = calloc(batch*outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
-    l.weight_updates = calloc(inputs*outputs, sizeof(float));
-    l.bias_updates = calloc(outputs, sizeof(float));
+    l.weight_updates = calloc(inputs*outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.bias_updates = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
-    l.weights = calloc(outputs*inputs, sizeof(float));
-    l.biases = calloc(outputs, sizeof(float));
+    l.weights = calloc(outputs*inputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+    l.biases = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
     l.forward = forward_connected_layer;
     l.backward = backward_connected_layer;
     l.update = update_connected_layer;
 
     //float scale = 1./sqrt(inputs);
-    float scale = sqrt(2./inputs);
-    for(i = 0; i < outputs*inputs; ++i){
+    ಭಿನ್ನ scale = sqrt(2./inputs);
+    ಪ್ರತಿ(i = 0; i < outputs*inputs; ++i){
         l.weights[i] = scale*rand_uniform(-1, 1);
     }
 
-    for(i = 0; i < outputs; ++i){
+    ಪ್ರತಿ(i = 0; i < outputs; ++i){
         l.biases[i] = 0;
     }
 
-    if(adam){
-        l.m = calloc(l.inputs*l.outputs, sizeof(float));
-        l.v = calloc(l.inputs*l.outputs, sizeof(float));
-        l.bias_m = calloc(l.outputs, sizeof(float));
-        l.scale_m = calloc(l.outputs, sizeof(float));
-        l.bias_v = calloc(l.outputs, sizeof(float));
-        l.scale_v = calloc(l.outputs, sizeof(float));
+    ಯದಿ(adam){
+        l.m = calloc(l.inputs*l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.v = calloc(l.inputs*l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.bias_m = calloc(l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.scale_m = calloc(l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.bias_v = calloc(l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.scale_v = calloc(l.outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
     }
-    if(batch_normalize){
-        l.scales = calloc(outputs, sizeof(float));
-        l.scale_updates = calloc(outputs, sizeof(float));
-        for(i = 0; i < outputs; ++i){
+    ಯದಿ(batch_normalize){
+        l.scales = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.scale_updates = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        ಪ್ರತಿ(i = 0; i < outputs; ++i){
             l.scales[i] = 1;
         }
 
-        l.mean = calloc(outputs, sizeof(float));
-        l.mean_delta = calloc(outputs, sizeof(float));
-        l.variance = calloc(outputs, sizeof(float));
-        l.variance_delta = calloc(outputs, sizeof(float));
+        l.mean = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.mean_delta = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.variance = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.variance_delta = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
-        l.rolling_mean = calloc(outputs, sizeof(float));
-        l.rolling_variance = calloc(outputs, sizeof(float));
+        l.rolling_mean = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.rolling_variance = calloc(outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
 
-        l.x = calloc(batch*outputs, sizeof(float));
-        l.x_norm = calloc(batch*outputs, sizeof(float));
+        l.x = calloc(batch*outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
+        l.x_norm = calloc(batch*outputs, ಪರಿಮಾಣ(ಭಿನ್ನ));
     }
 
 #ifdef GPU
@@ -92,7 +92,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
 
     l.output_gpu = cuda_make_array(l.output, outputs*batch);
     l.delta_gpu = cuda_make_array(l.delta, outputs*batch);
-    if (adam) {
+    ಯದಿ (adam) {
         l.m_gpu =       cuda_make_array(0, inputs*outputs);
         l.v_gpu =       cuda_make_array(0, inputs*outputs);
         l.bias_m_gpu =  cuda_make_array(0, outputs);
@@ -101,7 +101,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
         l.scale_v_gpu = cuda_make_array(0, outputs);
     }
 
-    if(batch_normalize){
+    ಯದಿ(batch_normalize){
         l.mean_gpu = cuda_make_array(l.mean, outputs);
         l.variance_gpu = cuda_make_array(l.variance, outputs);
 
@@ -126,19 +126,19 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
 #endif
     l.activation = activation;
     fprintf(stderr, "connected                            %4d  ->  %4d\n", inputs, outputs);
-    return l;
+    ಪ್ರತ್ಯಾಗಮ l;
 }
 
-void update_connected_layer(layer l, update_args a)
+ಶೂನ್ಯ update_connected_layer(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    ಭಿನ್ನ learning_rate = a.learning_rate*l.learning_rate_scale;
+    ಭಿನ್ನ momentum = a.momentum;
+    ಭಿನ್ನ decay = a.decay;
+    ಪೂರ್ಣಾಙ್ಕ batch = a.batch;
     axpy_cpu(l.outputs, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.outputs, momentum, l.bias_updates, 1);
 
-    if(l.batch_normalize){
+    ಯದಿ(l.batch_normalize){
         axpy_cpu(l.outputs, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.outputs, momentum, l.scale_updates, 1);
     }
@@ -148,40 +148,40 @@ void update_connected_layer(layer l, update_args a)
     scal_cpu(l.inputs*l.outputs, momentum, l.weight_updates, 1);
 }
 
-void forward_connected_layer(layer l, network net)
+ಶೂನ್ಯ forward_connected_layer(layer l, network net)
 {
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
-    int m = l.batch;
-    int k = l.inputs;
-    int n = l.outputs;
-    float *a = net.input;
-    float *b = l.weights;
-    float *c = l.output;
+    ಪೂರ್ಣಾಙ್ಕ m = l.batch;
+    ಪೂರ್ಣಾಙ್ಕ k = l.inputs;
+    ಪೂರ್ಣಾಙ್ಕ n = l.outputs;
+    ಭಿನ್ನ *a = net.ಒಳಹರಿವು;
+    ಭಿನ್ನ *b = l.weights;
+    ಭಿನ್ನ *c = l.output;
     gemm(0,1,m,n,k,1,a,k,b,k,1,c,n);
-    if(l.batch_normalize){
+    ಯದಿ(l.batch_normalize){
         forward_batchnorm_layer(l, net);
-    } else {
+    } ಅನ್ಯಥಾ {
         add_bias(l.output, l.biases, l.batch, l.outputs, 1);
     }
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_connected_layer(layer l, network net)
+ಶೂನ್ಯ backward_connected_layer(layer l, network net)
 {
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    ಯದಿ(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } ಅನ್ಯಥಾ {
         backward_bias(l.bias_updates, l.delta, l.batch, l.outputs, 1);
     }
 
-    int m = l.outputs;
-    int k = l.batch;
-    int n = l.inputs;
-    float *a = l.delta;
-    float *b = net.input;
-    float *c = l.weight_updates;
+    ಪೂರ್ಣಾಙ್ಕ m = l.outputs;
+    ಪೂರ್ಣಾಙ್ಕ k = l.batch;
+    ಪೂರ್ಣಾಙ್ಕ n = l.inputs;
+    ಭಿನ್ನ *a = l.delta;
+    ಭಿನ್ನ *b = net.ಒಳಹರಿವು;
+    ಭಿನ್ನ *c = l.weight_updates;
     gemm(1,0,m,n,k,1,a,m,b,n,1,c,n);
 
     m = l.batch;
@@ -192,16 +192,16 @@ void backward_connected_layer(layer l, network net)
     b = l.weights;
     c = net.delta;
 
-    if(c) gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);
+    ಯದಿ(c) gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);
 }
 
 
-void denormalize_connected_layer(layer l)
+ಶೂನ್ಯ denormalize_connected_layer(layer l)
 {
-    int i, j;
-    for(i = 0; i < l.outputs; ++i){
-        float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .000001);
-        for(j = 0; j < l.inputs; ++j){
+    ಪೂರ್ಣಾಙ್ಕ i, j;
+    ಪ್ರತಿ(i = 0; i < l.outputs; ++i){
+        ಭಿನ್ನ scale = l.scales[i]/sqrt(l.rolling_variance[i] + .000001);
+        ಪ್ರತಿ(j = 0; j < l.inputs; ++j){
             l.weights[i*l.inputs + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
@@ -212,9 +212,9 @@ void denormalize_connected_layer(layer l)
 }
 
 
-void statistics_connected_layer(layer l)
+ಶೂನ್ಯ statistics_connected_layer(layer l)
 {
-    if(l.batch_normalize){
+    ಯದಿ(l.batch_normalize){
         printf("Scales ");
         print_statistics(l.scales, l.outputs);
         /*
@@ -232,49 +232,49 @@ void statistics_connected_layer(layer l)
 
 #ifdef GPU
 
-void pull_connected_layer(layer l)
+ಶೂನ್ಯ pull_connected_layer(layer l)
 {
     cuda_pull_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
     cuda_pull_array(l.biases_gpu, l.biases, l.outputs);
     cuda_pull_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
     cuda_pull_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
-    if (l.batch_normalize){
+    ಯದಿ (l.batch_normalize){
         cuda_pull_array(l.scales_gpu, l.scales, l.outputs);
         cuda_pull_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
         cuda_pull_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
     }
 }
 
-void push_connected_layer(layer l)
+ಶೂನ್ಯ ತಳ್ಳು_connected_layer(layer l)
 {
-    cuda_push_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
-    cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-    cuda_push_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
-    cuda_push_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
-    if (l.batch_normalize){
-        cuda_push_array(l.scales_gpu, l.scales, l.outputs);
-        cuda_push_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
-        cuda_push_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
+    cuda_ತಳ್ಳು_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
+    cuda_ತಳ್ಳು_array(l.biases_gpu, l.biases, l.outputs);
+    cuda_ತಳ್ಳು_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
+    cuda_ತಳ್ಳು_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
+    ಯದಿ (l.batch_normalize){
+        cuda_ತಳ್ಳು_array(l.scales_gpu, l.scales, l.outputs);
+        cuda_ತಳ್ಳು_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
+        cuda_ತಳ್ಳು_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
     }
 }
 
-void update_connected_layer_gpu(layer l, update_args a)
+ಶೂನ್ಯ update_connected_layer_gpu(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
-    if(a.adam){
+    ಭಿನ್ನ learning_rate = a.learning_rate*l.learning_rate_scale;
+    ಭಿನ್ನ momentum = a.momentum;
+    ಭಿನ್ನ decay = a.decay;
+    ಪೂರ್ಣಾಙ್ಕ batch = a.batch;
+    ಯದಿ(a.adam){
         adam_update_gpu(l.weights_gpu, l.weight_updates_gpu, l.m_gpu, l.v_gpu, a.B1, a.B2, a.eps, decay, learning_rate, l.inputs*l.outputs, batch, a.t);
         adam_update_gpu(l.biases_gpu, l.bias_updates_gpu, l.bias_m_gpu, l.bias_v_gpu, a.B1, a.B2, a.eps, decay, learning_rate, l.outputs, batch, a.t);
-        if(l.scales_gpu){
+        ಯದಿ(l.scales_gpu){
             adam_update_gpu(l.scales_gpu, l.scale_updates_gpu, l.scale_m_gpu, l.scale_v_gpu, a.B1, a.B2, a.eps, decay, learning_rate, l.outputs, batch, a.t);
         }
-    }else{
+    }ಅನ್ಯಥಾ{
         axpy_gpu(l.outputs, learning_rate/batch, l.bias_updates_gpu, 1, l.biases_gpu, 1);
         scal_gpu(l.outputs, momentum, l.bias_updates_gpu, 1);
 
-        if(l.batch_normalize){
+        ಯದಿ(l.batch_normalize){
             axpy_gpu(l.outputs, learning_rate/batch, l.scale_updates_gpu, 1, l.scales_gpu, 1);
             scal_gpu(l.outputs, momentum, l.scale_updates_gpu, 1);
         }
@@ -285,42 +285,42 @@ void update_connected_layer_gpu(layer l, update_args a)
     }
 }
 
-void forward_connected_layer_gpu(layer l, network net)
+ಶೂನ್ಯ forward_connected_layer_gpu(layer l, network net)
 {
     fill_gpu(l.outputs*l.batch, 0, l.output_gpu, 1);
 
-    int m = l.batch;
-    int k = l.inputs;
-    int n = l.outputs;
-    float * a = net.input_gpu;
-    float * b = l.weights_gpu;
-    float * c = l.output_gpu;
+    ಪೂರ್ಣಾಙ್ಕ m = l.batch;
+    ಪೂರ್ಣಾಙ್ಕ k = l.inputs;
+    ಪೂರ್ಣಾಙ್ಕ n = l.outputs;
+    ಭಿನ್ನ * a = net.ಒಳಹರಿವು_gpu;
+    ಭಿನ್ನ * b = l.weights_gpu;
+    ಭಿನ್ನ * c = l.output_gpu;
     gemm_gpu(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-    if (l.batch_normalize) {
+    ಯದಿ (l.batch_normalize) {
         forward_batchnorm_layer_gpu(l, net);
-    } else {
+    } ಅನ್ಯಥಾ {
         add_bias_gpu(l.output_gpu, l.biases_gpu, l.batch, l.outputs, 1);
     }
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_connected_layer_gpu(layer l, network net)
+ಶೂನ್ಯ backward_connected_layer_gpu(layer l, network net)
 {
     constrain_gpu(l.outputs*l.batch, 1, l.delta_gpu, 1);
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
-    if(l.batch_normalize){
+    ಯದಿ(l.batch_normalize){
         backward_batchnorm_layer_gpu(l, net);
-    } else {
+    } ಅನ್ಯಥಾ {
         backward_bias_gpu(l.bias_updates_gpu, l.delta_gpu, l.batch, l.outputs, 1);
     }
 
-    int m = l.outputs;
-    int k = l.batch;
-    int n = l.inputs;
-    float * a = l.delta_gpu;
-    float * b = net.input_gpu;
-    float * c = l.weight_updates_gpu;
+    ಪೂರ್ಣಾಙ್ಕ m = l.outputs;
+    ಪೂರ್ಣಾಙ್ಕ k = l.batch;
+    ಪೂರ್ಣಾಙ್ಕ n = l.inputs;
+    ಭಿನ್ನ * a = l.delta_gpu;
+    ಭಿನ್ನ * b = net.ಒಳಹರಿವು_gpu;
+    ಭಿನ್ನ * c = l.weight_updates_gpu;
     gemm_gpu(1,0,m,n,k,1,a,m,b,n,1,c,n);
 
     m = l.batch;
@@ -331,6 +331,6 @@ void backward_connected_layer_gpu(layer l, network net)
     b = l.weights_gpu;
     c = net.delta_gpu;
 
-    if(c) gemm_gpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
+    ಯದಿ(c) gemm_gpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
 }
 #endif
