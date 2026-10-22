@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن "tree.h"
+#ضمن "utils.h"
+#ضمن "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+فراغ change_leaves(ونه *t, حرف *ونې_پاڼه_list)
 {
-    list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
-        t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
-                t->leaf[i] = 1;
-                ++found;
-                break;
+    list *llist = get_paths(ونې_پاڼه_list);
+    حرف **leaves = (حرف **)list_منزل_array(llist);
+    صحيح n = llist->اندازه;
+    صحيح i,j;
+    صحيح وموندل = 0;
+    لكل(i = 0; i < t->n; ++i){
+        t->ونې_پاڼه[i] = 0;
+        لكل(j = 0; j < n; ++j){
+            إذا (0==strcmp(t->name[i], leaves[j])){
+                t->ونې_پاڼه[i] = 1;
+                ++وموندل;
+                اكسر;
             }
         }
     }
-    fprintf(stderr, "Found %d leaves.\n", found);
+    fprintf(stderr, "Found %d leaves.\n", وموندل);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+عائم get_hierarchy_probability(عائم *x, ونه *hier, صحيح c, صحيح stride)
 {
-    float p = 1;
-    while(c >= 0){
+    عائم p = 1;
+    طالما(c >= 0){
         p = p * x[c*stride];
-        c = hier->parent[c];
+        c = hier->پلار[c];
     }
-    return p;
+    أرجع p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+فراغ hierarchy_predictions(عائم *predictions, صحيح n, ونه *hier, صحيح only_leaves, صحيح stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
-            predictions[j*stride] *= predictions[parent*stride]; 
+    صحيح j;
+    لكل(j = 0; j < n; ++j){
+        صحيح پلار = hier->پلار[j];
+        إذا(پلار >= 0){
+            predictions[j*stride] *= predictions[پلار*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    إذا(only_leaves){
+        لكل(j = 0; j < n; ++j){
+            إذا(!hier->ونې_پاڼه[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+صحيح hierarchy_سر_prediction(عائم *predictions, ونه *hier, عائم thresh, صحيح stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    عائم p = 1;
+    صحيح ډله = 0;
+    صحيح i;
+    طالما(1){
+        عائم max = 0;
+        صحيح max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
-                max_i = index;
+        لكل(i = 0; i < hier->ډله_اندازه[ډله]; ++i){
+            صحيح شاخص = i + hier->ډله_دننه_واټن[ډله];
+            عائم val = predictions[(i + hier->ډله_دننه_واټن[ډله])*stride];
+            إذا(val > max){
+                max_i = شاخص;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        إذا(p*max > thresh){
             p = p*max;
-            group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            ډله = hier->ماشوم[max_i];
+            إذا(hier->ماشوم[max_i] < 0) أرجع max_i;
+        } وإلا إذا (ډله == 0){
+            أرجع max_i;
+        } وإلا {
+            أرجع hier->پلار[hier->ډله_دننه_واټن[ډله]];
         }
     }
-    return 0;
+    أرجع 0;
 }
 
-tree *read_tree(char *filename)
+ونه *read_ونه(حرف *filename)
 {
-    tree t = {0};
+    ونه t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
-        t.parent[n] = parent;
+    حرف *کرښه;
+    صحيح وروستی_پلار = -1;
+    صحيح ډله_اندازه = 0;
+    صحيح groups = 0;
+    صحيح n = 0;
+    طالما((کرښه=fgetl(fp)) != 0){
+        حرف *id = حافظه_صفر_ورکړه(256, حجم(حرف));
+        صحيح پلار = -1;
+        له_مزي_ولوله(کرښه, "%s %d", id, &پلار);
+        t.پلار = realloc(t.پلار, (n+1)*حجم(صحيح));
+        t.پلار[n] = پلار;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
-        t.child[n] = -1;
+        t.ماشوم = realloc(t.ماشوم, (n+1)*حجم(صحيح));
+        t.ماشوم[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*حجم(حرف *));
         t.name[n] = id;
-        if(parent != last_parent){
+        إذا(پلار != وروستی_پلار){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-            t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
-            t.group_size[groups - 1] = group_size;
-            group_size = 0;
-            last_parent = parent;
+            t.ډله_دننه_واټن = realloc(t.ډله_دننه_واټن, groups * حجم(صحيح));
+            t.ډله_دننه_واټن[groups - 1] = n - ډله_اندازه;
+            t.ډله_اندازه = realloc(t.ډله_اندازه, groups * حجم(صحيح));
+            t.ډله_اندازه[groups - 1] = ډله_اندازه;
+            ډله_اندازه = 0;
+            وروستی_پلار = پلار;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
-        t.group[n] = groups;
-        if (parent >= 0) {
-            t.child[parent] = groups;
+        t.ډله = realloc(t.ډله, (n+1)*حجم(صحيح));
+        t.ډله[n] = groups;
+        إذا (پلار >= 0) {
+            t.ماشوم[پلار] = groups;
         }
         ++n;
-        ++group_size;
+        ++ډله_اندازه;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-    t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
-    t.group_size[groups - 1] = group_size;
+    t.ډله_دننه_واټن = realloc(t.ډله_دننه_واټن, groups * حجم(صحيح));
+    t.ډله_دننه_واټن[groups - 1] = n - ډله_اندازه;
+    t.ډله_اندازه = realloc(t.ډله_اندازه, groups * حجم(صحيح));
+    t.ډله_اندازه[groups - 1] = ډله_اندازه;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.ونې_پاڼه = حافظه_صفر_ورکړه(n, حجم(صحيح));
+    صحيح i;
+    لكل(i = 0; i < n; ++i) t.ونې_پاڼه[i] = 1;
+    لكل(i = 0; i < n; ++i) إذا(t.پلار[i] >= 0) t.ونې_پاڼه[t.پلار[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    ونه *ونه_ptr = حافظه_صفر_ورکړه(1, حجم(ونه));
+    *ونه_ptr = t;
     //error(0);
-    return tree_ptr;
+    أرجع ونه_ptr;
 }

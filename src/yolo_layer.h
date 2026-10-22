@@ -1,19 +1,19 @@
-#ifndef YOLO_LAYER_H
-#define YOLO_LAYER_H
+#که_نه_تعریف_شوی YOLO_LAYER_H
+#تعریف_کړه YOLO_LAYER_H
 
-#include "darknet.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "darknet.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes);
-void forward_yolo_layer(const layer l, network net);
-void backward_yolo_layer(const layer l, network net);
-void resize_yolo_layer(layer *l, int w, int h);
-int yolo_num_detections(layer l, float thresh);
+layer make_yolo_layer(صحيح batch, صحيح w, صحيح h, صحيح n, صحيح ټول, صحيح *ماسک, صحيح classes);
+فراغ forward_yolo_layer(ثابت layer l, شبکه net);
+فراغ backward_yolo_layer(ثابت layer l, شبکه net);
+فراغ resize_yolo_layer(layer *l, صحيح w, صحيح h);
+صحيح yolo_عدد_detections(layer l, عائم thresh);
 
-#ifdef GPU
-void forward_yolo_layer_gpu(const layer l, network net);
-void backward_yolo_layer_gpu(layer l, network net);
-#endif
+#که_تعریف_شوی GPU
+فراغ forward_yolo_layer_gpu(ثابت layer l, شبکه net);
+فراغ backward_yolo_layer_gpu(layer l, شبکه net);
+#د_که_پای
 
-#endif
+#د_که_پای

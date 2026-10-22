@@ -1,38 +1,38 @@
-#include "im2col.h"
-#include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+#ضمن "im2col.h"
+#ضمن <stdio.h>
+عائم im2col_get_pixel(عائم *im, صحيح لوړوالی, صحيح پلنوالی, صحيح channels,
+                        صحيح لیکه, صحيح ستون, صحيح channel, صحيح pad)
 {
-    row -= pad;
-    col -= pad;
+    لیکه -= pad;
+    ستون -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    إذا (لیکه < 0 || ستون < 0 ||
+        لیکه >= لوړوالی || ستون >= پلنوالی) أرجع 0;
+    أرجع im[ستون + پلنوالی*(لیکه + لوړوالی*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
-void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+فراغ im2col_cpu(عائم* معلومات_im,
+     صحيح channels,  صحيح لوړوالی,  صحيح پلنوالی,
+     صحيح ksize,  صحيح stride, صحيح pad, عائم* معلومات_ستون) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    صحيح c,h,w;
+    صحيح لوړوالی_ستون = (لوړوالی + 2*pad - ksize) / stride + 1;
+    صحيح پلنوالی_ستون = (پلنوالی + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
-                        im_row, im_col, c_im, pad);
+    صحيح channels_ستون = channels * ksize * ksize;
+    لكل (c = 0; c < channels_ستون; ++c) {
+        صحيح w_دننه_واټن = c % ksize;
+        صحيح h_دننه_واټن = (c / ksize) % ksize;
+        صحيح c_im = c / ksize / ksize;
+        لكل (h = 0; h < لوړوالی_ستون; ++h) {
+            لكل (w = 0; w < پلنوالی_ستون; ++w) {
+                صحيح im_لیکه = h_دننه_واټن + h * stride;
+                صحيح im_ستون = w_دننه_واټن + w * stride;
+                صحيح ستون_شاخص = (c * لوړوالی_ستون + h) * پلنوالی_ستون + w;
+                معلومات_ستون[ستون_شاخص] = im2col_get_pixel(معلومات_im, لوړوالی, پلنوالی, channels,
+                        im_لیکه, im_ستون, c_im, pad);
             }
         }
     }

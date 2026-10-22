@@ -1,25 +1,25 @@
-#include "gemm.h"
-#include "utils.h"
-#include "cuda.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#ضمن "gemm.h"
+#ضمن "utils.h"
+#ضمن "cuda.h"
+#ضمن <stdlib.h>
+#ضمن <stdio.h>
+#ضمن <math.h>
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+فراغ gemm_bin(صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        حرف  *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم *C, صحيح ldc)
 {
-    int i,j,k;
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            char A_PART = A[i*lda+k];
-            if(A_PART){
-                for(j = 0; j < N; ++j){
+    صحيح i,j,k;
+    لكل(i = 0; i < M; ++i){
+        لكل(k = 0; k < K; ++k){
+            حرف A_PART = A[i*lda+k];
+            إذا(A_PART){
+                لكل(j = 0; j < N; ++j){
                     C[i*ldc+j] += B[k*ldb+j];
                 }
-            } else {
-                for(j = 0; j < N; ++j){
+            } وإلا {
+                لكل(j = 0; j < N; ++j){
                     C[i*ldc+j] -= B[k*ldb+j];
                 }
             }
@@ -27,241 +27,241 @@ void gemm_bin(int M, int N, int K, float ALPHA,
     }
 }
 
-float *random_matrix(int rows, int cols)
+عائم *random_ماتریکس(صحيح لیکې, صحيح ستون_شمېر)
 {
-    int i;
-    float *m = calloc(rows*cols, sizeof(float));
-    for(i = 0; i < rows*cols; ++i){
-        m[i] = (float)rand()/RAND_MAX;
+    صحيح i;
+    عائم *m = حافظه_صفر_ورکړه(لیکې*ستون_شمېر, حجم(عائم));
+    لكل(i = 0; i < لیکې*ستون_شمېر; ++i){
+        m[i] = (عائم)rand()/RAND_MAX;
     }
-    return m;
+    أرجع m;
 }
 
-void time_random_matrix(int TA, int TB, int m, int k, int n)
+فراغ وخت_random_ماتریکس(صحيح TA, صحيح TB, صحيح m, صحيح k, صحيح n)
 {
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    عائم *a;
+    إذا(!TA) a = random_ماتریکس(m,k);
+    وإلا a = random_ماتریکس(k,m);
+    صحيح lda = (!TA)?k:m;
+    عائم *b;
+    إذا(!TB) b = random_ماتریکس(k,n);
+    وإلا b = random_ماتریکس(n,k);
+    صحيح ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    int i;
-    clock_t start = clock(), end;
-    for(i = 0; i<10; ++i){
+    عائم *c = random_ماتریکس(m,n);
+    صحيح i;
+    clock_t پیل = clock(), پای_ټکی;
+    لكل(i = 0; i<10; ++i){
         gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
-    end = clock();
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
-    free(a);
-    free(b);
-    free(c);
+    پای_ټکی = clock();
+    چاپ_کړه("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (عائم)(پای_ټکی-پیل)/CLOCKS_PER_SEC);
+    حرر(a);
+    حرر(b);
+    حرر(c);
 }
 
 
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc)
+فراغ gemm(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم BETA,
+        عائم *C, صحيح ldc)
 {
     gemm_cpu( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
 }
 
-void gemm_nn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+فراغ gemm_nn(صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم *C, صحيح ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[i*lda+k];
-            for(j = 0; j < N; ++j){
+    صحيح i,j,k;
+    #لارښوونه omp parallel لكل
+    لكل(i = 0; i < M; ++i){
+        لكل(k = 0; k < K; ++k){
+            سجل عائم A_PART = ALPHA*A[i*lda+k];
+            لكل(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_nt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+فراغ gemm_nt(صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم *C, صحيح ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
-                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+    صحيح i,j,k;
+    #لارښوونه omp parallel لكل
+    لكل(i = 0; i < M; ++i){
+        لكل(j = 0; j < N; ++j){
+            سجل عائم مجموعه = 0;
+            لكل(k = 0; k < K; ++k){
+                مجموعه += ALPHA*A[i*lda+k]*B[j*ldb + k];
             }
-            C[i*ldc+j] += sum;
+            C[i*ldc+j] += مجموعه;
         }
     }
 }
 
-void gemm_tn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+فراغ gemm_tn(صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم *C, صحيح ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[k*lda+i];
-            for(j = 0; j < N; ++j){
+    صحيح i,j,k;
+    #لارښوونه omp parallel لكل
+    لكل(i = 0; i < M; ++i){
+        لكل(k = 0; k < K; ++k){
+            سجل عائم A_PART = ALPHA*A[k*lda+i];
+            لكل(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_tt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+فراغ gemm_tt(صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم *C, صحيح ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
-                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+    صحيح i,j,k;
+    #لارښوونه omp parallel لكل
+    لكل(i = 0; i < M; ++i){
+        لكل(j = 0; j < N; ++j){
+            سجل عائم مجموعه = 0;
+            لكل(k = 0; k < K; ++k){
+                مجموعه += ALPHA*A[i+k*lda]*B[k+j*ldb];
             }
-            C[i*ldc+j] += sum;
+            C[i*ldc+j] += مجموعه;
         }
     }
 }
 
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc)
+فراغ gemm_cpu(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم BETA,
+        عائم *C, صحيح ldc)
 {
     //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
-    int i, j;
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    صحيح i, j;
+    لكل(i = 0; i < M; ++i){
+        لكل(j = 0; j < N; ++j){
             C[i*ldc + j] *= BETA;
         }
     }
-    if(!TA && !TB)
+    إذا(!TA && !TB)
         gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(TA && !TB)
+    وإلا إذا(TA && !TB)
         gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(!TA && TB)
+    وإلا إذا(!TA && TB)
         gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else
+    وإلا
         gemm_tt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
 }
 
-#ifdef GPU
+#که_تعریف_شوی GPU
 
-#include <math.h>
+#ضمن <math.h>
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc)
+فراغ gemm_gpu(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A_gpu, صحيح lda, 
+        عائم *B_gpu, صحيح ldb,
+        عائم BETA,
+        عائم *C_gpu, صحيح ldc)
 {
     cublasHandle_t handle = blas_handle();
-    cudaError_t status = cublasSgemm(handle, (TB ? CUBLAS_OP_T : CUBLAS_OP_N), 
+    cudaError_t حالت = cublasSgemm(handle, (TB ? CUBLAS_OP_T : CUBLAS_OP_N), 
             (TA ? CUBLAS_OP_T : CUBLAS_OP_N), N, M, K, &ALPHA, B_gpu, ldb, A_gpu, lda, &BETA, C_gpu, ldc);
-    check_error(status);
+    check_error(حالت);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن <time.h>
 
-void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
+فراغ وخت_gpu_random_ماتریکس(صحيح TA, صحيح TB, صحيح m, صحيح k, صحيح n)
 {
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    عائم *a;
+    إذا(!TA) a = random_ماتریکس(m,k);
+    وإلا a = random_ماتریکس(k,m);
+    صحيح lda = (!TA)?k:m;
+    عائم *b;
+    إذا(!TB) b = random_ماتریکس(k,n);
+    وإلا b = random_ماتریکس(n,k);
+    صحيح ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    int i;
-    clock_t start = clock(), end;
-    for(i = 0; i<32; ++i){
+    عائم *c = random_ماتریکس(m,n);
+    صحيح i;
+    clock_t پیل = clock(), پای_ټکی;
+    لكل(i = 0; i<32; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
-    end = clock();
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
-    free(a);
-    free(b);
-    free(c);
+    پای_ټکی = clock();
+    چاپ_کړه("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s\n",m,k,k,n, TA, TB, (عائم)(پای_ټکی-پیل)/CLOCKS_PER_SEC);
+    حرر(a);
+    حرر(b);
+    حرر(c);
 }
 
-void time_gpu(int TA, int TB, int m, int k, int n)
+فراغ وخت_gpu(صحيح TA, صحيح TB, صحيح m, صحيح k, صحيح n)
 {
-    int iter = 10;
-    float *a = random_matrix(m,k);
-    float *b = random_matrix(k,n);
+    صحيح iter = 10;
+    عائم *a = random_ماتریکس(m,k);
+    عائم *b = random_ماتریکس(k,n);
 
-    int lda = (!TA)?k:m;
-    int ldb = (!TB)?n:k;
+    صحيح lda = (!TA)?k:m;
+    صحيح ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
+    عائم *c = random_ماتریکس(m,n);
 
-    float *a_cl = cuda_make_array(a, m*k);
-    float *b_cl = cuda_make_array(b, k*n);
-    float *c_cl = cuda_make_array(c, m*n);
+    عائم *a_cl = cuda_make_array(a, m*k);
+    عائم *b_cl = cuda_make_array(b, k*n);
+    عائم *c_cl = cuda_make_array(c, m*n);
 
-    int i;
-    clock_t start = clock(), end;
-    for(i = 0; i<iter; ++i){
+    صحيح i;
+    clock_t پیل = clock(), پای_ټکی;
+    لكل(i = 0; i<iter; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a_cl,lda,b_cl,ldb,1,c_cl,n);
         cudaThreadSynchronize();
     }
-    double flop = ((double)m)*n*(2.*k + 2.)*iter;
-    double gflop = flop/pow(10., 9);
-    end = clock();
-    double seconds = sec(end-start);
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s, %lf GFLOPS\n",m,k,k,n, TA, TB, seconds, gflop/seconds);
+    مزدوج flop = ((مزدوج)m)*n*(2.*k + 2.)*iter;
+    مزدوج gflop = flop/توان(10., 9);
+    پای_ټکی = clock();
+    مزدوج seconds = sec(پای_ټکی-پیل);
+    چاپ_کړه("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s, %lf GFLOPS\n",m,k,k,n, TA, TB, seconds, gflop/seconds);
     cuda_free(a_cl);
     cuda_free(b_cl);
     cuda_free(c_cl);
-    free(a);
-    free(b);
-    free(c);
+    حرر(a);
+    حرر(b);
+    حرر(c);
 }
 
 
-void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
+فراغ test_gpu_accuracy(صحيح TA, صحيح TB, صحيح m, صحيح k, صحيح n)
 {
     srand(0);
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    عائم *a;
+    إذا(!TA) a = random_ماتریکس(m,k);
+    وإلا a = random_ماتریکس(k,m);
+    صحيح lda = (!TA)?k:m;
+    عائم *b;
+    إذا(!TB) b = random_ماتریکس(k,n);
+    وإلا b = random_ماتریکس(n,k);
+    صحيح ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    float *c_gpu = random_matrix(m,n);
-    memset(c, 0, m*n*sizeof(float));
-    memset(c_gpu, 0, m*n*sizeof(float));
-    int i;
+    عائم *c = random_ماتریکس(m,n);
+    عائم *c_gpu = random_ماتریکس(m,n);
+    memset(c, 0, m*n*حجم(عائم));
+    memset(c_gpu, 0, m*n*حجم(عائم));
+    صحيح i;
     //pm(m,k,b);
     gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c_gpu,n);
     //printf("GPU\n");
@@ -270,19 +270,19 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     //printf("\n\nCPU\n");
     //pm(m, n, c);
-    double sse = 0;
-    for(i = 0; i < m*n; ++i) {
+    مزدوج sse = 0;
+    لكل(i = 0; i < m*n; ++i) {
         //printf("%f %f\n", c[i], c_gpu[i]);
-        sse += pow(c[i]-c_gpu[i], 2);
+        sse += توان(c[i]-c_gpu[i], 2);
     }
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %g SSE\n",m,k,k,n, TA, TB, sse/(m*n));
-    free(a);
-    free(b);
-    free(c);
-    free(c_gpu);
+    چاپ_کړه("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %g SSE\n",m,k,k,n, TA, TB, sse/(m*n));
+    حرر(a);
+    حرر(b);
+    حرر(c);
+    حرر(c_gpu);
 }
 
-int test_gpu_blas()
+صحيح test_gpu_blas()
 {
     /*
        test_gpu_accuracy(0,0,10,576,75); 
@@ -309,16 +309,16 @@ int test_gpu_blas()
        time_gpu(0,0,128,4096,12544); 
        time_gpu(0,0,128,4096,4096); 
      */
-    time_gpu(0,0,64,75,12544); 
-    time_gpu(0,0,64,75,12544); 
-    time_gpu(0,0,64,75,12544); 
-    time_gpu(0,0,64,576,12544); 
-    time_gpu(0,0,256,2304,784); 
-    time_gpu(1,1,2304,256,784); 
-    time_gpu(0,0,512,4608,196); 
-    time_gpu(1,1,4608,512,196); 
+    وخت_gpu(0,0,64,75,12544); 
+    وخت_gpu(0,0,64,75,12544); 
+    وخت_gpu(0,0,64,75,12544); 
+    وخت_gpu(0,0,64,576,12544); 
+    وخت_gpu(0,0,256,2304,784); 
+    وخت_gpu(1,1,2304,256,784); 
+    وخت_gpu(0,0,512,4608,196); 
+    وخت_gpu(1,1,4608,512,196); 
 
-    return 0;
+    أرجع 0;
 }
-#endif
+#د_که_پای
 

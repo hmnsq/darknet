@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = حافظه_ورکړه(حجم(list));
+	l->اندازه = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->شا = 0;
+	أرجع l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+فراغ *list_راوباسه(list *l){
+    إذا(!l->شا) أرجع 0;
+    غوټه *b = l->شا;
+    فراغ *val = b->val;
+    l->شا = b->prev;
+    إذا(l->شا) l->شا->بل = 0;
+    حرر(b);
+    --l->اندازه;
     
-    return val;
+    أرجع val;
 }
 
-void list_insert(list *l, void *val)
+فراغ list_ورننباسه(list *l, فراغ *val)
 {
-	node *new = malloc(sizeof(node));
+	غوټه *new = حافظه_ورکړه(حجم(غوټه));
 	new->val = val;
-	new->next = 0;
+	new->بل = 0;
 
-	if(!l->back){
+	إذا(!l->شا){
 		l->front = new;
 		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+	}وإلا{
+		l->شا->بل = new;
+		new->prev = l->شا;
 	}
-	l->back = new;
-	++l->size;
+	l->شا = new;
+	++l->اندازه;
 }
 
-void free_node(node *n)
+فراغ free_غوټه(غوټه *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	غوټه *بل;
+	طالما(n) {
+		بل = n->بل;
+		حرر(n);
+		n = بل;
 	}
 }
 
-void **list_to_array(list *l)
+فراغ free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_غوټه(l->front);
+	حرر(l);
+}
+
+فراغ free_list_contents(list *l)
+{
+	غوټه *n = l->front;
+	طالما(n){
+		حرر(n->val);
+		n = n->بل;
+	}
+}
+
+فراغ **list_منزل_array(list *l)
+{
+    فراغ **a = حافظه_صفر_ورکړه(l->اندازه, حجم(فراغ*));
+    صحيح شمېر = 0;
+    غوټه *n = l->front;
+    طالما(n){
+        a[شمېر++] = n->val;
+        n = n->بل;
     }
-    return a;
+    أرجع a;
 }

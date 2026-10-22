@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن <math.h>
+#ضمن <assert.h>
+#ضمن <unistd.h>
+#ضمن <float.h>
+#ضمن <limits.h>
+#ضمن <time.h>
+#ضمن <sys/time.h>
 
-#include "utils.h"
+#ضمن "utils.h"
 
 
 /*
@@ -24,652 +24,652 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+مزدوج what_وخت_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    بنية timeval وخت;
+    إذا (gettimeofday(&وخت,عدم)){
+        أرجع 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    أرجع (مزدوج)وخت.tv_sec + (مزدوج)وخت.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+صحيح *read_intlist(حرف *gpu_list, صحيح *ngpus, صحيح d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    صحيح *gpus = 0;
+    إذا(gpu_list){
+        صحيح len = مزي_اوږدوالی(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        صحيح i;
+        لكل(i = 0; i < len; ++i){
+            إذا (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = حافظه_صفر_ورکړه(*ngpus, حجم(صحيح));
+        لكل(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } وإلا {
+        gpus = حافظه_صفر_ورکړه(1, حجم(عائم));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    أرجع gpus;
 }
 
-int *read_map(char *filename)
+صحيح *read_map(حرف *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    صحيح n = 0;
+    صحيح *map = 0;
+    حرف *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    إذا(!file) file_error(filename);
+    طالما((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*حجم(صحيح));
         map[n-1] = atoi(str);
     }
-    return map;
+    أرجع map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+فراغ sorta_shuffle(فراغ *arr, size_t n, size_t اندازه, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
-        size_t start = n*i/sections;
-        size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+    لكل(i = 0; i < sections; ++i){
+        size_t پیل = n*i/sections;
+        size_t پای_ټکی = n*(i+1)/sections;
+        size_t عدد = پای_ټکی-پیل;
+        shuffle(arr+(پیل*اندازه), عدد, اندازه);
     }
 }
 
-void shuffle(void *arr, size_t n, size_t size)
+فراغ shuffle(فراغ *arr, size_t n, size_t اندازه)
 {
     size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    فراغ *swp = حافظه_صفر_ورکړه(1, اندازه);
+    لكل(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
-        memcpy(swp,          arr+(j*size), size);
-        memcpy(arr+(j*size), arr+(i*size), size);
-        memcpy(arr+(i*size), swp,          size);
+        حافظه_نقل(swp,          arr+(j*اندازه), اندازه);
+        حافظه_نقل(arr+(j*اندازه), arr+(i*اندازه), اندازه);
+        حافظه_نقل(arr+(i*اندازه), swp,          اندازه);
     }
 }
 
-int *random_index_order(int min, int max)
+صحيح *random_شاخص_ترتیب(صحيح min, صحيح max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    صحيح *inds = حافظه_صفر_ورکړه(max-min, حجم(صحيح));
+    صحيح i;
+    لكل(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
-        inds[i] = inds[index];
-        inds[index] = swap;
+    لكل(i = min; i < max-1; ++i){
+        صحيح بدلون = inds[i];
+        صحيح شاخص = i + rand()%(max-i);
+        inds[i] = inds[شاخص];
+        inds[شاخص] = بدلون;
     }
-    return inds;
+    أرجع inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+فراغ del_arg(صحيح argc, حرف **argv, صحيح شاخص)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    صحيح i;
+    لكل(i = شاخص; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+صحيح پیدا_کړه_arg(صحيح argc, حرف* argv[], حرف *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    صحيح i;
+    لكل(i = 0; i < argc; ++i) {
+        إذا(!argv[i]) استمر;
+        إذا(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            أرجع 1;
         }
     }
-    return 0;
+    أرجع 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+صحيح پیدا_کړه_int_arg(صحيح argc, حرف **argv, حرف *arg, صحيح def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    صحيح i;
+    لكل(i = 0; i < argc-1; ++i){
+        إذا(!argv[i]) استمر;
+        إذا(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            اكسر;
         }
     }
-    return def;
+    أرجع def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+عائم پیدا_کړه_float_arg(صحيح argc, حرف **argv, حرف *arg, عائم def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    صحيح i;
+    لكل(i = 0; i < argc-1; ++i){
+        إذا(!argv[i]) استمر;
+        إذا(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            اكسر;
         }
     }
-    return def;
+    أرجع def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+حرف *پیدا_کړه_char_arg(صحيح argc, حرف **argv, حرف *arg, حرف *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    صحيح i;
+    لكل(i = 0; i < argc-1; ++i){
+        إذا(!argv[i]) استمر;
+        إذا(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            اكسر;
         }
     }
-    return def;
+    أرجع def;
 }
 
 
-char *basecfg(char *cfgfile)
+حرف *basecfg(حرف *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    حرف *c = cfgfile;
+    حرف *بل;
+    طالما((بل = strchr(c, '/')))
     {
-        c = next+1;
+        c = بل+1;
     }
     c = copy_string(c);
-    next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    بل = strchr(c, '.');
+    إذا (بل) *بل = 0;
+    أرجع c;
 }
 
-int alphanum_to_int(char c)
+صحيح alphanum_منزل_int(حرف c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    أرجع (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+حرف int_منزل_alphanum(صحيح i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    إذا (i == 36) أرجع '.';
+    أرجع (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+فراغ pm(صحيح M, صحيح N, عائم *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
-        printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
-            printf("%2.4f, ", A[i*N+j]);
+    صحيح i,j;
+    لكل(i =0 ; i < M; ++i){
+        چاپ_کړه("%d ", i+1);
+        لكل(j = 0; j < N; ++j){
+            چاپ_کړه("%2.4f, ", A[i*N+j]);
         }
-        printf("\n");
+        چاپ_کړه("\n");
     }
-    printf("\n");
+    چاپ_کړه("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+فراغ پیدا_کړه_replace(حرف *str, حرف *orig, حرف *rep, حرف *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    حرف بفر[4096] = {0};
+    حرف *p;
 
-    sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    sprintf(بفر, "%s", str);
+    إذا(!(p = مزي_پلټنه(بفر, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        أرجع;
     }
 
     *p = '\0';
 
-    sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
+    sprintf(output, "%s%s%s", بفر, rep, p+مزي_اوږدوالی(orig));
 }
 
-float sec(clock_t clocks)
+عائم sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    أرجع (عائم)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+فراغ سر_k(عائم *a, صحيح n, صحيح k, صحيح *شاخص)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
-                curr = index[j];
-                index[j] = swap;
+    صحيح i,j;
+    لكل(j = 0; j < k; ++j) شاخص[j] = -1;
+    لكل(i = 0; i < n; ++i){
+        صحيح curr = i;
+        لكل(j = 0; j < k; ++j){
+            إذا((شاخص[j] < 0) || a[curr] > a[شاخص[j]]){
+                صحيح بدلون = curr;
+                curr = شاخص[j];
+                شاخص[j] = بدلون;
             }
         }
     }
 }
 
-void error(const char *s)
+فراغ error(ثابت حرف *s)
 {
     perror(s);
-    assert(0);
-    exit(-1);
+    أكد(0);
+    وتل(-1);
 }
 
-unsigned char *read_file(char *filename)
+بینښه حرف *read_file(حرف *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    size_t size;
+    size_t اندازه;
 
     fseek(fp, 0, SEEK_END); 
-    size = ftell(fp);
+    اندازه = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
-    fread(text, 1, size, fp);
+    بینښه حرف *متن = حافظه_صفر_ورکړه(اندازه+1, حجم(حرف));
+    fread(متن, 1, اندازه, fp);
     fclose(fp);
-    return text;
+    أرجع متن;
 }
 
-void malloc_error()
+فراغ malloc_error()
 {
     fprintf(stderr, "Malloc error\n");
-    exit(-1);
+    وتل(-1);
 }
 
-void file_error(char *s)
+فراغ file_error(حرف *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
-    exit(0);
+    وتل(0);
 }
 
-list *split_str(char *s, char delim)
+list *وېشل_str(حرف *s, حرف delim)
 {
     size_t i;
-    size_t len = strlen(s);
+    size_t len = مزي_اوږدوالی(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_ورننباسه(l, s);
+    لكل(i = 0; i < len; ++i){
+        إذا(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_ورننباسه(l, &(s[i+1]));
         }
     }
-    return l;
+    أرجع l;
 }
 
-void strip(char *s)
+فراغ strip(حرف *s)
 {
     size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    size_t len = مزي_اوږدوالی(s);
+    size_t دننه_واټن = 0;
+    لكل(i = 0; i < len; ++i){
+        حرف c = s[i];
+        إذا(c==' '||c=='\t'||c=='\n') ++دننه_واټن;
+        وإلا s[i-دننه_واټن] = c;
     }
-    s[len-offset] = '\0';
+    s[len-دننه_واټن] = '\0';
 }
 
-void strip_char(char *s, char bad)
+فراغ strip_char(حرف *s, حرف bad)
 {
     size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    size_t len = مزي_اوږدوالی(s);
+    size_t دننه_واټن = 0;
+    لكل(i = 0; i < len; ++i){
+        حرف c = s[i];
+        إذا(c==bad) ++دننه_واټن;
+        وإلا s[i-دننه_واټن] = c;
     }
-    s[len-offset] = '\0';
+    s[len-دننه_واټن] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+فراغ free_ptrs(فراغ **ptrs, صحيح n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    صحيح i;
+    لكل(i = 0; i < n; ++i) حرر(ptrs[i]);
+    حرر(ptrs);
 }
 
-char *fgetl(FILE *fp)
+حرف *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
-    size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    إذا(feof(fp)) أرجع 0;
+    size_t اندازه = 512;
+    حرف *کرښه = حافظه_ورکړه(اندازه*حجم(حرف));
+    إذا(!fgets(کرښه, اندازه, fp)){
+        حرر(کرښه);
+        أرجع 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = مزي_اوږدوالی(کرښه);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
-            size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
-                printf("%ld\n", size);
+    طالما((کرښه[curr-1] != '\n') && !feof(fp)){
+        إذا(curr == اندازه-1){
+            اندازه *= 2;
+            کرښه = realloc(کرښه, اندازه*حجم(حرف));
+            إذا(!کرښه) {
+                چاپ_کړه("%ld\n", اندازه);
                 malloc_error();
             }
         }
-        size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        size_t readsize = اندازه-curr;
+        إذا(readsize > لوی_عدد) readsize = لوی_عدد-1;
+        fgets(&کرښه[curr], readsize, fp);
+        curr = مزي_اوږدوالی(کرښه);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    إذا(کرښه[curr-1] == '\n') کرښه[curr-1] = '\0';
 
-    return line;
+    أرجع کرښه;
 }
 
-int read_int(int fd)
+صحيح read_int(صحيح fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    صحيح n = 0;
+    صحيح بل = اقرأ(fd, &n, حجم(صحيح));
+    إذا(بل <= 0) أرجع -1;
+    أرجع n;
 }
 
-void write_int(int fd, int n)
+فراغ write_int(صحيح fd, صحيح n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    صحيح بل = اكتب(fd, &n, حجم(صحيح));
+    إذا(بل <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+صحيح read_all_fail(صحيح fd, حرف *بفر, size_t بایټونه)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    طالما(n < بایټونه){
+        صحيح بل = اقرأ(fd, بفر + n, بایټونه-n);
+        إذا(بل <= 0) أرجع 1;
+        n += بل;
     }
-    return 0;
+    أرجع 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+صحيح write_all_fail(صحيح fd, حرف *بفر, size_t بایټونه)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    طالما(n < بایټونه){
+        size_t بل = اكتب(fd, بفر + n, بایټونه-n);
+        إذا(بل <= 0) أرجع 1;
+        n += بل;
     }
-    return 0;
+    أرجع 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+فراغ read_all(صحيح fd, حرف *بفر, size_t بایټونه)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
+    طالما(n < بایټونه){
+        صحيح بل = اقرأ(fd, بفر + n, بایټونه-n);
+        إذا(بل <= 0) error("read failed");
+        n += بل;
     }
 }
 
-void write_all(int fd, char *buffer, size_t bytes)
+فراغ write_all(صحيح fd, حرف *بفر, size_t بایټونه)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
-        n += next;
+    طالما(n < بایټونه){
+        size_t بل = اكتب(fd, بفر + n, بایټونه-n);
+        إذا(بل <= 0) error("write failed");
+        n += بل;
     }
 }
 
 
-char *copy_string(char *s)
+حرف *copy_string(حرف *s)
 {
-    char *copy = malloc(strlen(s)+1);
-    strncpy(copy, s, strlen(s)+1);
-    return copy;
+    حرف *copy = حافظه_ورکړه(مزي_اوږدوالی(s)+1);
+    strncpy(copy, s, مزي_اوږدوالی(s)+1);
+    أرجع copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_کرښه(حرف *کرښه)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    حرف *c, *p;
+    صحيح دننه = 0;
+    لكل(c = کرښه, p = کرښه; *c != '\0'; ++c){
+        إذا(*c == '"') دننه = !دننه;
+        وإلا إذا(*c == ',' && !دننه){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_ورننباسه(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_ورننباسه(l, copy_string(p));
+    أرجع l;
 }
 
-int count_fields(char *line)
+صحيح شمېر_fields(حرف *کرښه)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
-        done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+    صحيح شمېر = 0;
+    صحيح بشپړ = 0;
+    حرف *c;
+    لكل(c = کرښه; !بشپړ; ++c){
+        بشپړ = (*c == '\0');
+        إذا(*c == ',' || بشپړ) ++شمېر;
     }
-    return count;
+    أرجع شمېر;
 }
 
-float *parse_fields(char *line, int n)
+عائم *parse_fields(حرف *کرښه, صحيح n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
-        done = (*c == '\0');
-        if(*c == ',' || done){
+    عائم *ډګر = حافظه_صفر_ورکړه(n, حجم(عائم));
+    حرف *c, *p, *پای_ټکی;
+    صحيح شمېر = 0;
+    صحيح بشپړ = 0;
+    لكل(c = کرښه, p = کرښه; !بشپړ; ++c){
+        بشپړ = (*c == '\0');
+        إذا(*c == ',' || بشپړ){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            ډګر[شمېر] = strtod(p, &پای_ټکی);
+            إذا(p == c) ډګر[شمېر] = nan("");
+            إذا(پای_ټکی != c && (پای_ټکی != c-1 || *پای_ټکی != '\r')) ډګر[شمېر] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++شمېر;
         }
     }
-    return field;
+    أرجع ډګر;
 }
 
-float sum_array(float *a, int n)
+عائم مجموعه_array(عائم *a, صحيح n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    صحيح i;
+    عائم مجموعه = 0;
+    لكل(i = 0; i < n; ++i) مجموعه += a[i];
+    أرجع مجموعه;
 }
 
-float mean_array(float *a, int n)
+عائم منځنۍ_array(عائم *a, صحيح n)
 {
-    return sum_array(a,n)/n;
+    أرجع مجموعه_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+فراغ منځنۍ_arrays(عائم **a, صحيح n, صحيح els, عائم *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    صحيح i;
+    صحيح j;
+    memset(avg, 0, els*حجم(عائم));
+    لكل(j = 0; j < n; ++j){
+        لكل(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    لكل(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+فراغ print_statistics(عائم *a, صحيح n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
-    printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
+    عائم m = منځنۍ_array(a, n);
+    عائم v = variance_array(a, n);
+    چاپ_کړه("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+عائم variance_array(عائم *a, صحيح n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    صحيح i;
+    عائم مجموعه = 0;
+    عائم منځنۍ = منځنۍ_array(a, n);
+    لكل(i = 0; i < n; ++i) مجموعه += (a[i] - منځنۍ)*(a[i]-منځنۍ);
+    عائم variance = مجموعه/n;
+    أرجع variance;
 }
 
-int constrain_int(int a, int min, int max)
+صحيح constrain_int(صحيح a, صحيح min, صحيح max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    إذا (a < min) أرجع min;
+    إذا (a > max) أرجع max;
+    أرجع a;
 }
 
-float constrain(float min, float max, float a)
+عائم constrain(عائم min, عائم max, عائم a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    إذا (a < min) أرجع min;
+    إذا (a > max) أرجع max;
+    أرجع a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+عائم dist_array(عائم *a, عائم *b, صحيح n, صحيح sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    صحيح i;
+    عائم مجموعه = 0;
+    لكل(i = 0; i < n; i += sub) مجموعه += توان(a[i]-b[i], 2);
+    أرجع جذر(مجموعه);
 }
 
-float mse_array(float *a, int n)
+عائم mse_array(عائم *a, صحيح n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    صحيح i;
+    عائم مجموعه = 0;
+    لكل(i = 0; i < n; ++i) مجموعه += a[i]*a[i];
+    أرجع جذر(مجموعه/n);
 }
 
-void normalize_array(float *a, int n)
+فراغ normalize_array(عائم *a, صحيح n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    صحيح i;
+    عائم mu = منځنۍ_array(a,n);
+    عائم sigma = جذر(variance_array(a,n));
+    لكل(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
-    mu = mean_array(a,n);
-    sigma = sqrt(variance_array(a,n));
+    mu = منځنۍ_array(a,n);
+    sigma = جذر(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+فراغ translate_array(عائم *a, صحيح n, عائم s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+عائم mag_array(عائم *a, صحيح n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        sum += a[i]*a[i];   
+    صحيح i;
+    عائم مجموعه = 0;
+    لكل(i = 0; i < n; ++i){
+        مجموعه += a[i]*a[i];   
     }
-    return sqrt(sum);
+    أرجع جذر(مجموعه);
 }
 
-void scale_array(float *a, int n, float s)
+فراغ scale_array(عائم *a, صحيح n, عائم s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+صحيح sample_array(عائم *a, صحيح n)
 {
-    float sum = sum_array(a, n);
-    scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    عائم مجموعه = مجموعه_array(a, n);
+    scale_array(a, n, 1./مجموعه);
+    عائم r = rand_یوشان(0, 1);
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        إذا (r <= 0) أرجع i;
     }
-    return n-1;
+    أرجع n-1;
 }
 
-int max_int_index(int *a, int n)
+صحيح max_int_شاخص(صحيح *a, صحيح n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    إذا(n <= 0) أرجع -1;
+    صحيح i, max_i = 0;
+    صحيح max = a[0];
+    لكل(i = 1; i < n; ++i){
+        إذا(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    أرجع max_i;
 }
 
-int max_index(float *a, int n)
+صحيح max_شاخص(عائم *a, صحيح n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    إذا(n <= 0) أرجع -1;
+    صحيح i, max_i = 0;
+    عائم max = a[0];
+    لكل(i = 1; i < n; ++i){
+        إذا(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    أرجع max_i;
 }
 
-int int_index(int *a, int val, int n)
+صحيح int_شاخص(صحيح *a, صحيح val, صحيح n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    صحيح i;
+    لكل(i = 0; i < n; ++i){
+        إذا(a[i] == val) أرجع i;
     }
-    return -1;
+    أرجع -1;
 }
 
-int rand_int(int min, int max)
+صحيح rand_int(صحيح min, صحيح max)
 {
-    if (max < min){
-        int s = min;
+    إذا (max < min){
+        صحيح s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    صحيح r = (rand()%(max - min + 1)) + min;
+    أرجع r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+عائم rand_نورمال()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    ساكن صحيح have_اضافي = 0;
+    ساكن مزدوج rand1, rand2;
 
-    if(haveSpare)
+    إذا(have_اضافي)
     {
-        haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        have_اضافي = 0;
+        أرجع جذر(rand1) * ساین(rand2);
     }
 
-    haveSpare = 1;
+    have_اضافي = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
-    rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand1 = rand() / ((مزدوج) RAND_MAX);
+    إذا(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = -2 * لوګاریتم(rand1);
+    rand2 = (rand() / ((مزدوج) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    أرجع جذر(rand1) * کوساین(rand2);
 }
 
 /*
@@ -683,9 +683,9 @@ float rand_normal()
    }
  */
 
-size_t rand_size_t()
+size_t rand_اندازه_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    أرجع  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -695,32 +695,32 @@ size_t rand_size_t()
         ((size_t)(rand()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+عائم rand_یوشان(عائم min, عائم max)
 {
-    if(max < min){
-        float swap = min;
+    إذا(max < min){
+        عائم بدلون = min;
         min = max;
-        max = swap;
+        max = بدلون;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    أرجع ((عائم)rand()/RAND_MAX * (max - min)) + min;
 }
 
-float rand_scale(float s)
+عائم rand_scale(عائم s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    عائم scale = rand_یوشان(1, s);
+    إذا(rand()%2) أرجع scale;
+    أرجع 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+عائم **one_hot_encode(عائم *a, صحيح n, صحيح k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
-        t[i][index] = 1;
+    صحيح i;
+    عائم **t = حافظه_صفر_ورکړه(n, حجم(عائم*));
+    لكل(i = 0; i < n; ++i){
+        t[i] = حافظه_صفر_ورکړه(k, حجم(عائم));
+        صحيح شاخص = (صحيح)a[i];
+        t[i][شاخص] = 1;
     }
-    return t;
+    أرجع t;
 }
 

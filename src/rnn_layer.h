@@ -1,25 +1,25 @@
 
-#ifndef RNN_LAYER_H
-#define RNN_LAYER_H
+#که_نه_تعریف_شوی RNN_LAYER_H
+#تعریف_کړه RNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
-#define USET
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
+#تعریف_کړه USET
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam);
+layer make_rnn_layer(صحيح batch, صحيح inputs, صحيح outputs, صحيح ګامونه, ACTIVATION activation, صحيح batch_normalize, صحيح adam);
 
-void forward_rnn_layer(layer l, network net);
-void backward_rnn_layer(layer l, network net);
-void update_rnn_layer(layer l, update_args a);
+فراغ forward_rnn_layer(layer l, شبکه net);
+فراغ backward_rnn_layer(layer l, شبکه net);
+فراغ update_rnn_layer(layer l, update_دلیلونه a);
 
-#ifdef GPU
-void forward_rnn_layer_gpu(layer l, network net);
-void backward_rnn_layer_gpu(layer l, network net);
-void update_rnn_layer_gpu(layer l, update_args a);
-void push_rnn_layer(layer l);
-void pull_rnn_layer(layer l);
-#endif
+#که_تعریف_شوی GPU
+فراغ forward_rnn_layer_gpu(layer l, شبکه net);
+فراغ backward_rnn_layer_gpu(layer l, شبکه net);
+فراغ update_rnn_layer_gpu(layer l, update_دلیلونه a);
+فراغ ټېل_rnn_layer(layer l);
+فراغ pull_rnn_layer(layer l);
+#د_که_پای
 
-#endif
+#د_که_پای
 

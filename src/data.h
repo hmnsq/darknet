@@ -1,50 +1,50 @@
-#ifndef DATA_H
-#define DATA_H
-#include <pthread.h>
+#که_نه_تعریف_شوی معلومات_H
+#تعریف_کړه معلومات_H
+#ضمن <pthread.h>
 
-#include "darknet.h"
-#include "matrix.h"
-#include "list.h"
-#include "image.h"
-#include "tree.h"
+#ضمن "darknet.h"
+#ضمن "matrix.h"
+#ضمن "list.h"
+#ضمن "image.h"
+#ضمن "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+ساكن مضمن عائم واټن_from_څنډه(صحيح x, صحيح max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    صحيح dx = (max/2) - x;
+    إذا (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
-    float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    عائم dist = (عائم)dx/max;
+    إذا (dist > 1) dist = 1;
+    أرجع dist;
 }
-void load_data_blocking(load_args args);
+فراغ بارول_معلومات_blocking(بارول_دلیلونه دلیلونه);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+فراغ print_letters(عائم *pred, صحيح n);
+معلومات بارول_معلومات_captcha(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح w, صحيح h);
+معلومات بارول_معلومات_captcha_encode(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h);
+معلومات بارول_معلومات_detection(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح boxes, صحيح classes, عائم jitter, عائم hue, عائم saturation, عائم exposure);
+معلومات بارول_معلومات_نښان(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure);
+ماتریکس بارول_image_augment_paths(حرف **paths, صحيح n, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح center);
+معلومات بارول_معلومات_super(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h, صحيح scale);
+معلومات بارول_معلومات_augment(حرف **paths, صحيح n, صحيح m, حرف **labels, صحيح k, ونه *hierarchy, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح center);
+معلومات بارول_معلومات_regression(حرف **paths, صحيح n, صحيح m, صحيح classes, صحيح min, صحيح max, صحيح اندازه, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure);
+معلومات بارول_go(حرف *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+معلومات بارول_معلومات_writing(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h, صحيح بهر_w, صحيح بهر_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
-void normalize_data_rows(data d);
-void scale_data_rows(data d, float s);
-void translate_data_rows(data d, float s);
-void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+فراغ get_random_batch(معلومات d, صحيح n, عائم *X, عائم *y);
+معلومات get_معلومات_part(معلومات d, صحيح part, صحيح ټول);
+معلومات get_random_معلومات(معلومات d, صحيح عدد);
+معلومات بارول_categorical_معلومات_csv(حرف *filename, صحيح موخه, صحيح k);
+فراغ normalize_معلومات_لیکې(معلومات d);
+فراغ scale_معلومات_لیکې(معلومات d, عائم s);
+فراغ translate_معلومات_لیکې(معلومات d, عائم s);
+فراغ randomize_معلومات(معلومات d);
+معلومات *وېشل_معلومات(معلومات d, صحيح part, صحيح ټول);
+معلومات concat_datas(معلومات *d, صحيح n);
+فراغ fill_truth(حرف *لار, حرف **labels, صحيح k, عائم *truth);
 
-#endif
+#د_که_پای

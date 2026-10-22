@@ -1,57 +1,57 @@
-#include "rnn_layer.h"
-#include "connected_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#ضمن "rnn_layer.h"
+#ضمن "connected_layer.h"
+#ضمن "utils.h"
+#ضمن "cuda.h"
+#ضمن "blas.h"
+#ضمن "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ضمن <math.h>
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
 
-static void increment_layer(layer *l, int steps)
+ساكن فراغ increment_layer(layer *l, صحيح ګامونه)
 {
-    int num = l->outputs*l->batch*steps;
-    l->output += num;
-    l->delta += num;
-    l->x += num;
-    l->x_norm += num;
+    صحيح عدد = l->outputs*l->batch*ګامونه;
+    l->output += عدد;
+    l->delta += عدد;
+    l->x += عدد;
+    l->x_norm += عدد;
 
-#ifdef GPU
-    l->output_gpu += num;
-    l->delta_gpu += num;
-    l->x_gpu += num;
-    l->x_norm_gpu += num;
-#endif
+#که_تعریف_شوی GPU
+    l->output_gpu += عدد;
+    l->delta_gpu += عدد;
+    l->x_gpu += عدد;
+    l->x_norm_gpu += عدد;
+#د_که_پای
 }
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam)
+layer make_rnn_layer(صحيح batch, صحيح inputs, صحيح outputs, صحيح ګامونه, ACTIVATION activation, صحيح batch_normalize, صحيح adam)
 {
     fprintf(stderr, "RNN Layer: %d inputs, %d outputs\n", inputs, outputs);
-    batch = batch / steps;
+    batch = batch / ګامونه;
     layer l = {0};
     l.batch = batch;
     l.type = RNN;
-    l.steps = steps;
+    l.ګامونه = ګامونه;
     l.inputs = inputs;
 
-    l.state = calloc(batch*outputs, sizeof(float));
-    l.prev_state = calloc(batch*outputs, sizeof(float));
+    l.state = حافظه_صفر_ورکړه(batch*outputs, حجم(عائم));
+    l.prev_state = حافظه_صفر_ورکړه(batch*outputs, حجم(عائم));
 
-    l.input_layer = malloc(sizeof(layer));
+    l.ننوت_layer = حافظه_ورکړه(حجم(layer));
     fprintf(stderr, "\t\t");
-    *(l.input_layer) = make_connected_layer(batch*steps, inputs, outputs, activation, batch_normalize, adam);
-    l.input_layer->batch = batch;
+    *(l.ننوت_layer) = make_connected_layer(batch*ګامونه, inputs, outputs, activation, batch_normalize, adam);
+    l.ننوت_layer->batch = batch;
 
-    l.self_layer = malloc(sizeof(layer));
+    l.self_layer = حافظه_ورکړه(حجم(layer));
     fprintf(stderr, "\t\t");
-    *(l.self_layer) = make_connected_layer(batch*steps, outputs, outputs, activation, batch_normalize, adam);
+    *(l.self_layer) = make_connected_layer(batch*ګامونه, outputs, outputs, activation, batch_normalize, adam);
     l.self_layer->batch = batch;
 
-    l.output_layer = malloc(sizeof(layer));
+    l.output_layer = حافظه_ورکړه(حجم(layer));
     fprintf(stderr, "\t\t");
-    *(l.output_layer) = make_connected_layer(batch*steps, outputs, outputs, activation, batch_normalize, adam);
+    *(l.output_layer) = make_connected_layer(batch*ګامونه, outputs, outputs, activation, batch_normalize, adam);
     l.output_layer->batch = batch;
 
     l.outputs = outputs;
@@ -61,7 +61,7 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
     l.forward = forward_rnn_layer;
     l.backward = backward_rnn_layer;
     l.update = update_rnn_layer;
-#ifdef GPU
+#که_تعریف_شوی GPU
     l.forward_gpu = forward_rnn_layer_gpu;
     l.backward_gpu = backward_rnn_layer_gpu;
     l.update_gpu = update_rnn_layer_gpu;
@@ -69,83 +69,83 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
     l.prev_state_gpu = cuda_make_array(0, batch*outputs);
     l.output_gpu = l.output_layer->output_gpu;
     l.delta_gpu = l.output_layer->delta_gpu;
-#ifdef CUDNN
-    cudnnSetTensor4dDescriptor(l.input_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.input_layer->out_c, l.input_layer->out_h, l.input_layer->out_w); 
-    cudnnSetTensor4dDescriptor(l.self_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.self_layer->out_c, l.self_layer->out_h, l.self_layer->out_w); 
-    cudnnSetTensor4dDescriptor(l.output_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, batch, l.output_layer->out_c, l.output_layer->out_h, l.output_layer->out_w); 
-#endif
-#endif
+#که_تعریف_شوی CUDNN
+    cudnn_سېټ_Tensor4d_Descriptor(l.ننوت_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_معلومات_FLOAT, batch, l.ننوت_layer->بهر_c, l.ننوت_layer->بهر_h, l.ننوت_layer->بهر_w); 
+    cudnn_سېټ_Tensor4d_Descriptor(l.self_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_معلومات_FLOAT, batch, l.self_layer->بهر_c, l.self_layer->بهر_h, l.self_layer->بهر_w); 
+    cudnn_سېټ_Tensor4d_Descriptor(l.output_layer->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_معلومات_FLOAT, batch, l.output_layer->بهر_c, l.output_layer->بهر_h, l.output_layer->بهر_w); 
+#د_که_پای
+#د_که_پای
 
-    return l;
+    أرجع l;
 }
 
-void update_rnn_layer(layer l, update_args a)
+فراغ update_rnn_layer(layer l, update_دلیلونه a)
 {
-    update_connected_layer(*(l.input_layer),  a);
+    update_connected_layer(*(l.ننوت_layer),  a);
     update_connected_layer(*(l.self_layer),   a);
     update_connected_layer(*(l.output_layer), a);
 }
 
-void forward_rnn_layer(layer l, network net)
+فراغ forward_rnn_layer(layer l, شبکه net)
 {
-    network s = net;
+    شبکه s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحيح i;
+    layer ننوت_layer = *(l.ننوت_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
-    fill_cpu(l.outputs * l.batch * l.steps, 0, output_layer.delta, 1);
-    fill_cpu(l.outputs * l.batch * l.steps, 0, self_layer.delta, 1);
-    fill_cpu(l.outputs * l.batch * l.steps, 0, input_layer.delta, 1);
-    if(net.train) fill_cpu(l.outputs * l.batch, 0, l.state, 1);
+    fill_cpu(l.outputs * l.batch * l.ګامونه, 0, output_layer.delta, 1);
+    fill_cpu(l.outputs * l.batch * l.ګامونه, 0, self_layer.delta, 1);
+    fill_cpu(l.outputs * l.batch * l.ګامونه, 0, ننوت_layer.delta, 1);
+    إذا(net.train) fill_cpu(l.outputs * l.batch, 0, l.state, 1);
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input = net.input;
-        forward_connected_layer(input_layer, s);
+    لكل (i = 0; i < l.ګامونه; ++i) {
+        s.ننوت = net.ننوت;
+        forward_connected_layer(ننوت_layer, s);
 
-        s.input = l.state;
+        s.ننوت = l.state;
         forward_connected_layer(self_layer, s);
 
-        float *old_state = l.state;
-        if(net.train) l.state += l.outputs*l.batch;
-        if(l.shortcut){
+        عائم *old_state = l.state;
+        إذا(net.train) l.state += l.outputs*l.batch;
+        إذا(l.shortcut){
             copy_cpu(l.outputs * l.batch, old_state, 1, l.state, 1);
-        }else{
+        }وإلا{
             fill_cpu(l.outputs * l.batch, 0, l.state, 1);
         }
-        axpy_cpu(l.outputs * l.batch, 1, input_layer.output, 1, l.state, 1);
+        axpy_cpu(l.outputs * l.batch, 1, ننوت_layer.output, 1, l.state, 1);
         axpy_cpu(l.outputs * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.ننوت = l.state;
         forward_connected_layer(output_layer, s);
 
-        net.input += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.ننوت += l.inputs*l.batch;
+        increment_layer(&ننوت_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_rnn_layer(layer l, network net)
+فراغ backward_rnn_layer(layer l, شبکه net)
 {
-    network s = net;
+    شبکه s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحيح i;
+    layer ننوت_layer = *(l.ننوت_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
-    increment_layer(&input_layer, l.steps-1);
-    increment_layer(&self_layer, l.steps-1);
-    increment_layer(&output_layer, l.steps-1);
+    increment_layer(&ننوت_layer, l.ګامونه-1);
+    increment_layer(&self_layer, l.ګامونه-1);
+    increment_layer(&output_layer, l.ګامونه-1);
 
-    l.state += l.outputs*l.batch*l.steps;
-    for (i = l.steps-1; i >= 0; --i) {
-        copy_cpu(l.outputs * l.batch, input_layer.output, 1, l.state, 1);
+    l.state += l.outputs*l.batch*l.ګامونه;
+    لكل (i = l.ګامونه-1; i >= 0; --i) {
+        copy_cpu(l.outputs * l.batch, ننوت_layer.output, 1, l.state, 1);
         axpy_cpu(l.outputs * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.ننوت = l.state;
         s.delta = self_layer.delta;
         backward_connected_layer(output_layer, s);
 
@@ -159,134 +159,134 @@ void backward_rnn_layer(layer l, network net)
            }
          */
 
-        s.input = l.state;
+        s.ننوت = l.state;
         s.delta = self_layer.delta - l.outputs*l.batch;
-        if (i == 0) s.delta = 0;
+        إذا (i == 0) s.delta = 0;
         backward_connected_layer(self_layer, s);
 
-        copy_cpu(l.outputs*l.batch, self_layer.delta, 1, input_layer.delta, 1);
-        if (i > 0 && l.shortcut) axpy_cpu(l.outputs*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.outputs*l.batch, 1);
-        s.input = net.input + i*l.inputs*l.batch;
-        if(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
-        else s.delta = 0;
-        backward_connected_layer(input_layer, s);
+        copy_cpu(l.outputs*l.batch, self_layer.delta, 1, ننوت_layer.delta, 1);
+        إذا (i > 0 && l.shortcut) axpy_cpu(l.outputs*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.outputs*l.batch, 1);
+        s.ننوت = net.ننوت + i*l.inputs*l.batch;
+        إذا(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
+        وإلا s.delta = 0;
+        backward_connected_layer(ننوت_layer, s);
 
-        increment_layer(&input_layer, -1);
+        increment_layer(&ننوت_layer, -1);
         increment_layer(&self_layer, -1);
         increment_layer(&output_layer, -1);
     }
 }
 
-#ifdef GPU
+#که_تعریف_شوی GPU
 
-void pull_rnn_layer(layer l)
+فراغ pull_rnn_layer(layer l)
 {
-    pull_connected_layer(*(l.input_layer));
+    pull_connected_layer(*(l.ننوت_layer));
     pull_connected_layer(*(l.self_layer));
     pull_connected_layer(*(l.output_layer));
 }
 
-void push_rnn_layer(layer l)
+فراغ ټېل_rnn_layer(layer l)
 {
-    push_connected_layer(*(l.input_layer));
-    push_connected_layer(*(l.self_layer));
-    push_connected_layer(*(l.output_layer));
+    ټېل_connected_layer(*(l.ننوت_layer));
+    ټېل_connected_layer(*(l.self_layer));
+    ټېل_connected_layer(*(l.output_layer));
 }
 
-void update_rnn_layer_gpu(layer l, update_args a)
+فراغ update_rnn_layer_gpu(layer l, update_دلیلونه a)
 {
-    update_connected_layer_gpu(*(l.input_layer),  a);
+    update_connected_layer_gpu(*(l.ننوت_layer),  a);
     update_connected_layer_gpu(*(l.self_layer),   a);
     update_connected_layer_gpu(*(l.output_layer), a);
 }
 
-void forward_rnn_layer_gpu(layer l, network net)
+فراغ forward_rnn_layer_gpu(layer l, شبکه net)
 {
-    network s = {0};
+    شبکه s = {0};
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحيح i;
+    layer ننوت_layer = *(l.ننوت_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
-    fill_gpu(l.outputs * l.batch * l.steps, 0, output_layer.delta_gpu, 1);
-    fill_gpu(l.outputs * l.batch * l.steps, 0, self_layer.delta_gpu, 1);
-    fill_gpu(l.outputs * l.batch * l.steps, 0, input_layer.delta_gpu, 1);
+    fill_gpu(l.outputs * l.batch * l.ګامونه, 0, output_layer.delta_gpu, 1);
+    fill_gpu(l.outputs * l.batch * l.ګامونه, 0, self_layer.delta_gpu, 1);
+    fill_gpu(l.outputs * l.batch * l.ګامونه, 0, ننوت_layer.delta_gpu, 1);
 
-    if(net.train) {
-        fill_gpu(l.outputs * l.batch * l.steps, 0, l.delta_gpu, 1);
+    إذا(net.train) {
+        fill_gpu(l.outputs * l.batch * l.ګامونه, 0, l.delta_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.state_gpu, 1, l.prev_state_gpu, 1);
     }
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input_gpu = net.input_gpu;
-        forward_connected_layer_gpu(input_layer, s);
+    لكل (i = 0; i < l.ګامونه; ++i) {
+        s.ننوت_gpu = net.ننوت_gpu;
+        forward_connected_layer_gpu(ننوت_layer, s);
 
-        s.input_gpu = l.state_gpu;
+        s.ننوت_gpu = l.state_gpu;
         forward_connected_layer_gpu(self_layer, s);
 
         fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-        axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu, 1, l.state_gpu, 1);
+        axpy_gpu(l.outputs * l.batch, 1, ننوت_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.ننوت_gpu = l.state_gpu;
         forward_connected_layer_gpu(output_layer, s);
 
-        net.input_gpu += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.ننوت_gpu += l.inputs*l.batch;
+        increment_layer(&ننوت_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_rnn_layer_gpu(layer l, network net)
+فراغ backward_rnn_layer_gpu(layer l, شبکه net)
 {
-    network s = {0};
+    شبکه s = {0};
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحيح i;
+    layer ننوت_layer = *(l.ننوت_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
-    increment_layer(&input_layer,  l.steps - 1);
-    increment_layer(&self_layer,   l.steps - 1);
-    increment_layer(&output_layer, l.steps - 1);
-    float *last_input = input_layer.output_gpu;
-    float *last_self = self_layer.output_gpu;
-    for (i = l.steps-1; i >= 0; --i) {
+    increment_layer(&ننوت_layer,  l.ګامونه - 1);
+    increment_layer(&self_layer,   l.ګامونه - 1);
+    increment_layer(&output_layer, l.ګامونه - 1);
+    عائم *وروستی_ننوت = ننوت_layer.output_gpu;
+    عائم *وروستی_self = self_layer.output_gpu;
+    لكل (i = l.ګامونه-1; i >= 0; --i) {
         fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-        axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu, 1, l.state_gpu, 1);
+        axpy_gpu(l.outputs * l.batch, 1, ننوت_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.ننوت_gpu = l.state_gpu;
         s.delta_gpu = self_layer.delta_gpu;
         backward_connected_layer_gpu(output_layer, s);
 
-        if(i != 0) {
+        إذا(i != 0) {
             fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-            axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
+            axpy_gpu(l.outputs * l.batch, 1, ننوت_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
             axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
-        }else {
+        }وإلا {
             copy_gpu(l.outputs*l.batch, l.prev_state_gpu, 1, l.state_gpu, 1);
         }
 
-        copy_gpu(l.outputs*l.batch, self_layer.delta_gpu, 1, input_layer.delta_gpu, 1);
+        copy_gpu(l.outputs*l.batch, self_layer.delta_gpu, 1, ننوت_layer.delta_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.ننوت_gpu = l.state_gpu;
         s.delta_gpu = (i > 0) ? self_layer.delta_gpu - l.outputs*l.batch : 0;
-        if (i == 0) s.delta_gpu = 0;
+        إذا (i == 0) s.delta_gpu = 0;
         backward_connected_layer_gpu(self_layer, s);
 
-        s.input_gpu = net.input_gpu + i*l.inputs*l.batch;
-        if(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
-        else s.delta_gpu = 0;
-        backward_connected_layer_gpu(input_layer, s);
+        s.ننوت_gpu = net.ننوت_gpu + i*l.inputs*l.batch;
+        إذا(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
+        وإلا s.delta_gpu = 0;
+        backward_connected_layer_gpu(ننوت_layer, s);
 
-        increment_layer(&input_layer,  -1);
+        increment_layer(&ننوت_layer,  -1);
         increment_layer(&self_layer,   -1);
         increment_layer(&output_layer, -1);
     }
     fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
-    axpy_gpu(l.outputs * l.batch, 1, last_input, 1, l.state_gpu, 1);
-    axpy_gpu(l.outputs * l.batch, 1, last_self, 1, l.state_gpu, 1);
+    axpy_gpu(l.outputs * l.batch, 1, وروستی_ننوت, 1, l.state_gpu, 1);
+    axpy_gpu(l.outputs * l.batch, 1, وروستی_self, 1, l.state_gpu, 1);
 }
-#endif
+#د_که_پای
