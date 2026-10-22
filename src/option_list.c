@@ -1,140 +1,140 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "option_list.h"
-#include "utils.h"
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <string.h>
+#अन्तर्भाव "option_list.h"
+#अन्तर्भाव "utils.h"
 
-list *read_data_cfg(char *filename)
+list *read_data_cfg(वर्ण *filename)
 {
     FILE *file = fopen(filename, "r");
-    if(file == 0) file_error(filename);
-    char *line;
-    int nu = 0;
+    जइ(file == 0) file_error(filename);
+    वर्ण *पङ्क्तिः;
+    पूर्णाङ्क nu = 0;
     list *options = make_list();
-    while((line=fgetl(file)) != 0){
+    जाव((पङ्क्तिः=fgetl(file)) != 0){
         ++ nu;
-        strip(line);
-        switch(line[0]){
-            case '\0':
-            case '#':
-            case ';':
-                free(line);
-                break;
-            default:
-                if(!read_option(line, options)){
-                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+        strip(पङ्क्तिः);
+        विकल्प(पङ्क्तिः[0]){
+            पक्ष '\0':
+            पक्ष '#':
+            पक्ष ';':
+                मुक्त(पङ्क्तिः);
+                भङ्ग;
+            स्वभाव:
+                जइ(!read_option(पङ्क्तिः, options)){
+                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, पङ्क्तिः);
+                    मुक्त(पङ्क्तिः);
                 }
-                break;
+                भङ्ग;
         }
     }
     fclose(file);
-    return options;
+    प्रत्यागम options;
 }
 
-metadata get_metadata(char *file)
+metadata get_metadata(वर्ण *file)
 {
     metadata m = {0};
     list *options = read_data_cfg(file);
 
-    char *name_list = option_find_str(options, "names", 0);
-    if(!name_list) name_list = option_find_str(options, "labels", 0);
-    if(!name_list) {
+    वर्ण *name_list = option_find_str(options, "names", 0);
+    जइ(!name_list) name_list = option_find_str(options, "labels", 0);
+    जइ(!name_list) {
         fprintf(stderr, "No names or labels found\n");
-    } else {
+    } अण्णहा {
         m.names = get_labels(name_list);
     }
     m.classes = option_find_int(options, "classes", 2);
     free_list(options);
-    return m;
+    प्रत्यागम m;
 }
 
-int read_option(char *s, list *options)
+पूर्णाङ्क read_option(वर्ण *s, list *options)
 {
     size_t i;
     size_t len = strlen(s);
-    char *val = 0;
-    for(i = 0; i < len; ++i){
-        if(s[i] == '='){
+    वर्ण *val = 0;
+    प्रति(i = 0; i < len; ++i){
+        जइ(s[i] == '='){
             s[i] = '\0';
             val = s+i+1;
-            break;
+            भङ्ग;
         }
     }
-    if(i == len-1) return 0;
-    char *key = s;
-    option_insert(options, key, val);
-    return 1;
+    जइ(i == len-1) प्रत्यागम 0;
+    वर्ण *कुञ्चिका = s;
+    option_निवेशय(options, कुञ्चिका, val);
+    प्रत्यागम 1;
 }
 
-void option_insert(list *l, char *key, char *val)
+शून्य option_निवेशय(list *l, वर्ण *कुञ्चिका, वर्ण *val)
 {
-    kvp *p = malloc(sizeof(kvp));
-    p->key = key;
+    kvp *p = malloc(परिमाण(kvp));
+    p->कुञ्चिका = कुञ्चिका;
     p->val = val;
     p->used = 0;
-    list_insert(l, p);
+    list_निवेशय(l, p);
 }
 
-void option_unused(list *l)
+शून्य option_unused(list *l)
 {
-    node *n = l->front;
-    while(n){
+    ग्रन्थिः *n = l->front;
+    जाव(n){
         kvp *p = (kvp *)n->val;
-        if(!p->used){
-            fprintf(stderr, "Unused field: '%s = %s'\n", p->key, p->val);
+        जइ(!p->used){
+            fprintf(stderr, "Unused field: '%s = %s'\n", p->कुञ्चिका, p->val);
         }
         n = n->next;
     }
 }
 
-char *option_find(list *l, char *key)
+वर्ण *option_find(list *l, वर्ण *कुञ्चिका)
 {
-    node *n = l->front;
-    while(n){
+    ग्रन्थिः *n = l->front;
+    जाव(n){
         kvp *p = (kvp *)n->val;
-        if(strcmp(p->key, key) == 0){
+        जइ(strcmp(p->कुञ्चिका, कुञ्चिका) == 0){
             p->used = 1;
-            return p->val;
+            प्रत्यागम p->val;
         }
         n = n->next;
     }
-    return 0;
+    प्रत्यागम 0;
 }
-char *option_find_str(list *l, char *key, char *def)
+वर्ण *option_find_str(list *l, वर्ण *कुञ्चिका, वर्ण *def)
 {
-    char *v = option_find(l, key);
-    if(v) return v;
-    if(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
-    return def;
-}
-
-int option_find_int(list *l, char *key, int def)
-{
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    fprintf(stderr, "%s: Using default '%d'\n", key, def);
-    return def;
+    वर्ण *v = option_find(l, कुञ्चिका);
+    जइ(v) प्रत्यागम v;
+    जइ(def) fprintf(stderr, "%s: Using default '%s'\n", कुञ्चिका, def);
+    प्रत्यागम def;
 }
 
-int option_find_int_quiet(list *l, char *key, int def)
+पूर्णाङ्क option_find_int(list *l, वर्ण *कुञ्चिका, पूर्णाङ्क def)
 {
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    return def;
+    वर्ण *v = option_find(l, कुञ्चिका);
+    जइ(v) प्रत्यागम atoi(v);
+    fprintf(stderr, "%s: Using default '%d'\n", कुञ्चिका, def);
+    प्रत्यागम def;
 }
 
-float option_find_float_quiet(list *l, char *key, float def)
+पूर्णाङ्क option_find_int_quiet(list *l, वर्ण *कुञ्चिका, पूर्णाङ्क def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    return def;
+    वर्ण *v = option_find(l, कुञ्चिका);
+    जइ(v) प्रत्यागम atoi(v);
+    प्रत्यागम def;
 }
 
-float option_find_float(list *l, char *key, float def)
+भिन्न option_find_float_quiet(list *l, वर्ण *कुञ्चिका, भिन्न def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    fprintf(stderr, "%s: Using default '%lf'\n", key, def);
-    return def;
+    वर्ण *v = option_find(l, कुञ्चिका);
+    जइ(v) प्रत्यागम atof(v);
+    प्रत्यागम def;
+}
+
+भिन्न option_find_float(list *l, वर्ण *कुञ्चिका, भिन्न def)
+{
+    वर्ण *v = option_find(l, कुञ्चिका);
+    जइ(v) प्रत्यागम atof(v);
+    fprintf(stderr, "%s: Using default '%lf'\n", कुञ्चिका, def);
+    प्रत्यागम def;
 }

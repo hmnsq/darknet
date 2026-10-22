@@ -1,19 +1,19 @@
 #ifndef SOFTMAX_LAYER_H
 #define SOFTMAX_LAYER_H
-#include "layer.h"
-#include "network.h"
+#अन्तर्भाव "layer.h"
+#अन्तर्भाव "network.h"
 
-typedef layer softmax_layer;
+प्रकारनिर्देश layer softmax_layer;
 
-void softmax_array(float *input, int n, float temp, float *output);
-softmax_layer make_softmax_layer(int batch, int inputs, int groups);
-void forward_softmax_layer(const softmax_layer l, network net);
-void backward_softmax_layer(const softmax_layer l, network net);
+शून्य softmax_array(भिन्न *निवेशः, पूर्णाङ्क n, भिन्न temp, भिन्न *output);
+softmax_layer make_softmax_layer(पूर्णाङ्क batch, पूर्णाङ्क inputs, पूर्णाङ्क groups);
+शून्य forward_softmax_layer(ध्रुव softmax_layer l, network net);
+शून्य backward_softmax_layer(ध्रुव softmax_layer l, network net);
 
 #ifdef GPU
-void pull_softmax_layer_output(const softmax_layer l);
-void forward_softmax_layer_gpu(const softmax_layer l, network net);
-void backward_softmax_layer_gpu(const softmax_layer l, network net);
+शून्य pull_softmax_layer_output(ध्रुव softmax_layer l);
+शून्य forward_softmax_layer_gpu(ध्रुव softmax_layer l, network net);
+शून्य backward_softmax_layer_gpu(ध्रुव softmax_layer l, network net);
 #endif
 
 #endif
