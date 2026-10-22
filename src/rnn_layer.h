@@ -11,13 +11,13 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
 
 void forward_rnn_layer(layer l, network net);
 void backward_rnn_layer(layer l, network net);
-void update_rnn_layer(layer l, update_args a);
+void update_rnn_layer(layer l, update_मगा_कातविरान a);
 
 #ifdef GPU
 void forward_rnn_layer_gpu(layer l, network net);
 void backward_rnn_layer_gpu(layer l, network net);
-void update_rnn_layer_gpu(layer l, update_args a);
-void push_rnn_layer(layer l);
+void update_rnn_layer_gpu(layer l, update_मगा_कातविरान a);
+void इतुलाक_rnn_layer(layer l);
 void pull_rnn_layer(layer l);
 #endif
 

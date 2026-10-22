@@ -47,7 +47,7 @@ void forward_avgpool_layer(const avgpool_layer l, network net)
             l.output[out_index] = 0;
             for(i = 0; i < l.h*l.w; ++i){
                 int in_index = i + l.h*l.w*(k + b*l.c);
-                l.output[out_index] += net.input[in_index];
+                l.output[out_index] += net.पासोक[in_index];
             }
             l.output[out_index] /= l.h*l.w;
         }

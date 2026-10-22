@@ -109,7 +109,7 @@ void delta_region_mask(float *truth, float *x, int n, int index, float *delta, i
 }
 
 
-void delta_region_class(float *output, float *delta, int index, int class, int classes, tree *hier, float scale, int stride, float *avg_cat, int tag)
+void delta_region_class(float *output, float *delta, int index, int class, int classes, पुनो *hier, float scale, int stride, float *avg_cat, int tag)
 {
     int i, n;
     if(hier){
@@ -158,7 +158,7 @@ int entry_index(layer l, int batch, int location, int entry)
 void forward_region_layer(const layer l, network net)
 {
     int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    memcpy(l.output, net.पासोक, l.outputs*l.batch*sizeof(float));
 
 #ifndef GPU
     for (b = 0; b < l.batch; ++b){
@@ -168,20 +168,20 @@ void forward_region_layer(const layer l, network net)
             index = entry_index(l, b, n*l.w*l.h, l.coords);
             if(!l.background) activate_array(l.output + index,   l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+            if(!l.softmax && !l.softmax_पुनो) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
+    if (l.softmax_पुनो){
         int i;
-        int count = l.coords + 1;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + count);
-            count += group_size;
+        int बिलांग = l.coords + 1;
+        for (i = 0; i < l.softmax_पुनो->groups; ++i) {
+            int group_size = l.softmax_पुनो->group_size[i];
+            softmax_cpu(net.पासोक + बिलांग, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + बिलांग);
+            बिलांग += group_size;
         }
     } else if (l.softmax){
         int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_cpu(net.input + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
+        softmax_cpu(net.पासोक + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
     }
 #endif
 
@@ -192,11 +192,11 @@ void forward_region_layer(const layer l, network net)
     float avg_cat = 0;
     float avg_obj = 0;
     float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    int बिलांग = 0;
+    int class_बिलांग = 0;
     *(l.cost) = 0;
     for (b = 0; b < l.batch; ++b) {
-        if(l.softmax_tree){
+        if(l.softmax_पुनो){
             int onlyclass = 0;
             for(t = 0; t < 30; ++t){
                 box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
@@ -210,7 +210,7 @@ void forward_region_layer(const layer l, network net)
                         int obj_index = entry_index(l, b, n, l.coords);
                         float scale =  l.output[obj_index];
                         l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                        float p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_tree, class, l.w*l.h);
+                        float p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_पुनो, class, l.w*l.h);
                         if(p > maxp){
                             maxp = p;
                             maxi = n;
@@ -218,11 +218,11 @@ void forward_region_layer(const layer l, network net)
                     }
                     int class_index = entry_index(l, b, maxi, l.coords + 1);
                     int obj_index = entry_index(l, b, maxi, l.coords);
-                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_पुनो, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
                     if(l.output[obj_index] < .3) l.delta[obj_index] = l.object_scale * (.3 - l.output[obj_index]);
                     else  l.delta[obj_index] = 0;
                     l.delta[obj_index] = 0;
-                    ++class_count;
+                    ++class_बिलांग;
                     onlyclass = 1;
                     break;
                 }
@@ -311,13 +311,13 @@ void forward_region_layer(const layer l, network net)
             int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
             if (l.map) class = l.map[class];
             int class_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords + 1);
-            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-            ++count;
-            ++class_count;
+            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_पुनो, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+            ++बिलांग;
+            ++class_बिलांग;
         }
     }
     *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, count);
+    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/बिलांग, avg_cat/class_बिलांग, avg_obj/बिलांग, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/बिलांग, बिलांग);
 }
 
 void backward_region_layer(const layer l, network net)
@@ -361,7 +361,7 @@ void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int ne
     }
 }
 
-void get_region_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, float tree_thresh, int relative, detection *dets)
+void get_region_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, float पुनो_thresh, int relative, detection *dets)
 {
     int i,j,n,z;
     float *predictions = l.output;
@@ -409,9 +409,9 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
             }
 
             int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + !l.background);
-            if(l.softmax_tree){
+            if(l.softmax_पुनो){
 
-                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_tree, 0, l.w*l.h);
+                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_पुनो, 0, l.w*l.h);
                 if(map){
                     for(j = 0; j < 200; ++j){
                         int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
@@ -419,7 +419,7 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
                         dets[index].prob[j] = (prob > thresh) ? prob : 0;
                     }
                 } else {
-                    int j =  hierarchy_top_prediction(predictions + class_index, l.softmax_tree, tree_thresh, l.w*l.h);
+                    int j =  hierarchy_इताअस_prediction(predictions + class_index, l.softmax_पुनो, पुनो_thresh, l.w*l.h);
                     dets[index].prob[j] = (scale > thresh) ? scale : 0;
                 }
             } else {
@@ -440,7 +440,7 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
 
 void forward_region_layer_gpu(const layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.batch*l.inputs, net.पासोक_gpu, 1, l.output_gpu, 1);
     int b, n;
     for (b = 0; b < l.batch; ++b){
         for(n = 0; n < l.n; ++n){
@@ -453,26 +453,26 @@ void forward_region_layer_gpu(const layer l, network net)
             index = entry_index(l, b, n*l.w*l.h, l.coords);
             if(!l.background) activate_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
+            if(!l.softmax && !l.softmax_पुनो) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
+    if (l.softmax_पुनो){
         int index = entry_index(l, 0, 0, l.coords + 1);
-        softmax_tree(net.input_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_tree);
+        softmax_पुनो(net.पासोक_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_पुनो);
     } else if (l.softmax) {
         int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_gpu(net.input_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
+        softmax_gpu(net.पासोक_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
     }
     if(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
         return;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.पासोक, l.batch*l.inputs);
     forward_region_layer(l, net);
     //cuda_push_array(l.output_gpu, l.output, l.batch*l.outputs);
     if(!net.train) return;
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_इतुलाक_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
 void backward_region_layer_gpu(const layer l, network net)

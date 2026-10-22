@@ -85,15 +85,15 @@ void forward_cost_layer(cost_layer l, network net)
     if(l.cost_type == MASKED){
         int i;
         for(i = 0; i < l.batch*l.inputs; ++i){
-            if(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
+            if(net.truth[i] == SECRET_नुमेरो) net.पासोक[i] = SECRET_नुमेरो;
         }
     }
     if(l.cost_type == SMOOTH){
-        smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
+        smooth_l1_cpu(l.batch*l.inputs, net.पासोक, net.truth, l.delta, l.output);
     }else if(l.cost_type == L1){
-        l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
+        l1_cpu(l.batch*l.inputs, net.पासोक, net.truth, l.delta, l.output);
     } else {
-        l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
+        l2_cpu(l.batch*l.inputs, net.पासोक, net.truth, l.delta, l.output);
     }
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
 }
@@ -110,9 +110,9 @@ void pull_cost_layer(cost_layer l)
     cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-void push_cost_layer(cost_layer l)
+void इतुलाक_cost_layer(cost_layer l)
 {
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
+    cuda_इतुलाक_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
 int float_abs_compare (const void * a, const void * b)
@@ -133,13 +133,13 @@ void forward_cost_layer_gpu(cost_layer l, network net)
     }
 
     if(l.cost_type == SMOOTH){
-        smooth_l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+        smooth_l1_gpu(l.batch*l.inputs, net.पासोक_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     } else if (l.cost_type == L1){
-        l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+        l1_gpu(l.batch*l.inputs, net.पासोक_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     } else if (l.cost_type == WGAN){
-        wgan_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+        wgan_gpu(l.batch*l.inputs, net.पासोक_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     } else {
-        l2_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+        l2_gpu(l.batch*l.inputs, net.पासोक_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     }
 
     if (l.cost_type == SEG && l.noobject_scale != 1) {
@@ -147,7 +147,7 @@ void forward_cost_layer_gpu(cost_layer l, network net)
         scale_mask_gpu(l.batch*l.inputs, l.output_gpu, 0, net.truth_gpu, l.noobject_scale);
     }
     if (l.cost_type == MASKED) {
-        mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
+        mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_नुमेरो, net.truth_gpu, 0);
     }
 
     if(l.ratio){

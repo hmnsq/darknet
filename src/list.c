@@ -25,9 +25,9 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
+void *list_आलिसिन(list *l){
     if(!l->back) return 0;
-    node *b = l->back;
+    बुहोल *b = l->back;
     void *val = b->val;
     l->back = b->prev;
     if(l->back) l->back->next = 0;
@@ -37,9 +37,9 @@ void *list_pop(list *l){
     return val;
 }
 
-void list_insert(list *l, void *val)
+void list_इसिंगित(list *l, void *val)
 {
-	node *new = malloc(sizeof(node));
+	बुहोल *new = malloc(sizeof(बुहोल));
 	new->val = val;
 	new->next = 0;
 
@@ -54,9 +54,9 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+void free_बुहोल(बुहोल *n)
 {
-	node *next;
+	बुहोल *next;
 	while(n) {
 		next = n->next;
 		free(n);
@@ -66,13 +66,13 @@ void free_node(node *n)
 
 void free_list(list *l)
 {
-	free_node(l->front);
+	free_बुहोल(l->front);
 	free(l);
 }
 
 void free_list_contents(list *l)
 {
-	node *n = l->front;
+	बुहोल *n = l->front;
 	while(n){
 		free(n->val);
 		n = n->next;
@@ -82,10 +82,10 @@ void free_list_contents(list *l)
 void **list_to_array(list *l)
 {
     void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
+    int बिलांग = 0;
+    बुहोल *n = l->front;
     while(n){
-        a[count++] = n->val;
+        a[बिलांग++] = n->val;
         n = n->next;
     }
     return a;

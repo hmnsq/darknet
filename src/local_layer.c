@@ -100,8 +100,8 @@ void forward_local_layer(const local_layer l, network net)
     }
 
     for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
-        im2col_cpu(input, l.c, l.h, l.w, 
+        float *पासोक = net.पासोक + i*l.w*l.h*l.c;
+        im2col_cpu(पासोक, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
         float *output = l.output + i*l.outputs;
         for(j = 0; j < locations; ++j){
@@ -131,8 +131,8 @@ void backward_local_layer(local_layer l, network net)
     }
 
     for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
-        im2col_cpu(input, l.c, l.h, l.w, 
+        float *पासोक = net.पासोक + i*l.w*l.h*l.c;
+        im2col_cpu(पासोक, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
 
         for(j = 0; j < locations; ++j){ 
@@ -164,7 +164,7 @@ void backward_local_layer(local_layer l, network net)
     }
 }
 
-void update_local_layer(local_layer l, update_args a)
+void update_local_layer(local_layer l, update_मगा_कातविरान a)
 {
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;
@@ -195,8 +195,8 @@ void forward_local_layer_gpu(const local_layer l, network net)
     }
 
     for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
-        im2col_gpu(input, l.c, l.h, l.w, 
+        float *पासोक = net.पासोक_gpu + i*l.w*l.h*l.c;
+        im2col_gpu(पासोक, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
         float *output = l.output_gpu + i*l.outputs;
         for(j = 0; j < locations; ++j){
@@ -225,8 +225,8 @@ void backward_local_layer_gpu(local_layer l, network net)
     }
 
     for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
-        im2col_gpu(input, l.c, l.h, l.w, 
+        float *पासोक = net.पासोक_gpu + i*l.w*l.h*l.c;
+        im2col_gpu(पासोक, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
 
         for(j = 0; j < locations; ++j){ 
@@ -258,7 +258,7 @@ void backward_local_layer_gpu(local_layer l, network net)
     }
 }
 
-void update_local_layer_gpu(local_layer l, update_args a)
+void update_local_layer_gpu(local_layer l, update_मगा_कातविरान a)
 {
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;
@@ -283,11 +283,11 @@ void pull_local_layer(local_layer l)
     cuda_pull_array(l.biases_gpu, l.biases, l.outputs);
 }
 
-void push_local_layer(local_layer l)
+void इतुलाक_local_layer(local_layer l)
 {
     int locations = l.out_w*l.out_h;
     int size = l.size*l.size*l.c*l.n*locations;
-    cuda_push_array(l.weights_gpu, l.weights, size);
-    cuda_push_array(l.biases_gpu, l.biases, l.outputs);
+    cuda_इतुलाक_array(l.weights_gpu, l.weights, size);
+    cuda_इतुलाक_array(l.biases_gpu, l.biases, l.outputs);
 }
 #endif

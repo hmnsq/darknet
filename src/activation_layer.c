@@ -37,7 +37,7 @@ layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
 
 void forward_activation_layer(layer l, network net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    copy_cpu(l.outputs*l.batch, net.पासोक, 1, l.output, 1);
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
@@ -51,7 +51,7 @@ void backward_activation_layer(layer l, network net)
 
 void forward_activation_layer_gpu(layer l, network net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.outputs*l.batch, net.पासोक_gpu, 1, l.output_gpu, 1);
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 

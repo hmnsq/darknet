@@ -81,7 +81,7 @@ void forward_iseg_layer(const layer l, network net)
     double time = what_time_is_it_now();
     int i,b,j,k;
     int ids = l.extra;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    memcpy(l.output, net.पासोक, l.outputs*l.batch*sizeof(float));
     memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
 
 #ifndef GPU
@@ -201,16 +201,16 @@ void backward_iseg_layer(const layer l, network net)
 
 void forward_iseg_layer_gpu(const layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.batch*l.inputs, net.पासोक_gpu, 1, l.output_gpu, 1);
     int b;
     for (b = 0; b < l.batch; ++b){
         activate_array_gpu(l.output_gpu + b*l.outputs, l.classes*l.w*l.h, LOGISTIC);
         //if(l.extra) activate_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC);
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.पासोक, l.batch*l.inputs);
     forward_iseg_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_इतुलाक_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
 void backward_iseg_layer_gpu(const layer l, network net)

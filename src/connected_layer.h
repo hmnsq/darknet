@@ -9,13 +9,13 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
 
 void forward_connected_layer(layer l, network net);
 void backward_connected_layer(layer l, network net);
-void update_connected_layer(layer l, update_args a);
+void update_connected_layer(layer l, update_मगा_कातविरान a);
 
 #ifdef GPU
 void forward_connected_layer_gpu(layer l, network net);
 void backward_connected_layer_gpu(layer l, network net);
-void update_connected_layer_gpu(layer l, update_args a);
-void push_connected_layer(layer l);
+void update_connected_layer_gpu(layer l, update_मगा_कातविरान a);
+void इतुलाक_connected_layer(layer l);
 void pull_connected_layer(layer l);
 #endif
 

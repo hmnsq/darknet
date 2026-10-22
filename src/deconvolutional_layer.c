@@ -231,7 +231,7 @@ void forward_deconvolutional_layer(const layer l, network net)
 
     for(i = 0; i < l.batch; ++i){
         float *a = l.weights;
-        float *b = net.input + i*l.c*l.h*l.w;
+        float *b = net.पासोक + i*l.c*l.h*l.w;
         float *c = net.workspace;
 
         gemm_cpu(1,0,m,n,k,1,a,m,b,n,0,c,n);
@@ -265,7 +265,7 @@ void backward_deconvolutional_layer(layer l, network net)
         int n = l.size*l.size*l.n;
         int k = l.h*l.w;
 
-        float *a = net.input + i*m*k;
+        float *a = net.पासोक + i*m*k;
         float *b = net.workspace;
         float *c = l.weight_updates;
 
@@ -287,7 +287,7 @@ void backward_deconvolutional_layer(layer l, network net)
     }
 }
 
-void update_deconvolutional_layer(layer l, update_args a)
+void update_deconvolutional_layer(layer l, update_मगा_कातविरान a)
 {
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;

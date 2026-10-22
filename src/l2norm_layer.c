@@ -36,7 +36,7 @@ layer make_l2norm_layer(int batch, int inputs)
 
 void forward_l2norm_layer(const layer l, network net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    copy_cpu(l.outputs*l.batch, net.पासोक, 1, l.output, 1);
     l2normalize_cpu(l.output, l.scales, l.batch, l.out_c, l.out_w*l.out_h);
 }
 
@@ -50,7 +50,7 @@ void backward_l2norm_layer(const layer l, network net)
 
 void forward_l2norm_layer_gpu(const layer l, network net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.outputs*l.batch, net.पासोक_gpu, 1, l.output_gpu, 1);
     l2normalize_gpu(l.output_gpu, l.scales_gpu, l.batch, l.out_c, l.out_w*l.out_h);
 }
 

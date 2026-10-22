@@ -32,22 +32,22 @@
 #include "parser.h"
 #include "data.h"
 
-load_args get_base_args(network *net)
+load_मगा_कातविरान get_base_मगा_कातविरान(network *net)
 {
-    load_args args = {0};
-    args.w = net->w;
-    args.h = net->h;
-    args.size = net->w;
+    load_मगा_कातविरान मगा_कातविरान = {0};
+    मगा_कातविरान.w = net->w;
+    मगा_कातविरान.h = net->h;
+    मगा_कातविरान.size = net->w;
 
-    args.min = net->min_crop;
-    args.max = net->max_crop;
-    args.angle = net->angle;
-    args.aspect = net->aspect;
-    args.exposure = net->exposure;
-    args.center = net->center;
-    args.saturation = net->saturation;
-    args.hue = net->hue;
-    return args;
+    मगा_कातविरान.min = net->min_crop;
+    मगा_कातविरान.max = net->max_crop;
+    मगा_कातविरान.angle = net->angle;
+    मगा_कातविरान.aspect = net->aspect;
+    मगा_कातविरान.exposure = net->exposure;
+    मगा_कातविरान.center = net->center;
+    मगा_कातविरान.saturation = net->saturation;
+    मगा_कातविरान.hue = net->hue;
+    return मगा_कातविरान;
 }
 
 network *load_network(char *cfg, char *weights, int clear)
@@ -62,8 +62,8 @@ network *load_network(char *cfg, char *weights, int clear)
 
 size_t get_current_batch(network *net)
 {
-    size_t batch_num = (*net->seen)/(net->batch*net->subdivisions);
-    return batch_num;
+    size_t batch_नुमेरो = (*net->seen)/(net->batch*net->subdivisions);
+    return batch_नुमेरो;
 }
 
 void reset_network_state(network *net, int b)
@@ -89,30 +89,30 @@ void reset_rnn(network *net)
 
 float get_current_rate(network *net)
 {
-    size_t batch_num = get_current_batch(net);
+    size_t batch_नुमेरो = get_current_batch(net);
     int i;
     float rate;
-    if (batch_num < net->burn_in) return net->learning_rate * pow((float)batch_num / net->burn_in, net->power);
+    if (batch_नुमेरो < net->burn_in) return net->learning_rate * pow((float)batch_नुमेरो / net->burn_in, net->power);
     switch (net->policy) {
         case CONSTANT:
             return net->learning_rate;
         case STEP:
-            return net->learning_rate * pow(net->scale, batch_num/net->step);
+            return net->learning_rate * pow(net->scale, batch_नुमेरो/net->step);
         case STEPS:
             rate = net->learning_rate;
-            for(i = 0; i < net->num_steps; ++i){
-                if(net->steps[i] > batch_num) return rate;
+            for(i = 0; i < net->नुमेरो_steps; ++i){
+                if(net->steps[i] > batch_नुमेरो) return rate;
                 rate *= net->scales[i];
             }
             return rate;
         case EXP:
-            return net->learning_rate * pow(net->gamma, batch_num);
+            return net->learning_rate * pow(net->gamma, batch_नुमेरो);
         case POLY:
-            return net->learning_rate * pow(1 - (float)batch_num / net->max_batches, net->power);
+            return net->learning_rate * pow(1 - (float)batch_नुमेरो / net->max_batches, net->power);
         case RANDOM:
             return net->learning_rate * pow(rand_uniform(0,1), net->power);
         case SIG:
-            return net->learning_rate * (1./(1.+exp(net->gamma*(batch_num - net->step))));
+            return net->learning_rate * (1./(1.+exp(net->gamma*(batch_नुमेरो - net->step))));
         default:
             fprintf(stderr, "Policy is weird!\n");
             return net->learning_rate;
@@ -202,7 +202,7 @@ void forward_network(network *netp)
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
         l.forward(l, net);
-        net.input = l.output;
+        net.पासोक = l.output;
         if(l.truth) {
             net.truth = l.output;
         }
@@ -220,7 +220,7 @@ void update_network(network *netp)
 #endif
     network net = *netp;
     int i;
-    update_args a = {0};
+    update_मगा_कातविरान a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
     a.momentum = net.momentum;
@@ -245,14 +245,14 @@ void calc_network_cost(network *netp)
     network net = *netp;
     int i;
     float sum = 0;
-    int count = 0;
+    int बिलांग = 0;
     for(i = 0; i < net.n; ++i){
         if(net.layers[i].cost){
             sum += net.layers[i].cost[0];
-            ++count;
+            ++बिलांग;
         }
     }
-    *net.cost = sum/count;
+    *net.cost = sum/बिलांग;
 }
 
 int get_predicted_class_network(network *net)
@@ -278,7 +278,7 @@ void backward_network(network *netp)
             net = orig;
         }else{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.पासोक = prev.output;
             net.delta = prev.delta;
         }
         net.index = i;
@@ -304,7 +304,7 @@ float train_network_sgd(network *net, data d, int n)
     int i;
     float sum = 0;
     for(i = 0; i < n; ++i){
-        get_random_batch(d, batch, net->input, net->truth);
+        get_random_batch(d, batch, net->पासोक, net->truth);
         float err = train_network_datum(net);
         sum += err;
     }
@@ -320,7 +320,7 @@ float train_network(network *net, data d)
     int i;
     float sum = 0;
     for(i = 0; i < n; ++i){
-        get_next_batch(d, batch, i*batch, net->input, net->truth);
+        get_next_batch(d, batch, i*batch, net->पासोक, net->truth);
         float err = train_network_datum(net);
         sum += err;
     }
@@ -412,15 +412,15 @@ int resize_network(network *net, int w, int h)
     net->truths = out.outputs;
     if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
     net->output = out.output;
-    free(net->input);
+    free(net->पासोक);
     free(net->truth);
-    net->input = calloc(net->inputs*net->batch, sizeof(float));
+    net->पासोक = calloc(net->inputs*net->batch, sizeof(float));
     net->truth = calloc(net->truths*net->batch, sizeof(float));
 #ifdef GPU
     if(gpu_index >= 0){
-        cuda_free(net->input_gpu);
+        cuda_free(net->पासोक_gpu);
         cuda_free(net->truth_gpu);
-        net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
+        net->पासोक_gpu = cuda_make_array(net->पासोक, net->inputs*net->batch);
         net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
         if(workspace_size){
             net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
@@ -488,16 +488,16 @@ void visualize_network(network *net)
     } 
 }
 
-void top_predictions(network *net, int k, int *index)
+void इताअस_predictions(network *net, int k, int *index)
 {
-    top_k(net->output, net->outputs, k, index);
+    इताअस_k(net->output, net->outputs, k, index);
 }
 
 
-float *network_predict(network *net, float *input)
+float *network_predict(network *net, float *पासोक)
 {
     network orig = *net;
-    net->input = input;
+    net->पासोक = पासोक;
     net->truth = 0;
     net->train = 0;
     net->delta = 0;
@@ -507,14 +507,14 @@ float *network_predict(network *net, float *input)
     return out;
 }
 
-int num_detections(network *net, float thresh)
+int नुमेरो_detections(network *net, float thresh)
 {
     int i;
     int s = 0;
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
         if(l.type == YOLO){
-            s += yolo_num_detections(l, thresh);
+            s += yolo_नुमेरो_detections(l, thresh);
         }
         if(l.type == DETECTION || l.type == REGION){
             s += l.w*l.h*l.n;
@@ -523,12 +523,12 @@ int num_detections(network *net, float thresh)
     return s;
 }
 
-detection *make_network_boxes(network *net, float thresh, int *num)
+detection *make_network_boxes(network *net, float thresh, int *नुमेरो)
 {
     layer l = net->layers[net->n - 1];
     int i;
-    int nboxes = num_detections(net, thresh);
-    if(num) *num = nboxes;
+    int nboxes = नुमेरो_detections(net, thresh);
+    if(नुमेरो) *नुमेरो = nboxes;
     detection *dets = calloc(nboxes, sizeof(detection));
     for(i = 0; i < nboxes; ++i){
         dets[i].prob = calloc(l.classes, sizeof(float));
@@ -545,8 +545,8 @@ void fill_network_boxes(network *net, int w, int h, float thresh, float hier, in
     for(j = 0; j < net->n; ++j){
         layer l = net->layers[j];
         if(l.type == YOLO){
-            int count = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
-            dets += count;
+            int बिलांग = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
+            dets += बिलांग;
         }
         if(l.type == REGION){
             get_region_detections(l, w, h, net->w, net->h, thresh, map, hier, relative, dets);
@@ -559,9 +559,9 @@ void fill_network_boxes(network *net, int w, int h, float thresh, float hier, in
     }
 }
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *नुमेरो)
 {
-    detection *dets = make_network_boxes(net, thresh, num);
+    detection *dets = make_network_boxes(net, thresh, नुमेरो);
     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
     return dets;
 }
@@ -636,7 +636,7 @@ matrix network_predict_data(network *net, data test)
     return pred;   
 }
 
-void print_network(network *net)
+void इलिम्बाग_network(network *net)
 {
     int i,j;
     for(i = 0; i < net->n; ++i){
@@ -673,9 +673,9 @@ void compare_networks(network *n1, network *n2, data test)
         }
     }
     printf("%5d %5d\n%5d %5d\n", a, b, c, d);
-    float num = pow((abs(b - c) - 1.), 2.);
+    float नुमेरो = pow((abs(b - c) - 1.), 2.);
     float den = b + c;
-    printf("%f\n", num/den); 
+    printf("%f\n", नुमेरो/den); 
 }
 
 float network_accuracy(network *net, data d)
@@ -720,10 +720,10 @@ void free_network(network *net)
         free_layer(net->layers[i]);
     }
     free(net->layers);
-    if(net->input) free(net->input);
+    if(net->पासोक) free(net->पासोक);
     if(net->truth) free(net->truth);
 #ifdef GPU
-    if(net->input_gpu) cuda_free(net->input_gpu);
+    if(net->पासोक_gpu) cuda_free(net->पासोक_gpu);
     if(net->truth_gpu) cuda_free(net->truth_gpu);
 #endif
     free(net);
@@ -763,9 +763,9 @@ void forward_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    cuda_push_array(net.input_gpu, net.input, net.inputs*net.batch);
+    cuda_इतुलाक_array(net.पासोक_gpu, net.पासोक, net.inputs*net.batch);
     if(net.truth){
-        cuda_push_array(net.truth_gpu, net.truth, net.truths*net.batch);
+        cuda_इतुलाक_array(net.truth_gpu, net.truth, net.truths*net.batch);
     }
 
     int i;
@@ -776,8 +776,8 @@ void forward_network_gpu(network *netp)
             fill_gpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
         }
         l.forward_gpu(l, net);
-        net.input_gpu = l.output_gpu;
-        net.input = l.output;
+        net.पासोक_gpu = l.output_gpu;
+        net.पासोक = l.output;
         if(l.truth) {
             net.truth_gpu = l.output_gpu;
             net.truth = l.output;
@@ -800,9 +800,9 @@ void backward_network_gpu(network *netp)
             net = orig;
         }else{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.पासोक = prev.output;
             net.delta = prev.delta;
-            net.input_gpu = prev.output_gpu;
+            net.पासोक_gpu = prev.output_gpu;
             net.delta_gpu = prev.delta_gpu;
         }
         net.index = i;
@@ -815,7 +815,7 @@ void update_network_gpu(network *netp)
     network net = *netp;
     cuda_set_device(net.gpu_index);
     int i;
-    update_args a = {0};
+    update_मगा_कातविरान a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
     a.momentum = net.momentum;
@@ -852,21 +852,21 @@ typedef struct {
     network *net;
     data d;
     float *err;
-} train_args;
+} train_मगा_कातविरान;
 
 void *train_thread(void *ptr)
 {
-    train_args args = *(train_args*)ptr;
+    train_मगा_कातविरान मगा_कातविरान = *(train_मगा_कातविरान*)ptr;
     free(ptr);
-    cuda_set_device(args.net->gpu_index);
-    *args.err = train_network(args.net, args.d);
+    cuda_set_device(मगा_कातविरान.net->gpu_index);
+    *मगा_कातविरान.err = train_network(मगा_कातविरान.net, मगा_कातविरान.d);
     return 0;
 }
 
 pthread_t train_network_in_thread(network *net, data d, float *err)
 {
     pthread_t thread;
-    train_args *ptr = (train_args *)calloc(1, sizeof(train_args));
+    train_मगा_कातविरान *ptr = (train_मगा_कातविरान *)calloc(1, sizeof(train_मगा_कातविरान));
     ptr->net = net;
     ptr->d = d;
     ptr->err = err;
@@ -915,27 +915,27 @@ void pull_weights(layer l)
     }
 }
 
-void push_weights(layer l)
+void इतुलाक_weights(layer l)
 {
     if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
-        cuda_push_array(l.biases_gpu, l.biases, l.n);
-        cuda_push_array(l.weights_gpu, l.weights, l.nweights);
-        if(l.scales) cuda_push_array(l.scales_gpu, l.scales, l.n);
+        cuda_इतुलाक_array(l.biases_gpu, l.biases, l.n);
+        cuda_इतुलाक_array(l.weights_gpu, l.weights, l.nweights);
+        if(l.scales) cuda_इतुलाक_array(l.scales_gpu, l.scales, l.n);
     } else if(l.type == CONNECTED){
-        cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
+        cuda_इतुलाक_array(l.biases_gpu, l.biases, l.outputs);
+        cuda_इतुलाक_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
     }
 }
 
 void distribute_weights(layer l, layer base)
 {
     if (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
-        cuda_push_array(l.biases_gpu, base.biases, l.n);
-        cuda_push_array(l.weights_gpu, base.weights, l.nweights);
-        if (base.scales) cuda_push_array(l.scales_gpu, base.scales, l.n);
+        cuda_इतुलाक_array(l.biases_gpu, base.biases, l.n);
+        cuda_इतुलाक_array(l.weights_gpu, base.weights, l.nweights);
+        if (base.scales) cuda_इतुलाक_array(l.scales_gpu, base.scales, l.n);
     } else if (l.type == CONNECTED) {
-        cuda_push_array(l.biases_gpu, base.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
+        cuda_इतुलाक_array(l.biases_gpu, base.biases, l.outputs);
+        cuda_इतुलाक_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
     }
 }
 
@@ -1048,12 +1048,12 @@ typedef struct{
     network **nets;
     int n;
     int j;
-} sync_args;
+} sync_मगा_कातविरान;
 
 void *sync_layer_thread(void *ptr)
 {
-    sync_args args = *(sync_args*)ptr;
-    sync_layer(args.nets, args.n, args.j);
+    sync_मगा_कातविरान मगा_कातविरान = *(sync_मगा_कातविरान*)ptr;
+    sync_layer(मगा_कातविरान.nets, मगा_कातविरान.n, मगा_कातविरान.j);
     free(ptr);
     return 0;
 }
@@ -1061,7 +1061,7 @@ void *sync_layer_thread(void *ptr)
 pthread_t sync_layer_in_thread(network **nets, int n, int j)
 {
     pthread_t thread;
-    sync_args *ptr = (sync_args *)calloc(1, sizeof(sync_args));
+    sync_मगा_कातविरान *ptr = (sync_मगा_कातविरान *)calloc(1, sizeof(sync_मगा_कातविरान));
     ptr->nets = nets;
     ptr->n = n;
     ptr->j = j;

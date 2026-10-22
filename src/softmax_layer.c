@@ -38,16 +38,16 @@ softmax_layer make_softmax_layer(int batch, int inputs, int groups)
 
 void forward_softmax_layer(const softmax_layer l, network net)
 {
-    if(l.softmax_tree){
+    if(l.softmax_पुनो){
         int i;
-        int count = 0;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + count);
-            count += group_size;
+        int बिलांग = 0;
+        for (i = 0; i < l.softmax_पुनो->groups; ++i) {
+            int group_size = l.softmax_पुनो->group_size[i];
+            softmax_cpu(net.पासोक + बिलांग, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + बिलांग);
+            बिलांग += group_size;
         }
     } else {
-        softmax_cpu(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
+        softmax_cpu(net.पासोक, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
     }
 
     if(net.truth && !l.noloss){
@@ -70,8 +70,8 @@ void pull_softmax_layer_output(const softmax_layer layer)
 
 void forward_softmax_layer_gpu(const softmax_layer l, network net)
 {
-    if(l.softmax_tree){
-        softmax_tree(net.input_gpu, 1, l.batch, l.inputs, l.temperature, l.output_gpu, *l.softmax_tree);
+    if(l.softmax_पुनो){
+        softmax_पुनो(net.पासोक_gpu, 1, l.batch, l.inputs, l.temperature, l.output_gpu, *l.softmax_पुनो);
         /*
         int i;
         int count = 0;
@@ -83,16 +83,16 @@ void forward_softmax_layer_gpu(const softmax_layer l, network net)
         */
     } else {
         if(l.spatial){
-            softmax_gpu(net.input_gpu, l.c, l.batch*l.c, l.inputs/l.c, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu);
+            softmax_gpu(net.पासोक_gpu, l.c, l.batch*l.c, l.inputs/l.c, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu);
         }else{
-            softmax_gpu(net.input_gpu, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output_gpu);
+            softmax_gpu(net.पासोक_gpu, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output_gpu);
         }
     }
     if(net.truth && !l.noloss){
         softmax_x_ent_gpu(l.batch*l.inputs, l.output_gpu, net.truth_gpu, l.delta_gpu, l.loss_gpu);
-        if(l.softmax_tree){
-            mask_gpu(l.batch*l.inputs, l.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
-            mask_gpu(l.batch*l.inputs, l.loss_gpu, SECRET_NUM, net.truth_gpu, 0);
+        if(l.softmax_पुनो){
+            mask_gpu(l.batch*l.inputs, l.delta_gpu, SECRET_नुमेरो, net.truth_gpu, 0);
+            mask_gpu(l.batch*l.inputs, l.loss_gpu, SECRET_नुमेरो, net.truth_gpu, 0);
         }
         cuda_pull_array(l.loss_gpu, l.loss, l.batch*l.inputs);
         l.cost[0] = sum_array(l.loss, l.batch*l.inputs);

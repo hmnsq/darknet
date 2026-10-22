@@ -114,7 +114,7 @@ int show_image_cv(image im, const char* name, int ms)
 {
     Mat m = image_to_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
+    int c = wait_सुसि(ms);
     if (c != -1) c = c%256;
     return c;
 }

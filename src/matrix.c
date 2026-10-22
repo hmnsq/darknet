@@ -21,7 +21,7 @@ float matrix_topk_accuracy(matrix truth, matrix guess, int k)
     int i,j;
     int correct = 0;
     for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
+        इताअस_k(guess.vals[i], n, k, indexes);
         for(j = 0; j < k; ++j){
             int class = indexes[j];
             if(truth.vals[i][class]){
@@ -116,7 +116,7 @@ matrix hold_out_matrix(matrix *m, int n)
     return h;
 }
 
-float *pop_column(matrix *m, int c)
+float *आलिसिन_column(matrix *m, int c)
 {
     float *col = calloc(m->rows, sizeof(float));
     int i, j;
@@ -138,19 +138,19 @@ matrix csv_to_matrix(char *filename)
     matrix m;
     m.cols = -1;
 
-    char *line;
+    char *लिन्या;
 
     int n = 0;
     int size = 1024;
     m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
+    while((लिन्या = fgetl(fp))){
+        if(m.cols == -1) m.cols = बिलांग_fields(लिन्या);
         if(n == size){
             size *= 2;
             m.vals = realloc(m.vals, size*sizeof(float*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(लिन्या, m.cols);
+        free(लिन्या);
         ++n;
     }
     m.vals = realloc(m.vals, n*sizeof(float*));
@@ -171,7 +171,7 @@ void matrix_to_csv(matrix m)
     }
 }
 
-void print_matrix(matrix m)
+void इलिम्बाग_matrix(matrix m)
 {
     int i, j;
     printf("%d X %d Matrix:\n",m.rows, m.cols);

@@ -51,7 +51,7 @@ void forward_detection_layer(const detection_layer l, network net)
 {
     int locations = l.side*l.side;
     int i,j;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    memcpy(l.output, net.पासोक, l.outputs*l.batch*sizeof(float));
     //if(l.reorg) reorg(l.output, l.w*l.h, size*l.n, l.batch, 1);
     int b;
     if (l.softmax){
@@ -70,7 +70,7 @@ void forward_detection_layer(const detection_layer l, network net)
         float avg_allcat = 0;
         float avg_obj = 0;
         float avg_anyobj = 0;
-        int count = 0;
+        int बिलांग = 0;
         *(l.cost) = 0;
         int size = l.inputs * l.batch;
         memset(l.delta, 0, size * sizeof(float));
@@ -178,7 +178,7 @@ void forward_detection_layer(const detection_layer l, network net)
 
                 *(l.cost) += pow(1-iou, 2);
                 avg_iou += iou;
-                ++count;
+                ++बिलांग;
             }
         }
 
@@ -194,7 +194,7 @@ void forward_detection_layer(const detection_layer l, network net)
                 }
             }
             int indexes[100];
-            top_k(costs, l.batch*locations*l.n, 100, indexes);
+            इताअस_k(costs, l.batch*locations*l.n, 100, indexes);
             float cutoff = costs[indexes[99]];
             for (b = 0; b < l.batch; ++b) {
                 int index = b*l.inputs;
@@ -212,7 +212,7 @@ void forward_detection_layer(const detection_layer l, network net)
         *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
 
 
-        printf("Detection Avg IOU: %f, Pos Cat: %f, All Cat: %f, Pos Obj: %f, Any Obj: %f, count: %d\n", avg_iou/count, avg_cat/count, avg_allcat/(count*l.classes), avg_obj/count, avg_anyobj/(l.batch*locations*l.n), count);
+        printf("Detection Avg IOU: %f, Pos Cat: %f, All Cat: %f, Pos Obj: %f, Any Obj: %f, count: %d\n", avg_iou/बिलांग, avg_cat/बिलांग, avg_allcat/(बिलांग*l.classes), avg_obj/बिलांग, avg_anyobj/(l.batch*locations*l.n), बिलांग);
         //if(l.reorg) reorg(l.delta, l.w*l.h, size*l.n, l.batch, 0);
     }
 }
@@ -256,14 +256,14 @@ void get_detection_detections(layer l, int w, int h, float thresh, detection *de
 void forward_detection_layer_gpu(const detection_layer l, network net)
 {
     if(!net.train){
-        copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
+        copy_gpu(l.batch*l.inputs, net.पासोक_gpu, 1, l.output_gpu, 1);
         return;
     }
 
-    cuda_pull_array(net.input_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(net.पासोक_gpu, net.पासोक, l.batch*l.inputs);
     forward_detection_layer(l, net);
-    cuda_push_array(l.output_gpu, l.output, l.batch*l.outputs);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
+    cuda_इतुलाक_array(l.output_gpu, l.output, l.batch*l.outputs);
+    cuda_इतुलाक_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
 void backward_detection_layer_gpu(detection_layer l, network net)

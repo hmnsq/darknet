@@ -77,8 +77,8 @@ void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
     for(i = 0; i < sections; ++i){
         size_t start = n*i/sections;
         size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+        size_t नुमेरो = end-start;
+        shuffle(arr+(start*size), नुमेरो, size);
     }
 }
 
@@ -234,7 +234,7 @@ float sec(clock_t clocks)
     return (float)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+void इताअस_k(float *a, int n, int k, int *index)
 {
     int i,j;
     for(j = 0; j < k; ++j) index[j] = -1;
@@ -289,11 +289,11 @@ list *split_str(char *s, char delim)
     size_t i;
     size_t len = strlen(s);
     list *l = make_list();
-    list_insert(l, s);
+    list_इसिंगित(l, s);
     for(i = 0; i < len; ++i){
         if(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_इसिंगित(l, &(s[i+1]));
         }
     }
     return l;
@@ -336,31 +336,31 @@ char *fgetl(FILE *fp)
 {
     if(feof(fp)) return 0;
     size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
+    char *लिन्या = malloc(size*sizeof(char));
+    if(!fgets(लिन्या, size, fp)){
+        free(लिन्या);
         return 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = strlen(लिन्या);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
+    while((लिन्या[curr-1] != '\n') && !feof(fp)){
         if(curr == size-1){
             size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
+            लिन्या = realloc(लिन्या, size*sizeof(char));
+            if(!लिन्या) {
                 printf("%ld\n", size);
                 malloc_error();
             }
         }
         size_t readsize = size-curr;
         if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        fgets(&लिन्या[curr], readsize, fp);
+        curr = strlen(लिन्या);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    if(लिन्या[curr-1] == '\n') लिन्या[curr-1] = '\0';
 
-    return line;
+    return लिन्या;
 }
 
 int read_int(int fd)
@@ -427,50 +427,50 @@ char *copy_string(char *s)
     return copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_लिन्या(char *लिन्या)
 {
     list *l = make_list();
     char *c, *p;
     int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
+    for(c = लिन्या, p = लिन्या; *c != '\0'; ++c){
         if(*c == '"') in = !in;
         else if(*c == ',' && !in){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_इसिंगित(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
+    list_इसिंगित(l, copy_string(p));
     return l;
 }
 
-int count_fields(char *line)
+int बिलांग_fields(char *लिन्या)
 {
-    int count = 0;
+    int बिलांग = 0;
     int done = 0;
     char *c;
-    for(c = line; !done; ++c){
+    for(c = लिन्या; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        if(*c == ',' || done) ++बिलांग;
     }
-    return count;
+    return बिलांग;
 }
 
-float *parse_fields(char *line, int n)
+float *parse_fields(char *लिन्या, int n)
 {
     float *field = calloc(n, sizeof(float));
     char *c, *p, *end;
-    int count = 0;
+    int बिलांग = 0;
     int done = 0;
-    for(c = line, p = line; !done; ++c){
+    for(c = लिन्या, p = लिन्या; !done; ++c){
         done = (*c == '\0');
         if(*c == ',' || done){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            field[बिलांग] = strtod(p, &end);
+            if(p == c) field[बिलांग] = nan("");
+            if(end != c && (end != c-1 || *end != '\r')) field[बिलांग] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++बिलांग;
         }
     }
     return field;
@@ -504,7 +504,7 @@ void mean_arrays(float **a, int n, int els, float *avg)
     }
 }
 
-void print_statistics(float *a, int n)
+void इलिम्बाग_statistics(float *a, int n)
 {
     float m = mean_array(a, n);
     float v = variance_array(a, n);

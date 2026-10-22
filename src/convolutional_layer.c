@@ -12,20 +12,20 @@
 #include "xnor_layer.h"
 #endif
 
-void swap_binary(convolutional_layer *l)
+void swap_दालावाहान(convolutional_layer *l)
 {
     float *swap = l->weights;
-    l->weights = l->binary_weights;
-    l->binary_weights = swap;
+    l->weights = l->दालावाहान_weights;
+    l->दालावाहान_weights = swap;
 
 #ifdef GPU
     swap = l->weights_gpu;
-    l->weights_gpu = l->binary_weights_gpu;
-    l->binary_weights_gpu = swap;
+    l->weights_gpu = l->दालावाहान_weights_gpu;
+    l->दालावाहान_weights_gpu = swap;
 #endif
 }
 
-void binarize_weights(float *weights, int n, int size, float *binary)
+void binarize_weights(float *weights, int n, int size, float *दालावाहान)
 {
     int i, f;
     for(f = 0; f < n; ++f){
@@ -35,30 +35,30 @@ void binarize_weights(float *weights, int n, int size, float *binary)
         }
         mean = mean / size;
         for(i = 0; i < size; ++i){
-            binary[f*size + i] = (weights[f*size + i] > 0) ? mean : -mean;
+            दालावाहान[f*size + i] = (weights[f*size + i] > 0) ? mean : -mean;
         }
     }
 }
 
-void binarize_cpu(float *input, int n, float *binary)
+void binarize_cpu(float *पासोक, int n, float *दालावाहान)
 {
     int i;
     for(i = 0; i < n; ++i){
-        binary[i] = (input[i] > 0) ? 1 : -1;
+        दालावाहान[i] = (पासोक[i] > 0) ? 1 : -1;
     }
 }
 
-void binarize_input(float *input, int n, int size, float *binary)
+void binarize_पासोक(float *पासोक, int n, int size, float *दालावाहान)
 {
     int i, s;
     for(s = 0; s < size; ++s){
         float mean = 0;
         for(i = 0; i < n; ++i){
-            mean += fabs(input[i*size + s]);
+            mean += fabs(पासोक[i*size + s]);
         }
         mean = mean / n;
         for(i = 0; i < n; ++i){
-            binary[i*size + s] = (input[i*size + s] > 0) ? mean : -mean;
+            दालावाहान[i*size + s] = (पासोक[i*size + s] > 0) ? mean : -mean;
         }
     }
 }
@@ -138,7 +138,7 @@ void cudnn_convolutional_setup(layer *l)
     #endif
 
     #if CUDNN_MAJOR >= 7
-    cudnnSetConvolutionGroupCount(l->convDesc, l->groups);
+    cudnn_Set_Convolution_Group_बिलांग(l->convDesc, l->groups);
     #else
     if(l->groups > 1){
         error("CUDNN < 7 doesn't support groups, please upgrade!");
@@ -173,7 +173,7 @@ void cudnn_convolutional_setup(layer *l)
 #endif
 #endif
 
-convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam)
+convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int दालावाहान, int xnor, int adam)
 {
     int i;
     convolutional_layer l = {0};
@@ -184,7 +184,7 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
     l.w = w;
     l.c = c;
     l.n = n;
-    l.binary = binary;
+    l.दालावाहान = दालावाहान;
     l.xnor = xnor;
     l.batch = batch;
     l.stride = stride;
@@ -221,14 +221,14 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
     l.forward = forward_convolutional_layer;
     l.backward = backward_convolutional_layer;
     l.update = update_convolutional_layer;
-    if(binary){
-        l.binary_weights = calloc(l.nweights, sizeof(float));
+    if(दालावाहान){
+        l.दालावाहान_weights = calloc(l.nweights, sizeof(float));
         l.cweights = calloc(l.nweights, sizeof(char));
         l.scales = calloc(n, sizeof(float));
     }
     if(xnor){
-        l.binary_weights = calloc(l.nweights, sizeof(float));
-        l.binary_input = calloc(l.inputs*l.batch, sizeof(float));
+        l.दालावाहान_weights = calloc(l.nweights, sizeof(float));
+        l.दालावाहान_पासोक = calloc(l.inputs*l.batch, sizeof(float));
     }
 
     if(batch_normalize){
@@ -282,12 +282,12 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
         l.delta_gpu = cuda_make_array(l.delta, l.batch*out_h*out_w*n);
         l.output_gpu = cuda_make_array(l.output, l.batch*out_h*out_w*n);
 
-        if(binary){
-            l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
+        if(दालावाहान){
+            l.दालावाहान_weights_gpu = cuda_make_array(l.weights, l.nweights);
         }
         if(xnor){
-            l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
-            l.binary_input_gpu = cuda_make_array(0, l.inputs*l.batch);
+            l.दालावाहान_weights_gpu = cuda_make_array(l.weights, l.nweights);
+            l.दालावाहान_पासोक_gpu = cuda_make_array(0, l.inputs*l.batch);
         }
 
         if(batch_normalize){
@@ -449,10 +449,10 @@ void forward_convolutional_layer(convolutional_layer l, network net)
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
 
     if(l.xnor){
-        binarize_weights(l.weights, l.n, l.c/l.groups*l.size*l.size, l.binary_weights);
-        swap_binary(&l);
-        binarize_cpu(net.input, l.c*l.h*l.w*l.batch, l.binary_input);
-        net.input = l.binary_input;
+        binarize_weights(l.weights, l.n, l.c/l.groups*l.size*l.size, l.दालावाहान_weights);
+        swap_दालावाहान(&l);
+        binarize_cpu(net.पासोक, l.c*l.h*l.w*l.batch, l.दालावाहान_पासोक);
+        net.पासोक = l.दालावाहान_पासोक;
     }
 
     int m = l.n/l.groups;
@@ -463,7 +463,7 @@ void forward_convolutional_layer(convolutional_layer l, network net)
             float *a = l.weights + j*l.nweights/l.groups;
             float *b = net.workspace;
             float *c = l.output + (i*l.groups + j)*n*m;
-            float *im =  net.input + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
+            float *im =  net.पासोक + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
 
             if (l.size == 1) {
                 b = im;
@@ -481,7 +481,7 @@ void forward_convolutional_layer(convolutional_layer l, network net)
     }
 
     activate_array(l.output, l.outputs*l.batch, l.activation);
-    if(l.binary || l.xnor) swap_binary(&l);
+    if(l.दालावाहान || l.xnor) swap_दालावाहान(&l);
 }
 
 void backward_convolutional_layer(convolutional_layer l, network net)
@@ -505,7 +505,7 @@ void backward_convolutional_layer(convolutional_layer l, network net)
             float *b = net.workspace;
             float *c = l.weight_updates + j*l.nweights/l.groups;
 
-            float *im  = net.input + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
+            float *im  = net.पासोक + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
             float *imd = net.delta + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
 
             if(l.size == 1){
@@ -535,7 +535,7 @@ void backward_convolutional_layer(convolutional_layer l, network net)
     }
 }
 
-void update_convolutional_layer(convolutional_layer l, update_args a)
+void update_convolutional_layer(convolutional_layer l, update_मगा_कातविरान a)
 {
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;

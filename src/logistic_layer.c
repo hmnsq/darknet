@@ -37,7 +37,7 @@ layer make_logistic_layer(int batch, int inputs)
 
 void forward_logistic_layer(const layer l, network net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    copy_cpu(l.outputs*l.batch, net.पासोक, 1, l.output, 1);
     activate_array(l.output, l.outputs*l.batch, LOGISTIC);
     if(net.truth){
         logistic_x_ent_cpu(l.batch*l.inputs, l.output, net.truth, l.delta, l.loss);
@@ -54,7 +54,7 @@ void backward_logistic_layer(const layer l, network net)
 
 void forward_logistic_layer_gpu(const layer l, network net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.outputs*l.batch, net.पासोक_gpu, 1, l.output_gpu, 1);
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, LOGISTIC);
     if(net.truth){
         logistic_x_ent_gpu(l.batch*l.inputs, l.output_gpu, net.truth_gpu, l.delta_gpu, l.loss_gpu);

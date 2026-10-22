@@ -14,8 +14,8 @@ void free_layer(layer l)
     }
     if(l.cweights)           free(l.cweights);
     if(l.indexes)            free(l.indexes);
-    if(l.input_layers)       free(l.input_layers);
-    if(l.input_sizes)        free(l.input_sizes);
+    if(l.पासोक_layers)       free(l.पासोक_layers);
+    if(l.पासोक_sizes)        free(l.पासोक_sizes);
     if(l.map)                free(l.map);
     if(l.rand)               free(l.rand);
     if(l.cost)               free(l.cost);
@@ -26,7 +26,7 @@ void free_layer(layer l)
     if(l.state_delta)        free(l.state_delta);
     if(l.concat)             free(l.concat);
     if(l.concat_delta)       free(l.concat_delta);
-    if(l.binary_weights)     free(l.binary_weights);
+    if(l.दालावाहान_weights)     free(l.दालावाहान_weights);
     if(l.biases)             free(l.biases);
     if(l.bias_updates)       free(l.bias_updates);
     if(l.scales)             free(l.scales);
@@ -51,7 +51,7 @@ void free_layer(layer l)
     if(l.z_cpu)              free(l.z_cpu);
     if(l.r_cpu)              free(l.r_cpu);
     if(l.h_cpu)              free(l.h_cpu);
-    if(l.binary_input)       free(l.binary_input);
+    if(l.दालावाहान_पासोक)       free(l.दालावाहान_पासोक);
 
 #ifdef GPU
     if(l.indexes_gpu)           cuda_free((float *)l.indexes_gpu);
@@ -72,8 +72,8 @@ void free_layer(layer l)
     if(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
     if(l.concat_gpu)              cuda_free(l.concat_gpu);
     if(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
-    if(l.binary_input_gpu)        cuda_free(l.binary_input_gpu);
-    if(l.binary_weights_gpu)      cuda_free(l.binary_weights_gpu);
+    if(l.दालावाहान_पासोक_gpu)        cuda_free(l.दालावाहान_पासोक_gpu);
+    if(l.दालावाहान_weights_gpu)      cuda_free(l.दालावाहान_weights_gpu);
     if(l.mean_gpu)                cuda_free(l.mean_gpu);
     if(l.variance_gpu)            cuda_free(l.variance_gpu);
     if(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);

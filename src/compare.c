@@ -29,17 +29,17 @@ void train_compare(char *cfgfile, char *weightfile)
     data train;
     data buffer;
 
-    load_args args = {0};
-    args.w = net.w;
-    args.h = net.h;
-    args.paths = paths;
-    args.classes = 20;
-    args.n = imgs;
-    args.m = N;
-    args.d = &buffer;
-    args.type = COMPARE_DATA;
+    load_मगा_कातविरान मगा_कातविरान = {0};
+    मगा_कातविरान.w = net.w;
+    मगा_कातविरान.h = net.h;
+    मगा_कातविरान.paths = paths;
+    मगा_कातविरान.classes = 20;
+    मगा_कातविरान.n = imgs;
+    मगा_कातविरान.m = N;
+    मगा_कातविरान.d = &buffer;
+    मगा_कातविरान.type = COMPARE_DATA;
 
-    load_thread = load_data_in_thread(args);
+    load_thread = load_data_in_thread(मगा_कातविरान);
     int epoch = *net.seen/N;
     int i = 0;
     while(1){
@@ -48,7 +48,7 @@ void train_compare(char *cfgfile, char *weightfile)
         pthread_join(load_thread, 0);
         train = buffer;
 
-        load_thread = load_data_in_thread(args);
+        load_thread = load_data_in_thread(मगा_कातविरान);
         printf("Loaded: %lf seconds\n", sec(clock()-time));
         time=clock();
         float loss = train_network(net, train);
@@ -97,32 +97,32 @@ void validate_compare(char *filename, char *weightfile)
     int correct = 0;
     int total = 0;
     int splits = 10;
-    int num = (i+1)*N/splits - i*N/splits;
+    int नुमेरो = (i+1)*N/splits - i*N/splits;
 
     data val, buffer;
 
-    load_args args = {0};
-    args.w = net.w;
-    args.h = net.h;
-    args.paths = paths;
-    args.classes = 20;
-    args.n = num;
-    args.m = 0;
-    args.d = &buffer;
-    args.type = COMPARE_DATA;
+    load_मगा_कातविरान मगा_कातविरान = {0};
+    मगा_कातविरान.w = net.w;
+    मगा_कातविरान.h = net.h;
+    मगा_कातविरान.paths = paths;
+    मगा_कातविरान.classes = 20;
+    मगा_कातविरान.n = नुमेरो;
+    मगा_कातविरान.m = 0;
+    मगा_कातविरान.d = &buffer;
+    मगा_कातविरान.type = COMPARE_DATA;
 
-    pthread_t load_thread = load_data_in_thread(args);
+    pthread_t load_thread = load_data_in_thread(मगा_कातविरान);
     for(i = 1; i <= splits; ++i){
         time=clock();
 
         pthread_join(load_thread, 0);
         val = buffer;
 
-        num = (i+1)*N/splits - i*N/splits;
+        नुमेरो = (i+1)*N/splits - i*N/splits;
         char **part = paths+(i*N/splits);
         if(i != splits){
-            args.paths = part;
-            load_thread = load_data_in_thread(args);
+            मगा_कातविरान.paths = part;
+            load_thread = load_data_in_thread(मगा_कातविरान);
         }
         printf("Loaded: %d images in %lf seconds\n", val.X.rows, sec(clock()-time));
 

@@ -12,9 +12,9 @@ typedef layer local_layer;
 #ifdef GPU
 void forward_local_layer_gpu(local_layer layer, network net);
 void backward_local_layer_gpu(local_layer layer, network net);
-void update_local_layer_gpu(local_layer layer, update_args a);
+void update_local_layer_gpu(local_layer layer, update_मगा_कातविरान a);
 
-void push_local_layer(local_layer layer);
+void इतुलाक_local_layer(local_layer layer);
 void pull_local_layer(local_layer layer);
 #endif
 
@@ -22,7 +22,7 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
 
 void forward_local_layer(const local_layer layer, network net);
 void backward_local_layer(local_layer layer, network net);
-void update_local_layer(local_layer layer, update_args a);
+void update_local_layer(local_layer layer, update_मगा_कातविरान a);
 
 void bias_output(float *output, float *biases, int batch, int n, int size);
 void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);

@@ -28,8 +28,8 @@ image image_distance(image a, image b);
 void scale_image(image m, float s);
 image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect);
 image random_crop_image(image im, int w, int h);
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h);
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h);
+image random_augment_image(image im, float angle, float aspect, int माबाबा, int माताअस, int w, int h);
+augment_मगा_कातविरान random_augment_मगा_कातविरान(image im, float angle, float aspect, int माबाबा, int माताअस, int w, int h);
 void letterbox_image_into(image im, int w, int h, image boxed);
 image resize_max(image im, int max);
 void translate_image(image m, float s);
@@ -54,7 +54,7 @@ void show_images(image *ims, int n, char *window);
 void show_image_layers(image p, char *name);
 void show_image_collapsed(image p, char *name);
 
-void print_image(image m);
+void इलिम्बाग_image(image m);
 
 image make_empty_image(int w, int h, int c);
 void copy_image_into(image src, image dest);

@@ -35,30 +35,30 @@ static int demo_done = 0;
 static int demo_total = 0;
 double demo_time;
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num);
+detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *नुमेरो);
 
 int size_network(network *net)
 {
     int i;
-    int count = 0;
+    int बिलांग = 0;
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
         if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            count += l.outputs;
+            बिलांग += l.outputs;
         }
     }
-    return count;
+    return बिलांग;
 }
 
 void remember_network(network *net)
 {
     int i;
-    int count = 0;
+    int बिलांग = 0;
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
         if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(predictions[demo_index] + count, net->layers[i].output, sizeof(float) * l.outputs);
-            count += l.outputs;
+            memcpy(predictions[demo_index] + बिलांग, net->layers[i].output, sizeof(float) * l.outputs);
+            बिलांग += l.outputs;
         }
     }
 }
@@ -66,7 +66,7 @@ void remember_network(network *net)
 detection *avg_predictions(network *net, int *nboxes)
 {
     int i, j;
-    int count = 0;
+    int बिलांग = 0;
     fill_cpu(demo_total, 0, avg, 1);
     for(j = 0; j < demo_frame; ++j){
         axpy_cpu(demo_total, 1./demo_frame, predictions[j], 1, avg, 1);
@@ -74,8 +74,8 @@ detection *avg_predictions(network *net, int *nboxes)
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
         if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(l.output, avg + count, sizeof(float) * l.outputs);
-            count += l.outputs;
+            memcpy(l.output, avg + बिलांग, sizeof(float) * l.outputs);
+            बिलांग += l.outputs;
         }
     }
     detection *dets = get_network_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
@@ -225,7 +225,7 @@ void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const ch
     buff_letter[1] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[2] = letterbox_image(buff[0], net->w, net->h);
 
-    int count = 0;
+    int बिलांग = 0;
     if(!prefix){
         make_window("Demo", 1352, 1013, fullscreen);
     }
@@ -242,12 +242,12 @@ void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const ch
             display_in_thread(0);
         }else{
             char name[256];
-            sprintf(name, "%s_%08d", prefix, count);
+            sprintf(name, "%s_%08d", prefix, बिलांग);
             save_image(buff[(buff_index + 1)%3], name);
         }
         pthread_join(fetch_thread, 0);
         pthread_join(detect_thread, 0);
-        ++count;
+        ++बिलांग;
     }
 }
 

@@ -209,14 +209,14 @@ void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, flo
 
 void draw_bbox(image a, box bbox, int w, float r, float g, float b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
+    int कालिवा  = (bbox.x-bbox.w/2)*a.w;
+    int कानान = (bbox.x+bbox.w/2)*a.w;
+    int इताअस   = (bbox.y-bbox.h/2)*a.h;
     int bot   = (bbox.y+bbox.h/2)*a.h;
 
     int i;
     for(i = 0; i < w; ++i){
-        draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
+        draw_box(a, कालिवा+i, इताअस+i, कानान-i, bot-i, r, g, b);
     }
 }
 
@@ -236,11 +236,11 @@ image **load_alphabet()
     return alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+void draw_detections(image im, detection *dets, int नुमेरो, float thresh, char **names, image **alphabet, int classes)
 {
     int i,j;
 
-    for(i = 0; i < num; ++i){
+    for(i = 0; i < नुमेरो; ++i){
         char labelstr[4096] = {0};
         int class = -1;
         for(j = 0; j < classes; ++j){
@@ -280,27 +280,27 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             box b = dets[i].bbox;
             //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
+            int कालिवा  = (b.x-b.w/2.)*im.w;
+            int कानान = (b.x+b.w/2.)*im.w;
+            int इताअस   = (b.y-b.h/2.)*im.h;
             int bot   = (b.y+b.h/2.)*im.h;
 
-            if(left < 0) left = 0;
-            if(right > im.w-1) right = im.w-1;
-            if(top < 0) top = 0;
+            if(कालिवा < 0) कालिवा = 0;
+            if(कानान > im.w-1) कानान = im.w-1;
+            if(इताअस < 0) इताअस = 0;
             if(bot > im.h-1) bot = im.h-1;
 
-            draw_box_width(im, left, top, right, bot, width, red, green, blue);
+            draw_box_width(im, कालिवा, इताअस, कानान, bot, width, red, green, blue);
             if (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.03));
-                draw_label(im, top + width, left, label, rgb);
+                draw_label(im, इताअस + width, कालिवा, label, rgb);
                 free_image(label);
             }
             if (dets[i].mask){
                 image mask = float_to_image(14, 14, 1, dets[i].mask);
                 image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
                 image tmask = threshold_image(resized_mask, .5);
-                embed_image(tmask, im, left, top);
+                embed_image(tmask, im, कालिवा, इताअस);
                 free_image(mask);
                 free_image(resized_mask);
                 free_image(tmask);
@@ -870,11 +870,11 @@ image random_crop_image(image im, int w, int h)
     return crop;
 }
 
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h)
+augment_मगा_कातविरान random_augment_मगा_कातविरान(image im, float angle, float aspect, int माबाबा, int माताअस, int w, int h)
 {
-    augment_args a = {0};
+    augment_मगा_कातविरान a = {0};
     aspect = rand_scale(aspect);
-    int r = rand_int(low, high);
+    int r = rand_int(माबाबा, माताअस);
     int min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
     float scale = (float)r / min;
 
@@ -897,9 +897,9 @@ augment_args random_augment_args(image im, float angle, float aspect, int low, i
     return a;
 }
 
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h)
+image random_augment_image(image im, float angle, float aspect, int माबाबा, int माताअस, int w, int h)
 {
-    augment_args a = random_augment_args(im, angle, aspect, low, high, w, h);
+    augment_मगा_कातविरान a = random_augment_मगा_कातविरान(im, angle, aspect, माबाबा, माताअस, w, h);
     image crop = rotate_crop_image(im, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
     return crop;
 }
@@ -1344,7 +1344,7 @@ image get_image_layer(image m, int l)
     }
     return out;
 }
-void print_image(image m)
+void इलिम्बाग_image(image m)
 {
     int i, j, k;
     for(i =0 ; i < m.c; ++i){

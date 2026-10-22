@@ -134,7 +134,7 @@ void resize_batchnorm_layer(layer *layer, int w, int h)
 
 void forward_batchnorm_layer(layer l, network net)
 {
-    if(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    if(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, net.पासोक, 1, l.output, 1);
     copy_cpu(l.outputs*l.batch, l.output, 1, l.x, 1);
     if(net.train){
         mean_cpu(l.output, l.batch, l.out_c, l.out_h*l.out_w, l.mean);
@@ -179,16 +179,16 @@ void pull_batchnorm_layer(layer l)
     cuda_pull_array(l.rolling_mean_gpu, l.rolling_mean, l.c);
     cuda_pull_array(l.rolling_variance_gpu, l.rolling_variance, l.c);
 }
-void push_batchnorm_layer(layer l)
+void इतुलाक_batchnorm_layer(layer l)
 {
-    cuda_push_array(l.scales_gpu, l.scales, l.c);
-    cuda_push_array(l.rolling_mean_gpu, l.rolling_mean, l.c);
-    cuda_push_array(l.rolling_variance_gpu, l.rolling_variance, l.c);
+    cuda_इतुलाक_array(l.scales_gpu, l.scales, l.c);
+    cuda_इतुलाक_array(l.rolling_mean_gpu, l.rolling_mean, l.c);
+    cuda_इतुलाक_array(l.rolling_variance_gpu, l.rolling_variance, l.c);
 }
 
 void forward_batchnorm_layer_gpu(layer l, network net)
 {
-    if(l.type == BATCHNORM) copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    if(l.type == BATCHNORM) copy_gpu(l.outputs*l.batch, net.पासोक_gpu, 1, l.output_gpu, 1);
     copy_gpu(l.outputs*l.batch, l.output_gpu, 1, l.x_gpu, 1);
     if (net.train) {
 #ifdef CUDNN

@@ -12,17 +12,17 @@
 
 static void increment_layer(layer *l, int steps)
 {
-    int num = l->outputs*l->batch*steps;
-    l->output += num;
-    l->delta += num;
-    l->x += num;
-    l->x_norm += num;
+    int नुमेरो = l->outputs*l->batch*steps;
+    l->output += नुमेरो;
+    l->delta += नुमेरो;
+    l->x += नुमेरो;
+    l->x_norm += नुमेरो;
 
 #ifdef GPU
-    l->output_gpu += num;
-    l->delta_gpu += num;
-    l->x_gpu += num;
-    l->x_norm_gpu += num;
+    l->output_gpu += नुमेरो;
+    l->delta_gpu += नुमेरो;
+    l->x_gpu += नुमेरो;
+    l->x_norm_gpu += नुमेरो;
 #endif
 }
 
@@ -115,7 +115,7 @@ layer make_gru_layer(int batch, int inputs, int outputs, int steps, int batch_no
     return l;
 }
 
-void update_gru_layer(layer l, update_args a)
+void update_gru_layer(layer l, update_मगा_कातविरान a)
 {
     update_connected_layer(*(l.ur), a);
     update_connected_layer(*(l.uz), a);
@@ -151,11 +151,11 @@ void forward_gru_layer(layer l, network net)
     }
 
     for (i = 0; i < l.steps; ++i) {
-        s.input = l.state;
+        s.पासोक = l.state;
         forward_connected_layer(wz, s);
         forward_connected_layer(wr, s);
 
-        s.input = net.input;
+        s.पासोक = net.पासोक;
         forward_connected_layer(uz, s);
         forward_connected_layer(ur, s);
         forward_connected_layer(uh, s);
@@ -173,7 +173,7 @@ void forward_gru_layer(layer l, network net)
         copy_cpu(l.outputs*l.batch, l.state, 1, l.forgot_state, 1);
         mul_cpu(l.outputs*l.batch, l.r_cpu, 1, l.forgot_state, 1);
 
-        s.input = l.forgot_state;
+        s.पासोक = l.forgot_state;
         forward_connected_layer(wh, s);
 
         copy_cpu(l.outputs*l.batch, uh.output, 1, l.h_cpu, 1);
@@ -189,7 +189,7 @@ void forward_gru_layer(layer l, network net)
 
         copy_cpu(l.outputs*l.batch, l.output, 1, l.state, 1);
 
-        net.input += l.inputs*l.batch;
+        net.पासोक += l.inputs*l.batch;
         l.output += l.outputs*l.batch;
         increment_layer(&uz, 1);
         increment_layer(&ur, 1);
@@ -211,11 +211,11 @@ void pull_gru_layer(layer l)
 {
 }
 
-void push_gru_layer(layer l)
+void इतुलाक_gru_layer(layer l)
 {
 }
 
-void update_gru_layer_gpu(layer l, update_args a)
+void update_gru_layer_gpu(layer l, update_मगा_कातविरान a)
 {
     update_connected_layer_gpu(*(l.ur), a);
     update_connected_layer_gpu(*(l.uz), a);
@@ -251,11 +251,11 @@ void forward_gru_layer_gpu(layer l, network net)
     }
 
     for (i = 0; i < l.steps; ++i) {
-        s.input_gpu = l.state_gpu;
+        s.पासोक_gpu = l.state_gpu;
         forward_connected_layer_gpu(wz, s);
         forward_connected_layer_gpu(wr, s);
 
-        s.input_gpu = net.input_gpu;
+        s.पासोक_gpu = net.पासोक_gpu;
         forward_connected_layer_gpu(uz, s);
         forward_connected_layer_gpu(ur, s);
         forward_connected_layer_gpu(uh, s);
@@ -272,7 +272,7 @@ void forward_gru_layer_gpu(layer l, network net)
         copy_gpu(l.outputs*l.batch, l.state_gpu, 1, l.forgot_state_gpu, 1);
         mul_gpu(l.outputs*l.batch, l.r_gpu, 1, l.forgot_state_gpu, 1);
 
-        s.input_gpu = l.forgot_state_gpu;
+        s.पासोक_gpu = l.forgot_state_gpu;
         forward_connected_layer_gpu(wh, s);
 
         copy_gpu(l.outputs*l.batch, uh.output_gpu, 1, l.h_gpu, 1);
@@ -287,7 +287,7 @@ void forward_gru_layer_gpu(layer l, network net)
         weighted_sum_gpu(l.state_gpu, l.h_gpu, l.z_gpu, l.outputs*l.batch, l.output_gpu);
         copy_gpu(l.outputs*l.batch, l.output_gpu, 1, l.state_gpu, 1);
 
-        net.input_gpu += l.inputs*l.batch;
+        net.पासोक_gpu += l.inputs*l.batch;
         l.output_gpu += l.outputs*l.batch;
         increment_layer(&uz, 1);
         increment_layer(&ur, 1);
@@ -320,7 +320,7 @@ void backward_gru_layer_gpu(layer l, network net)
     increment_layer(&wr, l.steps - 1);
     increment_layer(&wh, l.steps - 1);
 
-    net.input_gpu += l.inputs*l.batch*(l.steps-1);
+    net.पासोक_gpu += l.inputs*l.batch*(l.steps-1);
     if(net.delta_gpu) net.delta_gpu += l.inputs*l.batch*(l.steps-1);
     l.output_gpu += l.outputs*l.batch*(l.steps-1);
     l.delta_gpu += l.outputs*l.batch*(l.steps-1);
@@ -362,7 +362,7 @@ void backward_gru_layer_gpu(layer l, network net)
         mul_gpu(l.outputs*l.batch, l.r_gpu, 1, l.forgot_state_gpu, 1);
         fill_gpu(l.outputs*l.batch, 0, l.forgot_delta_gpu, 1);
 
-        s.input_gpu = l.forgot_state_gpu;
+        s.पासोक_gpu = l.forgot_state_gpu;
         s.delta_gpu = l.forgot_delta_gpu;
 
         backward_connected_layer_gpu(wh, s);
@@ -375,13 +375,13 @@ void backward_gru_layer_gpu(layer l, network net)
         gradient_array_gpu(l.z_gpu, l.outputs*l.batch, LOGISTIC, uz.delta_gpu);
         copy_gpu(l.outputs*l.batch, uz.delta_gpu, 1, wz.delta_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.पासोक_gpu = l.state_gpu;
         s.delta_gpu = prev_delta_gpu;
 
         backward_connected_layer_gpu(wr, s);
         backward_connected_layer_gpu(wz, s);
 
-        s.input_gpu = net.input_gpu;
+        s.पासोक_gpu = net.पासोक_gpu;
         s.delta_gpu = net.delta_gpu;
 
         backward_connected_layer_gpu(uh, s);
@@ -389,7 +389,7 @@ void backward_gru_layer_gpu(layer l, network net)
         backward_connected_layer_gpu(uz, s);
 
 
-        net.input_gpu -= l.inputs*l.batch;
+        net.पासोक_gpu -= l.inputs*l.batch;
         if(net.delta_gpu) net.delta_gpu -= l.inputs*l.batch;
         l.output_gpu -= l.outputs*l.batch;
         l.delta_gpu -= l.outputs*l.batch;

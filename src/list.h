@@ -5,7 +5,7 @@
 list *make_list();
 int list_find(list *l, void *val);
 
-void list_insert(list *, void *);
+void list_इसिंगित(list *, void *);
 
 
 void free_list_contents(list *l);

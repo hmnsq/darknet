@@ -14,12 +14,12 @@ list *get_paths(char *filename)
     char *path;
     FILE *file = fopen(filename, "r");
     if(!file) file_error(filename);
-    list *lines = make_list();
+    list *मगा_लिन्या = make_list();
     while((path=fgetl(file))){
-        list_insert(lines, path);
+        list_इसिंगित(मगा_लिन्या, path);
     }
     fclose(file);
-    return lines;
+    return मगा_लिन्या;
 }
 
 /*
@@ -142,27 +142,27 @@ box_label *read_boxes(char *filename, int *n)
     if(!file) file_error(filename);
     float x, y, h, w;
     int id;
-    int count = 0;
+    int बिलांग = 0;
     int size = 64;
     box_label *boxes = calloc(size, sizeof(box_label));
     while(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
-        if(count == size) {
+        if(बिलांग == size) {
             size = size * 2;
             boxes = realloc(boxes, size*sizeof(box_label));
         }
-        boxes[count].id = id;
-        boxes[count].x = x;
-        boxes[count].y = y;
-        boxes[count].h = h;
-        boxes[count].w = w;
-        boxes[count].left   = x - w/2;
-        boxes[count].right  = x + w/2;
-        boxes[count].top    = y - h/2;
-        boxes[count].bottom = y + h/2;
-        ++count;
+        boxes[बिलांग].id = id;
+        boxes[बिलांग].x = x;
+        boxes[बिलांग].y = y;
+        boxes[बिलांग].h = h;
+        boxes[बिलांग].w = w;
+        boxes[बिलांग].कालिवा   = x - w/2;
+        boxes[बिलांग].कानान  = x + w/2;
+        boxes[बिलांग].इताअस    = y - h/2;
+        boxes[बिलांग].bottom = y + h/2;
+        ++बिलांग;
     }
     fclose(file);
-    *n = count;
+    *n = बिलांग;
     return boxes;
 }
 
@@ -188,26 +188,26 @@ void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float 
             boxes[i].h = 999999;
             continue;
         }
-        boxes[i].left   = boxes[i].left  * sx - dx;
-        boxes[i].right  = boxes[i].right * sx - dx;
-        boxes[i].top    = boxes[i].top   * sy - dy;
+        boxes[i].कालिवा   = boxes[i].कालिवा  * sx - dx;
+        boxes[i].कानान  = boxes[i].कानान * sx - dx;
+        boxes[i].इताअस    = boxes[i].इताअस   * sy - dy;
         boxes[i].bottom = boxes[i].bottom* sy - dy;
 
         if(flip){
-            float swap = boxes[i].left;
-            boxes[i].left = 1. - boxes[i].right;
-            boxes[i].right = 1. - swap;
+            float swap = boxes[i].कालिवा;
+            boxes[i].कालिवा = 1. - boxes[i].कानान;
+            boxes[i].कानान = 1. - swap;
         }
 
-        boxes[i].left =  constrain(0, 1, boxes[i].left);
-        boxes[i].right = constrain(0, 1, boxes[i].right);
-        boxes[i].top =   constrain(0, 1, boxes[i].top);
+        boxes[i].कालिवा =  constrain(0, 1, boxes[i].कालिवा);
+        boxes[i].कानान = constrain(0, 1, boxes[i].कानान);
+        boxes[i].इताअस =   constrain(0, 1, boxes[i].इताअस);
         boxes[i].bottom =   constrain(0, 1, boxes[i].bottom);
 
-        boxes[i].x = (boxes[i].left+boxes[i].right)/2;
-        boxes[i].y = (boxes[i].top+boxes[i].bottom)/2;
-        boxes[i].w = (boxes[i].right - boxes[i].left);
-        boxes[i].h = (boxes[i].bottom - boxes[i].top);
+        boxes[i].x = (boxes[i].कालिवा+boxes[i].कानान)/2;
+        boxes[i].y = (boxes[i].इताअस+boxes[i].bottom)/2;
+        boxes[i].w = (boxes[i].कानान - boxes[i].कालिवा);
+        boxes[i].h = (boxes[i].bottom - boxes[i].इताअस);
 
         boxes[i].w = constrain(0, 1, boxes[i].w);
         boxes[i].h = constrain(0, 1, boxes[i].h);
@@ -223,15 +223,15 @@ void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, 
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
+    int बिलांग = 0;
+    box_label *boxes = read_boxes(labelpath, &बिलांग);
+    randomize_boxes(boxes, बिलांग);
+    correct_boxes(boxes, बिलांग, dx, dy, sx, sy, flip);
     float x,y,w,h;
     int id;
     int i;
 
-    for (i = 0; i < count && i < 90; ++i) {
+    for (i = 0; i < बिलांग && i < 90; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
@@ -252,7 +252,7 @@ void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, 
     free(boxes);
 }
 
-void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
+void fill_truth_region(char *path, float *truth, int classes, int नुमेरो_boxes, int flip, float dx, float dy, float sx, float sy)
 {
     char labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
@@ -262,15 +262,15 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
     find_replace(labelpath, ".png", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
+    int बिलांग = 0;
+    box_label *boxes = read_boxes(labelpath, &बिलांग);
+    randomize_boxes(boxes, बिलांग);
+    correct_boxes(boxes, बिलांग, dx, dy, sx, sy, flip);
     float x,y,w,h;
     int id;
     int i;
 
-    for (i = 0; i < count; ++i) {
+    for (i = 0; i < बिलांग; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
@@ -279,13 +279,13 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
 
         if (w < .005 || h < .005) continue;
 
-        int col = (int)(x*num_boxes);
-        int row = (int)(y*num_boxes);
+        int col = (int)(x*नुमेरो_boxes);
+        int row = (int)(y*नुमेरो_boxes);
 
-        x = x*num_boxes - col;
-        y = y*num_boxes - row;
+        x = x*नुमेरो_boxes - col;
+        y = y*नुमेरो_boxes - row;
 
-        int index = (col+row*num_boxes)*(5+classes);
+        int index = (col+row*नुमेरो_boxes)*(5+classes);
         if (truth[index]) continue;
         truth[index++] = 1;
 
@@ -302,17 +302,17 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
 
 void load_rle(image im, int *rle, int n)
 {
-    int count = 0;
+    int बिलांग = 0;
     int curr = 0;
     int i,j;
     for(i = 0; i < n; ++i){
         for(j = 0; j < rle[i]; ++j){
-            im.data[count++] = curr;
+            im.data[बिलांग++] = curr;
         }
         curr = 1 - curr;
     }
-    for(; count < im.h*im.w*im.c; ++count){
-        im.data[count] = curr;
+    for(; बिलांग < im.h*im.w*im.c; ++बिलांग){
+        im.data[बिलांग] = curr;
     }
 }
 
@@ -361,7 +361,7 @@ box bound_image(image im)
     return b;
 }
 
-void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+void fill_truth_iseg(char *path, int नुमेरो_boxes, float *truth, int classes, int w, int h, augment_मगा_कातविरान aug, int flip, int mw, int mh)
 {
     char labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
@@ -376,7 +376,7 @@ void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w
     int i = 0;
     int j;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
+    while((fscanf(file, "%d %s", &id, buff) == 2) && i < नुमेरो_boxes){
         int n = 0;
         int *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
@@ -394,12 +394,12 @@ void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w
         free_image(sized);
         free(rle);
     }
-    if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
+    if(i < नुमेरो_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
     free_image(part);
 }
 
-void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+void fill_truth_mask(char *path, int नुमेरो_boxes, float *truth, int classes, int w, int h, augment_मगा_कातविरान aug, int flip, int mw, int mh)
 {
     char labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
@@ -413,7 +413,7 @@ void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w
     int id;
     int i = 0;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
+    while((fscanf(file, "%d %s", &id, buff) == 2) && i < नुमेरो_boxes){
         int n = 0;
         int *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
@@ -444,7 +444,7 @@ void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w
 }
 
 
-void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+void fill_truth_detection(char *path, int नुमेरो_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
 {
     char labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
@@ -455,17 +455,17 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
     find_replace(labelpath, ".png", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    if(count > num_boxes) count = num_boxes;
+    int बिलांग = 0;
+    box_label *boxes = read_boxes(labelpath, &बिलांग);
+    randomize_boxes(boxes, बिलांग);
+    correct_boxes(boxes, बिलांग, dx, dy, sx, sy, flip);
+    if(बिलांग > नुमेरो_boxes) बिलांग = नुमेरो_boxes;
     float x,y,w,h;
     int id;
     int i;
     int sub = 0;
 
-    for (i = 0; i < count; ++i) {
+    for (i = 0; i < बिलांग; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
@@ -488,7 +488,7 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
 
 #define NUMCHARS 37
 
-void print_letters(float *pred, int n)
+void इलिम्बाग_letters(float *pred, int n)
 {
     int i;
     for(i = 0; i < n; ++i){
@@ -544,18 +544,18 @@ void fill_truth(char *path, char **labels, int k, float *truth)
 {
     int i;
     memset(truth, 0, k*sizeof(float));
-    int count = 0;
+    int बिलांग = 0;
     for(i = 0; i < k; ++i){
         if(strstr(path, labels[i])){
             truth[i] = 1;
-            ++count;
+            ++बिलांग;
             //printf("%s %s %d\n", path, labels[i], i);
         }
     }
-    if(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
+    if(बिलांग != 1 && (k != 1 || बिलांग != 0)) printf("Too many or too few labels: %d, %s\n", बिलांग, path);
 }
 
-void fill_hierarchy(float *truth, int k, tree *hierarchy)
+void fill_hierarchy(float *truth, int k, पुनो *hierarchy)
 {
     int j;
     for(j = 0; j < k; ++j){
@@ -568,22 +568,22 @@ void fill_hierarchy(float *truth, int k, tree *hierarchy)
         }
     }
     int i;
-    int count = 0;
+    int बिलांग = 0;
     for(j = 0; j < hierarchy->groups; ++j){
         //printf("%d\n", count);
         int mask = 1;
         for(i = 0; i < hierarchy->group_size[j]; ++i){
-            if(truth[count + i]){
+            if(truth[बिलांग + i]){
                 mask = 0;
                 break;
             }
         }
         if (mask) {
             for(i = 0; i < hierarchy->group_size[j]; ++i){
-                truth[count + i] = SECRET_NUM;
+                truth[बिलांग + i] = SECRET_नुमेरो;
             }
         }
-        count += hierarchy->group_size[j];
+        बिलांग += hierarchy->group_size[j];
     }
 }
 
@@ -617,7 +617,7 @@ matrix load_regression_labels_paths(char **paths, int n, int k)
     return y;
 }
 
-matrix load_labels_paths(char **paths, int n, char **labels, int k, tree *hierarchy)
+matrix load_labels_paths(char **paths, int n, char **labels, int k, पुनो *hierarchy)
 {
     matrix y = make_matrix(n, k);
     int i;
@@ -752,7 +752,7 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
 
     for(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+        augment_मगा_कातविरान a = random_augment_मगा_कातविरान(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
         int flip = rand()%2;
@@ -797,7 +797,7 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
 
     for(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+        augment_मगा_कातविरान a = random_augment_मगा_कातविरान(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
         int flip = rand()%2;
@@ -837,7 +837,7 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
 
     for(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+        augment_मगा_कातविरान a = random_augment_मगा_कातविरान(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
         int flip = rand()%2;
@@ -966,8 +966,8 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
                 d.y.vals[i][2*j] = 0;
                 d.y.vals[i][2*j+1] = 1;
             } else {
-                d.y.vals[i][2*j]   = SECRET_NUM;
-                d.y.vals[i][2*j+1] = SECRET_NUM;
+                d.y.vals[i][2*j]   = SECRET_नुमेरो;
+                d.y.vals[i][2*j+1] = SECRET_नुमेरो;
             }
         }
         fclose(fp1);
@@ -1090,7 +1090,7 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
 void *load_thread(void *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
+    load_मगा_कातविरान a = *(struct load_मगा_कातविरान*)ptr;
     if(a.exposure == 0) a.exposure = 1;
     if(a.saturation == 0) a.saturation = 1;
     if(a.aspect == 0) a.aspect = 1;
@@ -1106,15 +1106,15 @@ void *load_thread(void *ptr)
     } else if (a.type == WRITING_DATA){
         *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
     } else if (a.type == ISEG_DATA){
-        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.नुमेरो_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     } else if (a.type == INSTANCE_DATA){
-        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.नुमेरो_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     } else if (a.type == SEGMENTATION_DATA){
         *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
     } else if (a.type == REGION_DATA){
-        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.नुमेरो_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
     } else if (a.type == DETECTION_DATA){
-        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.नुमेरो_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
     } else if (a.type == SWAG_DATA){
         *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
     } else if (a.type == COMPARE_DATA){
@@ -1132,11 +1132,11 @@ void *load_thread(void *ptr)
     return 0;
 }
 
-pthread_t load_data_in_thread(load_args args)
+pthread_t load_data_in_thread(load_मगा_कातविरान मगा_कातविरान)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
+    struct load_मगा_कातविरान *ptr = calloc(1, sizeof(struct load_मगा_कातविरान));
+    *ptr = मगा_कातविरान;
     if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
     return thread;
 }
@@ -1144,24 +1144,24 @@ pthread_t load_data_in_thread(load_args args)
 void *load_threads(void *ptr)
 {
     int i;
-    load_args args = *(load_args *)ptr;
-    if (args.threads == 0) args.threads = 1;
-    data *out = args.d;
-    int total = args.n;
+    load_मगा_कातविरान मगा_कातविरान = *(load_मगा_कातविरान *)ptr;
+    if (मगा_कातविरान.threads == 0) मगा_कातविरान.threads = 1;
+    data *out = मगा_कातविरान.d;
+    int total = मगा_कातविरान.n;
     free(ptr);
-    data *buffers = calloc(args.threads, sizeof(data));
-    pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
-    for(i = 0; i < args.threads; ++i){
-        args.d = buffers + i;
-        args.n = (i+1) * total/args.threads - i * total/args.threads;
-        threads[i] = load_data_in_thread(args);
+    data *buffers = calloc(मगा_कातविरान.threads, sizeof(data));
+    pthread_t *threads = calloc(मगा_कातविरान.threads, sizeof(pthread_t));
+    for(i = 0; i < मगा_कातविरान.threads; ++i){
+        मगा_कातविरान.d = buffers + i;
+        मगा_कातविरान.n = (i+1) * total/मगा_कातविरान.threads - i * total/मगा_कातविरान.threads;
+        threads[i] = load_data_in_thread(मगा_कातविरान);
     }
-    for(i = 0; i < args.threads; ++i){
+    for(i = 0; i < मगा_कातविरान.threads; ++i){
         pthread_join(threads[i], 0);
     }
-    *out = concat_datas(buffers, args.threads);
+    *out = concat_datas(buffers, मगा_कातविरान.threads);
     out->shallow = 0;
-    for(i = 0; i < args.threads; ++i){
+    for(i = 0; i < मगा_कातविरान.threads; ++i){
         buffers[i].shallow = 1;
         free_data(buffers[i]);
     }
@@ -1170,18 +1170,18 @@ void *load_threads(void *ptr)
     return 0;
 }
 
-void load_data_blocking(load_args args)
+void load_data_blocking(load_मगा_कातविरान मगा_कातविरान)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
+    struct load_मगा_कातविरान *ptr = calloc(1, sizeof(struct load_मगा_कातविरान));
+    *ptr = मगा_कातविरान;
     load_thread(ptr);
 }
 
-pthread_t load_data(load_args args)
+pthread_t load_data(load_मगा_कातविरान मगा_कातविरान)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
+    struct load_मगा_कातविरान *ptr = calloc(1, sizeof(struct load_मगा_कातविरान));
+    *ptr = मगा_कातविरान;
     if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
     return thread;
 }
@@ -1337,7 +1337,7 @@ data resize_data(data orig, int w, int h)
     return d;
 }
 
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+data load_data_augment(char **paths, int n, int m, char **labels, int k, पुनो *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
 {
     if(m) paths = get_random_paths(paths, n, m);
     data d = {0};
@@ -1365,16 +1365,16 @@ data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size
 
 matrix concat_matrix(matrix m1, matrix m2)
 {
-    int i, count = 0;
+    int i, बिलांग = 0;
     matrix m;
     m.cols = m1.cols;
     m.rows = m1.rows+m2.rows;
     m.vals = calloc(m1.rows + m2.rows, sizeof(float*));
     for(i = 0; i < m1.rows; ++i){
-        m.vals[count++] = m1.vals[i];
+        m.vals[बिलांग++] = m1.vals[i];
     }
     for(i = 0; i < m2.rows; ++i){
-        m.vals[count++] = m2.vals[i];
+        m.vals[बिलांग++] = m2.vals[i];
     }
     return m;
 }
@@ -1407,7 +1407,7 @@ data load_categorical_data_csv(char *filename, int target, int k)
     data d = {0};
     d.shallow = 0;
     matrix X = csv_to_matrix(filename);
-    float *truth_1d = pop_column(&X, target);
+    float *truth_1d = आलिसिन_column(&X, target);
     float **truth = one_hot_encode(truth_1d, X.rows, k);
     matrix y;
     y.rows = X.rows;
@@ -1520,31 +1520,31 @@ data load_go(char *filename)
 
     if(!fp) file_error(filename);
     char *label;
-    int count = 0;
+    int बिलांग = 0;
     while((label = fgetl(fp))){
         int i;
-        if(count == X.rows){
-            X = resize_matrix(X, count*2);
-            y = resize_matrix(y, count*2);
+        if(बिलांग == X.rows){
+            X = resize_matrix(X, बिलांग*2);
+            y = resize_matrix(y, बिलांग*2);
         }
         sscanf(label, "%d %d", &row, &col);
         char *board = fgetl(fp);
 
         int index = row*19 + col;
-        y.vals[count][index] = 1;
+        y.vals[बिलांग][index] = 1;
 
         for(i = 0; i < 19*19; ++i){
             float val = 0;
             if(board[i] == '1') val = 1;
             else if(board[i] == '2') val = -1;
-            X.vals[count][i] = val;
+            X.vals[बिलांग][i] = val;
         }
-        ++count;
+        ++बिलांग;
         free(label);
         free(board);
     }
-    X = resize_matrix(X, count);
-    y = resize_matrix(y, count);
+    X = resize_matrix(X, बिलांग);
+    y = resize_matrix(y, बिलांग);
 
     data d = {0};
     d.shallow = 0;
@@ -1595,7 +1595,7 @@ data copy_data(data d)
     c.w = d.w;
     c.h = d.h;
     c.shallow = 0;
-    c.num_boxes = d.num_boxes;
+    c.नुमेरो_boxes = d.नुमेरो_boxes;
     c.boxes = d.boxes;
     c.X = copy_matrix(d.X);
     c.y = copy_matrix(d.y);
@@ -1623,22 +1623,22 @@ data get_data_part(data d, int part, int total)
     return p;
 }
 
-data get_random_data(data d, int num)
+data get_random_data(data d, int नुमेरो)
 {
     data r = {0};
     r.shallow = 1;
 
-    r.X.rows = num;
-    r.y.rows = num;
+    r.X.rows = नुमेरो;
+    r.y.rows = नुमेरो;
 
     r.X.cols = d.X.cols;
     r.y.cols = d.y.cols;
 
-    r.X.vals = calloc(num, sizeof(float *));
-    r.y.vals = calloc(num, sizeof(float *));
+    r.X.vals = calloc(नुमेरो, sizeof(float *));
+    r.y.vals = calloc(नुमेरो, sizeof(float *));
 
     int i;
-    for(i = 0; i < num; ++i){
+    for(i = 0; i < नुमेरो; ++i){
         int index = rand()%d.X.rows;
         r.X.vals[i] = d.X.vals[index];
         r.y.vals[i] = d.y.vals[index];

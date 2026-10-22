@@ -129,7 +129,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     return l;
 }
 
-void update_connected_layer(layer l, update_args a)
+void update_connected_layer(layer l, update_मगा_कातविरान a)
 {
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;
@@ -154,7 +154,7 @@ void forward_connected_layer(layer l, network net)
     int m = l.batch;
     int k = l.inputs;
     int n = l.outputs;
-    float *a = net.input;
+    float *a = net.पासोक;
     float *b = l.weights;
     float *c = l.output;
     gemm(0,1,m,n,k,1,a,k,b,k,1,c,n);
@@ -180,7 +180,7 @@ void backward_connected_layer(layer l, network net)
     int k = l.batch;
     int n = l.inputs;
     float *a = l.delta;
-    float *b = net.input;
+    float *b = net.पासोक;
     float *c = l.weight_updates;
     gemm(1,0,m,n,k,1,a,m,b,n,1,c,n);
 
@@ -216,7 +216,7 @@ void statistics_connected_layer(layer l)
 {
     if(l.batch_normalize){
         printf("Scales ");
-        print_statistics(l.scales, l.outputs);
+        इलिम्बाग_statistics(l.scales, l.outputs);
         /*
            printf("Rolling Mean ");
            print_statistics(l.rolling_mean, l.outputs);
@@ -225,9 +225,9 @@ void statistics_connected_layer(layer l)
          */
     }
     printf("Biases ");
-    print_statistics(l.biases, l.outputs);
+    इलिम्बाग_statistics(l.biases, l.outputs);
     printf("Weights ");
-    print_statistics(l.weights, l.outputs);
+    इलिम्बाग_statistics(l.weights, l.outputs);
 }
 
 #ifdef GPU
@@ -245,20 +245,20 @@ void pull_connected_layer(layer l)
     }
 }
 
-void push_connected_layer(layer l)
+void इतुलाक_connected_layer(layer l)
 {
-    cuda_push_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
-    cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-    cuda_push_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
-    cuda_push_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
+    cuda_इतुलाक_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
+    cuda_इतुलाक_array(l.biases_gpu, l.biases, l.outputs);
+    cuda_इतुलाक_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
+    cuda_इतुलाक_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
     if (l.batch_normalize){
-        cuda_push_array(l.scales_gpu, l.scales, l.outputs);
-        cuda_push_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
-        cuda_push_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
+        cuda_इतुलाक_array(l.scales_gpu, l.scales, l.outputs);
+        cuda_इतुलाक_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
+        cuda_इतुलाक_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
     }
 }
 
-void update_connected_layer_gpu(layer l, update_args a)
+void update_connected_layer_gpu(layer l, update_मगा_कातविरान a)
 {
     float learning_rate = a.learning_rate*l.learning_rate_scale;
     float momentum = a.momentum;
@@ -292,7 +292,7 @@ void forward_connected_layer_gpu(layer l, network net)
     int m = l.batch;
     int k = l.inputs;
     int n = l.outputs;
-    float * a = net.input_gpu;
+    float * a = net.पासोक_gpu;
     float * b = l.weights_gpu;
     float * c = l.output_gpu;
     gemm_gpu(0,1,m,n,k,1,a,k,b,k,1,c,n);
@@ -319,7 +319,7 @@ void backward_connected_layer_gpu(layer l, network net)
     int k = l.batch;
     int n = l.inputs;
     float * a = l.delta_gpu;
-    float * b = net.input_gpu;
+    float * b = net.पासोक_gpu;
     float * c = l.weight_updates_gpu;
     gemm_gpu(1,0,m,n,k,1,a,m,b,n,1,c,n);
 

@@ -92,7 +92,7 @@ void forward_reorg_layer(const layer l, network net)
 {
     int i;
     if(l.flatten){
-        memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+        memcpy(l.output, net.पासोक, l.outputs*l.batch*sizeof(float));
         if(l.reverse){
             flatten(l.output, l.w*l.h, l.c, l.batch, 0);
         }else{
@@ -100,12 +100,12 @@ void forward_reorg_layer(const layer l, network net)
         }
     } else if (l.extra) {
         for(i = 0; i < l.batch; ++i){
-            copy_cpu(l.inputs, net.input + i*l.inputs, 1, l.output + i*l.outputs, 1);
+            copy_cpu(l.inputs, net.पासोक + i*l.inputs, 1, l.output + i*l.outputs, 1);
         }
     } else if (l.reverse){
-        reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
+        reorg_cpu(net.पासोक, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
     } else {
-        reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
+        reorg_cpu(net.पासोक, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
     }
 }
 
@@ -136,18 +136,18 @@ void forward_reorg_layer_gpu(layer l, network net)
     int i;
     if(l.flatten){
         if(l.reverse){
-            flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
+            flatten_gpu(net.पासोक_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
         }else{
-            flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
+            flatten_gpu(net.पासोक_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
         }
     } else if (l.extra) {
         for(i = 0; i < l.batch; ++i){
-            copy_gpu(l.inputs, net.input_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
+            copy_gpu(l.inputs, net.पासोक_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
         }
     } else if (l.reverse) {
-        reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
+        reorg_gpu(net.पासोक_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
     }else {
-        reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
+        reorg_gpu(net.पासोक_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
     }
 }
 

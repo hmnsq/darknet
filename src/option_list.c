@@ -8,22 +8,22 @@ list *read_data_cfg(char *filename)
 {
     FILE *file = fopen(filename, "r");
     if(file == 0) file_error(filename);
-    char *line;
+    char *लिन्या;
     int nu = 0;
     list *options = make_list();
-    while((line=fgetl(file)) != 0){
+    while((लिन्या=fgetl(file)) != 0){
         ++ nu;
-        strip(line);
-        switch(line[0]){
+        strip(लिन्या);
+        switch(लिन्या[0]){
             case '\0':
             case '#':
             case ';':
-                free(line);
+                free(लिन्या);
                 break;
             default:
-                if(!read_option(line, options)){
-                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+                if(!read_option(लिन्या, options)){
+                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, लिन्या);
+                    free(लिन्या);
                 }
                 break;
         }
@@ -62,38 +62,38 @@ int read_option(char *s, list *options)
         }
     }
     if(i == len-1) return 0;
-    char *key = s;
-    option_insert(options, key, val);
+    char *सुसि = s;
+    option_इसिंगित(options, सुसि, val);
     return 1;
 }
 
-void option_insert(list *l, char *key, char *val)
+void option_इसिंगित(list *l, char *सुसि, char *val)
 {
     kvp *p = malloc(sizeof(kvp));
-    p->key = key;
+    p->सुसि = सुसि;
     p->val = val;
     p->used = 0;
-    list_insert(l, p);
+    list_इसिंगित(l, p);
 }
 
 void option_unused(list *l)
 {
-    node *n = l->front;
+    बुहोल *n = l->front;
     while(n){
         kvp *p = (kvp *)n->val;
         if(!p->used){
-            fprintf(stderr, "Unused field: '%s = %s'\n", p->key, p->val);
+            fprintf(stderr, "Unused field: '%s = %s'\n", p->सुसि, p->val);
         }
         n = n->next;
     }
 }
 
-char *option_find(list *l, char *key)
+char *option_find(list *l, char *सुसि)
 {
-    node *n = l->front;
+    बुहोल *n = l->front;
     while(n){
         kvp *p = (kvp *)n->val;
-        if(strcmp(p->key, key) == 0){
+        if(strcmp(p->सुसि, सुसि) == 0){
             p->used = 1;
             return p->val;
         }
@@ -101,40 +101,40 @@ char *option_find(list *l, char *key)
     }
     return 0;
 }
-char *option_find_str(list *l, char *key, char *def)
+char *option_find_str(list *l, char *सुसि, char *def)
 {
-    char *v = option_find(l, key);
+    char *v = option_find(l, सुसि);
     if(v) return v;
-    if(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
+    if(def) fprintf(stderr, "%s: Using default '%s'\n", सुसि, def);
     return def;
 }
 
-int option_find_int(list *l, char *key, int def)
+int option_find_int(list *l, char *सुसि, int def)
 {
-    char *v = option_find(l, key);
+    char *v = option_find(l, सुसि);
     if(v) return atoi(v);
-    fprintf(stderr, "%s: Using default '%d'\n", key, def);
+    fprintf(stderr, "%s: Using default '%d'\n", सुसि, def);
     return def;
 }
 
-int option_find_int_quiet(list *l, char *key, int def)
+int option_find_int_quiet(list *l, char *सुसि, int def)
 {
-    char *v = option_find(l, key);
+    char *v = option_find(l, सुसि);
     if(v) return atoi(v);
     return def;
 }
 
-float option_find_float_quiet(list *l, char *key, float def)
+float option_find_float_quiet(list *l, char *सुसि, float def)
 {
-    char *v = option_find(l, key);
+    char *v = option_find(l, सुसि);
     if(v) return atof(v);
     return def;
 }
 
-float option_find_float(list *l, char *key, float def)
+float option_find_float(list *l, char *सुसि, float def)
 {
-    char *v = option_find(l, key);
+    char *v = option_find(l, सुसि);
     if(v) return atof(v);
-    fprintf(stderr, "%s: Using default '%lf'\n", key, def);
+    fprintf(stderr, "%s: Using default '%lf'\n", सुसि, def);
     return def;
 }

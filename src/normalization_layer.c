@@ -74,8 +74,8 @@ void forward_normalization_layer(const layer layer, network net)
     for(b = 0; b < layer.batch; ++b){
         float *squared = layer.squared + w*h*c*b;
         float *norms   = layer.norms + w*h*c*b;
-        float *input   = net.input + w*h*c*b;
-        pow_cpu(w*h*c, 2, input, 1, squared, 1);
+        float *पासोक   = net.पासोक + w*h*c*b;
+        pow_cpu(w*h*c, 2, पासोक, 1, squared, 1);
 
         const_cpu(w*h, layer.kappa, norms, 1);
         for(k = 0; k < layer.size/2; ++k){
@@ -91,7 +91,7 @@ void forward_normalization_layer(const layer layer, network net)
         }
     }
     pow_cpu(w*h*c*layer.batch, -layer.beta, layer.norms, 1, layer.output, 1);
-    mul_cpu(w*h*c*layer.batch, net.input, 1, layer.output, 1);
+    mul_cpu(w*h*c*layer.batch, net.पासोक, 1, layer.output, 1);
 }
 
 void backward_normalization_layer(const layer layer, network net)
@@ -118,8 +118,8 @@ void forward_normalization_layer_gpu(const layer layer, network net)
     for(b = 0; b < layer.batch; ++b){
         float *squared = layer.squared_gpu + w*h*c*b;
         float *norms   = layer.norms_gpu + w*h*c*b;
-        float *input   = net.input_gpu + w*h*c*b;
-        pow_gpu(w*h*c, 2, input, 1, squared, 1);
+        float *पासोक   = net.पासोक_gpu + w*h*c*b;
+        pow_gpu(w*h*c, 2, पासोक, 1, squared, 1);
 
         const_gpu(w*h, layer.kappa, norms, 1);
         for(k = 0; k < layer.size/2; ++k){
@@ -135,7 +135,7 @@ void forward_normalization_layer_gpu(const layer layer, network net)
         }
     }
     pow_gpu(w*h*c*layer.batch, -layer.beta, layer.norms_gpu, 1, layer.output_gpu, 1);
-    mul_gpu(w*h*c*layer.batch, net.input_gpu, 1, layer.output_gpu, 1);
+    mul_gpu(w*h*c*layer.batch, net.पासोक_gpu, 1, layer.output_gpu, 1);
 }
 
 void backward_normalization_layer_gpu(const layer layer, network net)

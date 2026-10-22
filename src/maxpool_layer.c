@@ -100,7 +100,7 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
                             int index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
                             int valid = (cur_h >= 0 && cur_h < l.h &&
                                          cur_w >= 0 && cur_w < l.w);
-                            float val = (valid != 0) ? net.input[index] : -FLT_MAX;
+                            float val = (valid != 0) ? net.पासोक[index] : -FLT_MAX;
                             max_i = (val > max) ? index : max_i;
                             max   = (val > max) ? val   : max;
                         }
