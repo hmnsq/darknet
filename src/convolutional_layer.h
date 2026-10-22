@@ -17,34 +17,34 @@ void update_convolutional_layer_gpu(convolutional_layer layer, update_args a);
 void push_convolutional_layer(convolutional_layer layer);
 void pull_convolutional_layer(convolutional_layer layer);
 
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
+void add_bias_gpu(float *output, float *biases, цяло batch, цяло n, цяло size);
+void backward_bias_gpu(float *bias_updates, float *delta, цяло batch, цяло n, цяло size);
+void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, цяло n, цяло batch, цяло t);
 #ifdef CUDNN
 void cudnn_convolutional_setup(layer *l);
 #endif
 #endif
 
-convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam);
-void resize_convolutional_layer(convolutional_layer *layer, int w, int h);
+convolutional_layer make_convolutional_layer(цяло batch, цяло h, цяло w, цяло c, цяло n, цяло groups, цяло size, цяло stride, цяло padding, ACTIVATION activation, цяло batch_normalize, цяло binary, цяло xnor, цяло adam);
+void resize_convolutional_layer(convolutional_layer *layer, цяло w, цяло h);
 void forward_convolutional_layer(const convolutional_layer layer, network net);
 void update_convolutional_layer(convolutional_layer layer, update_args a);
 image *visualize_convolutional_layer(convolutional_layer layer, char *window, image *prev_weights);
-void binarize_weights(float *weights, int n, int size, float *binary);
+void binarize_weights(float *weights, цяло n, цяло size, float *binary);
 void swap_binary(convolutional_layer *l);
-void binarize_weights2(float *weights, int n, int size, char *binary, float *scales);
+void binarize_weights2(float *weights, цяло n, цяло size, char *binary, float *scales);
 
 void backward_convolutional_layer(convolutional_layer layer, network net);
 
-void add_bias(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+void add_bias(float *output, float *biases, цяло batch, цяло n, цяло size);
+void backward_bias(float *bias_updates, float *delta, цяло batch, цяло n, цяло size);
 
 image get_convolutional_image(convolutional_layer layer);
 image get_convolutional_delta(convolutional_layer layer);
-image get_convolutional_weight(convolutional_layer layer, int i);
+image get_convolutional_weight(convolutional_layer layer, цяло i);
 
-int convolutional_out_height(convolutional_layer layer);
-int convolutional_out_width(convolutional_layer layer);
+цяло convolutional_out_height(convolutional_layer layer);
+цяло convolutional_out_width(convolutional_layer layer);
 
 #endif
 

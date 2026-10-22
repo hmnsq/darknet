@@ -3,7 +3,7 @@
 #include "blas.h"
 #include <stdio.h>
 
-layer make_batchnorm_layer(int batch, int w, int h, int c)
+layer make_batchnorm_layer(цяло batch, цяло w, цяло h, цяло c)
 {
     fprintf(stderr, "Batch Normalization Layer: %d x %d x %d image\n", w,h,c);
     layer l = {0};
@@ -21,8 +21,8 @@ layer make_batchnorm_layer(int batch, int w, int h, int c)
     l.scale_updates = calloc(c, sizeof(float));
     l.biases = calloc(c, sizeof(float));
     l.bias_updates = calloc(c, sizeof(float));
-    int i;
-    for(i = 0; i < c; ++i){
+    цяло i;
+    за(i = 0; i < c; ++i){
         l.scales[i] = 1;
     }
 
@@ -66,17 +66,17 @@ layer make_batchnorm_layer(int batch, int w, int h, int c)
 
     #endif
 #endif
-    return l;
+    върни l;
 }
 
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates)
+void backward_scale_cpu(float *x_norm, float *delta, цяло batch, цяло n, цяло size, float *scale_updates)
 {
-    int i,b,f;
-    for(f = 0; f < n; ++f){
+    цяло i,b,f;
+    за(f = 0; f < n; ++f){
         float sum = 0;
-        for(b = 0; b < batch; ++b){
-            for(i = 0; i < size; ++i){
-                int index = i + size*(f + n*b);
+        за(b = 0; b < batch; ++b){
+            за(i = 0; i < size; ++i){
+                цяло index = i + size*(f + n*b);
                 sum += delta[index] * x_norm[index];
             }
         }
@@ -84,59 +84,59 @@ void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size,
     }
 }
 
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta)
+void mean_delta_cpu(float *delta, float *variance, цяло batch, цяло filters, цяло spatial, float *mean_delta)
 {
 
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    цяло i,j,k;
+    за(i = 0; i < filters; ++i){
         mean_delta[i] = 0;
-        for (j = 0; j < batch; ++j) {
-            for (k = 0; k < spatial; ++k) {
-                int index = j*filters*spatial + i*spatial + k;
+        за (j = 0; j < batch; ++j) {
+            за (k = 0; k < spatial; ++k) {
+                цяло index = j*filters*spatial + i*spatial + k;
                 mean_delta[i] += delta[index];
             }
         }
         mean_delta[i] *= (-1./sqrt(variance[i] + .00001f));
     }
 }
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta)
+void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, цяло batch, цяло filters, цяло spatial, float *variance_delta)
 {
 
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    цяло i,j,k;
+    за(i = 0; i < filters; ++i){
         variance_delta[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
+        за(j = 0; j < batch; ++j){
+            за(k = 0; k < spatial; ++k){
+                цяло index = j*filters*spatial + i*spatial + k;
                 variance_delta[i] += delta[index]*(x[index] - mean[i]);
             }
         }
         variance_delta[i] *= -.5 * pow(variance[i] + .00001f, (float)(-3./2.));
     }
 }
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta)
+void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, цяло batch, цяло filters, цяло spatial, float *delta)
 {
-    int f, j, k;
-    for(j = 0; j < batch; ++j){
-        for(f = 0; f < filters; ++f){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + f*spatial + k;
+    цяло f, j, k;
+    за(j = 0; j < batch; ++j){
+        за(f = 0; f < filters; ++f){
+            за(k = 0; k < spatial; ++k){
+                цяло index = j*filters*spatial + f*spatial + k;
                 delta[index] = delta[index] * 1./(sqrt(variance[f] + .00001f)) + variance_delta[f] * 2. * (x[index] - mean[f]) / (spatial * batch) + mean_delta[f]/(spatial*batch);
             }
         }
     }
 }
 
-void resize_batchnorm_layer(layer *layer, int w, int h)
+void resize_batchnorm_layer(layer *layer, цяло w, цяло h)
 {
     fprintf(stderr, "Not implemented\n");
 }
 
 void forward_batchnorm_layer(layer l, network net)
 {
-    if(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    ако(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
     copy_cpu(l.outputs*l.batch, l.output, 1, l.x, 1);
-    if(net.train){
+    ако(net.train){
         mean_cpu(l.output, l.batch, l.out_c, l.out_h*l.out_w, l.mean);
         variance_cpu(l.output, l.mean, l.batch, l.out_c, l.out_h*l.out_w, l.variance);
 
@@ -147,7 +147,7 @@ void forward_batchnorm_layer(layer l, network net)
 
         normalize_cpu(l.output, l.mean, l.variance, l.batch, l.out_c, l.out_h*l.out_w);   
         copy_cpu(l.outputs*l.batch, l.output, 1, l.x_norm, 1);
-    } else {
+    } иначе {
         normalize_cpu(l.output, l.rolling_mean, l.rolling_variance, l.batch, l.out_c, l.out_h*l.out_w);
     }
     scale_bias(l.output, l.scales, l.batch, l.out_c, l.out_h*l.out_w);
@@ -156,7 +156,7 @@ void forward_batchnorm_layer(layer l, network net)
 
 void backward_batchnorm_layer(layer l, network net)
 {
-    if(!net.train){
+    ако(!net.train){
         l.mean = l.rolling_mean;
         l.variance = l.rolling_variance;
     }
@@ -168,7 +168,7 @@ void backward_batchnorm_layer(layer l, network net)
     mean_delta_cpu(l.delta, l.variance, l.batch, l.out_c, l.out_w*l.out_h, l.mean_delta);
     variance_delta_cpu(l.x, l.delta, l.mean, l.variance, l.batch, l.out_c, l.out_w*l.out_h, l.variance_delta);
     normalize_delta_cpu(l.x, l.mean, l.variance, l.mean_delta, l.variance_delta, l.batch, l.out_c, l.out_w*l.out_h, l.delta);
-    if(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, l.delta, 1, net.delta, 1);
+    ако(l.type == BATCHNORM) copy_cpu(l.outputs*l.batch, l.delta, 1, net.delta, 1);
 }
 
 #ifdef GPU
@@ -188,9 +188,9 @@ void push_batchnorm_layer(layer l)
 
 void forward_batchnorm_layer_gpu(layer l, network net)
 {
-    if(l.type == BATCHNORM) copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    ако(l.type == BATCHNORM) copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
     copy_gpu(l.outputs*l.batch, l.output_gpu, 1, l.x_gpu, 1);
-    if (net.train) {
+    ако (net.train) {
 #ifdef CUDNN
         float one = 1;
         float zero = 0;
@@ -211,7 +211,7 @@ void forward_batchnorm_layer_gpu(layer l, network net)
                 .00001,
                 l.mean_gpu,
                 l.variance_gpu);
-#else
+#иначе
         fast_mean_gpu(l.output_gpu, l.batch, l.out_c, l.out_h*l.out_w, l.mean_gpu);
         fast_variance_gpu(l.output_gpu, l.mean_gpu, l.batch, l.out_c, l.out_h*l.out_w, l.variance_gpu);
 
@@ -227,7 +227,7 @@ void forward_batchnorm_layer_gpu(layer l, network net)
         scale_bias_gpu(l.output_gpu, l.scales_gpu, l.batch, l.out_c, l.out_h*l.out_w);
         add_bias_gpu(l.output_gpu, l.biases_gpu, l.batch, l.out_c, l.out_w*l.out_h);
 #endif
-    } else {
+    } иначе {
         normalize_gpu(l.output_gpu, l.rolling_mean_gpu, l.rolling_variance_gpu, l.batch, l.out_c, l.out_h*l.out_w);
         scale_bias_gpu(l.output_gpu, l.scales_gpu, l.batch, l.out_c, l.out_h*l.out_w);
         add_bias_gpu(l.output_gpu, l.biases_gpu, l.batch, l.out_c, l.out_w*l.out_h);
@@ -237,7 +237,7 @@ void forward_batchnorm_layer_gpu(layer l, network net)
 
 void backward_batchnorm_layer_gpu(layer l, network net)
 {
-    if(!net.train){
+    ако(!net.train){
         l.mean_gpu = l.rolling_mean_gpu;
         l.variance_gpu = l.rolling_variance_gpu;
     }
@@ -264,7 +264,7 @@ void backward_batchnorm_layer_gpu(layer l, network net)
             l.mean_gpu,
             l.variance_gpu);
     copy_gpu(l.outputs*l.batch, l.x_norm_gpu, 1, l.delta_gpu, 1);
-#else
+#иначе
     backward_bias_gpu(l.bias_updates_gpu, l.delta_gpu, l.batch, l.out_c, l.out_w*l.out_h);
     backward_scale_gpu(l.x_norm_gpu, l.delta_gpu, l.batch, l.out_c, l.out_w*l.out_h, l.scale_updates_gpu);
 
@@ -274,6 +274,6 @@ void backward_batchnorm_layer_gpu(layer l, network net)
     fast_variance_delta_gpu(l.x_gpu, l.delta_gpu, l.mean_gpu, l.variance_gpu, l.batch, l.out_c, l.out_w*l.out_h, l.variance_delta_gpu);
     normalize_delta_gpu(l.x_gpu, l.mean_gpu, l.variance_gpu, l.mean_delta_gpu, l.variance_delta_gpu, l.batch, l.out_c, l.out_w*l.out_h, l.delta_gpu);
 #endif
-    if(l.type == BATCHNORM) copy_gpu(l.outputs*l.batch, l.delta_gpu, 1, net.delta_gpu, 1);
+    ако(l.type == BATCHNORM) copy_gpu(l.outputs*l.batch, l.delta_gpu, 1, net.delta_gpu, 1);
 }
 #endif

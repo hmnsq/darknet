@@ -5,9 +5,9 @@
 matrix copy_matrix(matrix m);
 void print_matrix(matrix m);
 
-matrix hold_out_matrix(matrix *m, int n);
-matrix resize_matrix(matrix m, int size);
+matrix hold_out_matrix(matrix *m, цяло n);
+matrix resize_matrix(matrix m, цяло size);
 
-float *pop_column(matrix *m, int c);
+float *pop_column(matrix *m, цяло c);
 
 #endif
