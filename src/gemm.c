@@ -5,21 +5,21 @@
 #include <stdio.h>
 #include <math.h>
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_bin(ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        var_na  *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
+        float *C, ཧྲིལ ldc)
 {
-    int i,j,k;
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            char A_PART = A[i*lda+k];
-            if(A_PART){
-                for(j = 0; j < N; ++j){
+    ཧྲིལ i,j,k;
+    དོན་ལུ(i = 0; i < M; ++i){
+        དོན་ལུ(k = 0; k < K; ++k){
+            var_na A_PART = A[i*lda+k];
+            གལ་སྲིད(A_PART){
+                དོན་ལུ(j = 0; j < N; ++j){
                     C[i*ldc+j] += B[k*ldb+j];
                 }
-            } else {
-                for(j = 0; j < N; ++j){
+            } དེ་མིན {
+                དོན་ལུ(j = 0; j < N; ++j){
                     C[i*ldc+j] -= B[k*ldb+j];
                 }
             }
@@ -27,31 +27,31 @@ void gemm_bin(int M, int N, int K, float ALPHA,
     }
 }
 
-float *random_matrix(int rows, int cols)
+float *random_matrix(ཧྲིལ rows, ཧྲིལ cols)
 {
-    int i;
-    float *m = calloc(rows*cols, sizeof(float));
-    for(i = 0; i < rows*cols; ++i){
+    ཧྲིལ i;
+    float *m = calloc(rows*cols, parimaa_na(float));
+    དོན་ལུ(i = 0; i < rows*cols; ++i){
         m[i] = (float)rand()/RAND_MAX;
     }
-    return m;
+    ལོག m;
 }
 
-void time_random_matrix(int TA, int TB, int m, int k, int n)
+void time_random_matrix(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ m, ཧྲིལ k, ཧྲིལ n)
 {
     float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
+    གལ་སྲིད(!TA) a = random_matrix(m,k);
+    དེ་མིན a = random_matrix(k,m);
+    ཧྲིལ lda = (!TA)?k:m;
     float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    གལ་སྲིད(!TB) b = random_matrix(k,n);
+    དེ་མིན b = random_matrix(n,k);
+    ཧྲིལ ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
-    int i;
+    ཧྲིལ i;
     clock_t start = clock(), end;
-    for(i = 0; i<10; ++i){
+    དོན་ལུ(i = 0; i<10; ++i){
         gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
@@ -62,43 +62,43 @@ void time_random_matrix(int TA, int TB, int m, int k, int n)
 }
 
 
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
         float BETA,
-        float *C, int ldc)
+        float *C, ཧྲིལ ldc)
 {
     gemm_cpu( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
 }
 
-void gemm_nn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_nn(ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
+        float *C, ཧྲིལ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[i*lda+k];
-            for(j = 0; j < N; ++j){
+    ཧྲིལ i,j,k;
+    #pragma omp parallel དོན་ལུ
+    དོན་ལུ(i = 0; i < M; ++i){
+        དོན་ལུ(k = 0; k < K; ++k){
+            pa_njikaa float A_PART = ALPHA*A[i*lda+k];
+            དོན་ལུ(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_nt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_nt(ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
+        float *C, ཧྲིལ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
+    ཧྲིལ i,j,k;
+    #pragma omp parallel དོན་ལུ
+    དོན་ལུ(i = 0; i < M; ++i){
+        དོན་ལུ(j = 0; j < N; ++j){
+            pa_njikaa float sum = 0;
+            དོན་ལུ(k = 0; k < K; ++k){
                 sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
             }
             C[i*ldc+j] += sum;
@@ -106,34 +106,34 @@ void gemm_nt(int M, int N, int K, float ALPHA,
     }
 }
 
-void gemm_tn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_tn(ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
+        float *C, ཧྲིལ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[k*lda+i];
-            for(j = 0; j < N; ++j){
+    ཧྲིལ i,j,k;
+    #pragma omp parallel དོན་ལུ
+    དོན་ལུ(i = 0; i < M; ++i){
+        དོན་ལུ(k = 0; k < K; ++k){
+            pa_njikaa float A_PART = ALPHA*A[k*lda+i];
+            དོན་ལུ(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_tt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+void gemm_tt(ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
+        float *C, ཧྲིལ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
+    ཧྲིལ i,j,k;
+    #pragma omp parallel དོན་ལུ
+    དོན་ལུ(i = 0; i < M; ++i){
+        དོན་ལུ(j = 0; j < N; ++j){
+            pa_njikaa float sum = 0;
+            དོན་ལུ(k = 0; k < K; ++k){
                 sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
             }
             C[i*ldc+j] += sum;
@@ -142,26 +142,26 @@ void gemm_tt(int M, int N, int K, float ALPHA,
 }
 
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_cpu(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
         float BETA,
-        float *C, int ldc)
+        float *C, ཧྲིལ ldc)
 {
     //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
-    int i, j;
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    ཧྲིལ i, j;
+    དོན་ལུ(i = 0; i < M; ++i){
+        དོན་ལུ(j = 0; j < N; ++j){
             C[i*ldc + j] *= BETA;
         }
     }
-    if(!TA && !TB)
+    གལ་སྲིད(!TA && !TB)
         gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(TA && !TB)
+    དེ་མིན གལ་སྲིད(TA && !TB)
         gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(!TA && TB)
+    དེ་མིན གལ་སྲིད(!TA && TB)
         gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else
+    དེ་མིན
         gemm_tt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
 }
 
@@ -169,11 +169,11 @@ void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA,
 
 #include <math.h>
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
+void gemm_gpu(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A_gpu, ཧྲིལ lda, 
+        float *B_gpu, ཧྲིལ ldb,
         float BETA,
-        float *C_gpu, int ldc)
+        float *C_gpu, ཧྲིལ ldc)
 {
     cublasHandle_t handle = blas_handle();
     cudaError_t status = cublasSgemm(handle, (TB ? CUBLAS_OP_T : CUBLAS_OP_N), 
@@ -186,21 +186,21 @@ void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA,
 #include <string.h>
 #include <time.h>
 
-void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
+void time_gpu_random_matrix(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ m, ཧྲིལ k, ཧྲིལ n)
 {
     float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
+    གལ་སྲིད(!TA) a = random_matrix(m,k);
+    དེ་མིན a = random_matrix(k,m);
+    ཧྲིལ lda = (!TA)?k:m;
     float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    གལ་སྲིད(!TB) b = random_matrix(k,n);
+    དེ་མིན b = random_matrix(n,k);
+    ཧྲིལ ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
-    int i;
+    ཧྲིལ i;
     clock_t start = clock(), end;
-    for(i = 0; i<32; ++i){
+    དོན་ལུ(i = 0; i<32; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
@@ -210,14 +210,14 @@ void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
     free(c);
 }
 
-void time_gpu(int TA, int TB, int m, int k, int n)
+void time_gpu(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ m, ཧྲིལ k, ཧྲིལ n)
 {
-    int iter = 10;
+    ཧྲིལ iter = 10;
     float *a = random_matrix(m,k);
     float *b = random_matrix(k,n);
 
-    int lda = (!TA)?k:m;
-    int ldb = (!TB)?n:k;
+    ཧྲིལ lda = (!TA)?k:m;
+    ཧྲིལ ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
 
@@ -225,16 +225,16 @@ void time_gpu(int TA, int TB, int m, int k, int n)
     float *b_cl = cuda_make_array(b, k*n);
     float *c_cl = cuda_make_array(c, m*n);
 
-    int i;
+    ཧྲིལ i;
     clock_t start = clock(), end;
-    for(i = 0; i<iter; ++i){
+    དོན་ལུ(i = 0; i<iter; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a_cl,lda,b_cl,ldb,1,c_cl,n);
         cudaThreadSynchronize();
     }
-    double flop = ((double)m)*n*(2.*k + 2.)*iter;
-    double gflop = flop/pow(10., 9);
+    dviguu_na flop = ((dviguu_na)m)*n*(2.*k + 2.)*iter;
+    dviguu_na gflop = flop/pow(10., 9);
     end = clock();
-    double seconds = sec(end-start);
+    dviguu_na seconds = sec(end-start);
     printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s, %lf GFLOPS\n",m,k,k,n, TA, TB, seconds, gflop/seconds);
     cuda_free(a_cl);
     cuda_free(b_cl);
@@ -245,23 +245,23 @@ void time_gpu(int TA, int TB, int m, int k, int n)
 }
 
 
-void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
+void test_gpu_accuracy(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ m, ཧྲིལ k, ཧྲིལ n)
 {
     srand(0);
     float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
+    གལ་སྲིད(!TA) a = random_matrix(m,k);
+    དེ་མིན a = random_matrix(k,m);
+    ཧྲིལ lda = (!TA)?k:m;
     float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    གལ་སྲིད(!TB) b = random_matrix(k,n);
+    དེ་མིན b = random_matrix(n,k);
+    ཧྲིལ ldb = (!TB)?n:k;
 
     float *c = random_matrix(m,n);
     float *c_gpu = random_matrix(m,n);
-    memset(c, 0, m*n*sizeof(float));
-    memset(c_gpu, 0, m*n*sizeof(float));
-    int i;
+    memset(c, 0, m*n*parimaa_na(float));
+    memset(c_gpu, 0, m*n*parimaa_na(float));
+    ཧྲིལ i;
     //pm(m,k,b);
     gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c_gpu,n);
     //printf("GPU\n");
@@ -270,8 +270,8 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     //printf("\n\nCPU\n");
     //pm(m, n, c);
-    double sse = 0;
-    for(i = 0; i < m*n; ++i) {
+    dviguu_na sse = 0;
+    དོན་ལུ(i = 0; i < m*n; ++i) {
         //printf("%f %f\n", c[i], c_gpu[i]);
         sse += pow(c[i]-c_gpu[i], 2);
     }
@@ -282,7 +282,7 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     free(c_gpu);
 }
 
-int test_gpu_blas()
+ཧྲིལ test_gpu_blas()
 {
     /*
        test_gpu_accuracy(0,0,10,576,75); 
@@ -318,7 +318,7 @@ int test_gpu_blas()
     time_gpu(0,0,512,4608,196); 
     time_gpu(1,1,4608,512,196); 
 
-    return 0;
+    ལོག 0;
 }
 #endif
 

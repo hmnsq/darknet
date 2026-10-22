@@ -4,16 +4,16 @@
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    ཧྲིལ h = l.out_h;
+    ཧྲིལ w = l.out_w;
+    ཧྲིལ c = l.out_c;
+    ལོག float_to_image(w,h,c,l.output);
 }
 
 void backward_crop_layer(const crop_layer l, network net){}
 void backward_crop_layer_gpu(const crop_layer l, network net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(ཧྲིལ batch, ཧྲིལ h, ཧྲིལ w, ཧྲིལ c, ཧྲིལ crop_height, ཧྲིལ crop_width, ཧྲིལ flip, float angle, float saturation, float exposure)
 {
     fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
     crop_layer l = {0};
@@ -32,7 +32,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.out_c = c;
     l.inputs = l.w * l.h * l.c;
     l.outputs = l.out_w * l.out_h * l.out_c;
-    l.output = calloc(l.outputs*batch, sizeof(float));
+    l.output = calloc(l.outputs*batch, parimaa_na(float));
     l.forward = forward_crop_layer;
     l.backward = backward_crop_layer;
 
@@ -42,10 +42,10 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
     #endif
-    return l;
+    ལོག l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+void resize_crop_layer(layer *l, ཧྲིལ w, ཧྲིལ h)
 {
     l->w = w;
     l->h = h;
@@ -56,7 +56,7 @@ void resize_crop_layer(layer *l, int w, int h)
     l->inputs = l->w * l->h * l->c;
     l->outputs = l->out_h * l->out_w * l->out_c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*parimaa_na(float));
     #ifdef GPU
     cuda_free(l->output_gpu);
     l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
@@ -66,30 +66,30 @@ void resize_crop_layer(layer *l, int w, int h)
 
 void forward_crop_layer(const crop_layer l, network net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
+    ཧྲིལ i,j,c,b,row,col;
+    ཧྲིལ index;
+    ཧྲིལ count = 0;
+    ཧྲིལ flip = (l.flip && rand()%2);
+    ཧྲིལ dh = rand()%(l.h - l.out_h + 1);
+    ཧྲིལ dw = rand()%(l.w - l.out_w + 1);
     float scale = 2;
     float trans = -1;
-    if(l.noadjust){
+    གལ་སྲིད(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    གལ་སྲིད(!net.train){
         flip = 0;
         dh = (l.h - l.out_h)/2;
         dw = (l.w - l.out_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
+    དོན་ལུ(b = 0; b < l.batch; ++b){
+        དོན་ལུ(c = 0; c < l.c; ++c){
+            དོན་ལུ(i = 0; i < l.out_h; ++i){
+                དོན་ལུ(j = 0; j < l.out_w; ++j){
+                    གལ་སྲིད(flip){
                         col = l.w - dw - j - 1;    
-                    }else{
+                    }དེ་མིན{
                         col = j + dw;
                     }
                     row = i + dh;

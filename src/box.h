@@ -2,7 +2,7 @@
 #define BOX_H
 #include "darknet.h"
 
-typedef struct{
+typedef sa_nracanaa{
     float dx, dy, dw, dh;
 } dbox;
 

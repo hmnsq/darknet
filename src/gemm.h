@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+void gemm_bin(ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        var_na  *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
+        float *C, ཧྲིལ ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
+void gemm(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+                    float *A, ཧྲིལ lda, 
+                    float *B, ཧྲིལ ldb,
                     float BETA,
-                    float *C, int ldc);
+                    float *C, ཧྲིལ ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_cpu(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
         float BETA,
-        float *C, int ldc);
+        float *C, ཧྲིལ ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
+void gemm_gpu(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A_gpu, ཧྲིལ lda, 
+        float *B_gpu, ཧྲིལ ldb,
         float BETA,
-        float *C_gpu, int ldc);
+        float *C_gpu, ཧྲིལ ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_gpu(ཧྲིལ TA, ཧྲིལ TB, ཧྲིལ M, ཧྲིལ N, ཧྲིལ K, float ALPHA, 
+        float *A, ཧྲིལ lda, 
+        float *B, ཧྲིལ ldb,
         float BETA,
-        float *C, int ldc);
+        float *C, ཧྲིལ ldc);
 #endif
 #endif
