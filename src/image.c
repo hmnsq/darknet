@@ -10,73 +10,73 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-int windows = 0;
+цео windows = 0;
 
 float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
 
-float get_color(int c, int x, int max)
+float get_color(цео c, цео x, цео max)
 {
     float ratio = ((float)x/max)*5;
-    int i = floor(ratio);
-    int j = ceil(ratio);
+    цео i = floor(ratio);
+    цео j = ceil(ratio);
     ratio -= i;
     float r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
     //printf("%f\n", r);
-    return r;
+    врати r;
 }
 
 image mask_to_rgb(image mask)
 {
-    int n = mask.c;
+    цео n = mask.c;
     image im = make_image(mask.w, mask.h, 3);
-    int i, j;
-    for(j = 0; j < n; ++j){
-        int offset = j*123457 % n;
+    цео i, j;
+    за(j = 0; j < n; ++j){
+        цео offset = j*123457 % n;
         float red = get_color(2,offset,n);
         float green = get_color(1,offset,n);
         float blue = get_color(0,offset,n);
-        for(i = 0; i < im.w*im.h; ++i){
+        за(i = 0; i < im.w*im.h; ++i){
             im.data[i + 0*im.w*im.h] += mask.data[j*im.h*im.w + i]*red;
             im.data[i + 1*im.w*im.h] += mask.data[j*im.h*im.w + i]*green;
             im.data[i + 2*im.w*im.h] += mask.data[j*im.h*im.w + i]*blue;
         }
     }
-    return im;
+    врати im;
 }
 
-static float get_pixel(image m, int x, int y, int c)
+static float get_pixel(image m, цео x, цео y, цео c)
 {
     assert(x < m.w && y < m.h && c < m.c);
-    return m.data[c*m.h*m.w + y*m.w + x];
+    врати m.data[c*m.h*m.w + y*m.w + x];
 }
-static float get_pixel_extend(image m, int x, int y, int c)
+static float get_pixel_extend(image m, цео x, цео y, цео c)
 {
-    if(x < 0 || x >= m.w || y < 0 || y >= m.h) return 0;
+    ако(x < 0 || x >= m.w || y < 0 || y >= m.h) врати 0;
     /*
     if(x < 0) x = 0;
     if(x >= m.w) x = m.w-1;
     if(y < 0) y = 0;
     if(y >= m.h) y = m.h-1;
     */
-    if(c < 0 || c >= m.c) return 0;
-    return get_pixel(m, x, y, c);
+    ако(c < 0 || c >= m.c) врати 0;
+    врати get_pixel(m, x, y, c);
 }
-static void set_pixel(image m, int x, int y, int c, float val)
+static void set_pixel(image m, цео x, цео y, цео c, float val)
 {
-    if (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) return;
+    ако (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) врати;
     assert(x < m.w && y < m.h && c < m.c);
     m.data[c*m.h*m.w + y*m.w + x] = val;
 }
-static void add_pixel(image m, int x, int y, int c, float val)
+static void add_pixel(image m, цео x, цео y, цео c, float val)
 {
     assert(x < m.w && y < m.h && c < m.c);
     m.data[c*m.h*m.w + y*m.w + x] += val;
 }
 
-static float bilinear_interpolate(image im, float x, float y, int c)
+static float bilinear_interpolate(image im, float x, float y, цео c)
 {
-    int ix = (int) floorf(x);
-    int iy = (int) floorf(y);
+    цео ix = (цео) floorf(x);
+    цео iy = (цео) floorf(y);
 
     float dx = x - ix;
     float dy = y - iy;
@@ -85,16 +85,16 @@ static float bilinear_interpolate(image im, float x, float y, int c)
         dy     * (1-dx) * get_pixel_extend(im, ix, iy+1, c) + 
         (1-dy) *   dx   * get_pixel_extend(im, ix+1, iy, c) +
         dy     *   dx   * get_pixel_extend(im, ix+1, iy+1, c);
-    return val;
+    врати val;
 }
 
 
-void composite_image(image source, image dest, int dx, int dy)
+void composite_image(image source, image dest, цео dx, цео dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
+    цео x,y,k;
+    за(k = 0; k < source.c; ++k){
+        за(y = 0; y < source.h; ++y){
+            за(x = 0; x < source.w; ++x){
                 float val = get_pixel(source, x, y, k);
                 float val2 = get_pixel_extend(dest, dx+x, dy+y, k);
                 set_pixel(dest, dx+x, dy+y, k, val * val2);
@@ -103,39 +103,39 @@ void composite_image(image source, image dest, int dx, int dy)
     }
 }
 
-image border_image(image a, int border)
+image border_image(image a, цео border)
 {
     image b = make_image(a.w + 2*border, a.h + 2*border, a.c);
-    int x,y,k;
-    for(k = 0; k < b.c; ++k){
-        for(y = 0; y < b.h; ++y){
-            for(x = 0; x < b.w; ++x){
+    цео x,y,k;
+    за(k = 0; k < b.c; ++k){
+        за(y = 0; y < b.h; ++y){
+            за(x = 0; x < b.w; ++x){
                 float val = get_pixel_extend(a, x - border, y - border, k);
-                if(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
+                ако(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
                 set_pixel(b, x, y, k, val);
             }
         }
     }
-    return b;
+    врати b;
 }
 
-image tile_images(image a, image b, int dx)
+image tile_images(image a, image b, цео dx)
 {
-    if(a.w == 0) return copy_image(b);
+    ако(a.w == 0) врати copy_image(b);
     image c = make_image(a.w + b.w + dx, (a.h > b.h) ? a.h : b.h, (a.c > b.c) ? a.c : b.c);
     fill_cpu(c.w*c.h*c.c, 1, c.data, 1);
     embed_image(a, c, 0, 0); 
     composite_image(b, c, a.w + dx, 0);
-    return c;
+    врати c;
 }
 
-image get_label(image **characters, char *string, int size)
+image get_label(image **characters, char *string, цео size)
 {
     size = size/10;
-    if(size > 7) size = 7;
+    ако(size > 7) size = 7;
     image label = make_empty_image(0,0,0);
-    while(*string){
-        image l = characters[size][(int)*string];
+    док(*string){
+        image l = characters[size][(цео)*string];
         image n = tile_images(label, l, -size - 1 + (size+1)/2);
         free_image(label);
         label = n;
@@ -143,19 +143,19 @@ image get_label(image **characters, char *string, int size)
     }
     image b = border_image(label, label.h*.25);
     free_image(label);
-    return b;
+    врати b;
 }
 
-void draw_label(image a, int r, int c, image label, const float *rgb)
+void draw_label(image a, цео r, цео c, image label, const float *rgb)
 {
-    int w = label.w;
-    int h = label.h;
-    if (r - h >= 0) r = r - h;
+    цео w = label.w;
+    цео h = label.h;
+    ако (r - h >= 0) r = r - h;
 
-    int i, j, k;
-    for(j = 0; j < h && j + r < a.h; ++j){
-        for(i = 0; i < w && i + c < a.w; ++i){
-            for(k = 0; k < label.c; ++k){
+    цео i, j, k;
+    за(j = 0; j < h && j + r < a.h; ++j){
+        за(i = 0; i < w && i + c < a.w; ++i){
+            за(k = 0; k < label.c; ++k){
                 float val = get_pixel(label, i, j, k);
                 set_pixel(a, i+c, j+r, k, rgb[k] * val);
             }
@@ -163,21 +163,21 @@ void draw_label(image a, int r, int c, image label, const float *rgb)
     }
 }
 
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b)
+void draw_box(image a, цео x1, цео y1, цео x2, цео y2, float r, float g, float b)
 {
     //normalize_image(a);
-    int i;
-    if(x1 < 0) x1 = 0;
-    if(x1 >= a.w) x1 = a.w-1;
-    if(x2 < 0) x2 = 0;
-    if(x2 >= a.w) x2 = a.w-1;
+    цео i;
+    ако(x1 < 0) x1 = 0;
+    ако(x1 >= a.w) x1 = a.w-1;
+    ако(x2 < 0) x2 = 0;
+    ако(x2 >= a.w) x2 = a.w-1;
 
-    if(y1 < 0) y1 = 0;
-    if(y1 >= a.h) y1 = a.h-1;
-    if(y2 < 0) y2 = 0;
-    if(y2 >= a.h) y2 = a.h-1;
+    ако(y1 < 0) y1 = 0;
+    ако(y1 >= a.h) y1 = a.h-1;
+    ако(y2 < 0) y2 = 0;
+    ако(y2 >= a.h) y2 = a.h-1;
 
-    for(i = x1; i <= x2; ++i){
+    за(i = x1; i <= x2; ++i){
         a.data[i + y1*a.w + 0*a.w*a.h] = r;
         a.data[i + y2*a.w + 0*a.w*a.h] = r;
 
@@ -187,7 +187,7 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
         a.data[i + y1*a.w + 2*a.w*a.h] = b;
         a.data[i + y2*a.w + 2*a.w*a.h] = b;
     }
-    for(i = y1; i <= y2; ++i){
+    за(i = y1; i <= y2; ++i){
         a.data[x1 + i*a.w + 0*a.w*a.h] = r;
         a.data[x2 + i*a.w + 0*a.w*a.h] = r;
 
@@ -199,64 +199,64 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
     }
 }
 
-void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
+void draw_box_width(image a, цео x1, цео y1, цео x2, цео y2, цео w, float r, float g, float b)
 {
-    int i;
-    for(i = 0; i < w; ++i){
+    цео i;
+    за(i = 0; i < w; ++i){
         draw_box(a, x1+i, y1+i, x2-i, y2-i, r, g, b);
     }
 }
 
-void draw_bbox(image a, box bbox, int w, float r, float g, float b)
+void draw_bbox(image a, box bbox, цео w, float r, float g, float b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
-    int bot   = (bbox.y+bbox.h/2)*a.h;
+    цео left  = (bbox.x-bbox.w/2)*a.w;
+    цео right = (bbox.x+bbox.w/2)*a.w;
+    цео top   = (bbox.y-bbox.h/2)*a.h;
+    цео bot   = (bbox.y+bbox.h/2)*a.h;
 
-    int i;
-    for(i = 0; i < w; ++i){
+    цео i;
+    за(i = 0; i < w; ++i){
         draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
     }
 }
 
 image **load_alphabet()
 {
-    int i, j;
-    const int nsize = 8;
+    цео i, j;
+    const цео nsize = 8;
     image **alphabets = calloc(nsize, sizeof(image));
-    for(j = 0; j < nsize; ++j){
+    за(j = 0; j < nsize; ++j){
         alphabets[j] = calloc(128, sizeof(image));
-        for(i = 32; i < 127; ++i){
+        за(i = 32; i < 127; ++i){
             char buff[256];
             sprintf(buff, "data/labels/%d_%d.png", i, j);
             alphabets[j][i] = load_image_color(buff, 0, 0);
         }
     }
-    return alphabets;
+    врати alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+void draw_detections(image im, detection *dets, цео num, float thresh, char **names, image **alphabet, цео classes)
 {
-    int i,j;
+    цео i,j;
 
-    for(i = 0; i < num; ++i){
+    за(i = 0; i < num; ++i){
         char labelstr[4096] = {0};
-        int class = -1;
-        for(j = 0; j < classes; ++j){
-            if (dets[i].prob[j] > thresh){
-                if (class < 0) {
+        цео class = -1;
+        за(j = 0; j < classes; ++j){
+            ако (dets[i].prob[j] > thresh){
+                ако (class < 0) {
                     strcat(labelstr, names[j]);
                     class = j;
-                } else {
+                } инако {
                     strcat(labelstr, ", ");
                     strcat(labelstr, names[j]);
                 }
                 printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
             }
         }
-        if(class >= 0){
-            int width = im.h * .006;
+        ако(class >= 0){
+            цео width = im.h * .006;
 
             /*
                if(0){
@@ -266,7 +266,7 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
              */
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
-            int offset = class*123457 % classes;
+            цео offset = class*123457 % classes;
             float red = get_color(2,offset,classes);
             float green = get_color(1,offset,classes);
             float blue = get_color(0,offset,classes);
@@ -280,23 +280,23 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             box b = dets[i].bbox;
             //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
-            int bot   = (b.y+b.h/2.)*im.h;
+            цео left  = (b.x-b.w/2.)*im.w;
+            цео right = (b.x+b.w/2.)*im.w;
+            цео top   = (b.y-b.h/2.)*im.h;
+            цео bot   = (b.y+b.h/2.)*im.h;
 
-            if(left < 0) left = 0;
-            if(right > im.w-1) right = im.w-1;
-            if(top < 0) top = 0;
-            if(bot > im.h-1) bot = im.h-1;
+            ако(left < 0) left = 0;
+            ако(right > im.w-1) right = im.w-1;
+            ако(top < 0) top = 0;
+            ако(bot > im.h-1) bot = im.h-1;
 
             draw_box_width(im, left, top, right, bot, width, red, green, blue);
-            if (alphabet) {
+            ако (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.03));
                 draw_label(im, top + width, left, label, rgb);
                 free_image(label);
             }
-            if (dets[i].mask){
+            ако (dets[i].mask){
                 image mask = float_to_image(14, 14, 1, dets[i].mask);
                 image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
                 image tmask = threshold_image(resized_mask, .5);
@@ -312,11 +312,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
 void transpose_image(image im)
 {
     assert(im.w == im.h);
-    int n, m;
-    int c;
-    for(c = 0; c < im.c; ++c){
-        for(n = 0; n < im.w-1; ++n){
-            for(m = n + 1; m < im.w; ++m){
+    цео n, m;
+    цео c;
+    за(c = 0; c < im.c; ++c){
+        за(n = 0; n < im.w-1; ++n){
+            за(m = n + 1; m < im.w; ++m){
                 float swap = im.data[m + im.w*(n + im.h*c)];
                 im.data[m + im.w*(n + im.h*c)] = im.data[n + im.w*(m + im.h*c)];
                 im.data[n + im.w*(m + im.h*c)] = swap;
@@ -325,16 +325,16 @@ void transpose_image(image im)
     }
 }
 
-void rotate_image_cw(image im, int times)
+void rotate_image_cw(image im, цео times)
 {
     assert(im.w == im.h);
     times = (times + 400) % 4;
-    int i, x, y, c;
-    int n = im.w;
-    for(i = 0; i < times; ++i){
-        for(c = 0; c < im.c; ++c){
-            for(x = 0; x < n/2; ++x){
-                for(y = 0; y < (n-1)/2 + 1; ++y){
+    цео i, x, y, c;
+    цео n = im.w;
+    за(i = 0; i < times; ++i){
+        за(c = 0; c < im.c; ++c){
+            за(x = 0; x < n/2; ++x){
+                за(y = 0; y < (n-1)/2 + 1; ++y){
                     float temp = im.data[y + im.w*(x + im.h*c)];
                     im.data[y + im.w*(x + im.h*c)] = im.data[n-1-x + im.w*(y + im.h*c)];
                     im.data[n-1-x + im.w*(y + im.h*c)] = im.data[n-1-y + im.w*(n-1-x + im.h*c)];
@@ -348,12 +348,12 @@ void rotate_image_cw(image im, int times)
 
 void flip_image(image a)
 {
-    int i,j,k;
-    for(k = 0; k < a.c; ++k){
-        for(i = 0; i < a.h; ++i){
-            for(j = 0; j < a.w/2; ++j){
-                int index = j + a.w*(i + a.h*(k));
-                int flip = (a.w - j - 1) + a.w*(i + a.h*(k));
+    цео i,j,k;
+    за(k = 0; k < a.c; ++k){
+        за(i = 0; i < a.h; ++i){
+            за(j = 0; j < a.w/2; ++j){
+                цео index = j + a.w*(i + a.h*(k));
+                цео flip = (a.w - j - 1) + a.w*(i + a.h*(k));
                 float swap = a.data[flip];
                 a.data[flip] = a.data[index];
                 a.data[index] = swap;
@@ -364,29 +364,29 @@ void flip_image(image a)
 
 image image_distance(image a, image b)
 {
-    int i,j;
+    цео i,j;
     image dist = make_image(a.w, a.h, 1);
-    for(i = 0; i < a.c; ++i){
-        for(j = 0; j < a.h*a.w; ++j){
+    за(i = 0; i < a.c; ++i){
+        за(j = 0; j < a.h*a.w; ++j){
             dist.data[j] += pow(a.data[i*a.h*a.w+j]-b.data[i*a.h*a.w+j],2);
         }
     }
-    for(j = 0; j < a.h*a.w; ++j){
+    за(j = 0; j < a.h*a.w; ++j){
         dist.data[j] = sqrt(dist.data[j]);
     }
-    return dist;
+    врати dist;
 }
 
-void ghost_image(image source, image dest, int dx, int dy)
+void ghost_image(image source, image dest, цео dx, цео dy)
 {
-    int x,y,k;
+    цео x,y,k;
     float max_dist = sqrt((-source.w/2. + .5)*(-source.w/2. + .5));
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
+    за(k = 0; k < source.c; ++k){
+        за(y = 0; y < source.h; ++y){
+            за(x = 0; x < source.w; ++x){
                 float dist = sqrt((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
                 float alpha = (1 - dist/max_dist);
-                if(alpha < 0) alpha = 0;
+                ако(alpha < 0) alpha = 0;
                 float v1 = get_pixel(source, x,y,k);
                 float v2 = get_pixel(dest, dx+x,dy+y,k);
                 float val = alpha*v1 + (1-alpha)*v2;
@@ -396,28 +396,28 @@ void ghost_image(image source, image dest, int dx, int dy)
     }
 }
 
-void blocky_image(image im, int s)
+void blocky_image(image im, цео s)
 {
-    int i,j,k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
+    цео i,j,k;
+    за(k = 0; k < im.c; ++k){
+        за(j = 0; j < im.h; ++j){
+            за(i = 0; i < im.w; ++i){
                 im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
             }
         }
     }
 }
 
-void censor_image(image im, int dx, int dy, int w, int h)
+void censor_image(image im, цео dx, цео dy, цео w, цео h)
 {
-    int i,j,k;
-    int s = 32;
-    if(dx < 0) dx = 0;
-    if(dy < 0) dy = 0;
+    цео i,j,k;
+    цео s = 32;
+    ако(dx < 0) dx = 0;
+    ако(dy < 0) dy = 0;
 
-    for(k = 0; k < im.c; ++k){
-        for(j = dy; j < dy + h && j < im.h; ++j){
-            for(i = dx; i < dx + w && i < im.w; ++i){
+    за(k = 0; k < im.c; ++k){
+        за(j = dy; j < dy + h && j < im.h; ++j){
+            за(i = dx; i < dx + w && i < im.w; ++i){
                 im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
                 //im.data[i + j*im.w + k*im.w*im.h] = 0;
             }
@@ -425,12 +425,12 @@ void censor_image(image im, int dx, int dy, int w, int h)
     }
 }
 
-void embed_image(image source, image dest, int dx, int dy)
+void embed_image(image source, image dest, цео dx, цео dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
+    цео x,y,k;
+    за(k = 0; k < source.c; ++k){
+        за(y = 0; y < source.h; ++y){
+            за(x = 0; x < source.w; ++x){
                 float val = get_pixel(source, x,y,k);
                 set_pixel(dest, dx+x, dy+y, k, val);
             }
@@ -438,46 +438,46 @@ void embed_image(image source, image dest, int dx, int dy)
     }
 }
 
-image collapse_image_layers(image source, int border)
+image collapse_image_layers(image source, цео border)
 {
-    int h = source.h;
+    цео h = source.h;
     h = (h+border)*source.c - border;
     image dest = make_image(source.w, h, 1);
-    int i;
-    for(i = 0; i < source.c; ++i){
+    цео i;
+    за(i = 0; i < source.c; ++i){
         image layer = get_image_layer(source, i);
-        int h_offset = i*(source.h+border);
+        цео h_offset = i*(source.h+border);
         embed_image(layer, dest, 0, h_offset);
         free_image(layer);
     }
-    return dest;
+    врати dest;
 }
 
 void constrain_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        if(im.data[i] < 0) im.data[i] = 0;
-        if(im.data[i] > 1) im.data[i] = 1;
+    цео i;
+    за(i = 0; i < im.w*im.h*im.c; ++i){
+        ако(im.data[i] < 0) im.data[i] = 0;
+        ако(im.data[i] > 1) im.data[i] = 1;
     }
 }
 
 void normalize_image(image p)
 {
-    int i;
+    цео i;
     float min = 9999999;
     float max = -999999;
 
-    for(i = 0; i < p.h*p.w*p.c; ++i){
+    за(i = 0; i < p.h*p.w*p.c; ++i){
         float v = p.data[i];
-        if(v < min) min = v;
-        if(v > max) max = v;
+        ако(v < min) min = v;
+        ако(v > max) max = v;
     }
-    if(max - min < .000000001){
+    ако(max - min < .000000001){
         min = 0;
         max = 1;
     }
-    for(i = 0; i < p.c*p.w*p.h; ++i){
+    за(i = 0; i < p.c*p.w*p.h; ++i){
         p.data[i] = (p.data[i] - min)/(max-min);
     }
 }
@@ -486,24 +486,24 @@ void normalize_image2(image p)
 {
     float *min = calloc(p.c, sizeof(float));
     float *max = calloc(p.c, sizeof(float));
-    int i,j;
-    for(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
+    цео i,j;
+    за(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
 
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.h*p.w; ++i){
+    за(j = 0; j < p.c; ++j){
+        за(i = 0; i < p.h*p.w; ++i){
             float v = p.data[i+j*p.h*p.w];
-            if(v < min[j]) min[j] = v;
-            if(v > max[j]) max[j] = v;
+            ако(v < min[j]) min[j] = v;
+            ако(v > max[j]) max[j] = v;
         }
     }
-    for(i = 0; i < p.c; ++i){
-        if(max[i] - min[i] < .000000001){
+    за(i = 0; i < p.c; ++i){
+        ако(max[i] - min[i] < .000000001){
             min[i] = 0;
             max[i] = 1;
         }
     }
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.w*p.h; ++i){
+    за(j = 0; j < p.c; ++j){
+        за(i = 0; i < p.w*p.h; ++i){
             p.data[i+j*p.h*p.w] = (p.data[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
         }
     }
@@ -521,54 +521,54 @@ image copy_image(image p)
     image copy = p;
     copy.data = calloc(p.h*p.w*p.c, sizeof(float));
     memcpy(copy.data, p.data, p.h*p.w*p.c*sizeof(float));
-    return copy;
+    врати copy;
 }
 
 void rgbgr_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    цео i;
+    за(i = 0; i < im.w*im.h; ++i){
         float swap = im.data[i];
         im.data[i] = im.data[i+im.w*im.h*2];
         im.data[i+im.w*im.h*2] = swap;
     }
 }
 
-int show_image(image p, const char *name, int ms)
+цео show_image(image p, const char *name, цео ms)
 {
 #ifdef OPENCV
-    int c = show_image_cv(p, name, ms);
-    return c;
-#else
+    цео c = show_image_cv(p, name, ms);
+    врати c;
+#инако
     fprintf(stderr, "Not compiled with OpenCV, saving to %s.png instead\n", name);
     save_image(p, name);
-    return -1;
+    врати -1;
 #endif
 }
 
-void save_image_options(image im, const char *name, IMTYPE f, int quality)
+void save_image_options(image im, const char *name, IMTYPE f, цео quality)
 {
     char buff[256];
     //sprintf(buff, "%s (%d)", name, windows);
-    if(f == PNG)       sprintf(buff, "%s.png", name);
-    else if (f == BMP) sprintf(buff, "%s.bmp", name);
-    else if (f == TGA) sprintf(buff, "%s.tga", name);
-    else if (f == JPG) sprintf(buff, "%s.jpg", name);
-    else               sprintf(buff, "%s.png", name);
+    ако(f == PNG)       sprintf(buff, "%s.png", name);
+    инако ако (f == BMP) sprintf(buff, "%s.bmp", name);
+    инако ако (f == TGA) sprintf(buff, "%s.tga", name);
+    инако ако (f == JPG) sprintf(buff, "%s.jpg", name);
+    инако               sprintf(buff, "%s.png", name);
     unsigned char *data = calloc(im.w*im.h*im.c, sizeof(char));
-    int i,k;
-    for(k = 0; k < im.c; ++k){
-        for(i = 0; i < im.w*im.h; ++i){
+    цео i,k;
+    за(k = 0; k < im.c; ++k){
+        за(i = 0; i < im.w*im.h; ++i){
             data[i*im.c+k] = (unsigned char) (255*im.data[i + k*im.w*im.h]);
         }
     }
-    int success = 0;
-    if(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
-    else if (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
-    else if (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
-    else if (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
+    цео success = 0;
+    ако(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
+    инако ако (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
+    инако ако (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
+    инако ако (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
     free(data);
-    if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
+    ако(!success) fprintf(stderr, "Failed to write image %s\n", buff);
 }
 
 void save_image(image im, const char *name)
@@ -578,9 +578,9 @@ void save_image(image im, const char *name)
 
 void show_image_layers(image p, char *name)
 {
-    int i;
+    цео i;
     char buff[256];
-    for(i = 0; i < p.c; ++i){
+    за(i = 0; i < p.c; ++i){
         sprintf(buff, "%s - Layer %d", name, i);
         image layer = get_image_layer(p, i);
         show_image(layer, buff, 1);
@@ -595,47 +595,47 @@ void show_image_collapsed(image p, char *name)
     free_image(c);
 }
 
-image make_empty_image(int w, int h, int c)
+image make_empty_image(цео w, цео h, цео c)
 {
     image out;
     out.data = 0;
     out.h = h;
     out.w = w;
     out.c = c;
-    return out;
+    врати out;
 }
 
-image make_image(int w, int h, int c)
+image make_image(цео w, цео h, цео c)
 {
     image out = make_empty_image(w,h,c);
     out.data = calloc(h*w*c, sizeof(float));
-    return out;
+    врати out;
 }
 
-image make_random_image(int w, int h, int c)
+image make_random_image(цео w, цео h, цео c)
 {
     image out = make_empty_image(w,h,c);
     out.data = calloc(h*w*c, sizeof(float));
-    int i;
-    for(i = 0; i < w*h*c; ++i){
+    цео i;
+    за(i = 0; i < w*h*c; ++i){
         out.data[i] = (rand_normal() * .25) + .5;
     }
-    return out;
+    врати out;
 }
 
-image float_to_image(int w, int h, int c, float *data)
+image float_to_image(цео w, цео h, цео c, float *data)
 {
     image out = make_empty_image(w,h,c);
     out.data = data;
-    return out;
+    врати out;
 }
 
-void place_image(image im, int w, int h, int dx, int dy, image canvas)
+void place_image(image im, цео w, цео h, цео dx, цео dy, image canvas)
 {
-    int x, y, c;
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
+    цео x, y, c;
+    за(c = 0; c < im.c; ++c){
+        за(y = 0; y < h; ++y){
+            за(x = 0; x < w; ++x){
                 float rx = ((float)x / w) * im.w;
                 float ry = ((float)y / h) * im.h;
                 float val = bilinear_interpolate(im, rx, ry, c);
@@ -645,24 +645,24 @@ void place_image(image im, int w, int h, int dx, int dy, image canvas)
     }
 }
 
-image center_crop_image(image im, int w, int h)
+image center_crop_image(image im, цео w, цео h)
 {
-    int m = (im.w < im.h) ? im.w : im.h;   
+    цео m = (im.w < im.h) ? im.w : im.h;   
     image c = crop_image(im, (im.w - m) / 2, (im.h - m)/2, m, m);
     image r = resize_image(c, w, h);
     free_image(c);
-    return r;
+    врати r;
 }
 
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect)
+image rotate_crop_image(image im, float rad, float s, цео w, цео h, float dx, float dy, float aspect)
 {
-    int x, y, c;
+    цео x, y, c;
     float cx = im.w/2.;
     float cy = im.h/2.;
     image rot = make_image(w, h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
+    за(c = 0; c < im.c; ++c){
+        за(y = 0; y < h; ++y){
+            за(x = 0; x < w; ++x){
                 float rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
                 float ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
                 float val = bilinear_interpolate(im, rx, ry, c);
@@ -670,18 +670,18 @@ image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, fl
             }
         }
     }
-    return rot;
+    врати rot;
 }
 
 image rotate_image(image im, float rad)
 {
-    int x, y, c;
+    цео x, y, c;
     float cx = im.w/2.;
     float cy = im.h/2.;
     image rot = make_image(im.w, im.h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < im.h; ++y){
-            for(x = 0; x < im.w; ++x){
+    за(c = 0; c < im.c; ++c){
+        за(y = 0; y < im.h; ++y){
+            за(x = 0; x < im.w; ++x){
                 float rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
                 float ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
                 float val = bilinear_interpolate(im, rx, ry, c);
@@ -689,36 +689,36 @@ image rotate_image(image im, float rad)
             }
         }
     }
-    return rot;
+    врати rot;
 }
 
 void fill_image(image m, float s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
+    цео i;
+    за(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
 }
 
 void translate_image(image m, float s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
+    цео i;
+    за(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
 }
 
 void scale_image(image m, float s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
+    цео i;
+    за(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
 }
 
-image crop_image(image im, int dx, int dy, int w, int h)
+image crop_image(image im, цео dx, цео dy, цео w, цео h)
 {
     image cropped = make_image(w, h, im.c);
-    int i, j, k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int r = j + dy;
-                int c = i + dx;
+    цео i, j, k;
+    за(k = 0; k < im.c; ++k){
+        за(j = 0; j < h; ++j){
+            за(i = 0; i < w; ++i){
+                цео r = j + dy;
+                цео c = i + dx;
                 float val = 0;
                 r = constrain_int(r, 0, im.h-1);
                 c = constrain_int(c, 0, im.w-1);
@@ -727,80 +727,80 @@ image crop_image(image im, int dx, int dy, int w, int h)
             }
         }
     }
-    return cropped;
+    врати cropped;
 }
 
-int best_3d_shift_r(image a, image b, int min, int max)
+цео best_3d_shift_r(image a, image b, цео min, цео max)
 {
-    if(min == max) return min;
-    int mid = floor((min + max) / 2.);
+    ако(min == max) врати min;
+    цео mid = floor((min + max) / 2.);
     image c1 = crop_image(b, 0, mid, b.w, b.h);
     image c2 = crop_image(b, 0, mid+1, b.w, b.h);
     float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
     float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
     free_image(c1);
     free_image(c2);
-    if(d1 < d2) return best_3d_shift_r(a, b, min, mid);
-    else return best_3d_shift_r(a, b, mid+1, max);
+    ако(d1 < d2) врати best_3d_shift_r(a, b, min, mid);
+    инако врати best_3d_shift_r(a, b, mid+1, max);
 }
 
-int best_3d_shift(image a, image b, int min, int max)
+цео best_3d_shift(image a, image b, цео min, цео max)
 {
-    int i;
-    int best = 0;
+    цео i;
+    цео best = 0;
     float best_distance = FLT_MAX;
-    for(i = min; i <= max; i += 2){
+    за(i = min; i <= max; i += 2){
         image c = crop_image(b, 0, i, b.w, b.h);
         float d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
-        if(d < best_distance){
+        ако(d < best_distance){
             best_distance = d;
             best = i;
         }
         printf("%d %f\n", i, d);
         free_image(c);
     }
-    return best;
+    врати best;
 }
 
-void composite_3d(char *f1, char *f2, char *out, int delta)
+void composite_3d(char *f1, char *f2, char *out, цео delta)
 {
-    if(!out) out = "out";
+    ако(!out) out = "out";
     image a = load_image(f1, 0,0,0);
     image b = load_image(f2, 0,0,0);
-    int shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
+    цео shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
 
     image c1 = crop_image(b, 10, shift, b.w, b.h);
     float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
     image c2 = crop_image(b, -10, shift, b.w, b.h);
     float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
 
-    if(d2 < d1 && 0){
+    ако(d2 < d1 && 0){
         image swap = a;
         a = b;
         b = swap;
         shift = -shift;
         printf("swapped, %d\n", shift);
     }
-    else{
+    инако{
         printf("%d\n", shift);
     }
 
     image c = crop_image(b, delta, shift, a.w, a.h);
-    int i;
-    for(i = 0; i < c.w*c.h; ++i){
+    цео i;
+    за(i = 0; i < c.w*c.h; ++i){
         c.data[i] = a.data[i];
     }
     save_image(c, out);
 }
 
-void letterbox_image_into(image im, int w, int h, image boxed)
+void letterbox_image_into(image im, цео w, цео h, image boxed)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    цео new_w = im.w;
+    цео new_h = im.h;
+    ако (((float)w/im.w) < ((float)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } инако {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -809,14 +809,14 @@ void letterbox_image_into(image im, int w, int h, image boxed)
     free_image(resized);
 }
 
-image letterbox_image(image im, int w, int h)
+image letterbox_image(image im, цео w, цео h)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    цео new_w = im.w;
+    цео new_h = im.h;
+    ако (((float)w/im.w) < ((float)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } инако {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -827,55 +827,55 @@ image letterbox_image(image im, int w, int h)
     //for(i = 0; i < boxed.w*boxed.h*boxed.c; ++i) boxed.data[i] = 0;
     embed_image(resized, boxed, (w-new_w)/2, (h-new_h)/2); 
     free_image(resized);
-    return boxed;
+    врати boxed;
 }
 
-image resize_max(image im, int max)
+image resize_max(image im, цео max)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w > h){
+    цео w = im.w;
+    цео h = im.h;
+    ако(w > h){
         h = (h * max) / w;
         w = max;
-    } else {
+    } инако {
         w = (w * max) / h;
         h = max;
     }
-    if(w == im.w && h == im.h) return im;
+    ако(w == im.w && h == im.h) врати im;
     image resized = resize_image(im, w, h);
-    return resized;
+    врати resized;
 }
 
-image resize_min(image im, int min)
+image resize_min(image im, цео min)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w < h){
+    цео w = im.w;
+    цео h = im.h;
+    ако(w < h){
         h = (h * min) / w;
         w = min;
-    } else {
+    } инако {
         w = (w * min) / h;
         h = min;
     }
-    if(w == im.w && h == im.h) return im;
+    ако(w == im.w && h == im.h) врати im;
     image resized = resize_image(im, w, h);
-    return resized;
+    врати resized;
 }
 
-image random_crop_image(image im, int w, int h)
+image random_crop_image(image im, цео w, цео h)
 {
-    int dx = rand_int(0, im.w - w);
-    int dy = rand_int(0, im.h - h);
+    цео dx = rand_int(0, im.w - w);
+    цео dy = rand_int(0, im.h - h);
     image crop = crop_image(im, dx, dy, w, h);
-    return crop;
+    врати crop;
 }
 
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h)
+augment_args random_augment_args(image im, float angle, float aspect, цео low, цео high, цео w, цео h)
 {
     augment_args a = {0};
     aspect = rand_scale(aspect);
-    int r = rand_int(low, high);
-    int min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
+    цео r = rand_int(low, high);
+    цео min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
     float scale = (float)r / min;
 
     float rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
@@ -894,34 +894,34 @@ augment_args random_augment_args(image im, float angle, float aspect, int low, i
     a.dx = dx;
     a.dy = dy;
     a.aspect = aspect;
-    return a;
+    врати a;
 }
 
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h)
+image random_augment_image(image im, float angle, float aspect, цео low, цео high, цео w, цео h)
 {
     augment_args a = random_augment_args(im, angle, aspect, low, high, w, h);
     image crop = rotate_crop_image(im, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
-    return crop;
+    врати crop;
 }
 
 float three_way_max(float a, float b, float c)
 {
-    return (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
+    врати (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
 }
 
 float three_way_min(float a, float b, float c)
 {
-    return (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
+    врати (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
 }
 
 void yuv_to_rgb(image im)
 {
     assert(im.c == 3);
-    int i, j;
+    цео i, j;
     float r, g, b;
     float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             y = get_pixel(im, i , j, 0);
             u = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
@@ -940,11 +940,11 @@ void yuv_to_rgb(image im)
 void rgb_to_yuv(image im)
 {
     assert(im.c == 3);
-    int i, j;
+    цео i, j;
     float r, g, b;
     float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
@@ -964,11 +964,11 @@ void rgb_to_yuv(image im)
 void rgb_to_hsv(image im)
 {
     assert(im.c == 3);
-    int i, j;
+    цео i, j;
     float r, g, b;
     float h, s, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
@@ -976,19 +976,19 @@ void rgb_to_hsv(image im)
             float min = three_way_min(r,g,b);
             float delta = max - min;
             v = max;
-            if(max == 0){
+            ако(max == 0){
                 s = 0;
                 h = 0;
-            }else{
+            }инако{
                 s = delta/max;
-                if(r == max){
+                ако(r == max){
                     h = (g - b) / delta;
-                } else if (g == max) {
+                } инако ако (g == max) {
                     h = 2 + (b - r) / delta;
-                } else {
+                } инако {
                     h = 4 + (r - g) / delta;
                 }
-                if (h < 0) h += 6;
+                ако (h < 0) h += 6;
                 h = h/6.;
             }
             set_pixel(im, i, j, 0, h);
@@ -1001,34 +1001,34 @@ void rgb_to_hsv(image im)
 void hsv_to_rgb(image im)
 {
     assert(im.c == 3);
-    int i, j;
+    цео i, j;
     float r, g, b;
     float h, s, v;
     float f, p, q, t;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             h = 6 * get_pixel(im, i , j, 0);
             s = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
-            if (s == 0) {
+            ако (s == 0) {
                 r = g = b = v;
-            } else {
-                int index = floor(h);
+            } инако {
+                цео index = floor(h);
                 f = h - index;
                 p = v*(1-s);
                 q = v*(1-s*f);
                 t = v*(1-s*(1-f));
-                if(index == 0){
+                ако(index == 0){
                     r = v; g = t; b = p;
-                } else if(index == 1){
+                } инако ако(index == 1){
                     r = q; g = v; b = p;
-                } else if(index == 2){
+                } инако ако(index == 2){
                     r = p; g = v; b = t;
-                } else if(index == 3){
+                } инако ако(index == 3){
                     r = p; g = q; b = v;
-                } else if(index == 4){
+                } инако ако(index == 4){
                     r = t; g = p; b = v;
-                } else {
+                } инако {
                     r = v; g = p; b = q;
                 }
             }
@@ -1042,12 +1042,12 @@ void hsv_to_rgb(image im)
 void grayscale_image_3c(image im)
 {
     assert(im.c == 3);
-    int i, j, k;
+    цео i, j, k;
     float scale[] = {0.299, 0.587, 0.114};
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             float val = 0;
-            for(k = 0; k < 3; ++k){
+            за(k = 0; k < 3; ++k){
                 val += scale[k]*get_pixel(im, i, j, k);
             }
             im.data[0*im.h*im.w + im.w*j + i] = val;
@@ -1060,51 +1060,51 @@ void grayscale_image_3c(image im)
 image grayscale_image(image im)
 {
     assert(im.c == 3);
-    int i, j, k;
+    цео i, j, k;
     image gray = make_image(im.w, im.h, 1);
     float scale[] = {0.299, 0.587, 0.114};
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
+    за(k = 0; k < im.c; ++k){
+        за(j = 0; j < im.h; ++j){
+            за(i = 0; i < im.w; ++i){
                 gray.data[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
             }
         }
     }
-    return gray;
+    врати gray;
 }
 
 image threshold_image(image im, float thresh)
 {
-    int i;
+    цео i;
     image t = make_image(im.w, im.h, im.c);
-    for(i = 0; i < im.w*im.h*im.c; ++i){
+    за(i = 0; i < im.w*im.h*im.c; ++i){
         t.data[i] = im.data[i]>thresh ? 1 : 0;
     }
-    return t;
+    врати t;
 }
 
 image blend_image(image fore, image back, float alpha)
 {
     assert(fore.w == back.w && fore.h == back.h && fore.c == back.c);
     image blend = make_image(fore.w, fore.h, fore.c);
-    int i, j, k;
-    for(k = 0; k < fore.c; ++k){
-        for(j = 0; j < fore.h; ++j){
-            for(i = 0; i < fore.w; ++i){
+    цео i, j, k;
+    за(k = 0; k < fore.c; ++k){
+        за(j = 0; j < fore.h; ++j){
+            за(i = 0; i < fore.w; ++i){
                 float val = alpha * get_pixel(fore, i, j, k) + 
                     (1 - alpha)* get_pixel(back, i, j, k);
                 set_pixel(blend, i, j, k, val);
             }
         }
     }
-    return blend;
+    врати blend;
 }
 
-void scale_image_channel(image im, int c, float v)
+void scale_image_channel(image im, цео c, float v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    цео i, j;
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             float pix = get_pixel(im, i, j, c);
             pix = pix*v;
             set_pixel(im, i, j, c, pix);
@@ -1112,11 +1112,11 @@ void scale_image_channel(image im, int c, float v)
     }
 }
 
-void translate_image_channel(image im, int c, float v)
+void translate_image_channel(image im, цео c, float v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    цео i, j;
+    за(j = 0; j < im.h; ++j){
+        за(i = 0; i < im.w; ++i){
             float pix = get_pixel(im, i, j, c);
             pix = pix+v;
             set_pixel(im, i, j, c, pix);
@@ -1127,12 +1127,12 @@ void translate_image_channel(image im, int c, float v)
 image binarize_image(image im)
 {
     image c = copy_image(im);
-    int i;
-    for(i = 0; i < im.w * im.h * im.c; ++i){
-        if(c.data[i] > .5) c.data[i] = 1;
-        else c.data[i] = 0;
+    цео i;
+    за(i = 0; i < im.w * im.h * im.c; ++i){
+        ако(c.data[i] > .5) c.data[i] = 1;
+        инако c.data[i] = 0;
     }
-    return c;
+    врати c;
 }
 
 void saturate_image(image im, float sat)
@@ -1146,11 +1146,11 @@ void saturate_image(image im, float sat)
 void hue_image(image im, float hue)
 {
     rgb_to_hsv(im);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    цео i;
+    за(i = 0; i < im.w*im.h; ++i){
         im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+        ако (im.data[i] > 1) im.data[i] -= 1;
+        ако (im.data[i] < 0) im.data[i] += 1;
     }
     hsv_to_rgb(im);
     constrain_image(im);
@@ -1169,11 +1169,11 @@ void distort_image(image im, float hue, float sat, float val)
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, val);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    цео i;
+    за(i = 0; i < im.w*im.h; ++i){
         im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+        ако (im.data[i] > 1) im.data[i] -= 1;
+        ако (im.data[i] < 0) im.data[i] += 1;
     }
     hsv_to_rgb(im);
     constrain_image(im);
@@ -1196,22 +1196,22 @@ void saturate_exposure_image(image im, float sat, float exposure)
     constrain_image(im);
 }
 
-image resize_image(image im, int w, int h)
+image resize_image(image im, цео w, цео h)
 {
     image resized = make_image(w, h, im.c);   
     image part = make_image(w, im.h, im.c);
-    int r, c, k;
+    цео r, c, k;
     float w_scale = (float)(im.w - 1) / (w - 1);
     float h_scale = (float)(im.h - 1) / (h - 1);
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < im.h; ++r){
-            for(c = 0; c < w; ++c){
+    за(k = 0; k < im.c; ++k){
+        за(r = 0; r < im.h; ++r){
+            за(c = 0; c < w; ++c){
                 float val = 0;
-                if(c == w-1 || im.w == 1){
+                ако(c == w-1 || im.w == 1){
                     val = get_pixel(im, im.w-1, r, k);
-                } else {
+                } инако {
                     float sx = c*w_scale;
-                    int ix = (int) sx;
+                    цео ix = (цео) sx;
                     float dx = sx - ix;
                     val = (1 - dx) * get_pixel(im, ix, r, k) + dx * get_pixel(im, ix+1, r, k);
                 }
@@ -1219,17 +1219,17 @@ image resize_image(image im, int w, int h)
             }
         }
     }
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < h; ++r){
+    за(k = 0; k < im.c; ++k){
+        за(r = 0; r < h; ++r){
             float sy = r*h_scale;
-            int iy = (int) sy;
+            цео iy = (цео) sy;
             float dy = sy - iy;
-            for(c = 0; c < w; ++c){
+            за(c = 0; c < w; ++c){
                 float val = (1-dy) * get_pixel(part, c, iy, k);
                 set_pixel(resized, c, r, k, val);
             }
-            if(r == h-1 || im.h == 1) continue;
-            for(c = 0; c < w; ++c){
+            ако(r == h-1 || im.h == 1) continue;
+            за(c = 0; c < w; ++c){
                 float val = dy * get_pixel(part, c, iy+1, k);
                 add_pixel(resized, c, r, k, val);
             }
@@ -1237,7 +1237,7 @@ image resize_image(image im, int w, int h)
     }
 
     free_image(part);
-    return resized;
+    врати resized;
 }
 
 
@@ -1265,7 +1265,7 @@ void test_resize(char *filename)
     show_image(c3, "C3", 1);
     show_image(c4, "C4", 1);
 #ifdef OPENCV
-    while(1){
+    док(1){
         image aug = random_augment_image(im, 0, .75, 320, 448, 320, 320);
         show_image(aug, "aug", 1);
         free_image(aug);
@@ -1290,102 +1290,102 @@ void test_resize(char *filename)
 }
 
 
-image load_image_stb(char *filename, int channels)
+image load_image_stb(char *filename, цео channels)
 {
-    int w, h, c;
+    цео w, h, c;
     unsigned char *data = stbi_load(filename, &w, &h, &c, channels);
-    if (!data) {
+    ако (!data) {
         fprintf(stderr, "Cannot load image \"%s\"\nSTB Reason: %s\n", filename, stbi_failure_reason());
         exit(0);
     }
-    if(channels) c = channels;
-    int i,j,k;
+    ако(channels) c = channels;
+    цео i,j,k;
     image im = make_image(w, h, c);
-    for(k = 0; k < c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int dst_index = i + w*j + w*h*k;
-                int src_index = k + c*i + c*w*j;
+    за(k = 0; k < c; ++k){
+        за(j = 0; j < h; ++j){
+            за(i = 0; i < w; ++i){
+                цео dst_index = i + w*j + w*h*k;
+                цео src_index = k + c*i + c*w*j;
                 im.data[dst_index] = (float)data[src_index]/255.;
             }
         }
     }
     free(data);
-    return im;
+    врати im;
 }
 
-image load_image(char *filename, int w, int h, int c)
+image load_image(char *filename, цео w, цео h, цео c)
 {
 #ifdef OPENCV
     image out = load_image_cv(filename, c);
-#else
+#инако
     image out = load_image_stb(filename, c);
 #endif
 
-    if((h && w) && (h != out.h || w != out.w)){
+    ако((h && w) && (h != out.h || w != out.w)){
         image resized = resize_image(out, w, h);
         free_image(out);
         out = resized;
     }
-    return out;
+    врати out;
 }
 
-image load_image_color(char *filename, int w, int h)
+image load_image_color(char *filename, цео w, цео h)
 {
-    return load_image(filename, w, h, 3);
+    врати load_image(filename, w, h, 3);
 }
 
-image get_image_layer(image m, int l)
+image get_image_layer(image m, цео l)
 {
     image out = make_image(m.w, m.h, 1);
-    int i;
-    for(i = 0; i < m.h*m.w; ++i){
+    цео i;
+    за(i = 0; i < m.h*m.w; ++i){
         out.data[i] = m.data[i+l*m.h*m.w];
     }
-    return out;
+    врати out;
 }
 void print_image(image m)
 {
-    int i, j, k;
-    for(i =0 ; i < m.c; ++i){
-        for(j =0 ; j < m.h; ++j){
-            for(k = 0; k < m.w; ++k){
+    цео i, j, k;
+    за(i =0 ; i < m.c; ++i){
+        за(j =0 ; j < m.h; ++j){
+            за(k = 0; k < m.w; ++k){
                 printf("%.2lf, ", m.data[i*m.h*m.w + j*m.w + k]);
-                if(k > 30) break;
+                ако(k > 30) break;
             }
             printf("\n");
-            if(j > 30) break;
+            ако(j > 30) break;
         }
         printf("\n");
     }
     printf("\n");
 }
 
-image collapse_images_vert(image *ims, int n)
+image collapse_images_vert(image *ims, цео n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
+    цео color = 1;
+    цео border = 1;
+    цео h,w,c;
     w = ims[0].w;
     h = (ims[0].h + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    ако(c != 3 || !color){
         w = (w+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int h_offset = i*(ims[0].h+border);
+    цео i,j;
+    за(i = 0; i < n; ++i){
+        цео h_offset = i*(ims[0].h+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
+        ако(c == 3 && color){
             embed_image(copy, filters, 0, h_offset);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int w_offset = j*(ims[0].w+border);
+        инако{
+            за(j = 0; j < copy.c; ++j){
+                цео w_offset = j*(ims[0].w+border);
                 image layer = get_image_layer(copy, j);
                 embed_image(layer, filters, w_offset, h_offset);
                 free_image(layer);
@@ -1393,35 +1393,35 @@ image collapse_images_vert(image *ims, int n)
         }
         free_image(copy);
     }
-    return filters;
+    врати filters;
 } 
 
-image collapse_images_horz(image *ims, int n)
+image collapse_images_horz(image *ims, цео n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
-    int size = ims[0].h;
+    цео color = 1;
+    цео border = 1;
+    цео h,w,c;
+    цео size = ims[0].h;
     h = size;
     w = (ims[0].w + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    ако(c != 3 || !color){
         h = (h+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int w_offset = i*(size+border);
+    цео i,j;
+    за(i = 0; i < n; ++i){
+        цео w_offset = i*(size+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
+        ако(c == 3 && color){
             embed_image(copy, filters, w_offset, 0);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int h_offset = j*(size+border);
+        инако{
+            за(j = 0; j < copy.c; ++j){
+                цео h_offset = j*(size+border);
                 image layer = get_image_layer(copy, j);
                 embed_image(layer, filters, w_offset, h_offset);
                 free_image(layer);
@@ -1429,7 +1429,7 @@ image collapse_images_horz(image *ims, int n)
         }
         free_image(copy);
     }
-    return filters;
+    врати filters;
 } 
 
 void show_image_normalized(image im, const char *name)
@@ -1440,7 +1440,7 @@ void show_image_normalized(image im, const char *name)
     free_image(c);
 }
 
-void show_images(image *ims, int n, char *window)
+void show_images(image *ims, цео n, char *window)
 {
     image m = collapse_images_vert(ims, n);
     /*
@@ -1460,7 +1460,7 @@ void show_images(image *ims, int n, char *window)
 
 void free_image(image m)
 {
-    if(m.data){
+    ако(m.data){
         free(m.data);
     }
 }

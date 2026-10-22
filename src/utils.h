@@ -10,22 +10,22 @@
     double start = what_time_is_it_now(); \
     a; \
     printf("%s took: %f seconds\n", #a, what_time_is_it_now() - start); \
-    } while (0)
+    } док (0)
 
 #define TWO_PI 6.2831853071795864769252866f
 
 double what_time_is_it_now();
 void shuffle(void *arr, size_t n, size_t size);
 void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections);
-void free_ptrs(void **ptrs, int n);
-int alphanum_to_int(char c);
-char int_to_alphanum(int i);
-int read_int(int fd);
-void write_int(int fd, int n);
-void read_all(int fd, char *buffer, size_t bytes);
-void write_all(int fd, char *buffer, size_t bytes);
-int read_all_fail(int fd, char *buffer, size_t bytes);
-int write_all_fail(int fd, char *buffer, size_t bytes);
+void free_ptrs(void **ptrs, цео n);
+цео alphanum_to_int(char c);
+char int_to_alphanum(цео i);
+цео read_int(цео fd);
+void write_int(цео fd, цео n);
+void read_all(цео fd, char *buffer, size_t bytes);
+void write_all(цео fd, char *buffer, size_t bytes);
+цео read_all_fail(цео fd, char *buffer, size_t bytes);
+цео write_all_fail(цео fd, char *buffer, size_t bytes);
 void find_replace(char *str, char *orig, char *rep, char *output);
 void malloc_error();
 void file_error(char *s);
@@ -35,19 +35,19 @@ list *split_str(char *s, char delim);
 char *fgetl(FILE *fp);
 list *parse_csv_line(char *line);
 char *copy_string(char *s);
-int count_fields(char *line);
-float *parse_fields(char *line, int n);
-void translate_array(float *a, int n, float s);
+цео count_fields(char *line);
+float *parse_fields(char *line, цео n);
+void translate_array(float *a, цео n, float s);
 float constrain(float min, float max, float a);
-int constrain_int(int a, int min, int max);
+цео constrain_int(цео a, цео min, цео max);
 float rand_scale(float s);
-int rand_int(int min, int max);
-void mean_arrays(float **a, int n, int els, float *avg);
-float dist_array(float *a, float *b, int n, int sub);
-float **one_hot_encode(float *a, int n, int k);
+цео rand_int(цео min, цео max);
+void mean_arrays(float **a, цео n, цео els, float *avg);
+float dist_array(float *a, float *b, цео n, цео sub);
+float **one_hot_encode(float *a, цео n, цео k);
 float sec(clock_t clocks);
-void print_statistics(float *a, int n);
-int int_index(int *a, int val, int n);
+void print_statistics(float *a, цео n);
+цео int_index(цео *a, цео val, цео n);
 
 #endif
 
