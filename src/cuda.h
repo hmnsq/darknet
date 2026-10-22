@@ -1,15 +1,15 @@
 #ifndef CUDA_H
 #define CUDA_H
 
-#include "darknet.h"
+#অন্তর্ভাব "darknet.h"
 
 #ifdef GPU
 
-void check_error(cudaError_t status);
+শূন্য check_error(cudaError_t status);
 cublasHandle_t blas_handle();
-int *cuda_make_int_array(int *x, size_t n);
-void cuda_random(float *x_gpu, size_t n);
-float cuda_compare(float *x_gpu, float *x, size_t n, char *s);
+পূর্ণসংখ্যা *cuda_make_int_array(পূর্ণসংখ্যা *x, size_t n);
+শূন্য cuda_random(দশমিক *x_gpu, size_t n);
+দশমিক cuda_compare(দশমিক *x_gpu, দশমিক *x, size_t n, অক্ষর *s);
 dim3 cuda_gridsize(size_t n);
 
 #ifdef CUDNN

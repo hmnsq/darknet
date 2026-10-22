@@ -1,105 +1,105 @@
 #ifndef BLAS_H
 #define BLAS_H
-#include "darknet.h"
+#অন্তর্ভাব "darknet.h"
 
-void flatten(float *x, int size, int layers, int batch, int forward);
-void pm(int M, int N, float *A);
-float *random_matrix(int rows, int cols);
-void time_random_matrix(int TA, int TB, int m, int k, int n);
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+শূন্য flatten(দশমিক *x, পূর্ণসংখ্যা আকার_2, পূর্ণসংখ্যা layers, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা forward);
+শূন্য pm(পূর্ণসংখ্যা M, পূর্ণসংখ্যা N, দশমিক *A);
+দশমিক *random_matrix(পূর্ণসংখ্যা rows, পূর্ণসংখ্যা cols);
+শূন্য time_random_matrix(পূর্ণসংখ্যা TA, পূর্ণসংখ্যা TB, পূর্ণসংখ্যা m, পূর্ণসংখ্যা k, পূর্ণসংখ্যা n);
+শূন্য reorg_cpu(দশমিক *x, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা c, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা stride, পূর্ণসংখ্যা forward, দশমিক *out);
 
-void test_blas();
+শূন্য test_blas();
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z);
+শূন্য inter_cpu(পূর্ণসংখ্যা NX, দশমিক *X, পূর্ণসংখ্যা NY, দশমিক *Y, পূর্ণসংখ্যা B, দশমিক *OUT);
+শূন্য deinter_cpu(পূর্ণসংখ্যা NX, দশমিক *X, পূর্ণসংখ্যা NY, দশমিক *Y, পূর্ণসংখ্যা B, দশমিক *OUT);
+শূন্য mult_add_into_cpu(পূর্ণসংখ্যা N, দশমিক *X, দশমিক *Y, দশমিক *Z);
 
-void const_cpu(int N, float ALPHA, float *X, int INCX);
-void constrain_gpu(int N, float ALPHA, float * X, int INCX);
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY);
+শূন্য const_cpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক *X, পূর্ণসংখ্যা INCX);
+শূন্য constrain_gpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক * X, পূর্ণসংখ্যা INCX);
+শূন্য pow_cpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক *X, পূর্ণসংখ্যা INCX, দশমিক *Y, পূর্ণসংখ্যা INCY);
+শূন্য mul_cpu(পূর্ণসংখ্যা N, দশমিক *X, পূর্ণসংখ্যা INCX, দশমিক *Y, পূর্ণসংখ্যা INCY);
 
-int test_gpu_blas();
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
+পূর্ণসংখ্যা test_gpu_blas();
+শূন্য shortcut_cpu(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা w1, পূর্ণসংখ্যা h1, পূর্ণসংখ্যা c1, দশমিক *add, পূর্ণসংখ্যা w2, পূর্ণসংখ্যা h2, পূর্ণসংখ্যা c2, দশমিক s1, দশমিক s2, দশমিক *out);
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
+শূন্য mean_cpu(দশমিক *x, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *mean);
+শূন্য variance_cpu(দশমিক *x, দশমিক *mean, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *variance);
 
-void scale_bias(float *output, float *scales, int batch, int n, int size);
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial);
+শূন্য scale_bias(দশমিক *output, দশমিক *scales, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2);
+শূন্য backward_scale_cpu(দশমিক *x_norm, দশমিক *delta, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2, দশমিক *scale_updates);
+শূন্য mean_delta_cpu(দশমিক *delta, দশমিক *variance, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *mean_delta);
+শূন্য  variance_delta_cpu(দশমিক *x, দশমিক *delta, দশমিক *mean, দশমিক *variance, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *variance_delta);
+শূন্য normalize_delta_cpu(দশমিক *x, দশমিক *mean, দশমিক *variance, দশমিক *mean_delta, দশমিক *variance_delta, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *delta);
+শূন্য l2normalize_cpu(দশমিক *x, দশমিক *dx, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial);
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_sum_cpu(float *a, float *b, float *s, int num, float *c);
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc);
+শূন্য smooth_l1_cpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য l2_cpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য l1_cpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য logistic_x_ent_cpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য softmax_x_ent_cpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য weighted_যোগ_cpu(দশমিক *a, দশমিক *b, দশমিক *s, পূর্ণসংখ্যা অঙ্ক, দশমিক *c);
+শূন্য weighted_delta_cpu(দশমিক *a, দশমিক *b, দশমিক *s, দশমিক *da, দশমিক *db, দশমিক *ds, পূর্ণসংখ্যা n, দশমিক *dc);
 
-void softmax(float *input, int n, float temp, int stride, float *output);
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+শূন্য softmax(দশমিক *প্রবেশ, পূর্ণসংখ্যা n, দশমিক অস্থায়ী, পূর্ণসংখ্যা stride, দশমিক *output);
+শূন্য softmax_cpu(দশমিক *প্রবেশ, পূর্ণসংখ্যা n, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা batch_offset, পূর্ণসংখ্যা groups, পূর্ণসংখ্যা group_offset, পূর্ণসংখ্যা stride, দশমিক অস্থায়ী, দশমিক *output);
+শূন্য upsample_cpu(দশমিক *in, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা c, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা stride, পূর্ণসংখ্যা forward, দশমিক scale, দশমিক *out);
 
 #ifdef GPU
-#include "cuda.h"
-#include "tree.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব "tree.h"
 
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void axpy_gpu_offset(int N, float ALPHA, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
-void copy_gpu_offset(int N, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void add_gpu(int N, float ALPHA, float * X, int INCX);
-void supp_gpu(int N, float ALPHA, float * X, int INCX);
-void mask_gpu(int N, float * X, float mask_num, float * mask, float val);
-void scale_mask_gpu(int N, float * X, float mask_num, float * mask, float scale);
-void const_gpu(int N, float ALPHA, float *X, int INCX);
-void pow_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_gpu(int N, float *X, int INCX, float *Y, int INCY);
+শূন্য axpy_gpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক * X, পূর্ণসংখ্যা INCX, দশমিক * Y, পূর্ণসংখ্যা INCY);
+শূন্য axpy_gpu_offset(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক * X, পূর্ণসংখ্যা OFFX, পূর্ণসংখ্যা INCX, দশমিক * Y, পূর্ণসংখ্যা OFFY, পূর্ণসংখ্যা INCY);
+শূন্য copy_gpu(পূর্ণসংখ্যা N, দশমিক * X, পূর্ণসংখ্যা INCX, দশমিক * Y, পূর্ণসংখ্যা INCY);
+শূন্য copy_gpu_offset(পূর্ণসংখ্যা N, দশমিক * X, পূর্ণসংখ্যা OFFX, পূর্ণসংখ্যা INCX, দশমিক * Y, পূর্ণসংখ্যা OFFY, পূর্ণসংখ্যা INCY);
+শূন্য add_gpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক * X, পূর্ণসংখ্যা INCX);
+শূন্য supp_gpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক * X, পূর্ণসংখ্যা INCX);
+শূন্য mask_gpu(পূর্ণসংখ্যা N, দশমিক * X, দশমিক mask_অঙ্ক, দশমিক * mask, দশমিক val);
+শূন্য scale_mask_gpu(পূর্ণসংখ্যা N, দশমিক * X, দশমিক mask_অঙ্ক, দশমিক * mask, দশমিক scale);
+শূন্য const_gpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক *X, পূর্ণসংখ্যা INCX);
+শূন্য pow_gpu(পূর্ণসংখ্যা N, দশমিক ALPHA, দশমিক *X, পূর্ণসংখ্যা INCX, দশমিক *Y, পূর্ণসংখ্যা INCY);
+শূন্য mul_gpu(পূর্ণসংখ্যা N, দশমিক *X, পূর্ণসংখ্যা INCX, দশমিক *Y, পূর্ণসংখ্যা INCY);
 
-void mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void normalize_gpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
-void l2normalize_gpu(float *x, float *dx, int batch, int filters, int spatial);
+শূন্য mean_gpu(দশমিক *x, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *mean);
+শূন্য variance_gpu(দশমিক *x, দশমিক *mean, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *variance);
+শূন্য normalize_gpu(দশমিক *x, দশমিক *mean, দশমিক *variance, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial);
+শূন্য l2normalize_gpu(দশমিক *x, দশমিক *dx, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial);
 
-void normalize_delta_gpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
+শূন্য normalize_delta_gpu(দশমিক *x, দশমিক *mean, দশমিক *variance, দশমিক *mean_delta, দশমিক *variance_delta, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *delta);
 
-void fast_mean_delta_gpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void fast_variance_delta_gpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
+শূন্য fast_mean_delta_gpu(দশমিক *delta, দশমিক *variance, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *mean_delta);
+শূন্য fast_variance_delta_gpu(দশমিক *x, দশমিক *delta, দশমিক *mean, দশমিক *variance, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *variance_delta);
 
-void fast_variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void fast_mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void shortcut_gpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_scale_gpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
+শূন্য fast_variance_gpu(দশমিক *x, দশমিক *mean, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *variance);
+শূন্য fast_mean_gpu(দশমিক *x, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা filters, পূর্ণসংখ্যা spatial, দশমিক *mean);
+শূন্য shortcut_gpu(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা w1, পূর্ণসংখ্যা h1, পূর্ণসংখ্যা c1, দশমিক *add, পূর্ণসংখ্যা w2, পূর্ণসংখ্যা h2, পূর্ণসংখ্যা c2, দশমিক s1, দশমিক s2, দশমিক *out);
+শূন্য scale_bias_gpu(দশমিক *output, দশমিক *biases, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2);
+শূন্য backward_scale_gpu(দশমিক *x_norm, দশমিক *delta, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2, দশমিক *scale_updates);
+শূন্য scale_bias_gpu(দশমিক *output, দশমিক *biases, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2);
+শূন্য add_bias_gpu(দশমিক *output, দশমিক *biases, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2);
+শূন্য backward_bias_gpu(দশমিক *bias_updates, দশমিক *delta, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা n, পূর্ণসংখ্যা আকার_2);
 
-void logistic_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void smooth_l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void wgan_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_delta_gpu(float *a, float *b, float *s, float *da, float *db, float *ds, int num, float *dc);
-void weighted_sum_gpu(float *a, float *b, float *s, int num, float *c);
-void mult_add_into_gpu(int num, float *a, float *b, float *c);
-void inter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
+শূন্য logistic_x_ent_gpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য softmax_x_ent_gpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য smooth_l1_gpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য l2_gpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য l1_gpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য wgan_gpu(পূর্ণসংখ্যা n, দশমিক *pred, দশমিক *truth, দশমিক *delta, দশমিক *error);
+শূন্য weighted_delta_gpu(দশমিক *a, দশমিক *b, দশমিক *s, দশমিক *da, দশমিক *db, দশমিক *ds, পূর্ণসংখ্যা অঙ্ক, দশমিক *dc);
+শূন্য weighted_যোগ_gpu(দশমিক *a, দশমিক *b, দশমিক *s, পূর্ণসংখ্যা অঙ্ক, দশমিক *c);
+শূন্য mult_add_into_gpu(পূর্ণসংখ্যা অঙ্ক, দশমিক *a, দশমিক *b, দশমিক *c);
+শূন্য inter_gpu(পূর্ণসংখ্যা NX, দশমিক *X, পূর্ণসংখ্যা NY, দশমিক *Y, পূর্ণসংখ্যা B, দশমিক *OUT);
+শূন্য deinter_gpu(পূর্ণসংখ্যা NX, দশমিক *X, পূর্ণসংখ্যা NY, দশমিক *Y, পূর্ণসংখ্যা B, দশমিক *OUT);
 
-void reorg_gpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+শূন্য reorg_gpu(দশমিক *x, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা c, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা stride, পূর্ণসংখ্যা forward, দশমিক *out);
 
-void softmax_gpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-void adam_gpu(int n, float *x, float *m, float *v, float B1, float B2, float rate, float eps, int t);
+শূন্য softmax_gpu(দশমিক *প্রবেশ, পূর্ণসংখ্যা n, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা batch_offset, পূর্ণসংখ্যা groups, পূর্ণসংখ্যা group_offset, পূর্ণসংখ্যা stride, দশমিক অস্থায়ী, দশমিক *output);
+শূন্য adam_update_gpu(দশমিক *w, দশমিক *d, দশমিক *m, দশমিক *v, দশমিক B1, দশমিক B2, দশমিক eps, দশমিক decay, দশমিক rate, পূর্ণসংখ্যা n, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা t);
+শূন্য adam_gpu(পূর্ণসংখ্যা n, দশমিক *x, দশমিক *m, দশমিক *v, দশমিক B1, দশমিক B2, দশমিক rate, দশমিক eps, পূর্ণসংখ্যা t);
 
-void flatten_gpu(float *x, int spatial, int layers, int batch, int forward, float *out);
-void softmax_tree(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
-void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+শূন্য flatten_gpu(দশমিক *x, পূর্ণসংখ্যা spatial, পূর্ণসংখ্যা layers, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা forward, দশমিক *out);
+শূন্য softmax_বৃক্ষ(দশমিক *প্রবেশ, পূর্ণসংখ্যা spatial, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা stride, দশমিক অস্থায়ী, দশমিক *output, বৃক্ষ hier);
+শূন্য upsample_gpu(দশমিক *in, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা c, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা stride, পূর্ণসংখ্যা forward, দশমিক scale, দশমিক *out);
 
 #endif
 #endif

@@ -1,44 +1,44 @@
-#include "cost_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#অন্তর্ভাব "cost_layer.h"
+#অন্তর্ভাব "utils.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব "blas.h"
+#অন্তর্ভাব <math.h>
+#অন্তর্ভাব <string.h>
+#অন্তর্ভাব <stdlib.h>
+#অন্তর্ভাব <stdio.h>
 
-COST_TYPE get_cost_type(char *s)
+COST_TYPE get_cost_type(অক্ষর *s)
 {
-    if (strcmp(s, "seg")==0) return SEG;
-    if (strcmp(s, "sse")==0) return SSE;
-    if (strcmp(s, "masked")==0) return MASKED;
-    if (strcmp(s, "smooth")==0) return SMOOTH;
-    if (strcmp(s, "L1")==0) return L1;
-    if (strcmp(s, "wgan")==0) return WGAN;
+    যদি (strcmp(s, "seg")==0) ফেরত SEG;
+    যদি (strcmp(s, "sse")==0) ফেরত SSE;
+    যদি (strcmp(s, "masked")==0) ফেরত MASKED;
+    যদি (strcmp(s, "smooth")==0) ফেরত SMOOTH;
+    যদি (strcmp(s, "L1")==0) ফেরত L1;
+    যদি (strcmp(s, "wgan")==0) ফেরত WGAN;
     fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
-    return SSE;
+    ফেরত SSE;
 }
 
-char *get_cost_string(COST_TYPE a)
+অক্ষর *get_cost_string(COST_TYPE a)
 {
-    switch(a){
-        case SEG:
-            return "seg";
-        case SSE:
-            return "sse";
-        case MASKED:
-            return "masked";
-        case SMOOTH:
-            return "smooth";
-        case L1:
-            return "L1";
-        case WGAN:
-            return "wgan";
+    নির্বাচন(a){
+        ক্ষেত্র SEG:
+            ফেরত "seg";
+        ক্ষেত্র SSE:
+            ফেরত "sse";
+        ক্ষেত্র MASKED:
+            ফেরত "masked";
+        ক্ষেত্র SMOOTH:
+            ফেরত "smooth";
+        ক্ষেত্র L1:
+            ফেরত "L1";
+        ক্ষেত্র WGAN:
+            ফেরত "wgan";
     }
-    return "sse";
+    ফেরত "sse";
 }
 
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float scale)
+cost_layer make_cost_layer(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা inputs, COST_TYPE cost_type, দশমিক scale)
 {
     fprintf(stderr, "cost                                           %4d\n",  inputs);
     cost_layer l = {0};
@@ -49,9 +49,9 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.inputs = inputs;
     l.outputs = inputs;
     l.cost_type = cost_type;
-    l.delta = calloc(inputs*batch, sizeof(float));
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.cost = calloc(1, sizeof(float));
+    l.delta = calloc(inputs*batch, আকার(দশমিক));
+    l.output = calloc(inputs*batch, আকার(দশমিক));
+    l.cost = calloc(1, আকার(দশমিক));
 
     l.forward = forward_cost_layer;
     l.backward = backward_cost_layer;
@@ -62,15 +62,15 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.delta_gpu = cuda_make_array(l.output, inputs*batch);
     l.output_gpu = cuda_make_array(l.delta, inputs*batch);
     #endif
-    return l;
+    ফেরত l;
 }
 
-void resize_cost_layer(cost_layer *l, int inputs)
+শূন্য resize_cost_layer(cost_layer *l, পূর্ণসংখ্যা inputs)
 {
     l->inputs = inputs;
     l->outputs = inputs;
-    l->delta = realloc(l->delta, inputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, inputs*l->batch*sizeof(float));
+    l->delta = realloc(l->delta, inputs*l->batch*আকার(দশমিক));
+    l->output = realloc(l->output, inputs*l->batch*আকার(দশমিক));
 #ifdef GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
@@ -79,96 +79,96 @@ void resize_cost_layer(cost_layer *l, int inputs)
 #endif
 }
 
-void forward_cost_layer(cost_layer l, network net)
+শূন্য forward_cost_layer(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.cost_type == MASKED){
-        int i;
-        for(i = 0; i < l.batch*l.inputs; ++i){
-            if(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
+    যদি (!net.truth) ফেরত;
+    যদি(l.cost_type == MASKED){
+        পূর্ণসংখ্যা i;
+        জন্য(i = 0; i < l.batch*l.inputs; ++i){
+            যদি(net.truth[i] == SECRET_অঙ্ক) net.প্রবেশ[i] = SECRET_অঙ্ক;
         }
     }
-    if(l.cost_type == SMOOTH){
-        smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    }else if(l.cost_type == L1){
-        l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    } else {
-        l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
+    যদি(l.cost_type == SMOOTH){
+        smooth_l1_cpu(l.batch*l.inputs, net.প্রবেশ, net.truth, l.delta, l.output);
+    }অন্যথা যদি(l.cost_type == L1){
+        l1_cpu(l.batch*l.inputs, net.প্রবেশ, net.truth, l.delta, l.output);
+    } অন্যথা {
+        l2_cpu(l.batch*l.inputs, net.প্রবেশ, net.truth, l.delta, l.output);
     }
-    l.cost[0] = sum_array(l.output, l.batch*l.inputs);
+    l.cost[0] = যোগ_array(l.output, l.batch*l.inputs);
 }
 
-void backward_cost_layer(const cost_layer l, network net)
+শূন্য backward_cost_layer(ধ্রুবক cost_layer l, network net)
 {
     axpy_cpu(l.batch*l.inputs, l.scale, l.delta, 1, net.delta, 1);
 }
 
 #ifdef GPU
 
-void pull_cost_layer(cost_layer l)
+শূন্য pull_cost_layer(cost_layer l)
 {
     cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-void push_cost_layer(cost_layer l)
+শূন্য ঠেলো_cost_layer(cost_layer l)
 {
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
+    cuda_ঠেলো_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-int float_abs_compare (const void * a, const void * b)
+পূর্ণসংখ্যা float_abs_compare (ধ্রুবক শূন্য * a, ধ্রুবক শূন্য * b)
 {
-    float fa = *(const float*) a;
-    if(fa < 0) fa = -fa;
-    float fb = *(const float*) b;
-    if(fb < 0) fb = -fb;
-    return (fa > fb) - (fa < fb);
+    দশমিক fa = *(ধ্রুবক দশমিক*) a;
+    যদি(fa < 0) fa = -fa;
+    দশমিক fb = *(ধ্রুবক দশমিক*) b;
+    যদি(fb < 0) fb = -fb;
+    ফেরত (fa > fb) - (fa < fb);
 }
 
-void forward_cost_layer_gpu(cost_layer l, network net)
+শূন্য forward_cost_layer_gpu(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.smooth){
+    যদি (!net.truth) ফেরত;
+    যদি(l.smooth){
         scal_gpu(l.batch*l.inputs, (1-l.smooth), net.truth_gpu, 1);
         add_gpu(l.batch*l.inputs, l.smooth * 1./l.inputs, net.truth_gpu, 1);
     }
 
-    if(l.cost_type == SMOOTH){
-        smooth_l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == L1){
-        l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == WGAN){
-        wgan_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else {
-        l2_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    যদি(l.cost_type == SMOOTH){
+        smooth_l1_gpu(l.batch*l.inputs, net.প্রবেশ_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    } অন্যথা যদি (l.cost_type == L1){
+        l1_gpu(l.batch*l.inputs, net.প্রবেশ_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    } অন্যথা যদি (l.cost_type == WGAN){
+        wgan_gpu(l.batch*l.inputs, net.প্রবেশ_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    } অন্যথা {
+        l2_gpu(l.batch*l.inputs, net.প্রবেশ_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     }
 
-    if (l.cost_type == SEG && l.noobject_scale != 1) {
+    যদি (l.cost_type == SEG && l.noobject_scale != 1) {
         scale_mask_gpu(l.batch*l.inputs, l.delta_gpu, 0, net.truth_gpu, l.noobject_scale);
         scale_mask_gpu(l.batch*l.inputs, l.output_gpu, 0, net.truth_gpu, l.noobject_scale);
     }
-    if (l.cost_type == MASKED) {
-        mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
+    যদি (l.cost_type == MASKED) {
+        mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_অঙ্ক, net.truth_gpu, 0);
     }
 
-    if(l.ratio){
+    যদি(l.ratio){
         cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
-        qsort(l.delta, l.batch*l.inputs, sizeof(float), float_abs_compare);
-        int n = (1-l.ratio) * l.batch*l.inputs;
-        float thresh = l.delta[n];
+        qsort(l.delta, l.batch*l.inputs, আকার(দশমিক), float_abs_compare);
+        পূর্ণসংখ্যা n = (1-l.ratio) * l.batch*l.inputs;
+        দশমিক thresh = l.delta[n];
         thresh = 0;
         printf("%f\n", thresh);
         supp_gpu(l.batch*l.inputs, thresh, l.delta_gpu, 1);
     }
 
-    if(l.thresh){
+    যদি(l.thresh){
         supp_gpu(l.batch*l.inputs, l.thresh*1./l.inputs, l.delta_gpu, 1);
     }
 
     cuda_pull_array(l.output_gpu, l.output, l.batch*l.inputs);
-    l.cost[0] = sum_array(l.output, l.batch*l.inputs);
+    l.cost[0] = যোগ_array(l.output, l.batch*l.inputs);
 }
 
-void backward_cost_layer_gpu(const cost_layer l, network net)
+শূন্য backward_cost_layer_gpu(ধ্রুবক cost_layer l, network net)
 {
     axpy_gpu(l.batch*l.inputs, l.scale, l.delta_gpu, 1, net.delta_gpu, 1);
 }

@@ -304,12 +304,12 @@ RECENT REVISION HISTORY:
 
 
 #ifndef STBI_NO_STDIO
-#include <stdio.h>
+#অন্তর্ভাব <stdio.h>
 #endif // STBI_NO_STDIO
 
 #define STBI_VERSION 1
 
-enum
+গণনা
 {
    STBI_default = 0, // only used for desired_channels
 
@@ -319,17 +319,17 @@ enum
    STBI_rgb_alpha  = 4
 };
 
-typedef unsigned char stbi_uc;
-typedef unsigned short stbi_us;
+প্রকারলেখ unsigned অক্ষর stbi_uc;
+প্রকারলেখ unsigned short stbi_us;
 
 #ifdef __cplusplus
-extern "C" {
+বাহ্যিক "C" {
 #endif
 
 #ifdef STB_IMAGE_STATIC
-#define STBIDEF static
-#else
-#define STBIDEF extern
+#define STBIDEF স্থির
+#অন্যথা
+#define STBIDEF বাহ্যিক
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -341,11 +341,11 @@ extern "C" {
 // load image by filename, open file, or memory buffer
 //
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
-   int      (*read)  (void *user,char *data,int size);   // fill 'data' with 'size' bytes.  return number of bytes actually read
-   void     (*skip)  (void *user,int n);                 // skip the next 'n' bytes, or 'unget' the last -n bytes if negative
-   int      (*eof)   (void *user);                       // returns nonzero if we are at end of file/data
+   পূর্ণসংখ্যা      (*পঠ)  (শূন্য *user,অক্ষর *তথ্য,পূর্ণসংখ্যা আকার_2);   // fill 'data' with 'size' bytes.  return number of bytes actually read
+   শূন্য     (*skip)  (শূন্য *user,পূর্ণসংখ্যা n);                 // skip the next 'n' bytes, or 'unget' the last -n bytes if negative
+   পূর্ণসংখ্যা      (*eof)   (শূন্য *user);                       // returns nonzero if we are at end of file/data
 } stbi_io_callbacks;
 
 ////////////////////////////////////
@@ -353,16 +353,16 @@ typedef struct
 // 8-bits-per-channel interface
 //
 
-STBIDEF stbi_uc *stbi_load_from_memory   (stbi_uc           const *buffer, int len   , int *x, int *y, int *channels_in_file, int desired_channels);
-STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk  , void *user, int *x, int *y, int *channels_in_file, int desired_channels);
+STBIDEF stbi_uc *stbi_load_from_memory   (stbi_uc           ধ্রুবক *বাফার, পূর্ণসংখ্যা len   , পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
+STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk  , শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
 #ifndef STBI_NO_GIF
-STBIDEF stbi_uc *stbi_load_gif_from_memory(stbi_uc const *buffer, int len, int **delays, int *x, int *y, int *z, int *comp, int req_comp);
+STBIDEF stbi_uc *stbi_load_gif_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা **delays, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *z, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp);
 #endif
 
 
 #ifndef STBI_NO_STDIO
-STBIDEF stbi_uc *stbi_load            (char const *filename, int *x, int *y, int *channels_in_file, int desired_channels);
-STBIDEF stbi_uc *stbi_load_from_file  (FILE *f, int *x, int *y, int *channels_in_file, int desired_channels);
+STBIDEF stbi_uc *stbi_load            (অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
+STBIDEF stbi_uc *stbi_load_from_file  (FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
 // for stbi_load_from_file, file pointer is left pointing immediately after image
 #endif
 
@@ -371,12 +371,12 @@ STBIDEF stbi_uc *stbi_load_from_file  (FILE *f, int *x, int *y, int *channels_in
 // 16-bits-per-channel interface
 //
 
-STBIDEF stbi_us *stbi_load_16_from_memory   (stbi_uc const *buffer, int len, int *x, int *y, int *channels_in_file, int desired_channels);
-STBIDEF stbi_us *stbi_load_16_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *channels_in_file, int desired_channels);
+STBIDEF stbi_us *stbi_load_16_from_memory   (stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
+STBIDEF stbi_us *stbi_load_16_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
 
 #ifndef STBI_NO_STDIO
-STBIDEF stbi_us *stbi_load_16          (char const *filename, int *x, int *y, int *channels_in_file, int desired_channels);
-STBIDEF stbi_us *stbi_load_from_file_16(FILE *f, int *x, int *y, int *channels_in_file, int desired_channels);
+STBIDEF stbi_us *stbi_load_16          (অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
+STBIDEF stbi_us *stbi_load_from_file_16(FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
 #endif
 
 ////////////////////////////////////
@@ -384,52 +384,52 @@ STBIDEF stbi_us *stbi_load_from_file_16(FILE *f, int *x, int *y, int *channels_i
 // float-per-channel interface
 //
 #ifndef STBI_NO_LINEAR
-   STBIDEF float *stbi_loadf_from_memory     (stbi_uc const *buffer, int len, int *x, int *y, int *channels_in_file, int desired_channels);
-   STBIDEF float *stbi_loadf_from_callbacks  (stbi_io_callbacks const *clbk, void *user, int *x, int *y,  int *channels_in_file, int desired_channels);
+   STBIDEF দশমিক *stbi_loadf_from_memory     (stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
+   STBIDEF দশমিক *stbi_loadf_from_callbacks  (stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y,  পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
 
    #ifndef STBI_NO_STDIO
-   STBIDEF float *stbi_loadf            (char const *filename, int *x, int *y, int *channels_in_file, int desired_channels);
-   STBIDEF float *stbi_loadf_from_file  (FILE *f, int *x, int *y, int *channels_in_file, int desired_channels);
+   STBIDEF দশমিক *stbi_loadf            (অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
+   STBIDEF দশমিক *stbi_loadf_from_file  (FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels);
    #endif
 #endif
 
 #ifndef STBI_NO_HDR
-   STBIDEF void   stbi_hdr_to_ldr_gamma(float gamma);
-   STBIDEF void   stbi_hdr_to_ldr_scale(float scale);
+   STBIDEF শূন্য   stbi_hdr_to_ldr_gamma(দশমিক gamma);
+   STBIDEF শূন্য   stbi_hdr_to_ldr_scale(দশমিক scale);
 #endif // STBI_NO_HDR
 
 #ifndef STBI_NO_LINEAR
-   STBIDEF void   stbi_ldr_to_hdr_gamma(float gamma);
-   STBIDEF void   stbi_ldr_to_hdr_scale(float scale);
+   STBIDEF শূন্য   stbi_ldr_to_hdr_gamma(দশমিক gamma);
+   STBIDEF শূন্য   stbi_ldr_to_hdr_scale(দশমিক scale);
 #endif // STBI_NO_LINEAR
 
 // stbi_is_hdr is always defined, but always returns false if STBI_NO_HDR
-STBIDEF int    stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user);
-STBIDEF int    stbi_is_hdr_from_memory(stbi_uc const *buffer, int len);
+STBIDEF পূর্ণসংখ্যা    stbi_is_hdr_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user);
+STBIDEF পূর্ণসংখ্যা    stbi_is_hdr_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len);
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_is_hdr          (char const *filename);
-STBIDEF int      stbi_is_hdr_from_file(FILE *f);
+STBIDEF পূর্ণসংখ্যা      stbi_is_hdr          (অক্ষর ধ্রুবক *filename);
+STBIDEF পূর্ণসংখ্যা      stbi_is_hdr_from_file(FILE *f);
 #endif // STBI_NO_STDIO
 
 
 // get a VERY brief reason for failure
 // NOT THREADSAFE
-STBIDEF const char *stbi_failure_reason  (void);
+STBIDEF ধ্রুবক অক্ষর *stbi_failure_reason  (শূন্য);
 
 // free the loaded image -- this is just free()
-STBIDEF void     stbi_image_free      (void *retval_from_stbi_load);
+STBIDEF শূন্য     stbi_image_free      (শূন্য *retval_from_stbi_load);
 
 // get image dimensions & components without fully decoding
-STBIDEF int      stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp);
-STBIDEF int      stbi_info_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp);
-STBIDEF int      stbi_is_16_bit_from_memory(stbi_uc const *buffer, int len);
-STBIDEF int      stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *clbk, void *user);
+STBIDEF পূর্ণসংখ্যা      stbi_info_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
+STBIDEF পূর্ণসংখ্যা      stbi_info_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
+STBIDEF পূর্ণসংখ্যা      stbi_is_16_bit_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len);
+STBIDEF পূর্ণসংখ্যা      stbi_is_16_bit_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user);
 
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_info               (char const *filename,     int *x, int *y, int *comp);
-STBIDEF int      stbi_info_from_file     (FILE *f,                  int *x, int *y, int *comp);
-STBIDEF int      stbi_is_16_bit          (char const *filename);
-STBIDEF int      stbi_is_16_bit_from_file(FILE *f);
+STBIDEF পূর্ণসংখ্যা      stbi_info               (অক্ষর ধ্রুবক *filename,     পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
+STBIDEF পূর্ণসংখ্যা      stbi_info_from_file     (FILE *f,                  পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
+STBIDEF পূর্ণসংখ্যা      stbi_is_16_bit          (অক্ষর ধ্রুবক *filename);
+STBIDEF পূর্ণসংখ্যা      stbi_is_16_bit_from_file(FILE *f);
 #endif
 
 
@@ -437,24 +437,24 @@ STBIDEF int      stbi_is_16_bit_from_file(FILE *f);
 // for image formats that explicitly notate that they have premultiplied alpha,
 // we just return the colors as stored in the file. set this flag to force
 // unpremultiplication. results are undefined if the unpremultiply overflow.
-STBIDEF void stbi_set_unpremultiply_on_load(int flag_true_if_should_unpremultiply);
+STBIDEF শূন্য stbi_set_unpremultiply_on_load(পূর্ণসংখ্যা flag_true_if_should_unpremultiply);
 
 // indicate whether we should process iphone images back to canonical format,
 // or just pass them through "as-is"
-STBIDEF void stbi_convert_iphone_png_to_rgb(int flag_true_if_should_convert);
+STBIDEF শূন্য stbi_convert_iphone_png_to_rgb(পূর্ণসংখ্যা flag_true_if_should_convert);
 
 // flip the image vertically, so the first pixel in the output array is the bottom left
-STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip);
+STBIDEF শূন্য stbi_set_flip_vertically_on_load(পূর্ণসংখ্যা flag_true_if_should_flip);
 
 // ZLIB client - used by PNG, available for other purposes
 
-STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, int *outlen);
-STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header);
-STBIDEF char *stbi_zlib_decode_malloc(const char *buffer, int len, int *outlen);
-STBIDEF int   stbi_zlib_decode_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
+STBIDEF অক্ষর *stbi_zlib_decode_malloc_guesssize(ধ্রুবক অক্ষর *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা initial_আকার, পূর্ণসংখ্যা *outlen);
+STBIDEF অক্ষর *stbi_zlib_decode_malloc_guesssize_headerflag(ধ্রুবক অক্ষর *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা initial_আকার, পূর্ণসংখ্যা *outlen, পূর্ণসংখ্যা parse_header);
+STBIDEF অক্ষর *stbi_zlib_decode_malloc(ধ্রুবক অক্ষর *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *outlen);
+STBIDEF পূর্ণসংখ্যা   stbi_zlib_decode_বাফার(অক্ষর *obuffer, পূর্ণসংখ্যা olen, ধ্রুবক অক্ষর *ibuffer, পূর্ণসংখ্যা ilen);
 
-STBIDEF char *stbi_zlib_decode_noheader_malloc(const char *buffer, int len, int *outlen);
-STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int ilen);
+STBIDEF অক্ষর *stbi_zlib_decode_noheader_malloc(ধ্রুবক অক্ষর *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *outlen);
+STBIDEF পূর্ণসংখ্যা   stbi_zlib_decode_noheader_বাফার(অক্ষর *obuffer, পূর্ণসংখ্যা olen, ধ্রুবক অক্ষর *ibuffer, পূর্ণসংখ্যা ilen);
 
 
 #ifdef __cplusplus
@@ -468,7 +468,7 @@ STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const ch
 
 #ifdef STB_IMAGE_IMPLEMENTATION
 
-#if defined(STBI_ONLY_JPEG) || defined(STBI_ONLY_PNG) || defined(STBI_ONLY_BMP) \
+#যদি defined(STBI_ONLY_JPEG) || defined(STBI_ONLY_PNG) || defined(STBI_ONLY_BMP) \
   || defined(STBI_ONLY_TGA) || defined(STBI_ONLY_GIF) || defined(STBI_ONLY_PSD) \
   || defined(STBI_ONLY_HDR) || defined(STBI_ONLY_PIC) || defined(STBI_ONLY_PNM) \
   || defined(STBI_ONLY_ZLIB)
@@ -501,62 +501,62 @@ STBIDEF int   stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const ch
    #endif
 #endif
 
-#if defined(STBI_NO_PNG) && !defined(STBI_SUPPORT_ZLIB) && !defined(STBI_NO_ZLIB)
+#যদি defined(STBI_NO_PNG) && !defined(STBI_SUPPORT_ZLIB) && !defined(STBI_NO_ZLIB)
 #define STBI_NO_ZLIB
 #endif
 
 
-#include <stdarg.h>
-#include <stddef.h> // ptrdiff_t on osx
-#include <stdlib.h>
-#include <string.h>
-#include <limits.h>
+#অন্তর্ভাব <stdarg.h>
+#অন্তর্ভাব <stddef.h> // ptrdiff_t on osx
+#অন্তর্ভাব <stdlib.h>
+#অন্তর্ভাব <string.h>
+#অন্তর্ভাব <limits.h>
 
-#if !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
-#include <math.h>  // ldexp, pow
+#যদি !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
+#অন্তর্ভাব <math.h>  // ldexp, pow
 #endif
 
 #ifndef STBI_NO_STDIO
-#include <stdio.h>
+#অন্তর্ভাব <stdio.h>
 #endif
 
 #ifndef STBI_ASSERT
-#include <assert.h>
-#define STBI_ASSERT(x) assert(x)
+#অন্তর্ভাব <assert.h>
+#define STBI_ASSERT(x) প্রতিজ্ঞা(x)
 #endif
 
 
 #ifndef _MSC_VER
    #ifdef __cplusplus
-   #define stbi_inline inline
-   #else
+   #define stbi_inline অন্তঃরেখ
+   #অন্যথা
    #define stbi_inline
    #endif
-#else
+#অন্যথা
    #define stbi_inline __forceinline
 #endif
 
 
 #ifdef _MSC_VER
-typedef unsigned short stbi__uint16;
-typedef   signed short stbi__int16;
-typedef unsigned int   stbi__uint32;
-typedef   signed int   stbi__int32;
-#else
-#include <stdint.h>
-typedef uint16_t stbi__uint16;
-typedef int16_t  stbi__int16;
-typedef uint32_t stbi__uint32;
-typedef int32_t  stbi__int32;
+প্রকারলেখ unsigned short stbi__uint16;
+প্রকারলেখ   signed short stbi__int16;
+প্রকারলেখ unsigned পূর্ণসংখ্যা   stbi__uint32;
+প্রকারলেখ   signed পূর্ণসংখ্যা   stbi__int32;
+#অন্যথা
+#অন্তর্ভাব <stdint.h>
+প্রকারলেখ uint16_t stbi__uint16;
+প্রকারলেখ int16_t  stbi__int16;
+প্রকারলেখ uint32_t stbi__uint32;
+প্রকারলেখ int32_t  stbi__int32;
 #endif
 
 // should produce compiler error if size is wrong
-typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
+প্রকারলেখ unsigned অক্ষর validate_uint32[আকার(stbi__uint32)==4 ? 1 : -1];
 
 #ifdef _MSC_VER
-#define STBI_NOTUSED(v)  (void)(v)
-#else
-#define STBI_NOTUSED(v)  (void)sizeof(v)
+#define STBI_NOTUSED(v)  (শূন্য)(v)
+#অন্যথা
+#define STBI_NOTUSED(v)  (শূন্য)আকার(v)
 #endif
 
 #ifdef _MSC_VER
@@ -565,22 +565,22 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 
 #ifdef STBI_HAS_LROTL
    #define stbi_lrot(x,y)  _lrotl(x,y)
-#else
+#অন্যথা
    #define stbi_lrot(x,y)  (((x) << (y)) | ((x) >> (32 - (y))))
 #endif
 
-#if defined(STBI_MALLOC) && defined(STBI_FREE) && (defined(STBI_REALLOC) || defined(STBI_REALLOC_SIZED))
+#যদি defined(STBI_MALLOC) && defined(STBI_FREE) && (defined(STBI_REALLOC) || defined(STBI_REALLOC_SIZED))
 // ok
-#elif !defined(STBI_MALLOC) && !defined(STBI_FREE) && !defined(STBI_REALLOC) && !defined(STBI_REALLOC_SIZED)
+#নতুবা_যদি !defined(STBI_MALLOC) && !defined(STBI_FREE) && !defined(STBI_REALLOC) && !defined(STBI_REALLOC_SIZED)
 // ok
-#else
+#অন্যথা
 #error "Must define all or none of STBI_MALLOC, STBI_FREE, and STBI_REALLOC (or STBI_REALLOC_SIZED)."
 #endif
 
 #ifndef STBI_MALLOC
 #define STBI_MALLOC(sz)           malloc(sz)
 #define STBI_REALLOC(p,newsz)     realloc(p,newsz)
-#define STBI_FREE(p)              free(p)
+#define STBI_FREE(p)              মুক্ত(p)
 #endif
 
 #ifndef STBI_REALLOC_SIZED
@@ -588,13 +588,13 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #endif
 
 // x86/x64 detection
-#if defined(__x86_64__) || defined(_M_X64)
+#যদি defined(__x86_64__) || defined(_M_X64)
 #define STBI__X64_TARGET
-#elif defined(__i386) || defined(_M_IX86)
+#নতুবা_যদি defined(__i386) || defined(_M_IX86)
 #define STBI__X86_TARGET
 #endif
 
-#if defined(__GNUC__) && defined(STBI__X86_TARGET) && !defined(__SSE2__) && !defined(STBI_NO_SIMD)
+#যদি defined(__GNUC__) && defined(STBI__X86_TARGET) && !defined(__SSE2__) && !defined(STBI_NO_SIMD)
 // gcc doesn't support sse2 intrinsics unless you compile with -msse2,
 // which in turn means it gets to use SSE2 everywhere. This is unfortunate,
 // but previous attempts to provide the SSE2 functions with runtime
@@ -605,7 +605,7 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #define STBI_NO_SIMD
 #endif
 
-#if defined(__MINGW32__) && defined(STBI__X86_TARGET) && !defined(STBI_MINGW_ENABLE_SSE2) && !defined(STBI_NO_SIMD)
+#যদি defined(__MINGW32__) && defined(STBI__X86_TARGET) && !defined(STBI_MINGW_ENABLE_SSE2) && !defined(STBI_NO_SIMD)
 // Note that __MINGW32__ doesn't actually mean 32-bit, so we have to avoid STBI__X64_TARGET
 //
 // 32-bit MinGW wants ESP to be 16-byte aligned, but this is not in the
@@ -620,60 +620,60 @@ typedef unsigned char validate_uint32[sizeof(stbi__uint32)==4 ? 1 : -1];
 #define STBI_NO_SIMD
 #endif
 
-#if !defined(STBI_NO_SIMD) && (defined(STBI__X86_TARGET) || defined(STBI__X64_TARGET))
+#যদি !defined(STBI_NO_SIMD) && (defined(STBI__X86_TARGET) || defined(STBI__X64_TARGET))
 #define STBI_SSE2
-#include <emmintrin.h>
+#অন্তর্ভাব <emmintrin.h>
 
 #ifdef _MSC_VER
 
-#if _MSC_VER >= 1400  // not VC6
-#include <intrin.h> // __cpuid
-static int stbi__cpuid3(void)
+#যদি _MSC_VER >= 1400  // not VC6
+#অন্তর্ভাব <intrin.h> // __cpuid
+স্থির পূর্ণসংখ্যা stbi__cpuid3(শূন্য)
 {
-   int info[4];
+   পূর্ণসংখ্যা info[4];
    __cpuid(info,1);
-   return info[3];
+   ফেরত info[3];
 }
-#else
-static int stbi__cpuid3(void)
+#অন্যথা
+স্থির পূর্ণসংখ্যা stbi__cpuid3(শূন্য)
 {
-   int res;
+   পূর্ণসংখ্যা res;
    __asm {
       mov  eax,1
       cpuid
       mov  res,edx
    }
-   return res;
+   ফেরত res;
 }
 #endif
 
 #define STBI_SIMD_ALIGN(type, name) __declspec(align(16)) type name
 
-static int stbi__sse2_available(void)
+স্থির পূর্ণসংখ্যা stbi__sse2_available(শূন্য)
 {
-   int info3 = stbi__cpuid3();
-   return ((info3 >> 26) & 1) != 0;
+   পূর্ণসংখ্যা info3 = stbi__cpuid3();
+   ফেরত ((info3 >> 26) & 1) != 0;
 }
-#else // assume GCC-style if not VC++
+#অন্যথা // assume GCC-style if not VC++
 #define STBI_SIMD_ALIGN(type, name) type name __attribute__((aligned(16)))
 
-static int stbi__sse2_available(void)
+স্থির পূর্ণসংখ্যা stbi__sse2_available(শূন্য)
 {
    // If we're even attempting to compile this on GCC/Clang, that means
    // -msse2 is on, which means the compiler is allowed to use SSE2
    // instructions at will, and so are we.
-   return 1;
+   ফেরত 1;
 }
 #endif
 #endif
 
 // ARM NEON
-#if defined(STBI_NO_SIMD) && defined(STBI_NEON)
+#যদি defined(STBI_NO_SIMD) && defined(STBI_NEON)
 #undef STBI_NEON
 #endif
 
 #ifdef STBI_NEON
-#include <arm_neon.h>
+#অন্তর্ভাব <arm_neon.h>
 // assume GCC or Clang on ARM targets
 #define STBI_SIMD_ALIGN(type, name) type name __attribute__((aligned(16)))
 #endif
@@ -688,175 +688,175 @@ static int stbi__sse2_available(void)
 
 // stbi__context structure is our basic context used by all images, so it
 // contains all the IO context, plus some basic image information
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi__uint32 img_x, img_y;
-   int img_n, img_out_n;
+   পূর্ণসংখ্যা img_n, img_out_n;
 
    stbi_io_callbacks io;
-   void *io_user_data;
+   শূন্য *io_user_তথ্য;
 
-   int read_from_callbacks;
-   int buflen;
-   stbi_uc buffer_start[128];
+   পূর্ণসংখ্যা read_from_callbacks;
+   পূর্ণসংখ্যা buflen;
+   stbi_uc বাফার_start[128];
 
-   stbi_uc *img_buffer, *img_buffer_end;
-   stbi_uc *img_buffer_original, *img_buffer_original_end;
+   stbi_uc *img_বাফার, *img_বাফার_end;
+   stbi_uc *img_বাফার_original, *img_বাফার_original_end;
 } stbi__context;
 
 
-static void stbi__refill_buffer(stbi__context *s);
+স্থির শূন্য stbi_refill_বাফার(stbi__context *s);
 
 // initialize a memory-decode context
-static void stbi__start_mem(stbi__context *s, stbi_uc const *buffer, int len)
+স্থির শূন্য stbi__start_mem(stbi__context *s, stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len)
 {
-   s->io.read = NULL;
+   s->io.পঠ = ফাঁকা;
    s->read_from_callbacks = 0;
-   s->img_buffer = s->img_buffer_original = (stbi_uc *) buffer;
-   s->img_buffer_end = s->img_buffer_original_end = (stbi_uc *) buffer+len;
+   s->img_বাফার = s->img_বাফার_original = (stbi_uc *) বাফার;
+   s->img_বাফার_end = s->img_বাফার_original_end = (stbi_uc *) বাফার+len;
 }
 
 // initialize a callback-based context
-static void stbi__start_callbacks(stbi__context *s, stbi_io_callbacks *c, void *user)
+স্থির শূন্য stbi__start_callbacks(stbi__context *s, stbi_io_callbacks *c, শূন্য *user)
 {
    s->io = *c;
-   s->io_user_data = user;
-   s->buflen = sizeof(s->buffer_start);
+   s->io_user_তথ্য = user;
+   s->buflen = আকার(s->বাফার_start);
    s->read_from_callbacks = 1;
-   s->img_buffer_original = s->buffer_start;
-   stbi__refill_buffer(s);
-   s->img_buffer_original_end = s->img_buffer_end;
+   s->img_বাফার_original = s->বাফার_start;
+   stbi_refill_বাফার(s);
+   s->img_বাফার_original_end = s->img_বাফার_end;
 }
 
 #ifndef STBI_NO_STDIO
 
-static int stbi__stdio_read(void *user, char *data, int size)
+স্থির পূর্ণসংখ্যা stbi__stdio_read(শূন্য *user, অক্ষর *তথ্য, পূর্ণসংখ্যা আকার_2)
 {
-   return (int) fread(data,1,size,(FILE*) user);
+   ফেরত (পূর্ণসংখ্যা) fread(তথ্য,1,আকার_2,(FILE*) user);
 }
 
-static void stbi__stdio_skip(void *user, int n)
+স্থির শূন্য stbi__stdio_skip(শূন্য *user, পূর্ণসংখ্যা n)
 {
    fseek((FILE*) user, n, SEEK_CUR);
 }
 
-static int stbi__stdio_eof(void *user)
+স্থির পূর্ণসংখ্যা stbi__stdio_eof(শূন্য *user)
 {
-   return feof((FILE*) user);
+   ফেরত feof((FILE*) user);
 }
 
-static stbi_io_callbacks stbi__stdio_callbacks =
+স্থির stbi_io_callbacks stbi__stdio_callbacks =
 {
    stbi__stdio_read,
    stbi__stdio_skip,
    stbi__stdio_eof,
 };
 
-static void stbi__start_file(stbi__context *s, FILE *f)
+স্থির শূন্য stbi__start_file(stbi__context *s, FILE *f)
 {
-   stbi__start_callbacks(s, &stbi__stdio_callbacks, (void *) f);
+   stbi__start_callbacks(s, &stbi__stdio_callbacks, (শূন্য *) f);
 }
 
 //static void stop_file(stbi__context *s) { }
 
 #endif // !STBI_NO_STDIO
 
-static void stbi__rewind(stbi__context *s)
+স্থির শূন্য stbi__rewind(stbi__context *s)
 {
    // conceptually rewind SHOULD rewind to the beginning of the stream,
    // but we just rewind to the beginning of the initial buffer, because
    // we only use it after doing 'test', which only ever looks at at most 92 bytes
-   s->img_buffer = s->img_buffer_original;
-   s->img_buffer_end = s->img_buffer_original_end;
+   s->img_বাফার = s->img_বাফার_original;
+   s->img_বাফার_end = s->img_বাফার_original_end;
 }
 
-enum
+গণনা
 {
    STBI_ORDER_RGB,
    STBI_ORDER_BGR
 };
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
-   int bits_per_channel;
-   int num_channels;
-   int channel_order;
-} stbi__result_info;
+   পূর্ণসংখ্যা bits_per_channel;
+   পূর্ণসংখ্যা অঙ্ক_channels;
+   পূর্ণসংখ্যা channel_order;
+} stbi_ফলাফল_info;
 
 #ifndef STBI_NO_JPEG
-static int      stbi__jpeg_test(stbi__context *s);
-static void    *stbi__jpeg_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__jpeg_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__jpeg_test(stbi__context *s);
+স্থির শূন্য    *stbi__jpeg_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__jpeg_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 #ifndef STBI_NO_PNG
-static int      stbi__png_test(stbi__context *s);
-static void    *stbi__png_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__png_info(stbi__context *s, int *x, int *y, int *comp);
-static int      stbi__png_is16(stbi__context *s);
+স্থির পূর্ণসংখ্যা      stbi__png_test(stbi__context *s);
+স্থির শূন্য    *stbi__png_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__png_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
+স্থির পূর্ণসংখ্যা      stbi__png_is16(stbi__context *s);
 #endif
 
 #ifndef STBI_NO_BMP
-static int      stbi__bmp_test(stbi__context *s);
-static void    *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__bmp_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__bmp_test(stbi__context *s);
+স্থির শূন্য    *stbi__bmp_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__bmp_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 #ifndef STBI_NO_TGA
-static int      stbi__tga_test(stbi__context *s);
-static void    *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__tga_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__tga_test(stbi__context *s);
+স্থির শূন্য    *stbi__tga_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__tga_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 #ifndef STBI_NO_PSD
-static int      stbi__psd_test(stbi__context *s);
-static void    *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri, int bpc);
-static int      stbi__psd_info(stbi__context *s, int *x, int *y, int *comp);
-static int      stbi__psd_is16(stbi__context *s);
+স্থির পূর্ণসংখ্যা      stbi__psd_test(stbi__context *s);
+স্থির শূন্য    *stbi__psd_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri, পূর্ণসংখ্যা bpc);
+স্থির পূর্ণসংখ্যা      stbi__psd_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
+স্থির পূর্ণসংখ্যা      stbi__psd_is16(stbi__context *s);
 #endif
 
 #ifndef STBI_NO_HDR
-static int      stbi__hdr_test(stbi__context *s);
-static float   *stbi__hdr_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__hdr_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__hdr_test(stbi__context *s);
+স্থির দশমিক   *stbi__hdr_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__hdr_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 #ifndef STBI_NO_PIC
-static int      stbi__pic_test(stbi__context *s);
-static void    *stbi__pic_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__pic_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__pic_test(stbi__context *s);
+স্থির শূন্য    *stbi__pic_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__pic_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 #ifndef STBI_NO_GIF
-static int      stbi__gif_test(stbi__context *s);
-static void    *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static void    *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y, int *z, int *comp, int req_comp);
-static int      stbi__gif_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__gif_test(stbi__context *s);
+স্থির শূন্য    *stbi__gif_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির শূন্য    *stbi__load_gif_main(stbi__context *s, পূর্ণসংখ্যা **delays, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *z, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp);
+স্থির পূর্ণসংখ্যা      stbi__gif_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 #ifndef STBI_NO_PNM
-static int      stbi__pnm_test(stbi__context *s);
-static void    *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri);
-static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp);
+স্থির পূর্ণসংখ্যা      stbi__pnm_test(stbi__context *s);
+স্থির শূন্য    *stbi__pnm_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri);
+স্থির পূর্ণসংখ্যা      stbi__pnm_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp);
 #endif
 
 // this is not threadsafe
-static const char *stbi__g_failure_reason;
+স্থির ধ্রুবক অক্ষর *stbi__g_failure_reason;
 
-STBIDEF const char *stbi_failure_reason(void)
+STBIDEF ধ্রুবক অক্ষর *stbi_failure_reason(শূন্য)
 {
-   return stbi__g_failure_reason;
+   ফেরত stbi__g_failure_reason;
 }
 
-static int stbi__err(const char *str)
+স্থির পূর্ণসংখ্যা stbi__err(ধ্রুবক অক্ষর *str)
 {
    stbi__g_failure_reason = str;
-   return 0;
+   ফেরত 0;
 }
 
-static void *stbi__malloc(size_t size)
+স্থির শূন্য *stbi__malloc(size_t আকার_2)
 {
-    return STBI_MALLOC(size);
+    ফেরত STBI_MALLOC(আকার_2);
 }
 
 // stb_image uses ints pervasively, including for offset calculations.
@@ -871,66 +871,66 @@ static void *stbi__malloc(size_t size)
 
 // return 1 if the sum is valid, 0 on overflow.
 // negative terms are considered invalid.
-static int stbi__addsizes_valid(int a, int b)
+স্থির পূর্ণসংখ্যা stbi__addsizes_valid(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b)
 {
-   if (b < 0) return 0;
+   যদি (b < 0) ফেরত 0;
    // now 0 <= b <= INT_MAX, hence also
    // 0 <= INT_MAX - b <= INTMAX.
    // And "a + b <= INT_MAX" (which might overflow) is the
    // same as a <= INT_MAX - b (no overflow)
-   return a <= INT_MAX - b;
+   ফেরত a <= INT_MAX - b;
 }
 
 // returns 1 if the product is valid, 0 on overflow.
 // negative factors are considered invalid.
-static int stbi__mul2sizes_valid(int a, int b)
+স্থির পূর্ণসংখ্যা stbi__mul2sizes_valid(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b)
 {
-   if (a < 0 || b < 0) return 0;
-   if (b == 0) return 1; // mul-by-0 is always safe
+   যদি (a < 0 || b < 0) ফেরত 0;
+   যদি (b == 0) ফেরত 1; // mul-by-0 is always safe
    // portable way to check for no overflows in a*b
-   return a <= INT_MAX/b;
+   ফেরত a <= INT_MAX/b;
 }
 
 // returns 1 if "a*b + add" has no negative terms/factors and doesn't overflow
-static int stbi__mad2sizes_valid(int a, int b, int add)
+স্থির পূর্ণসংখ্যা stbi__mad2sizes_valid(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা add)
 {
-   return stbi__mul2sizes_valid(a, b) && stbi__addsizes_valid(a*b, add);
+   ফেরত stbi__mul2sizes_valid(a, b) && stbi__addsizes_valid(a*b, add);
 }
 
 // returns 1 if "a*b*c + add" has no negative terms/factors and doesn't overflow
-static int stbi__mad3sizes_valid(int a, int b, int c, int add)
+স্থির পূর্ণসংখ্যা stbi__mad3sizes_valid(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা c, পূর্ণসংখ্যা add)
 {
-   return stbi__mul2sizes_valid(a, b) && stbi__mul2sizes_valid(a*b, c) &&
+   ফেরত stbi__mul2sizes_valid(a, b) && stbi__mul2sizes_valid(a*b, c) &&
       stbi__addsizes_valid(a*b*c, add);
 }
 
 // returns 1 if "a*b*c*d + add" has no negative terms/factors and doesn't overflow
-#if !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
-static int stbi__mad4sizes_valid(int a, int b, int c, int d, int add)
+#যদি !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
+স্থির পূর্ণসংখ্যা stbi__mad4sizes_valid(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা c, পূর্ণসংখ্যা d, পূর্ণসংখ্যা add)
 {
-   return stbi__mul2sizes_valid(a, b) && stbi__mul2sizes_valid(a*b, c) &&
+   ফেরত stbi__mul2sizes_valid(a, b) && stbi__mul2sizes_valid(a*b, c) &&
       stbi__mul2sizes_valid(a*b*c, d) && stbi__addsizes_valid(a*b*c*d, add);
 }
 #endif
 
 // mallocs with size overflow checking
-static void *stbi__malloc_mad2(int a, int b, int add)
+স্থির শূন্য *stbi__malloc_mad2(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা add)
 {
-   if (!stbi__mad2sizes_valid(a, b, add)) return NULL;
-   return stbi__malloc(a*b + add);
+   যদি (!stbi__mad2sizes_valid(a, b, add)) ফেরত ফাঁকা;
+   ফেরত stbi__malloc(a*b + add);
 }
 
-static void *stbi__malloc_mad3(int a, int b, int c, int add)
+স্থির শূন্য *stbi__malloc_mad3(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা c, পূর্ণসংখ্যা add)
 {
-   if (!stbi__mad3sizes_valid(a, b, c, add)) return NULL;
-   return stbi__malloc(a*b*c + add);
+   যদি (!stbi__mad3sizes_valid(a, b, c, add)) ফেরত ফাঁকা;
+   ফেরত stbi__malloc(a*b*c + add);
 }
 
-#if !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
-static void *stbi__malloc_mad4(int a, int b, int c, int d, int add)
+#যদি !defined(STBI_NO_LINEAR) || !defined(STBI_NO_HDR)
+স্থির শূন্য *stbi__malloc_mad4(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা c, পূর্ণসংখ্যা d, পূর্ণসংখ্যা add)
 {
-   if (!stbi__mad4sizes_valid(a, b, c, d, add)) return NULL;
-   return stbi__malloc(a*b*c*d + add);
+   যদি (!stbi__mad4sizes_valid(a, b, c, d, add)) ফেরত ফাঁকা;
+   ফেরত stbi__malloc(a*b*c*d + add);
 }
 #endif
 
@@ -940,364 +940,364 @@ static void *stbi__malloc_mad4(int a, int b, int c, int d, int add)
 
 #ifdef STBI_NO_FAILURE_STRINGS
    #define stbi__err(x,y)  0
-#elif defined(STBI_FAILURE_USERMSG)
+#নতুবা_যদি defined(STBI_FAILURE_USERMSG)
    #define stbi__err(x,y)  stbi__err(y)
-#else
+#অন্যথা
    #define stbi__err(x,y)  stbi__err(x)
 #endif
 
-#define stbi__errpf(x,y)   ((float *)(size_t) (stbi__err(x,y)?NULL:NULL))
-#define stbi__errpuc(x,y)  ((unsigned char *)(size_t) (stbi__err(x,y)?NULL:NULL))
+#define stbi__errpf(x,y)   ((দশমিক *)(size_t) (stbi__err(x,y)?ফাঁকা:ফাঁকা))
+#define stbi__errpuc(x,y)  ((unsigned অক্ষর *)(size_t) (stbi__err(x,y)?ফাঁকা:ফাঁকা))
 
-STBIDEF void stbi_image_free(void *retval_from_stbi_load)
+STBIDEF শূন্য stbi_image_free(শূন্য *retval_from_stbi_load)
 {
    STBI_FREE(retval_from_stbi_load);
 }
 
 #ifndef STBI_NO_LINEAR
-static float   *stbi__ldr_to_hdr(stbi_uc *data, int x, int y, int comp);
+স্থির দশমিক   *stbi__ldr_to_hdr(stbi_uc *তথ্য, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp);
 #endif
 
 #ifndef STBI_NO_HDR
-static stbi_uc *stbi__hdr_to_ldr(float   *data, int x, int y, int comp);
+স্থির stbi_uc *stbi__hdr_to_ldr(দশমিক   *তথ্য, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp);
 #endif
 
-static int stbi__vertically_flip_on_load = 0;
+স্থির পূর্ণসংখ্যা stbi__vertically_flip_on_load = 0;
 
-STBIDEF void stbi_set_flip_vertically_on_load(int flag_true_if_should_flip)
+STBIDEF শূন্য stbi_set_flip_vertically_on_load(পূর্ণসংখ্যা flag_true_if_should_flip)
 {
     stbi__vertically_flip_on_load = flag_true_if_should_flip;
 }
 
-static void *stbi__load_main(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri, int bpc)
+স্থির শূন্য *stbi__load_main(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri, পূর্ণসংখ্যা bpc)
 {
-   memset(ri, 0, sizeof(*ri)); // make sure it's initialized if we add new fields
+   memset(ri, 0, আকার(*ri)); // make sure it's initialized if we add new fields
    ri->bits_per_channel = 8; // default is 8 so most paths don't have to be changed
    ri->channel_order = STBI_ORDER_RGB; // all current input & output are this, but this is here so we can add BGR order
-   ri->num_channels = 0;
+   ri->অঙ্ক_channels = 0;
 
    #ifndef STBI_NO_JPEG
-   if (stbi__jpeg_test(s)) return stbi__jpeg_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__jpeg_test(s)) ফেরত stbi__jpeg_load(s,x,y,comp,req_comp, ri);
    #endif
    #ifndef STBI_NO_PNG
-   if (stbi__png_test(s))  return stbi__png_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__png_test(s))  ফেরত stbi__png_load(s,x,y,comp,req_comp, ri);
    #endif
    #ifndef STBI_NO_BMP
-   if (stbi__bmp_test(s))  return stbi__bmp_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__bmp_test(s))  ফেরত stbi__bmp_load(s,x,y,comp,req_comp, ri);
    #endif
    #ifndef STBI_NO_GIF
-   if (stbi__gif_test(s))  return stbi__gif_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__gif_test(s))  ফেরত stbi__gif_load(s,x,y,comp,req_comp, ri);
    #endif
    #ifndef STBI_NO_PSD
-   if (stbi__psd_test(s))  return stbi__psd_load(s,x,y,comp,req_comp, ri, bpc);
+   যদি (stbi__psd_test(s))  ফেরত stbi__psd_load(s,x,y,comp,req_comp, ri, bpc);
    #endif
    #ifndef STBI_NO_PIC
-   if (stbi__pic_test(s))  return stbi__pic_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__pic_test(s))  ফেরত stbi__pic_load(s,x,y,comp,req_comp, ri);
    #endif
    #ifndef STBI_NO_PNM
-   if (stbi__pnm_test(s))  return stbi__pnm_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__pnm_test(s))  ফেরত stbi__pnm_load(s,x,y,comp,req_comp, ri);
    #endif
 
    #ifndef STBI_NO_HDR
-   if (stbi__hdr_test(s)) {
-      float *hdr = stbi__hdr_load(s, x,y,comp,req_comp, ri);
-      return stbi__hdr_to_ldr(hdr, *x, *y, req_comp ? req_comp : *comp);
+   যদি (stbi__hdr_test(s)) {
+      দশমিক *hdr = stbi__hdr_load(s, x,y,comp,req_comp, ri);
+      ফেরত stbi__hdr_to_ldr(hdr, *x, *y, req_comp ? req_comp : *comp);
    }
    #endif
 
    #ifndef STBI_NO_TGA
    // test tga last because it's a crappy test!
-   if (stbi__tga_test(s))
-      return stbi__tga_load(s,x,y,comp,req_comp, ri);
+   যদি (stbi__tga_test(s))
+      ফেরত stbi__tga_load(s,x,y,comp,req_comp, ri);
    #endif
 
-   return stbi__errpuc("unknown image type", "Image not of any known type, or corrupt");
+   ফেরত stbi__errpuc("unknown image type", "Image not of any known type, or corrupt");
 }
 
-static stbi_uc *stbi__convert_16_to_8(stbi__uint16 *orig, int w, int h, int channels)
+স্থির stbi_uc *stbi__convert_16_to_8(stbi__uint16 *orig, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা channels)
 {
-   int i;
-   int img_len = w * h * channels;
+   পূর্ণসংখ্যা i;
+   পূর্ণসংখ্যা img_len = w * h * channels;
    stbi_uc *reduced;
 
    reduced = (stbi_uc *) stbi__malloc(img_len);
-   if (reduced == NULL) return stbi__errpuc("outofmem", "Out of memory");
+   যদি (reduced == ফাঁকা) ফেরত stbi__errpuc("outofmem", "Out of memory");
 
-   for (i = 0; i < img_len; ++i)
+   জন্য (i = 0; i < img_len; ++i)
       reduced[i] = (stbi_uc)((orig[i] >> 8) & 0xFF); // top half of each byte is sufficient approx of 16->8 bit scaling
 
    STBI_FREE(orig);
-   return reduced;
+   ফেরত reduced;
 }
 
-static stbi__uint16 *stbi__convert_8_to_16(stbi_uc *orig, int w, int h, int channels)
+স্থির stbi__uint16 *stbi__convert_8_to_16(stbi_uc *orig, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা channels)
 {
-   int i;
-   int img_len = w * h * channels;
+   পূর্ণসংখ্যা i;
+   পূর্ণসংখ্যা img_len = w * h * channels;
    stbi__uint16 *enlarged;
 
    enlarged = (stbi__uint16 *) stbi__malloc(img_len*2);
-   if (enlarged == NULL) return (stbi__uint16 *) stbi__errpuc("outofmem", "Out of memory");
+   যদি (enlarged == ফাঁকা) ফেরত (stbi__uint16 *) stbi__errpuc("outofmem", "Out of memory");
 
-   for (i = 0; i < img_len; ++i)
+   জন্য (i = 0; i < img_len; ++i)
       enlarged[i] = (stbi__uint16)((orig[i] << 8) + orig[i]); // replicate to high and low byte, maps 0->0, 255->0xffff
 
    STBI_FREE(orig);
-   return enlarged;
+   ফেরত enlarged;
 }
 
-static void stbi__vertical_flip(void *image, int w, int h, int bytes_per_pixel)
+স্থির শূন্য stbi__vertical_flip(শূন্য *image, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা bytes_per_pixel)
 {
-   int row;
+   পূর্ণসংখ্যা row;
    size_t bytes_per_row = (size_t)w * bytes_per_pixel;
-   stbi_uc temp[2048];
+   stbi_uc অস্থায়ী[2048];
    stbi_uc *bytes = (stbi_uc *)image;
 
-   for (row = 0; row < (h>>1); row++) {
+   জন্য (row = 0; row < (h>>1); row++) {
       stbi_uc *row0 = bytes + row*bytes_per_row;
       stbi_uc *row1 = bytes + (h - row - 1)*bytes_per_row;
       // swap row0 with row1
-      size_t bytes_left = bytes_per_row;
-      while (bytes_left) {
-         size_t bytes_copy = (bytes_left < sizeof(temp)) ? bytes_left : sizeof(temp);
-         memcpy(temp, row0, bytes_copy);
+      size_t bytes_বাম = bytes_per_row;
+      যখন (bytes_বাম) {
+         size_t bytes_copy = (bytes_বাম < আকার(অস্থায়ী)) ? bytes_বাম : আকার(অস্থায়ী);
+         memcpy(অস্থায়ী, row0, bytes_copy);
          memcpy(row0, row1, bytes_copy);
-         memcpy(row1, temp, bytes_copy);
+         memcpy(row1, অস্থায়ী, bytes_copy);
          row0 += bytes_copy;
          row1 += bytes_copy;
-         bytes_left -= bytes_copy;
+         bytes_বাম -= bytes_copy;
       }
    }
 }
 
-static void stbi__vertical_flip_slices(void *image, int w, int h, int z, int bytes_per_pixel)
+স্থির শূন্য stbi__vertical_flip_slices(শূন্য *image, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা z, পূর্ণসংখ্যা bytes_per_pixel)
 {
-   int slice;
-   int slice_size = w * h * bytes_per_pixel;
+   পূর্ণসংখ্যা slice;
+   পূর্ণসংখ্যা slice_আকার = w * h * bytes_per_pixel;
 
    stbi_uc *bytes = (stbi_uc *)image;
-   for (slice = 0; slice < z; ++slice) {
+   জন্য (slice = 0; slice < z; ++slice) {
       stbi__vertical_flip(bytes, w, h, bytes_per_pixel); 
-      bytes += slice_size; 
+      bytes += slice_আকার; 
    }
 }
 
-static unsigned char *stbi__load_and_postprocess_8bit(stbi__context *s, int *x, int *y, int *comp, int req_comp)
+স্থির unsigned অক্ষর *stbi__load_and_postprocess_8bit(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   stbi__result_info ri;
-   void *result = stbi__load_main(s, x, y, comp, req_comp, &ri, 8);
+   stbi_ফলাফল_info ri;
+   শূন্য *ফলাফল = stbi__load_main(s, x, y, comp, req_comp, &ri, 8);
 
-   if (result == NULL)
-      return NULL;
+   যদি (ফলাফল == ফাঁকা)
+      ফেরত ফাঁকা;
 
-   if (ri.bits_per_channel != 8) {
+   যদি (ri.bits_per_channel != 8) {
       STBI_ASSERT(ri.bits_per_channel == 16);
-      result = stbi__convert_16_to_8((stbi__uint16 *) result, *x, *y, req_comp == 0 ? *comp : req_comp);
+      ফলাফল = stbi__convert_16_to_8((stbi__uint16 *) ফলাফল, *x, *y, req_comp == 0 ? *comp : req_comp);
       ri.bits_per_channel = 8;
    }
 
    // @TODO: move stbi__convert_format to here
 
-   if (stbi__vertically_flip_on_load) {
-      int channels = req_comp ? req_comp : *comp;
-      stbi__vertical_flip(result, *x, *y, channels * sizeof(stbi_uc));
+   যদি (stbi__vertically_flip_on_load) {
+      পূর্ণসংখ্যা channels = req_comp ? req_comp : *comp;
+      stbi__vertical_flip(ফলাফল, *x, *y, channels * আকার(stbi_uc));
    }
 
-   return (unsigned char *) result;
+   ফেরত (unsigned অক্ষর *) ফলাফল;
 }
 
-static stbi__uint16 *stbi__load_and_postprocess_16bit(stbi__context *s, int *x, int *y, int *comp, int req_comp)
+স্থির stbi__uint16 *stbi__load_and_postprocess_16bit(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   stbi__result_info ri;
-   void *result = stbi__load_main(s, x, y, comp, req_comp, &ri, 16);
+   stbi_ফলাফল_info ri;
+   শূন্য *ফলাফল = stbi__load_main(s, x, y, comp, req_comp, &ri, 16);
 
-   if (result == NULL)
-      return NULL;
+   যদি (ফলাফল == ফাঁকা)
+      ফেরত ফাঁকা;
 
-   if (ri.bits_per_channel != 16) {
+   যদি (ri.bits_per_channel != 16) {
       STBI_ASSERT(ri.bits_per_channel == 8);
-      result = stbi__convert_8_to_16((stbi_uc *) result, *x, *y, req_comp == 0 ? *comp : req_comp);
+      ফলাফল = stbi__convert_8_to_16((stbi_uc *) ফলাফল, *x, *y, req_comp == 0 ? *comp : req_comp);
       ri.bits_per_channel = 16;
    }
 
    // @TODO: move stbi__convert_format16 to here
    // @TODO: special case RGB-to-Y (and RGBA-to-YA) for 8-bit-to-16-bit case to keep more precision
 
-   if (stbi__vertically_flip_on_load) {
-      int channels = req_comp ? req_comp : *comp;
-      stbi__vertical_flip(result, *x, *y, channels * sizeof(stbi__uint16));
+   যদি (stbi__vertically_flip_on_load) {
+      পূর্ণসংখ্যা channels = req_comp ? req_comp : *comp;
+      stbi__vertical_flip(ফলাফল, *x, *y, channels * আকার(stbi__uint16));
    }
 
-   return (stbi__uint16 *) result;
+   ফেরত (stbi__uint16 *) ফলাফল;
 }
 
-#if !defined(STBI_NO_HDR) || !defined(STBI_NO_LINEAR)
-static void stbi__float_postprocess(float *result, int *x, int *y, int *comp, int req_comp)
+#যদি !defined(STBI_NO_HDR) || !defined(STBI_NO_LINEAR)
+স্থির শূন্য stbi__float_postprocess(দশমিক *ফলাফল, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   if (stbi__vertically_flip_on_load && result != NULL) {
-      int channels = req_comp ? req_comp : *comp;
-      stbi__vertical_flip(result, *x, *y, channels * sizeof(float));
+   যদি (stbi__vertically_flip_on_load && ফলাফল != ফাঁকা) {
+      পূর্ণসংখ্যা channels = req_comp ? req_comp : *comp;
+      stbi__vertical_flip(ফলাফল, *x, *y, channels * আকার(দশমিক));
    }
 }
 #endif
 
 #ifndef STBI_NO_STDIO
 
-static FILE *stbi__fopen(char const *filename, char const *mode)
+স্থির FILE *stbi__fopen(অক্ষর ধ্রুবক *filename, অক্ষর ধ্রুবক *mode)
 {
    FILE *f;
-#if defined(_MSC_VER) && _MSC_VER >= 1400
-   if (0 != fopen_s(&f, filename, mode))
+#যদি defined(_MSC_VER) && _MSC_VER >= 1400
+   যদি (0 != fopen_s(&f, filename, mode))
       f=0;
-#else
+#অন্যথা
    f = fopen(filename, mode);
 #endif
-   return f;
+   ফেরত f;
 }
 
 
-STBIDEF stbi_uc *stbi_load(char const *filename, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_uc *stbi_load(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    FILE *f = stbi__fopen(filename, "rb");
-   unsigned char *result;
-   if (!f) return stbi__errpuc("can't fopen", "Unable to open file");
-   result = stbi_load_from_file(f,x,y,comp,req_comp);
+   unsigned অক্ষর *ফলাফল;
+   যদি (!f) ফেরত stbi__errpuc("can't fopen", "Unable to open file");
+   ফলাফল = stbi_load_from_file(f,x,y,comp,req_comp);
    fclose(f);
-   return result;
+   ফেরত ফলাফল;
 }
 
-STBIDEF stbi_uc *stbi_load_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_uc *stbi_load_from_file(FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   unsigned char *result;
+   unsigned অক্ষর *ফলাফল;
    stbi__context s;
    stbi__start_file(&s,f);
-   result = stbi__load_and_postprocess_8bit(&s,x,y,comp,req_comp);
-   if (result) {
+   ফলাফল = stbi__load_and_postprocess_8bit(&s,x,y,comp,req_comp);
+   যদি (ফলাফল) {
       // need to 'unget' all the characters in the IO buffer
-      fseek(f, - (int) (s.img_buffer_end - s.img_buffer), SEEK_CUR);
+      fseek(f, - (পূর্ণসংখ্যা) (s.img_বাফার_end - s.img_বাফার), SEEK_CUR);
    }
-   return result;
+   ফেরত ফলাফল;
 }
 
-STBIDEF stbi__uint16 *stbi_load_from_file_16(FILE *f, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi__uint16 *stbi_load_from_file_16(FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   stbi__uint16 *result;
+   stbi__uint16 *ফলাফল;
    stbi__context s;
    stbi__start_file(&s,f);
-   result = stbi__load_and_postprocess_16bit(&s,x,y,comp,req_comp);
-   if (result) {
+   ফলাফল = stbi__load_and_postprocess_16bit(&s,x,y,comp,req_comp);
+   যদি (ফলাফল) {
       // need to 'unget' all the characters in the IO buffer
-      fseek(f, - (int) (s.img_buffer_end - s.img_buffer), SEEK_CUR);
+      fseek(f, - (পূর্ণসংখ্যা) (s.img_বাফার_end - s.img_বাফার), SEEK_CUR);
    }
-   return result;
+   ফেরত ফলাফল;
 }
 
-STBIDEF stbi_us *stbi_load_16(char const *filename, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_us *stbi_load_16(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    FILE *f = stbi__fopen(filename, "rb");
-   stbi__uint16 *result;
-   if (!f) return (stbi_us *) stbi__errpuc("can't fopen", "Unable to open file");
-   result = stbi_load_from_file_16(f,x,y,comp,req_comp);
+   stbi__uint16 *ফলাফল;
+   যদি (!f) ফেরত (stbi_us *) stbi__errpuc("can't fopen", "Unable to open file");
+   ফলাফল = stbi_load_from_file_16(f,x,y,comp,req_comp);
    fclose(f);
-   return result;
+   ফেরত ফলাফল;
 }
 
 
 #endif //!STBI_NO_STDIO
 
-STBIDEF stbi_us *stbi_load_16_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *channels_in_file, int desired_channels)
+STBIDEF stbi_us *stbi_load_16_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels)
 {
    stbi__context s;
-   stbi__start_mem(&s,buffer,len);
-   return stbi__load_and_postprocess_16bit(&s,x,y,channels_in_file,desired_channels);
+   stbi__start_mem(&s,বাফার,len);
+   ফেরত stbi__load_and_postprocess_16bit(&s,x,y,channels_in_file,desired_channels);
 }
 
-STBIDEF stbi_us *stbi_load_16_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *channels_in_file, int desired_channels)
+STBIDEF stbi_us *stbi_load_16_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *channels_in_file, পূর্ণসংখ্যা desired_channels)
 {
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *)clbk, user);
-   return stbi__load_and_postprocess_16bit(&s,x,y,channels_in_file,desired_channels);
+   ফেরত stbi__load_and_postprocess_16bit(&s,x,y,channels_in_file,desired_channels);
 }
 
-STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_uc *stbi_load_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    stbi__context s;
-   stbi__start_mem(&s,buffer,len);
-   return stbi__load_and_postprocess_8bit(&s,x,y,comp,req_comp);
+   stbi__start_mem(&s,বাফার,len);
+   ফেরত stbi__load_and_postprocess_8bit(&s,x,y,comp,req_comp);
 }
 
-STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp)
+STBIDEF stbi_uc *stbi_load_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *) clbk, user);
-   return stbi__load_and_postprocess_8bit(&s,x,y,comp,req_comp);
+   ফেরত stbi__load_and_postprocess_8bit(&s,x,y,comp,req_comp);
 }
 
 #ifndef STBI_NO_GIF
-STBIDEF stbi_uc *stbi_load_gif_from_memory(stbi_uc const *buffer, int len, int **delays, int *x, int *y, int *z, int *comp, int req_comp)
+STBIDEF stbi_uc *stbi_load_gif_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা **delays, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *z, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   unsigned char *result;
+   unsigned অক্ষর *ফলাফল;
    stbi__context s; 
-   stbi__start_mem(&s,buffer,len); 
+   stbi__start_mem(&s,বাফার,len); 
    
-   result = (unsigned char*) stbi__load_gif_main(&s, delays, x, y, z, comp, req_comp);
-   if (stbi__vertically_flip_on_load) {
-      stbi__vertical_flip_slices( result, *x, *y, *z, *comp ); 
+   ফলাফল = (unsigned অক্ষর*) stbi__load_gif_main(&s, delays, x, y, z, comp, req_comp);
+   যদি (stbi__vertically_flip_on_load) {
+      stbi__vertical_flip_slices( ফলাফল, *x, *y, *z, *comp ); 
    }
 
-   return result; 
+   ফেরত ফলাফল; 
 }
 #endif
 
 #ifndef STBI_NO_LINEAR
-static float *stbi__loadf_main(stbi__context *s, int *x, int *y, int *comp, int req_comp)
+স্থির দশমিক *stbi__loadf_main(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   unsigned char *data;
+   unsigned অক্ষর *তথ্য;
    #ifndef STBI_NO_HDR
-   if (stbi__hdr_test(s)) {
-      stbi__result_info ri;
-      float *hdr_data = stbi__hdr_load(s,x,y,comp,req_comp, &ri);
-      if (hdr_data)
-         stbi__float_postprocess(hdr_data,x,y,comp,req_comp);
-      return hdr_data;
+   যদি (stbi__hdr_test(s)) {
+      stbi_ফলাফল_info ri;
+      দশমিক *hdr_তথ্য = stbi__hdr_load(s,x,y,comp,req_comp, &ri);
+      যদি (hdr_তথ্য)
+         stbi__float_postprocess(hdr_তথ্য,x,y,comp,req_comp);
+      ফেরত hdr_তথ্য;
    }
    #endif
-   data = stbi__load_and_postprocess_8bit(s, x, y, comp, req_comp);
-   if (data)
-      return stbi__ldr_to_hdr(data, *x, *y, req_comp ? req_comp : *comp);
-   return stbi__errpf("unknown image type", "Image not of any known type, or corrupt");
+   তথ্য = stbi__load_and_postprocess_8bit(s, x, y, comp, req_comp);
+   যদি (তথ্য)
+      ফেরত stbi__ldr_to_hdr(তথ্য, *x, *y, req_comp ? req_comp : *comp);
+   ফেরত stbi__errpf("unknown image type", "Image not of any known type, or corrupt");
 }
 
-STBIDEF float *stbi_loadf_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)
+STBIDEF দশমিক *stbi_loadf_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    stbi__context s;
-   stbi__start_mem(&s,buffer,len);
-   return stbi__loadf_main(&s,x,y,comp,req_comp);
+   stbi__start_mem(&s,বাফার,len);
+   ফেরত stbi__loadf_main(&s,x,y,comp,req_comp);
 }
 
-STBIDEF float *stbi_loadf_from_callbacks(stbi_io_callbacks const *clbk, void *user, int *x, int *y, int *comp, int req_comp)
+STBIDEF দশমিক *stbi_loadf_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *) clbk, user);
-   return stbi__loadf_main(&s,x,y,comp,req_comp);
+   ফেরত stbi__loadf_main(&s,x,y,comp,req_comp);
 }
 
 #ifndef STBI_NO_STDIO
-STBIDEF float *stbi_loadf(char const *filename, int *x, int *y, int *comp, int req_comp)
+STBIDEF দশমিক *stbi_loadf(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   float *result;
+   দশমিক *ফলাফল;
    FILE *f = stbi__fopen(filename, "rb");
-   if (!f) return stbi__errpf("can't fopen", "Unable to open file");
-   result = stbi_loadf_from_file(f,x,y,comp,req_comp);
+   যদি (!f) ফেরত stbi__errpf("can't fopen", "Unable to open file");
+   ফলাফল = stbi_loadf_from_file(f,x,y,comp,req_comp);
    fclose(f);
-   return result;
+   ফেরত ফলাফল;
 }
 
-STBIDEF float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)
+STBIDEF দশমিক *stbi_loadf_from_file(FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
    stbi__context s;
    stbi__start_file(&s,f);
-   return stbi__loadf_main(&s,x,y,comp,req_comp);
+   ফেরত stbi__loadf_main(&s,x,y,comp,req_comp);
 }
 #endif // !STBI_NO_STDIO
 
@@ -1307,72 +1307,72 @@ STBIDEF float *stbi_loadf_from_file(FILE *f, int *x, int *y, int *comp, int req_
 // defined, for API simplicity; if STBI_NO_LINEAR is defined, it always
 // reports false!
 
-STBIDEF int stbi_is_hdr_from_memory(stbi_uc const *buffer, int len)
+STBIDEF পূর্ণসংখ্যা stbi_is_hdr_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len)
 {
    #ifndef STBI_NO_HDR
    stbi__context s;
-   stbi__start_mem(&s,buffer,len);
-   return stbi__hdr_test(&s);
-   #else
-   STBI_NOTUSED(buffer);
+   stbi__start_mem(&s,বাফার,len);
+   ফেরত stbi__hdr_test(&s);
+   #অন্যথা
+   STBI_NOTUSED(বাফার);
    STBI_NOTUSED(len);
-   return 0;
+   ফেরত 0;
    #endif
 }
 
 #ifndef STBI_NO_STDIO
-STBIDEF int      stbi_is_hdr          (char const *filename)
+STBIDEF পূর্ণসংখ্যা      stbi_is_hdr          (অক্ষর ধ্রুবক *filename)
 {
    FILE *f = stbi__fopen(filename, "rb");
-   int result=0;
-   if (f) {
-      result = stbi_is_hdr_from_file(f);
+   পূর্ণসংখ্যা ফলাফল=0;
+   যদি (f) {
+      ফলাফল = stbi_is_hdr_from_file(f);
       fclose(f);
    }
-   return result;
+   ফেরত ফলাফল;
 }
 
-STBIDEF int stbi_is_hdr_from_file(FILE *f)
+STBIDEF পূর্ণসংখ্যা stbi_is_hdr_from_file(FILE *f)
 {
    #ifndef STBI_NO_HDR
    long pos = ftell(f);
-   int res;
+   পূর্ণসংখ্যা res;
    stbi__context s;
    stbi__start_file(&s,f);
    res = stbi__hdr_test(&s);
    fseek(f, pos, SEEK_SET);
-   return res;
-   #else
+   ফেরত res;
+   #অন্যথা
    STBI_NOTUSED(f);
-   return 0;
+   ফেরত 0;
    #endif
 }
 #endif // !STBI_NO_STDIO
 
-STBIDEF int      stbi_is_hdr_from_callbacks(stbi_io_callbacks const *clbk, void *user)
+STBIDEF পূর্ণসংখ্যা      stbi_is_hdr_from_callbacks(stbi_io_callbacks ধ্রুবক *clbk, শূন্য *user)
 {
    #ifndef STBI_NO_HDR
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *) clbk, user);
-   return stbi__hdr_test(&s);
-   #else
+   ফেরত stbi__hdr_test(&s);
+   #অন্যথা
    STBI_NOTUSED(clbk);
    STBI_NOTUSED(user);
-   return 0;
+   ফেরত 0;
    #endif
 }
 
 #ifndef STBI_NO_LINEAR
-static float stbi__l2h_gamma=2.2f, stbi__l2h_scale=1.0f;
+স্থির দশমিক stbi__l2h_gamma=2.2f, stbi__l2h_scale=1.0f;
 
-STBIDEF void   stbi_ldr_to_hdr_gamma(float gamma) { stbi__l2h_gamma = gamma; }
-STBIDEF void   stbi_ldr_to_hdr_scale(float scale) { stbi__l2h_scale = scale; }
+STBIDEF শূন্য   stbi_ldr_to_hdr_gamma(দশমিক gamma) { stbi__l2h_gamma = gamma; }
+STBIDEF শূন্য   stbi_ldr_to_hdr_scale(দশমিক scale) { stbi__l2h_scale = scale; }
 #endif
 
-static float stbi__h2l_gamma_i=1.0f/2.2f, stbi__h2l_scale_i=1.0f;
+স্থির দশমিক stbi__h2l_gamma_i=1.0f/2.2f, stbi__h2l_scale_i=1.0f;
 
-STBIDEF void   stbi_hdr_to_ldr_gamma(float gamma) { stbi__h2l_gamma_i = 1/gamma; }
-STBIDEF void   stbi_hdr_to_ldr_scale(float scale) { stbi__h2l_scale_i = 1/scale; }
+STBIDEF শূন্য   stbi_hdr_to_ldr_gamma(দশমিক gamma) { stbi__h2l_gamma_i = 1/gamma; }
+STBIDEF শূন্য   stbi_hdr_to_ldr_scale(দশমিক scale) { stbi__h2l_scale_i = 1/scale; }
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1380,120 +1380,120 @@ STBIDEF void   stbi_hdr_to_ldr_scale(float scale) { stbi__h2l_scale_i = 1/scale;
 // Common code used by all image loaders
 //
 
-enum
+গণনা
 {
    STBI__SCAN_load=0,
    STBI__SCAN_type,
    STBI__SCAN_header
 };
 
-static void stbi__refill_buffer(stbi__context *s)
+স্থির শূন্য stbi_refill_বাফার(stbi__context *s)
 {
-   int n = (s->io.read)(s->io_user_data,(char*)s->buffer_start,s->buflen);
-   if (n == 0) {
+   পূর্ণসংখ্যা n = (s->io.পঠ)(s->io_user_তথ্য,(অক্ষর*)s->বাফার_start,s->buflen);
+   যদি (n == 0) {
       // at end of file, treat same as if from memory, but need to handle case
       // where s->img_buffer isn't pointing to safe memory, e.g. 0-byte file
       s->read_from_callbacks = 0;
-      s->img_buffer = s->buffer_start;
-      s->img_buffer_end = s->buffer_start+1;
-      *s->img_buffer = 0;
-   } else {
-      s->img_buffer = s->buffer_start;
-      s->img_buffer_end = s->buffer_start + n;
+      s->img_বাফার = s->বাফার_start;
+      s->img_বাফার_end = s->বাফার_start+1;
+      *s->img_বাফার = 0;
+   } অন্যথা {
+      s->img_বাফার = s->বাফার_start;
+      s->img_বাফার_end = s->বাফার_start + n;
    }
 }
 
-stbi_inline static stbi_uc stbi__get8(stbi__context *s)
+stbi_inline স্থির stbi_uc stbi__get8(stbi__context *s)
 {
-   if (s->img_buffer < s->img_buffer_end)
-      return *s->img_buffer++;
-   if (s->read_from_callbacks) {
-      stbi__refill_buffer(s);
-      return *s->img_buffer++;
+   যদি (s->img_বাফার < s->img_বাফার_end)
+      ফেরত *s->img_বাফার++;
+   যদি (s->read_from_callbacks) {
+      stbi_refill_বাফার(s);
+      ফেরত *s->img_বাফার++;
    }
-   return 0;
+   ফেরত 0;
 }
 
-stbi_inline static int stbi__at_eof(stbi__context *s)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__at_eof(stbi__context *s)
 {
-   if (s->io.read) {
-      if (!(s->io.eof)(s->io_user_data)) return 0;
+   যদি (s->io.পঠ) {
+      যদি (!(s->io.eof)(s->io_user_তথ্য)) ফেরত 0;
       // if feof() is true, check if buffer = end
       // special case: we've only got the special 0 character at the end
-      if (s->read_from_callbacks == 0) return 1;
+      যদি (s->read_from_callbacks == 0) ফেরত 1;
    }
 
-   return s->img_buffer >= s->img_buffer_end;
+   ফেরত s->img_বাফার >= s->img_বাফার_end;
 }
 
-static void stbi__skip(stbi__context *s, int n)
+স্থির শূন্য stbi__skip(stbi__context *s, পূর্ণসংখ্যা n)
 {
-   if (n < 0) {
-      s->img_buffer = s->img_buffer_end;
-      return;
+   যদি (n < 0) {
+      s->img_বাফার = s->img_বাফার_end;
+      ফেরত;
    }
-   if (s->io.read) {
-      int blen = (int) (s->img_buffer_end - s->img_buffer);
-      if (blen < n) {
-         s->img_buffer = s->img_buffer_end;
-         (s->io.skip)(s->io_user_data, n - blen);
-         return;
+   যদি (s->io.পঠ) {
+      পূর্ণসংখ্যা blen = (পূর্ণসংখ্যা) (s->img_বাফার_end - s->img_বাফার);
+      যদি (blen < n) {
+         s->img_বাফার = s->img_বাফার_end;
+         (s->io.skip)(s->io_user_তথ্য, n - blen);
+         ফেরত;
       }
    }
-   s->img_buffer += n;
+   s->img_বাফার += n;
 }
 
-static int stbi__getn(stbi__context *s, stbi_uc *buffer, int n)
+স্থির পূর্ণসংখ্যা stbi__getn(stbi__context *s, stbi_uc *বাফার, পূর্ণসংখ্যা n)
 {
-   if (s->io.read) {
-      int blen = (int) (s->img_buffer_end - s->img_buffer);
-      if (blen < n) {
-         int res, count;
+   যদি (s->io.পঠ) {
+      পূর্ণসংখ্যা blen = (পূর্ণসংখ্যা) (s->img_বাফার_end - s->img_বাফার);
+      যদি (blen < n) {
+         পূর্ণসংখ্যা res, গুনতি;
 
-         memcpy(buffer, s->img_buffer, blen);
+         memcpy(বাফার, s->img_বাফার, blen);
 
-         count = (s->io.read)(s->io_user_data, (char*) buffer + blen, n - blen);
-         res = (count == (n-blen));
-         s->img_buffer = s->img_buffer_end;
-         return res;
+         গুনতি = (s->io.পঠ)(s->io_user_তথ্য, (অক্ষর*) বাফার + blen, n - blen);
+         res = (গুনতি == (n-blen));
+         s->img_বাফার = s->img_বাফার_end;
+         ফেরত res;
       }
    }
 
-   if (s->img_buffer+n <= s->img_buffer_end) {
-      memcpy(buffer, s->img_buffer, n);
-      s->img_buffer += n;
-      return 1;
-   } else
-      return 0;
+   যদি (s->img_বাফার+n <= s->img_বাফার_end) {
+      memcpy(বাফার, s->img_বাফার, n);
+      s->img_বাফার += n;
+      ফেরত 1;
+   } অন্যথা
+      ফেরত 0;
 }
 
-static int stbi__get16be(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__get16be(stbi__context *s)
 {
-   int z = stbi__get8(s);
-   return (z << 8) + stbi__get8(s);
+   পূর্ণসংখ্যা z = stbi__get8(s);
+   ফেরত (z << 8) + stbi__get8(s);
 }
 
-static stbi__uint32 stbi__get32be(stbi__context *s)
+স্থির stbi__uint32 stbi__get32be(stbi__context *s)
 {
    stbi__uint32 z = stbi__get16be(s);
-   return (z << 16) + stbi__get16be(s);
+   ফেরত (z << 16) + stbi__get16be(s);
 }
 
-#if defined(STBI_NO_BMP) && defined(STBI_NO_TGA) && defined(STBI_NO_GIF)
+#যদি defined(STBI_NO_BMP) && defined(STBI_NO_TGA) && defined(STBI_NO_GIF)
 // nothing
-#else
-static int stbi__get16le(stbi__context *s)
+#অন্যথা
+স্থির পূর্ণসংখ্যা stbi__get16le(stbi__context *s)
 {
-   int z = stbi__get8(s);
-   return z + (stbi__get8(s) << 8);
+   পূর্ণসংখ্যা z = stbi__get8(s);
+   ফেরত z + (stbi__get8(s) << 8);
 }
 #endif
 
 #ifndef STBI_NO_BMP
-static stbi__uint32 stbi__get32le(stbi__context *s)
+স্থির stbi__uint32 stbi__get32le(stbi__context *s)
 {
    stbi__uint32 z = stbi__get16le(s);
-   return z + (stbi__get16le(s) << 16);
+   ফেরত z + (stbi__get16le(s) << 16);
 }
 #endif
 
@@ -1511,152 +1511,152 @@ static stbi__uint32 stbi__get32le(stbi__context *s)
 //  assume data buffer is malloced, so malloc a new one and free that one
 //  only failure mode is malloc failing
 
-static stbi_uc stbi__compute_y(int r, int g, int b)
+স্থির stbi_uc stbi__compute_y(পূর্ণসংখ্যা r, পূর্ণসংখ্যা g, পূর্ণসংখ্যা b)
 {
-   return (stbi_uc) (((r*77) + (g*150) +  (29*b)) >> 8);
+   ফেরত (stbi_uc) (((r*77) + (g*150) +  (29*b)) >> 8);
 }
 
-static unsigned char *stbi__convert_format(unsigned char *data, int img_n, int req_comp, unsigned int x, unsigned int y)
+স্থির unsigned অক্ষর *stbi__convert_format(unsigned অক্ষর *তথ্য, পূর্ণসংখ্যা img_n, পূর্ণসংখ্যা req_comp, unsigned পূর্ণসংখ্যা x, unsigned পূর্ণসংখ্যা y)
 {
-   int i,j;
-   unsigned char *good;
+   পূর্ণসংখ্যা i,j;
+   unsigned অক্ষর *good;
 
-   if (req_comp == img_n) return data;
+   যদি (req_comp == img_n) ফেরত তথ্য;
    STBI_ASSERT(req_comp >= 1 && req_comp <= 4);
 
-   good = (unsigned char *) stbi__malloc_mad3(req_comp, x, y, 0);
-   if (good == NULL) {
-      STBI_FREE(data);
-      return stbi__errpuc("outofmem", "Out of memory");
+   good = (unsigned অক্ষর *) stbi__malloc_mad3(req_comp, x, y, 0);
+   যদি (good == ফাঁকা) {
+      STBI_FREE(তথ্য);
+      ফেরত stbi__errpuc("outofmem", "Out of memory");
    }
 
-   for (j=0; j < (int) y; ++j) {
-      unsigned char *src  = data + j * x * img_n   ;
-      unsigned char *dest = good + j * x * req_comp;
+   জন্য (j=0; j < (পূর্ণসংখ্যা) y; ++j) {
+      unsigned অক্ষর *src  = তথ্য + j * x * img_n   ;
+      unsigned অক্ষর *dest = good + j * x * req_comp;
 
       #define STBI__COMBO(a,b)  ((a)*8+(b))
-      #define STBI__CASE(a,b)   case STBI__COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
+      #define STBI__CASE(a,b)   ক্ষেত্র STBI__COMBO(a,b): জন্য(i=x-1; i >= 0; --i, src += a, dest += b)
       // convert source image with img_n components to one with req_comp components;
       // avoid switch per pixel, so use switch per scanline and massive macros
-      switch (STBI__COMBO(img_n, req_comp)) {
-         STBI__CASE(1,2) { dest[0]=src[0], dest[1]=255;                                     } break;
-         STBI__CASE(1,3) { dest[0]=dest[1]=dest[2]=src[0];                                  } break;
-         STBI__CASE(1,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=255;                     } break;
-         STBI__CASE(2,1) { dest[0]=src[0];                                                  } break;
-         STBI__CASE(2,3) { dest[0]=dest[1]=dest[2]=src[0];                                  } break;
-         STBI__CASE(2,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=src[1];                  } break;
-         STBI__CASE(3,4) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2],dest[3]=255;        } break;
-         STBI__CASE(3,1) { dest[0]=stbi__compute_y(src[0],src[1],src[2]);                   } break;
-         STBI__CASE(3,2) { dest[0]=stbi__compute_y(src[0],src[1],src[2]), dest[1] = 255;    } break;
-         STBI__CASE(4,1) { dest[0]=stbi__compute_y(src[0],src[1],src[2]);                   } break;
-         STBI__CASE(4,2) { dest[0]=stbi__compute_y(src[0],src[1],src[2]), dest[1] = src[3]; } break;
-         STBI__CASE(4,3) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2];                    } break;
-         default: STBI_ASSERT(0);
+      নির্বাচন (STBI__COMBO(img_n, req_comp)) {
+         STBI__CASE(1,2) { dest[0]=src[0], dest[1]=255;                                     } বিরতি;
+         STBI__CASE(1,3) { dest[0]=dest[1]=dest[2]=src[0];                                  } বিরতি;
+         STBI__CASE(1,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=255;                     } বিরতি;
+         STBI__CASE(2,1) { dest[0]=src[0];                                                  } বিরতি;
+         STBI__CASE(2,3) { dest[0]=dest[1]=dest[2]=src[0];                                  } বিরতি;
+         STBI__CASE(2,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=src[1];                  } বিরতি;
+         STBI__CASE(3,4) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2],dest[3]=255;        } বিরতি;
+         STBI__CASE(3,1) { dest[0]=stbi__compute_y(src[0],src[1],src[2]);                   } বিরতি;
+         STBI__CASE(3,2) { dest[0]=stbi__compute_y(src[0],src[1],src[2]), dest[1] = 255;    } বিরতি;
+         STBI__CASE(4,1) { dest[0]=stbi__compute_y(src[0],src[1],src[2]);                   } বিরতি;
+         STBI__CASE(4,2) { dest[0]=stbi__compute_y(src[0],src[1],src[2]), dest[1] = src[3]; } বিরতি;
+         STBI__CASE(4,3) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2];                    } বিরতি;
+         পূর্বনির্ধারিত: STBI_ASSERT(0);
       }
       #undef STBI__CASE
    }
 
-   STBI_FREE(data);
-   return good;
+   STBI_FREE(তথ্য);
+   ফেরত good;
 }
 
-static stbi__uint16 stbi__compute_y_16(int r, int g, int b)
+স্থির stbi__uint16 stbi__compute_y_16(পূর্ণসংখ্যা r, পূর্ণসংখ্যা g, পূর্ণসংখ্যা b)
 {
-   return (stbi__uint16) (((r*77) + (g*150) +  (29*b)) >> 8);
+   ফেরত (stbi__uint16) (((r*77) + (g*150) +  (29*b)) >> 8);
 }
 
-static stbi__uint16 *stbi__convert_format16(stbi__uint16 *data, int img_n, int req_comp, unsigned int x, unsigned int y)
+স্থির stbi__uint16 *stbi__convert_format16(stbi__uint16 *তথ্য, পূর্ণসংখ্যা img_n, পূর্ণসংখ্যা req_comp, unsigned পূর্ণসংখ্যা x, unsigned পূর্ণসংখ্যা y)
 {
-   int i,j;
+   পূর্ণসংখ্যা i,j;
    stbi__uint16 *good;
 
-   if (req_comp == img_n) return data;
+   যদি (req_comp == img_n) ফেরত তথ্য;
    STBI_ASSERT(req_comp >= 1 && req_comp <= 4);
 
    good = (stbi__uint16 *) stbi__malloc(req_comp * x * y * 2);
-   if (good == NULL) {
-      STBI_FREE(data);
-      return (stbi__uint16 *) stbi__errpuc("outofmem", "Out of memory");
+   যদি (good == ফাঁকা) {
+      STBI_FREE(তথ্য);
+      ফেরত (stbi__uint16 *) stbi__errpuc("outofmem", "Out of memory");
    }
 
-   for (j=0; j < (int) y; ++j) {
-      stbi__uint16 *src  = data + j * x * img_n   ;
+   জন্য (j=0; j < (পূর্ণসংখ্যা) y; ++j) {
+      stbi__uint16 *src  = তথ্য + j * x * img_n   ;
       stbi__uint16 *dest = good + j * x * req_comp;
 
       #define STBI__COMBO(a,b)  ((a)*8+(b))
-      #define STBI__CASE(a,b)   case STBI__COMBO(a,b): for(i=x-1; i >= 0; --i, src += a, dest += b)
+      #define STBI__CASE(a,b)   ক্ষেত্র STBI__COMBO(a,b): জন্য(i=x-1; i >= 0; --i, src += a, dest += b)
       // convert source image with img_n components to one with req_comp components;
       // avoid switch per pixel, so use switch per scanline and massive macros
-      switch (STBI__COMBO(img_n, req_comp)) {
-         STBI__CASE(1,2) { dest[0]=src[0], dest[1]=0xffff;                                     } break;
-         STBI__CASE(1,3) { dest[0]=dest[1]=dest[2]=src[0];                                     } break;
-         STBI__CASE(1,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=0xffff;                     } break;
-         STBI__CASE(2,1) { dest[0]=src[0];                                                     } break;
-         STBI__CASE(2,3) { dest[0]=dest[1]=dest[2]=src[0];                                     } break;
-         STBI__CASE(2,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=src[1];                     } break;
-         STBI__CASE(3,4) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2],dest[3]=0xffff;        } break;
-         STBI__CASE(3,1) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]);                   } break;
-         STBI__CASE(3,2) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]), dest[1] = 0xffff; } break;
-         STBI__CASE(4,1) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]);                   } break;
-         STBI__CASE(4,2) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]), dest[1] = src[3]; } break;
-         STBI__CASE(4,3) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2];                       } break;
-         default: STBI_ASSERT(0);
+      নির্বাচন (STBI__COMBO(img_n, req_comp)) {
+         STBI__CASE(1,2) { dest[0]=src[0], dest[1]=0xffff;                                     } বিরতি;
+         STBI__CASE(1,3) { dest[0]=dest[1]=dest[2]=src[0];                                     } বিরতি;
+         STBI__CASE(1,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=0xffff;                     } বিরতি;
+         STBI__CASE(2,1) { dest[0]=src[0];                                                     } বিরতি;
+         STBI__CASE(2,3) { dest[0]=dest[1]=dest[2]=src[0];                                     } বিরতি;
+         STBI__CASE(2,4) { dest[0]=dest[1]=dest[2]=src[0], dest[3]=src[1];                     } বিরতি;
+         STBI__CASE(3,4) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2],dest[3]=0xffff;        } বিরতি;
+         STBI__CASE(3,1) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]);                   } বিরতি;
+         STBI__CASE(3,2) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]), dest[1] = 0xffff; } বিরতি;
+         STBI__CASE(4,1) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]);                   } বিরতি;
+         STBI__CASE(4,2) { dest[0]=stbi__compute_y_16(src[0],src[1],src[2]), dest[1] = src[3]; } বিরতি;
+         STBI__CASE(4,3) { dest[0]=src[0],dest[1]=src[1],dest[2]=src[2];                       } বিরতি;
+         পূর্বনির্ধারিত: STBI_ASSERT(0);
       }
       #undef STBI__CASE
    }
 
-   STBI_FREE(data);
-   return good;
+   STBI_FREE(তথ্য);
+   ফেরত good;
 }
 
 #ifndef STBI_NO_LINEAR
-static float   *stbi__ldr_to_hdr(stbi_uc *data, int x, int y, int comp)
+স্থির দশমিক   *stbi__ldr_to_hdr(stbi_uc *তথ্য, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp)
 {
-   int i,k,n;
-   float *output;
-   if (!data) return NULL;
-   output = (float *) stbi__malloc_mad4(x, y, comp, sizeof(float), 0);
-   if (output == NULL) { STBI_FREE(data); return stbi__errpf("outofmem", "Out of memory"); }
+   পূর্ণসংখ্যা i,k,n;
+   দশমিক *output;
+   যদি (!তথ্য) ফেরত ফাঁকা;
+   output = (দশমিক *) stbi__malloc_mad4(x, y, comp, আকার(দশমিক), 0);
+   যদি (output == ফাঁকা) { STBI_FREE(তথ্য); ফেরত stbi__errpf("outofmem", "Out of memory"); }
    // compute number of non-alpha components
-   if (comp & 1) n = comp; else n = comp-1;
-   for (i=0; i < x*y; ++i) {
-      for (k=0; k < n; ++k) {
-         output[i*comp + k] = (float) (pow(data[i*comp+k]/255.0f, stbi__l2h_gamma) * stbi__l2h_scale);
+   যদি (comp & 1) n = comp; অন্যথা n = comp-1;
+   জন্য (i=0; i < x*y; ++i) {
+      জন্য (k=0; k < n; ++k) {
+         output[i*comp + k] = (দশমিক) (pow(তথ্য[i*comp+k]/255.0f, stbi__l2h_gamma) * stbi__l2h_scale);
       }
-      if (k < comp) output[i*comp + k] = data[i*comp+k]/255.0f;
+      যদি (k < comp) output[i*comp + k] = তথ্য[i*comp+k]/255.0f;
    }
-   STBI_FREE(data);
-   return output;
+   STBI_FREE(তথ্য);
+   ফেরত output;
 }
 #endif
 
 #ifndef STBI_NO_HDR
-#define stbi__float2int(x)   ((int) (x))
-static stbi_uc *stbi__hdr_to_ldr(float   *data, int x, int y, int comp)
+#define stbi__float2int(x)   ((পূর্ণসংখ্যা) (x))
+স্থির stbi_uc *stbi__hdr_to_ldr(দশমিক   *তথ্য, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp)
 {
-   int i,k,n;
+   পূর্ণসংখ্যা i,k,n;
    stbi_uc *output;
-   if (!data) return NULL;
+   যদি (!তথ্য) ফেরত ফাঁকা;
    output = (stbi_uc *) stbi__malloc_mad3(x, y, comp, 0);
-   if (output == NULL) { STBI_FREE(data); return stbi__errpuc("outofmem", "Out of memory"); }
+   যদি (output == ফাঁকা) { STBI_FREE(তথ্য); ফেরত stbi__errpuc("outofmem", "Out of memory"); }
    // compute number of non-alpha components
-   if (comp & 1) n = comp; else n = comp-1;
-   for (i=0; i < x*y; ++i) {
-      for (k=0; k < n; ++k) {
-         float z = (float) pow(data[i*comp+k]*stbi__h2l_scale_i, stbi__h2l_gamma_i) * 255 + 0.5f;
-         if (z < 0) z = 0;
-         if (z > 255) z = 255;
+   যদি (comp & 1) n = comp; অন্যথা n = comp-1;
+   জন্য (i=0; i < x*y; ++i) {
+      জন্য (k=0; k < n; ++k) {
+         দশমিক z = (দশমিক) pow(তথ্য[i*comp+k]*stbi__h2l_scale_i, stbi__h2l_gamma_i) * 255 + 0.5f;
+         যদি (z < 0) z = 0;
+         যদি (z > 255) z = 255;
          output[i*comp + k] = (stbi_uc) stbi__float2int(z);
       }
-      if (k < comp) {
-         float z = data[i*comp+k] * 255 + 0.5f;
-         if (z < 0) z = 0;
-         if (z > 255) z = 255;
+      যদি (k < comp) {
+         দশমিক z = তথ্য[i*comp+k] * 255 + 0.5f;
+         যদি (z < 0) z = 0;
+         যদি (z > 255) z = 255;
          output[i*comp + k] = (stbi_uc) stbi__float2int(z);
       }
    }
-   STBI_FREE(data);
-   return output;
+   STBI_FREE(তথ্য);
+   ফেরত output;
 }
 #endif
 
@@ -1686,18 +1686,18 @@ static stbi_uc *stbi__hdr_to_ldr(float   *data, int x, int y, int comp)
 // huffman decoding acceleration
 #define FAST_BITS   9  // larger handles more cases; smaller stomps less cache
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi_uc  fast[1 << FAST_BITS];
    // weirdly, repacking this into AoS is a 10% speed loss, instead of a win
    stbi__uint16 code[256];
-   stbi_uc  values[256];
-   stbi_uc  size[257];
-   unsigned int maxcode[18];
-   int    delta[17];   // old 'firstsymbol' - old 'firstcode'
+   stbi_uc  মানসমূহ[256];
+   stbi_uc  আকার_2[257];
+   unsigned পূর্ণসংখ্যা maxcode[18];
+   পূর্ণসংখ্যা    delta[17];   // old 'firstsymbol' - old 'firstcode'
 } stbi__huffman;
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi__context *s;
    stbi__huffman huff_dc[4];
@@ -1706,71 +1706,71 @@ typedef struct
    stbi__int16 fast_ac[4][1 << FAST_BITS];
 
 // sizes for components, interleaved MCUs
-   int img_h_max, img_v_max;
-   int img_mcu_x, img_mcu_y;
-   int img_mcu_w, img_mcu_h;
+   পূর্ণসংখ্যা img_h_max, img_v_max;
+   পূর্ণসংখ্যা img_mcu_x, img_mcu_y;
+   পূর্ণসংখ্যা img_mcu_w, img_mcu_h;
 
 // definition of jpeg image component
-   struct
+   কাঠামো
    {
-      int id;
-      int h,v;
-      int tq;
-      int hd,ha;
-      int dc_pred;
+      পূর্ণসংখ্যা id;
+      পূর্ণসংখ্যা h,v;
+      পূর্ণসংখ্যা tq;
+      পূর্ণসংখ্যা hd,ha;
+      পূর্ণসংখ্যা dc_pred;
 
-      int x,y,w2,h2;
-      stbi_uc *data;
-      void *raw_data, *raw_coeff;
+      পূর্ণসংখ্যা x,y,w2,h2;
+      stbi_uc *তথ্য;
+      শূন্য *raw_তথ্য, *raw_coeff;
       stbi_uc *linebuf;
       short   *coeff;   // progressive only
-      int      coeff_w, coeff_h; // number of 8x8 coefficient blocks
+      পূর্ণসংখ্যা      coeff_w, coeff_h; // number of 8x8 coefficient blocks
    } img_comp[4];
 
-   stbi__uint32   code_buffer; // jpeg entropy-coded buffer
-   int            code_bits;   // number of valid bits
-   unsigned char  marker;      // marker seen while filling entropy buffer
-   int            nomore;      // flag if we saw a marker so must stop
+   stbi__uint32   code_বাফার; // jpeg entropy-coded buffer
+   পূর্ণসংখ্যা            code_bits;   // number of valid bits
+   unsigned অক্ষর  marker;      // marker seen while filling entropy buffer
+   পূর্ণসংখ্যা            nomore;      // flag if we saw a marker so must stop
 
-   int            progressive;
-   int            spec_start;
-   int            spec_end;
-   int            succ_high;
-   int            succ_low;
-   int            eob_run;
-   int            jfif;
-   int            app14_color_transform; // Adobe APP14 tag
-   int            rgb;
+   পূর্ণসংখ্যা            progressive;
+   পূর্ণসংখ্যা            spec_start;
+   পূর্ণসংখ্যা            spec_end;
+   পূর্ণসংখ্যা            succ_উপরের;
+   পূর্ণসংখ্যা            succ_নিচের;
+   পূর্ণসংখ্যা            eob_run;
+   পূর্ণসংখ্যা            jfif;
+   পূর্ণসংখ্যা            app14_color_transform; // Adobe APP14 tag
+   পূর্ণসংখ্যা            rgb;
 
-   int scan_n, order[4];
-   int restart_interval, todo;
+   পূর্ণসংখ্যা scan_n, order[4];
+   পূর্ণসংখ্যা restart_interval, todo;
 
 // kernels
-   void (*idct_block_kernel)(stbi_uc *out, int out_stride, short data[64]);
-   void (*YCbCr_to_RGB_kernel)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step);
-   stbi_uc *(*resample_row_hv_2_kernel)(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs);
+   শূন্য (*idct_block_kernel)(stbi_uc *out, পূর্ণসংখ্যা out_stride, short তথ্য[64]);
+   শূন্য (*YCbCr_to_RGB_kernel)(stbi_uc *out, ধ্রুবক stbi_uc *y, ধ্রুবক stbi_uc *pcb, ধ্রুবক stbi_uc *pcr, পূর্ণসংখ্যা গুনতি, পূর্ণসংখ্যা step);
+   stbi_uc *(*resample_row_hv_2_kernel)(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs);
 } stbi__jpeg;
 
-static int stbi__build_huffman(stbi__huffman *h, int *count)
+স্থির পূর্ণসংখ্যা stbi__build_huffman(stbi__huffman *h, পূর্ণসংখ্যা *গুনতি)
 {
-   int i,j,k=0;
-   unsigned int code;
+   পূর্ণসংখ্যা i,j,k=0;
+   unsigned পূর্ণসংখ্যা code;
    // build size list for each symbol (from JPEG spec)
-   for (i=0; i < 16; ++i)
-      for (j=0; j < count[i]; ++j)
-         h->size[k++] = (stbi_uc) (i+1);
-   h->size[k] = 0;
+   জন্য (i=0; i < 16; ++i)
+      জন্য (j=0; j < গুনতি[i]; ++j)
+         h->আকার_2[k++] = (stbi_uc) (i+1);
+   h->আকার_2[k] = 0;
 
    // compute actual symbols (from jpeg spec)
    code = 0;
    k = 0;
-   for(j=1; j <= 16; ++j) {
+   জন্য(j=1; j <= 16; ++j) {
       // compute delta to add to code to compute symbol id
       h->delta[j] = k - code;
-      if (h->size[k] == j) {
-         while (h->size[k] == j)
+      যদি (h->আকার_2[k] == j) {
+         যখন (h->আকার_2[k] == j)
             h->code[k++] = (stbi__uint16) (code++);
-         if (code-1 >= (1u << j)) return stbi__err("bad code lengths","Corrupt JPEG");
+         যদি (code-1 >= (1u << j)) ফেরত stbi__err("bad code lengths","Corrupt JPEG");
       }
       // compute largest code + 1 for this size, preshifted as needed later
       h->maxcode[j] = code << (16-j);
@@ -1780,86 +1780,86 @@ static int stbi__build_huffman(stbi__huffman *h, int *count)
 
    // build non-spec acceleration table; 255 is flag for not-accelerated
    memset(h->fast, 255, 1 << FAST_BITS);
-   for (i=0; i < k; ++i) {
-      int s = h->size[i];
-      if (s <= FAST_BITS) {
-         int c = h->code[i] << (FAST_BITS-s);
-         int m = 1 << (FAST_BITS-s);
-         for (j=0; j < m; ++j) {
+   জন্য (i=0; i < k; ++i) {
+      পূর্ণসংখ্যা s = h->আকার_2[i];
+      যদি (s <= FAST_BITS) {
+         পূর্ণসংখ্যা c = h->code[i] << (FAST_BITS-s);
+         পূর্ণসংখ্যা m = 1 << (FAST_BITS-s);
+         জন্য (j=0; j < m; ++j) {
             h->fast[c+j] = (stbi_uc) i;
          }
       }
    }
-   return 1;
+   ফেরত 1;
 }
 
 // build a table that decodes both magnitude and value of small ACs in
 // one go.
-static void stbi__build_fast_ac(stbi__int16 *fast_ac, stbi__huffman *h)
+স্থির শূন্য stbi__build_fast_ac(stbi__int16 *fast_ac, stbi__huffman *h)
 {
-   int i;
-   for (i=0; i < (1 << FAST_BITS); ++i) {
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < (1 << FAST_BITS); ++i) {
       stbi_uc fast = h->fast[i];
       fast_ac[i] = 0;
-      if (fast < 255) {
-         int rs = h->values[fast];
-         int run = (rs >> 4) & 15;
-         int magbits = rs & 15;
-         int len = h->size[fast];
+      যদি (fast < 255) {
+         পূর্ণসংখ্যা rs = h->মানসমূহ[fast];
+         পূর্ণসংখ্যা run = (rs >> 4) & 15;
+         পূর্ণসংখ্যা magbits = rs & 15;
+         পূর্ণসংখ্যা len = h->আকার_2[fast];
 
-         if (magbits && len + magbits <= FAST_BITS) {
+         যদি (magbits && len + magbits <= FAST_BITS) {
             // magnitude code followed by receive_extend code
-            int k = ((i << len) & ((1 << FAST_BITS) - 1)) >> (FAST_BITS - magbits);
-            int m = 1 << (magbits - 1);
-            if (k < m) k += (~0U << magbits) + 1;
+            পূর্ণসংখ্যা k = ((i << len) & ((1 << FAST_BITS) - 1)) >> (FAST_BITS - magbits);
+            পূর্ণসংখ্যা m = 1 << (magbits - 1);
+            যদি (k < m) k += (~0U << magbits) + 1;
             // if the result is small enough, we can fit it in fast_ac table
-            if (k >= -128 && k <= 127)
+            যদি (k >= -128 && k <= 127)
                fast_ac[i] = (stbi__int16) ((k * 256) + (run * 16) + (len + magbits));
          }
       }
    }
 }
 
-static void stbi__grow_buffer_unsafe(stbi__jpeg *j)
+স্থির শূন্য stbi_grow_বাফার_unsafe(stbi__jpeg *j)
 {
-   do {
-      unsigned int b = j->nomore ? 0 : stbi__get8(j->s);
-      if (b == 0xff) {
-         int c = stbi__get8(j->s);
-         while (c == 0xff) c = stbi__get8(j->s); // consume fill bytes
-         if (c != 0) {
-            j->marker = (unsigned char) c;
+   করো {
+      unsigned পূর্ণসংখ্যা b = j->nomore ? 0 : stbi__get8(j->s);
+      যদি (b == 0xff) {
+         পূর্ণসংখ্যা c = stbi__get8(j->s);
+         যখন (c == 0xff) c = stbi__get8(j->s); // consume fill bytes
+         যদি (c != 0) {
+            j->marker = (unsigned অক্ষর) c;
             j->nomore = 1;
-            return;
+            ফেরত;
          }
       }
-      j->code_buffer |= b << (24 - j->code_bits);
+      j->code_বাফার |= b << (24 - j->code_bits);
       j->code_bits += 8;
-   } while (j->code_bits <= 24);
+   } যখন (j->code_bits <= 24);
 }
 
 // (1 << n) - 1
-static const stbi__uint32 stbi__bmask[17]={0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535};
+স্থির ধ্রুবক stbi__uint32 stbi__bmask[17]={0,1,3,7,15,31,63,127,255,511,1023,2047,4095,8191,16383,32767,65535};
 
 // decode a jpeg huffman value from the bitstream
-stbi_inline static int stbi__jpeg_huff_decode(stbi__jpeg *j, stbi__huffman *h)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__jpeg_huff_decode(stbi__jpeg *j, stbi__huffman *h)
 {
-   unsigned int temp;
-   int c,k;
+   unsigned পূর্ণসংখ্যা অস্থায়ী;
+   পূর্ণসংখ্যা c,k;
 
-   if (j->code_bits < 16) stbi__grow_buffer_unsafe(j);
+   যদি (j->code_bits < 16) stbi_grow_বাফার_unsafe(j);
 
    // look at the top FAST_BITS and determine what symbol ID it is,
    // if the code is <= FAST_BITS
-   c = (j->code_buffer >> (32 - FAST_BITS)) & ((1 << FAST_BITS)-1);
+   c = (j->code_বাফার >> (32 - FAST_BITS)) & ((1 << FAST_BITS)-1);
    k = h->fast[c];
-   if (k < 255) {
-      int s = h->size[k];
-      if (s > j->code_bits)
-         return -1;
-      j->code_buffer <<= s;
+   যদি (k < 255) {
+      পূর্ণসংখ্যা s = h->আকার_2[k];
+      যদি (s > j->code_bits)
+         ফেরত -1;
+      j->code_বাফার <<= s;
       j->code_bits -= s;
-      return h->values[k];
+      ফেরত h->মানসমূহ[k];
    }
 
    // naive test is to shift the code_buffer down so k bits are
@@ -1868,74 +1868,74 @@ stbi_inline static int stbi__jpeg_huff_decode(stbi__jpeg *j, stbi__huffman *h)
    // end; in other words, regardless of the number of bits, it
    // wants to be compared against something shifted to have 16;
    // that way we don't need to shift inside the loop.
-   temp = j->code_buffer >> 16;
-   for (k=FAST_BITS+1 ; ; ++k)
-      if (temp < h->maxcode[k])
-         break;
-   if (k == 17) {
+   অস্থায়ী = j->code_বাফার >> 16;
+   জন্য (k=FAST_BITS+1 ; ; ++k)
+      যদি (অস্থায়ী < h->maxcode[k])
+         বিরতি;
+   যদি (k == 17) {
       // error! code not found
       j->code_bits -= 16;
-      return -1;
+      ফেরত -1;
    }
 
-   if (k > j->code_bits)
-      return -1;
+   যদি (k > j->code_bits)
+      ফেরত -1;
 
    // convert the huffman code to the symbol id
-   c = ((j->code_buffer >> (32 - k)) & stbi__bmask[k]) + h->delta[k];
-   STBI_ASSERT((((j->code_buffer) >> (32 - h->size[c])) & stbi__bmask[h->size[c]]) == h->code[c]);
+   c = ((j->code_বাফার >> (32 - k)) & stbi__bmask[k]) + h->delta[k];
+   STBI_ASSERT((((j->code_বাফার) >> (32 - h->আকার_2[c])) & stbi__bmask[h->আকার_2[c]]) == h->code[c]);
 
    // convert the id to a symbol
    j->code_bits -= k;
-   j->code_buffer <<= k;
-   return h->values[c];
+   j->code_বাফার <<= k;
+   ফেরত h->মানসমূহ[c];
 }
 
 // bias[n] = (-1<<n) + 1
-static const int stbi__jbias[16] = {0,-1,-3,-7,-15,-31,-63,-127,-255,-511,-1023,-2047,-4095,-8191,-16383,-32767};
+স্থির ধ্রুবক পূর্ণসংখ্যা stbi__jbias[16] = {0,-1,-3,-7,-15,-31,-63,-127,-255,-511,-1023,-2047,-4095,-8191,-16383,-32767};
 
 // combined JPEG 'receive' and JPEG 'extend', since baseline
 // always extends everything it receives.
-stbi_inline static int stbi__extend_receive(stbi__jpeg *j, int n)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__extend_receive(stbi__jpeg *j, পূর্ণসংখ্যা n)
 {
-   unsigned int k;
-   int sgn;
-   if (j->code_bits < n) stbi__grow_buffer_unsafe(j);
+   unsigned পূর্ণসংখ্যা k;
+   পূর্ণসংখ্যা sgn;
+   যদি (j->code_bits < n) stbi_grow_বাফার_unsafe(j);
 
-   sgn = (stbi__int32)j->code_buffer >> 31; // sign bit is always in MSB
-   k = stbi_lrot(j->code_buffer, n);
-   STBI_ASSERT(n >= 0 && n < (int) (sizeof(stbi__bmask)/sizeof(*stbi__bmask)));
-   j->code_buffer = k & ~stbi__bmask[n];
+   sgn = (stbi__int32)j->code_বাফার >> 31; // sign bit is always in MSB
+   k = stbi_lrot(j->code_বাফার, n);
+   STBI_ASSERT(n >= 0 && n < (পূর্ণসংখ্যা) (আকার(stbi__bmask)/আকার(*stbi__bmask)));
+   j->code_বাফার = k & ~stbi__bmask[n];
    k &= stbi__bmask[n];
    j->code_bits -= n;
-   return k + (stbi__jbias[n] & ~sgn);
+   ফেরত k + (stbi__jbias[n] & ~sgn);
 }
 
 // get some unsigned bits
-stbi_inline static int stbi__jpeg_get_bits(stbi__jpeg *j, int n)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__jpeg_get_bits(stbi__jpeg *j, পূর্ণসংখ্যা n)
 {
-   unsigned int k;
-   if (j->code_bits < n) stbi__grow_buffer_unsafe(j);
-   k = stbi_lrot(j->code_buffer, n);
-   j->code_buffer = k & ~stbi__bmask[n];
+   unsigned পূর্ণসংখ্যা k;
+   যদি (j->code_bits < n) stbi_grow_বাফার_unsafe(j);
+   k = stbi_lrot(j->code_বাফার, n);
+   j->code_বাফার = k & ~stbi__bmask[n];
    k &= stbi__bmask[n];
    j->code_bits -= n;
-   return k;
+   ফেরত k;
 }
 
-stbi_inline static int stbi__jpeg_get_bit(stbi__jpeg *j)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__jpeg_get_bit(stbi__jpeg *j)
 {
-   unsigned int k;
-   if (j->code_bits < 1) stbi__grow_buffer_unsafe(j);
-   k = j->code_buffer;
-   j->code_buffer <<= 1;
+   unsigned পূর্ণসংখ্যা k;
+   যদি (j->code_bits < 1) stbi_grow_বাফার_unsafe(j);
+   k = j->code_বাফার;
+   j->code_বাফার <<= 1;
    --j->code_bits;
-   return k & 0x80000000;
+   ফেরত k & 0x80000000;
 }
 
 // given a value that's at position X in the zigzag stream,
 // where does it appear in the 8x8 matrix coded as row-major?
-static const stbi_uc stbi__jpeg_dezigzag[64+15] =
+স্থির ধ্রুবক stbi_uc stbi__jpeg_dezigzag[64+15] =
 {
     0,  1,  8, 16,  9,  2,  3, 10,
    17, 24, 32, 25, 18, 11,  4,  5,
@@ -1951,221 +1951,221 @@ static const stbi_uc stbi__jpeg_dezigzag[64+15] =
 };
 
 // decode one 64-entry block--
-static int stbi__jpeg_decode_block(stbi__jpeg *j, short data[64], stbi__huffman *hdc, stbi__huffman *hac, stbi__int16 *fac, int b, stbi__uint16 *dequant)
+স্থির পূর্ণসংখ্যা stbi__jpeg_decode_block(stbi__jpeg *j, short তথ্য[64], stbi__huffman *hdc, stbi__huffman *hac, stbi__int16 *fac, পূর্ণসংখ্যা b, stbi__uint16 *dequant)
 {
-   int diff,dc,k;
-   int t;
+   পূর্ণসংখ্যা diff,dc,k;
+   পূর্ণসংখ্যা t;
 
-   if (j->code_bits < 16) stbi__grow_buffer_unsafe(j);
+   যদি (j->code_bits < 16) stbi_grow_বাফার_unsafe(j);
    t = stbi__jpeg_huff_decode(j, hdc);
-   if (t < 0) return stbi__err("bad huffman code","Corrupt JPEG");
+   যদি (t < 0) ফেরত stbi__err("bad huffman code","Corrupt JPEG");
 
    // 0 all the ac values now so we can do it 32-bits at a time
-   memset(data,0,64*sizeof(data[0]));
+   memset(তথ্য,0,64*আকার(তথ্য[0]));
 
    diff = t ? stbi__extend_receive(j, t) : 0;
    dc = j->img_comp[b].dc_pred + diff;
    j->img_comp[b].dc_pred = dc;
-   data[0] = (short) (dc * dequant[0]);
+   তথ্য[0] = (short) (dc * dequant[0]);
 
    // decode AC components, see JPEG spec
    k = 1;
-   do {
-      unsigned int zig;
-      int c,r,s;
-      if (j->code_bits < 16) stbi__grow_buffer_unsafe(j);
-      c = (j->code_buffer >> (32 - FAST_BITS)) & ((1 << FAST_BITS)-1);
+   করো {
+      unsigned পূর্ণসংখ্যা zig;
+      পূর্ণসংখ্যা c,r,s;
+      যদি (j->code_bits < 16) stbi_grow_বাফার_unsafe(j);
+      c = (j->code_বাফার >> (32 - FAST_BITS)) & ((1 << FAST_BITS)-1);
       r = fac[c];
-      if (r) { // fast-AC path
+      যদি (r) { // fast-AC path
          k += (r >> 4) & 15; // run
          s = r & 15; // combined length
-         j->code_buffer <<= s;
+         j->code_বাফার <<= s;
          j->code_bits -= s;
          // decode into unzigzag'd location
          zig = stbi__jpeg_dezigzag[k++];
-         data[zig] = (short) ((r >> 8) * dequant[zig]);
-      } else {
-         int rs = stbi__jpeg_huff_decode(j, hac);
-         if (rs < 0) return stbi__err("bad huffman code","Corrupt JPEG");
+         তথ্য[zig] = (short) ((r >> 8) * dequant[zig]);
+      } অন্যথা {
+         পূর্ণসংখ্যা rs = stbi__jpeg_huff_decode(j, hac);
+         যদি (rs < 0) ফেরত stbi__err("bad huffman code","Corrupt JPEG");
          s = rs & 15;
          r = rs >> 4;
-         if (s == 0) {
-            if (rs != 0xf0) break; // end block
+         যদি (s == 0) {
+            যদি (rs != 0xf0) বিরতি; // end block
             k += 16;
-         } else {
+         } অন্যথা {
             k += r;
             // decode into unzigzag'd location
             zig = stbi__jpeg_dezigzag[k++];
-            data[zig] = (short) (stbi__extend_receive(j,s) * dequant[zig]);
+            তথ্য[zig] = (short) (stbi__extend_receive(j,s) * dequant[zig]);
          }
       }
-   } while (k < 64);
-   return 1;
+   } যখন (k < 64);
+   ফেরত 1;
 }
 
-static int stbi__jpeg_decode_block_prog_dc(stbi__jpeg *j, short data[64], stbi__huffman *hdc, int b)
+স্থির পূর্ণসংখ্যা stbi__jpeg_decode_block_prog_dc(stbi__jpeg *j, short তথ্য[64], stbi__huffman *hdc, পূর্ণসংখ্যা b)
 {
-   int diff,dc;
-   int t;
-   if (j->spec_end != 0) return stbi__err("can't merge dc and ac", "Corrupt JPEG");
+   পূর্ণসংখ্যা diff,dc;
+   পূর্ণসংখ্যা t;
+   যদি (j->spec_end != 0) ফেরত stbi__err("can't merge dc and ac", "Corrupt JPEG");
 
-   if (j->code_bits < 16) stbi__grow_buffer_unsafe(j);
+   যদি (j->code_bits < 16) stbi_grow_বাফার_unsafe(j);
 
-   if (j->succ_high == 0) {
+   যদি (j->succ_উপরের == 0) {
       // first scan for DC coefficient, must be first
-      memset(data,0,64*sizeof(data[0])); // 0 all the ac values now
+      memset(তথ্য,0,64*আকার(তথ্য[0])); // 0 all the ac values now
       t = stbi__jpeg_huff_decode(j, hdc);
       diff = t ? stbi__extend_receive(j, t) : 0;
 
       dc = j->img_comp[b].dc_pred + diff;
       j->img_comp[b].dc_pred = dc;
-      data[0] = (short) (dc << j->succ_low);
-   } else {
+      তথ্য[0] = (short) (dc << j->succ_নিচের);
+   } অন্যথা {
       // refinement scan for DC coefficient
-      if (stbi__jpeg_get_bit(j))
-         data[0] += (short) (1 << j->succ_low);
+      যদি (stbi__jpeg_get_bit(j))
+         তথ্য[0] += (short) (1 << j->succ_নিচের);
    }
-   return 1;
+   ফেরত 1;
 }
 
 // @OPTIMIZE: store non-zigzagged during the decode passes,
 // and only de-zigzag when dequantizing
-static int stbi__jpeg_decode_block_prog_ac(stbi__jpeg *j, short data[64], stbi__huffman *hac, stbi__int16 *fac)
+স্থির পূর্ণসংখ্যা stbi__jpeg_decode_block_prog_ac(stbi__jpeg *j, short তথ্য[64], stbi__huffman *hac, stbi__int16 *fac)
 {
-   int k;
-   if (j->spec_start == 0) return stbi__err("can't merge dc and ac", "Corrupt JPEG");
+   পূর্ণসংখ্যা k;
+   যদি (j->spec_start == 0) ফেরত stbi__err("can't merge dc and ac", "Corrupt JPEG");
 
-   if (j->succ_high == 0) {
-      int shift = j->succ_low;
+   যদি (j->succ_উপরের == 0) {
+      পূর্ণসংখ্যা shift = j->succ_নিচের;
 
-      if (j->eob_run) {
+      যদি (j->eob_run) {
          --j->eob_run;
-         return 1;
+         ফেরত 1;
       }
 
       k = j->spec_start;
-      do {
-         unsigned int zig;
-         int c,r,s;
-         if (j->code_bits < 16) stbi__grow_buffer_unsafe(j);
-         c = (j->code_buffer >> (32 - FAST_BITS)) & ((1 << FAST_BITS)-1);
+      করো {
+         unsigned পূর্ণসংখ্যা zig;
+         পূর্ণসংখ্যা c,r,s;
+         যদি (j->code_bits < 16) stbi_grow_বাফার_unsafe(j);
+         c = (j->code_বাফার >> (32 - FAST_BITS)) & ((1 << FAST_BITS)-1);
          r = fac[c];
-         if (r) { // fast-AC path
+         যদি (r) { // fast-AC path
             k += (r >> 4) & 15; // run
             s = r & 15; // combined length
-            j->code_buffer <<= s;
+            j->code_বাফার <<= s;
             j->code_bits -= s;
             zig = stbi__jpeg_dezigzag[k++];
-            data[zig] = (short) ((r >> 8) << shift);
-         } else {
-            int rs = stbi__jpeg_huff_decode(j, hac);
-            if (rs < 0) return stbi__err("bad huffman code","Corrupt JPEG");
+            তথ্য[zig] = (short) ((r >> 8) << shift);
+         } অন্যথা {
+            পূর্ণসংখ্যা rs = stbi__jpeg_huff_decode(j, hac);
+            যদি (rs < 0) ফেরত stbi__err("bad huffman code","Corrupt JPEG");
             s = rs & 15;
             r = rs >> 4;
-            if (s == 0) {
-               if (r < 15) {
+            যদি (s == 0) {
+               যদি (r < 15) {
                   j->eob_run = (1 << r);
-                  if (r)
+                  যদি (r)
                      j->eob_run += stbi__jpeg_get_bits(j, r);
                   --j->eob_run;
-                  break;
+                  বিরতি;
                }
                k += 16;
-            } else {
+            } অন্যথা {
                k += r;
                zig = stbi__jpeg_dezigzag[k++];
-               data[zig] = (short) (stbi__extend_receive(j,s) << shift);
+               তথ্য[zig] = (short) (stbi__extend_receive(j,s) << shift);
             }
          }
-      } while (k <= j->spec_end);
-   } else {
+      } যখন (k <= j->spec_end);
+   } অন্যথা {
       // refinement scan for these AC coefficients
 
-      short bit = (short) (1 << j->succ_low);
+      short bit = (short) (1 << j->succ_নিচের);
 
-      if (j->eob_run) {
+      যদি (j->eob_run) {
          --j->eob_run;
-         for (k = j->spec_start; k <= j->spec_end; ++k) {
-            short *p = &data[stbi__jpeg_dezigzag[k]];
-            if (*p != 0)
-               if (stbi__jpeg_get_bit(j))
-                  if ((*p & bit)==0) {
-                     if (*p > 0)
+         জন্য (k = j->spec_start; k <= j->spec_end; ++k) {
+            short *p = &তথ্য[stbi__jpeg_dezigzag[k]];
+            যদি (*p != 0)
+               যদি (stbi__jpeg_get_bit(j))
+                  যদি ((*p & bit)==0) {
+                     যদি (*p > 0)
                         *p += bit;
-                     else
+                     অন্যথা
                         *p -= bit;
                   }
          }
-      } else {
+      } অন্যথা {
          k = j->spec_start;
-         do {
-            int r,s;
-            int rs = stbi__jpeg_huff_decode(j, hac); // @OPTIMIZE see if we can use the fast path here, advance-by-r is so slow, eh
-            if (rs < 0) return stbi__err("bad huffman code","Corrupt JPEG");
+         করো {
+            পূর্ণসংখ্যা r,s;
+            পূর্ণসংখ্যা rs = stbi__jpeg_huff_decode(j, hac); // @OPTIMIZE see if we can use the fast path here, advance-by-r is so slow, eh
+            যদি (rs < 0) ফেরত stbi__err("bad huffman code","Corrupt JPEG");
             s = rs & 15;
             r = rs >> 4;
-            if (s == 0) {
-               if (r < 15) {
+            যদি (s == 0) {
+               যদি (r < 15) {
                   j->eob_run = (1 << r) - 1;
-                  if (r)
+                  যদি (r)
                      j->eob_run += stbi__jpeg_get_bits(j, r);
                   r = 64; // force end of block
-               } else {
+               } অন্যথা {
                   // r=15 s=0 should write 16 0s, so we just do
                   // a run of 15 0s and then write s (which is 0),
                   // so we don't have to do anything special here
                }
-            } else {
-               if (s != 1) return stbi__err("bad huffman code", "Corrupt JPEG");
+            } অন্যথা {
+               যদি (s != 1) ফেরত stbi__err("bad huffman code", "Corrupt JPEG");
                // sign bit
-               if (stbi__jpeg_get_bit(j))
+               যদি (stbi__jpeg_get_bit(j))
                   s = bit;
-               else
+               অন্যথা
                   s = -bit;
             }
 
             // advance by r
-            while (k <= j->spec_end) {
-               short *p = &data[stbi__jpeg_dezigzag[k++]];
-               if (*p != 0) {
-                  if (stbi__jpeg_get_bit(j))
-                     if ((*p & bit)==0) {
-                        if (*p > 0)
+            যখন (k <= j->spec_end) {
+               short *p = &তথ্য[stbi__jpeg_dezigzag[k++]];
+               যদি (*p != 0) {
+                  যদি (stbi__jpeg_get_bit(j))
+                     যদি ((*p & bit)==0) {
+                        যদি (*p > 0)
                            *p += bit;
-                        else
+                        অন্যথা
                            *p -= bit;
                      }
-               } else {
-                  if (r == 0) {
+               } অন্যথা {
+                  যদি (r == 0) {
                      *p = (short) s;
-                     break;
+                     বিরতি;
                   }
                   --r;
                }
             }
-         } while (k <= j->spec_end);
+         } যখন (k <= j->spec_end);
       }
    }
-   return 1;
+   ফেরত 1;
 }
 
 // take a -128..127 value and stbi__clamp it and convert to 0..255
-stbi_inline static stbi_uc stbi__clamp(int x)
+stbi_inline স্থির stbi_uc stbi__clamp(পূর্ণসংখ্যা x)
 {
    // trick to use a single test to catch both cases
-   if ((unsigned int) x > 255) {
-      if (x < 0) return 0;
-      if (x > 255) return 255;
+   যদি ((unsigned পূর্ণসংখ্যা) x > 255) {
+      যদি (x < 0) ফেরত 0;
+      যদি (x > 255) ফেরত 255;
    }
-   return (stbi_uc) x;
+   ফেরত (stbi_uc) x;
 }
 
-#define stbi__f2f(x)  ((int) (((x) * 4096 + 0.5)))
+#define stbi__f2f(x)  ((পূর্ণসংখ্যা) (((x) * 4096 + 0.5)))
 #define stbi__fsh(x)  ((x) * 4096)
 
 // derived from jidctint -- DCT_ISLOW
 #define STBI__IDCT_1D(s0,s1,s2,s3,s4,s5,s6,s7) \
-   int t0,t1,t2,t3,p1,p2,p3,p4,p5,x0,x1,x2,x3; \
+   পূর্ণসংখ্যা t0,t1,t2,t3,p1,p2,p3,p4,p5,x0,x1,x2,x3; \
    p2 = s2;                                    \
    p3 = s6;                                    \
    p1 = (p2+p3) * stbi__f2f(0.5411961f);       \
@@ -2201,24 +2201,24 @@ stbi_inline static stbi_uc stbi__clamp(int x)
    t1 += p2+p4;                                \
    t0 += p1+p3;
 
-static void stbi__idct_block(stbi_uc *out, int out_stride, short data[64])
+স্থির শূন্য stbi__idct_block(stbi_uc *out, পূর্ণসংখ্যা out_stride, short তথ্য[64])
 {
-   int i,val[64],*v=val;
+   পূর্ণসংখ্যা i,val[64],*v=val;
    stbi_uc *o;
-   short *d = data;
+   short *d = তথ্য;
 
    // columns
-   for (i=0; i < 8; ++i,++d, ++v) {
+   জন্য (i=0; i < 8; ++i,++d, ++v) {
       // if all zeroes, shortcut -- this avoids dequantizing 0s and IDCTing
-      if (d[ 8]==0 && d[16]==0 && d[24]==0 && d[32]==0
+      যদি (d[ 8]==0 && d[16]==0 && d[24]==0 && d[32]==0
            && d[40]==0 && d[48]==0 && d[56]==0) {
          //    no shortcut                 0     seconds
          //    (1|2|3|4|5|6|7)==0          0     seconds
          //    all separate               -0.047 seconds
          //    1 && 2|3 && 4|5 && 6|7:    -0.047 seconds
-         int dcterm = d[0]*4;
+         পূর্ণসংখ্যা dcterm = d[0]*4;
          v[0] = v[8] = v[16] = v[24] = v[32] = v[40] = v[48] = v[56] = dcterm;
-      } else {
+      } অন্যথা {
          STBI__IDCT_1D(d[ 0],d[ 8],d[16],d[24],d[32],d[40],d[48],d[56])
          // constants scaled things up by 1<<12; let's bring them back
          // down, but keep 2 extra bits of precision
@@ -2234,7 +2234,7 @@ static void stbi__idct_block(stbi_uc *out, int out_stride, short data[64])
       }
    }
 
-   for (i=0, v=val, o=out; i < 8; ++i,v+=8,o+=out_stride) {
+   জন্য (i=0, v=val, o=out; i < 8; ++i,v+=8,o+=out_stride) {
       // no fast case since the first 1D IDCT spread components out
       STBI__IDCT_1D(v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7])
       // constants scaled things up by 1<<12, plus we had 1<<2 from first
@@ -2264,7 +2264,7 @@ static void stbi__idct_block(stbi_uc *out, int out_stride, short data[64])
 // sse2 integer IDCT. not the fastest possible implementation but it
 // produces bit-identical results to the generic C version so it's
 // fully "transparent".
-static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
+স্থির শূন্য stbi__idct_simd(stbi_uc *out, পূর্ণসংখ্যা out_stride, short তথ্য[64])
 {
    // This is constructed to match our regular (generic) integer IDCT exactly.
    __m128i row0, row1, row2, row3, row4, row5, row6, row7;
@@ -2303,9 +2303,9 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
       { \
          __m128i abiased_l = _mm_add_epi32(a##_l, bias); \
          __m128i abiased_h = _mm_add_epi32(a##_h, bias); \
-         dct_wadd(sum, abiased, b); \
+         dct_wadd(যোগ, abiased, b); \
          dct_wsub(dif, abiased, b); \
-         out0 = _mm_packs_epi32(_mm_srai_epi32(sum_l, s), _mm_srai_epi32(sum_h, s)); \
+         out0 = _mm_packs_epi32(_mm_srai_epi32(যোগ_l, s), _mm_srai_epi32(যোগ_h, s)); \
          out1 = _mm_packs_epi32(_mm_srai_epi32(dif_l, s), _mm_srai_epi32(dif_h, s)); \
       }
 
@@ -2363,14 +2363,14 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
    __m128i bias_1 = _mm_set1_epi32(65536 + (128<<17));
 
    // load
-   row0 = _mm_load_si128((const __m128i *) (data + 0*8));
-   row1 = _mm_load_si128((const __m128i *) (data + 1*8));
-   row2 = _mm_load_si128((const __m128i *) (data + 2*8));
-   row3 = _mm_load_si128((const __m128i *) (data + 3*8));
-   row4 = _mm_load_si128((const __m128i *) (data + 4*8));
-   row5 = _mm_load_si128((const __m128i *) (data + 5*8));
-   row6 = _mm_load_si128((const __m128i *) (data + 6*8));
-   row7 = _mm_load_si128((const __m128i *) (data + 7*8));
+   row0 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 0*8));
+   row1 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 1*8));
+   row2 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 2*8));
+   row3 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 3*8));
+   row4 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 4*8));
+   row5 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 5*8));
+   row6 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 6*8));
+   row7 = _mm_load_si128((ধ্রুবক __m128i *) (তথ্য + 7*8));
 
    // column pass
    dct_pass(bias_0, 10);
@@ -2445,7 +2445,7 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
 
 // NEON integer IDCT. should produce bit-identical
 // results to the generic C version.
-static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
+স্থির শূন্য stbi__idct_simd(stbi_uc *out, পূর্ণসংখ্যা out_stride, short তথ্য[64])
 {
    int16x8_t row0, row1, row2, row3, row4, row5, row6, row7;
 
@@ -2463,16 +2463,16 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
    int16x4_t rot3_3 = vdup_n_s16(stbi__f2f( 1.501321110f));
 
 #define dct_long_mul(out, inq, coeff) \
-   int32x4_t out##_l = vmull_s16(vget_low_s16(inq), coeff); \
-   int32x4_t out##_h = vmull_s16(vget_high_s16(inq), coeff)
+   int32x4_t out##_l = vmull_s16(vget_নিচের_s16(inq), coeff); \
+   int32x4_t out##_h = vmull_s16(vget_উপরের_s16(inq), coeff)
 
 #define dct_long_mac(out, acc, inq, coeff) \
-   int32x4_t out##_l = vmlal_s16(acc##_l, vget_low_s16(inq), coeff); \
-   int32x4_t out##_h = vmlal_s16(acc##_h, vget_high_s16(inq), coeff)
+   int32x4_t out##_l = vmlal_s16(acc##_l, vget_নিচের_s16(inq), coeff); \
+   int32x4_t out##_h = vmlal_s16(acc##_h, vget_উপরের_s16(inq), coeff)
 
 #define dct_widen(out, inq) \
-   int32x4_t out##_l = vshll_n_s16(vget_low_s16(inq), 12); \
-   int32x4_t out##_h = vshll_n_s16(vget_high_s16(inq), 12)
+   int32x4_t out##_l = vshll_n_s16(vget_নিচের_s16(inq), 12); \
+   int32x4_t out##_h = vshll_n_s16(vget_উপরের_s16(inq), 12)
 
 // wide add
 #define dct_wadd(out, a, b) \
@@ -2487,9 +2487,9 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
 // butterfly a/b, then shift using "shiftop" by "s" and pack
 #define dct_bfly32o(out0,out1, a,b,shiftop,s) \
    { \
-      dct_wadd(sum, a, b); \
+      dct_wadd(যোগ, a, b); \
       dct_wsub(dif, a, b); \
-      out0 = vcombine_s16(shiftop(sum_l, s), shiftop(sum_h, s)); \
+      out0 = vcombine_s16(shiftop(যোগ_l, s), shiftop(যোগ_h, s)); \
       out1 = vcombine_s16(shiftop(dif_l, s), shiftop(dif_h, s)); \
    }
 
@@ -2534,14 +2534,14 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
    }
 
    // load
-   row0 = vld1q_s16(data + 0*8);
-   row1 = vld1q_s16(data + 1*8);
-   row2 = vld1q_s16(data + 2*8);
-   row3 = vld1q_s16(data + 3*8);
-   row4 = vld1q_s16(data + 4*8);
-   row5 = vld1q_s16(data + 5*8);
-   row6 = vld1q_s16(data + 6*8);
-   row7 = vld1q_s16(data + 7*8);
+   row0 = vld1q_s16(তথ্য + 0*8);
+   row1 = vld1q_s16(তথ্য + 1*8);
+   row2 = vld1q_s16(তথ্য + 2*8);
+   row3 = vld1q_s16(তথ্য + 3*8);
+   row4 = vld1q_s16(তথ্য + 4*8);
+   row5 = vld1q_s16(তথ্য + 5*8);
+   row6 = vld1q_s16(তথ্য + 6*8);
+   row7 = vld1q_s16(তথ্য + 7*8);
 
    // add DC bias
    row0 = vaddq_s16(row0, vsetq_lane_s16(1024, vdupq_n_s16(0), 0));
@@ -2555,7 +2555,7 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
 // whether compilers actually get this is another story, sadly.
 #define dct_trn16(x, y) { int16x8x2_t t = vtrnq_s16(x, y); x = t.val[0]; y = t.val[1]; }
 #define dct_trn32(x, y) { int32x4x2_t t = vtrnq_s32(vreinterpretq_s32_s16(x), vreinterpretq_s32_s16(y)); x = vreinterpretq_s16_s32(t.val[0]); y = vreinterpretq_s16_s32(t.val[1]); }
-#define dct_trn64(x, y) { int16x8_t x0 = x; int16x8_t y0 = y; x = vcombine_s16(vget_low_s16(x0), vget_low_s16(y0)); y = vcombine_s16(vget_high_s16(x0), vget_high_s16(y0)); }
+#define dct_trn64(x, y) { int16x8_t x0 = x; int16x8_t y0 = y; x = vcombine_s16(vget_নিচের_s16(x0), vget_নিচের_s16(y0)); y = vcombine_s16(vget_উপরের_s16(x0), vget_উপরের_s16(y0)); }
 
       // pass 1
       dct_trn16(row0, row1); // a0b0a2b2a4b4a6b6
@@ -2653,15 +2653,15 @@ static void stbi__idct_simd(stbi_uc *out, int out_stride, short data[64])
 // if there's a pending marker from the entropy stream, return that
 // otherwise, fetch from the stream and get a marker. if there's no
 // marker, return 0xff, which is never a valid marker value
-static stbi_uc stbi__get_marker(stbi__jpeg *j)
+স্থির stbi_uc stbi__get_marker(stbi__jpeg *j)
 {
    stbi_uc x;
-   if (j->marker != STBI__MARKER_none) { x = j->marker; j->marker = STBI__MARKER_none; return x; }
+   যদি (j->marker != STBI__MARKER_none) { x = j->marker; j->marker = STBI__MARKER_none; ফেরত x; }
    x = stbi__get8(j->s);
-   if (x != 0xff) return STBI__MARKER_none;
-   while (x == 0xff)
+   যদি (x != 0xff) ফেরত STBI__MARKER_none;
+   যখন (x == 0xff)
       x = stbi__get8(j->s); // consume repeated 0xff fill bytes
-   return x;
+   ফেরত x;
 }
 
 // in each scan, we'll have scan_n components, and the order
@@ -2670,10 +2670,10 @@ static stbi_uc stbi__get_marker(stbi__jpeg *j)
 
 // after a restart interval, stbi__jpeg_reset the entropy decoder and
 // the dc prediction
-static void stbi__jpeg_reset(stbi__jpeg *j)
+স্থির শূন্য stbi__jpeg_reset(stbi__jpeg *j)
 {
    j->code_bits = 0;
-   j->code_buffer = 0;
+   j->code_বাফার = 0;
    j->nomore = 0;
    j->img_comp[0].dc_pred = j->img_comp[1].dc_pred = j->img_comp[2].dc_pred = j->img_comp[3].dc_pred = 0;
    j->marker = STBI__MARKER_none;
@@ -2683,243 +2683,243 @@ static void stbi__jpeg_reset(stbi__jpeg *j)
    // since we don't even allow 1<<30 pixels
 }
 
-static int stbi__parse_entropy_coded_data(stbi__jpeg *z)
+স্থির পূর্ণসংখ্যা stbi_parse_entropy_coded_তথ্য(stbi__jpeg *z)
 {
    stbi__jpeg_reset(z);
-   if (!z->progressive) {
-      if (z->scan_n == 1) {
-         int i,j;
-         STBI_SIMD_ALIGN(short, data[64]);
-         int n = z->order[0];
+   যদি (!z->progressive) {
+      যদি (z->scan_n == 1) {
+         পূর্ণসংখ্যা i,j;
+         STBI_SIMD_ALIGN(short, তথ্য[64]);
+         পূর্ণসংখ্যা n = z->order[0];
          // non-interleaved data, we just need to process one block at a time,
          // in trivial scanline order
          // number of blocks to do just depends on how many actual "pixels" this
          // component has, independent of interleaved MCU blocking and such
-         int w = (z->img_comp[n].x+7) >> 3;
-         int h = (z->img_comp[n].y+7) >> 3;
-         for (j=0; j < h; ++j) {
-            for (i=0; i < w; ++i) {
-               int ha = z->img_comp[n].ha;
-               if (!stbi__jpeg_decode_block(z, data, z->huff_dc+z->img_comp[n].hd, z->huff_ac+ha, z->fast_ac[ha], n, z->dequant[z->img_comp[n].tq])) return 0;
-               z->idct_block_kernel(z->img_comp[n].data+z->img_comp[n].w2*j*8+i*8, z->img_comp[n].w2, data);
+         পূর্ণসংখ্যা w = (z->img_comp[n].x+7) >> 3;
+         পূর্ণসংখ্যা h = (z->img_comp[n].y+7) >> 3;
+         জন্য (j=0; j < h; ++j) {
+            জন্য (i=0; i < w; ++i) {
+               পূর্ণসংখ্যা ha = z->img_comp[n].ha;
+               যদি (!stbi__jpeg_decode_block(z, তথ্য, z->huff_dc+z->img_comp[n].hd, z->huff_ac+ha, z->fast_ac[ha], n, z->dequant[z->img_comp[n].tq])) ফেরত 0;
+               z->idct_block_kernel(z->img_comp[n].তথ্য+z->img_comp[n].w2*j*8+i*8, z->img_comp[n].w2, তথ্য);
                // every data block is an MCU, so countdown the restart interval
-               if (--z->todo <= 0) {
-                  if (z->code_bits < 24) stbi__grow_buffer_unsafe(z);
+               যদি (--z->todo <= 0) {
+                  যদি (z->code_bits < 24) stbi_grow_বাফার_unsafe(z);
                   // if it's NOT a restart, then just bail, so we get corrupt data
                   // rather than no data
-                  if (!STBI__RESTART(z->marker)) return 1;
+                  যদি (!STBI__RESTART(z->marker)) ফেরত 1;
                   stbi__jpeg_reset(z);
                }
             }
          }
-         return 1;
-      } else { // interleaved
-         int i,j,k,x,y;
-         STBI_SIMD_ALIGN(short, data[64]);
-         for (j=0; j < z->img_mcu_y; ++j) {
-            for (i=0; i < z->img_mcu_x; ++i) {
+         ফেরত 1;
+      } অন্যথা { // interleaved
+         পূর্ণসংখ্যা i,j,k,x,y;
+         STBI_SIMD_ALIGN(short, তথ্য[64]);
+         জন্য (j=0; j < z->img_mcu_y; ++j) {
+            জন্য (i=0; i < z->img_mcu_x; ++i) {
                // scan an interleaved mcu... process scan_n components in order
-               for (k=0; k < z->scan_n; ++k) {
-                  int n = z->order[k];
+               জন্য (k=0; k < z->scan_n; ++k) {
+                  পূর্ণসংখ্যা n = z->order[k];
                   // scan out an mcu's worth of this component; that's just determined
                   // by the basic H and V specified for the component
-                  for (y=0; y < z->img_comp[n].v; ++y) {
-                     for (x=0; x < z->img_comp[n].h; ++x) {
-                        int x2 = (i*z->img_comp[n].h + x)*8;
-                        int y2 = (j*z->img_comp[n].v + y)*8;
-                        int ha = z->img_comp[n].ha;
-                        if (!stbi__jpeg_decode_block(z, data, z->huff_dc+z->img_comp[n].hd, z->huff_ac+ha, z->fast_ac[ha], n, z->dequant[z->img_comp[n].tq])) return 0;
-                        z->idct_block_kernel(z->img_comp[n].data+z->img_comp[n].w2*y2+x2, z->img_comp[n].w2, data);
+                  জন্য (y=0; y < z->img_comp[n].v; ++y) {
+                     জন্য (x=0; x < z->img_comp[n].h; ++x) {
+                        পূর্ণসংখ্যা x2 = (i*z->img_comp[n].h + x)*8;
+                        পূর্ণসংখ্যা y2 = (j*z->img_comp[n].v + y)*8;
+                        পূর্ণসংখ্যা ha = z->img_comp[n].ha;
+                        যদি (!stbi__jpeg_decode_block(z, তথ্য, z->huff_dc+z->img_comp[n].hd, z->huff_ac+ha, z->fast_ac[ha], n, z->dequant[z->img_comp[n].tq])) ফেরত 0;
+                        z->idct_block_kernel(z->img_comp[n].তথ্য+z->img_comp[n].w2*y2+x2, z->img_comp[n].w2, তথ্য);
                      }
                   }
                }
                // after all interleaved components, that's an interleaved MCU,
                // so now count down the restart interval
-               if (--z->todo <= 0) {
-                  if (z->code_bits < 24) stbi__grow_buffer_unsafe(z);
-                  if (!STBI__RESTART(z->marker)) return 1;
+               যদি (--z->todo <= 0) {
+                  যদি (z->code_bits < 24) stbi_grow_বাফার_unsafe(z);
+                  যদি (!STBI__RESTART(z->marker)) ফেরত 1;
                   stbi__jpeg_reset(z);
                }
             }
          }
-         return 1;
+         ফেরত 1;
       }
-   } else {
-      if (z->scan_n == 1) {
-         int i,j;
-         int n = z->order[0];
+   } অন্যথা {
+      যদি (z->scan_n == 1) {
+         পূর্ণসংখ্যা i,j;
+         পূর্ণসংখ্যা n = z->order[0];
          // non-interleaved data, we just need to process one block at a time,
          // in trivial scanline order
          // number of blocks to do just depends on how many actual "pixels" this
          // component has, independent of interleaved MCU blocking and such
-         int w = (z->img_comp[n].x+7) >> 3;
-         int h = (z->img_comp[n].y+7) >> 3;
-         for (j=0; j < h; ++j) {
-            for (i=0; i < w; ++i) {
-               short *data = z->img_comp[n].coeff + 64 * (i + j * z->img_comp[n].coeff_w);
-               if (z->spec_start == 0) {
-                  if (!stbi__jpeg_decode_block_prog_dc(z, data, &z->huff_dc[z->img_comp[n].hd], n))
-                     return 0;
-               } else {
-                  int ha = z->img_comp[n].ha;
-                  if (!stbi__jpeg_decode_block_prog_ac(z, data, &z->huff_ac[ha], z->fast_ac[ha]))
-                     return 0;
+         পূর্ণসংখ্যা w = (z->img_comp[n].x+7) >> 3;
+         পূর্ণসংখ্যা h = (z->img_comp[n].y+7) >> 3;
+         জন্য (j=0; j < h; ++j) {
+            জন্য (i=0; i < w; ++i) {
+               short *তথ্য = z->img_comp[n].coeff + 64 * (i + j * z->img_comp[n].coeff_w);
+               যদি (z->spec_start == 0) {
+                  যদি (!stbi__jpeg_decode_block_prog_dc(z, তথ্য, &z->huff_dc[z->img_comp[n].hd], n))
+                     ফেরত 0;
+               } অন্যথা {
+                  পূর্ণসংখ্যা ha = z->img_comp[n].ha;
+                  যদি (!stbi__jpeg_decode_block_prog_ac(z, তথ্য, &z->huff_ac[ha], z->fast_ac[ha]))
+                     ফেরত 0;
                }
                // every data block is an MCU, so countdown the restart interval
-               if (--z->todo <= 0) {
-                  if (z->code_bits < 24) stbi__grow_buffer_unsafe(z);
-                  if (!STBI__RESTART(z->marker)) return 1;
+               যদি (--z->todo <= 0) {
+                  যদি (z->code_bits < 24) stbi_grow_বাফার_unsafe(z);
+                  যদি (!STBI__RESTART(z->marker)) ফেরত 1;
                   stbi__jpeg_reset(z);
                }
             }
          }
-         return 1;
-      } else { // interleaved
-         int i,j,k,x,y;
-         for (j=0; j < z->img_mcu_y; ++j) {
-            for (i=0; i < z->img_mcu_x; ++i) {
+         ফেরত 1;
+      } অন্যথা { // interleaved
+         পূর্ণসংখ্যা i,j,k,x,y;
+         জন্য (j=0; j < z->img_mcu_y; ++j) {
+            জন্য (i=0; i < z->img_mcu_x; ++i) {
                // scan an interleaved mcu... process scan_n components in order
-               for (k=0; k < z->scan_n; ++k) {
-                  int n = z->order[k];
+               জন্য (k=0; k < z->scan_n; ++k) {
+                  পূর্ণসংখ্যা n = z->order[k];
                   // scan out an mcu's worth of this component; that's just determined
                   // by the basic H and V specified for the component
-                  for (y=0; y < z->img_comp[n].v; ++y) {
-                     for (x=0; x < z->img_comp[n].h; ++x) {
-                        int x2 = (i*z->img_comp[n].h + x);
-                        int y2 = (j*z->img_comp[n].v + y);
-                        short *data = z->img_comp[n].coeff + 64 * (x2 + y2 * z->img_comp[n].coeff_w);
-                        if (!stbi__jpeg_decode_block_prog_dc(z, data, &z->huff_dc[z->img_comp[n].hd], n))
-                           return 0;
+                  জন্য (y=0; y < z->img_comp[n].v; ++y) {
+                     জন্য (x=0; x < z->img_comp[n].h; ++x) {
+                        পূর্ণসংখ্যা x2 = (i*z->img_comp[n].h + x);
+                        পূর্ণসংখ্যা y2 = (j*z->img_comp[n].v + y);
+                        short *তথ্য = z->img_comp[n].coeff + 64 * (x2 + y2 * z->img_comp[n].coeff_w);
+                        যদি (!stbi__jpeg_decode_block_prog_dc(z, তথ্য, &z->huff_dc[z->img_comp[n].hd], n))
+                           ফেরত 0;
                      }
                   }
                }
                // after all interleaved components, that's an interleaved MCU,
                // so now count down the restart interval
-               if (--z->todo <= 0) {
-                  if (z->code_bits < 24) stbi__grow_buffer_unsafe(z);
-                  if (!STBI__RESTART(z->marker)) return 1;
+               যদি (--z->todo <= 0) {
+                  যদি (z->code_bits < 24) stbi_grow_বাফার_unsafe(z);
+                  যদি (!STBI__RESTART(z->marker)) ফেরত 1;
                   stbi__jpeg_reset(z);
                }
             }
          }
-         return 1;
+         ফেরত 1;
       }
    }
 }
 
-static void stbi__jpeg_dequantize(short *data, stbi__uint16 *dequant)
+স্থির শূন্য stbi__jpeg_dequantize(short *তথ্য, stbi__uint16 *dequant)
 {
-   int i;
-   for (i=0; i < 64; ++i)
-      data[i] *= dequant[i];
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < 64; ++i)
+      তথ্য[i] *= dequant[i];
 }
 
-static void stbi__jpeg_finish(stbi__jpeg *z)
+স্থির শূন্য stbi__jpeg_finish(stbi__jpeg *z)
 {
-   if (z->progressive) {
+   যদি (z->progressive) {
       // dequantize and idct the data
-      int i,j,n;
-      for (n=0; n < z->s->img_n; ++n) {
-         int w = (z->img_comp[n].x+7) >> 3;
-         int h = (z->img_comp[n].y+7) >> 3;
-         for (j=0; j < h; ++j) {
-            for (i=0; i < w; ++i) {
-               short *data = z->img_comp[n].coeff + 64 * (i + j * z->img_comp[n].coeff_w);
-               stbi__jpeg_dequantize(data, z->dequant[z->img_comp[n].tq]);
-               z->idct_block_kernel(z->img_comp[n].data+z->img_comp[n].w2*j*8+i*8, z->img_comp[n].w2, data);
+      পূর্ণসংখ্যা i,j,n;
+      জন্য (n=0; n < z->s->img_n; ++n) {
+         পূর্ণসংখ্যা w = (z->img_comp[n].x+7) >> 3;
+         পূর্ণসংখ্যা h = (z->img_comp[n].y+7) >> 3;
+         জন্য (j=0; j < h; ++j) {
+            জন্য (i=0; i < w; ++i) {
+               short *তথ্য = z->img_comp[n].coeff + 64 * (i + j * z->img_comp[n].coeff_w);
+               stbi__jpeg_dequantize(তথ্য, z->dequant[z->img_comp[n].tq]);
+               z->idct_block_kernel(z->img_comp[n].তথ্য+z->img_comp[n].w2*j*8+i*8, z->img_comp[n].w2, তথ্য);
             }
          }
       }
    }
 }
 
-static int stbi__process_marker(stbi__jpeg *z, int m)
+স্থির পূর্ণসংখ্যা stbi__process_marker(stbi__jpeg *z, পূর্ণসংখ্যা m)
 {
-   int L;
-   switch (m) {
-      case STBI__MARKER_none: // no marker found
-         return stbi__err("expected marker","Corrupt JPEG");
+   পূর্ণসংখ্যা L;
+   নির্বাচন (m) {
+      ক্ষেত্র STBI__MARKER_none: // no marker found
+         ফেরত stbi__err("expected marker","Corrupt JPEG");
 
-      case 0xDD: // DRI - specify restart interval
-         if (stbi__get16be(z->s) != 4) return stbi__err("bad DRI len","Corrupt JPEG");
+      ক্ষেত্র 0xDD: // DRI - specify restart interval
+         যদি (stbi__get16be(z->s) != 4) ফেরত stbi__err("bad DRI len","Corrupt JPEG");
          z->restart_interval = stbi__get16be(z->s);
-         return 1;
+         ফেরত 1;
 
-      case 0xDB: // DQT - define quantization table
+      ক্ষেত্র 0xDB: // DQT - define quantization table
          L = stbi__get16be(z->s)-2;
-         while (L > 0) {
-            int q = stbi__get8(z->s);
-            int p = q >> 4, sixteen = (p != 0);
-            int t = q & 15,i;
-            if (p != 0 && p != 1) return stbi__err("bad DQT type","Corrupt JPEG");
-            if (t > 3) return stbi__err("bad DQT table","Corrupt JPEG");
+         যখন (L > 0) {
+            পূর্ণসংখ্যা q = stbi__get8(z->s);
+            পূর্ণসংখ্যা p = q >> 4, sixteen = (p != 0);
+            পূর্ণসংখ্যা t = q & 15,i;
+            যদি (p != 0 && p != 1) ফেরত stbi__err("bad DQT type","Corrupt JPEG");
+            যদি (t > 3) ফেরত stbi__err("bad DQT table","Corrupt JPEG");
 
-            for (i=0; i < 64; ++i)
+            জন্য (i=0; i < 64; ++i)
                z->dequant[t][stbi__jpeg_dezigzag[i]] = (stbi__uint16)(sixteen ? stbi__get16be(z->s) : stbi__get8(z->s));
             L -= (sixteen ? 129 : 65);
          }
-         return L==0;
+         ফেরত L==0;
 
-      case 0xC4: // DHT - define huffman table
+      ক্ষেত্র 0xC4: // DHT - define huffman table
          L = stbi__get16be(z->s)-2;
-         while (L > 0) {
+         যখন (L > 0) {
             stbi_uc *v;
-            int sizes[16],i,n=0;
-            int q = stbi__get8(z->s);
-            int tc = q >> 4;
-            int th = q & 15;
-            if (tc > 1 || th > 3) return stbi__err("bad DHT header","Corrupt JPEG");
-            for (i=0; i < 16; ++i) {
+            পূর্ণসংখ্যা sizes[16],i,n=0;
+            পূর্ণসংখ্যা q = stbi__get8(z->s);
+            পূর্ণসংখ্যা tc = q >> 4;
+            পূর্ণসংখ্যা th = q & 15;
+            যদি (tc > 1 || th > 3) ফেরত stbi__err("bad DHT header","Corrupt JPEG");
+            জন্য (i=0; i < 16; ++i) {
                sizes[i] = stbi__get8(z->s);
                n += sizes[i];
             }
             L -= 17;
-            if (tc == 0) {
-               if (!stbi__build_huffman(z->huff_dc+th, sizes)) return 0;
-               v = z->huff_dc[th].values;
-            } else {
-               if (!stbi__build_huffman(z->huff_ac+th, sizes)) return 0;
-               v = z->huff_ac[th].values;
+            যদি (tc == 0) {
+               যদি (!stbi__build_huffman(z->huff_dc+th, sizes)) ফেরত 0;
+               v = z->huff_dc[th].মানসমূহ;
+            } অন্যথা {
+               যদি (!stbi__build_huffman(z->huff_ac+th, sizes)) ফেরত 0;
+               v = z->huff_ac[th].মানসমূহ;
             }
-            for (i=0; i < n; ++i)
+            জন্য (i=0; i < n; ++i)
                v[i] = stbi__get8(z->s);
-            if (tc != 0)
+            যদি (tc != 0)
                stbi__build_fast_ac(z->fast_ac[th], z->huff_ac + th);
             L -= n;
          }
-         return L==0;
+         ফেরত L==0;
    }
 
    // check for comment block or APP blocks
-   if ((m >= 0xE0 && m <= 0xEF) || m == 0xFE) {
+   যদি ((m >= 0xE0 && m <= 0xEF) || m == 0xFE) {
       L = stbi__get16be(z->s);
-      if (L < 2) {
-         if (m == 0xFE)
-            return stbi__err("bad COM len","Corrupt JPEG");
-         else
-            return stbi__err("bad APP len","Corrupt JPEG");
+      যদি (L < 2) {
+         যদি (m == 0xFE)
+            ফেরত stbi__err("bad COM len","Corrupt JPEG");
+         অন্যথা
+            ফেরত stbi__err("bad APP len","Corrupt JPEG");
       }
       L -= 2;
 
-      if (m == 0xE0 && L >= 5) { // JFIF APP0 segment
-         static const unsigned char tag[5] = {'J','F','I','F','\0'};
-         int ok = 1;
-         int i;
-         for (i=0; i < 5; ++i)
-            if (stbi__get8(z->s) != tag[i])
+      যদি (m == 0xE0 && L >= 5) { // JFIF APP0 segment
+         স্থির ধ্রুবক unsigned অক্ষর tag[5] = {'J','F','I','F','\0'};
+         পূর্ণসংখ্যা ok = 1;
+         পূর্ণসংখ্যা i;
+         জন্য (i=0; i < 5; ++i)
+            যদি (stbi__get8(z->s) != tag[i])
                ok = 0;
          L -= 5;
-         if (ok)
+         যদি (ok)
             z->jfif = 1;
-      } else if (m == 0xEE && L >= 12) { // Adobe APP14 segment
-         static const unsigned char tag[6] = {'A','d','o','b','e','\0'};
-         int ok = 1;
-         int i;
-         for (i=0; i < 6; ++i)
-            if (stbi__get8(z->s) != tag[i])
+      } অন্যথা যদি (m == 0xEE && L >= 12) { // Adobe APP14 segment
+         স্থির ধ্রুবক unsigned অক্ষর tag[6] = {'A','d','o','b','e','\0'};
+         পূর্ণসংখ্যা ok = 1;
+         পূর্ণসংখ্যা i;
+         জন্য (i=0; i < 6; ++i)
+            যদি (stbi__get8(z->s) != tag[i])
                ok = 0;
          L -= 6;
-         if (ok) {
+         যদি (ok) {
             stbi__get8(z->s); // version
             stbi__get16be(z->s); // flags0
             stbi__get16be(z->s); // flags1
@@ -2929,111 +2929,111 @@ static int stbi__process_marker(stbi__jpeg *z, int m)
       }
 
       stbi__skip(z->s, L);
-      return 1;
+      ফেরত 1;
    }
 
-   return stbi__err("unknown marker","Corrupt JPEG");
+   ফেরত stbi__err("unknown marker","Corrupt JPEG");
 }
 
 // after we see SOS
-static int stbi__process_scan_header(stbi__jpeg *z)
+স্থির পূর্ণসংখ্যা stbi__process_scan_header(stbi__jpeg *z)
 {
-   int i;
-   int Ls = stbi__get16be(z->s);
+   পূর্ণসংখ্যা i;
+   পূর্ণসংখ্যা Ls = stbi__get16be(z->s);
    z->scan_n = stbi__get8(z->s);
-   if (z->scan_n < 1 || z->scan_n > 4 || z->scan_n > (int) z->s->img_n) return stbi__err("bad SOS component count","Corrupt JPEG");
-   if (Ls != 6+2*z->scan_n) return stbi__err("bad SOS len","Corrupt JPEG");
-   for (i=0; i < z->scan_n; ++i) {
-      int id = stbi__get8(z->s), which;
-      int q = stbi__get8(z->s);
-      for (which = 0; which < z->s->img_n; ++which)
-         if (z->img_comp[which].id == id)
-            break;
-      if (which == z->s->img_n) return 0; // no match
-      z->img_comp[which].hd = q >> 4;   if (z->img_comp[which].hd > 3) return stbi__err("bad DC huff","Corrupt JPEG");
-      z->img_comp[which].ha = q & 15;   if (z->img_comp[which].ha > 3) return stbi__err("bad AC huff","Corrupt JPEG");
+   যদি (z->scan_n < 1 || z->scan_n > 4 || z->scan_n > (পূর্ণসংখ্যা) z->s->img_n) ফেরত stbi__err("bad SOS component count","Corrupt JPEG");
+   যদি (Ls != 6+2*z->scan_n) ফেরত stbi__err("bad SOS len","Corrupt JPEG");
+   জন্য (i=0; i < z->scan_n; ++i) {
+      পূর্ণসংখ্যা id = stbi__get8(z->s), which;
+      পূর্ণসংখ্যা q = stbi__get8(z->s);
+      জন্য (which = 0; which < z->s->img_n; ++which)
+         যদি (z->img_comp[which].id == id)
+            বিরতি;
+      যদি (which == z->s->img_n) ফেরত 0; // no match
+      z->img_comp[which].hd = q >> 4;   যদি (z->img_comp[which].hd > 3) ফেরত stbi__err("bad DC huff","Corrupt JPEG");
+      z->img_comp[which].ha = q & 15;   যদি (z->img_comp[which].ha > 3) ফেরত stbi__err("bad AC huff","Corrupt JPEG");
       z->order[i] = which;
    }
 
    {
-      int aa;
+      পূর্ণসংখ্যা aa;
       z->spec_start = stbi__get8(z->s);
       z->spec_end   = stbi__get8(z->s); // should be 63, but might be 0
       aa = stbi__get8(z->s);
-      z->succ_high = (aa >> 4);
-      z->succ_low  = (aa & 15);
-      if (z->progressive) {
-         if (z->spec_start > 63 || z->spec_end > 63  || z->spec_start > z->spec_end || z->succ_high > 13 || z->succ_low > 13)
-            return stbi__err("bad SOS", "Corrupt JPEG");
-      } else {
-         if (z->spec_start != 0) return stbi__err("bad SOS","Corrupt JPEG");
-         if (z->succ_high != 0 || z->succ_low != 0) return stbi__err("bad SOS","Corrupt JPEG");
+      z->succ_উপরের = (aa >> 4);
+      z->succ_নিচের  = (aa & 15);
+      যদি (z->progressive) {
+         যদি (z->spec_start > 63 || z->spec_end > 63  || z->spec_start > z->spec_end || z->succ_উপরের > 13 || z->succ_নিচের > 13)
+            ফেরত stbi__err("bad SOS", "Corrupt JPEG");
+      } অন্যথা {
+         যদি (z->spec_start != 0) ফেরত stbi__err("bad SOS","Corrupt JPEG");
+         যদি (z->succ_উপরের != 0 || z->succ_নিচের != 0) ফেরত stbi__err("bad SOS","Corrupt JPEG");
          z->spec_end = 63;
       }
    }
 
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__free_jpeg_components(stbi__jpeg *z, int ncomp, int why)
+স্থির পূর্ণসংখ্যা stbi__free_jpeg_components(stbi__jpeg *z, পূর্ণসংখ্যা ncomp, পূর্ণসংখ্যা why)
 {
-   int i;
-   for (i=0; i < ncomp; ++i) {
-      if (z->img_comp[i].raw_data) {
-         STBI_FREE(z->img_comp[i].raw_data);
-         z->img_comp[i].raw_data = NULL;
-         z->img_comp[i].data = NULL;
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < ncomp; ++i) {
+      যদি (z->img_comp[i].raw_তথ্য) {
+         STBI_FREE(z->img_comp[i].raw_তথ্য);
+         z->img_comp[i].raw_তথ্য = ফাঁকা;
+         z->img_comp[i].তথ্য = ফাঁকা;
       }
-      if (z->img_comp[i].raw_coeff) {
+      যদি (z->img_comp[i].raw_coeff) {
          STBI_FREE(z->img_comp[i].raw_coeff);
          z->img_comp[i].raw_coeff = 0;
          z->img_comp[i].coeff = 0;
       }
-      if (z->img_comp[i].linebuf) {
+      যদি (z->img_comp[i].linebuf) {
          STBI_FREE(z->img_comp[i].linebuf);
-         z->img_comp[i].linebuf = NULL;
+         z->img_comp[i].linebuf = ফাঁকা;
       }
    }
-   return why;
+   ফেরত why;
 }
 
-static int stbi__process_frame_header(stbi__jpeg *z, int scan)
+স্থির পূর্ণসংখ্যা stbi__process_frame_header(stbi__jpeg *z, পূর্ণসংখ্যা scan)
 {
    stbi__context *s = z->s;
-   int Lf,p,i,q, h_max=1,v_max=1,c;
-   Lf = stbi__get16be(s);         if (Lf < 11) return stbi__err("bad SOF len","Corrupt JPEG"); // JPEG
-   p  = stbi__get8(s);            if (p != 8) return stbi__err("only 8-bit","JPEG format not supported: 8-bit only"); // JPEG baseline
-   s->img_y = stbi__get16be(s);   if (s->img_y == 0) return stbi__err("no header height", "JPEG format not supported: delayed height"); // Legal, but we don't handle it--but neither does IJG
-   s->img_x = stbi__get16be(s);   if (s->img_x == 0) return stbi__err("0 width","Corrupt JPEG"); // JPEG requires
+   পূর্ণসংখ্যা Lf,p,i,q, h_max=1,v_max=1,c;
+   Lf = stbi__get16be(s);         যদি (Lf < 11) ফেরত stbi__err("bad SOF len","Corrupt JPEG"); // JPEG
+   p  = stbi__get8(s);            যদি (p != 8) ফেরত stbi__err("only 8-bit","JPEG format not supported: 8-bit only"); // JPEG baseline
+   s->img_y = stbi__get16be(s);   যদি (s->img_y == 0) ফেরত stbi__err("no header height", "JPEG format not supported: delayed height"); // Legal, but we don't handle it--but neither does IJG
+   s->img_x = stbi__get16be(s);   যদি (s->img_x == 0) ফেরত stbi__err("0 width","Corrupt JPEG"); // JPEG requires
    c = stbi__get8(s);
-   if (c != 3 && c != 1 && c != 4) return stbi__err("bad component count","Corrupt JPEG");
+   যদি (c != 3 && c != 1 && c != 4) ফেরত stbi__err("bad component count","Corrupt JPEG");
    s->img_n = c;
-   for (i=0; i < c; ++i) {
-      z->img_comp[i].data = NULL;
-      z->img_comp[i].linebuf = NULL;
+   জন্য (i=0; i < c; ++i) {
+      z->img_comp[i].তথ্য = ফাঁকা;
+      z->img_comp[i].linebuf = ফাঁকা;
    }
 
-   if (Lf != 8+3*s->img_n) return stbi__err("bad SOF len","Corrupt JPEG");
+   যদি (Lf != 8+3*s->img_n) ফেরত stbi__err("bad SOF len","Corrupt JPEG");
 
    z->rgb = 0;
-   for (i=0; i < s->img_n; ++i) {
-      static const unsigned char rgb[3] = { 'R', 'G', 'B' };
+   জন্য (i=0; i < s->img_n; ++i) {
+      স্থির ধ্রুবক unsigned অক্ষর rgb[3] = { 'R', 'G', 'B' };
       z->img_comp[i].id = stbi__get8(s);
-      if (s->img_n == 3 && z->img_comp[i].id == rgb[i])
+      যদি (s->img_n == 3 && z->img_comp[i].id == rgb[i])
          ++z->rgb;
       q = stbi__get8(s);
-      z->img_comp[i].h = (q >> 4);  if (!z->img_comp[i].h || z->img_comp[i].h > 4) return stbi__err("bad H","Corrupt JPEG");
-      z->img_comp[i].v = q & 15;    if (!z->img_comp[i].v || z->img_comp[i].v > 4) return stbi__err("bad V","Corrupt JPEG");
-      z->img_comp[i].tq = stbi__get8(s);  if (z->img_comp[i].tq > 3) return stbi__err("bad TQ","Corrupt JPEG");
+      z->img_comp[i].h = (q >> 4);  যদি (!z->img_comp[i].h || z->img_comp[i].h > 4) ফেরত stbi__err("bad H","Corrupt JPEG");
+      z->img_comp[i].v = q & 15;    যদি (!z->img_comp[i].v || z->img_comp[i].v > 4) ফেরত stbi__err("bad V","Corrupt JPEG");
+      z->img_comp[i].tq = stbi__get8(s);  যদি (z->img_comp[i].tq > 3) ফেরত stbi__err("bad TQ","Corrupt JPEG");
    }
 
-   if (scan != STBI__SCAN_load) return 1;
+   যদি (scan != STBI__SCAN_load) ফেরত 1;
 
-   if (!stbi__mad3sizes_valid(s->img_x, s->img_y, s->img_n, 0)) return stbi__err("too large", "Image too large to decode");
+   যদি (!stbi__mad3sizes_valid(s->img_x, s->img_y, s->img_n, 0)) ফেরত stbi__err("too large", "Image too large to decode");
 
-   for (i=0; i < s->img_n; ++i) {
-      if (z->img_comp[i].h > h_max) h_max = z->img_comp[i].h;
-      if (z->img_comp[i].v > v_max) v_max = z->img_comp[i].v;
+   জন্য (i=0; i < s->img_n; ++i) {
+      যদি (z->img_comp[i].h > h_max) h_max = z->img_comp[i].h;
+      যদি (z->img_comp[i].v > v_max) v_max = z->img_comp[i].v;
    }
 
    // compute interleaved mcu info
@@ -3045,7 +3045,7 @@ static int stbi__process_frame_header(stbi__jpeg *z, int scan)
    z->img_mcu_x = (s->img_x + z->img_mcu_w-1) / z->img_mcu_w;
    z->img_mcu_y = (s->img_y + z->img_mcu_h-1) / z->img_mcu_h;
 
-   for (i=0; i < s->img_n; ++i) {
+   জন্য (i=0; i < s->img_n; ++i) {
       // number of effective pixels (e.g. for non-interleaved MCU)
       z->img_comp[i].x = (s->img_x * z->img_comp[i].h + h_max-1) / h_max;
       z->img_comp[i].y = (s->img_y * z->img_comp[i].v + v_max-1) / v_max;
@@ -3060,24 +3060,24 @@ static int stbi__process_frame_header(stbi__jpeg *z, int scan)
       z->img_comp[i].h2 = z->img_mcu_y * z->img_comp[i].v * 8;
       z->img_comp[i].coeff = 0;
       z->img_comp[i].raw_coeff = 0;
-      z->img_comp[i].linebuf = NULL;
-      z->img_comp[i].raw_data = stbi__malloc_mad2(z->img_comp[i].w2, z->img_comp[i].h2, 15);
-      if (z->img_comp[i].raw_data == NULL)
-         return stbi__free_jpeg_components(z, i+1, stbi__err("outofmem", "Out of memory"));
+      z->img_comp[i].linebuf = ফাঁকা;
+      z->img_comp[i].raw_তথ্য = stbi__malloc_mad2(z->img_comp[i].w2, z->img_comp[i].h2, 15);
+      যদি (z->img_comp[i].raw_তথ্য == ফাঁকা)
+         ফেরত stbi__free_jpeg_components(z, i+1, stbi__err("outofmem", "Out of memory"));
       // align blocks for idct using mmx/sse
-      z->img_comp[i].data = (stbi_uc*) (((size_t) z->img_comp[i].raw_data + 15) & ~15);
-      if (z->progressive) {
+      z->img_comp[i].তথ্য = (stbi_uc*) (((size_t) z->img_comp[i].raw_তথ্য + 15) & ~15);
+      যদি (z->progressive) {
          // w2, h2 are multiples of 8 (see above)
          z->img_comp[i].coeff_w = z->img_comp[i].w2 / 8;
          z->img_comp[i].coeff_h = z->img_comp[i].h2 / 8;
-         z->img_comp[i].raw_coeff = stbi__malloc_mad3(z->img_comp[i].w2, z->img_comp[i].h2, sizeof(short), 15);
-         if (z->img_comp[i].raw_coeff == NULL)
-            return stbi__free_jpeg_components(z, i+1, stbi__err("outofmem", "Out of memory"));
+         z->img_comp[i].raw_coeff = stbi__malloc_mad3(z->img_comp[i].w2, z->img_comp[i].h2, আকার(short), 15);
+         যদি (z->img_comp[i].raw_coeff == ফাঁকা)
+            ফেরত stbi__free_jpeg_components(z, i+1, stbi__err("outofmem", "Out of memory"));
          z->img_comp[i].coeff = (short*) (((size_t) z->img_comp[i].raw_coeff + 15) & ~15);
       }
    }
 
-   return 1;
+   ফেরত 1;
 }
 
 // use comparisons since in some cases we handle more than one case (e.g. SOF)
@@ -3089,139 +3089,139 @@ static int stbi__process_frame_header(stbi__jpeg *z, int scan)
 
 #define stbi__SOF_progressive(x)   ((x) == 0xc2)
 
-static int stbi__decode_jpeg_header(stbi__jpeg *z, int scan)
+স্থির পূর্ণসংখ্যা stbi__decode_jpeg_header(stbi__jpeg *z, পূর্ণসংখ্যা scan)
 {
-   int m;
+   পূর্ণসংখ্যা m;
    z->jfif = 0;
    z->app14_color_transform = -1; // valid values are 0,1,2
    z->marker = STBI__MARKER_none; // initialize cached marker to empty
    m = stbi__get_marker(z);
-   if (!stbi__SOI(m)) return stbi__err("no SOI","Corrupt JPEG");
-   if (scan == STBI__SCAN_type) return 1;
+   যদি (!stbi__SOI(m)) ফেরত stbi__err("no SOI","Corrupt JPEG");
+   যদি (scan == STBI__SCAN_type) ফেরত 1;
    m = stbi__get_marker(z);
-   while (!stbi__SOF(m)) {
-      if (!stbi__process_marker(z,m)) return 0;
+   যখন (!stbi__SOF(m)) {
+      যদি (!stbi__process_marker(z,m)) ফেরত 0;
       m = stbi__get_marker(z);
-      while (m == STBI__MARKER_none) {
+      যখন (m == STBI__MARKER_none) {
          // some files have extra padding after their blocks, so ok, we'll scan
-         if (stbi__at_eof(z->s)) return stbi__err("no SOF", "Corrupt JPEG");
+         যদি (stbi__at_eof(z->s)) ফেরত stbi__err("no SOF", "Corrupt JPEG");
          m = stbi__get_marker(z);
       }
    }
    z->progressive = stbi__SOF_progressive(m);
-   if (!stbi__process_frame_header(z, scan)) return 0;
-   return 1;
+   যদি (!stbi__process_frame_header(z, scan)) ফেরত 0;
+   ফেরত 1;
 }
 
 // decode image to YCbCr format
-static int stbi__decode_jpeg_image(stbi__jpeg *j)
+স্থির পূর্ণসংখ্যা stbi__decode_jpeg_image(stbi__jpeg *j)
 {
-   int m;
-   for (m = 0; m < 4; m++) {
-      j->img_comp[m].raw_data = NULL;
-      j->img_comp[m].raw_coeff = NULL;
+   পূর্ণসংখ্যা m;
+   জন্য (m = 0; m < 4; m++) {
+      j->img_comp[m].raw_তথ্য = ফাঁকা;
+      j->img_comp[m].raw_coeff = ফাঁকা;
    }
    j->restart_interval = 0;
-   if (!stbi__decode_jpeg_header(j, STBI__SCAN_load)) return 0;
+   যদি (!stbi__decode_jpeg_header(j, STBI__SCAN_load)) ফেরত 0;
    m = stbi__get_marker(j);
-   while (!stbi__EOI(m)) {
-      if (stbi__SOS(m)) {
-         if (!stbi__process_scan_header(j)) return 0;
-         if (!stbi__parse_entropy_coded_data(j)) return 0;
-         if (j->marker == STBI__MARKER_none ) {
+   যখন (!stbi__EOI(m)) {
+      যদি (stbi__SOS(m)) {
+         যদি (!stbi__process_scan_header(j)) ফেরত 0;
+         যদি (!stbi_parse_entropy_coded_তথ্য(j)) ফেরত 0;
+         যদি (j->marker == STBI__MARKER_none ) {
             // handle 0s at the end of image data from IP Kamera 9060
-            while (!stbi__at_eof(j->s)) {
-               int x = stbi__get8(j->s);
-               if (x == 255) {
+            যখন (!stbi__at_eof(j->s)) {
+               পূর্ণসংখ্যা x = stbi__get8(j->s);
+               যদি (x == 255) {
                   j->marker = stbi__get8(j->s);
-                  break;
+                  বিরতি;
                }
             }
             // if we reach eof without hitting a marker, stbi__get_marker() below will fail and we'll eventually return 0
          }
-      } else if (stbi__DNL(m)) {
-         int Ld = stbi__get16be(j->s);
+      } অন্যথা যদি (stbi__DNL(m)) {
+         পূর্ণসংখ্যা Ld = stbi__get16be(j->s);
          stbi__uint32 NL = stbi__get16be(j->s);
-         if (Ld != 4) return stbi__err("bad DNL len", "Corrupt JPEG");
-         if (NL != j->s->img_y) return stbi__err("bad DNL height", "Corrupt JPEG");
-      } else {
-         if (!stbi__process_marker(j, m)) return 0;
+         যদি (Ld != 4) ফেরত stbi__err("bad DNL len", "Corrupt JPEG");
+         যদি (NL != j->s->img_y) ফেরত stbi__err("bad DNL height", "Corrupt JPEG");
+      } অন্যথা {
+         যদি (!stbi__process_marker(j, m)) ফেরত 0;
       }
       m = stbi__get_marker(j);
    }
-   if (j->progressive)
+   যদি (j->progressive)
       stbi__jpeg_finish(j);
-   return 1;
+   ফেরত 1;
 }
 
 // static jfif-centered resampling (across block boundaries)
 
-typedef stbi_uc *(*resample_row_func)(stbi_uc *out, stbi_uc *in0, stbi_uc *in1,
-                                    int w, int hs);
+প্রকারলেখ stbi_uc *(*resample_row_func)(stbi_uc *out, stbi_uc *in0, stbi_uc *in1,
+                                    পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs);
 
 #define stbi__div4(x) ((stbi_uc) ((x) >> 2))
 
-static stbi_uc *resample_row_1(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)
+স্থির stbi_uc *resample_row_1(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs)
 {
    STBI_NOTUSED(out);
    STBI_NOTUSED(in_far);
    STBI_NOTUSED(w);
    STBI_NOTUSED(hs);
-   return in_near;
+   ফেরত in_near;
 }
 
-static stbi_uc* stbi__resample_row_v_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)
+স্থির stbi_uc* stbi__resample_row_v_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs)
 {
    // need to generate two samples vertically for every one in input
-   int i;
+   পূর্ণসংখ্যা i;
    STBI_NOTUSED(hs);
-   for (i=0; i < w; ++i)
+   জন্য (i=0; i < w; ++i)
       out[i] = stbi__div4(3*in_near[i] + in_far[i] + 2);
-   return out;
+   ফেরত out;
 }
 
-static stbi_uc*  stbi__resample_row_h_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)
+স্থির stbi_uc*  stbi__resample_row_h_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs)
 {
    // need to generate two samples horizontally for every one in input
-   int i;
-   stbi_uc *input = in_near;
+   পূর্ণসংখ্যা i;
+   stbi_uc *প্রবেশ = in_near;
 
-   if (w == 1) {
+   যদি (w == 1) {
       // if only one sample, can't do any interpolation
-      out[0] = out[1] = input[0];
-      return out;
+      out[0] = out[1] = প্রবেশ[0];
+      ফেরত out;
    }
 
-   out[0] = input[0];
-   out[1] = stbi__div4(input[0]*3 + input[1] + 2);
-   for (i=1; i < w-1; ++i) {
-      int n = 3*input[i]+2;
-      out[i*2+0] = stbi__div4(n+input[i-1]);
-      out[i*2+1] = stbi__div4(n+input[i+1]);
+   out[0] = প্রবেশ[0];
+   out[1] = stbi__div4(প্রবেশ[0]*3 + প্রবেশ[1] + 2);
+   জন্য (i=1; i < w-1; ++i) {
+      পূর্ণসংখ্যা n = 3*প্রবেশ[i]+2;
+      out[i*2+0] = stbi__div4(n+প্রবেশ[i-1]);
+      out[i*2+1] = stbi__div4(n+প্রবেশ[i+1]);
    }
-   out[i*2+0] = stbi__div4(input[w-2]*3 + input[w-1] + 2);
-   out[i*2+1] = input[w-1];
+   out[i*2+0] = stbi__div4(প্রবেশ[w-2]*3 + প্রবেশ[w-1] + 2);
+   out[i*2+1] = প্রবেশ[w-1];
 
    STBI_NOTUSED(in_far);
    STBI_NOTUSED(hs);
 
-   return out;
+   ফেরত out;
 }
 
 #define stbi__div16(x) ((stbi_uc) ((x) >> 4))
 
-static stbi_uc *stbi__resample_row_hv_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)
+স্থির stbi_uc *stbi__resample_row_hv_2(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs)
 {
    // need to generate 2x2 samples for every one in input
-   int i,t0,t1;
-   if (w == 1) {
+   পূর্ণসংখ্যা i,t0,t1;
+   যদি (w == 1) {
       out[0] = out[1] = stbi__div4(3*in_near[0] + in_far[0] + 2);
-      return out;
+      ফেরত out;
    }
 
    t1 = 3*in_near[0] + in_far[0];
    out[0] = stbi__div4(t1+2);
-   for (i=1; i < w; ++i) {
+   জন্য (i=1; i < w; ++i) {
       t0 = t1;
       t1 = 3*in_near[i]+in_far[i];
       out[i*2-1] = stbi__div16(3*t0 + t1 + 8);
@@ -3231,26 +3231,26 @@ static stbi_uc *stbi__resample_row_hv_2(stbi_uc *out, stbi_uc *in_near, stbi_uc 
 
    STBI_NOTUSED(hs);
 
-   return out;
+   ফেরত out;
 }
 
-#if defined(STBI_SSE2) || defined(STBI_NEON)
-static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)
+#যদি defined(STBI_SSE2) || defined(STBI_NEON)
+স্থির stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs)
 {
    // need to generate 2x2 samples for every one in input
-   int i=0,t0,t1;
+   পূর্ণসংখ্যা i=0,t0,t1;
 
-   if (w == 1) {
+   যদি (w == 1) {
       out[0] = out[1] = stbi__div4(3*in_near[0] + in_far[0] + 2);
-      return out;
+      ফেরত out;
    }
 
    t1 = 3*in_near[0] + in_far[0];
    // process groups of 8 pixels for as long as we can.
    // note we can't handle the last pixel in a row in this loop
    // because we need to handle the filter boundary conditions.
-   for (; i < ((w-1) & ~7); i += 8) {
-#if defined(STBI_SSE2)
+   জন্য (; i < ((w-1) & ~7); i += 8) {
+#যদি defined(STBI_SSE2)
       // load and perform the vertical filtering pass
       // this uses 3*x + y = 4*x + (y - x)
       __m128i zero  = _mm_setzero_si128();
@@ -3269,8 +3269,8 @@ static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stb
       // of next block of 8 pixels added in.
       __m128i prv0 = _mm_slli_si128(curr, 2);
       __m128i nxt0 = _mm_srli_si128(curr, 2);
-      __m128i prev = _mm_insert_epi16(prv0, t1, 0);
-      __m128i next = _mm_insert_epi16(nxt0, 3*in_near[i+8] + in_far[i+8], 7);
+      __m128i পূর্ব = mm_ঢোকাও_epi16(prv0, t1, 0);
+      __m128i পরবর্তী = mm_ঢোকাও_epi16(nxt0, 3*in_near[i+8] + in_far[i+8], 7);
 
       // horizontal filter, polyphase implementation since it's convenient:
       // even pixels = 3*cur + prev = cur*4 + (prev - cur)
@@ -3278,8 +3278,8 @@ static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stb
       // note the shared term.
       __m128i bias  = _mm_set1_epi16(8);
       __m128i curs = _mm_slli_epi16(curr, 2);
-      __m128i prvd = _mm_sub_epi16(prev, curr);
-      __m128i nxtd = _mm_sub_epi16(next, curr);
+      __m128i prvd = _mm_sub_epi16(পূর্ব, curr);
+      __m128i nxtd = _mm_sub_epi16(পরবর্তী, curr);
       __m128i curb = _mm_add_epi16(curs, bias);
       __m128i even = _mm_add_epi16(prvd, curb);
       __m128i odd  = _mm_add_epi16(nxtd, curb);
@@ -3293,7 +3293,7 @@ static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stb
       // pack and write output
       __m128i outv = _mm_packus_epi16(de0, de1);
       _mm_storeu_si128((__m128i *) (out + i*2), outv);
-#elif defined(STBI_NEON)
+#নতুবা_যদি defined(STBI_NEON)
       // load and perform the vertical filtering pass
       // this uses 3*x + y = 4*x + (y - x)
       uint8x8_t farb  = vld1_u8(in_far + i);
@@ -3309,16 +3309,16 @@ static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stb
       // of next block of 8 pixels added in.
       int16x8_t prv0 = vextq_s16(curr, curr, 7);
       int16x8_t nxt0 = vextq_s16(curr, curr, 1);
-      int16x8_t prev = vsetq_lane_s16(t1, prv0, 0);
-      int16x8_t next = vsetq_lane_s16(3*in_near[i+8] + in_far[i+8], nxt0, 7);
+      int16x8_t পূর্ব = vsetq_lane_s16(t1, prv0, 0);
+      int16x8_t পরবর্তী = vsetq_lane_s16(3*in_near[i+8] + in_far[i+8], nxt0, 7);
 
       // horizontal filter, polyphase implementation since it's convenient:
       // even pixels = 3*cur + prev = cur*4 + (prev - cur)
       // odd  pixels = 3*cur + next = cur*4 + (next - cur)
       // note the shared term.
       int16x8_t curs = vshlq_n_s16(curr, 2);
-      int16x8_t prvd = vsubq_s16(prev, curr);
-      int16x8_t nxtd = vsubq_s16(next, curr);
+      int16x8_t prvd = vsubq_s16(পূর্ব, curr);
+      int16x8_t nxtd = vsubq_s16(পরবর্তী, curr);
       int16x8_t even = vaddq_s16(curs, prvd);
       int16x8_t odd  = vaddq_s16(curs, nxtd);
 
@@ -3337,7 +3337,7 @@ static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stb
    t1 = 3*in_near[i] + in_far[i];
    out[i*2] = stbi__div16(3*t1 + t0 + 8);
 
-   for (++i; i < w; ++i) {
+   জন্য (++i; i < w; ++i) {
       t0 = t1;
       t1 = 3*in_near[i]+in_far[i];
       out[i*2-1] = stbi__div16(3*t0 + t1 + 8);
@@ -3347,41 +3347,41 @@ static stbi_uc *stbi__resample_row_hv_2_simd(stbi_uc *out, stbi_uc *in_near, stb
 
    STBI_NOTUSED(hs);
 
-   return out;
+   ফেরত out;
 }
 #endif
 
-static stbi_uc *stbi__resample_row_generic(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)
+স্থির stbi_uc *stbi__resample_row_generic(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, পূর্ণসংখ্যা w, পূর্ণসংখ্যা hs)
 {
    // resample with nearest-neighbor
-   int i,j;
+   পূর্ণসংখ্যা i,j;
    STBI_NOTUSED(in_far);
-   for (i=0; i < w; ++i)
-      for (j=0; j < hs; ++j)
+   জন্য (i=0; i < w; ++i)
+      জন্য (j=0; j < hs; ++j)
          out[i*hs+j] = in_near[i];
-   return out;
+   ফেরত out;
 }
 
 // this is a reduced-precision calculation of YCbCr-to-RGB introduced
 // to make sure the code produces the same results in both SIMD and scalar
-#define stbi__float2fixed(x)  (((int) ((x) * 4096.0f + 0.5f)) << 8)
-static void stbi__YCbCr_to_RGB_row(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step)
+#define stbi__float2fixed(x)  (((পূর্ণসংখ্যা) ((x) * 4096.0f + 0.5f)) << 8)
+স্থির শূন্য stbi__YCbCr_to_RGB_row(stbi_uc *out, ধ্রুবক stbi_uc *y, ধ্রুবক stbi_uc *pcb, ধ্রুবক stbi_uc *pcr, পূর্ণসংখ্যা গুনতি, পূর্ণসংখ্যা step)
 {
-   int i;
-   for (i=0; i < count; ++i) {
-      int y_fixed = (y[i] << 20) + (1<<19); // rounding
-      int r,g,b;
-      int cr = pcr[i] - 128;
-      int cb = pcb[i] - 128;
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < গুনতি; ++i) {
+      পূর্ণসংখ্যা y_fixed = (y[i] << 20) + (1<<19); // rounding
+      পূর্ণসংখ্যা r,g,b;
+      পূর্ণসংখ্যা cr = pcr[i] - 128;
+      পূর্ণসংখ্যা cb = pcb[i] - 128;
       r = y_fixed +  cr* stbi__float2fixed(1.40200f);
       g = y_fixed + (cr*-stbi__float2fixed(0.71414f)) + ((cb*-stbi__float2fixed(0.34414f)) & 0xffff0000);
       b = y_fixed                                     +   cb* stbi__float2fixed(1.77200f);
       r >>= 20;
       g >>= 20;
       b >>= 20;
-      if ((unsigned) r > 255) { if (r < 0) r = 0; else r = 255; }
-      if ((unsigned) g > 255) { if (g < 0) g = 0; else g = 255; }
-      if ((unsigned) b > 255) { if (b < 0) b = 0; else b = 255; }
+      যদি ((unsigned) r > 255) { যদি (r < 0) r = 0; অন্যথা r = 255; }
+      যদি ((unsigned) g > 255) { যদি (g < 0) g = 0; অন্যথা g = 255; }
+      যদি ((unsigned) b > 255) { যদি (b < 0) b = 0; অন্যথা b = 255; }
       out[0] = (stbi_uc)r;
       out[1] = (stbi_uc)g;
       out[2] = (stbi_uc)b;
@@ -3390,26 +3390,26 @@ static void stbi__YCbCr_to_RGB_row(stbi_uc *out, const stbi_uc *y, const stbi_uc
    }
 }
 
-#if defined(STBI_SSE2) || defined(STBI_NEON)
-static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc const *pcb, stbi_uc const *pcr, int count, int step)
+#যদি defined(STBI_SSE2) || defined(STBI_NEON)
+স্থির শূন্য stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc ধ্রুবক *y, stbi_uc ধ্রুবক *pcb, stbi_uc ধ্রুবক *pcr, পূর্ণসংখ্যা গুনতি, পূর্ণসংখ্যা step)
 {
-   int i = 0;
+   পূর্ণসংখ্যা i = 0;
 
 #ifdef STBI_SSE2
    // step == 3 is pretty ugly on the final interleave, and i'm not convinced
    // it's useful in practice (you wouldn't use it for textures, for example).
    // so just accelerate step == 4 case.
-   if (step == 4) {
+   যদি (step == 4) {
       // this is a fairly straightforward implementation and not super-optimized.
       __m128i signflip  = _mm_set1_epi8(-0x80);
       __m128i cr_const0 = _mm_set1_epi16(   (short) ( 1.40200f*4096.0f+0.5f));
       __m128i cr_const1 = _mm_set1_epi16( - (short) ( 0.71414f*4096.0f+0.5f));
       __m128i cb_const0 = _mm_set1_epi16( - (short) ( 0.34414f*4096.0f+0.5f));
       __m128i cb_const1 = _mm_set1_epi16(   (short) ( 1.77200f*4096.0f+0.5f));
-      __m128i y_bias = _mm_set1_epi8((char) (unsigned char) 128);
+      __m128i y_bias = _mm_set1_epi8((অক্ষর) (unsigned অক্ষর) 128);
       __m128i xw = _mm_set1_epi16(255); // alpha channel
 
-      for (; i+7 < count; i += 8) {
+      জন্য (; i+7 < গুনতি; i += 8) {
          // load
          __m128i y_bytes = _mm_loadl_epi64((__m128i *) (y+i));
          __m128i cr_bytes = _mm_loadl_epi64((__m128i *) (pcr+i));
@@ -3458,7 +3458,7 @@ static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc cons
 
 #ifdef STBI_NEON
    // in this version, step=3 support would be easy to add. but is there demand?
-   if (step == 4) {
+   যদি (step == 4) {
       // this is a fairly straightforward implementation and not super-optimized.
       uint8x8_t signflip = vdup_n_u8(0x80);
       int16x8_t cr_const0 = vdupq_n_s16(   (short) ( 1.40200f*4096.0f+0.5f));
@@ -3466,7 +3466,7 @@ static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc cons
       int16x8_t cb_const0 = vdupq_n_s16( - (short) ( 0.34414f*4096.0f+0.5f));
       int16x8_t cb_const1 = vdupq_n_s16(   (short) ( 1.77200f*4096.0f+0.5f));
 
-      for (; i+7 < count; i += 8) {
+      জন্য (; i+7 < গুনতি; i += 8) {
          // load
          uint8x8_t y_bytes  = vld1_u8(y + i);
          uint8x8_t cr_bytes = vld1_u8(pcr + i);
@@ -3502,20 +3502,20 @@ static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc cons
    }
 #endif
 
-   for (; i < count; ++i) {
-      int y_fixed = (y[i] << 20) + (1<<19); // rounding
-      int r,g,b;
-      int cr = pcr[i] - 128;
-      int cb = pcb[i] - 128;
+   জন্য (; i < গুনতি; ++i) {
+      পূর্ণসংখ্যা y_fixed = (y[i] << 20) + (1<<19); // rounding
+      পূর্ণসংখ্যা r,g,b;
+      পূর্ণসংখ্যা cr = pcr[i] - 128;
+      পূর্ণসংখ্যা cb = pcb[i] - 128;
       r = y_fixed + cr* stbi__float2fixed(1.40200f);
       g = y_fixed + cr*-stbi__float2fixed(0.71414f) + ((cb*-stbi__float2fixed(0.34414f)) & 0xffff0000);
       b = y_fixed                                   +   cb* stbi__float2fixed(1.77200f);
       r >>= 20;
       g >>= 20;
       b >>= 20;
-      if ((unsigned) r > 255) { if (r < 0) r = 0; else r = 255; }
-      if ((unsigned) g > 255) { if (g < 0) g = 0; else g = 255; }
-      if ((unsigned) b > 255) { if (b < 0) b = 0; else b = 255; }
+      যদি ((unsigned) r > 255) { যদি (r < 0) r = 0; অন্যথা r = 255; }
+      যদি ((unsigned) g > 255) { যদি (g < 0) g = 0; অন্যথা g = 255; }
+      যদি ((unsigned) b > 255) { যদি (b < 0) b = 0; অন্যথা b = 255; }
       out[0] = (stbi_uc)r;
       out[1] = (stbi_uc)g;
       out[2] = (stbi_uc)b;
@@ -3526,14 +3526,14 @@ static void stbi__YCbCr_to_RGB_simd(stbi_uc *out, stbi_uc const *y, stbi_uc cons
 #endif
 
 // set up the kernels
-static void stbi__setup_jpeg(stbi__jpeg *j)
+স্থির শূন্য stbi__setup_jpeg(stbi__jpeg *j)
 {
    j->idct_block_kernel = stbi__idct_block;
    j->YCbCr_to_RGB_kernel = stbi__YCbCr_to_RGB_row;
    j->resample_row_hv_2_kernel = stbi__resample_row_hv_2;
 
 #ifdef STBI_SSE2
-   if (stbi__sse2_available()) {
+   যদি (stbi__sse2_available()) {
       j->idct_block_kernel = stbi__idct_simd;
       j->YCbCr_to_RGB_kernel = stbi__YCbCr_to_RGB_simd;
       j->resample_row_hv_2_kernel = stbi__resample_row_hv_2_simd;
@@ -3548,118 +3548,118 @@ static void stbi__setup_jpeg(stbi__jpeg *j)
 }
 
 // clean up the temporary component buffers
-static void stbi__cleanup_jpeg(stbi__jpeg *j)
+স্থির শূন্য stbi__cleanup_jpeg(stbi__jpeg *j)
 {
    stbi__free_jpeg_components(j, j->s->img_n, 0);
 }
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
    resample_row_func resample;
    stbi_uc *line0,*line1;
-   int hs,vs;   // expansion factor in each axis
-   int w_lores; // horizontal pixels pre-expansion
-   int ystep;   // how far through vertical expansion we are
-   int ypos;    // which pre-expansion row we're on
+   পূর্ণসংখ্যা hs,vs;   // expansion factor in each axis
+   পূর্ণসংখ্যা w_lores; // horizontal pixels pre-expansion
+   পূর্ণসংখ্যা ystep;   // how far through vertical expansion we are
+   পূর্ণসংখ্যা ypos;    // which pre-expansion row we're on
 } stbi__resample;
 
 // fast 0..255 * 0..255 => 0..255 rounded multiplication
-static stbi_uc stbi__blinn_8x8(stbi_uc x, stbi_uc y)
+স্থির stbi_uc stbi__blinn_8x8(stbi_uc x, stbi_uc y)
 {
-   unsigned int t = x*y + 128;
-   return (stbi_uc) ((t + (t >>8)) >> 8);
+   unsigned পূর্ণসংখ্যা t = x*y + 128;
+   ফেরত (stbi_uc) ((t + (t >>8)) >> 8);
 }
 
-static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp, int req_comp)
+স্থির stbi_uc *load_jpeg_image(stbi__jpeg *z, পূর্ণসংখ্যা *out_x, পূর্ণসংখ্যা *out_y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   int n, decode_n, is_rgb;
+   পূর্ণসংখ্যা n, decode_n, is_rgb;
    z->s->img_n = 0; // make stbi__cleanup_jpeg safe
 
    // validate req_comp
-   if (req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal error");
+   যদি (req_comp < 0 || req_comp > 4) ফেরত stbi__errpuc("bad req_comp", "Internal error");
 
    // load a jpeg image from whichever source, but leave in YCbCr format
-   if (!stbi__decode_jpeg_image(z)) { stbi__cleanup_jpeg(z); return NULL; }
+   যদি (!stbi__decode_jpeg_image(z)) { stbi__cleanup_jpeg(z); ফেরত ফাঁকা; }
 
    // determine actual number of components to generate
    n = req_comp ? req_comp : z->s->img_n >= 3 ? 3 : 1;
 
    is_rgb = z->s->img_n == 3 && (z->rgb == 3 || (z->app14_color_transform == 0 && !z->jfif));
 
-   if (z->s->img_n == 3 && n < 3 && !is_rgb)
+   যদি (z->s->img_n == 3 && n < 3 && !is_rgb)
       decode_n = 1;
-   else
+   অন্যথা
       decode_n = z->s->img_n;
 
    // resample and color-convert
    {
-      int k;
-      unsigned int i,j;
+      পূর্ণসংখ্যা k;
+      unsigned পূর্ণসংখ্যা i,j;
       stbi_uc *output;
       stbi_uc *coutput[4];
 
       stbi__resample res_comp[4];
 
-      for (k=0; k < decode_n; ++k) {
+      জন্য (k=0; k < decode_n; ++k) {
          stbi__resample *r = &res_comp[k];
 
          // allocate line buffer big enough for upsampling off the edges
          // with upsample factor of 4
          z->img_comp[k].linebuf = (stbi_uc *) stbi__malloc(z->s->img_x + 3);
-         if (!z->img_comp[k].linebuf) { stbi__cleanup_jpeg(z); return stbi__errpuc("outofmem", "Out of memory"); }
+         যদি (!z->img_comp[k].linebuf) { stbi__cleanup_jpeg(z); ফেরত stbi__errpuc("outofmem", "Out of memory"); }
 
          r->hs      = z->img_h_max / z->img_comp[k].h;
          r->vs      = z->img_v_max / z->img_comp[k].v;
          r->ystep   = r->vs >> 1;
          r->w_lores = (z->s->img_x + r->hs-1) / r->hs;
          r->ypos    = 0;
-         r->line0   = r->line1 = z->img_comp[k].data;
+         r->line0   = r->line1 = z->img_comp[k].তথ্য;
 
-         if      (r->hs == 1 && r->vs == 1) r->resample = resample_row_1;
-         else if (r->hs == 1 && r->vs == 2) r->resample = stbi__resample_row_v_2;
-         else if (r->hs == 2 && r->vs == 1) r->resample = stbi__resample_row_h_2;
-         else if (r->hs == 2 && r->vs == 2) r->resample = z->resample_row_hv_2_kernel;
-         else                               r->resample = stbi__resample_row_generic;
+         যদি      (r->hs == 1 && r->vs == 1) r->resample = resample_row_1;
+         অন্যথা যদি (r->hs == 1 && r->vs == 2) r->resample = stbi__resample_row_v_2;
+         অন্যথা যদি (r->hs == 2 && r->vs == 1) r->resample = stbi__resample_row_h_2;
+         অন্যথা যদি (r->hs == 2 && r->vs == 2) r->resample = z->resample_row_hv_2_kernel;
+         অন্যথা                               r->resample = stbi__resample_row_generic;
       }
 
       // can't error after this so, this is safe
       output = (stbi_uc *) stbi__malloc_mad3(n, z->s->img_x, z->s->img_y, 1);
-      if (!output) { stbi__cleanup_jpeg(z); return stbi__errpuc("outofmem", "Out of memory"); }
+      যদি (!output) { stbi__cleanup_jpeg(z); ফেরত stbi__errpuc("outofmem", "Out of memory"); }
 
       // now go ahead and resample
-      for (j=0; j < z->s->img_y; ++j) {
+      জন্য (j=0; j < z->s->img_y; ++j) {
          stbi_uc *out = output + n * z->s->img_x * j;
-         for (k=0; k < decode_n; ++k) {
+         জন্য (k=0; k < decode_n; ++k) {
             stbi__resample *r = &res_comp[k];
-            int y_bot = r->ystep >= (r->vs >> 1);
+            পূর্ণসংখ্যা y_bot = r->ystep >= (r->vs >> 1);
             coutput[k] = r->resample(z->img_comp[k].linebuf,
                                      y_bot ? r->line1 : r->line0,
                                      y_bot ? r->line0 : r->line1,
                                      r->w_lores, r->hs);
-            if (++r->ystep >= r->vs) {
+            যদি (++r->ystep >= r->vs) {
                r->ystep = 0;
                r->line0 = r->line1;
-               if (++r->ypos < z->img_comp[k].y)
+               যদি (++r->ypos < z->img_comp[k].y)
                   r->line1 += z->img_comp[k].w2;
             }
          }
-         if (n >= 3) {
+         যদি (n >= 3) {
             stbi_uc *y = coutput[0];
-            if (z->s->img_n == 3) {
-               if (is_rgb) {
-                  for (i=0; i < z->s->img_x; ++i) {
+            যদি (z->s->img_n == 3) {
+               যদি (is_rgb) {
+                  জন্য (i=0; i < z->s->img_x; ++i) {
                      out[0] = y[i];
                      out[1] = coutput[1][i];
                      out[2] = coutput[2][i];
                      out[3] = 255;
                      out += n;
                   }
-               } else {
+               } অন্যথা {
                   z->YCbCr_to_RGB_kernel(out, y, coutput[1], coutput[2], z->s->img_x, n);
                }
-            } else if (z->s->img_n == 4) {
-               if (z->app14_color_transform == 0) { // CMYK
-                  for (i=0; i < z->s->img_x; ++i) {
+            } অন্যথা যদি (z->s->img_n == 4) {
+               যদি (z->app14_color_transform == 0) { // CMYK
+                  জন্য (i=0; i < z->s->img_x; ++i) {
                      stbi_uc m = coutput[3][i];
                      out[0] = stbi__blinn_8x8(coutput[0][i], m);
                      out[1] = stbi__blinn_8x8(coutput[1][i], m);
@@ -3667,37 +3667,37 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
                      out[3] = 255;
                      out += n;
                   }
-               } else if (z->app14_color_transform == 2) { // YCCK
+               } অন্যথা যদি (z->app14_color_transform == 2) { // YCCK
                   z->YCbCr_to_RGB_kernel(out, y, coutput[1], coutput[2], z->s->img_x, n);
-                  for (i=0; i < z->s->img_x; ++i) {
+                  জন্য (i=0; i < z->s->img_x; ++i) {
                      stbi_uc m = coutput[3][i];
                      out[0] = stbi__blinn_8x8(255 - out[0], m);
                      out[1] = stbi__blinn_8x8(255 - out[1], m);
                      out[2] = stbi__blinn_8x8(255 - out[2], m);
                      out += n;
                   }
-               } else { // YCbCr + alpha?  Ignore the fourth channel for now
+               } অন্যথা { // YCbCr + alpha?  Ignore the fourth channel for now
                   z->YCbCr_to_RGB_kernel(out, y, coutput[1], coutput[2], z->s->img_x, n);
                }
-            } else
-               for (i=0; i < z->s->img_x; ++i) {
+            } অন্যথা
+               জন্য (i=0; i < z->s->img_x; ++i) {
                   out[0] = out[1] = out[2] = y[i];
                   out[3] = 255; // not used if n==3
                   out += n;
                }
-         } else {
-            if (is_rgb) {
-               if (n == 1)
-                  for (i=0; i < z->s->img_x; ++i)
+         } অন্যথা {
+            যদি (is_rgb) {
+               যদি (n == 1)
+                  জন্য (i=0; i < z->s->img_x; ++i)
                      *out++ = stbi__compute_y(coutput[0][i], coutput[1][i], coutput[2][i]);
-               else {
-                  for (i=0; i < z->s->img_x; ++i, out += 2) {
+               অন্যথা {
+                  জন্য (i=0; i < z->s->img_x; ++i, out += 2) {
                      out[0] = stbi__compute_y(coutput[0][i], coutput[1][i], coutput[2][i]);
                      out[1] = 255;
                   }
                }
-            } else if (z->s->img_n == 4 && z->app14_color_transform == 0) {
-               for (i=0; i < z->s->img_x; ++i) {
+            } অন্যথা যদি (z->s->img_n == 4 && z->app14_color_transform == 0) {
+               জন্য (i=0; i < z->s->img_x; ++i) {
                   stbi_uc m = coutput[3][i];
                   stbi_uc r = stbi__blinn_8x8(coutput[0][i], m);
                   stbi_uc g = stbi__blinn_8x8(coutput[1][i], m);
@@ -3706,73 +3706,73 @@ static stbi_uc *load_jpeg_image(stbi__jpeg *z, int *out_x, int *out_y, int *comp
                   out[1] = 255;
                   out += n;
                }
-            } else if (z->s->img_n == 4 && z->app14_color_transform == 2) {
-               for (i=0; i < z->s->img_x; ++i) {
+            } অন্যথা যদি (z->s->img_n == 4 && z->app14_color_transform == 2) {
+               জন্য (i=0; i < z->s->img_x; ++i) {
                   out[0] = stbi__blinn_8x8(255 - coutput[0][i], coutput[3][i]);
                   out[1] = 255;
                   out += n;
                }
-            } else {
+            } অন্যথা {
                stbi_uc *y = coutput[0];
-               if (n == 1)
-                  for (i=0; i < z->s->img_x; ++i) out[i] = y[i];
-               else
-                  for (i=0; i < z->s->img_x; ++i) *out++ = y[i], *out++ = 255;
+               যদি (n == 1)
+                  জন্য (i=0; i < z->s->img_x; ++i) out[i] = y[i];
+               অন্যথা
+                  জন্য (i=0; i < z->s->img_x; ++i) *out++ = y[i], *out++ = 255;
             }
          }
       }
       stbi__cleanup_jpeg(z);
       *out_x = z->s->img_x;
       *out_y = z->s->img_y;
-      if (comp) *comp = z->s->img_n >= 3 ? 3 : 1; // report original components, not output
-      return output;
+      যদি (comp) *comp = z->s->img_n >= 3 ? 3 : 1; // report original components, not output
+      ফেরত output;
    }
 }
 
-static void *stbi__jpeg_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__jpeg_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
-   unsigned char* result;
-   stbi__jpeg* j = (stbi__jpeg*) stbi__malloc(sizeof(stbi__jpeg));
+   unsigned অক্ষর* ফলাফল;
+   stbi__jpeg* j = (stbi__jpeg*) stbi__malloc(আকার(stbi__jpeg));
    STBI_NOTUSED(ri);
    j->s = s;
    stbi__setup_jpeg(j);
-   result = load_jpeg_image(j, x,y,comp,req_comp);
+   ফলাফল = load_jpeg_image(j, x,y,comp,req_comp);
    STBI_FREE(j);
-   return result;
+   ফেরত ফলাফল;
 }
 
-static int stbi__jpeg_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__jpeg_test(stbi__context *s)
 {
-   int r;
-   stbi__jpeg* j = (stbi__jpeg*)stbi__malloc(sizeof(stbi__jpeg));
+   পূর্ণসংখ্যা r;
+   stbi__jpeg* j = (stbi__jpeg*)stbi__malloc(আকার(stbi__jpeg));
    j->s = s;
    stbi__setup_jpeg(j);
    r = stbi__decode_jpeg_header(j, STBI__SCAN_type);
    stbi__rewind(s);
    STBI_FREE(j);
-   return r;
+   ফেরত r;
 }
 
-static int stbi__jpeg_info_raw(stbi__jpeg *j, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__jpeg_info_raw(stbi__jpeg *j, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   if (!stbi__decode_jpeg_header(j, STBI__SCAN_header)) {
+   যদি (!stbi__decode_jpeg_header(j, STBI__SCAN_header)) {
       stbi__rewind( j->s );
-      return 0;
+      ফেরত 0;
    }
-   if (x) *x = j->s->img_x;
-   if (y) *y = j->s->img_y;
-   if (comp) *comp = j->s->img_n >= 3 ? 3 : 1;
-   return 1;
+   যদি (x) *x = j->s->img_x;
+   যদি (y) *y = j->s->img_y;
+   যদি (comp) *comp = j->s->img_n >= 3 ? 3 : 1;
+   ফেরত 1;
 }
 
-static int stbi__jpeg_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__jpeg_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   int result;
-   stbi__jpeg* j = (stbi__jpeg*) (stbi__malloc(sizeof(stbi__jpeg)));
+   পূর্ণসংখ্যা ফলাফল;
+   stbi__jpeg* j = (stbi__jpeg*) (stbi__malloc(আকার(stbi__jpeg)));
    j->s = s;
-   result = stbi__jpeg_info_raw(j, x, y, comp);
+   ফলাফল = stbi__jpeg_info_raw(j, x, y, comp);
    STBI_FREE(j);
-   return result;
+   ফেরত ফলাফল;
 }
 #endif
 
@@ -3791,78 +3791,78 @@ static int stbi__jpeg_info(stbi__context *s, int *x, int *y, int *comp)
 
 // zlib-style huffman encoding
 // (jpegs packs from left, zlib from right, so can't share code)
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi__uint16 fast[1 << STBI__ZFAST_BITS];
    stbi__uint16 firstcode[16];
-   int maxcode[17];
+   পূর্ণসংখ্যা maxcode[17];
    stbi__uint16 firstsymbol[16];
-   stbi_uc  size[288];
-   stbi__uint16 value[288];
+   stbi_uc  আকার_2[288];
+   stbi__uint16 মান[288];
 } stbi__zhuffman;
 
-stbi_inline static int stbi__bitreverse16(int n)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__bitreverse16(পূর্ণসংখ্যা n)
 {
   n = ((n & 0xAAAA) >>  1) | ((n & 0x5555) << 1);
   n = ((n & 0xCCCC) >>  2) | ((n & 0x3333) << 2);
   n = ((n & 0xF0F0) >>  4) | ((n & 0x0F0F) << 4);
   n = ((n & 0xFF00) >>  8) | ((n & 0x00FF) << 8);
-  return n;
+  ফেরত n;
 }
 
-stbi_inline static int stbi__bit_reverse(int v, int bits)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__bit_reverse(পূর্ণসংখ্যা v, পূর্ণসংখ্যা bits)
 {
    STBI_ASSERT(bits <= 16);
    // to bit reverse n bits, reverse 16 and shift
    // e.g. 11 bits, bit reverse and shift away 5
-   return stbi__bitreverse16(v) >> (16-bits);
+   ফেরত stbi__bitreverse16(v) >> (16-bits);
 }
 
-static int stbi__zbuild_huffman(stbi__zhuffman *z, const stbi_uc *sizelist, int num)
+স্থির পূর্ণসংখ্যা stbi__zbuild_huffman(stbi__zhuffman *z, ধ্রুবক stbi_uc *sizelist, পূর্ণসংখ্যা অঙ্ক)
 {
-   int i,k=0;
-   int code, next_code[16], sizes[17];
+   পূর্ণসংখ্যা i,k=0;
+   পূর্ণসংখ্যা code, পরবর্তী_code[16], sizes[17];
 
    // DEFLATE spec for generating codes
-   memset(sizes, 0, sizeof(sizes));
-   memset(z->fast, 0, sizeof(z->fast));
-   for (i=0; i < num; ++i)
+   memset(sizes, 0, আকার(sizes));
+   memset(z->fast, 0, আকার(z->fast));
+   জন্য (i=0; i < অঙ্ক; ++i)
       ++sizes[sizelist[i]];
    sizes[0] = 0;
-   for (i=1; i < 16; ++i)
-      if (sizes[i] > (1 << i))
-         return stbi__err("bad sizes", "Corrupt PNG");
+   জন্য (i=1; i < 16; ++i)
+      যদি (sizes[i] > (1 << i))
+         ফেরত stbi__err("bad sizes", "Corrupt PNG");
    code = 0;
-   for (i=1; i < 16; ++i) {
-      next_code[i] = code;
+   জন্য (i=1; i < 16; ++i) {
+      পরবর্তী_code[i] = code;
       z->firstcode[i] = (stbi__uint16) code;
       z->firstsymbol[i] = (stbi__uint16) k;
       code = (code + sizes[i]);
-      if (sizes[i])
-         if (code-1 >= (1 << i)) return stbi__err("bad codelengths","Corrupt PNG");
+      যদি (sizes[i])
+         যদি (code-1 >= (1 << i)) ফেরত stbi__err("bad codelengths","Corrupt PNG");
       z->maxcode[i] = code << (16-i); // preshift for inner loop
       code <<= 1;
       k += sizes[i];
    }
    z->maxcode[16] = 0x10000; // sentinel
-   for (i=0; i < num; ++i) {
-      int s = sizelist[i];
-      if (s) {
-         int c = next_code[s] - z->firstcode[s] + z->firstsymbol[s];
+   জন্য (i=0; i < অঙ্ক; ++i) {
+      পূর্ণসংখ্যা s = sizelist[i];
+      যদি (s) {
+         পূর্ণসংখ্যা c = পরবর্তী_code[s] - z->firstcode[s] + z->firstsymbol[s];
          stbi__uint16 fastv = (stbi__uint16) ((s << 9) | i);
-         z->size [c] = (stbi_uc     ) s;
-         z->value[c] = (stbi__uint16) i;
-         if (s <= STBI__ZFAST_BITS) {
-            int j = stbi__bit_reverse(next_code[s],s);
-            while (j < (1 << STBI__ZFAST_BITS)) {
+         z->আকার_2 [c] = (stbi_uc     ) s;
+         z->মান[c] = (stbi__uint16) i;
+         যদি (s <= STBI__ZFAST_BITS) {
+            পূর্ণসংখ্যা j = stbi__bit_reverse(পরবর্তী_code[s],s);
+            যখন (j < (1 << STBI__ZFAST_BITS)) {
                z->fast[j] = fastv;
                j += (1 << s);
             }
          }
-         ++next_code[s];
+         ++পরবর্তী_code[s];
       }
    }
-   return 1;
+   ফেরত 1;
 }
 
 // zlib-from-memory implementation for PNG reading
@@ -3871,244 +3871,244 @@ static int stbi__zbuild_huffman(stbi__zhuffman *z, const stbi_uc *sizelist, int 
 //    we require PNG read all the IDATs and combine them into a single
 //    memory buffer
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi_uc *zbuffer, *zbuffer_end;
-   int num_bits;
-   stbi__uint32 code_buffer;
+   পূর্ণসংখ্যা অঙ্ক_bits;
+   stbi__uint32 code_বাফার;
 
-   char *zout;
-   char *zout_start;
-   char *zout_end;
-   int   z_expandable;
+   অক্ষর *zout;
+   অক্ষর *zout_start;
+   অক্ষর *zout_end;
+   পূর্ণসংখ্যা   z_expandable;
 
-   stbi__zhuffman z_length, z_distance;
+   stbi__zhuffman z_দৈর্ঘ্য, z_distance;
 } stbi__zbuf;
 
-stbi_inline static stbi_uc stbi__zget8(stbi__zbuf *z)
+stbi_inline স্থির stbi_uc stbi__zget8(stbi__zbuf *z)
 {
-   if (z->zbuffer >= z->zbuffer_end) return 0;
-   return *z->zbuffer++;
+   যদি (z->zbuffer >= z->zbuffer_end) ফেরত 0;
+   ফেরত *z->zbuffer++;
 }
 
-static void stbi__fill_bits(stbi__zbuf *z)
+স্থির শূন্য stbi__fill_bits(stbi__zbuf *z)
 {
-   do {
-      STBI_ASSERT(z->code_buffer < (1U << z->num_bits));
-      z->code_buffer |= (unsigned int) stbi__zget8(z) << z->num_bits;
-      z->num_bits += 8;
-   } while (z->num_bits <= 24);
+   করো {
+      STBI_ASSERT(z->code_বাফার < (1U << z->অঙ্ক_bits));
+      z->code_বাফার |= (unsigned পূর্ণসংখ্যা) stbi__zget8(z) << z->অঙ্ক_bits;
+      z->অঙ্ক_bits += 8;
+   } যখন (z->অঙ্ক_bits <= 24);
 }
 
-stbi_inline static unsigned int stbi__zreceive(stbi__zbuf *z, int n)
+stbi_inline স্থির unsigned পূর্ণসংখ্যা stbi__zreceive(stbi__zbuf *z, পূর্ণসংখ্যা n)
 {
-   unsigned int k;
-   if (z->num_bits < n) stbi__fill_bits(z);
-   k = z->code_buffer & ((1 << n) - 1);
-   z->code_buffer >>= n;
-   z->num_bits -= n;
-   return k;
+   unsigned পূর্ণসংখ্যা k;
+   যদি (z->অঙ্ক_bits < n) stbi__fill_bits(z);
+   k = z->code_বাফার & ((1 << n) - 1);
+   z->code_বাফার >>= n;
+   z->অঙ্ক_bits -= n;
+   ফেরত k;
 }
 
-static int stbi__zhuffman_decode_slowpath(stbi__zbuf *a, stbi__zhuffman *z)
+স্থির পূর্ণসংখ্যা stbi__zhuffman_decode_slowpath(stbi__zbuf *a, stbi__zhuffman *z)
 {
-   int b,s,k;
+   পূর্ণসংখ্যা b,s,k;
    // not resolved by fast table, so compute it the slow way
    // use jpeg approach, which requires MSbits at top
-   k = stbi__bit_reverse(a->code_buffer, 16);
-   for (s=STBI__ZFAST_BITS+1; ; ++s)
-      if (k < z->maxcode[s])
-         break;
-   if (s == 16) return -1; // invalid code!
+   k = stbi__bit_reverse(a->code_বাফার, 16);
+   জন্য (s=STBI__ZFAST_BITS+1; ; ++s)
+      যদি (k < z->maxcode[s])
+         বিরতি;
+   যদি (s == 16) ফেরত -1; // invalid code!
    // code size is s, so:
    b = (k >> (16-s)) - z->firstcode[s] + z->firstsymbol[s];
-   STBI_ASSERT(z->size[b] == s);
-   a->code_buffer >>= s;
-   a->num_bits -= s;
-   return z->value[b];
+   STBI_ASSERT(z->আকার_2[b] == s);
+   a->code_বাফার >>= s;
+   a->অঙ্ক_bits -= s;
+   ফেরত z->মান[b];
 }
 
-stbi_inline static int stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)
+stbi_inline স্থির পূর্ণসংখ্যা stbi__zhuffman_decode(stbi__zbuf *a, stbi__zhuffman *z)
 {
-   int b,s;
-   if (a->num_bits < 16) stbi__fill_bits(a);
-   b = z->fast[a->code_buffer & STBI__ZFAST_MASK];
-   if (b) {
+   পূর্ণসংখ্যা b,s;
+   যদি (a->অঙ্ক_bits < 16) stbi__fill_bits(a);
+   b = z->fast[a->code_বাফার & STBI__ZFAST_MASK];
+   যদি (b) {
       s = b >> 9;
-      a->code_buffer >>= s;
-      a->num_bits -= s;
-      return b & 511;
+      a->code_বাফার >>= s;
+      a->অঙ্ক_bits -= s;
+      ফেরত b & 511;
    }
-   return stbi__zhuffman_decode_slowpath(a, z);
+   ফেরত stbi__zhuffman_decode_slowpath(a, z);
 }
 
-static int stbi__zexpand(stbi__zbuf *z, char *zout, int n)  // need to make room for n bytes
+স্থির পূর্ণসংখ্যা stbi__zexpand(stbi__zbuf *z, অক্ষর *zout, পূর্ণসংখ্যা n)  // need to make room for n bytes
 {
-   char *q;
-   int cur, limit, old_limit;
+   অক্ষর *q;
+   পূর্ণসংখ্যা cur, limit, old_limit;
    z->zout = zout;
-   if (!z->z_expandable) return stbi__err("output buffer limit","Corrupt PNG");
-   cur   = (int) (z->zout     - z->zout_start);
-   limit = old_limit = (int) (z->zout_end - z->zout_start);
-   while (cur + n > limit)
+   যদি (!z->z_expandable) ফেরত stbi__err("output buffer limit","Corrupt PNG");
+   cur   = (পূর্ণসংখ্যা) (z->zout     - z->zout_start);
+   limit = old_limit = (পূর্ণসংখ্যা) (z->zout_end - z->zout_start);
+   যখন (cur + n > limit)
       limit *= 2;
-   q = (char *) STBI_REALLOC_SIZED(z->zout_start, old_limit, limit);
+   q = (অক্ষর *) STBI_REALLOC_SIZED(z->zout_start, old_limit, limit);
    STBI_NOTUSED(old_limit);
-   if (q == NULL) return stbi__err("outofmem", "Out of memory");
+   যদি (q == ফাঁকা) ফেরত stbi__err("outofmem", "Out of memory");
    z->zout_start = q;
    z->zout       = q + cur;
    z->zout_end   = q + limit;
-   return 1;
+   ফেরত 1;
 }
 
-static const int stbi__zlength_base[31] = {
+স্থির ধ্রুবক পূর্ণসংখ্যা stbi__zlength_base[31] = {
    3,4,5,6,7,8,9,10,11,13,
    15,17,19,23,27,31,35,43,51,59,
    67,83,99,115,131,163,195,227,258,0,0 };
 
-static const int stbi__zlength_extra[31]=
+স্থির ধ্রুবক পূর্ণসংখ্যা stbi__zlength_extra[31]=
 { 0,0,0,0,0,0,0,0,1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,0,0,0 };
 
-static const int stbi__zdist_base[32] = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,
+স্থির ধ্রুবক পূর্ণসংখ্যা stbi__zdist_base[32] = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,
 257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577,0,0};
 
-static const int stbi__zdist_extra[32] =
+স্থির ধ্রুবক পূর্ণসংখ্যা stbi__zdist_extra[32] =
 { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13};
 
-static int stbi__parse_huffman_block(stbi__zbuf *a)
+স্থির পূর্ণসংখ্যা stbi__parse_huffman_block(stbi__zbuf *a)
 {
-   char *zout = a->zout;
-   for(;;) {
-      int z = stbi__zhuffman_decode(a, &a->z_length);
-      if (z < 256) {
-         if (z < 0) return stbi__err("bad huffman code","Corrupt PNG"); // error in huffman codes
-         if (zout >= a->zout_end) {
-            if (!stbi__zexpand(a, zout, 1)) return 0;
+   অক্ষর *zout = a->zout;
+   জন্য(;;) {
+      পূর্ণসংখ্যা z = stbi__zhuffman_decode(a, &a->z_দৈর্ঘ্য);
+      যদি (z < 256) {
+         যদি (z < 0) ফেরত stbi__err("bad huffman code","Corrupt PNG"); // error in huffman codes
+         যদি (zout >= a->zout_end) {
+            যদি (!stbi__zexpand(a, zout, 1)) ফেরত 0;
             zout = a->zout;
          }
-         *zout++ = (char) z;
-      } else {
+         *zout++ = (অক্ষর) z;
+      } অন্যথা {
          stbi_uc *p;
-         int len,dist;
-         if (z == 256) {
+         পূর্ণসংখ্যা len,dist;
+         যদি (z == 256) {
             a->zout = zout;
-            return 1;
+            ফেরত 1;
          }
          z -= 257;
          len = stbi__zlength_base[z];
-         if (stbi__zlength_extra[z]) len += stbi__zreceive(a, stbi__zlength_extra[z]);
+         যদি (stbi__zlength_extra[z]) len += stbi__zreceive(a, stbi__zlength_extra[z]);
          z = stbi__zhuffman_decode(a, &a->z_distance);
-         if (z < 0) return stbi__err("bad huffman code","Corrupt PNG");
+         যদি (z < 0) ফেরত stbi__err("bad huffman code","Corrupt PNG");
          dist = stbi__zdist_base[z];
-         if (stbi__zdist_extra[z]) dist += stbi__zreceive(a, stbi__zdist_extra[z]);
-         if (zout - a->zout_start < dist) return stbi__err("bad dist","Corrupt PNG");
-         if (zout + len > a->zout_end) {
-            if (!stbi__zexpand(a, zout, len)) return 0;
+         যদি (stbi__zdist_extra[z]) dist += stbi__zreceive(a, stbi__zdist_extra[z]);
+         যদি (zout - a->zout_start < dist) ফেরত stbi__err("bad dist","Corrupt PNG");
+         যদি (zout + len > a->zout_end) {
+            যদি (!stbi__zexpand(a, zout, len)) ফেরত 0;
             zout = a->zout;
          }
          p = (stbi_uc *) (zout - dist);
-         if (dist == 1) { // run of one byte; common in images.
+         যদি (dist == 1) { // run of one byte; common in images.
             stbi_uc v = *p;
-            if (len) { do *zout++ = v; while (--len); }
-         } else {
-            if (len) { do *zout++ = *p++; while (--len); }
+            যদি (len) { করো *zout++ = v; যখন (--len); }
+         } অন্যথা {
+            যদি (len) { করো *zout++ = *p++; যখন (--len); }
          }
       }
    }
 }
 
-static int stbi__compute_huffman_codes(stbi__zbuf *a)
+স্থির পূর্ণসংখ্যা stbi__compute_huffman_codes(stbi__zbuf *a)
 {
-   static const stbi_uc length_dezigzag[19] = { 16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15 };
+   স্থির ধ্রুবক stbi_uc দৈর্ঘ্য_dezigzag[19] = { 16,17,18,0,8,7,9,6,10,5,11,4,12,3,13,2,14,1,15 };
    stbi__zhuffman z_codelength;
    stbi_uc lencodes[286+32+137];//padding for maximum single op
    stbi_uc codelength_sizes[19];
-   int i,n;
+   পূর্ণসংখ্যা i,n;
 
-   int hlit  = stbi__zreceive(a,5) + 257;
-   int hdist = stbi__zreceive(a,5) + 1;
-   int hclen = stbi__zreceive(a,4) + 4;
-   int ntot  = hlit + hdist;
+   পূর্ণসংখ্যা hlit  = stbi__zreceive(a,5) + 257;
+   পূর্ণসংখ্যা hdist = stbi__zreceive(a,5) + 1;
+   পূর্ণসংখ্যা hclen = stbi__zreceive(a,4) + 4;
+   পূর্ণসংখ্যা ntot  = hlit + hdist;
 
-   memset(codelength_sizes, 0, sizeof(codelength_sizes));
-   for (i=0; i < hclen; ++i) {
-      int s = stbi__zreceive(a,3);
-      codelength_sizes[length_dezigzag[i]] = (stbi_uc) s;
+   memset(codelength_sizes, 0, আকার(codelength_sizes));
+   জন্য (i=0; i < hclen; ++i) {
+      পূর্ণসংখ্যা s = stbi__zreceive(a,3);
+      codelength_sizes[দৈর্ঘ্য_dezigzag[i]] = (stbi_uc) s;
    }
-   if (!stbi__zbuild_huffman(&z_codelength, codelength_sizes, 19)) return 0;
+   যদি (!stbi__zbuild_huffman(&z_codelength, codelength_sizes, 19)) ফেরত 0;
 
    n = 0;
-   while (n < ntot) {
-      int c = stbi__zhuffman_decode(a, &z_codelength);
-      if (c < 0 || c >= 19) return stbi__err("bad codelengths", "Corrupt PNG");
-      if (c < 16)
+   যখন (n < ntot) {
+      পূর্ণসংখ্যা c = stbi__zhuffman_decode(a, &z_codelength);
+      যদি (c < 0 || c >= 19) ফেরত stbi__err("bad codelengths", "Corrupt PNG");
+      যদি (c < 16)
          lencodes[n++] = (stbi_uc) c;
-      else {
+      অন্যথা {
          stbi_uc fill = 0;
-         if (c == 16) {
+         যদি (c == 16) {
             c = stbi__zreceive(a,2)+3;
-            if (n == 0) return stbi__err("bad codelengths", "Corrupt PNG");
+            যদি (n == 0) ফেরত stbi__err("bad codelengths", "Corrupt PNG");
             fill = lencodes[n-1];
-         } else if (c == 17)
+         } অন্যথা যদি (c == 17)
             c = stbi__zreceive(a,3)+3;
-         else {
+         অন্যথা {
             STBI_ASSERT(c == 18);
             c = stbi__zreceive(a,7)+11;
          }
-         if (ntot - n < c) return stbi__err("bad codelengths", "Corrupt PNG");
+         যদি (ntot - n < c) ফেরত stbi__err("bad codelengths", "Corrupt PNG");
          memset(lencodes+n, fill, c);
          n += c;
       }
    }
-   if (n != ntot) return stbi__err("bad codelengths","Corrupt PNG");
-   if (!stbi__zbuild_huffman(&a->z_length, lencodes, hlit)) return 0;
-   if (!stbi__zbuild_huffman(&a->z_distance, lencodes+hlit, hdist)) return 0;
-   return 1;
+   যদি (n != ntot) ফেরত stbi__err("bad codelengths","Corrupt PNG");
+   যদি (!stbi__zbuild_huffman(&a->z_দৈর্ঘ্য, lencodes, hlit)) ফেরত 0;
+   যদি (!stbi__zbuild_huffman(&a->z_distance, lencodes+hlit, hdist)) ফেরত 0;
+   ফেরত 1;
 }
 
-static int stbi__parse_uncompressed_block(stbi__zbuf *a)
+স্থির পূর্ণসংখ্যা stbi__parse_uncompressed_block(stbi__zbuf *a)
 {
    stbi_uc header[4];
-   int len,nlen,k;
-   if (a->num_bits & 7)
-      stbi__zreceive(a, a->num_bits & 7); // discard
+   পূর্ণসংখ্যা len,nlen,k;
+   যদি (a->অঙ্ক_bits & 7)
+      stbi__zreceive(a, a->অঙ্ক_bits & 7); // discard
    // drain the bit-packed data into header
    k = 0;
-   while (a->num_bits > 0) {
-      header[k++] = (stbi_uc) (a->code_buffer & 255); // suppress MSVC run-time check
-      a->code_buffer >>= 8;
-      a->num_bits -= 8;
+   যখন (a->অঙ্ক_bits > 0) {
+      header[k++] = (stbi_uc) (a->code_বাফার & 255); // suppress MSVC run-time check
+      a->code_বাফার >>= 8;
+      a->অঙ্ক_bits -= 8;
    }
-   STBI_ASSERT(a->num_bits == 0);
+   STBI_ASSERT(a->অঙ্ক_bits == 0);
    // now fill header the normal way
-   while (k < 4)
+   যখন (k < 4)
       header[k++] = stbi__zget8(a);
    len  = header[1] * 256 + header[0];
    nlen = header[3] * 256 + header[2];
-   if (nlen != (len ^ 0xffff)) return stbi__err("zlib corrupt","Corrupt PNG");
-   if (a->zbuffer + len > a->zbuffer_end) return stbi__err("read past buffer","Corrupt PNG");
-   if (a->zout + len > a->zout_end)
-      if (!stbi__zexpand(a, a->zout, len)) return 0;
+   যদি (nlen != (len ^ 0xffff)) ফেরত stbi__err("zlib corrupt","Corrupt PNG");
+   যদি (a->zbuffer + len > a->zbuffer_end) ফেরত stbi__err("read past buffer","Corrupt PNG");
+   যদি (a->zout + len > a->zout_end)
+      যদি (!stbi__zexpand(a, a->zout, len)) ফেরত 0;
    memcpy(a->zout, a->zbuffer, len);
    a->zbuffer += len;
    a->zout += len;
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__parse_zlib_header(stbi__zbuf *a)
+স্থির পূর্ণসংখ্যা stbi__parse_zlib_header(stbi__zbuf *a)
 {
-   int cmf   = stbi__zget8(a);
-   int cm    = cmf & 15;
+   পূর্ণসংখ্যা cmf   = stbi__zget8(a);
+   পূর্ণসংখ্যা cm    = cmf & 15;
    /* int cinfo = cmf >> 4; */
-   int flg   = stbi__zget8(a);
-   if ((cmf*256+flg) % 31 != 0) return stbi__err("bad zlib header","Corrupt PNG"); // zlib spec
-   if (flg & 32) return stbi__err("no preset dict","Corrupt PNG"); // preset dictionary not allowed in png
-   if (cm != 8) return stbi__err("bad compression","Corrupt PNG"); // DEFLATE required for png
+   পূর্ণসংখ্যা flg   = stbi__zget8(a);
+   যদি ((cmf*256+flg) % 31 != 0) ফেরত stbi__err("bad zlib header","Corrupt PNG"); // zlib spec
+   যদি (flg & 32) ফেরত stbi__err("no preset dict","Corrupt PNG"); // preset dictionary not allowed in png
+   যদি (cm != 8) ফেরত stbi__err("bad compression","Corrupt PNG"); // DEFLATE required for png
    // window = 1 << (8 + cinfo)... but who cares, we fully buffer output
-   return 1;
+   ফেরত 1;
 }
 
-static const stbi_uc stbi__zdefault_length[288] =
+স্থির ধ্রুবক stbi_uc stbi_zdefault_দৈর্ঘ্য[288] =
 {
    8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8, 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
    8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8, 8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,
@@ -4120,7 +4120,7 @@ static const stbi_uc stbi__zdefault_length[288] =
    9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9, 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,
    7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7, 7,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8
 };
-static const stbi_uc stbi__zdefault_distance[32] =
+স্থির ধ্রুবক stbi_uc stbi__zdefault_distance[32] =
 {
    5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5
 };
@@ -4137,117 +4137,117 @@ Init algorithm:
 }
 */
 
-static int stbi__parse_zlib(stbi__zbuf *a, int parse_header)
+স্থির পূর্ণসংখ্যা stbi__parse_zlib(stbi__zbuf *a, পূর্ণসংখ্যা parse_header)
 {
-   int final, type;
-   if (parse_header)
-      if (!stbi__parse_zlib_header(a)) return 0;
-   a->num_bits = 0;
-   a->code_buffer = 0;
-   do {
+   পূর্ণসংখ্যা final, type;
+   যদি (parse_header)
+      যদি (!stbi__parse_zlib_header(a)) ফেরত 0;
+   a->অঙ্ক_bits = 0;
+   a->code_বাফার = 0;
+   করো {
       final = stbi__zreceive(a,1);
       type = stbi__zreceive(a,2);
-      if (type == 0) {
-         if (!stbi__parse_uncompressed_block(a)) return 0;
-      } else if (type == 3) {
-         return 0;
-      } else {
-         if (type == 1) {
+      যদি (type == 0) {
+         যদি (!stbi__parse_uncompressed_block(a)) ফেরত 0;
+      } অন্যথা যদি (type == 3) {
+         ফেরত 0;
+      } অন্যথা {
+         যদি (type == 1) {
             // use fixed code lengths
-            if (!stbi__zbuild_huffman(&a->z_length  , stbi__zdefault_length  , 288)) return 0;
-            if (!stbi__zbuild_huffman(&a->z_distance, stbi__zdefault_distance,  32)) return 0;
-         } else {
-            if (!stbi__compute_huffman_codes(a)) return 0;
+            যদি (!stbi__zbuild_huffman(&a->z_দৈর্ঘ্য  , stbi_zdefault_দৈর্ঘ্য  , 288)) ফেরত 0;
+            যদি (!stbi__zbuild_huffman(&a->z_distance, stbi__zdefault_distance,  32)) ফেরত 0;
+         } অন্যথা {
+            যদি (!stbi__compute_huffman_codes(a)) ফেরত 0;
          }
-         if (!stbi__parse_huffman_block(a)) return 0;
+         যদি (!stbi__parse_huffman_block(a)) ফেরত 0;
       }
-   } while (!final);
-   return 1;
+   } যখন (!final);
+   ফেরত 1;
 }
 
-static int stbi__do_zlib(stbi__zbuf *a, char *obuf, int olen, int exp, int parse_header)
+স্থির পূর্ণসংখ্যা stbi__do_zlib(stbi__zbuf *a, অক্ষর *obuf, পূর্ণসংখ্যা olen, পূর্ণসংখ্যা exp, পূর্ণসংখ্যা parse_header)
 {
    a->zout_start = obuf;
    a->zout       = obuf;
    a->zout_end   = obuf + olen;
    a->z_expandable = exp;
 
-   return stbi__parse_zlib(a, parse_header);
+   ফেরত stbi__parse_zlib(a, parse_header);
 }
 
-STBIDEF char *stbi_zlib_decode_malloc_guesssize(const char *buffer, int len, int initial_size, int *outlen)
+STBIDEF অক্ষর *stbi_zlib_decode_malloc_guesssize(ধ্রুবক অক্ষর *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা initial_আকার, পূর্ণসংখ্যা *outlen)
 {
    stbi__zbuf a;
-   char *p = (char *) stbi__malloc(initial_size);
-   if (p == NULL) return NULL;
-   a.zbuffer = (stbi_uc *) buffer;
-   a.zbuffer_end = (stbi_uc *) buffer + len;
-   if (stbi__do_zlib(&a, p, initial_size, 1, 1)) {
-      if (outlen) *outlen = (int) (a.zout - a.zout_start);
-      return a.zout_start;
-   } else {
+   অক্ষর *p = (অক্ষর *) stbi__malloc(initial_আকার);
+   যদি (p == ফাঁকা) ফেরত ফাঁকা;
+   a.zbuffer = (stbi_uc *) বাফার;
+   a.zbuffer_end = (stbi_uc *) বাফার + len;
+   যদি (stbi__do_zlib(&a, p, initial_আকার, 1, 1)) {
+      যদি (outlen) *outlen = (পূর্ণসংখ্যা) (a.zout - a.zout_start);
+      ফেরত a.zout_start;
+   } অন্যথা {
       STBI_FREE(a.zout_start);
-      return NULL;
+      ফেরত ফাঁকা;
    }
 }
 
-STBIDEF char *stbi_zlib_decode_malloc(char const *buffer, int len, int *outlen)
+STBIDEF অক্ষর *stbi_zlib_decode_malloc(অক্ষর ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *outlen)
 {
-   return stbi_zlib_decode_malloc_guesssize(buffer, len, 16384, outlen);
+   ফেরত stbi_zlib_decode_malloc_guesssize(বাফার, len, 16384, outlen);
 }
 
-STBIDEF char *stbi_zlib_decode_malloc_guesssize_headerflag(const char *buffer, int len, int initial_size, int *outlen, int parse_header)
+STBIDEF অক্ষর *stbi_zlib_decode_malloc_guesssize_headerflag(ধ্রুবক অক্ষর *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা initial_আকার, পূর্ণসংখ্যা *outlen, পূর্ণসংখ্যা parse_header)
 {
    stbi__zbuf a;
-   char *p = (char *) stbi__malloc(initial_size);
-   if (p == NULL) return NULL;
-   a.zbuffer = (stbi_uc *) buffer;
-   a.zbuffer_end = (stbi_uc *) buffer + len;
-   if (stbi__do_zlib(&a, p, initial_size, 1, parse_header)) {
-      if (outlen) *outlen = (int) (a.zout - a.zout_start);
-      return a.zout_start;
-   } else {
+   অক্ষর *p = (অক্ষর *) stbi__malloc(initial_আকার);
+   যদি (p == ফাঁকা) ফেরত ফাঁকা;
+   a.zbuffer = (stbi_uc *) বাফার;
+   a.zbuffer_end = (stbi_uc *) বাফার + len;
+   যদি (stbi__do_zlib(&a, p, initial_আকার, 1, parse_header)) {
+      যদি (outlen) *outlen = (পূর্ণসংখ্যা) (a.zout - a.zout_start);
+      ফেরত a.zout_start;
+   } অন্যথা {
       STBI_FREE(a.zout_start);
-      return NULL;
+      ফেরত ফাঁকা;
    }
 }
 
-STBIDEF int stbi_zlib_decode_buffer(char *obuffer, int olen, char const *ibuffer, int ilen)
+STBIDEF পূর্ণসংখ্যা stbi_zlib_decode_বাফার(অক্ষর *obuffer, পূর্ণসংখ্যা olen, অক্ষর ধ্রুবক *ibuffer, পূর্ণসংখ্যা ilen)
 {
    stbi__zbuf a;
    a.zbuffer = (stbi_uc *) ibuffer;
    a.zbuffer_end = (stbi_uc *) ibuffer + ilen;
-   if (stbi__do_zlib(&a, obuffer, olen, 0, 1))
-      return (int) (a.zout - a.zout_start);
-   else
-      return -1;
+   যদি (stbi__do_zlib(&a, obuffer, olen, 0, 1))
+      ফেরত (পূর্ণসংখ্যা) (a.zout - a.zout_start);
+   অন্যথা
+      ফেরত -1;
 }
 
-STBIDEF char *stbi_zlib_decode_noheader_malloc(char const *buffer, int len, int *outlen)
+STBIDEF অক্ষর *stbi_zlib_decode_noheader_malloc(অক্ষর ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *outlen)
 {
    stbi__zbuf a;
-   char *p = (char *) stbi__malloc(16384);
-   if (p == NULL) return NULL;
-   a.zbuffer = (stbi_uc *) buffer;
-   a.zbuffer_end = (stbi_uc *) buffer+len;
-   if (stbi__do_zlib(&a, p, 16384, 1, 0)) {
-      if (outlen) *outlen = (int) (a.zout - a.zout_start);
-      return a.zout_start;
-   } else {
+   অক্ষর *p = (অক্ষর *) stbi__malloc(16384);
+   যদি (p == ফাঁকা) ফেরত ফাঁকা;
+   a.zbuffer = (stbi_uc *) বাফার;
+   a.zbuffer_end = (stbi_uc *) বাফার+len;
+   যদি (stbi__do_zlib(&a, p, 16384, 1, 0)) {
+      যদি (outlen) *outlen = (পূর্ণসংখ্যা) (a.zout - a.zout_start);
+      ফেরত a.zout_start;
+   } অন্যথা {
       STBI_FREE(a.zout_start);
-      return NULL;
+      ফেরত ফাঁকা;
    }
 }
 
-STBIDEF int stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char *ibuffer, int ilen)
+STBIDEF পূর্ণসংখ্যা stbi_zlib_decode_noheader_বাফার(অক্ষর *obuffer, পূর্ণসংখ্যা olen, ধ্রুবক অক্ষর *ibuffer, পূর্ণসংখ্যা ilen)
 {
    stbi__zbuf a;
    a.zbuffer = (stbi_uc *) ibuffer;
    a.zbuffer_end = (stbi_uc *) ibuffer + ilen;
-   if (stbi__do_zlib(&a, obuffer, olen, 0, 0))
-      return (int) (a.zout - a.zout_start);
-   else
-      return -1;
+   যদি (stbi__do_zlib(&a, obuffer, olen, 0, 0))
+      ফেরত (পূর্ণসংখ্যা) (a.zout - a.zout_start);
+   অন্যথা
+      ফেরত -1;
 }
 #endif
 
@@ -4262,38 +4262,38 @@ STBIDEF int stbi_zlib_decode_noheader_buffer(char *obuffer, int olen, const char
 //      - uses stb_zlib, a PD zlib implementation with fast huffman decoding
 
 #ifndef STBI_NO_PNG
-typedef struct
+প্রকারলেখ কাঠামো
 {
-   stbi__uint32 length;
+   stbi__uint32 দৈর্ঘ্য;
    stbi__uint32 type;
 } stbi__pngchunk;
 
-static stbi__pngchunk stbi__get_chunk_header(stbi__context *s)
+স্থির stbi__pngchunk stbi__get_chunk_header(stbi__context *s)
 {
    stbi__pngchunk c;
-   c.length = stbi__get32be(s);
+   c.দৈর্ঘ্য = stbi__get32be(s);
    c.type   = stbi__get32be(s);
-   return c;
+   ফেরত c;
 }
 
-static int stbi__check_png_header(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__check_png_header(stbi__context *s)
 {
-   static const stbi_uc png_sig[8] = { 137,80,78,71,13,10,26,10 };
-   int i;
-   for (i=0; i < 8; ++i)
-      if (stbi__get8(s) != png_sig[i]) return stbi__err("bad png sig","Not a PNG");
-   return 1;
+   স্থির ধ্রুবক stbi_uc png_sig[8] = { 137,80,78,71,13,10,26,10 };
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < 8; ++i)
+      যদি (stbi__get8(s) != png_sig[i]) ফেরত stbi__err("bad png sig","Not a PNG");
+   ফেরত 1;
 }
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi__context *s;
    stbi_uc *idata, *expanded, *out;
-   int depth;
+   পূর্ণসংখ্যা depth;
 } stbi__png;
 
 
-enum {
+গণনা {
    STBI__F_none=0,
    STBI__F_sub=1,
    STBI__F_up=2,
@@ -4304,7 +4304,7 @@ enum {
    STBI__F_paeth_first
 };
 
-static stbi_uc first_row_filter[5] =
+স্থির stbi_uc first_row_filter[5] =
 {
    STBI__F_none,
    STBI__F_sub,
@@ -4313,55 +4313,55 @@ static stbi_uc first_row_filter[5] =
    STBI__F_paeth_first
 };
 
-static int stbi__paeth(int a, int b, int c)
+স্থির পূর্ণসংখ্যা stbi__paeth(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা c)
 {
-   int p = a + b - c;
-   int pa = abs(p-a);
-   int pb = abs(p-b);
-   int pc = abs(p-c);
-   if (pa <= pb && pa <= pc) return a;
-   if (pb <= pc) return b;
-   return c;
+   পূর্ণসংখ্যা p = a + b - c;
+   পূর্ণসংখ্যা pa = abs(p-a);
+   পূর্ণসংখ্যা pb = abs(p-b);
+   পূর্ণসংখ্যা pc = abs(p-c);
+   যদি (pa <= pb && pa <= pc) ফেরত a;
+   যদি (pb <= pc) ফেরত b;
+   ফেরত c;
 }
 
-static const stbi_uc stbi__depth_scale_table[9] = { 0, 0xff, 0x55, 0, 0x11, 0,0,0, 0x01 };
+স্থির ধ্রুবক stbi_uc stbi__depth_scale_table[9] = { 0, 0xff, 0x55, 0, 0x11, 0,0,0, 0x01 };
 
 // create the png data from post-deflated data
-static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 raw_len, int out_n, stbi__uint32 x, stbi__uint32 y, int depth, int color)
+স্থির পূর্ণসংখ্যা stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 raw_len, পূর্ণসংখ্যা out_n, stbi__uint32 x, stbi__uint32 y, পূর্ণসংখ্যা depth, পূর্ণসংখ্যা color)
 {
-   int bytes = (depth == 16? 2 : 1);
+   পূর্ণসংখ্যা bytes = (depth == 16? 2 : 1);
    stbi__context *s = a->s;
    stbi__uint32 i,j,stride = x*out_n*bytes;
    stbi__uint32 img_len, img_width_bytes;
-   int k;
-   int img_n = s->img_n; // copy it into a local for later
+   পূর্ণসংখ্যা k;
+   পূর্ণসংখ্যা img_n = s->img_n; // copy it into a local for later
 
-   int output_bytes = out_n*bytes;
-   int filter_bytes = img_n*bytes;
-   int width = x;
+   পূর্ণসংখ্যা output_bytes = out_n*bytes;
+   পূর্ণসংখ্যা filter_bytes = img_n*bytes;
+   পূর্ণসংখ্যা width = x;
 
    STBI_ASSERT(out_n == s->img_n || out_n == s->img_n+1);
    a->out = (stbi_uc *) stbi__malloc_mad3(x, y, output_bytes, 0); // extra bytes to write off the end into
-   if (!a->out) return stbi__err("outofmem", "Out of memory");
+   যদি (!a->out) ফেরত stbi__err("outofmem", "Out of memory");
 
-   if (!stbi__mad3sizes_valid(img_n, x, depth, 7)) return stbi__err("too large", "Corrupt PNG");
+   যদি (!stbi__mad3sizes_valid(img_n, x, depth, 7)) ফেরত stbi__err("too large", "Corrupt PNG");
    img_width_bytes = (((img_n * x * depth) + 7) >> 3);
    img_len = (img_width_bytes + 1) * y;
 
    // we used to check for exact match between raw_len and img_len on non-interlaced PNGs,
    // but issue #276 reported a PNG in the wild that had extra data at the end (all zeros),
    // so just check for raw_len < img_len always.
-   if (raw_len < img_len) return stbi__err("not enough pixels","Corrupt PNG");
+   যদি (raw_len < img_len) ফেরত stbi__err("not enough pixels","Corrupt PNG");
 
-   for (j=0; j < y; ++j) {
+   জন্য (j=0; j < y; ++j) {
       stbi_uc *cur = a->out + stride*j;
       stbi_uc *prior;
-      int filter = *raw++;
+      পূর্ণসংখ্যা filter = *raw++;
 
-      if (filter > 4)
-         return stbi__err("invalid filter","Corrupt PNG");
+      যদি (filter > 4)
+         ফেরত stbi__err("invalid filter","Corrupt PNG");
 
-      if (depth < 8) {
+      যদি (depth < 8) {
          STBI_ASSERT(img_width_bytes <= x);
          cur += x*out_n - img_width_bytes; // store output to the rightmost img_len bytes, so we can decode in place
          filter_bytes = 1;
@@ -4370,81 +4370,81 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
       prior = cur - stride; // bugfix: need to compute this after 'cur +=' computation above
 
       // if first row, use special filter that doesn't sample previous row
-      if (j == 0) filter = first_row_filter[filter];
+      যদি (j == 0) filter = first_row_filter[filter];
 
       // handle first byte explicitly
-      for (k=0; k < filter_bytes; ++k) {
-         switch (filter) {
-            case STBI__F_none       : cur[k] = raw[k]; break;
-            case STBI__F_sub        : cur[k] = raw[k]; break;
-            case STBI__F_up         : cur[k] = STBI__BYTECAST(raw[k] + prior[k]); break;
-            case STBI__F_avg        : cur[k] = STBI__BYTECAST(raw[k] + (prior[k]>>1)); break;
-            case STBI__F_paeth      : cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(0,prior[k],0)); break;
-            case STBI__F_avg_first  : cur[k] = raw[k]; break;
-            case STBI__F_paeth_first: cur[k] = raw[k]; break;
+      জন্য (k=0; k < filter_bytes; ++k) {
+         নির্বাচন (filter) {
+            ক্ষেত্র STBI__F_none       : cur[k] = raw[k]; বিরতি;
+            ক্ষেত্র STBI__F_sub        : cur[k] = raw[k]; বিরতি;
+            ক্ষেত্র STBI__F_up         : cur[k] = STBI__BYTECAST(raw[k] + prior[k]); বিরতি;
+            ক্ষেত্র STBI__F_avg        : cur[k] = STBI__BYTECAST(raw[k] + (prior[k]>>1)); বিরতি;
+            ক্ষেত্র STBI__F_paeth      : cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(0,prior[k],0)); বিরতি;
+            ক্ষেত্র STBI__F_avg_first  : cur[k] = raw[k]; বিরতি;
+            ক্ষেত্র STBI__F_paeth_first: cur[k] = raw[k]; বিরতি;
          }
       }
 
-      if (depth == 8) {
-         if (img_n != out_n)
+      যদি (depth == 8) {
+         যদি (img_n != out_n)
             cur[img_n] = 255; // first pixel
          raw += img_n;
          cur += out_n;
          prior += out_n;
-      } else if (depth == 16) {
-         if (img_n != out_n) {
+      } অন্যথা যদি (depth == 16) {
+         যদি (img_n != out_n) {
             cur[filter_bytes]   = 255; // first pixel top byte
             cur[filter_bytes+1] = 255; // first pixel bottom byte
          }
          raw += filter_bytes;
          cur += output_bytes;
          prior += output_bytes;
-      } else {
+      } অন্যথা {
          raw += 1;
          cur += 1;
          prior += 1;
       }
 
       // this is a little gross, so that we don't switch per-pixel or per-component
-      if (depth < 8 || img_n == out_n) {
-         int nk = (width - 1)*filter_bytes;
+      যদি (depth < 8 || img_n == out_n) {
+         পূর্ণসংখ্যা nk = (width - 1)*filter_bytes;
          #define STBI__CASE(f) \
-             case f:     \
-                for (k=0; k < nk; ++k)
-         switch (filter) {
+             ক্ষেত্র f:     \
+                জন্য (k=0; k < nk; ++k)
+         নির্বাচন (filter) {
             // "none" filter turns into a memcpy here; make that explicit.
-            case STBI__F_none:         memcpy(cur, raw, nk); break;
-            STBI__CASE(STBI__F_sub)          { cur[k] = STBI__BYTECAST(raw[k] + cur[k-filter_bytes]); } break;
-            STBI__CASE(STBI__F_up)           { cur[k] = STBI__BYTECAST(raw[k] + prior[k]); } break;
-            STBI__CASE(STBI__F_avg)          { cur[k] = STBI__BYTECAST(raw[k] + ((prior[k] + cur[k-filter_bytes])>>1)); } break;
-            STBI__CASE(STBI__F_paeth)        { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k-filter_bytes],prior[k],prior[k-filter_bytes])); } break;
-            STBI__CASE(STBI__F_avg_first)    { cur[k] = STBI__BYTECAST(raw[k] + (cur[k-filter_bytes] >> 1)); } break;
-            STBI__CASE(STBI__F_paeth_first)  { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k-filter_bytes],0,0)); } break;
+            ক্ষেত্র STBI__F_none:         memcpy(cur, raw, nk); বিরতি;
+            STBI__CASE(STBI__F_sub)          { cur[k] = STBI__BYTECAST(raw[k] + cur[k-filter_bytes]); } বিরতি;
+            STBI__CASE(STBI__F_up)           { cur[k] = STBI__BYTECAST(raw[k] + prior[k]); } বিরতি;
+            STBI__CASE(STBI__F_avg)          { cur[k] = STBI__BYTECAST(raw[k] + ((prior[k] + cur[k-filter_bytes])>>1)); } বিরতি;
+            STBI__CASE(STBI__F_paeth)        { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k-filter_bytes],prior[k],prior[k-filter_bytes])); } বিরতি;
+            STBI__CASE(STBI__F_avg_first)    { cur[k] = STBI__BYTECAST(raw[k] + (cur[k-filter_bytes] >> 1)); } বিরতি;
+            STBI__CASE(STBI__F_paeth_first)  { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k-filter_bytes],0,0)); } বিরতি;
          }
          #undef STBI__CASE
          raw += nk;
-      } else {
+      } অন্যথা {
          STBI_ASSERT(img_n+1 == out_n);
          #define STBI__CASE(f) \
-             case f:     \
-                for (i=x-1; i >= 1; --i, cur[filter_bytes]=255,raw+=filter_bytes,cur+=output_bytes,prior+=output_bytes) \
-                   for (k=0; k < filter_bytes; ++k)
-         switch (filter) {
-            STBI__CASE(STBI__F_none)         { cur[k] = raw[k]; } break;
-            STBI__CASE(STBI__F_sub)          { cur[k] = STBI__BYTECAST(raw[k] + cur[k- output_bytes]); } break;
-            STBI__CASE(STBI__F_up)           { cur[k] = STBI__BYTECAST(raw[k] + prior[k]); } break;
-            STBI__CASE(STBI__F_avg)          { cur[k] = STBI__BYTECAST(raw[k] + ((prior[k] + cur[k- output_bytes])>>1)); } break;
-            STBI__CASE(STBI__F_paeth)        { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k- output_bytes],prior[k],prior[k- output_bytes])); } break;
-            STBI__CASE(STBI__F_avg_first)    { cur[k] = STBI__BYTECAST(raw[k] + (cur[k- output_bytes] >> 1)); } break;
-            STBI__CASE(STBI__F_paeth_first)  { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k- output_bytes],0,0)); } break;
+             ক্ষেত্র f:     \
+                জন্য (i=x-1; i >= 1; --i, cur[filter_bytes]=255,raw+=filter_bytes,cur+=output_bytes,prior+=output_bytes) \
+                   জন্য (k=0; k < filter_bytes; ++k)
+         নির্বাচন (filter) {
+            STBI__CASE(STBI__F_none)         { cur[k] = raw[k]; } বিরতি;
+            STBI__CASE(STBI__F_sub)          { cur[k] = STBI__BYTECAST(raw[k] + cur[k- output_bytes]); } বিরতি;
+            STBI__CASE(STBI__F_up)           { cur[k] = STBI__BYTECAST(raw[k] + prior[k]); } বিরতি;
+            STBI__CASE(STBI__F_avg)          { cur[k] = STBI__BYTECAST(raw[k] + ((prior[k] + cur[k- output_bytes])>>1)); } বিরতি;
+            STBI__CASE(STBI__F_paeth)        { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k- output_bytes],prior[k],prior[k- output_bytes])); } বিরতি;
+            STBI__CASE(STBI__F_avg_first)    { cur[k] = STBI__BYTECAST(raw[k] + (cur[k- output_bytes] >> 1)); } বিরতি;
+            STBI__CASE(STBI__F_paeth_first)  { cur[k] = STBI__BYTECAST(raw[k] + stbi__paeth(cur[k- output_bytes],0,0)); } বিরতি;
          }
          #undef STBI__CASE
 
          // the loop above sets the high byte of the pixels' alpha, but for
          // 16 bit png files we also need the low byte set. we'll do that here.
-         if (depth == 16) {
+         যদি (depth == 16) {
             cur = a->out + stride*j; // start at the beginning of the row again
-            for (i=0; i < x; ++i,cur+=output_bytes) {
+            জন্য (i=0; i < x; ++i,cur+=output_bytes) {
                cur[filter_bytes+1] = 255;
             }
          }
@@ -4454,8 +4454,8 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
    // we make a separate pass to expand bits to pixels; for performance,
    // this could run two scanlines behind the above code, so it won't
    // intefere with filtering but will still be in the cache.
-   if (depth < 8) {
-      for (j=0; j < y; ++j) {
+   যদি (depth < 8) {
+      জন্য (j=0; j < y; ++j) {
          stbi_uc *cur = a->out + stride*j;
          stbi_uc *in  = a->out + stride*j + x*out_n - img_width_bytes;
          // unpack 1/2/4-bit into a 8-bit buffer. allows us to keep the common 8-bit path optimal at minimal cost for 1/2/4-bit
@@ -4468,24 +4468,24 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
          // on the next scanline? yes, consider 1-pixel-wide scanlines with 1-bit-per-pixel.
          // so we need to explicitly clamp the final ones
 
-         if (depth == 4) {
-            for (k=x*img_n; k >= 2; k-=2, ++in) {
+         যদি (depth == 4) {
+            জন্য (k=x*img_n; k >= 2; k-=2, ++in) {
                *cur++ = scale * ((*in >> 4)       );
                *cur++ = scale * ((*in     ) & 0x0f);
             }
-            if (k > 0) *cur++ = scale * ((*in >> 4)       );
-         } else if (depth == 2) {
-            for (k=x*img_n; k >= 4; k-=4, ++in) {
+            যদি (k > 0) *cur++ = scale * ((*in >> 4)       );
+         } অন্যথা যদি (depth == 2) {
+            জন্য (k=x*img_n; k >= 4; k-=4, ++in) {
                *cur++ = scale * ((*in >> 6)       );
                *cur++ = scale * ((*in >> 4) & 0x03);
                *cur++ = scale * ((*in >> 2) & 0x03);
                *cur++ = scale * ((*in     ) & 0x03);
             }
-            if (k > 0) *cur++ = scale * ((*in >> 6)       );
-            if (k > 1) *cur++ = scale * ((*in >> 4) & 0x03);
-            if (k > 2) *cur++ = scale * ((*in >> 2) & 0x03);
-         } else if (depth == 1) {
-            for (k=x*img_n; k >= 8; k-=8, ++in) {
+            যদি (k > 0) *cur++ = scale * ((*in >> 6)       );
+            যদি (k > 1) *cur++ = scale * ((*in >> 4) & 0x03);
+            যদি (k > 2) *cur++ = scale * ((*in >> 2) & 0x03);
+         } অন্যথা যদি (depth == 1) {
+            জন্য (k=x*img_n; k >= 8; k-=8, ++in) {
                *cur++ = scale * ((*in >> 7)       );
                *cur++ = scale * ((*in >> 6) & 0x01);
                *cur++ = scale * ((*in >> 5) & 0x01);
@@ -4495,26 +4495,26 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
                *cur++ = scale * ((*in >> 1) & 0x01);
                *cur++ = scale * ((*in     ) & 0x01);
             }
-            if (k > 0) *cur++ = scale * ((*in >> 7)       );
-            if (k > 1) *cur++ = scale * ((*in >> 6) & 0x01);
-            if (k > 2) *cur++ = scale * ((*in >> 5) & 0x01);
-            if (k > 3) *cur++ = scale * ((*in >> 4) & 0x01);
-            if (k > 4) *cur++ = scale * ((*in >> 3) & 0x01);
-            if (k > 5) *cur++ = scale * ((*in >> 2) & 0x01);
-            if (k > 6) *cur++ = scale * ((*in >> 1) & 0x01);
+            যদি (k > 0) *cur++ = scale * ((*in >> 7)       );
+            যদি (k > 1) *cur++ = scale * ((*in >> 6) & 0x01);
+            যদি (k > 2) *cur++ = scale * ((*in >> 5) & 0x01);
+            যদি (k > 3) *cur++ = scale * ((*in >> 4) & 0x01);
+            যদি (k > 4) *cur++ = scale * ((*in >> 3) & 0x01);
+            যদি (k > 5) *cur++ = scale * ((*in >> 2) & 0x01);
+            যদি (k > 6) *cur++ = scale * ((*in >> 1) & 0x01);
          }
-         if (img_n != out_n) {
-            int q;
+         যদি (img_n != out_n) {
+            পূর্ণসংখ্যা q;
             // insert alpha = 255
             cur = a->out + stride*j;
-            if (img_n == 1) {
-               for (q=x-1; q >= 0; --q) {
+            যদি (img_n == 1) {
+               জন্য (q=x-1; q >= 0; --q) {
                   cur[q*2+1] = 255;
                   cur[q*2+0] = cur[q];
                }
-            } else {
+            } অন্যথা {
                STBI_ASSERT(img_n == 3);
-               for (q=x-1; q >= 0; --q) {
+               জন্য (q=x-1; q >= 0; --q) {
                   cur[q*4+3] = 255;
                   cur[q*4+2] = cur[q*3+2];
                   cur[q*4+1] = cur[q*3+1];
@@ -4523,7 +4523,7 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
             }
          }
       }
-   } else if (depth == 16) {
+   } অন্যথা যদি (depth == 16) {
       // force the image data from big-endian to platform-native.
       // this is done in a separate pass due to the decoding relying
       // on the data being untouched, but could probably be done
@@ -4531,130 +4531,130 @@ static int stbi__create_png_image_raw(stbi__png *a, stbi_uc *raw, stbi__uint32 r
       stbi_uc *cur = a->out;
       stbi__uint16 *cur16 = (stbi__uint16*)cur;
 
-      for(i=0; i < x*y*out_n; ++i,cur16++,cur+=2) {
+      জন্য(i=0; i < x*y*out_n; ++i,cur16++,cur+=2) {
          *cur16 = (cur[0] << 8) | cur[1];
       }
    }
 
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__create_png_image(stbi__png *a, stbi_uc *image_data, stbi__uint32 image_data_len, int out_n, int depth, int color, int interlaced)
+স্থির পূর্ণসংখ্যা stbi__create_png_image(stbi__png *a, stbi_uc *image_তথ্য_2, stbi__uint32 image_তথ্য_len, পূর্ণসংখ্যা out_n, পূর্ণসংখ্যা depth, পূর্ণসংখ্যা color, পূর্ণসংখ্যা interlaced)
 {
-   int bytes = (depth == 16 ? 2 : 1);
-   int out_bytes = out_n * bytes;
+   পূর্ণসংখ্যা bytes = (depth == 16 ? 2 : 1);
+   পূর্ণসংখ্যা out_bytes = out_n * bytes;
    stbi_uc *final;
-   int p;
-   if (!interlaced)
-      return stbi__create_png_image_raw(a, image_data, image_data_len, out_n, a->s->img_x, a->s->img_y, depth, color);
+   পূর্ণসংখ্যা p;
+   যদি (!interlaced)
+      ফেরত stbi__create_png_image_raw(a, image_তথ্য_2, image_তথ্য_len, out_n, a->s->img_x, a->s->img_y, depth, color);
 
    // de-interlacing
    final = (stbi_uc *) stbi__malloc_mad3(a->s->img_x, a->s->img_y, out_bytes, 0);
-   for (p=0; p < 7; ++p) {
-      int xorig[] = { 0,4,0,2,0,1,0 };
-      int yorig[] = { 0,0,4,0,2,0,1 };
-      int xspc[]  = { 8,8,4,4,2,2,1 };
-      int yspc[]  = { 8,8,8,4,4,2,2 };
-      int i,j,x,y;
+   জন্য (p=0; p < 7; ++p) {
+      পূর্ণসংখ্যা xorig[] = { 0,4,0,2,0,1,0 };
+      পূর্ণসংখ্যা yorig[] = { 0,0,4,0,2,0,1 };
+      পূর্ণসংখ্যা xspc[]  = { 8,8,4,4,2,2,1 };
+      পূর্ণসংখ্যা yspc[]  = { 8,8,8,4,4,2,2 };
+      পূর্ণসংখ্যা i,j,x,y;
       // pass1_x[4] = 0, pass1_x[5] = 1, pass1_x[12] = 1
       x = (a->s->img_x - xorig[p] + xspc[p]-1) / xspc[p];
       y = (a->s->img_y - yorig[p] + yspc[p]-1) / yspc[p];
-      if (x && y) {
+      যদি (x && y) {
          stbi__uint32 img_len = ((((a->s->img_n * x * depth) + 7) >> 3) + 1) * y;
-         if (!stbi__create_png_image_raw(a, image_data, image_data_len, out_n, x, y, depth, color)) {
+         যদি (!stbi__create_png_image_raw(a, image_তথ্য_2, image_তথ্য_len, out_n, x, y, depth, color)) {
             STBI_FREE(final);
-            return 0;
+            ফেরত 0;
          }
-         for (j=0; j < y; ++j) {
-            for (i=0; i < x; ++i) {
-               int out_y = j*yspc[p]+yorig[p];
-               int out_x = i*xspc[p]+xorig[p];
+         জন্য (j=0; j < y; ++j) {
+            জন্য (i=0; i < x; ++i) {
+               পূর্ণসংখ্যা out_y = j*yspc[p]+yorig[p];
+               পূর্ণসংখ্যা out_x = i*xspc[p]+xorig[p];
                memcpy(final + out_y*a->s->img_x*out_bytes + out_x*out_bytes,
                       a->out + (j*x+i)*out_bytes, out_bytes);
             }
          }
          STBI_FREE(a->out);
-         image_data += img_len;
-         image_data_len -= img_len;
+         image_তথ্য_2 += img_len;
+         image_তথ্য_len -= img_len;
       }
    }
    a->out = final;
 
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__compute_transparency(stbi__png *z, stbi_uc tc[3], int out_n)
+স্থির পূর্ণসংখ্যা stbi__compute_transparency(stbi__png *z, stbi_uc tc[3], পূর্ণসংখ্যা out_n)
 {
    stbi__context *s = z->s;
-   stbi__uint32 i, pixel_count = s->img_x * s->img_y;
+   stbi__uint32 i, pixel_গুনতি = s->img_x * s->img_y;
    stbi_uc *p = z->out;
 
    // compute color-based transparency, assuming we've
    // already got 255 as the alpha value in the output
    STBI_ASSERT(out_n == 2 || out_n == 4);
 
-   if (out_n == 2) {
-      for (i=0; i < pixel_count; ++i) {
+   যদি (out_n == 2) {
+      জন্য (i=0; i < pixel_গুনতি; ++i) {
          p[1] = (p[0] == tc[0] ? 0 : 255);
          p += 2;
       }
-   } else {
-      for (i=0; i < pixel_count; ++i) {
-         if (p[0] == tc[0] && p[1] == tc[1] && p[2] == tc[2])
+   } অন্যথা {
+      জন্য (i=0; i < pixel_গুনতি; ++i) {
+         যদি (p[0] == tc[0] && p[1] == tc[1] && p[2] == tc[2])
             p[3] = 0;
          p += 4;
       }
    }
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__compute_transparency16(stbi__png *z, stbi__uint16 tc[3], int out_n)
+স্থির পূর্ণসংখ্যা stbi__compute_transparency16(stbi__png *z, stbi__uint16 tc[3], পূর্ণসংখ্যা out_n)
 {
    stbi__context *s = z->s;
-   stbi__uint32 i, pixel_count = s->img_x * s->img_y;
+   stbi__uint32 i, pixel_গুনতি = s->img_x * s->img_y;
    stbi__uint16 *p = (stbi__uint16*) z->out;
 
    // compute color-based transparency, assuming we've
    // already got 65535 as the alpha value in the output
    STBI_ASSERT(out_n == 2 || out_n == 4);
 
-   if (out_n == 2) {
-      for (i = 0; i < pixel_count; ++i) {
+   যদি (out_n == 2) {
+      জন্য (i = 0; i < pixel_গুনতি; ++i) {
          p[1] = (p[0] == tc[0] ? 0 : 65535);
          p += 2;
       }
-   } else {
-      for (i = 0; i < pixel_count; ++i) {
-         if (p[0] == tc[0] && p[1] == tc[1] && p[2] == tc[2])
+   } অন্যথা {
+      জন্য (i = 0; i < pixel_গুনতি; ++i) {
+         যদি (p[0] == tc[0] && p[1] == tc[1] && p[2] == tc[2])
             p[3] = 0;
          p += 4;
       }
    }
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__expand_png_palette(stbi__png *a, stbi_uc *palette, int len, int pal_img_n)
+স্থির পূর্ণসংখ্যা stbi__expand_png_palette(stbi__png *a, stbi_uc *palette, পূর্ণসংখ্যা len, পূর্ণসংখ্যা pal_img_n)
 {
-   stbi__uint32 i, pixel_count = a->s->img_x * a->s->img_y;
-   stbi_uc *p, *temp_out, *orig = a->out;
+   stbi__uint32 i, pixel_গুনতি = a->s->img_x * a->s->img_y;
+   stbi_uc *p, *অস্থায়ী_out, *orig = a->out;
 
-   p = (stbi_uc *) stbi__malloc_mad2(pixel_count, pal_img_n, 0);
-   if (p == NULL) return stbi__err("outofmem", "Out of memory");
+   p = (stbi_uc *) stbi__malloc_mad2(pixel_গুনতি, pal_img_n, 0);
+   যদি (p == ফাঁকা) ফেরত stbi__err("outofmem", "Out of memory");
 
    // between here and free(out) below, exitting would leak
-   temp_out = p;
+   অস্থায়ী_out = p;
 
-   if (pal_img_n == 3) {
-      for (i=0; i < pixel_count; ++i) {
-         int n = orig[i]*4;
+   যদি (pal_img_n == 3) {
+      জন্য (i=0; i < pixel_গুনতি; ++i) {
+         পূর্ণসংখ্যা n = orig[i]*4;
          p[0] = palette[n  ];
          p[1] = palette[n+1];
          p[2] = palette[n+2];
          p += 3;
       }
-   } else {
-      for (i=0; i < pixel_count; ++i) {
-         int n = orig[i]*4;
+   } অন্যথা {
+      জন্য (i=0; i < pixel_গুনতি; ++i) {
+         পূর্ণসংখ্যা n = orig[i]*4;
          p[0] = palette[n  ];
          p[1] = palette[n+1];
          p[2] = palette[n+2];
@@ -4663,60 +4663,60 @@ static int stbi__expand_png_palette(stbi__png *a, stbi_uc *palette, int len, int
       }
    }
    STBI_FREE(a->out);
-   a->out = temp_out;
+   a->out = অস্থায়ী_out;
 
    STBI_NOTUSED(len);
 
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__unpremultiply_on_load = 0;
-static int stbi__de_iphone_flag = 0;
+স্থির পূর্ণসংখ্যা stbi__unpremultiply_on_load = 0;
+স্থির পূর্ণসংখ্যা stbi__de_iphone_flag = 0;
 
-STBIDEF void stbi_set_unpremultiply_on_load(int flag_true_if_should_unpremultiply)
+STBIDEF শূন্য stbi_set_unpremultiply_on_load(পূর্ণসংখ্যা flag_true_if_should_unpremultiply)
 {
    stbi__unpremultiply_on_load = flag_true_if_should_unpremultiply;
 }
 
-STBIDEF void stbi_convert_iphone_png_to_rgb(int flag_true_if_should_convert)
+STBIDEF শূন্য stbi_convert_iphone_png_to_rgb(পূর্ণসংখ্যা flag_true_if_should_convert)
 {
    stbi__de_iphone_flag = flag_true_if_should_convert;
 }
 
-static void stbi__de_iphone(stbi__png *z)
+স্থির শূন্য stbi__de_iphone(stbi__png *z)
 {
    stbi__context *s = z->s;
-   stbi__uint32 i, pixel_count = s->img_x * s->img_y;
+   stbi__uint32 i, pixel_গুনতি = s->img_x * s->img_y;
    stbi_uc *p = z->out;
 
-   if (s->img_out_n == 3) {  // convert bgr to rgb
-      for (i=0; i < pixel_count; ++i) {
+   যদি (s->img_out_n == 3) {  // convert bgr to rgb
+      জন্য (i=0; i < pixel_গুনতি; ++i) {
          stbi_uc t = p[0];
          p[0] = p[2];
          p[2] = t;
          p += 3;
       }
-   } else {
+   } অন্যথা {
       STBI_ASSERT(s->img_out_n == 4);
-      if (stbi__unpremultiply_on_load) {
+      যদি (stbi__unpremultiply_on_load) {
          // convert bgr to rgb and unpremultiply
-         for (i=0; i < pixel_count; ++i) {
+         জন্য (i=0; i < pixel_গুনতি; ++i) {
             stbi_uc a = p[3];
             stbi_uc t = p[0];
-            if (a) {
+            যদি (a) {
                stbi_uc half = a / 2;
                p[0] = (p[2] * 255 + half) / a;
                p[1] = (p[1] * 255 + half) / a;
                p[2] = ( t   * 255 + half) / a;
-            } else {
+            } অন্যথা {
                p[0] = p[2];
                p[2] = t;
             }
             p += 4;
          }
-      } else {
+      } অন্যথা {
          // convert bgr to rgb
-         for (i=0; i < pixel_count; ++i) {
+         জন্য (i=0; i < pixel_গুনতি; ++i) {
             stbi_uc t = p[0];
             p[0] = p[2];
             p[2] = t;
@@ -4728,338 +4728,338 @@ static void stbi__de_iphone(stbi__png *z)
 
 #define STBI__PNG_TYPE(a,b,c,d)  (((unsigned) (a) << 24) + ((unsigned) (b) << 16) + ((unsigned) (c) << 8) + (unsigned) (d))
 
-static int stbi__parse_png_file(stbi__png *z, int scan, int req_comp)
+স্থির পূর্ণসংখ্যা stbi__parse_png_file(stbi__png *z, পূর্ণসংখ্যা scan, পূর্ণসংখ্যা req_comp)
 {
    stbi_uc palette[1024], pal_img_n=0;
    stbi_uc has_trans=0, tc[3];
    stbi__uint16 tc16[3];
    stbi__uint32 ioff=0, idata_limit=0, i, pal_len=0;
-   int first=1,k,interlace=0, color=0, is_iphone=0;
+   পূর্ণসংখ্যা first=1,k,interlace=0, color=0, is_iphone=0;
    stbi__context *s = z->s;
 
-   z->expanded = NULL;
-   z->idata = NULL;
-   z->out = NULL;
+   z->expanded = ফাঁকা;
+   z->idata = ফাঁকা;
+   z->out = ফাঁকা;
 
-   if (!stbi__check_png_header(s)) return 0;
+   যদি (!stbi__check_png_header(s)) ফেরত 0;
 
-   if (scan == STBI__SCAN_type) return 1;
+   যদি (scan == STBI__SCAN_type) ফেরত 1;
 
-   for (;;) {
+   জন্য (;;) {
       stbi__pngchunk c = stbi__get_chunk_header(s);
-      switch (c.type) {
-         case STBI__PNG_TYPE('C','g','B','I'):
+      নির্বাচন (c.type) {
+         ক্ষেত্র STBI__PNG_TYPE('C','g','B','I'):
             is_iphone = 1;
-            stbi__skip(s, c.length);
-            break;
-         case STBI__PNG_TYPE('I','H','D','R'): {
-            int comp,filter;
-            if (!first) return stbi__err("multiple IHDR","Corrupt PNG");
+            stbi__skip(s, c.দৈর্ঘ্য);
+            বিরতি;
+         ক্ষেত্র STBI__PNG_TYPE('I','H','D','R'): {
+            পূর্ণসংখ্যা comp,filter;
+            যদি (!first) ফেরত stbi__err("multiple IHDR","Corrupt PNG");
             first = 0;
-            if (c.length != 13) return stbi__err("bad IHDR len","Corrupt PNG");
-            s->img_x = stbi__get32be(s); if (s->img_x > (1 << 24)) return stbi__err("too large","Very large image (corrupt?)");
-            s->img_y = stbi__get32be(s); if (s->img_y > (1 << 24)) return stbi__err("too large","Very large image (corrupt?)");
-            z->depth = stbi__get8(s);  if (z->depth != 1 && z->depth != 2 && z->depth != 4 && z->depth != 8 && z->depth != 16)  return stbi__err("1/2/4/8/16-bit only","PNG not supported: 1/2/4/8/16-bit only");
-            color = stbi__get8(s);  if (color > 6)         return stbi__err("bad ctype","Corrupt PNG");
-            if (color == 3 && z->depth == 16)                  return stbi__err("bad ctype","Corrupt PNG");
-            if (color == 3) pal_img_n = 3; else if (color & 1) return stbi__err("bad ctype","Corrupt PNG");
-            comp  = stbi__get8(s);  if (comp) return stbi__err("bad comp method","Corrupt PNG");
-            filter= stbi__get8(s);  if (filter) return stbi__err("bad filter method","Corrupt PNG");
-            interlace = stbi__get8(s); if (interlace>1) return stbi__err("bad interlace method","Corrupt PNG");
-            if (!s->img_x || !s->img_y) return stbi__err("0-pixel image","Corrupt PNG");
-            if (!pal_img_n) {
+            যদি (c.দৈর্ঘ্য != 13) ফেরত stbi__err("bad IHDR len","Corrupt PNG");
+            s->img_x = stbi__get32be(s); যদি (s->img_x > (1 << 24)) ফেরত stbi__err("too large","Very large image (corrupt?)");
+            s->img_y = stbi__get32be(s); যদি (s->img_y > (1 << 24)) ফেরত stbi__err("too large","Very large image (corrupt?)");
+            z->depth = stbi__get8(s);  যদি (z->depth != 1 && z->depth != 2 && z->depth != 4 && z->depth != 8 && z->depth != 16)  ফেরত stbi__err("1/2/4/8/16-bit only","PNG not supported: 1/2/4/8/16-bit only");
+            color = stbi__get8(s);  যদি (color > 6)         ফেরত stbi__err("bad ctype","Corrupt PNG");
+            যদি (color == 3 && z->depth == 16)                  ফেরত stbi__err("bad ctype","Corrupt PNG");
+            যদি (color == 3) pal_img_n = 3; অন্যথা যদি (color & 1) ফেরত stbi__err("bad ctype","Corrupt PNG");
+            comp  = stbi__get8(s);  যদি (comp) ফেরত stbi__err("bad comp method","Corrupt PNG");
+            filter= stbi__get8(s);  যদি (filter) ফেরত stbi__err("bad filter method","Corrupt PNG");
+            interlace = stbi__get8(s); যদি (interlace>1) ফেরত stbi__err("bad interlace method","Corrupt PNG");
+            যদি (!s->img_x || !s->img_y) ফেরত stbi__err("0-pixel image","Corrupt PNG");
+            যদি (!pal_img_n) {
                s->img_n = (color & 2 ? 3 : 1) + (color & 4 ? 1 : 0);
-               if ((1 << 30) / s->img_x / s->img_n < s->img_y) return stbi__err("too large", "Image too large to decode");
-               if (scan == STBI__SCAN_header) return 1;
-            } else {
+               যদি ((1 << 30) / s->img_x / s->img_n < s->img_y) ফেরত stbi__err("too large", "Image too large to decode");
+               যদি (scan == STBI__SCAN_header) ফেরত 1;
+            } অন্যথা {
                // if paletted, then pal_n is our final components, and
                // img_n is # components to decompress/filter.
                s->img_n = 1;
-               if ((1 << 30) / s->img_x / 4 < s->img_y) return stbi__err("too large","Corrupt PNG");
+               যদি ((1 << 30) / s->img_x / 4 < s->img_y) ফেরত stbi__err("too large","Corrupt PNG");
                // if SCAN_header, have to scan to see if we have a tRNS
             }
-            break;
+            বিরতি;
          }
 
-         case STBI__PNG_TYPE('P','L','T','E'):  {
-            if (first) return stbi__err("first not IHDR", "Corrupt PNG");
-            if (c.length > 256*3) return stbi__err("invalid PLTE","Corrupt PNG");
-            pal_len = c.length / 3;
-            if (pal_len * 3 != c.length) return stbi__err("invalid PLTE","Corrupt PNG");
-            for (i=0; i < pal_len; ++i) {
+         ক্ষেত্র STBI__PNG_TYPE('P','L','T','E'):  {
+            যদি (first) ফেরত stbi__err("first not IHDR", "Corrupt PNG");
+            যদি (c.দৈর্ঘ্য > 256*3) ফেরত stbi__err("invalid PLTE","Corrupt PNG");
+            pal_len = c.দৈর্ঘ্য / 3;
+            যদি (pal_len * 3 != c.দৈর্ঘ্য) ফেরত stbi__err("invalid PLTE","Corrupt PNG");
+            জন্য (i=0; i < pal_len; ++i) {
                palette[i*4+0] = stbi__get8(s);
                palette[i*4+1] = stbi__get8(s);
                palette[i*4+2] = stbi__get8(s);
                palette[i*4+3] = 255;
             }
-            break;
+            বিরতি;
          }
 
-         case STBI__PNG_TYPE('t','R','N','S'): {
-            if (first) return stbi__err("first not IHDR", "Corrupt PNG");
-            if (z->idata) return stbi__err("tRNS after IDAT","Corrupt PNG");
-            if (pal_img_n) {
-               if (scan == STBI__SCAN_header) { s->img_n = 4; return 1; }
-               if (pal_len == 0) return stbi__err("tRNS before PLTE","Corrupt PNG");
-               if (c.length > pal_len) return stbi__err("bad tRNS len","Corrupt PNG");
+         ক্ষেত্র STBI__PNG_TYPE('t','R','N','S'): {
+            যদি (first) ফেরত stbi__err("first not IHDR", "Corrupt PNG");
+            যদি (z->idata) ফেরত stbi__err("tRNS after IDAT","Corrupt PNG");
+            যদি (pal_img_n) {
+               যদি (scan == STBI__SCAN_header) { s->img_n = 4; ফেরত 1; }
+               যদি (pal_len == 0) ফেরত stbi__err("tRNS before PLTE","Corrupt PNG");
+               যদি (c.দৈর্ঘ্য > pal_len) ফেরত stbi__err("bad tRNS len","Corrupt PNG");
                pal_img_n = 4;
-               for (i=0; i < c.length; ++i)
+               জন্য (i=0; i < c.দৈর্ঘ্য; ++i)
                   palette[i*4+3] = stbi__get8(s);
-            } else {
-               if (!(s->img_n & 1)) return stbi__err("tRNS with alpha","Corrupt PNG");
-               if (c.length != (stbi__uint32) s->img_n*2) return stbi__err("bad tRNS len","Corrupt PNG");
+            } অন্যথা {
+               যদি (!(s->img_n & 1)) ফেরত stbi__err("tRNS with alpha","Corrupt PNG");
+               যদি (c.দৈর্ঘ্য != (stbi__uint32) s->img_n*2) ফেরত stbi__err("bad tRNS len","Corrupt PNG");
                has_trans = 1;
-               if (z->depth == 16) {
-                  for (k = 0; k < s->img_n; ++k) tc16[k] = (stbi__uint16)stbi__get16be(s); // copy the values as-is
-               } else {
-                  for (k = 0; k < s->img_n; ++k) tc[k] = (stbi_uc)(stbi__get16be(s) & 255) * stbi__depth_scale_table[z->depth]; // non 8-bit images will be larger
+               যদি (z->depth == 16) {
+                  জন্য (k = 0; k < s->img_n; ++k) tc16[k] = (stbi__uint16)stbi__get16be(s); // copy the values as-is
+               } অন্যথা {
+                  জন্য (k = 0; k < s->img_n; ++k) tc[k] = (stbi_uc)(stbi__get16be(s) & 255) * stbi__depth_scale_table[z->depth]; // non 8-bit images will be larger
                }
             }
-            break;
+            বিরতি;
          }
 
-         case STBI__PNG_TYPE('I','D','A','T'): {
-            if (first) return stbi__err("first not IHDR", "Corrupt PNG");
-            if (pal_img_n && !pal_len) return stbi__err("no PLTE","Corrupt PNG");
-            if (scan == STBI__SCAN_header) { s->img_n = pal_img_n; return 1; }
-            if ((int)(ioff + c.length) < (int)ioff) return 0;
-            if (ioff + c.length > idata_limit) {
+         ক্ষেত্র STBI__PNG_TYPE('I','D','A','T'): {
+            যদি (first) ফেরত stbi__err("first not IHDR", "Corrupt PNG");
+            যদি (pal_img_n && !pal_len) ফেরত stbi__err("no PLTE","Corrupt PNG");
+            যদি (scan == STBI__SCAN_header) { s->img_n = pal_img_n; ফেরত 1; }
+            যদি ((পূর্ণসংখ্যা)(ioff + c.দৈর্ঘ্য) < (পূর্ণসংখ্যা)ioff) ফেরত 0;
+            যদি (ioff + c.দৈর্ঘ্য > idata_limit) {
                stbi__uint32 idata_limit_old = idata_limit;
                stbi_uc *p;
-               if (idata_limit == 0) idata_limit = c.length > 4096 ? c.length : 4096;
-               while (ioff + c.length > idata_limit)
+               যদি (idata_limit == 0) idata_limit = c.দৈর্ঘ্য > 4096 ? c.দৈর্ঘ্য : 4096;
+               যখন (ioff + c.দৈর্ঘ্য > idata_limit)
                   idata_limit *= 2;
                STBI_NOTUSED(idata_limit_old);
-               p = (stbi_uc *) STBI_REALLOC_SIZED(z->idata, idata_limit_old, idata_limit); if (p == NULL) return stbi__err("outofmem", "Out of memory");
+               p = (stbi_uc *) STBI_REALLOC_SIZED(z->idata, idata_limit_old, idata_limit); যদি (p == ফাঁকা) ফেরত stbi__err("outofmem", "Out of memory");
                z->idata = p;
             }
-            if (!stbi__getn(s, z->idata+ioff,c.length)) return stbi__err("outofdata","Corrupt PNG");
-            ioff += c.length;
-            break;
+            যদি (!stbi__getn(s, z->idata+ioff,c.দৈর্ঘ্য)) ফেরত stbi__err("outofdata","Corrupt PNG");
+            ioff += c.দৈর্ঘ্য;
+            বিরতি;
          }
 
-         case STBI__PNG_TYPE('I','E','N','D'): {
+         ক্ষেত্র STBI__PNG_TYPE('I','E','N','D'): {
             stbi__uint32 raw_len, bpl;
-            if (first) return stbi__err("first not IHDR", "Corrupt PNG");
-            if (scan != STBI__SCAN_load) return 1;
-            if (z->idata == NULL) return stbi__err("no IDAT","Corrupt PNG");
+            যদি (first) ফেরত stbi__err("first not IHDR", "Corrupt PNG");
+            যদি (scan != STBI__SCAN_load) ফেরত 1;
+            যদি (z->idata == ফাঁকা) ফেরত stbi__err("no IDAT","Corrupt PNG");
             // initial guess for decoded data size to avoid unnecessary reallocs
             bpl = (s->img_x * z->depth + 7) / 8; // bytes per line, per component
             raw_len = bpl * s->img_y * s->img_n /* pixels */ + s->img_y /* filter mode per row */;
-            z->expanded = (stbi_uc *) stbi_zlib_decode_malloc_guesssize_headerflag((char *) z->idata, ioff, raw_len, (int *) &raw_len, !is_iphone);
-            if (z->expanded == NULL) return 0; // zlib should set error
-            STBI_FREE(z->idata); z->idata = NULL;
-            if ((req_comp == s->img_n+1 && req_comp != 3 && !pal_img_n) || has_trans)
+            z->expanded = (stbi_uc *) stbi_zlib_decode_malloc_guesssize_headerflag((অক্ষর *) z->idata, ioff, raw_len, (পূর্ণসংখ্যা *) &raw_len, !is_iphone);
+            যদি (z->expanded == ফাঁকা) ফেরত 0; // zlib should set error
+            STBI_FREE(z->idata); z->idata = ফাঁকা;
+            যদি ((req_comp == s->img_n+1 && req_comp != 3 && !pal_img_n) || has_trans)
                s->img_out_n = s->img_n+1;
-            else
+            অন্যথা
                s->img_out_n = s->img_n;
-            if (!stbi__create_png_image(z, z->expanded, raw_len, s->img_out_n, z->depth, color, interlace)) return 0;
-            if (has_trans) {
-               if (z->depth == 16) {
-                  if (!stbi__compute_transparency16(z, tc16, s->img_out_n)) return 0;
-               } else {
-                  if (!stbi__compute_transparency(z, tc, s->img_out_n)) return 0;
+            যদি (!stbi__create_png_image(z, z->expanded, raw_len, s->img_out_n, z->depth, color, interlace)) ফেরত 0;
+            যদি (has_trans) {
+               যদি (z->depth == 16) {
+                  যদি (!stbi__compute_transparency16(z, tc16, s->img_out_n)) ফেরত 0;
+               } অন্যথা {
+                  যদি (!stbi__compute_transparency(z, tc, s->img_out_n)) ফেরত 0;
                }
             }
-            if (is_iphone && stbi__de_iphone_flag && s->img_out_n > 2)
+            যদি (is_iphone && stbi__de_iphone_flag && s->img_out_n > 2)
                stbi__de_iphone(z);
-            if (pal_img_n) {
+            যদি (pal_img_n) {
                // pal_img_n == 3 or 4
                s->img_n = pal_img_n; // record the actual colors we had
                s->img_out_n = pal_img_n;
-               if (req_comp >= 3) s->img_out_n = req_comp;
-               if (!stbi__expand_png_palette(z, palette, pal_len, s->img_out_n))
-                  return 0;
-            } else if (has_trans) {
+               যদি (req_comp >= 3) s->img_out_n = req_comp;
+               যদি (!stbi__expand_png_palette(z, palette, pal_len, s->img_out_n))
+                  ফেরত 0;
+            } অন্যথা যদি (has_trans) {
                // non-paletted image with tRNS -> source image has (constant) alpha
                ++s->img_n;
             }
-            STBI_FREE(z->expanded); z->expanded = NULL;
-            return 1;
+            STBI_FREE(z->expanded); z->expanded = ফাঁকা;
+            ফেরত 1;
          }
 
-         default:
+         পূর্বনির্ধারিত:
             // if critical, fail
-            if (first) return stbi__err("first not IHDR", "Corrupt PNG");
-            if ((c.type & (1 << 29)) == 0) {
+            যদি (first) ফেরত stbi__err("first not IHDR", "Corrupt PNG");
+            যদি ((c.type & (1 << 29)) == 0) {
                #ifndef STBI_NO_FAILURE_STRINGS
                // not threadsafe
-               static char invalid_chunk[] = "XXXX PNG chunk not known";
+               স্থির অক্ষর invalid_chunk[] = "XXXX PNG chunk not known";
                invalid_chunk[0] = STBI__BYTECAST(c.type >> 24);
                invalid_chunk[1] = STBI__BYTECAST(c.type >> 16);
                invalid_chunk[2] = STBI__BYTECAST(c.type >>  8);
                invalid_chunk[3] = STBI__BYTECAST(c.type >>  0);
                #endif
-               return stbi__err(invalid_chunk, "PNG not supported: unknown PNG chunk type");
+               ফেরত stbi__err(invalid_chunk, "PNG not supported: unknown PNG chunk type");
             }
-            stbi__skip(s, c.length);
-            break;
+            stbi__skip(s, c.দৈর্ঘ্য);
+            বিরতি;
       }
       // end of PNG chunk, read and skip CRC
       stbi__get32be(s);
    }
 }
 
-static void *stbi__do_png(stbi__png *p, int *x, int *y, int *n, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__do_png(stbi__png *p, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *n, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
-   void *result=NULL;
-   if (req_comp < 0 || req_comp > 4) return stbi__errpuc("bad req_comp", "Internal error");
-   if (stbi__parse_png_file(p, STBI__SCAN_load, req_comp)) {
-      if (p->depth < 8)
+   শূন্য *ফলাফল=ফাঁকা;
+   যদি (req_comp < 0 || req_comp > 4) ফেরত stbi__errpuc("bad req_comp", "Internal error");
+   যদি (stbi__parse_png_file(p, STBI__SCAN_load, req_comp)) {
+      যদি (p->depth < 8)
          ri->bits_per_channel = 8;
-      else
+      অন্যথা
          ri->bits_per_channel = p->depth;
-      result = p->out;
-      p->out = NULL;
-      if (req_comp && req_comp != p->s->img_out_n) {
-         if (ri->bits_per_channel == 8)
-            result = stbi__convert_format((unsigned char *) result, p->s->img_out_n, req_comp, p->s->img_x, p->s->img_y);
-         else
-            result = stbi__convert_format16((stbi__uint16 *) result, p->s->img_out_n, req_comp, p->s->img_x, p->s->img_y);
+      ফলাফল = p->out;
+      p->out = ফাঁকা;
+      যদি (req_comp && req_comp != p->s->img_out_n) {
+         যদি (ri->bits_per_channel == 8)
+            ফলাফল = stbi__convert_format((unsigned অক্ষর *) ফলাফল, p->s->img_out_n, req_comp, p->s->img_x, p->s->img_y);
+         অন্যথা
+            ফলাফল = stbi__convert_format16((stbi__uint16 *) ফলাফল, p->s->img_out_n, req_comp, p->s->img_x, p->s->img_y);
          p->s->img_out_n = req_comp;
-         if (result == NULL) return result;
+         যদি (ফলাফল == ফাঁকা) ফেরত ফলাফল;
       }
       *x = p->s->img_x;
       *y = p->s->img_y;
-      if (n) *n = p->s->img_n;
+      যদি (n) *n = p->s->img_n;
    }
-   STBI_FREE(p->out);      p->out      = NULL;
-   STBI_FREE(p->expanded); p->expanded = NULL;
-   STBI_FREE(p->idata);    p->idata    = NULL;
+   STBI_FREE(p->out);      p->out      = ফাঁকা;
+   STBI_FREE(p->expanded); p->expanded = ফাঁকা;
+   STBI_FREE(p->idata);    p->idata    = ফাঁকা;
 
-   return result;
+   ফেরত ফলাফল;
 }
 
-static void *stbi__png_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__png_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
    stbi__png p;
    p.s = s;
-   return stbi__do_png(&p, x,y,comp,req_comp, ri);
+   ফেরত stbi__do_png(&p, x,y,comp,req_comp, ri);
 }
 
-static int stbi__png_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__png_test(stbi__context *s)
 {
-   int r;
+   পূর্ণসংখ্যা r;
    r = stbi__check_png_header(s);
    stbi__rewind(s);
-   return r;
+   ফেরত r;
 }
 
-static int stbi__png_info_raw(stbi__png *p, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__png_info_raw(stbi__png *p, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   if (!stbi__parse_png_file(p, STBI__SCAN_header, 0)) {
+   যদি (!stbi__parse_png_file(p, STBI__SCAN_header, 0)) {
       stbi__rewind( p->s );
-      return 0;
+      ফেরত 0;
    }
-   if (x) *x = p->s->img_x;
-   if (y) *y = p->s->img_y;
-   if (comp) *comp = p->s->img_n;
-   return 1;
+   যদি (x) *x = p->s->img_x;
+   যদি (y) *y = p->s->img_y;
+   যদি (comp) *comp = p->s->img_n;
+   ফেরত 1;
 }
 
-static int stbi__png_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__png_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
    stbi__png p;
    p.s = s;
-   return stbi__png_info_raw(&p, x, y, comp);
+   ফেরত stbi__png_info_raw(&p, x, y, comp);
 }
 
-static int stbi__png_is16(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__png_is16(stbi__context *s)
 {
    stbi__png p;
    p.s = s;
-   if (!stbi__png_info_raw(&p, NULL, NULL, NULL))
-	   return 0;
-   if (p.depth != 16) {
+   যদি (!stbi__png_info_raw(&p, ফাঁকা, ফাঁকা, ফাঁকা))
+	   ফেরত 0;
+   যদি (p.depth != 16) {
       stbi__rewind(p.s);
-      return 0;
+      ফেরত 0;
    }
-   return 1;
+   ফেরত 1;
 }
 #endif
 
 // Microsoft/Windows BMP image
 
 #ifndef STBI_NO_BMP
-static int stbi__bmp_test_raw(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__bmp_test_raw(stbi__context *s)
 {
-   int r;
-   int sz;
-   if (stbi__get8(s) != 'B') return 0;
-   if (stbi__get8(s) != 'M') return 0;
+   পূর্ণসংখ্যা r;
+   পূর্ণসংখ্যা sz;
+   যদি (stbi__get8(s) != 'B') ফেরত 0;
+   যদি (stbi__get8(s) != 'M') ফেরত 0;
    stbi__get32le(s); // discard filesize
    stbi__get16le(s); // discard reserved
    stbi__get16le(s); // discard reserved
    stbi__get32le(s); // discard data offset
    sz = stbi__get32le(s);
    r = (sz == 12 || sz == 40 || sz == 56 || sz == 108 || sz == 124);
-   return r;
+   ফেরত r;
 }
 
-static int stbi__bmp_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__bmp_test(stbi__context *s)
 {
-   int r = stbi__bmp_test_raw(s);
+   পূর্ণসংখ্যা r = stbi__bmp_test_raw(s);
    stbi__rewind(s);
-   return r;
+   ফেরত r;
 }
 
 
 // returns 0..31 for the highest set bit
-static int stbi__high_bit(unsigned int z)
+স্থির পূর্ণসংখ্যা stbi_উপরের_bit(unsigned পূর্ণসংখ্যা z)
 {
-   int n=0;
-   if (z == 0) return -1;
-   if (z >= 0x10000) n += 16, z >>= 16;
-   if (z >= 0x00100) n +=  8, z >>=  8;
-   if (z >= 0x00010) n +=  4, z >>=  4;
-   if (z >= 0x00004) n +=  2, z >>=  2;
-   if (z >= 0x00002) n +=  1, z >>=  1;
-   return n;
+   পূর্ণসংখ্যা n=0;
+   যদি (z == 0) ফেরত -1;
+   যদি (z >= 0x10000) n += 16, z >>= 16;
+   যদি (z >= 0x00100) n +=  8, z >>=  8;
+   যদি (z >= 0x00010) n +=  4, z >>=  4;
+   যদি (z >= 0x00004) n +=  2, z >>=  2;
+   যদি (z >= 0x00002) n +=  1, z >>=  1;
+   ফেরত n;
 }
 
-static int stbi__bitcount(unsigned int a)
+স্থির পূর্ণসংখ্যা stbi__bitcount(unsigned পূর্ণসংখ্যা a)
 {
    a = (a & 0x55555555) + ((a >>  1) & 0x55555555); // max 2
    a = (a & 0x33333333) + ((a >>  2) & 0x33333333); // max 4
    a = (a + (a >> 4)) & 0x0f0f0f0f; // max 8 per 4, now 8 bits
    a = (a + (a >> 8)); // max 16 per 8 bits
    a = (a + (a >> 16)); // max 32 per 8 bits
-   return a & 0xff;
+   ফেরত a & 0xff;
 }
 
 // extract an arbitrarily-aligned N-bit value (N=bits)
 // from v, and then make it 8-bits long and fractionally
 // extend it to full full range.
-static int stbi__shiftsigned(int v, int shift, int bits)
+স্থির পূর্ণসংখ্যা stbi__shiftsigned(পূর্ণসংখ্যা v, পূর্ণসংখ্যা shift, পূর্ণসংখ্যা bits)
 {
-   static unsigned int mul_table[9] = {
+   স্থির unsigned পূর্ণসংখ্যা mul_table[9] = {
       0,
       0xff/*0b11111111*/, 0x55/*0b01010101*/, 0x49/*0b01001001*/, 0x11/*0b00010001*/,
       0x21/*0b00100001*/, 0x41/*0b01000001*/, 0x81/*0b10000001*/, 0x01/*0b00000001*/,
    };
-   static unsigned int shift_table[9] = {
+   স্থির unsigned পূর্ণসংখ্যা shift_table[9] = {
       0, 0,0,1,0,2,4,6,0,
    };
-   if (shift < 0)
+   যদি (shift < 0)
       v <<= -shift;
-   else
+   অন্যথা
       v >>= shift;
    STBI_ASSERT(v >= 0 && v < 256);
    v >>= (8-bits);
    STBI_ASSERT(bits >= 0 && bits <= 8);
-   return (int) ((unsigned) v * mul_table[bits]) >> shift_table[bits];
+   ফেরত (পূর্ণসংখ্যা) ((unsigned) v * mul_table[bits]) >> shift_table[bits];
 }
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
-   int bpp, offset, hsz;
-   unsigned int mr,mg,mb,ma, all_a;
-} stbi__bmp_data;
+   পূর্ণসংখ্যা bpp, offset, hsz;
+   unsigned পূর্ণসংখ্যা mr,mg,mb,ma, all_a;
+} stbi_bmp_তথ্য;
 
-static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)
+স্থির শূন্য *stbi__bmp_parse_header(stbi__context *s, stbi_bmp_তথ্য *info)
 {
-   int hsz;
-   if (stbi__get8(s) != 'B' || stbi__get8(s) != 'M') return stbi__errpuc("not BMP", "Corrupt BMP");
+   পূর্ণসংখ্যা hsz;
+   যদি (stbi__get8(s) != 'B' || stbi__get8(s) != 'M') ফেরত stbi__errpuc("not BMP", "Corrupt BMP");
    stbi__get32le(s); // discard filesize
    stbi__get16le(s); // discard reserved
    stbi__get16le(s); // discard reserved
@@ -5067,68 +5067,68 @@ static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)
    info->hsz = hsz = stbi__get32le(s);
    info->mr = info->mg = info->mb = info->ma = 0;
 
-   if (hsz != 12 && hsz != 40 && hsz != 56 && hsz != 108 && hsz != 124) return stbi__errpuc("unknown BMP", "BMP type not supported: unknown");
-   if (hsz == 12) {
+   যদি (hsz != 12 && hsz != 40 && hsz != 56 && hsz != 108 && hsz != 124) ফেরত stbi__errpuc("unknown BMP", "BMP type not supported: unknown");
+   যদি (hsz == 12) {
       s->img_x = stbi__get16le(s);
       s->img_y = stbi__get16le(s);
-   } else {
+   } অন্যথা {
       s->img_x = stbi__get32le(s);
       s->img_y = stbi__get32le(s);
    }
-   if (stbi__get16le(s) != 1) return stbi__errpuc("bad BMP", "bad BMP");
+   যদি (stbi__get16le(s) != 1) ফেরত stbi__errpuc("bad BMP", "bad BMP");
    info->bpp = stbi__get16le(s);
-   if (hsz != 12) {
-      int compress = stbi__get32le(s);
-      if (compress == 1 || compress == 2) return stbi__errpuc("BMP RLE", "BMP type not supported: RLE");
+   যদি (hsz != 12) {
+      পূর্ণসংখ্যা compress = stbi__get32le(s);
+      যদি (compress == 1 || compress == 2) ফেরত stbi__errpuc("BMP RLE", "BMP type not supported: RLE");
       stbi__get32le(s); // discard sizeof
       stbi__get32le(s); // discard hres
       stbi__get32le(s); // discard vres
       stbi__get32le(s); // discard colorsused
       stbi__get32le(s); // discard max important
-      if (hsz == 40 || hsz == 56) {
-         if (hsz == 56) {
+      যদি (hsz == 40 || hsz == 56) {
+         যদি (hsz == 56) {
             stbi__get32le(s);
             stbi__get32le(s);
             stbi__get32le(s);
             stbi__get32le(s);
          }
-         if (info->bpp == 16 || info->bpp == 32) {
-            if (compress == 0) {
-               if (info->bpp == 32) {
+         যদি (info->bpp == 16 || info->bpp == 32) {
+            যদি (compress == 0) {
+               যদি (info->bpp == 32) {
                   info->mr = 0xffu << 16;
                   info->mg = 0xffu <<  8;
                   info->mb = 0xffu <<  0;
                   info->ma = 0xffu << 24;
                   info->all_a = 0; // if all_a is 0 at end, then we loaded alpha channel but it was all 0
-               } else {
+               } অন্যথা {
                   info->mr = 31u << 10;
                   info->mg = 31u <<  5;
                   info->mb = 31u <<  0;
                }
-            } else if (compress == 3) {
+            } অন্যথা যদি (compress == 3) {
                info->mr = stbi__get32le(s);
                info->mg = stbi__get32le(s);
                info->mb = stbi__get32le(s);
                // not documented, but generated by photoshop and handled by mspaint
-               if (info->mr == info->mg && info->mg == info->mb) {
+               যদি (info->mr == info->mg && info->mg == info->mb) {
                   // ?!?!?
-                  return stbi__errpuc("bad BMP", "bad BMP");
+                  ফেরত stbi__errpuc("bad BMP", "bad BMP");
                }
-            } else
-               return stbi__errpuc("bad BMP", "bad BMP");
+            } অন্যথা
+               ফেরত stbi__errpuc("bad BMP", "bad BMP");
          }
-      } else {
-         int i;
-         if (hsz != 108 && hsz != 124)
-            return stbi__errpuc("bad BMP", "bad BMP");
+      } অন্যথা {
+         পূর্ণসংখ্যা i;
+         যদি (hsz != 108 && hsz != 124)
+            ফেরত stbi__errpuc("bad BMP", "bad BMP");
          info->mr = stbi__get32le(s);
          info->mg = stbi__get32le(s);
          info->mb = stbi__get32le(s);
          info->ma = stbi__get32le(s);
          stbi__get32le(s); // discard color space
-         for (i=0; i < 12; ++i)
+         জন্য (i=0; i < 12; ++i)
             stbi__get32le(s); // discard color space parameters
-         if (hsz == 124) {
+         যদি (hsz == 124) {
             stbi__get32le(s); // discard rendering intent
             stbi__get32le(s); // discard offset of profile data
             stbi__get32le(s); // discard size of profile data
@@ -5136,26 +5136,26 @@ static void *stbi__bmp_parse_header(stbi__context *s, stbi__bmp_data *info)
          }
       }
    }
-   return (void *) 1;
+   ফেরত (শূন্য *) 1;
 }
 
 
-static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__bmp_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
    stbi_uc *out;
-   unsigned int mr=0,mg=0,mb=0,ma=0, all_a;
+   unsigned পূর্ণসংখ্যা mr=0,mg=0,mb=0,ma=0, all_a;
    stbi_uc pal[256][4];
-   int psize=0,i,j,width;
-   int flip_vertically, pad, target;
-   stbi__bmp_data info;
+   পূর্ণসংখ্যা psize=0,i,j,width;
+   পূর্ণসংখ্যা flip_vertically, pad, target;
+   stbi_bmp_তথ্য info;
    STBI_NOTUSED(ri);
 
    info.all_a = 255;
-   if (stbi__bmp_parse_header(s, &info) == NULL)
-      return NULL; // error code already set
+   যদি (stbi__bmp_parse_header(s, &info) == ফাঁকা)
+      ফেরত ফাঁকা; // error code already set
 
-   flip_vertically = ((int) s->img_y) > 0;
-   s->img_y = abs((int) s->img_y);
+   flip_vertically = ((পূর্ণসংখ্যা) s->img_y) > 0;
+   s->img_y = abs((পূর্ণসংখ্যা) s->img_y);
 
    mr = info.mr;
    mg = info.mg;
@@ -5163,125 +5163,125 @@ static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req
    ma = info.ma;
    all_a = info.all_a;
 
-   if (info.hsz == 12) {
-      if (info.bpp < 24)
+   যদি (info.hsz == 12) {
+      যদি (info.bpp < 24)
          psize = (info.offset - 14 - 24) / 3;
-   } else {
-      if (info.bpp < 16)
+   } অন্যথা {
+      যদি (info.bpp < 16)
          psize = (info.offset - 14 - info.hsz) >> 2;
    }
 
    s->img_n = ma ? 4 : 3;
-   if (req_comp && req_comp >= 3) // we can directly decode 3 or 4
+   যদি (req_comp && req_comp >= 3) // we can directly decode 3 or 4
       target = req_comp;
-   else
+   অন্যথা
       target = s->img_n; // if they want monochrome, we'll post-convert
 
    // sanity-check size
-   if (!stbi__mad3sizes_valid(target, s->img_x, s->img_y, 0))
-      return stbi__errpuc("too large", "Corrupt BMP");
+   যদি (!stbi__mad3sizes_valid(target, s->img_x, s->img_y, 0))
+      ফেরত stbi__errpuc("too large", "Corrupt BMP");
 
    out = (stbi_uc *) stbi__malloc_mad3(target, s->img_x, s->img_y, 0);
-   if (!out) return stbi__errpuc("outofmem", "Out of memory");
-   if (info.bpp < 16) {
-      int z=0;
-      if (psize == 0 || psize > 256) { STBI_FREE(out); return stbi__errpuc("invalid", "Corrupt BMP"); }
-      for (i=0; i < psize; ++i) {
+   যদি (!out) ফেরত stbi__errpuc("outofmem", "Out of memory");
+   যদি (info.bpp < 16) {
+      পূর্ণসংখ্যা z=0;
+      যদি (psize == 0 || psize > 256) { STBI_FREE(out); ফেরত stbi__errpuc("invalid", "Corrupt BMP"); }
+      জন্য (i=0; i < psize; ++i) {
          pal[i][2] = stbi__get8(s);
          pal[i][1] = stbi__get8(s);
          pal[i][0] = stbi__get8(s);
-         if (info.hsz != 12) stbi__get8(s);
+         যদি (info.hsz != 12) stbi__get8(s);
          pal[i][3] = 255;
       }
       stbi__skip(s, info.offset - 14 - info.hsz - psize * (info.hsz == 12 ? 3 : 4));
-      if (info.bpp == 1) width = (s->img_x + 7) >> 3;
-      else if (info.bpp == 4) width = (s->img_x + 1) >> 1;
-      else if (info.bpp == 8) width = s->img_x;
-      else { STBI_FREE(out); return stbi__errpuc("bad bpp", "Corrupt BMP"); }
+      যদি (info.bpp == 1) width = (s->img_x + 7) >> 3;
+      অন্যথা যদি (info.bpp == 4) width = (s->img_x + 1) >> 1;
+      অন্যথা যদি (info.bpp == 8) width = s->img_x;
+      অন্যথা { STBI_FREE(out); ফেরত stbi__errpuc("bad bpp", "Corrupt BMP"); }
       pad = (-width)&3;
-      if (info.bpp == 1) {
-         for (j=0; j < (int) s->img_y; ++j) {
-            int bit_offset = 7, v = stbi__get8(s);
-            for (i=0; i < (int) s->img_x; ++i) {
-               int color = (v>>bit_offset)&0x1;
+      যদি (info.bpp == 1) {
+         জন্য (j=0; j < (পূর্ণসংখ্যা) s->img_y; ++j) {
+            পূর্ণসংখ্যা bit_offset = 7, v = stbi__get8(s);
+            জন্য (i=0; i < (পূর্ণসংখ্যা) s->img_x; ++i) {
+               পূর্ণসংখ্যা color = (v>>bit_offset)&0x1;
                out[z++] = pal[color][0];
                out[z++] = pal[color][1];
                out[z++] = pal[color][2];
-               if((--bit_offset) < 0) {
+               যদি((--bit_offset) < 0) {
                   bit_offset = 7;
                   v = stbi__get8(s);
                }
             }
             stbi__skip(s, pad);
          }
-      } else {
-         for (j=0; j < (int) s->img_y; ++j) {
-            for (i=0; i < (int) s->img_x; i += 2) {
-               int v=stbi__get8(s),v2=0;
-               if (info.bpp == 4) {
+      } অন্যথা {
+         জন্য (j=0; j < (পূর্ণসংখ্যা) s->img_y; ++j) {
+            জন্য (i=0; i < (পূর্ণসংখ্যা) s->img_x; i += 2) {
+               পূর্ণসংখ্যা v=stbi__get8(s),v2=0;
+               যদি (info.bpp == 4) {
                   v2 = v & 15;
                   v >>= 4;
                }
                out[z++] = pal[v][0];
                out[z++] = pal[v][1];
                out[z++] = pal[v][2];
-               if (target == 4) out[z++] = 255;
-               if (i+1 == (int) s->img_x) break;
+               যদি (target == 4) out[z++] = 255;
+               যদি (i+1 == (পূর্ণসংখ্যা) s->img_x) বিরতি;
                v = (info.bpp == 8) ? stbi__get8(s) : v2;
                out[z++] = pal[v][0];
                out[z++] = pal[v][1];
                out[z++] = pal[v][2];
-               if (target == 4) out[z++] = 255;
+               যদি (target == 4) out[z++] = 255;
             }
             stbi__skip(s, pad);
          }
       }
-   } else {
-      int rshift=0,gshift=0,bshift=0,ashift=0,rcount=0,gcount=0,bcount=0,acount=0;
-      int z = 0;
-      int easy=0;
+   } অন্যথা {
+      পূর্ণসংখ্যা rshift=0,gshift=0,bshift=0,ashift=0,rcount=0,gcount=0,bcount=0,acount=0;
+      পূর্ণসংখ্যা z = 0;
+      পূর্ণসংখ্যা easy=0;
       stbi__skip(s, info.offset - 14 - info.hsz);
-      if (info.bpp == 24) width = 3 * s->img_x;
-      else if (info.bpp == 16) width = 2*s->img_x;
-      else /* bpp = 32 and pad = 0 */ width=0;
+      যদি (info.bpp == 24) width = 3 * s->img_x;
+      অন্যথা যদি (info.bpp == 16) width = 2*s->img_x;
+      অন্যথা /* bpp = 32 and pad = 0 */ width=0;
       pad = (-width) & 3;
-      if (info.bpp == 24) {
+      যদি (info.bpp == 24) {
          easy = 1;
-      } else if (info.bpp == 32) {
-         if (mb == 0xff && mg == 0xff00 && mr == 0x00ff0000 && ma == 0xff000000)
+      } অন্যথা যদি (info.bpp == 32) {
+         যদি (mb == 0xff && mg == 0xff00 && mr == 0x00ff0000 && ma == 0xff000000)
             easy = 2;
       }
-      if (!easy) {
-         if (!mr || !mg || !mb) { STBI_FREE(out); return stbi__errpuc("bad masks", "Corrupt BMP"); }
+      যদি (!easy) {
+         যদি (!mr || !mg || !mb) { STBI_FREE(out); ফেরত stbi__errpuc("bad masks", "Corrupt BMP"); }
          // right shift amt to put high bit in position #7
-         rshift = stbi__high_bit(mr)-7; rcount = stbi__bitcount(mr);
-         gshift = stbi__high_bit(mg)-7; gcount = stbi__bitcount(mg);
-         bshift = stbi__high_bit(mb)-7; bcount = stbi__bitcount(mb);
-         ashift = stbi__high_bit(ma)-7; acount = stbi__bitcount(ma);
+         rshift = stbi_উপরের_bit(mr)-7; rcount = stbi__bitcount(mr);
+         gshift = stbi_উপরের_bit(mg)-7; gcount = stbi__bitcount(mg);
+         bshift = stbi_উপরের_bit(mb)-7; bcount = stbi__bitcount(mb);
+         ashift = stbi_উপরের_bit(ma)-7; acount = stbi__bitcount(ma);
       }
-      for (j=0; j < (int) s->img_y; ++j) {
-         if (easy) {
-            for (i=0; i < (int) s->img_x; ++i) {
-               unsigned char a;
+      জন্য (j=0; j < (পূর্ণসংখ্যা) s->img_y; ++j) {
+         যদি (easy) {
+            জন্য (i=0; i < (পূর্ণসংখ্যা) s->img_x; ++i) {
+               unsigned অক্ষর a;
                out[z+2] = stbi__get8(s);
                out[z+1] = stbi__get8(s);
                out[z+0] = stbi__get8(s);
                z += 3;
                a = (easy == 2 ? stbi__get8(s) : 255);
                all_a |= a;
-               if (target == 4) out[z++] = a;
+               যদি (target == 4) out[z++] = a;
             }
-         } else {
-            int bpp = info.bpp;
-            for (i=0; i < (int) s->img_x; ++i) {
+         } অন্যথা {
+            পূর্ণসংখ্যা bpp = info.bpp;
+            জন্য (i=0; i < (পূর্ণসংখ্যা) s->img_x; ++i) {
                stbi__uint32 v = (bpp == 16 ? (stbi__uint32) stbi__get16le(s) : stbi__get32le(s));
-               unsigned int a;
+               unsigned পূর্ণসংখ্যা a;
                out[z++] = STBI__BYTECAST(stbi__shiftsigned(v & mr, rshift, rcount));
                out[z++] = STBI__BYTECAST(stbi__shiftsigned(v & mg, gshift, gcount));
                out[z++] = STBI__BYTECAST(stbi__shiftsigned(v & mb, bshift, bcount));
                a = (ma ? stbi__shiftsigned(v & ma, ashift, acount) : 255);
                all_a |= a;
-               if (target == 4) out[z++] = STBI__BYTECAST(a);
+               যদি (target == 4) out[z++] = STBI__BYTECAST(a);
             }
          }
          stbi__skip(s, pad);
@@ -5289,30 +5289,30 @@ static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req
    }
 
    // if alpha channel is all 0s, replace with all 255s
-   if (target == 4 && all_a == 0)
-      for (i=4*s->img_x*s->img_y-1; i >= 0; i -= 4)
+   যদি (target == 4 && all_a == 0)
+      জন্য (i=4*s->img_x*s->img_y-1; i >= 0; i -= 4)
          out[i] = 255;
 
-   if (flip_vertically) {
+   যদি (flip_vertically) {
       stbi_uc t;
-      for (j=0; j < (int) s->img_y>>1; ++j) {
+      জন্য (j=0; j < (পূর্ণসংখ্যা) s->img_y>>1; ++j) {
          stbi_uc *p1 = out +      j     *s->img_x*target;
          stbi_uc *p2 = out + (s->img_y-1-j)*s->img_x*target;
-         for (i=0; i < (int) s->img_x*target; ++i) {
+         জন্য (i=0; i < (পূর্ণসংখ্যা) s->img_x*target; ++i) {
             t = p1[i], p1[i] = p2[i], p2[i] = t;
          }
       }
    }
 
-   if (req_comp && req_comp != target) {
+   যদি (req_comp && req_comp != target) {
       out = stbi__convert_format(out, target, req_comp, s->img_x, s->img_y);
-      if (out == NULL) return out; // stbi__convert_format frees input on failure
+      যদি (out == ফাঁকা) ফেরত out; // stbi__convert_format frees input on failure
    }
 
    *x = s->img_x;
    *y = s->img_y;
-   if (comp) *comp = s->img_n;
-   return out;
+   যদি (comp) *comp = s->img_n;
+   ফেরত out;
 }
 #endif
 
@@ -5320,127 +5320,127 @@ static void *stbi__bmp_load(stbi__context *s, int *x, int *y, int *comp, int req
 // by Jonathan Dummer
 #ifndef STBI_NO_TGA
 // returns STBI_rgb or whatever, 0 on error
-static int stbi__tga_get_comp(int bits_per_pixel, int is_grey, int* is_rgb16)
+স্থির পূর্ণসংখ্যা stbi__tga_get_comp(পূর্ণসংখ্যা bits_per_pixel, পূর্ণসংখ্যা is_grey, পূর্ণসংখ্যা* is_rgb16)
 {
    // only RGB or RGBA (incl. 16bit) or grey allowed
-   if (is_rgb16) *is_rgb16 = 0;
-   switch(bits_per_pixel) {
-      case 8:  return STBI_grey;
-      case 16: if(is_grey) return STBI_grey_alpha;
+   যদি (is_rgb16) *is_rgb16 = 0;
+   নির্বাচন(bits_per_pixel) {
+      ক্ষেত্র 8:  ফেরত STBI_grey;
+      ক্ষেত্র 16: যদি(is_grey) ফেরত STBI_grey_alpha;
                // fallthrough
-      case 15: if(is_rgb16) *is_rgb16 = 1;
-               return STBI_rgb;
-      case 24: // fallthrough
-      case 32: return bits_per_pixel/8;
-      default: return 0;
+      ক্ষেত্র 15: যদি(is_rgb16) *is_rgb16 = 1;
+               ফেরত STBI_rgb;
+      ক্ষেত্র 24: // fallthrough
+      ক্ষেত্র 32: ফেরত bits_per_pixel/8;
+      পূর্বনির্ধারিত: ফেরত 0;
    }
 }
 
-static int stbi__tga_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__tga_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-    int tga_w, tga_h, tga_comp, tga_image_type, tga_bits_per_pixel, tga_colormap_bpp;
-    int sz, tga_colormap_type;
+    পূর্ণসংখ্যা tga_w, tga_h, tga_comp, tga_image_type, tga_bits_per_pixel, tga_colormap_bpp;
+    পূর্ণসংখ্যা sz, tga_colormap_type;
     stbi__get8(s);                   // discard Offset
     tga_colormap_type = stbi__get8(s); // colormap type
-    if( tga_colormap_type > 1 ) {
+    যদি( tga_colormap_type > 1 ) {
         stbi__rewind(s);
-        return 0;      // only RGB or indexed allowed
+        ফেরত 0;      // only RGB or indexed allowed
     }
     tga_image_type = stbi__get8(s); // image type
-    if ( tga_colormap_type == 1 ) { // colormapped (paletted) image
-        if (tga_image_type != 1 && tga_image_type != 9) {
+    যদি ( tga_colormap_type == 1 ) { // colormapped (paletted) image
+        যদি (tga_image_type != 1 && tga_image_type != 9) {
             stbi__rewind(s);
-            return 0;
+            ফেরত 0;
         }
         stbi__skip(s,4);       // skip index of first colormap entry and number of entries
         sz = stbi__get8(s);    //   check bits per palette color entry
-        if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) {
+        যদি ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) {
             stbi__rewind(s);
-            return 0;
+            ফেরত 0;
         }
         stbi__skip(s,4);       // skip image x and y origin
         tga_colormap_bpp = sz;
-    } else { // "normal" image w/o colormap - only RGB or grey allowed, +/- RLE
-        if ( (tga_image_type != 2) && (tga_image_type != 3) && (tga_image_type != 10) && (tga_image_type != 11) ) {
+    } অন্যথা { // "normal" image w/o colormap - only RGB or grey allowed, +/- RLE
+        যদি ( (tga_image_type != 2) && (tga_image_type != 3) && (tga_image_type != 10) && (tga_image_type != 11) ) {
             stbi__rewind(s);
-            return 0; // only RGB or grey allowed, +/- RLE
+            ফেরত 0; // only RGB or grey allowed, +/- RLE
         }
         stbi__skip(s,9); // skip colormap specification and image x/y origin
         tga_colormap_bpp = 0;
     }
     tga_w = stbi__get16le(s);
-    if( tga_w < 1 ) {
+    যদি( tga_w < 1 ) {
         stbi__rewind(s);
-        return 0;   // test width
+        ফেরত 0;   // test width
     }
     tga_h = stbi__get16le(s);
-    if( tga_h < 1 ) {
+    যদি( tga_h < 1 ) {
         stbi__rewind(s);
-        return 0;   // test height
+        ফেরত 0;   // test height
     }
     tga_bits_per_pixel = stbi__get8(s); // bits per pixel
     stbi__get8(s); // ignore alpha bits
-    if (tga_colormap_bpp != 0) {
-        if((tga_bits_per_pixel != 8) && (tga_bits_per_pixel != 16)) {
+    যদি (tga_colormap_bpp != 0) {
+        যদি((tga_bits_per_pixel != 8) && (tga_bits_per_pixel != 16)) {
             // when using a colormap, tga_bits_per_pixel is the size of the indexes
             // I don't think anything but 8 or 16bit indexes makes sense
             stbi__rewind(s);
-            return 0;
+            ফেরত 0;
         }
-        tga_comp = stbi__tga_get_comp(tga_colormap_bpp, 0, NULL);
-    } else {
-        tga_comp = stbi__tga_get_comp(tga_bits_per_pixel, (tga_image_type == 3) || (tga_image_type == 11), NULL);
+        tga_comp = stbi__tga_get_comp(tga_colormap_bpp, 0, ফাঁকা);
+    } অন্যথা {
+        tga_comp = stbi__tga_get_comp(tga_bits_per_pixel, (tga_image_type == 3) || (tga_image_type == 11), ফাঁকা);
     }
-    if(!tga_comp) {
+    যদি(!tga_comp) {
       stbi__rewind(s);
-      return 0;
+      ফেরত 0;
     }
-    if (x) *x = tga_w;
-    if (y) *y = tga_h;
-    if (comp) *comp = tga_comp;
-    return 1;                   // seems to have passed everything
+    যদি (x) *x = tga_w;
+    যদি (y) *y = tga_h;
+    যদি (comp) *comp = tga_comp;
+    ফেরত 1;                   // seems to have passed everything
 }
 
-static int stbi__tga_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__tga_test(stbi__context *s)
 {
-   int res = 0;
-   int sz, tga_color_type;
+   পূর্ণসংখ্যা res = 0;
+   পূর্ণসংখ্যা sz, tga_color_type;
    stbi__get8(s);      //   discard Offset
    tga_color_type = stbi__get8(s);   //   color type
-   if ( tga_color_type > 1 ) goto errorEnd;   //   only RGB or indexed allowed
+   যদি ( tga_color_type > 1 ) যাও errorEnd;   //   only RGB or indexed allowed
    sz = stbi__get8(s);   //   image type
-   if ( tga_color_type == 1 ) { // colormapped (paletted) image
-      if (sz != 1 && sz != 9) goto errorEnd; // colortype 1 demands image type 1 or 9
+   যদি ( tga_color_type == 1 ) { // colormapped (paletted) image
+      যদি (sz != 1 && sz != 9) যাও errorEnd; // colortype 1 demands image type 1 or 9
       stbi__skip(s,4);       // skip index of first colormap entry and number of entries
       sz = stbi__get8(s);    //   check bits per palette color entry
-      if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto errorEnd;
+      যদি ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) যাও errorEnd;
       stbi__skip(s,4);       // skip image x and y origin
-   } else { // "normal" image w/o colormap
-      if ( (sz != 2) && (sz != 3) && (sz != 10) && (sz != 11) ) goto errorEnd; // only RGB or grey allowed, +/- RLE
+   } অন্যথা { // "normal" image w/o colormap
+      যদি ( (sz != 2) && (sz != 3) && (sz != 10) && (sz != 11) ) যাও errorEnd; // only RGB or grey allowed, +/- RLE
       stbi__skip(s,9); // skip colormap specification and image x/y origin
    }
-   if ( stbi__get16le(s) < 1 ) goto errorEnd;      //   test width
-   if ( stbi__get16le(s) < 1 ) goto errorEnd;      //   test height
+   যদি ( stbi__get16le(s) < 1 ) যাও errorEnd;      //   test width
+   যদি ( stbi__get16le(s) < 1 ) যাও errorEnd;      //   test height
    sz = stbi__get8(s);   //   bits per pixel
-   if ( (tga_color_type == 1) && (sz != 8) && (sz != 16) ) goto errorEnd; // for colormapped images, bpp is size of an index
-   if ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) goto errorEnd;
+   যদি ( (tga_color_type == 1) && (sz != 8) && (sz != 16) ) যাও errorEnd; // for colormapped images, bpp is size of an index
+   যদি ( (sz != 8) && (sz != 15) && (sz != 16) && (sz != 24) && (sz != 32) ) যাও errorEnd;
 
    res = 1; // if we got this far, everything's good and we can return 1 instead of 0
 
 errorEnd:
    stbi__rewind(s);
-   return res;
+   ফেরত res;
 }
 
 // read 16bit value and convert to 24bit RGB
-static void stbi__tga_read_rgb16(stbi__context *s, stbi_uc* out)
+স্থির শূন্য stbi__tga_read_rgb16(stbi__context *s, stbi_uc* out)
 {
    stbi__uint16 px = (stbi__uint16)stbi__get16le(s);
    stbi__uint16 fiveBitMask = 31;
    // we have 3 channels with 5bits each
-   int r = (px >> 10) & fiveBitMask;
-   int g = (px >> 5) & fiveBitMask;
-   int b = px & fiveBitMask;
+   পূর্ণসংখ্যা r = (px >> 10) & fiveBitMask;
+   পূর্ণসংখ্যা g = (px >> 5) & fiveBitMask;
+   পূর্ণসংখ্যা b = px & fiveBitMask;
    // Note that this saves the data in RGB(A) order, so it doesn't need to be swapped later
    out[0] = (stbi_uc)((r * 255)/31);
    out[1] = (stbi_uc)((g * 255)/31);
@@ -5452,36 +5452,36 @@ static void stbi__tga_read_rgb16(stbi__context *s, stbi_uc* out)
    // so let's treat all 15 and 16bit TGAs as RGB with no alpha.
 }
 
-static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__tga_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
    //   read in the TGA header stuff
-   int tga_offset = stbi__get8(s);
-   int tga_indexed = stbi__get8(s);
-   int tga_image_type = stbi__get8(s);
-   int tga_is_RLE = 0;
-   int tga_palette_start = stbi__get16le(s);
-   int tga_palette_len = stbi__get16le(s);
-   int tga_palette_bits = stbi__get8(s);
-   int tga_x_origin = stbi__get16le(s);
-   int tga_y_origin = stbi__get16le(s);
-   int tga_width = stbi__get16le(s);
-   int tga_height = stbi__get16le(s);
-   int tga_bits_per_pixel = stbi__get8(s);
-   int tga_comp, tga_rgb16=0;
-   int tga_inverted = stbi__get8(s);
+   পূর্ণসংখ্যা tga_offset = stbi__get8(s);
+   পূর্ণসংখ্যা tga_indexed = stbi__get8(s);
+   পূর্ণসংখ্যা tga_image_type = stbi__get8(s);
+   পূর্ণসংখ্যা tga_is_RLE = 0;
+   পূর্ণসংখ্যা tga_palette_start = stbi__get16le(s);
+   পূর্ণসংখ্যা tga_palette_len = stbi__get16le(s);
+   পূর্ণসংখ্যা tga_palette_bits = stbi__get8(s);
+   পূর্ণসংখ্যা tga_x_origin = stbi__get16le(s);
+   পূর্ণসংখ্যা tga_y_origin = stbi__get16le(s);
+   পূর্ণসংখ্যা tga_width = stbi__get16le(s);
+   পূর্ণসংখ্যা tga_height = stbi__get16le(s);
+   পূর্ণসংখ্যা tga_bits_per_pixel = stbi__get8(s);
+   পূর্ণসংখ্যা tga_comp, tga_rgb16=0;
+   পূর্ণসংখ্যা tga_inverted = stbi__get8(s);
    // int tga_alpha_bits = tga_inverted & 15; // the 4 lowest bits - unused (useless?)
    //   image data
-   unsigned char *tga_data;
-   unsigned char *tga_palette = NULL;
-   int i, j;
-   unsigned char raw_data[4] = {0};
-   int RLE_count = 0;
-   int RLE_repeating = 0;
-   int read_next_pixel = 1;
+   unsigned অক্ষর *tga_তথ্য;
+   unsigned অক্ষর *tga_palette = ফাঁকা;
+   পূর্ণসংখ্যা i, j;
+   unsigned অক্ষর raw_তথ্য[4] = {0};
+   পূর্ণসংখ্যা RLE_গুনতি = 0;
+   পূর্ণসংখ্যা RLE_repeating = 0;
+   পূর্ণসংখ্যা read_পরবর্তী_pixel = 1;
    STBI_NOTUSED(ri);
 
    //   do a tiny bit of precessing
-   if ( tga_image_type >= 8 )
+   যদি ( tga_image_type >= 8 )
    {
       tga_image_type -= 8;
       tga_is_RLE = 1;
@@ -5489,161 +5489,161 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
    tga_inverted = 1 - ((tga_inverted >> 5) & 1);
 
    //   If I'm paletted, then I'll use the number of bits from the palette
-   if ( tga_indexed ) tga_comp = stbi__tga_get_comp(tga_palette_bits, 0, &tga_rgb16);
-   else tga_comp = stbi__tga_get_comp(tga_bits_per_pixel, (tga_image_type == 3), &tga_rgb16);
+   যদি ( tga_indexed ) tga_comp = stbi__tga_get_comp(tga_palette_bits, 0, &tga_rgb16);
+   অন্যথা tga_comp = stbi__tga_get_comp(tga_bits_per_pixel, (tga_image_type == 3), &tga_rgb16);
 
-   if(!tga_comp) // shouldn't really happen, stbi__tga_test() should have ensured basic consistency
-      return stbi__errpuc("bad format", "Can't find out TGA pixelformat");
+   যদি(!tga_comp) // shouldn't really happen, stbi__tga_test() should have ensured basic consistency
+      ফেরত stbi__errpuc("bad format", "Can't find out TGA pixelformat");
 
    //   tga info
    *x = tga_width;
    *y = tga_height;
-   if (comp) *comp = tga_comp;
+   যদি (comp) *comp = tga_comp;
 
-   if (!stbi__mad3sizes_valid(tga_width, tga_height, tga_comp, 0))
-      return stbi__errpuc("too large", "Corrupt TGA");
+   যদি (!stbi__mad3sizes_valid(tga_width, tga_height, tga_comp, 0))
+      ফেরত stbi__errpuc("too large", "Corrupt TGA");
 
-   tga_data = (unsigned char*)stbi__malloc_mad3(tga_width, tga_height, tga_comp, 0);
-   if (!tga_data) return stbi__errpuc("outofmem", "Out of memory");
+   tga_তথ্য = (unsigned অক্ষর*)stbi__malloc_mad3(tga_width, tga_height, tga_comp, 0);
+   যদি (!tga_তথ্য) ফেরত stbi__errpuc("outofmem", "Out of memory");
 
    // skip to the data's starting position (offset usually = 0)
    stbi__skip(s, tga_offset );
 
-   if ( !tga_indexed && !tga_is_RLE && !tga_rgb16 ) {
-      for (i=0; i < tga_height; ++i) {
-         int row = tga_inverted ? tga_height -i - 1 : i;
-         stbi_uc *tga_row = tga_data + row*tga_width*tga_comp;
+   যদি ( !tga_indexed && !tga_is_RLE && !tga_rgb16 ) {
+      জন্য (i=0; i < tga_height; ++i) {
+         পূর্ণসংখ্যা row = tga_inverted ? tga_height -i - 1 : i;
+         stbi_uc *tga_row = tga_তথ্য + row*tga_width*tga_comp;
          stbi__getn(s, tga_row, tga_width * tga_comp);
       }
-   } else  {
+   } অন্যথা  {
       //   do I need to load a palette?
-      if ( tga_indexed)
+      যদি ( tga_indexed)
       {
          //   any data to skip? (offset usually = 0)
          stbi__skip(s, tga_palette_start );
          //   load the palette
-         tga_palette = (unsigned char*)stbi__malloc_mad2(tga_palette_len, tga_comp, 0);
-         if (!tga_palette) {
-            STBI_FREE(tga_data);
-            return stbi__errpuc("outofmem", "Out of memory");
+         tga_palette = (unsigned অক্ষর*)stbi__malloc_mad2(tga_palette_len, tga_comp, 0);
+         যদি (!tga_palette) {
+            STBI_FREE(tga_তথ্য);
+            ফেরত stbi__errpuc("outofmem", "Out of memory");
          }
-         if (tga_rgb16) {
+         যদি (tga_rgb16) {
             stbi_uc *pal_entry = tga_palette;
             STBI_ASSERT(tga_comp == STBI_rgb);
-            for (i=0; i < tga_palette_len; ++i) {
+            জন্য (i=0; i < tga_palette_len; ++i) {
                stbi__tga_read_rgb16(s, pal_entry);
                pal_entry += tga_comp;
             }
-         } else if (!stbi__getn(s, tga_palette, tga_palette_len * tga_comp)) {
-               STBI_FREE(tga_data);
+         } অন্যথা যদি (!stbi__getn(s, tga_palette, tga_palette_len * tga_comp)) {
+               STBI_FREE(tga_তথ্য);
                STBI_FREE(tga_palette);
-               return stbi__errpuc("bad palette", "Corrupt TGA");
+               ফেরত stbi__errpuc("bad palette", "Corrupt TGA");
          }
       }
       //   load the data
-      for (i=0; i < tga_width * tga_height; ++i)
+      জন্য (i=0; i < tga_width * tga_height; ++i)
       {
          //   if I'm in RLE mode, do I need to get a RLE stbi__pngchunk?
-         if ( tga_is_RLE )
+         যদি ( tga_is_RLE )
          {
-            if ( RLE_count == 0 )
+            যদি ( RLE_গুনতি == 0 )
             {
                //   yep, get the next byte as a RLE command
-               int RLE_cmd = stbi__get8(s);
-               RLE_count = 1 + (RLE_cmd & 127);
+               পূর্ণসংখ্যা RLE_cmd = stbi__get8(s);
+               RLE_গুনতি = 1 + (RLE_cmd & 127);
                RLE_repeating = RLE_cmd >> 7;
-               read_next_pixel = 1;
-            } else if ( !RLE_repeating )
+               read_পরবর্তী_pixel = 1;
+            } অন্যথা যদি ( !RLE_repeating )
             {
-               read_next_pixel = 1;
+               read_পরবর্তী_pixel = 1;
             }
-         } else
+         } অন্যথা
          {
-            read_next_pixel = 1;
+            read_পরবর্তী_pixel = 1;
          }
          //   OK, if I need to read a pixel, do it now
-         if ( read_next_pixel )
+         যদি ( read_পরবর্তী_pixel )
          {
             //   load however much data we did have
-            if ( tga_indexed )
+            যদি ( tga_indexed )
             {
                // read in index, then perform the lookup
-               int pal_idx = (tga_bits_per_pixel == 8) ? stbi__get8(s) : stbi__get16le(s);
-               if ( pal_idx >= tga_palette_len ) {
+               পূর্ণসংখ্যা pal_idx = (tga_bits_per_pixel == 8) ? stbi__get8(s) : stbi__get16le(s);
+               যদি ( pal_idx >= tga_palette_len ) {
                   // invalid index
                   pal_idx = 0;
                }
                pal_idx *= tga_comp;
-               for (j = 0; j < tga_comp; ++j) {
-                  raw_data[j] = tga_palette[pal_idx+j];
+               জন্য (j = 0; j < tga_comp; ++j) {
+                  raw_তথ্য[j] = tga_palette[pal_idx+j];
                }
-            } else if(tga_rgb16) {
+            } অন্যথা যদি(tga_rgb16) {
                STBI_ASSERT(tga_comp == STBI_rgb);
-               stbi__tga_read_rgb16(s, raw_data);
-            } else {
+               stbi__tga_read_rgb16(s, raw_তথ্য);
+            } অন্যথা {
                //   read in the data raw
-               for (j = 0; j < tga_comp; ++j) {
-                  raw_data[j] = stbi__get8(s);
+               জন্য (j = 0; j < tga_comp; ++j) {
+                  raw_তথ্য[j] = stbi__get8(s);
                }
             }
             //   clear the reading flag for the next pixel
-            read_next_pixel = 0;
+            read_পরবর্তী_pixel = 0;
          } // end of reading a pixel
 
          // copy data
-         for (j = 0; j < tga_comp; ++j)
-           tga_data[i*tga_comp+j] = raw_data[j];
+         জন্য (j = 0; j < tga_comp; ++j)
+           tga_তথ্য[i*tga_comp+j] = raw_তথ্য[j];
 
          //   in case we're in RLE mode, keep counting down
-         --RLE_count;
+         --RLE_গুনতি;
       }
       //   do I need to invert the image?
-      if ( tga_inverted )
+      যদি ( tga_inverted )
       {
-         for (j = 0; j*2 < tga_height; ++j)
+         জন্য (j = 0; j*2 < tga_height; ++j)
          {
-            int index1 = j * tga_width * tga_comp;
-            int index2 = (tga_height - 1 - j) * tga_width * tga_comp;
-            for (i = tga_width * tga_comp; i > 0; --i)
+            পূর্ণসংখ্যা index1 = j * tga_width * tga_comp;
+            পূর্ণসংখ্যা index2 = (tga_height - 1 - j) * tga_width * tga_comp;
+            জন্য (i = tga_width * tga_comp; i > 0; --i)
             {
-               unsigned char temp = tga_data[index1];
-               tga_data[index1] = tga_data[index2];
-               tga_data[index2] = temp;
+               unsigned অক্ষর অস্থায়ী = tga_তথ্য[index1];
+               tga_তথ্য[index1] = tga_তথ্য[index2];
+               tga_তথ্য[index2] = অস্থায়ী;
                ++index1;
                ++index2;
             }
          }
       }
       //   clear my palette, if I had one
-      if ( tga_palette != NULL )
+      যদি ( tga_palette != ফাঁকা )
       {
          STBI_FREE( tga_palette );
       }
    }
 
    // swap RGB - if the source data was RGB16, it already is in the right order
-   if (tga_comp >= 3 && !tga_rgb16)
+   যদি (tga_comp >= 3 && !tga_rgb16)
    {
-      unsigned char* tga_pixel = tga_data;
-      for (i=0; i < tga_width * tga_height; ++i)
+      unsigned অক্ষর* tga_pixel = tga_তথ্য;
+      জন্য (i=0; i < tga_width * tga_height; ++i)
       {
-         unsigned char temp = tga_pixel[0];
+         unsigned অক্ষর অস্থায়ী = tga_pixel[0];
          tga_pixel[0] = tga_pixel[2];
-         tga_pixel[2] = temp;
+         tga_pixel[2] = অস্থায়ী;
          tga_pixel += tga_comp;
       }
    }
 
    // convert to target component count
-   if (req_comp && req_comp != tga_comp)
-      tga_data = stbi__convert_format(tga_data, tga_comp, req_comp, tga_width, tga_height);
+   যদি (req_comp && req_comp != tga_comp)
+      tga_তথ্য = stbi__convert_format(tga_তথ্য, tga_comp, req_comp, tga_width, tga_height);
 
    //   the things I do to get rid of an error message, and yet keep
    //   Microsoft's C compilers happy... [8^(
    tga_palette_start = tga_palette_len = tga_palette_bits =
          tga_x_origin = tga_y_origin = 0;
    //   OK, done
-   return tga_data;
+   ফেরত tga_তথ্য;
 }
 #endif
 
@@ -5651,41 +5651,41 @@ static void *stbi__tga_load(stbi__context *s, int *x, int *y, int *comp, int req
 // Photoshop PSD loader -- PD by Thatcher Ulrich, integration by Nicolas Schulz, tweaked by STB
 
 #ifndef STBI_NO_PSD
-static int stbi__psd_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__psd_test(stbi__context *s)
 {
-   int r = (stbi__get32be(s) == 0x38425053);
+   পূর্ণসংখ্যা r = (stbi__get32be(s) == 0x38425053);
    stbi__rewind(s);
-   return r;
+   ফেরত r;
 }
 
-static int stbi__psd_decode_rle(stbi__context *s, stbi_uc *p, int pixelCount)
+স্থির পূর্ণসংখ্যা stbi__psd_decode_rle(stbi__context *s, stbi_uc *p, পূর্ণসংখ্যা pixel_গুনতি_2)
 {
-   int count, nleft, len;
+   পূর্ণসংখ্যা গুনতি, nleft, len;
 
-   count = 0;
-   while ((nleft = pixelCount - count) > 0) {
+   গুনতি = 0;
+   যখন ((nleft = pixel_গুনতি_2 - গুনতি) > 0) {
       len = stbi__get8(s);
-      if (len == 128) {
+      যদি (len == 128) {
          // No-op.
-      } else if (len < 128) {
+      } অন্যথা যদি (len < 128) {
          // Copy next len+1 bytes literally.
          len++;
-         if (len > nleft) return 0; // corrupt data
-         count += len;
-         while (len) {
+         যদি (len > nleft) ফেরত 0; // corrupt data
+         গুনতি += len;
+         যখন (len) {
             *p = stbi__get8(s);
             p += 4;
             len--;
          }
-      } else if (len > 128) {
+      } অন্যথা যদি (len > 128) {
          stbi_uc   val;
          // Next -len+1 bytes in the dest are replicated from next source byte.
          // (Interpret len as a negative 8-bit int.)
          len = 257 - len;
-         if (len > nleft) return 0; // corrupt data
+         যদি (len > nleft) ফেরত 0; // corrupt data
          val = stbi__get8(s);
-         count += len;
-         while (len) {
+         গুনতি += len;
+         যখন (len) {
             *p = val;
             p += 4;
             len--;
@@ -5693,34 +5693,34 @@ static int stbi__psd_decode_rle(stbi__context *s, stbi_uc *p, int pixelCount)
       }
    }
 
-   return 1;
+   ফেরত 1;
 }
 
-static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri, int bpc)
+স্থির শূন্য *stbi__psd_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri, পূর্ণসংখ্যা bpc)
 {
-   int pixelCount;
-   int channelCount, compression;
-   int channel, i;
-   int bitdepth;
-   int w,h;
+   পূর্ণসংখ্যা pixel_গুনতি_2;
+   পূর্ণসংখ্যা channel_গুনতি, compression;
+   পূর্ণসংখ্যা channel, i;
+   পূর্ণসংখ্যা bitdepth;
+   পূর্ণসংখ্যা w,h;
    stbi_uc *out;
    STBI_NOTUSED(ri);
 
    // Check identifier
-   if (stbi__get32be(s) != 0x38425053)   // "8BPS"
-      return stbi__errpuc("not PSD", "Corrupt PSD image");
+   যদি (stbi__get32be(s) != 0x38425053)   // "8BPS"
+      ফেরত stbi__errpuc("not PSD", "Corrupt PSD image");
 
    // Check file type version.
-   if (stbi__get16be(s) != 1)
-      return stbi__errpuc("wrong version", "Unsupported version of PSD image");
+   যদি (stbi__get16be(s) != 1)
+      ফেরত stbi__errpuc("wrong version", "Unsupported version of PSD image");
 
    // Skip 6 reserved bytes.
    stbi__skip(s, 6 );
 
    // Read the number of channels (R, G, B, A, etc).
-   channelCount = stbi__get16be(s);
-   if (channelCount < 0 || channelCount > 16)
-      return stbi__errpuc("wrong channel count", "Unsupported number of channels in PSD image");
+   channel_গুনতি = stbi__get16be(s);
+   যদি (channel_গুনতি < 0 || channel_গুনতি > 16)
+      ফেরত stbi__errpuc("wrong channel count", "Unsupported number of channels in PSD image");
 
    // Read the rows and columns of the image.
    h = stbi__get32be(s);
@@ -5728,8 +5728,8 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
 
    // Make sure the depth is 8 bits.
    bitdepth = stbi__get16be(s);
-   if (bitdepth != 8 && bitdepth != 16)
-      return stbi__errpuc("unsupported bit depth", "PSD bit depth is not 8 or 16 bit");
+   যদি (bitdepth != 8 && bitdepth != 16)
+      ফেরত stbi__errpuc("unsupported bit depth", "PSD bit depth is not 8 or 16 bit");
 
    // Make sure the color mode is RGB.
    // Valid options are:
@@ -5741,8 +5741,8 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
    //   7: Multichannel
    //   8: Duotone
    //   9: Lab color
-   if (stbi__get16be(s) != 3)
-      return stbi__errpuc("wrong color format", "PSD is not in RGB color format");
+   যদি (stbi__get16be(s) != 3)
+      ফেরত stbi__errpuc("wrong color format", "PSD is not in RGB color format");
 
    // Skip the Mode Data.  (It's the palette for indexed color; other info for other modes.)
    stbi__skip(s,stbi__get32be(s) );
@@ -5758,29 +5758,29 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
    //   0: no compression
    //   1: RLE compressed
    compression = stbi__get16be(s);
-   if (compression > 1)
-      return stbi__errpuc("bad compression", "PSD has an unknown compression format");
+   যদি (compression > 1)
+      ফেরত stbi__errpuc("bad compression", "PSD has an unknown compression format");
 
    // Check size
-   if (!stbi__mad3sizes_valid(4, w, h, 0))
-      return stbi__errpuc("too large", "Corrupt PSD");
+   যদি (!stbi__mad3sizes_valid(4, w, h, 0))
+      ফেরত stbi__errpuc("too large", "Corrupt PSD");
 
    // Create the destination image.
 
-   if (!compression && bitdepth == 16 && bpc == 16) {
+   যদি (!compression && bitdepth == 16 && bpc == 16) {
       out = (stbi_uc *) stbi__malloc_mad3(8, w, h, 0);
       ri->bits_per_channel = 16;
-   } else
+   } অন্যথা
       out = (stbi_uc *) stbi__malloc(4 * w*h);
 
-   if (!out) return stbi__errpuc("outofmem", "Out of memory");
-   pixelCount = w*h;
+   যদি (!out) ফেরত stbi__errpuc("outofmem", "Out of memory");
+   pixel_গুনতি_2 = w*h;
 
    // Initialize the data to zero.
    //memset( out, 0, pixelCount * 4 );
 
    // Finally, the image data.
-   if (compression) {
+   যদি (compression) {
       // RLE as used by .PSD and .TIFF
       // Loop until you get the number of unpacked bytes you are expecting:
       //     Read the next source byte into n.
@@ -5791,57 +5791,57 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
 
       // The RLE-compressed data is preceeded by a 2-byte data count for each row in the data,
       // which we're going to just skip.
-      stbi__skip(s, h * channelCount * 2 );
+      stbi__skip(s, h * channel_গুনতি * 2 );
 
       // Read the RLE data by channel.
-      for (channel = 0; channel < 4; channel++) {
+      জন্য (channel = 0; channel < 4; channel++) {
          stbi_uc *p;
 
          p = out+channel;
-         if (channel >= channelCount) {
+         যদি (channel >= channel_গুনতি) {
             // Fill this channel with default data.
-            for (i = 0; i < pixelCount; i++, p += 4)
+            জন্য (i = 0; i < pixel_গুনতি_2; i++, p += 4)
                *p = (channel == 3 ? 255 : 0);
-         } else {
+         } অন্যথা {
             // Read the RLE data.
-            if (!stbi__psd_decode_rle(s, p, pixelCount)) {
+            যদি (!stbi__psd_decode_rle(s, p, pixel_গুনতি_2)) {
                STBI_FREE(out);
-               return stbi__errpuc("corrupt", "bad RLE data");
+               ফেরত stbi__errpuc("corrupt", "bad RLE data");
             }
          }
       }
 
-   } else {
+   } অন্যথা {
       // We're at the raw image data.  It's each channel in order (Red, Green, Blue, Alpha, ...)
       // where each channel consists of an 8-bit (or 16-bit) value for each pixel in the image.
 
       // Read the data by channel.
-      for (channel = 0; channel < 4; channel++) {
-         if (channel >= channelCount) {
+      জন্য (channel = 0; channel < 4; channel++) {
+         যদি (channel >= channel_গুনতি) {
             // Fill this channel with default data.
-            if (bitdepth == 16 && bpc == 16) {
+            যদি (bitdepth == 16 && bpc == 16) {
                stbi__uint16 *q = ((stbi__uint16 *) out) + channel;
                stbi__uint16 val = channel == 3 ? 65535 : 0;
-               for (i = 0; i < pixelCount; i++, q += 4)
+               জন্য (i = 0; i < pixel_গুনতি_2; i++, q += 4)
                   *q = val;
-            } else {
+            } অন্যথা {
                stbi_uc *p = out+channel;
                stbi_uc val = channel == 3 ? 255 : 0;
-               for (i = 0; i < pixelCount; i++, p += 4)
+               জন্য (i = 0; i < pixel_গুনতি_2; i++, p += 4)
                   *p = val;
             }
-         } else {
-            if (ri->bits_per_channel == 16) {    // output bpc
+         } অন্যথা {
+            যদি (ri->bits_per_channel == 16) {    // output bpc
                stbi__uint16 *q = ((stbi__uint16 *) out) + channel;
-               for (i = 0; i < pixelCount; i++, q += 4)
+               জন্য (i = 0; i < pixel_গুনতি_2; i++, q += 4)
                   *q = (stbi__uint16) stbi__get16be(s);
-            } else {
+            } অন্যথা {
                stbi_uc *p = out+channel;
-               if (bitdepth == 16) {  // input bpc
-                  for (i = 0; i < pixelCount; i++, p += 4)
+               যদি (bitdepth == 16) {  // input bpc
+                  জন্য (i = 0; i < pixel_গুনতি_2; i++, p += 4)
                      *p = (stbi_uc) (stbi__get16be(s) >> 8);
-               } else {
-                  for (i = 0; i < pixelCount; i++, p += 4)
+               } অন্যথা {
+                  জন্য (i = 0; i < pixel_গুনতি_2; i++, p += 4)
                      *p = stbi__get8(s);
                }
             }
@@ -5850,48 +5850,48 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
    }
 
    // remove weird white matte from PSD
-   if (channelCount >= 4) {
-      if (ri->bits_per_channel == 16) {
-         for (i=0; i < w*h; ++i) {
+   যদি (channel_গুনতি >= 4) {
+      যদি (ri->bits_per_channel == 16) {
+         জন্য (i=0; i < w*h; ++i) {
             stbi__uint16 *pixel = (stbi__uint16 *) out + 4*i;
-            if (pixel[3] != 0 && pixel[3] != 65535) {
-               float a = pixel[3] / 65535.0f;
-               float ra = 1.0f / a;
-               float inv_a = 65535.0f * (1 - ra);
+            যদি (pixel[3] != 0 && pixel[3] != 65535) {
+               দশমিক a = pixel[3] / 65535.0f;
+               দশমিক ra = 1.0f / a;
+               দশমিক inv_a = 65535.0f * (1 - ra);
                pixel[0] = (stbi__uint16) (pixel[0]*ra + inv_a);
                pixel[1] = (stbi__uint16) (pixel[1]*ra + inv_a);
                pixel[2] = (stbi__uint16) (pixel[2]*ra + inv_a);
             }
          }
-      } else {
-         for (i=0; i < w*h; ++i) {
-            unsigned char *pixel = out + 4*i;
-            if (pixel[3] != 0 && pixel[3] != 255) {
-               float a = pixel[3] / 255.0f;
-               float ra = 1.0f / a;
-               float inv_a = 255.0f * (1 - ra);
-               pixel[0] = (unsigned char) (pixel[0]*ra + inv_a);
-               pixel[1] = (unsigned char) (pixel[1]*ra + inv_a);
-               pixel[2] = (unsigned char) (pixel[2]*ra + inv_a);
+      } অন্যথা {
+         জন্য (i=0; i < w*h; ++i) {
+            unsigned অক্ষর *pixel = out + 4*i;
+            যদি (pixel[3] != 0 && pixel[3] != 255) {
+               দশমিক a = pixel[3] / 255.0f;
+               দশমিক ra = 1.0f / a;
+               দশমিক inv_a = 255.0f * (1 - ra);
+               pixel[0] = (unsigned অক্ষর) (pixel[0]*ra + inv_a);
+               pixel[1] = (unsigned অক্ষর) (pixel[1]*ra + inv_a);
+               pixel[2] = (unsigned অক্ষর) (pixel[2]*ra + inv_a);
             }
          }
       }
    }
 
    // convert to desired output format
-   if (req_comp && req_comp != 4) {
-      if (ri->bits_per_channel == 16)
+   যদি (req_comp && req_comp != 4) {
+      যদি (ri->bits_per_channel == 16)
          out = (stbi_uc *) stbi__convert_format16((stbi__uint16 *) out, 4, req_comp, w, h);
-      else
+      অন্যথা
          out = stbi__convert_format(out, 4, req_comp, w, h);
-      if (out == NULL) return out; // stbi__convert_format frees input on failure
+      যদি (out == ফাঁকা) ফেরত out; // stbi__convert_format frees input on failure
    }
 
-   if (comp) *comp = 4;
+   যদি (comp) *comp = 4;
    *y = h;
    *x = w;
 
-   return out;
+   ফেরত out;
 }
 #endif
 
@@ -5903,211 +5903,211 @@ static void *stbi__psd_load(stbi__context *s, int *x, int *y, int *comp, int req
 // See http://ozviz.wasp.uwa.edu.au/~pbourke/dataformats/softimagepic/
 
 #ifndef STBI_NO_PIC
-static int stbi__pic_is4(stbi__context *s,const char *str)
+স্থির পূর্ণসংখ্যা stbi__pic_is4(stbi__context *s,ধ্রুবক অক্ষর *str)
 {
-   int i;
-   for (i=0; i<4; ++i)
-      if (stbi__get8(s) != (stbi_uc)str[i])
-         return 0;
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i<4; ++i)
+      যদি (stbi__get8(s) != (stbi_uc)str[i])
+         ফেরত 0;
 
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__pic_test_core(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__pic_test_core(stbi__context *s)
 {
-   int i;
+   পূর্ণসংখ্যা i;
 
-   if (!stbi__pic_is4(s,"\x53\x80\xF6\x34"))
-      return 0;
+   যদি (!stbi__pic_is4(s,"\x53\x80\xF6\x34"))
+      ফেরত 0;
 
-   for(i=0;i<84;++i)
+   জন্য(i=0;i<84;++i)
       stbi__get8(s);
 
-   if (!stbi__pic_is4(s,"PICT"))
-      return 0;
+   যদি (!stbi__pic_is4(s,"PICT"))
+      ফেরত 0;
 
-   return 1;
+   ফেরত 1;
 }
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
-   stbi_uc size,type,channel;
+   stbi_uc আকার_2,type,channel;
 } stbi__pic_packet;
 
-static stbi_uc *stbi__readval(stbi__context *s, int channel, stbi_uc *dest)
+স্থির stbi_uc *stbi__readval(stbi__context *s, পূর্ণসংখ্যা channel, stbi_uc *dest)
 {
-   int mask=0x80, i;
+   পূর্ণসংখ্যা mask=0x80, i;
 
-   for (i=0; i<4; ++i, mask>>=1) {
-      if (channel & mask) {
-         if (stbi__at_eof(s)) return stbi__errpuc("bad file","PIC file too short");
+   জন্য (i=0; i<4; ++i, mask>>=1) {
+      যদি (channel & mask) {
+         যদি (stbi__at_eof(s)) ফেরত stbi__errpuc("bad file","PIC file too short");
          dest[i]=stbi__get8(s);
       }
    }
 
-   return dest;
+   ফেরত dest;
 }
 
-static void stbi__copyval(int channel,stbi_uc *dest,const stbi_uc *src)
+স্থির শূন্য stbi__copyval(পূর্ণসংখ্যা channel,stbi_uc *dest,ধ্রুবক stbi_uc *src)
 {
-   int mask=0x80,i;
+   পূর্ণসংখ্যা mask=0x80,i;
 
-   for (i=0;i<4; ++i, mask>>=1)
-      if (channel&mask)
+   জন্য (i=0;i<4; ++i, mask>>=1)
+      যদি (channel&mask)
          dest[i]=src[i];
 }
 
-static stbi_uc *stbi__pic_load_core(stbi__context *s,int width,int height,int *comp, stbi_uc *result)
+স্থির stbi_uc *stbi__pic_load_core(stbi__context *s,পূর্ণসংখ্যা width,পূর্ণসংখ্যা height,পূর্ণসংখ্যা *comp, stbi_uc *ফলাফল)
 {
-   int act_comp=0,num_packets=0,y,chained;
+   পূর্ণসংখ্যা act_comp=0,অঙ্ক_packets=0,y,chained;
    stbi__pic_packet packets[10];
 
    // this will (should...) cater for even some bizarre stuff like having data
     // for the same channel in multiple packets.
-   do {
+   করো {
       stbi__pic_packet *packet;
 
-      if (num_packets==sizeof(packets)/sizeof(packets[0]))
-         return stbi__errpuc("bad format","too many packets");
+      যদি (অঙ্ক_packets==আকার(packets)/আকার(packets[0]))
+         ফেরত stbi__errpuc("bad format","too many packets");
 
-      packet = &packets[num_packets++];
+      packet = &packets[অঙ্ক_packets++];
 
       chained = stbi__get8(s);
-      packet->size    = stbi__get8(s);
+      packet->আকার_2    = stbi__get8(s);
       packet->type    = stbi__get8(s);
       packet->channel = stbi__get8(s);
 
       act_comp |= packet->channel;
 
-      if (stbi__at_eof(s))          return stbi__errpuc("bad file","file too short (reading packets)");
-      if (packet->size != 8)  return stbi__errpuc("bad format","packet isn't 8bpp");
-   } while (chained);
+      যদি (stbi__at_eof(s))          ফেরত stbi__errpuc("bad file","file too short (reading packets)");
+      যদি (packet->আকার_2 != 8)  ফেরত stbi__errpuc("bad format","packet isn't 8bpp");
+   } যখন (chained);
 
    *comp = (act_comp & 0x10 ? 4 : 3); // has alpha channel?
 
-   for(y=0; y<height; ++y) {
-      int packet_idx;
+   জন্য(y=0; y<height; ++y) {
+      পূর্ণসংখ্যা packet_idx;
 
-      for(packet_idx=0; packet_idx < num_packets; ++packet_idx) {
+      জন্য(packet_idx=0; packet_idx < অঙ্ক_packets; ++packet_idx) {
          stbi__pic_packet *packet = &packets[packet_idx];
-         stbi_uc *dest = result+y*width*4;
+         stbi_uc *dest = ফলাফল+y*width*4;
 
-         switch (packet->type) {
-            default:
-               return stbi__errpuc("bad format","packet has bad compression type");
+         নির্বাচন (packet->type) {
+            পূর্বনির্ধারিত:
+               ফেরত stbi__errpuc("bad format","packet has bad compression type");
 
-            case 0: {//uncompressed
-               int x;
+            ক্ষেত্র 0: {//uncompressed
+               পূর্ণসংখ্যা x;
 
-               for(x=0;x<width;++x, dest+=4)
-                  if (!stbi__readval(s,packet->channel,dest))
-                     return 0;
-               break;
+               জন্য(x=0;x<width;++x, dest+=4)
+                  যদি (!stbi__readval(s,packet->channel,dest))
+                     ফেরত 0;
+               বিরতি;
             }
 
-            case 1://Pure RLE
+            ক্ষেত্র 1://Pure RLE
                {
-                  int left=width, i;
+                  পূর্ণসংখ্যা বাম=width, i;
 
-                  while (left>0) {
-                     stbi_uc count,value[4];
+                  যখন (বাম>0) {
+                     stbi_uc গুনতি,মান[4];
 
-                     count=stbi__get8(s);
-                     if (stbi__at_eof(s))   return stbi__errpuc("bad file","file too short (pure read count)");
+                     গুনতি=stbi__get8(s);
+                     যদি (stbi__at_eof(s))   ফেরত stbi__errpuc("bad file","file too short (pure read count)");
 
-                     if (count > left)
-                        count = (stbi_uc) left;
+                     যদি (গুনতি > বাম)
+                        গুনতি = (stbi_uc) বাম;
 
-                     if (!stbi__readval(s,packet->channel,value))  return 0;
+                     যদি (!stbi__readval(s,packet->channel,মান))  ফেরত 0;
 
-                     for(i=0; i<count; ++i,dest+=4)
-                        stbi__copyval(packet->channel,dest,value);
-                     left -= count;
+                     জন্য(i=0; i<গুনতি; ++i,dest+=4)
+                        stbi__copyval(packet->channel,dest,মান);
+                     বাম -= গুনতি;
                   }
                }
-               break;
+               বিরতি;
 
-            case 2: {//Mixed RLE
-               int left=width;
-               while (left>0) {
-                  int count = stbi__get8(s), i;
-                  if (stbi__at_eof(s))  return stbi__errpuc("bad file","file too short (mixed read count)");
+            ক্ষেত্র 2: {//Mixed RLE
+               পূর্ণসংখ্যা বাম=width;
+               যখন (বাম>0) {
+                  পূর্ণসংখ্যা গুনতি = stbi__get8(s), i;
+                  যদি (stbi__at_eof(s))  ফেরত stbi__errpuc("bad file","file too short (mixed read count)");
 
-                  if (count >= 128) { // Repeated
-                     stbi_uc value[4];
+                  যদি (গুনতি >= 128) { // Repeated
+                     stbi_uc মান[4];
 
-                     if (count==128)
-                        count = stbi__get16be(s);
-                     else
-                        count -= 127;
-                     if (count > left)
-                        return stbi__errpuc("bad file","scanline overrun");
+                     যদি (গুনতি==128)
+                        গুনতি = stbi__get16be(s);
+                     অন্যথা
+                        গুনতি -= 127;
+                     যদি (গুনতি > বাম)
+                        ফেরত stbi__errpuc("bad file","scanline overrun");
 
-                     if (!stbi__readval(s,packet->channel,value))
-                        return 0;
+                     যদি (!stbi__readval(s,packet->channel,মান))
+                        ফেরত 0;
 
-                     for(i=0;i<count;++i, dest += 4)
-                        stbi__copyval(packet->channel,dest,value);
-                  } else { // Raw
-                     ++count;
-                     if (count>left) return stbi__errpuc("bad file","scanline overrun");
+                     জন্য(i=0;i<গুনতি;++i, dest += 4)
+                        stbi__copyval(packet->channel,dest,মান);
+                  } অন্যথা { // Raw
+                     ++গুনতি;
+                     যদি (গুনতি>বাম) ফেরত stbi__errpuc("bad file","scanline overrun");
 
-                     for(i=0;i<count;++i, dest+=4)
-                        if (!stbi__readval(s,packet->channel,dest))
-                           return 0;
+                     জন্য(i=0;i<গুনতি;++i, dest+=4)
+                        যদি (!stbi__readval(s,packet->channel,dest))
+                           ফেরত 0;
                   }
-                  left-=count;
+                  বাম-=গুনতি;
                }
-               break;
+               বিরতি;
             }
          }
       }
    }
 
-   return result;
+   ফেরত ফলাফল;
 }
 
-static void *stbi__pic_load(stbi__context *s,int *px,int *py,int *comp,int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__pic_load(stbi__context *s,পূর্ণসংখ্যা *px,পূর্ণসংখ্যা *py,পূর্ণসংখ্যা *comp,পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
-   stbi_uc *result;
-   int i, x,y, internal_comp;
+   stbi_uc *ফলাফল;
+   পূর্ণসংখ্যা i, x,y, internal_comp;
    STBI_NOTUSED(ri);
 
-   if (!comp) comp = &internal_comp;
+   যদি (!comp) comp = &internal_comp;
 
-   for (i=0; i<92; ++i)
+   জন্য (i=0; i<92; ++i)
       stbi__get8(s);
 
    x = stbi__get16be(s);
    y = stbi__get16be(s);
-   if (stbi__at_eof(s))  return stbi__errpuc("bad file","file too short (pic header)");
-   if (!stbi__mad3sizes_valid(x, y, 4, 0)) return stbi__errpuc("too large", "PIC image too large to decode");
+   যদি (stbi__at_eof(s))  ফেরত stbi__errpuc("bad file","file too short (pic header)");
+   যদি (!stbi__mad3sizes_valid(x, y, 4, 0)) ফেরত stbi__errpuc("too large", "PIC image too large to decode");
 
    stbi__get32be(s); //skip `ratio'
    stbi__get16be(s); //skip `fields'
    stbi__get16be(s); //skip `pad'
 
    // intermediate buffer is RGBA
-   result = (stbi_uc *) stbi__malloc_mad3(x, y, 4, 0);
-   memset(result, 0xff, x*y*4);
+   ফলাফল = (stbi_uc *) stbi__malloc_mad3(x, y, 4, 0);
+   memset(ফলাফল, 0xff, x*y*4);
 
-   if (!stbi__pic_load_core(s,x,y,comp, result)) {
-      STBI_FREE(result);
-      result=0;
+   যদি (!stbi__pic_load_core(s,x,y,comp, ফলাফল)) {
+      STBI_FREE(ফলাফল);
+      ফলাফল=0;
    }
    *px = x;
    *py = y;
-   if (req_comp == 0) req_comp = *comp;
-   result=stbi__convert_format(result,4,req_comp,x,y);
+   যদি (req_comp == 0) req_comp = *comp;
+   ফলাফল=stbi__convert_format(ফলাফল,4,req_comp,x,y);
 
-   return result;
+   ফেরত ফলাফল;
 }
 
-static int stbi__pic_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__pic_test(stbi__context *s)
 {
-   int r = stbi__pic_test_core(s);
+   পূর্ণসংখ্যা r = stbi__pic_test_core(s);
    stbi__rewind(s);
-   return r;
+   ফেরত r;
 }
 #endif
 
@@ -6115,54 +6115,54 @@ static int stbi__pic_test(stbi__context *s)
 // GIF loader -- public domain by Jean-Marc Lienher -- simplified/shrunk by stb
 
 #ifndef STBI_NO_GIF
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi__int16 prefix;
    stbi_uc first;
    stbi_uc suffix;
 } stbi__gif_lzw;
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
-   int w,h;
+   পূর্ণসংখ্যা w,h;
    stbi_uc *out;                 // output buffer (always 4 components)
    stbi_uc *background;          // The current "background" as far as a gif is concerned
    stbi_uc *history; 
-   int flags, bgindex, ratio, transparent, eflags;
+   পূর্ণসংখ্যা flags, bgindex, ratio, transparent, eflags;
    stbi_uc  pal[256][4];
    stbi_uc lpal[256][4];
    stbi__gif_lzw codes[8192];
    stbi_uc *color_table;
-   int parse, step;
-   int lflags;
-   int start_x, start_y;
-   int max_x, max_y;
-   int cur_x, cur_y;
-   int line_size;
-   int delay;
+   পূর্ণসংখ্যা parse, step;
+   পূর্ণসংখ্যা lflags;
+   পূর্ণসংখ্যা start_x, start_y;
+   পূর্ণসংখ্যা max_x, max_y;
+   পূর্ণসংখ্যা cur_x, cur_y;
+   পূর্ণসংখ্যা সারি_আকার;
+   পূর্ণসংখ্যা delay;
 } stbi__gif;
 
-static int stbi__gif_test_raw(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__gif_test_raw(stbi__context *s)
 {
-   int sz;
-   if (stbi__get8(s) != 'G' || stbi__get8(s) != 'I' || stbi__get8(s) != 'F' || stbi__get8(s) != '8') return 0;
+   পূর্ণসংখ্যা sz;
+   যদি (stbi__get8(s) != 'G' || stbi__get8(s) != 'I' || stbi__get8(s) != 'F' || stbi__get8(s) != '8') ফেরত 0;
    sz = stbi__get8(s);
-   if (sz != '9' && sz != '7') return 0;
-   if (stbi__get8(s) != 'a') return 0;
-   return 1;
+   যদি (sz != '9' && sz != '7') ফেরত 0;
+   যদি (stbi__get8(s) != 'a') ফেরত 0;
+   ফেরত 1;
 }
 
-static int stbi__gif_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__gif_test(stbi__context *s)
 {
-   int r = stbi__gif_test_raw(s);
+   পূর্ণসংখ্যা r = stbi__gif_test_raw(s);
    stbi__rewind(s);
-   return r;
+   ফেরত r;
 }
 
-static void stbi__gif_parse_colortable(stbi__context *s, stbi_uc pal[256][4], int num_entries, int transp)
+স্থির শূন্য stbi__gif_parse_colortable(stbi__context *s, stbi_uc pal[256][4], পূর্ণসংখ্যা অঙ্ক_entries, পূর্ণসংখ্যা transp)
 {
-   int i;
-   for (i=0; i < num_entries; ++i) {
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < অঙ্ক_entries; ++i) {
       pal[i][2] = stbi__get8(s);
       pal[i][1] = stbi__get8(s);
       pal[i][0] = stbi__get8(s);
@@ -6170,15 +6170,15 @@ static void stbi__gif_parse_colortable(stbi__context *s, stbi_uc pal[256][4], in
    }
 }
 
-static int stbi__gif_header(stbi__context *s, stbi__gif *g, int *comp, int is_info)
+স্থির পূর্ণসংখ্যা stbi__gif_header(stbi__context *s, stbi__gif *g, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা is_info)
 {
    stbi_uc version;
-   if (stbi__get8(s) != 'G' || stbi__get8(s) != 'I' || stbi__get8(s) != 'F' || stbi__get8(s) != '8')
-      return stbi__err("not GIF", "Corrupt GIF");
+   যদি (stbi__get8(s) != 'G' || stbi__get8(s) != 'I' || stbi__get8(s) != 'F' || stbi__get8(s) != '8')
+      ফেরত stbi__err("not GIF", "Corrupt GIF");
 
    version = stbi__get8(s);
-   if (version != '7' && version != '9')    return stbi__err("not GIF", "Corrupt GIF");
-   if (stbi__get8(s) != 'a')                return stbi__err("not GIF", "Corrupt GIF");
+   যদি (version != '7' && version != '9')    ফেরত stbi__err("not GIF", "Corrupt GIF");
+   যদি (stbi__get8(s) != 'a')                ফেরত stbi__err("not GIF", "Corrupt GIF");
 
    stbi__g_failure_reason = "";
    g->w = stbi__get16le(s);
@@ -6188,48 +6188,48 @@ static int stbi__gif_header(stbi__context *s, stbi__gif *g, int *comp, int is_in
    g->ratio = stbi__get8(s);
    g->transparent = -1;
 
-   if (comp != 0) *comp = 4;  // can't actually tell whether it's 3 or 4 until we parse the comments
+   যদি (comp != 0) *comp = 4;  // can't actually tell whether it's 3 or 4 until we parse the comments
 
-   if (is_info) return 1;
+   যদি (is_info) ফেরত 1;
 
-   if (g->flags & 0x80)
+   যদি (g->flags & 0x80)
       stbi__gif_parse_colortable(s,g->pal, 2 << (g->flags & 7), -1);
 
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__gif_info_raw(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__gif_info_raw(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   stbi__gif* g = (stbi__gif*) stbi__malloc(sizeof(stbi__gif));
-   if (!stbi__gif_header(s, g, comp, 1)) {
+   stbi__gif* g = (stbi__gif*) stbi__malloc(আকার(stbi__gif));
+   যদি (!stbi__gif_header(s, g, comp, 1)) {
       STBI_FREE(g);
       stbi__rewind( s );
-      return 0;
+      ফেরত 0;
    }
-   if (x) *x = g->w;
-   if (y) *y = g->h;
+   যদি (x) *x = g->w;
+   যদি (y) *y = g->h;
    STBI_FREE(g);
-   return 1;
+   ফেরত 1;
 }
 
-static void stbi__out_gif_code(stbi__gif *g, stbi__uint16 code)
+স্থির শূন্য stbi__out_gif_code(stbi__gif *g, stbi__uint16 code)
 {
    stbi_uc *p, *c;
-   int idx; 
+   পূর্ণসংখ্যা idx; 
 
    // recurse to decode the prefixes, since the linked-list is backwards,
    // and working backwards through an interleaved image would be nasty
-   if (g->codes[code].prefix >= 0)
+   যদি (g->codes[code].prefix >= 0)
       stbi__out_gif_code(g, g->codes[code].prefix);
 
-   if (g->cur_y >= g->max_y) return;
+   যদি (g->cur_y >= g->max_y) ফেরত;
 
    idx = g->cur_x + g->cur_y; 
    p = &g->out[idx];
    g->history[idx / 4] = 1;  
 
    c = &g->color_table[g->codes[code].suffix * 4];
-   if (c[3] > 128) { // don't render transparent pixels; 
+   যদি (c[3] > 128) { // don't render transparent pixels; 
       p[0] = c[2];
       p[1] = c[1];
       p[2] = c[0];
@@ -6237,19 +6237,19 @@ static void stbi__out_gif_code(stbi__gif *g, stbi__uint16 code)
    }
    g->cur_x += 4;
 
-   if (g->cur_x >= g->max_x) {
+   যদি (g->cur_x >= g->max_x) {
       g->cur_x = g->start_x;
       g->cur_y += g->step;
 
-      while (g->cur_y >= g->max_y && g->parse > 0) {
-         g->step = (1 << g->parse) * g->line_size;
+      যখন (g->cur_y >= g->max_y && g->parse > 0) {
+         g->step = (1 << g->parse) * g->সারি_আকার;
          g->cur_y = g->start_y + (g->step >> 1);
          --g->parse;
       }
    }
 }
 
-static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
+স্থির stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
 {
    stbi_uc lzw_cs;
    stbi__int32 len, init_code;
@@ -6258,14 +6258,14 @@ static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
    stbi__gif_lzw *p;
 
    lzw_cs = stbi__get8(s);
-   if (lzw_cs > 12) return NULL;
+   যদি (lzw_cs > 12) ফেরত ফাঁকা;
    clear = 1 << lzw_cs;
    first = 1;
    codesize = lzw_cs + 1;
    codemask = (1 << codesize) - 1;
    bits = 0;
    valid_bits = 0;
-   for (init_code = 0; init_code < clear; init_code++) {
+   জন্য (init_code = 0; init_code < clear; init_code++) {
       g->codes[init_code].prefix = -1;
       g->codes[init_code].first = (stbi_uc) init_code;
       g->codes[init_code].suffix = (stbi_uc) init_code;
@@ -6276,59 +6276,59 @@ static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
    oldcode = -1;
 
    len = 0;
-   for(;;) {
-      if (valid_bits < codesize) {
-         if (len == 0) {
+   জন্য(;;) {
+      যদি (valid_bits < codesize) {
+         যদি (len == 0) {
             len = stbi__get8(s); // start new block
-            if (len == 0)
-               return g->out;
+            যদি (len == 0)
+               ফেরত g->out;
          }
          --len;
          bits |= (stbi__int32) stbi__get8(s) << valid_bits;
          valid_bits += 8;
-      } else {
+      } অন্যথা {
          stbi__int32 code = bits & codemask;
          bits >>= codesize;
          valid_bits -= codesize;
          // @OPTIMIZE: is there some way we can accelerate the non-clear path?
-         if (code == clear) {  // clear code
+         যদি (code == clear) {  // clear code
             codesize = lzw_cs + 1;
             codemask = (1 << codesize) - 1;
             avail = clear + 2;
             oldcode = -1;
             first = 0;
-         } else if (code == clear + 1) { // end of stream code
+         } অন্যথা যদি (code == clear + 1) { // end of stream code
             stbi__skip(s, len);
-            while ((len = stbi__get8(s)) > 0)
+            যখন ((len = stbi__get8(s)) > 0)
                stbi__skip(s,len);
-            return g->out;
-         } else if (code <= avail) {
-            if (first) {
-               return stbi__errpuc("no clear code", "Corrupt GIF");
+            ফেরত g->out;
+         } অন্যথা যদি (code <= avail) {
+            যদি (first) {
+               ফেরত stbi__errpuc("no clear code", "Corrupt GIF");
             }
 
-            if (oldcode >= 0) {
+            যদি (oldcode >= 0) {
                p = &g->codes[avail++];
-               if (avail > 8192) {
-                  return stbi__errpuc("too many codes", "Corrupt GIF");
+               যদি (avail > 8192) {
+                  ফেরত stbi__errpuc("too many codes", "Corrupt GIF");
                }
 
                p->prefix = (stbi__int16) oldcode;
                p->first = g->codes[oldcode].first;
                p->suffix = (code == avail) ? p->first : g->codes[code].first;
-            } else if (code == avail)
-               return stbi__errpuc("illegal code in raster", "Corrupt GIF");
+            } অন্যথা যদি (code == avail)
+               ফেরত stbi__errpuc("illegal code in raster", "Corrupt GIF");
 
             stbi__out_gif_code(g, (stbi__uint16) code);
 
-            if ((avail & codemask) == 0 && avail <= 0x0FFF) {
+            যদি ((avail & codemask) == 0 && avail <= 0x0FFF) {
                codesize++;
                codemask = (1 << codesize) - 1;
             }
 
             oldcode = code;
-         } else {
-            return stbi__errpuc("illegal code in raster", "Corrupt GIF");
+         } অন্যথা {
+            ফেরত stbi__errpuc("illegal code in raster", "Corrupt GIF");
          }
       }
    }
@@ -6336,21 +6336,21 @@ static stbi_uc *stbi__process_gif_raster(stbi__context *s, stbi__gif *g)
 
 // this function is designed to support animated gifs, although stb_image doesn't support it
 // two back is the image from two frames ago, used for a very specific disposal format
-static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, int req_comp, stbi_uc *two_back)
+স্থির stbi_uc *stbi_gif_load_পরবর্তী(stbi__context *s, stbi__gif *g, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_uc *two_back)
 {
-   int dispose; 
-   int first_frame; 
-   int pi; 
-   int pcount; 
+   পূর্ণসংখ্যা dispose; 
+   পূর্ণসংখ্যা first_frame; 
+   পূর্ণসংখ্যা pi; 
+   পূর্ণসংখ্যা pcount; 
 
    // on first frame, any non-written pixels get the background colour (non-transparent)
    first_frame = 0; 
-   if (g->out == 0) {
-      if (!stbi__gif_header(s, g, comp,0))     return 0; // stbi__g_failure_reason set by stbi__gif_header
+   যদি (g->out == 0) {
+      যদি (!stbi__gif_header(s, g, comp,0))     ফেরত 0; // stbi__g_failure_reason set by stbi__gif_header
       g->out = (stbi_uc *) stbi__malloc(4 * g->w * g->h);
       g->background = (stbi_uc *) stbi__malloc(4 * g->w * g->h); 
       g->history = (stbi_uc *) stbi__malloc(g->w * g->h); 
-      if (g->out == 0)                      return stbi__errpuc("outofmem", "Out of memory");
+      যদি (g->out == 0)                      ফেরত stbi__errpuc("outofmem", "Out of memory");
 
       // image is treated as "tranparent" at the start - ie, nothing overwrites the current background; 
       // background colour is only used for pixels that are not rendered first frame, after that "background"
@@ -6359,29 +6359,29 @@ static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, i
       memset( g->background, 0x00, 4 * g->w * g->h ); // state of the background (starts transparent)
       memset( g->history, 0x00, g->w * g->h );        // pixels that were affected previous frame
       first_frame = 1; 
-   } else {
+   } অন্যথা {
       // second frame - how do we dispoase of the previous one?
       dispose = (g->eflags & 0x1C) >> 2; 
       pcount = g->w * g->h; 
 
-      if ((dispose == 3) && (two_back == 0)) {
+      যদি ((dispose == 3) && (two_back == 0)) {
          dispose = 2; // if I don't have an image to revert back to, default to the old background
       }
 
-      if (dispose == 3) { // use previous graphic
-         for (pi = 0; pi < pcount; ++pi) {
-            if (g->history[pi]) {
+      যদি (dispose == 3) { // use previous graphic
+         জন্য (pi = 0; pi < pcount; ++pi) {
+            যদি (g->history[pi]) {
                memcpy( &g->out[pi * 4], &two_back[pi * 4], 4 ); 
             }
          }
-      } else if (dispose == 2) { 
+      } অন্যথা যদি (dispose == 2) { 
          // restore what was changed last frame to background before that frame; 
-         for (pi = 0; pi < pcount; ++pi) {
-            if (g->history[pi]) {
+         জন্য (pi = 0; pi < pcount; ++pi) {
+            যদি (g->history[pi]) {
                memcpy( &g->out[pi * 4], &g->background[pi * 4], 4 ); 
             }
          }
-      } else {
+      } অন্যথা {
          // This is a non-disposal case eithe way, so just 
          // leave the pixels as is, and they will become the new background
          // 1: do not dispose
@@ -6395,10 +6395,10 @@ static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, i
    // clear my history; 
    memset( g->history, 0x00, g->w * g->h );        // pixels that were affected previous frame
 
-   for (;;) {
-      int tag = stbi__get8(s); 
-      switch (tag) {
-         case 0x2C: /* Image Descriptor */
+   জন্য (;;) {
+      পূর্ণসংখ্যা tag = stbi__get8(s); 
+      নির্বাচন (tag) {
+         ক্ষেত্র 0x2C: /* Image Descriptor */
          {
             stbi__int32 x, y, w, h;
             stbi_uc *o;
@@ -6407,142 +6407,142 @@ static stbi_uc *stbi__gif_load_next(stbi__context *s, stbi__gif *g, int *comp, i
             y = stbi__get16le(s);
             w = stbi__get16le(s);
             h = stbi__get16le(s);
-            if (((x + w) > (g->w)) || ((y + h) > (g->h)))
-               return stbi__errpuc("bad Image Descriptor", "Corrupt GIF");
+            যদি (((x + w) > (g->w)) || ((y + h) > (g->h)))
+               ফেরত stbi__errpuc("bad Image Descriptor", "Corrupt GIF");
 
-            g->line_size = g->w * 4;
+            g->সারি_আকার = g->w * 4;
             g->start_x = x * 4;
-            g->start_y = y * g->line_size;
+            g->start_y = y * g->সারি_আকার;
             g->max_x   = g->start_x + w * 4;
-            g->max_y   = g->start_y + h * g->line_size;
+            g->max_y   = g->start_y + h * g->সারি_আকার;
             g->cur_x   = g->start_x;
             g->cur_y   = g->start_y;
 
             g->lflags = stbi__get8(s);
 
-            if (g->lflags & 0x40) {
-               g->step = 8 * g->line_size; // first interlaced spacing
+            যদি (g->lflags & 0x40) {
+               g->step = 8 * g->সারি_আকার; // first interlaced spacing
                g->parse = 3;
-            } else {
-               g->step = g->line_size;
+            } অন্যথা {
+               g->step = g->সারি_আকার;
                g->parse = 0;
             }
 
-            if (g->lflags & 0x80) {
+            যদি (g->lflags & 0x80) {
                stbi__gif_parse_colortable(s,g->lpal, 2 << (g->lflags & 7), g->eflags & 0x01 ? g->transparent : -1);
                g->color_table = (stbi_uc *) g->lpal;
-            } else if (g->flags & 0x80) {
+            } অন্যথা যদি (g->flags & 0x80) {
                g->color_table = (stbi_uc *) g->pal;
-            } else
-               return stbi__errpuc("missing color table", "Corrupt GIF");            
+            } অন্যথা
+               ফেরত stbi__errpuc("missing color table", "Corrupt GIF");            
             
             o = stbi__process_gif_raster(s, g);
-            if (o == NULL) return NULL;
+            যদি (o == ফাঁকা) ফেরত ফাঁকা;
 
             // if this was the first frame, 
             pcount = g->w * g->h; 
-            if (first_frame && (g->bgindex > 0)) {
+            যদি (first_frame && (g->bgindex > 0)) {
                // if first frame, any pixel not drawn to gets the background color
-               for (pi = 0; pi < pcount; ++pi) {
-                  if (g->history[pi] == 0) {
+               জন্য (pi = 0; pi < pcount; ++pi) {
+                  যদি (g->history[pi] == 0) {
                      g->pal[g->bgindex][3] = 255; // just in case it was made transparent, undo that; It will be reset next frame if need be; 
                      memcpy( &g->out[pi * 4], &g->pal[g->bgindex], 4 ); 
                   }
                }
             }
 
-            return o;
+            ফেরত o;
          }
 
-         case 0x21: // Comment Extension.
+         ক্ষেত্র 0x21: // Comment Extension.
          {
-            int len;
-            int ext = stbi__get8(s); 
-            if (ext == 0xF9) { // Graphic Control Extension.
+            পূর্ণসংখ্যা len;
+            পূর্ণসংখ্যা ext = stbi__get8(s); 
+            যদি (ext == 0xF9) { // Graphic Control Extension.
                len = stbi__get8(s);
-               if (len == 4) {
+               যদি (len == 4) {
                   g->eflags = stbi__get8(s);
                   g->delay = 10 * stbi__get16le(s); // delay - 1/100th of a second, saving as 1/1000ths.
 
                   // unset old transparent
-                  if (g->transparent >= 0) {
+                  যদি (g->transparent >= 0) {
                      g->pal[g->transparent][3] = 255; 
                   } 
-                  if (g->eflags & 0x01) {
+                  যদি (g->eflags & 0x01) {
                      g->transparent = stbi__get8(s);
-                     if (g->transparent >= 0) {
+                     যদি (g->transparent >= 0) {
                         g->pal[g->transparent][3] = 0; 
                      }
-                  } else {
+                  } অন্যথা {
                      // don't need transparent
                      stbi__skip(s, 1); 
                      g->transparent = -1; 
                   }
-               } else {
+               } অন্যথা {
                   stbi__skip(s, len);
-                  break;
+                  বিরতি;
                }
             } 
-            while ((len = stbi__get8(s)) != 0) {
+            যখন ((len = stbi__get8(s)) != 0) {
                stbi__skip(s, len);
             }
-            break;
+            বিরতি;
          }
 
-         case 0x3B: // gif stream termination code
-            return (stbi_uc *) s; // using '1' causes warning on some compilers
+         ক্ষেত্র 0x3B: // gif stream termination code
+            ফেরত (stbi_uc *) s; // using '1' causes warning on some compilers
 
-         default:
-            return stbi__errpuc("unknown code", "Corrupt GIF");
+         পূর্বনির্ধারিত:
+            ফেরত stbi__errpuc("unknown code", "Corrupt GIF");
       }
    }
 }
 
-static void *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y, int *z, int *comp, int req_comp)
+স্থির শূন্য *stbi__load_gif_main(stbi__context *s, পূর্ণসংখ্যা **delays, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *z, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp)
 {
-   if (stbi__gif_test(s)) {
-      int layers = 0; 
+   যদি (stbi__gif_test(s)) {
+      পূর্ণসংখ্যা layers = 0; 
       stbi_uc *u = 0;
       stbi_uc *out = 0;
       stbi_uc *two_back = 0; 
       stbi__gif g;
-      int stride; 
-      memset(&g, 0, sizeof(g));
-      if (delays) {
+      পূর্ণসংখ্যা stride; 
+      memset(&g, 0, আকার(g));
+      যদি (delays) {
          *delays = 0; 
       }
 
-      do {
-         u = stbi__gif_load_next(s, &g, comp, req_comp, two_back);
-         if (u == (stbi_uc *) s) u = 0;  // end of animated gif marker
+      করো {
+         u = stbi_gif_load_পরবর্তী(s, &g, comp, req_comp, two_back);
+         যদি (u == (stbi_uc *) s) u = 0;  // end of animated gif marker
 
-         if (u) {
+         যদি (u) {
             *x = g.w;
             *y = g.h;
             ++layers; 
             stride = g.w * g.h * 4; 
          
-            if (out) {
+            যদি (out) {
                out = (stbi_uc*) STBI_REALLOC( out, layers * stride ); 
-               if (delays) {
-                  *delays = (int*) STBI_REALLOC( *delays, sizeof(int) * layers ); 
+               যদি (delays) {
+                  *delays = (পূর্ণসংখ্যা*) STBI_REALLOC( *delays, আকার(পূর্ণসংখ্যা) * layers ); 
                }
-            } else {
+            } অন্যথা {
                out = (stbi_uc*)stbi__malloc( layers * stride ); 
-               if (delays) {
-                  *delays = (int*) stbi__malloc( layers * sizeof(int) ); 
+               যদি (delays) {
+                  *delays = (পূর্ণসংখ্যা*) stbi__malloc( layers * আকার(পূর্ণসংখ্যা) ); 
                }
             }
             memcpy( out + ((layers - 1) * stride), u, stride ); 
-            if (layers >= 2) {
+            যদি (layers >= 2) {
                two_back = out - 2 * stride; 
             }
 
-            if (delays) {
+            যদি (delays) {
                (*delays)[layers - 1U] = g.delay; 
             }
          }
-      } while (u != 0); 
+      } যখন (u != 0); 
 
       // free temp buffer; 
       STBI_FREE(g.out); 
@@ -6550,31 +6550,31 @@ static void *stbi__load_gif_main(stbi__context *s, int **delays, int *x, int *y,
       STBI_FREE(g.background); 
 
       // do the final conversion after loading everything; 
-      if (req_comp && req_comp != 4)
+      যদি (req_comp && req_comp != 4)
          out = stbi__convert_format(out, 4, req_comp, layers * g.w, g.h);
 
       *z = layers; 
-      return out;
-   } else {
-      return stbi__errpuc("not GIF", "Image was not as a gif type."); 
+      ফেরত out;
+   } অন্যথা {
+      ফেরত stbi__errpuc("not GIF", "Image was not as a gif type."); 
    }
 }
 
-static void *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__gif_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
    stbi_uc *u = 0;
    stbi__gif g;
-   memset(&g, 0, sizeof(g));
+   memset(&g, 0, আকার(g));
 
-   u = stbi__gif_load_next(s, &g, comp, req_comp, 0);
-   if (u == (stbi_uc *) s) u = 0;  // end of animated gif marker
-   if (u) {
+   u = stbi_gif_load_পরবর্তী(s, &g, comp, req_comp, 0);
+   যদি (u == (stbi_uc *) s) u = 0;  // end of animated gif marker
+   যদি (u) {
       *x = g.w;
       *y = g.h;
 
       // moved conversion to after successful load so that the same
       // can be done for multiple frames. 
-      if (req_comp && req_comp != 4)
+      যদি (req_comp && req_comp != 4)
          u = stbi__convert_format(u, 4, req_comp, g.w, g.h);
    }
 
@@ -6582,12 +6582,12 @@ static void *stbi__gif_load(stbi__context *s, int *x, int *y, int *comp, int req
    STBI_FREE(g.history);
    STBI_FREE(g.background); 
 
-   return u;
+   ফেরত u;
 }
 
-static int stbi__gif_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__gif_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   return stbi__gif_info_raw(s,x,y,comp);
+   ফেরত stbi__gif_info_raw(s,x,y,comp);
 }
 #endif
 
@@ -6595,151 +6595,151 @@ static int stbi__gif_info(stbi__context *s, int *x, int *y, int *comp)
 // Radiance RGBE HDR loader
 // originally by Nicolas Schulz
 #ifndef STBI_NO_HDR
-static int stbi__hdr_test_core(stbi__context *s, const char *signature)
+স্থির পূর্ণসংখ্যা stbi__hdr_test_core(stbi__context *s, ধ্রুবক অক্ষর *signature)
 {
-   int i;
-   for (i=0; signature[i]; ++i)
-      if (stbi__get8(s) != signature[i])
-          return 0;
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; signature[i]; ++i)
+      যদি (stbi__get8(s) != signature[i])
+          ফেরত 0;
    stbi__rewind(s);
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__hdr_test(stbi__context* s)
+স্থির পূর্ণসংখ্যা stbi__hdr_test(stbi__context* s)
 {
-   int r = stbi__hdr_test_core(s, "#?RADIANCE\n");
+   পূর্ণসংখ্যা r = stbi__hdr_test_core(s, "#?RADIANCE\n");
    stbi__rewind(s);
-   if(!r) {
+   যদি(!r) {
        r = stbi__hdr_test_core(s, "#?RGBE\n");
        stbi__rewind(s);
    }
-   return r;
+   ফেরত r;
 }
 
 #define STBI__HDR_BUFLEN  1024
-static char *stbi__hdr_gettoken(stbi__context *z, char *buffer)
+স্থির অক্ষর *stbi__hdr_gettoken(stbi__context *z, অক্ষর *বাফার)
 {
-   int len=0;
-   char c = '\0';
+   পূর্ণসংখ্যা len=0;
+   অক্ষর c = '\0';
 
-   c = (char) stbi__get8(z);
+   c = (অক্ষর) stbi__get8(z);
 
-   while (!stbi__at_eof(z) && c != '\n') {
-      buffer[len++] = c;
-      if (len == STBI__HDR_BUFLEN-1) {
+   যখন (!stbi__at_eof(z) && c != '\n') {
+      বাফার[len++] = c;
+      যদি (len == STBI__HDR_BUFLEN-1) {
          // flush to end of line
-         while (!stbi__at_eof(z) && stbi__get8(z) != '\n')
+         যখন (!stbi__at_eof(z) && stbi__get8(z) != '\n')
             ;
-         break;
+         বিরতি;
       }
-      c = (char) stbi__get8(z);
+      c = (অক্ষর) stbi__get8(z);
    }
 
-   buffer[len] = 0;
-   return buffer;
+   বাফার[len] = 0;
+   ফেরত বাফার;
 }
 
-static void stbi__hdr_convert(float *output, stbi_uc *input, int req_comp)
+স্থির শূন্য stbi__hdr_convert(দশমিক *output, stbi_uc *প্রবেশ, পূর্ণসংখ্যা req_comp)
 {
-   if ( input[3] != 0 ) {
-      float f1;
+   যদি ( প্রবেশ[3] != 0 ) {
+      দশমিক f1;
       // Exponent
-      f1 = (float) ldexp(1.0f, input[3] - (int)(128 + 8));
-      if (req_comp <= 2)
-         output[0] = (input[0] + input[1] + input[2]) * f1 / 3;
-      else {
-         output[0] = input[0] * f1;
-         output[1] = input[1] * f1;
-         output[2] = input[2] * f1;
+      f1 = (দশমিক) ldexp(1.0f, প্রবেশ[3] - (পূর্ণসংখ্যা)(128 + 8));
+      যদি (req_comp <= 2)
+         output[0] = (প্রবেশ[0] + প্রবেশ[1] + প্রবেশ[2]) * f1 / 3;
+      অন্যথা {
+         output[0] = প্রবেশ[0] * f1;
+         output[1] = প্রবেশ[1] * f1;
+         output[2] = প্রবেশ[2] * f1;
       }
-      if (req_comp == 2) output[1] = 1;
-      if (req_comp == 4) output[3] = 1;
-   } else {
-      switch (req_comp) {
-         case 4: output[3] = 1; /* fallthrough */
-         case 3: output[0] = output[1] = output[2] = 0;
-                 break;
-         case 2: output[1] = 1; /* fallthrough */
-         case 1: output[0] = 0;
-                 break;
+      যদি (req_comp == 2) output[1] = 1;
+      যদি (req_comp == 4) output[3] = 1;
+   } অন্যথা {
+      নির্বাচন (req_comp) {
+         ক্ষেত্র 4: output[3] = 1; /* fallthrough */
+         ক্ষেত্র 3: output[0] = output[1] = output[2] = 0;
+                 বিরতি;
+         ক্ষেত্র 2: output[1] = 1; /* fallthrough */
+         ক্ষেত্র 1: output[0] = 0;
+                 বিরতি;
       }
    }
 }
 
-static float *stbi__hdr_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির দশমিক *stbi__hdr_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
-   char buffer[STBI__HDR_BUFLEN];
-   char *token;
-   int valid = 0;
-   int width, height;
+   অক্ষর বাফার[STBI__HDR_BUFLEN];
+   অক্ষর *token;
+   পূর্ণসংখ্যা valid = 0;
+   পূর্ণসংখ্যা width, height;
    stbi_uc *scanline;
-   float *hdr_data;
-   int len;
-   unsigned char count, value;
-   int i, j, k, c1,c2, z;
-   const char *headerToken;
+   দশমিক *hdr_তথ্য;
+   পূর্ণসংখ্যা len;
+   unsigned অক্ষর গুনতি, মান;
+   পূর্ণসংখ্যা i, j, k, c1,c2, z;
+   ধ্রুবক অক্ষর *headerToken;
    STBI_NOTUSED(ri);
 
    // Check identifier
-   headerToken = stbi__hdr_gettoken(s,buffer);
-   if (strcmp(headerToken, "#?RADIANCE") != 0 && strcmp(headerToken, "#?RGBE") != 0)
-      return stbi__errpf("not HDR", "Corrupt HDR image");
+   headerToken = stbi__hdr_gettoken(s,বাফার);
+   যদি (strcmp(headerToken, "#?RADIANCE") != 0 && strcmp(headerToken, "#?RGBE") != 0)
+      ফেরত stbi__errpf("not HDR", "Corrupt HDR image");
 
    // Parse header
-   for(;;) {
-      token = stbi__hdr_gettoken(s,buffer);
-      if (token[0] == 0) break;
-      if (strcmp(token, "FORMAT=32-bit_rle_rgbe") == 0) valid = 1;
+   জন্য(;;) {
+      token = stbi__hdr_gettoken(s,বাফার);
+      যদি (token[0] == 0) বিরতি;
+      যদি (strcmp(token, "FORMAT=32-bit_rle_rgbe") == 0) valid = 1;
    }
 
-   if (!valid)    return stbi__errpf("unsupported format", "Unsupported HDR format");
+   যদি (!valid)    ফেরত stbi__errpf("unsupported format", "Unsupported HDR format");
 
    // Parse width and height
    // can't use sscanf() if we're not using stdio!
-   token = stbi__hdr_gettoken(s,buffer);
-   if (strncmp(token, "-Y ", 3))  return stbi__errpf("unsupported data layout", "Unsupported HDR format");
+   token = stbi__hdr_gettoken(s,বাফার);
+   যদি (strncmp(token, "-Y ", 3))  ফেরত stbi__errpf("unsupported data layout", "Unsupported HDR format");
    token += 3;
-   height = (int) strtol(token, &token, 10);
-   while (*token == ' ') ++token;
-   if (strncmp(token, "+X ", 3))  return stbi__errpf("unsupported data layout", "Unsupported HDR format");
+   height = (পূর্ণসংখ্যা) strtol(token, &token, 10);
+   যখন (*token == ' ') ++token;
+   যদি (strncmp(token, "+X ", 3))  ফেরত stbi__errpf("unsupported data layout", "Unsupported HDR format");
    token += 3;
-   width = (int) strtol(token, NULL, 10);
+   width = (পূর্ণসংখ্যা) strtol(token, ফাঁকা, 10);
 
    *x = width;
    *y = height;
 
-   if (comp) *comp = 3;
-   if (req_comp == 0) req_comp = 3;
+   যদি (comp) *comp = 3;
+   যদি (req_comp == 0) req_comp = 3;
 
-   if (!stbi__mad4sizes_valid(width, height, req_comp, sizeof(float), 0))
-      return stbi__errpf("too large", "HDR image is too large");
+   যদি (!stbi__mad4sizes_valid(width, height, req_comp, আকার(দশমিক), 0))
+      ফেরত stbi__errpf("too large", "HDR image is too large");
 
    // Read data
-   hdr_data = (float *) stbi__malloc_mad4(width, height, req_comp, sizeof(float), 0);
-   if (!hdr_data)
-      return stbi__errpf("outofmem", "Out of memory");
+   hdr_তথ্য = (দশমিক *) stbi__malloc_mad4(width, height, req_comp, আকার(দশমিক), 0);
+   যদি (!hdr_তথ্য)
+      ফেরত stbi__errpf("outofmem", "Out of memory");
 
    // Load image data
    // image data is stored as some number of sca
-   if ( width < 8 || width >= 32768) {
+   যদি ( width < 8 || width >= 32768) {
       // Read flat data
-      for (j=0; j < height; ++j) {
-         for (i=0; i < width; ++i) {
+      জন্য (j=0; j < height; ++j) {
+         জন্য (i=0; i < width; ++i) {
             stbi_uc rgbe[4];
            main_decode_loop:
             stbi__getn(s, rgbe, 4);
-            stbi__hdr_convert(hdr_data + j * width * req_comp + i * req_comp, rgbe, req_comp);
+            stbi__hdr_convert(hdr_তথ্য + j * width * req_comp + i * req_comp, rgbe, req_comp);
          }
       }
-   } else {
+   } অন্যথা {
       // Read RLE-encoded data
-      scanline = NULL;
+      scanline = ফাঁকা;
 
-      for (j = 0; j < height; ++j) {
+      জন্য (j = 0; j < height; ++j) {
          c1 = stbi__get8(s);
          c2 = stbi__get8(s);
          len = stbi__get8(s);
-         if (c1 != 2 || c2 != 2 || (len & 0x80)) {
+         যদি (c1 != 2 || c2 != 2 || (len & 0x80)) {
             // not run-length encoded, so we have to actually use THIS data as a decoded
             // pixel (note this can't be a valid pixel--one of RGB must be >= 128)
             stbi_uc rgbe[4];
@@ -6747,236 +6747,236 @@ static float *stbi__hdr_load(stbi__context *s, int *x, int *y, int *comp, int re
             rgbe[1] = (stbi_uc) c2;
             rgbe[2] = (stbi_uc) len;
             rgbe[3] = (stbi_uc) stbi__get8(s);
-            stbi__hdr_convert(hdr_data, rgbe, req_comp);
+            stbi__hdr_convert(hdr_তথ্য, rgbe, req_comp);
             i = 1;
             j = 0;
             STBI_FREE(scanline);
-            goto main_decode_loop; // yes, this makes no sense
+            যাও main_decode_loop; // yes, this makes no sense
          }
          len <<= 8;
          len |= stbi__get8(s);
-         if (len != width) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("invalid decoded scanline length", "corrupt HDR"); }
-         if (scanline == NULL) {
+         যদি (len != width) { STBI_FREE(hdr_তথ্য); STBI_FREE(scanline); ফেরত stbi__errpf("invalid decoded scanline length", "corrupt HDR"); }
+         যদি (scanline == ফাঁকা) {
             scanline = (stbi_uc *) stbi__malloc_mad2(width, 4, 0);
-            if (!scanline) {
-               STBI_FREE(hdr_data);
-               return stbi__errpf("outofmem", "Out of memory");
+            যদি (!scanline) {
+               STBI_FREE(hdr_তথ্য);
+               ফেরত stbi__errpf("outofmem", "Out of memory");
             }
          }
 
-         for (k = 0; k < 4; ++k) {
-            int nleft;
+         জন্য (k = 0; k < 4; ++k) {
+            পূর্ণসংখ্যা nleft;
             i = 0;
-            while ((nleft = width - i) > 0) {
-               count = stbi__get8(s);
-               if (count > 128) {
+            যখন ((nleft = width - i) > 0) {
+               গুনতি = stbi__get8(s);
+               যদি (গুনতি > 128) {
                   // Run
-                  value = stbi__get8(s);
-                  count -= 128;
-                  if (count > nleft) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("corrupt", "bad RLE data in HDR"); }
-                  for (z = 0; z < count; ++z)
-                     scanline[i++ * 4 + k] = value;
-               } else {
+                  মান = stbi__get8(s);
+                  গুনতি -= 128;
+                  যদি (গুনতি > nleft) { STBI_FREE(hdr_তথ্য); STBI_FREE(scanline); ফেরত stbi__errpf("corrupt", "bad RLE data in HDR"); }
+                  জন্য (z = 0; z < গুনতি; ++z)
+                     scanline[i++ * 4 + k] = মান;
+               } অন্যথা {
                   // Dump
-                  if (count > nleft) { STBI_FREE(hdr_data); STBI_FREE(scanline); return stbi__errpf("corrupt", "bad RLE data in HDR"); }
-                  for (z = 0; z < count; ++z)
+                  যদি (গুনতি > nleft) { STBI_FREE(hdr_তথ্য); STBI_FREE(scanline); ফেরত stbi__errpf("corrupt", "bad RLE data in HDR"); }
+                  জন্য (z = 0; z < গুনতি; ++z)
                      scanline[i++ * 4 + k] = stbi__get8(s);
                }
             }
          }
-         for (i=0; i < width; ++i)
-            stbi__hdr_convert(hdr_data+(j*width + i)*req_comp, scanline + i*4, req_comp);
+         জন্য (i=0; i < width; ++i)
+            stbi__hdr_convert(hdr_তথ্য+(j*width + i)*req_comp, scanline + i*4, req_comp);
       }
-      if (scanline)
+      যদি (scanline)
          STBI_FREE(scanline);
    }
 
-   return hdr_data;
+   ফেরত hdr_তথ্য;
 }
 
-static int stbi__hdr_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__hdr_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   char buffer[STBI__HDR_BUFLEN];
-   char *token;
-   int valid = 0;
-   int dummy;
+   অক্ষর বাফার[STBI__HDR_BUFLEN];
+   অক্ষর *token;
+   পূর্ণসংখ্যা valid = 0;
+   পূর্ণসংখ্যা dummy;
 
-   if (!x) x = &dummy;
-   if (!y) y = &dummy;
-   if (!comp) comp = &dummy;
+   যদি (!x) x = &dummy;
+   যদি (!y) y = &dummy;
+   যদি (!comp) comp = &dummy;
 
-   if (stbi__hdr_test(s) == 0) {
+   যদি (stbi__hdr_test(s) == 0) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
 
-   for(;;) {
-      token = stbi__hdr_gettoken(s,buffer);
-      if (token[0] == 0) break;
-      if (strcmp(token, "FORMAT=32-bit_rle_rgbe") == 0) valid = 1;
+   জন্য(;;) {
+      token = stbi__hdr_gettoken(s,বাফার);
+      যদি (token[0] == 0) বিরতি;
+      যদি (strcmp(token, "FORMAT=32-bit_rle_rgbe") == 0) valid = 1;
    }
 
-   if (!valid) {
+   যদি (!valid) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   token = stbi__hdr_gettoken(s,buffer);
-   if (strncmp(token, "-Y ", 3)) {
+   token = stbi__hdr_gettoken(s,বাফার);
+   যদি (strncmp(token, "-Y ", 3)) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
    token += 3;
-   *y = (int) strtol(token, &token, 10);
-   while (*token == ' ') ++token;
-   if (strncmp(token, "+X ", 3)) {
+   *y = (পূর্ণসংখ্যা) strtol(token, &token, 10);
+   যখন (*token == ' ') ++token;
+   যদি (strncmp(token, "+X ", 3)) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
    token += 3;
-   *x = (int) strtol(token, NULL, 10);
+   *x = (পূর্ণসংখ্যা) strtol(token, ফাঁকা, 10);
    *comp = 3;
-   return 1;
+   ফেরত 1;
 }
 #endif // STBI_NO_HDR
 
 #ifndef STBI_NO_BMP
-static int stbi__bmp_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__bmp_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   void *p;
-   stbi__bmp_data info;
+   শূন্য *p;
+   stbi_bmp_তথ্য info;
 
    info.all_a = 255;
    p = stbi__bmp_parse_header(s, &info);
    stbi__rewind( s );
-   if (p == NULL)
-      return 0;
-   if (x) *x = s->img_x;
-   if (y) *y = s->img_y;
-   if (comp) *comp = info.ma ? 4 : 3;
-   return 1;
+   যদি (p == ফাঁকা)
+      ফেরত 0;
+   যদি (x) *x = s->img_x;
+   যদি (y) *y = s->img_y;
+   যদি (comp) *comp = info.ma ? 4 : 3;
+   ফেরত 1;
 }
 #endif
 
 #ifndef STBI_NO_PSD
-static int stbi__psd_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__psd_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   int channelCount, dummy, depth;
-   if (!x) x = &dummy;
-   if (!y) y = &dummy;
-   if (!comp) comp = &dummy;
-   if (stbi__get32be(s) != 0x38425053) {
+   পূর্ণসংখ্যা channel_গুনতি, dummy, depth;
+   যদি (!x) x = &dummy;
+   যদি (!y) y = &dummy;
+   যদি (!comp) comp = &dummy;
+   যদি (stbi__get32be(s) != 0x38425053) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   if (stbi__get16be(s) != 1) {
+   যদি (stbi__get16be(s) != 1) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
    stbi__skip(s, 6);
-   channelCount = stbi__get16be(s);
-   if (channelCount < 0 || channelCount > 16) {
+   channel_গুনতি = stbi__get16be(s);
+   যদি (channel_গুনতি < 0 || channel_গুনতি > 16) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
    *y = stbi__get32be(s);
    *x = stbi__get32be(s);
    depth = stbi__get16be(s);
-   if (depth != 8 && depth != 16) {
+   যদি (depth != 8 && depth != 16) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   if (stbi__get16be(s) != 3) {
+   যদি (stbi__get16be(s) != 3) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
    *comp = 4;
-   return 1;
+   ফেরত 1;
 }
 
-static int stbi__psd_is16(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__psd_is16(stbi__context *s)
 {
-   int channelCount, depth;
-   if (stbi__get32be(s) != 0x38425053) {
+   পূর্ণসংখ্যা channel_গুনতি, depth;
+   যদি (stbi__get32be(s) != 0x38425053) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   if (stbi__get16be(s) != 1) {
+   যদি (stbi__get16be(s) != 1) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
    stbi__skip(s, 6);
-   channelCount = stbi__get16be(s);
-   if (channelCount < 0 || channelCount > 16) {
+   channel_গুনতি = stbi__get16be(s);
+   যদি (channel_গুনতি < 0 || channel_গুনতি > 16) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   (void) stbi__get32be(s);
-   (void) stbi__get32be(s);
+   (শূন্য) stbi__get32be(s);
+   (শূন্য) stbi__get32be(s);
    depth = stbi__get16be(s);
-   if (depth != 16) {
+   যদি (depth != 16) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   return 1;
+   ফেরত 1;
 }
 #endif
 
 #ifndef STBI_NO_PIC
-static int stbi__pic_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__pic_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   int act_comp=0,num_packets=0,chained,dummy;
+   পূর্ণসংখ্যা act_comp=0,অঙ্ক_packets=0,chained,dummy;
    stbi__pic_packet packets[10];
 
-   if (!x) x = &dummy;
-   if (!y) y = &dummy;
-   if (!comp) comp = &dummy;
+   যদি (!x) x = &dummy;
+   যদি (!y) y = &dummy;
+   যদি (!comp) comp = &dummy;
 
-   if (!stbi__pic_is4(s,"\x53\x80\xF6\x34")) {
+   যদি (!stbi__pic_is4(s,"\x53\x80\xF6\x34")) {
       stbi__rewind(s);
-      return 0;
+      ফেরত 0;
    }
 
    stbi__skip(s, 88);
 
    *x = stbi__get16be(s);
    *y = stbi__get16be(s);
-   if (stbi__at_eof(s)) {
+   যদি (stbi__at_eof(s)) {
       stbi__rewind( s);
-      return 0;
+      ফেরত 0;
    }
-   if ( (*x) != 0 && (1 << 28) / (*x) < (*y)) {
+   যদি ( (*x) != 0 && (1 << 28) / (*x) < (*y)) {
       stbi__rewind( s );
-      return 0;
+      ফেরত 0;
    }
 
    stbi__skip(s, 8);
 
-   do {
+   করো {
       stbi__pic_packet *packet;
 
-      if (num_packets==sizeof(packets)/sizeof(packets[0]))
-         return 0;
+      যদি (অঙ্ক_packets==আকার(packets)/আকার(packets[0]))
+         ফেরত 0;
 
-      packet = &packets[num_packets++];
+      packet = &packets[অঙ্ক_packets++];
       chained = stbi__get8(s);
-      packet->size    = stbi__get8(s);
+      packet->আকার_2    = stbi__get8(s);
       packet->type    = stbi__get8(s);
       packet->channel = stbi__get8(s);
       act_comp |= packet->channel;
 
-      if (stbi__at_eof(s)) {
+      যদি (stbi__at_eof(s)) {
           stbi__rewind( s );
-          return 0;
+          ফেরত 0;
       }
-      if (packet->size != 8) {
+      যদি (packet->আকার_2 != 8) {
           stbi__rewind( s );
-          return 0;
+          ফেরত 0;
       }
-   } while (chained);
+   } যখন (chained);
 
    *comp = (act_comp & 0x10 ? 4 : 3);
 
-   return 1;
+   ফেরত 1;
 }
 #endif
 
@@ -6994,102 +6994,102 @@ static int stbi__pic_info(stbi__context *s, int *x, int *y, int *comp)
 
 #ifndef STBI_NO_PNM
 
-static int      stbi__pnm_test(stbi__context *s)
+স্থির পূর্ণসংখ্যা      stbi__pnm_test(stbi__context *s)
 {
-   char p, t;
-   p = (char) stbi__get8(s);
-   t = (char) stbi__get8(s);
-   if (p != 'P' || (t != '5' && t != '6')) {
+   অক্ষর p, t;
+   p = (অক্ষর) stbi__get8(s);
+   t = (অক্ষর) stbi__get8(s);
+   যদি (p != 'P' || (t != '5' && t != '6')) {
        stbi__rewind( s );
-       return 0;
+       ফেরত 0;
    }
-   return 1;
+   ফেরত 1;
 }
 
-static void *stbi__pnm_load(stbi__context *s, int *x, int *y, int *comp, int req_comp, stbi__result_info *ri)
+স্থির শূন্য *stbi__pnm_load(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp, পূর্ণসংখ্যা req_comp, stbi_ফলাফল_info *ri)
 {
    stbi_uc *out;
    STBI_NOTUSED(ri);
 
-   if (!stbi__pnm_info(s, (int *)&s->img_x, (int *)&s->img_y, (int *)&s->img_n))
-      return 0;
+   যদি (!stbi__pnm_info(s, (পূর্ণসংখ্যা *)&s->img_x, (পূর্ণসংখ্যা *)&s->img_y, (পূর্ণসংখ্যা *)&s->img_n))
+      ফেরত 0;
 
    *x = s->img_x;
    *y = s->img_y;
-   if (comp) *comp = s->img_n;
+   যদি (comp) *comp = s->img_n;
 
-   if (!stbi__mad3sizes_valid(s->img_n, s->img_x, s->img_y, 0))
-      return stbi__errpuc("too large", "PNM too large");
+   যদি (!stbi__mad3sizes_valid(s->img_n, s->img_x, s->img_y, 0))
+      ফেরত stbi__errpuc("too large", "PNM too large");
 
    out = (stbi_uc *) stbi__malloc_mad3(s->img_n, s->img_x, s->img_y, 0);
-   if (!out) return stbi__errpuc("outofmem", "Out of memory");
+   যদি (!out) ফেরত stbi__errpuc("outofmem", "Out of memory");
    stbi__getn(s, out, s->img_n * s->img_x * s->img_y);
 
-   if (req_comp && req_comp != s->img_n) {
+   যদি (req_comp && req_comp != s->img_n) {
       out = stbi__convert_format(out, s->img_n, req_comp, s->img_x, s->img_y);
-      if (out == NULL) return out; // stbi__convert_format frees input on failure
+      যদি (out == ফাঁকা) ফেরত out; // stbi__convert_format frees input on failure
    }
-   return out;
+   ফেরত out;
 }
 
-static int      stbi__pnm_isspace(char c)
+স্থির পূর্ণসংখ্যা      stbi__pnm_isspace(অক্ষর c)
 {
-   return c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r';
+   ফেরত c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r';
 }
 
-static void     stbi__pnm_skip_whitespace(stbi__context *s, char *c)
+স্থির শূন্য     stbi__pnm_skip_whitespace(stbi__context *s, অক্ষর *c)
 {
-   for (;;) {
-      while (!stbi__at_eof(s) && stbi__pnm_isspace(*c))
-         *c = (char) stbi__get8(s);
+   জন্য (;;) {
+      যখন (!stbi__at_eof(s) && stbi__pnm_isspace(*c))
+         *c = (অক্ষর) stbi__get8(s);
 
-      if (stbi__at_eof(s) || *c != '#')
-         break;
+      যদি (stbi__at_eof(s) || *c != '#')
+         বিরতি;
 
-      while (!stbi__at_eof(s) && *c != '\n' && *c != '\r' )
-         *c = (char) stbi__get8(s);
+      যখন (!stbi__at_eof(s) && *c != '\n' && *c != '\r' )
+         *c = (অক্ষর) stbi__get8(s);
    }
 }
 
-static int      stbi__pnm_isdigit(char c)
+স্থির পূর্ণসংখ্যা      stbi__pnm_isdigit(অক্ষর c)
 {
-   return c >= '0' && c <= '9';
+   ফেরত c >= '0' && c <= '9';
 }
 
-static int      stbi__pnm_getinteger(stbi__context *s, char *c)
+স্থির পূর্ণসংখ্যা      stbi__pnm_getinteger(stbi__context *s, অক্ষর *c)
 {
-   int value = 0;
+   পূর্ণসংখ্যা মান = 0;
 
-   while (!stbi__at_eof(s) && stbi__pnm_isdigit(*c)) {
-      value = value*10 + (*c - '0');
-      *c = (char) stbi__get8(s);
+   যখন (!stbi__at_eof(s) && stbi__pnm_isdigit(*c)) {
+      মান = মান*10 + (*c - '0');
+      *c = (অক্ষর) stbi__get8(s);
    }
 
-   return value;
+   ফেরত মান;
 }
 
-static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা      stbi__pnm_info(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   int maxv, dummy;
-   char c, p, t;
+   পূর্ণসংখ্যা maxv, dummy;
+   অক্ষর c, p, t;
 
-   if (!x) x = &dummy;
-   if (!y) y = &dummy;
-   if (!comp) comp = &dummy;
+   যদি (!x) x = &dummy;
+   যদি (!y) y = &dummy;
+   যদি (!comp) comp = &dummy;
 
    stbi__rewind(s);
 
    // Get identifier
-   p = (char) stbi__get8(s);
-   t = (char) stbi__get8(s);
-   if (p != 'P' || (t != '5' && t != '6')) {
+   p = (অক্ষর) stbi__get8(s);
+   t = (অক্ষর) stbi__get8(s);
+   যদি (p != 'P' || (t != '5' && t != '6')) {
        stbi__rewind(s);
-       return 0;
+       ফেরত 0;
    }
 
    *comp = (t == '6') ? 3 : 1;  // '5' is 1-component .pgm; '6' is 3-component .ppm
 
-   c = (char) stbi__get8(s);
+   c = (অক্ষর) stbi__get8(s);
    stbi__pnm_skip_whitespace(s, &c);
 
    *x = stbi__pnm_getinteger(s, &c); // read width
@@ -7100,138 +7100,138 @@ static int      stbi__pnm_info(stbi__context *s, int *x, int *y, int *comp)
 
    maxv = stbi__pnm_getinteger(s, &c);  // read max value
 
-   if (maxv > 255)
-      return stbi__err("max value > 255", "PPM image not 8-bit");
-   else
-      return 1;
+   যদি (maxv > 255)
+      ফেরত stbi__err("max value > 255", "PPM image not 8-bit");
+   অন্যথা
+      ফেরত 1;
 }
 #endif
 
-static int stbi__info_main(stbi__context *s, int *x, int *y, int *comp)
+স্থির পূর্ণসংখ্যা stbi__info_main(stbi__context *s, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
    #ifndef STBI_NO_JPEG
-   if (stbi__jpeg_info(s, x, y, comp)) return 1;
+   যদি (stbi__jpeg_info(s, x, y, comp)) ফেরত 1;
    #endif
 
    #ifndef STBI_NO_PNG
-   if (stbi__png_info(s, x, y, comp))  return 1;
+   যদি (stbi__png_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_GIF
-   if (stbi__gif_info(s, x, y, comp))  return 1;
+   যদি (stbi__gif_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_BMP
-   if (stbi__bmp_info(s, x, y, comp))  return 1;
+   যদি (stbi__bmp_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_PSD
-   if (stbi__psd_info(s, x, y, comp))  return 1;
+   যদি (stbi__psd_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_PIC
-   if (stbi__pic_info(s, x, y, comp))  return 1;
+   যদি (stbi__pic_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_PNM
-   if (stbi__pnm_info(s, x, y, comp))  return 1;
+   যদি (stbi__pnm_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_HDR
-   if (stbi__hdr_info(s, x, y, comp))  return 1;
+   যদি (stbi__hdr_info(s, x, y, comp))  ফেরত 1;
    #endif
 
    // test tga last because it's a crappy test!
    #ifndef STBI_NO_TGA
-   if (stbi__tga_info(s, x, y, comp))
-       return 1;
+   যদি (stbi__tga_info(s, x, y, comp))
+       ফেরত 1;
    #endif
-   return stbi__err("unknown image type", "Image not of any known type, or corrupt");
+   ফেরত stbi__err("unknown image type", "Image not of any known type, or corrupt");
 }
 
-static int stbi__is_16_main(stbi__context *s)
+স্থির পূর্ণসংখ্যা stbi__is_16_main(stbi__context *s)
 {
    #ifndef STBI_NO_PNG
-   if (stbi__png_is16(s))  return 1;
+   যদি (stbi__png_is16(s))  ফেরত 1;
    #endif
 
    #ifndef STBI_NO_PSD
-   if (stbi__psd_is16(s))  return 1;
+   যদি (stbi__psd_is16(s))  ফেরত 1;
    #endif
 
-   return 0;
+   ফেরত 0;
 }
 
 #ifndef STBI_NO_STDIO
-STBIDEF int stbi_info(char const *filename, int *x, int *y, int *comp)
+STBIDEF পূর্ণসংখ্যা stbi_info(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
     FILE *f = stbi__fopen(filename, "rb");
-    int result;
-    if (!f) return stbi__err("can't fopen", "Unable to open file");
-    result = stbi_info_from_file(f, x, y, comp);
+    পূর্ণসংখ্যা ফলাফল;
+    যদি (!f) ফেরত stbi__err("can't fopen", "Unable to open file");
+    ফলাফল = stbi_info_from_file(f, x, y, comp);
     fclose(f);
-    return result;
+    ফেরত ফলাফল;
 }
 
-STBIDEF int stbi_info_from_file(FILE *f, int *x, int *y, int *comp)
+STBIDEF পূর্ণসংখ্যা stbi_info_from_file(FILE *f, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
-   int r;
+   পূর্ণসংখ্যা r;
    stbi__context s;
    long pos = ftell(f);
    stbi__start_file(&s, f);
    r = stbi__info_main(&s,x,y,comp);
    fseek(f,pos,SEEK_SET);
-   return r;
+   ফেরত r;
 }
 
-STBIDEF int stbi_is_16_bit(char const *filename)
+STBIDEF পূর্ণসংখ্যা stbi_is_16_bit(অক্ষর ধ্রুবক *filename)
 {
     FILE *f = stbi__fopen(filename, "rb");
-    int result;
-    if (!f) return stbi__err("can't fopen", "Unable to open file");
-    result = stbi_is_16_bit_from_file(f);
+    পূর্ণসংখ্যা ফলাফল;
+    যদি (!f) ফেরত stbi__err("can't fopen", "Unable to open file");
+    ফলাফল = stbi_is_16_bit_from_file(f);
     fclose(f);
-    return result;
+    ফেরত ফলাফল;
 }
 
-STBIDEF int stbi_is_16_bit_from_file(FILE *f)
+STBIDEF পূর্ণসংখ্যা stbi_is_16_bit_from_file(FILE *f)
 {
-   int r;
+   পূর্ণসংখ্যা r;
    stbi__context s;
    long pos = ftell(f);
    stbi__start_file(&s, f);
    r = stbi__is_16_main(&s);
    fseek(f,pos,SEEK_SET);
-   return r;
+   ফেরত r;
 }
 #endif // !STBI_NO_STDIO
 
-STBIDEF int stbi_info_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp)
+STBIDEF পূর্ণসংখ্যা stbi_info_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
    stbi__context s;
-   stbi__start_mem(&s,buffer,len);
-   return stbi__info_main(&s,x,y,comp);
+   stbi__start_mem(&s,বাফার,len);
+   ফেরত stbi__info_main(&s,x,y,comp);
 }
 
-STBIDEF int stbi_info_from_callbacks(stbi_io_callbacks const *c, void *user, int *x, int *y, int *comp)
+STBIDEF পূর্ণসংখ্যা stbi_info_from_callbacks(stbi_io_callbacks ধ্রুবক *c, শূন্য *user, পূর্ণসংখ্যা *x, পূর্ণসংখ্যা *y, পূর্ণসংখ্যা *comp)
 {
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *) c, user);
-   return stbi__info_main(&s,x,y,comp);
+   ফেরত stbi__info_main(&s,x,y,comp);
 }
 
-STBIDEF int stbi_is_16_bit_from_memory(stbi_uc const *buffer, int len)
+STBIDEF পূর্ণসংখ্যা stbi_is_16_bit_from_memory(stbi_uc ধ্রুবক *বাফার, পূর্ণসংখ্যা len)
 {
    stbi__context s;
-   stbi__start_mem(&s,buffer,len);
-   return stbi__is_16_main(&s);
+   stbi__start_mem(&s,বাফার,len);
+   ফেরত stbi__is_16_main(&s);
 }
 
-STBIDEF int stbi_is_16_bit_from_callbacks(stbi_io_callbacks const *c, void *user)
+STBIDEF পূর্ণসংখ্যা stbi_is_16_bit_from_callbacks(stbi_io_callbacks ধ্রুবক *c, শূন্য *user)
 {
    stbi__context s;
    stbi__start_callbacks(&s, (stbi_io_callbacks *) c, user);
-   return stbi__is_16_main(&s);
+   ফেরত stbi__is_16_main(&s);
 }
 
 #endif // STB_IMAGE_IMPLEMENTATION

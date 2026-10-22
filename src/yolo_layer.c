@@ -1,23 +1,23 @@
-#include "yolo_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#অন্তর্ভাব "yolo_layer.h"
+#অন্তর্ভাব "activations.h"
+#অন্তর্ভাব "blas.h"
+#অন্তর্ভাব "box.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#অন্তর্ভাব <stdio.h>
+#অন্তর্ভাব <assert.h>
+#অন্তর্ভাব <string.h>
+#অন্তর্ভাব <stdlib.h>
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes)
+layer make_yolo_layer(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা n, পূর্ণসংখ্যা যোগ_2, পূর্ণসংখ্যা *mask, পূর্ণসংখ্যা classes)
 {
-    int i;
+    পূর্ণসংখ্যা i;
     layer l = {0};
     l.type = YOLO;
 
     l.n = n;
-    l.total = total;
+    l.যোগ_2 = যোগ_2;
     l.batch = batch;
     l.h = h;
     l.w = w;
@@ -26,22 +26,22 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     l.out_h = l.h;
     l.out_c = l.c;
     l.classes = classes;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(total*2, sizeof(float));
-    if(mask) l.mask = mask;
-    else{
-        l.mask = calloc(n, sizeof(int));
-        for(i = 0; i < n; ++i){
+    l.cost = calloc(1, আকার(দশমিক));
+    l.biases = calloc(যোগ_2*2, আকার(দশমিক));
+    যদি(mask) l.mask = mask;
+    অন্যথা{
+        l.mask = calloc(n, আকার(পূর্ণসংখ্যা));
+        জন্য(i = 0; i < n; ++i){
             l.mask[i] = i;
         }
     }
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.bias_updates = calloc(n*2, আকার(দশমিক));
     l.outputs = h*w*n*(classes + 4 + 1);
     l.inputs = l.outputs;
     l.truths = 90*(4 + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    for(i = 0; i < total*2; ++i){
+    l.delta = calloc(batch*l.outputs, আকার(দশমিক));
+    l.output = calloc(batch*l.outputs, আকার(দশমিক));
+    জন্য(i = 0; i < যোগ_2*2; ++i){
         l.biases[i] = .5;
     }
 
@@ -57,10 +57,10 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     fprintf(stderr, "yolo\n");
     srand(0);
 
-    return l;
+    ফেরত l;
 }
 
-void resize_yolo_layer(layer *l, int w, int h)
+শূন্য resize_yolo_layer(layer *l, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h)
 {
     l->w = w;
     l->h = h;
@@ -68,8 +68,8 @@ void resize_yolo_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + 4 + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*আকার(দশমিক));
+    l->delta = realloc(l->delta, l->batch*l->outputs*আকার(দশমিক));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -80,189 +80,189 @@ void resize_yolo_layer(layer *l, int w, int h)
 #endif
 }
 
-box get_yolo_box(float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, int stride)
+box get_yolo_box(দশমিক *x, দশমিক *biases, পূর্ণসংখ্যা n, পূর্ণসংখ্যা সূচক, পূর্ণসংখ্যা i, পূর্ণসংখ্যা j, পূর্ণসংখ্যা lw, পূর্ণসংখ্যা lh, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা stride)
 {
     box b;
-    b.x = (i + x[index + 0*stride]) / lw;
-    b.y = (j + x[index + 1*stride]) / lh;
-    b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
-    b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    b.x = (i + x[সূচক + 0*stride]) / lw;
+    b.y = (j + x[সূচক + 1*stride]) / lh;
+    b.w = exp(x[সূচক + 2*stride]) * biases[2*n]   / w;
+    b.h = exp(x[সূচক + 3*stride]) * biases[2*n+1] / h;
+    ফেরত b;
 }
 
-float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, float *delta, float scale, int stride)
+দশমিক delta_yolo_box(box truth, দশমিক *x, দশমিক *biases, পূর্ণসংখ্যা n, পূর্ণসংখ্যা সূচক, পূর্ণসংখ্যা i, পূর্ণসংখ্যা j, পূর্ণসংখ্যা lw, পূর্ণসংখ্যা lh, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, দশমিক *delta, দশমিক scale, পূর্ণসংখ্যা stride)
 {
-    box pred = get_yolo_box(x, biases, n, index, i, j, lw, lh, w, h, stride);
-    float iou = box_iou(pred, truth);
+    box pred = get_yolo_box(x, biases, n, সূচক, i, j, lw, lh, w, h, stride);
+    দশমিক iou = box_iou(pred, truth);
 
-    float tx = (truth.x*lw - i);
-    float ty = (truth.y*lh - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    দশমিক tx = (truth.x*lw - i);
+    দশমিক ty = (truth.y*lh - j);
+    দশমিক tw = log(truth.w*w / biases[2*n]);
+    দশমিক th = log(truth.h*h / biases[2*n + 1]);
 
-    delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
-    delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
-    delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
-    delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    delta[সূচক + 0*stride] = scale * (tx - x[সূচক + 0*stride]);
+    delta[সূচক + 1*stride] = scale * (ty - x[সূচক + 1*stride]);
+    delta[সূচক + 2*stride] = scale * (tw - x[সূচক + 2*stride]);
+    delta[সূচক + 3*stride] = scale * (th - x[সূচক + 3*stride]);
+    ফেরত iou;
 }
 
 
-void delta_yolo_class(float *output, float *delta, int index, int class, int classes, int stride, float *avg_cat)
+শূন্য delta_yolo_class(দশমিক *output, দশমিক *delta, পূর্ণসংখ্যা সূচক, পূর্ণসংখ্যা class, পূর্ণসংখ্যা classes, পূর্ণসংখ্যা stride, দশমিক *avg_cat)
 {
-    int n;
-    if (delta[index]){
-        delta[index + stride*class] = 1 - output[index + stride*class];
-        if(avg_cat) *avg_cat += output[index + stride*class];
-        return;
+    পূর্ণসংখ্যা n;
+    যদি (delta[সূচক]){
+        delta[সূচক + stride*class] = 1 - output[সূচক + stride*class];
+        যদি(avg_cat) *avg_cat += output[সূচক + stride*class];
+        ফেরত;
     }
-    for(n = 0; n < classes; ++n){
-        delta[index + stride*n] = ((n == class)?1 : 0) - output[index + stride*n];
-        if(n == class && avg_cat) *avg_cat += output[index + stride*n];
+    জন্য(n = 0; n < classes; ++n){
+        delta[সূচক + stride*n] = ((n == class)?1 : 0) - output[সূচক + stride*n];
+        যদি(n == class && avg_cat) *avg_cat += output[সূচক + stride*n];
     }
 }
 
-static int entry_index(layer l, int batch, int location, int entry)
+স্থির পূর্ণসংখ্যা entry_সূচক(layer l, পূর্ণসংখ্যা batch, পূর্ণসংখ্যা location, পূর্ণসংখ্যা entry)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
+    পূর্ণসংখ্যা n =   location / (l.w*l.h);
+    পূর্ণসংখ্যা loc = location % (l.w*l.h);
+    ফেরত batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
 }
 
-void forward_yolo_layer(const layer l, network net)
+শূন্য forward_yolo_layer(ধ্রুবক layer l, network net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    পূর্ণসংখ্যা i,j,b,t,n;
+    memcpy(l.output, net.প্রবেশ, l.outputs*l.batch*আকার(দশমিক));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, 4);
-            activate_array(l.output + index, (1+l.classes)*l.w*l.h, LOGISTIC);
+    জন্য (b = 0; b < l.batch; ++b){
+        জন্য(n = 0; n < l.n; ++n){
+            পূর্ণসংখ্যা সূচক = entry_সূচক(l, b, n*l.w*l.h, 0);
+            activate_array(l.output + সূচক, 2*l.w*l.h, LOGISTIC);
+            সূচক = entry_সূচক(l, b, n*l.w*l.h, 4);
+            activate_array(l.output + সূচক, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
 #endif
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float recall75 = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    memset(l.delta, 0, l.outputs * l.batch * আকার(দশমিক));
+    যদি(!net.train) ফেরত;
+    দশমিক avg_iou = 0;
+    দশমিক recall = 0;
+    দশমিক recall75 = 0;
+    দশমিক avg_cat = 0;
+    দশমিক avg_obj = 0;
+    দশমিক avg_anyobj = 0;
+    পূর্ণসংখ্যা গুনতি = 0;
+    পূর্ণসংখ্যা class_গুনতি = 0;
     *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
-                    box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
-                    float best_iou = 0;
-                    int best_t = 0;
-                    for(t = 0; t < l.max_boxes; ++t){
+    জন্য (b = 0; b < l.batch; ++b) {
+        জন্য (j = 0; j < l.h; ++j) {
+            জন্য (i = 0; i < l.w; ++i) {
+                জন্য (n = 0; n < l.n; ++n) {
+                    পূর্ণসংখ্যা box_সূচক = entry_সূচক(l, b, n*l.w*l.h + j*l.w + i, 0);
+                    box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_সূচক, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
+                    দশমিক best_iou = 0;
+                    পূর্ণসংখ্যা best_t = 0;
+                    জন্য(t = 0; t < l.max_boxes; ++t){
                         box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
+                        যদি(!truth.x) বিরতি;
+                        দশমিক iou = box_iou(pred, truth);
+                        যদি (iou > best_iou) {
                             best_iou = iou;
                             best_t = t;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
-                    avg_anyobj += l.output[obj_index];
-                    l.delta[obj_index] = 0 - l.output[obj_index];
-                    if (best_iou > l.ignore_thresh) {
-                        l.delta[obj_index] = 0;
+                    পূর্ণসংখ্যা obj_সূচক = entry_সূচক(l, b, n*l.w*l.h + j*l.w + i, 4);
+                    avg_anyobj += l.output[obj_সূচক];
+                    l.delta[obj_সূচক] = 0 - l.output[obj_সূচক];
+                    যদি (best_iou > l.ignore_thresh) {
+                        l.delta[obj_সূচক] = 0;
                     }
-                    if (best_iou > l.truth_thresh) {
-                        l.delta[obj_index] = 1 - l.output[obj_index];
+                    যদি (best_iou > l.truth_thresh) {
+                        l.delta[obj_সূচক] = 1 - l.output[obj_সূচক];
 
-                        int class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
-                        if (l.map) class = l.map[class];
-                        int class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
-                        delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, 0);
+                        পূর্ণসংখ্যা class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
+                        যদি (l.map) class = l.map[class];
+                        পূর্ণসংখ্যা class_সূচক = entry_সূচক(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
+                        delta_yolo_class(l.output, l.delta, class_সূচক, class, l.classes, l.w*l.h, 0);
                         box truth = float_to_box(net.truth + best_t*(4 + 1) + b*l.truths, 1);
-                        delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+                        delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_সূচক, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
                     }
                 }
             }
         }
-        for(t = 0; t < l.max_boxes; ++t){
+        জন্য(t = 0; t < l.max_boxes; ++t){
             box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            যদি(!truth.x) বিরতি;
+            দশমিক best_iou = 0;
+            পূর্ণসংখ্যা best_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
             box truth_shift = truth;
             truth_shift.x = truth_shift.y = 0;
-            for(n = 0; n < l.total; ++n){
+            জন্য(n = 0; n < l.যোগ_2; ++n){
                 box pred = {0};
                 pred.w = l.biases[2*n]/net.w;
                 pred.h = l.biases[2*n+1]/net.h;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
+                দশমিক iou = box_iou(pred, truth_shift);
+                যদি (iou > best_iou){
                     best_iou = iou;
                     best_n = n;
                 }
             }
 
-            int mask_n = int_index(l.mask, best_n, l.n);
-            if(mask_n >= 0){
-                int box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
-                float iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+            পূর্ণসংখ্যা mask_n = int_সূচক(l.mask, best_n, l.n);
+            যদি(mask_n >= 0){
+                পূর্ণসংখ্যা box_সূচক = entry_সূচক(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
+                দশমিক iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_সূচক, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
 
-                int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
-                avg_obj += l.output[obj_index];
-                l.delta[obj_index] = 1 - l.output[obj_index];
+                পূর্ণসংখ্যা obj_সূচক = entry_সূচক(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
+                avg_obj += l.output[obj_সূচক];
+                l.delta[obj_সূচক] = 1 - l.output[obj_সূচক];
 
-                int class = net.truth[t*(4 + 1) + b*l.truths + 4];
-                if (l.map) class = l.map[class];
-                int class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
-                delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, &avg_cat);
+                পূর্ণসংখ্যা class = net.truth[t*(4 + 1) + b*l.truths + 4];
+                যদি (l.map) class = l.map[class];
+                পূর্ণসংখ্যা class_সূচক = entry_সূচক(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
+                delta_yolo_class(l.output, l.delta, class_সূচক, class, l.classes, l.w*l.h, &avg_cat);
 
-                ++count;
-                ++class_count;
-                if(iou > .5) recall += 1;
-                if(iou > .75) recall75 += 1;
+                ++গুনতি;
+                ++class_গুনতি;
+                যদি(iou > .5) recall += 1;
+                যদি(iou > .75) recall75 += 1;
                 avg_iou += iou;
             }
         }
     }
     *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.সূচক, avg_iou/গুনতি, avg_cat/class_গুনতি, avg_obj/গুনতি, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/গুনতি, recall75/গুনতি, গুনতি);
 }
 
-void backward_yolo_layer(const layer l, network net)
+শূন্য backward_yolo_layer(ধ্রুবক layer l, network net)
 {
    axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+শূন্য correct_yolo_boxes(detection *dets, পূর্ণসংখ্যা n, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা netw, পূর্ণসংখ্যা neth, পূর্ণসংখ্যা relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    পূর্ণসংখ্যা i;
+    পূর্ণসংখ্যা new_w=0;
+    পূর্ণসংখ্যা new_h=0;
+    যদি (((দশমিক)netw/w) < ((দশমিক)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } অন্যথা {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    জন্য (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((দশমিক)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((দশমিক)new_h/neth); 
+        b.w *= (দশমিক)netw/new_w;
+        b.h *= (দশমিক)neth/new_h;
+        যদি(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -272,35 +272,35 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
     }
 }
 
-int yolo_num_detections(layer l, float thresh)
+পূর্ণসংখ্যা yolo_অঙ্ক_detections(layer l, দশমিক thresh)
 {
-    int i, n;
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            if(l.output[obj_index] > thresh){
-                ++count;
+    পূর্ণসংখ্যা i, n;
+    পূর্ণসংখ্যা গুনতি = 0;
+    জন্য (i = 0; i < l.w*l.h; ++i){
+        জন্য(n = 0; n < l.n; ++n){
+            পূর্ণসংখ্যা obj_সূচক  = entry_সূচক(l, 0, n*l.w*l.h + i, 4);
+            যদি(l.output[obj_সূচক] > thresh){
+                ++গুনতি;
             }
         }
     }
-    return count;
+    ফেরত গুনতি;
 }
 
-void avg_flipped_yolo(layer l)
+শূন্য avg_flipped_yolo(layer l)
 {
-    int i,j,n,z;
-    float *flip = l.output + l.outputs;
-    for (j = 0; j < l.h; ++j) {
-        for (i = 0; i < l.w/2; ++i) {
-            for (n = 0; n < l.n; ++n) {
-                for(z = 0; z < l.classes + 4 + 1; ++z){
-                    int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                    int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                    float swap = flip[i1];
+    পূর্ণসংখ্যা i,j,n,z;
+    দশমিক *flip = l.output + l.outputs;
+    জন্য (j = 0; j < l.h; ++j) {
+        জন্য (i = 0; i < l.w/2; ++i) {
+            জন্য (n = 0; n < l.n; ++n) {
+                জন্য(z = 0; z < l.classes + 4 + 1; ++z){
+                    পূর্ণসংখ্যা i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                    পূর্ণসংখ্যা i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                    দশমিক swap = flip[i1];
                     flip[i1] = flip[i2];
                     flip[i2] = swap;
-                    if(z == 0){
+                    যদি(z == 0){
                         flip[i1] = -flip[i1];
                         flip[i2] = -flip[i2];
                     }
@@ -308,65 +308,65 @@ void avg_flipped_yolo(layer l)
             }
         }
     }
-    for(i = 0; i < l.outputs; ++i){
+    জন্য(i = 0; i < l.outputs; ++i){
         l.output[i] = (l.output[i] + flip[i])/2.;
     }
 }
 
-int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets)
+পূর্ণসংখ্যা get_yolo_detections(layer l, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা netw, পূর্ণসংখ্যা neth, দশমিক thresh, পূর্ণসংখ্যা *map, পূর্ণসংখ্যা relative, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
-    if (l.batch == 2) avg_flipped_yolo(l);
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float objectness = predictions[obj_index];
-            if(objectness <= thresh) continue;
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            dets[count].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
-            dets[count].objectness = objectness;
-            dets[count].classes = l.classes;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
-                float prob = objectness*predictions[class_index];
-                dets[count].prob[j] = (prob > thresh) ? prob : 0;
+    পূর্ণসংখ্যা i,j,n;
+    দশমিক *predictions = l.output;
+    যদি (l.batch == 2) avg_flipped_yolo(l);
+    পূর্ণসংখ্যা গুনতি = 0;
+    জন্য (i = 0; i < l.w*l.h; ++i){
+        পূর্ণসংখ্যা row = i / l.w;
+        পূর্ণসংখ্যা col = i % l.w;
+        জন্য(n = 0; n < l.n; ++n){
+            পূর্ণসংখ্যা obj_সূচক  = entry_সূচক(l, 0, n*l.w*l.h + i, 4);
+            দশমিক objectness = predictions[obj_সূচক];
+            যদি(objectness <= thresh) চালু;
+            পূর্ণসংখ্যা box_সূচক  = entry_সূচক(l, 0, n*l.w*l.h + i, 0);
+            dets[গুনতি].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_সূচক, col, row, l.w, l.h, netw, neth, l.w*l.h);
+            dets[গুনতি].objectness = objectness;
+            dets[গুনতি].classes = l.classes;
+            জন্য(j = 0; j < l.classes; ++j){
+                পূর্ণসংখ্যা class_সূচক = entry_সূচক(l, 0, n*l.w*l.h + i, 4 + 1 + j);
+                দশমিক prob = objectness*predictions[class_সূচক];
+                dets[গুনতি].prob[j] = (prob > thresh) ? prob : 0;
             }
-            ++count;
+            ++গুনতি;
         }
     }
-    correct_yolo_boxes(dets, count, w, h, netw, neth, relative);
-    return count;
+    correct_yolo_boxes(dets, গুনতি, w, h, netw, neth, relative);
+    ফেরত গুনতি;
 }
 
 #ifdef GPU
 
-void forward_yolo_layer_gpu(const layer l, network net)
+শূন্য forward_yolo_layer_gpu(ধ্রুবক layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, 4);
-            activate_array_gpu(l.output_gpu + index, (1+l.classes)*l.w*l.h, LOGISTIC);
+    copy_gpu(l.batch*l.inputs, net.প্রবেশ_gpu, 1, l.output_gpu, 1);
+    পূর্ণসংখ্যা b, n;
+    জন্য (b = 0; b < l.batch; ++b){
+        জন্য(n = 0; n < l.n; ++n){
+            পূর্ণসংখ্যা সূচক = entry_সূচক(l, b, n*l.w*l.h, 0);
+            activate_array_gpu(l.output_gpu + সূচক, 2*l.w*l.h, LOGISTIC);
+            সূচক = entry_সূচক(l, b, n*l.w*l.h, 4);
+            activate_array_gpu(l.output_gpu + সূচক, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-    if(!net.train || l.onlyforward){
+    যদি(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ফেরত;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.প্রবেশ, l.batch*l.inputs);
     forward_yolo_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_ঠেলো_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_yolo_layer_gpu(const layer l, network net)
+শূন্য backward_yolo_layer_gpu(ধ্রুবক layer l, network net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }

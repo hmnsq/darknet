@@ -151,39 +151,39 @@ LICENSE
 // if STB_IMAGE_WRITE_STATIC causes problems, try defining STBIWDEF to 'inline' or 'static inline'
 #ifndef STBIWDEF
 #ifdef STB_IMAGE_WRITE_STATIC
-#define STBIWDEF  static
-#else
+#define STBIWDEF  স্থির
+#অন্যথা
 #ifdef __cplusplus
-#define STBIWDEF  extern "C"
-#else
-#define STBIWDEF  extern
+#define STBIWDEF  বাহ্যিক "C"
+#অন্যথা
+#define STBIWDEF  বাহ্যিক
 #endif
 #endif
 #endif
 
 #ifndef STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
-extern int stbi_write_tga_with_rle;
-extern int stbi_write_png_compression_level;
-extern int stbi_write_force_png_filter;
+বাহ্যিক পূর্ণসংখ্যা stbi_write_tga_with_rle;
+বাহ্যিক পূর্ণসংখ্যা stbi_write_png_compression_level;
+বাহ্যিক পূর্ণসংখ্যা stbi_write_force_png_filter;
 #endif
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF পূর্ণসংখ্যা stbi_write_png(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য, পূর্ণসংখ্যা stride_in_bytes);
+STBIWDEF পূর্ণসংখ্যা stbi_write_bmp(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য);
+STBIWDEF পূর্ণসংখ্যা stbi_write_tga(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য);
+STBIWDEF পূর্ণসংখ্যা stbi_write_hdr(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক দশমিক *তথ্য);
+STBIWDEF পূর্ণসংখ্যা stbi_write_jpg(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য, পূর্ণসংখ্যা quality);
 #endif
 
-typedef void stbi_write_func(void *context, void *data, int size);
+প্রকারলেখ শূন্য stbi_write_func(শূন্য *context, শূন্য *তথ্য, পূর্ণসংখ্যা আকার_2);
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF পূর্ণসংখ্যা stbi_write_png_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য, পূর্ণসংখ্যা stride_in_bytes);
+STBIWDEF পূর্ণসংখ্যা stbi_write_bmp_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য);
+STBIWDEF পূর্ণসংখ্যা stbi_write_tga_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য);
+STBIWDEF পূর্ণসংখ্যা stbi_write_hdr_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা comp, ধ্রুবক দশমিক *তথ্য);
+STBIWDEF পূর্ণসংখ্যা stbi_write_jpg_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য  *তথ্য, পূর্ণসংখ্যা quality);
 
-STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
+STBIWDEF শূন্য stbi_flip_vertically_on_write(পূর্ণসংখ্যা flip_boolean);
 
 #endif//INCLUDE_STB_IMAGE_WRITE_H
 
@@ -199,26 +199,26 @@ STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
 #endif
 
 #ifndef STBI_WRITE_NO_STDIO
-#include <stdio.h>
+#অন্তর্ভাব <stdio.h>
 #endif // STBI_WRITE_NO_STDIO
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#অন্তর্ভাব <stdarg.h>
+#অন্তর্ভাব <stdlib.h>
+#অন্তর্ভাব <string.h>
+#অন্তর্ভাব <math.h>
 
-#if defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
+#যদি defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
 // ok
-#elif !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
+#নতুবা_যদি !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
 // ok
-#else
+#অন্যথা
 #error "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
 #endif
 
 #ifndef STBIW_MALLOC
 #define STBIW_MALLOC(sz)        malloc(sz)
 #define STBIW_REALLOC(p,newsz)  realloc(p,newsz)
-#define STBIW_FREE(p)           free(p)
+#define STBIW_FREE(p)           মুক্ত(p)
 #endif
 
 #ifndef STBIW_REALLOC_SIZED
@@ -232,37 +232,37 @@ STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
 
 
 #ifndef STBIW_ASSERT
-#include <assert.h>
-#define STBIW_ASSERT(x) assert(x)
+#অন্তর্ভাব <assert.h>
+#define STBIW_ASSERT(x) প্রতিজ্ঞা(x)
 #endif
 
-#define STBIW_UCHAR(x) (unsigned char) ((x) & 0xff)
+#define STBIW_UCHAR(x) (unsigned অক্ষর) ((x) & 0xff)
 
 #ifdef STB_IMAGE_WRITE_STATIC
-static int stbi__flip_vertically_on_write=0;
-static int stbi_write_png_compression_level = 8;
-static int stbi_write_tga_with_rle = 1;
-static int stbi_write_force_png_filter = -1;
-#else
-int stbi_write_png_compression_level = 8;
-int stbi__flip_vertically_on_write=0;
-int stbi_write_tga_with_rle = 1;
-int stbi_write_force_png_filter = -1;
+স্থির পূর্ণসংখ্যা stbi__flip_vertically_on_write=0;
+স্থির পূর্ণসংখ্যা stbi_write_png_compression_level = 8;
+স্থির পূর্ণসংখ্যা stbi_write_tga_with_rle = 1;
+স্থির পূর্ণসংখ্যা stbi_write_force_png_filter = -1;
+#অন্যথা
+পূর্ণসংখ্যা stbi_write_png_compression_level = 8;
+পূর্ণসংখ্যা stbi__flip_vertically_on_write=0;
+পূর্ণসংখ্যা stbi_write_tga_with_rle = 1;
+পূর্ণসংখ্যা stbi_write_force_png_filter = -1;
 #endif
 
-STBIWDEF void stbi_flip_vertically_on_write(int flag)
+STBIWDEF শূন্য stbi_flip_vertically_on_write(পূর্ণসংখ্যা flag)
 {
    stbi__flip_vertically_on_write = flag;
 }
 
-typedef struct
+প্রকারলেখ কাঠামো
 {
    stbi_write_func *func;
-   void *context;
+   শূন্য *context;
 } stbi__write_context;
 
 // initialize a callback-based context
-static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func *c, void *context)
+স্থির শূন্য stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func *c, শূন্য *context)
 {
    s->func    = c;
    s->context = context;
@@ -270,64 +270,64 @@ static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func 
 
 #ifndef STBI_WRITE_NO_STDIO
 
-static void stbi__stdio_write(void *context, void *data, int size)
+স্থির শূন্য stbi__stdio_write(শূন্য *context, শূন্য *তথ্য, পূর্ণসংখ্যা আকার_2)
 {
-   fwrite(data,1,size,(FILE*) context);
+   fwrite(তথ্য,1,আকার_2,(FILE*) context);
 }
 
-static int stbi__start_write_file(stbi__write_context *s, const char *filename)
+স্থির পূর্ণসংখ্যা stbi__start_write_file(stbi__write_context *s, ধ্রুবক অক্ষর *filename)
 {
    FILE *f;
 #ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+   যদি (fopen_s(&f, filename, "wb"))
+      f = ফাঁকা;
+#অন্যথা
    f = fopen(filename, "wb");
 #endif
-   stbi__start_write_callbacks(s, stbi__stdio_write, (void *) f);
-   return f != NULL;
+   stbi__start_write_callbacks(s, stbi__stdio_write, (শূন্য *) f);
+   ফেরত f != ফাঁকা;
 }
 
-static void stbi__end_write_file(stbi__write_context *s)
+স্থির শূন্য stbi__end_write_file(stbi__write_context *s)
 {
    fclose((FILE *)s->context);
 }
 
 #endif // !STBI_WRITE_NO_STDIO
 
-typedef unsigned int stbiw_uint32;
-typedef int stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
+প্রকারলেখ unsigned পূর্ণসংখ্যা stbiw_uint32;
+প্রকারলেখ পূর্ণসংখ্যা stb_image_write_test[আকার(stbiw_uint32)==4 ? 1 : -1];
 
-static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
+স্থির শূন্য stbiw__writefv(stbi__write_context *s, ধ্রুবক অক্ষর *fmt, va_list v)
 {
-   while (*fmt) {
-      switch (*fmt++) {
-         case ' ': break;
-         case '1': { unsigned char x = STBIW_UCHAR(va_arg(v, int));
+   যখন (*fmt) {
+      নির্বাচন (*fmt++) {
+         ক্ষেত্র ' ': বিরতি;
+         ক্ষেত্র '1': { unsigned অক্ষর x = STBIW_UCHAR(va_arg(v, পূর্ণসংখ্যা));
                      s->func(s->context,&x,1);
-                     break; }
-         case '2': { int x = va_arg(v,int);
-                     unsigned char b[2];
+                     বিরতি; }
+         ক্ষেত্র '2': { পূর্ণসংখ্যা x = va_arg(v,পূর্ণসংখ্যা);
+                     unsigned অক্ষর b[2];
                      b[0] = STBIW_UCHAR(x);
                      b[1] = STBIW_UCHAR(x>>8);
                      s->func(s->context,b,2);
-                     break; }
-         case '4': { stbiw_uint32 x = va_arg(v,int);
-                     unsigned char b[4];
+                     বিরতি; }
+         ক্ষেত্র '4': { stbiw_uint32 x = va_arg(v,পূর্ণসংখ্যা);
+                     unsigned অক্ষর b[4];
                      b[0]=STBIW_UCHAR(x);
                      b[1]=STBIW_UCHAR(x>>8);
                      b[2]=STBIW_UCHAR(x>>16);
                      b[3]=STBIW_UCHAR(x>>24);
                      s->func(s->context,b,4);
-                     break; }
-         default:
+                     বিরতি; }
+         পূর্বনির্ধারিত:
             STBIW_ASSERT(0);
-            return;
+            ফেরত;
       }
    }
 }
 
-static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
+স্থির শূন্য stbiw__writef(stbi__write_context *s, ধ্রুবক অক্ষর *fmt, ...)
 {
    va_list v;
    va_start(v, fmt);
@@ -335,214 +335,214 @@ static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
    va_end(v);
 }
 
-static void stbiw__putc(stbi__write_context *s, unsigned char c)
+স্থির শূন্য stbiw__putc(stbi__write_context *s, unsigned অক্ষর c)
 {
    s->func(s->context, &c, 1);
 }
 
-static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char b, unsigned char c)
+স্থির শূন্য stbiw__write3(stbi__write_context *s, unsigned অক্ষর a, unsigned অক্ষর b, unsigned অক্ষর c)
 {
-   unsigned char arr[3];
+   unsigned অক্ষর arr[3];
    arr[0] = a, arr[1] = b, arr[2] = c;
    s->func(s->context, arr, 3);
 }
 
-static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, int write_alpha, int expand_mono, unsigned char *d)
+স্থির শূন্য stbiw__write_pixel(stbi__write_context *s, পূর্ণসংখ্যা rgb_dir, পূর্ণসংখ্যা comp, পূর্ণসংখ্যা write_alpha, পূর্ণসংখ্যা expand_mono, unsigned অক্ষর *d)
 {
-   unsigned char bg[3] = { 255, 0, 255}, px[3];
-   int k;
+   unsigned অক্ষর bg[3] = { 255, 0, 255}, px[3];
+   পূর্ণসংখ্যা k;
 
-   if (write_alpha < 0)
+   যদি (write_alpha < 0)
       s->func(s->context, &d[comp - 1], 1);
 
-   switch (comp) {
-      case 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
-      case 1:
-         if (expand_mono)
+   নির্বাচন (comp) {
+      ক্ষেত্র 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
+      ক্ষেত্র 1:
+         যদি (expand_mono)
             stbiw__write3(s, d[0], d[0], d[0]); // monochrome bmp
-         else
+         অন্যথা
             s->func(s->context, d, 1);  // monochrome TGA
-         break;
-      case 4:
-         if (!write_alpha) {
+         বিরতি;
+      ক্ষেত্র 4:
+         যদি (!write_alpha) {
             // composite against pink background
-            for (k = 0; k < 3; ++k)
+            জন্য (k = 0; k < 3; ++k)
                px[k] = bg[k] + ((d[k] - bg[k]) * d[3]) / 255;
             stbiw__write3(s, px[1 - rgb_dir], px[1], px[1 + rgb_dir]);
-            break;
+            বিরতি;
          }
          /* FALLTHROUGH */
-      case 3:
+      ক্ষেত্র 3:
          stbiw__write3(s, d[1 - rgb_dir], d[1], d[1 + rgb_dir]);
-         break;
+         বিরতি;
    }
-   if (write_alpha > 0)
+   যদি (write_alpha > 0)
       s->func(s->context, &d[comp - 1], 1);
 }
 
-static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, void *data, int write_alpha, int scanline_pad, int expand_mono)
+স্থির শূন্য stbiw__write_pixels(stbi__write_context *s, পূর্ণসংখ্যা rgb_dir, পূর্ণসংখ্যা vdir, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, শূন্য *তথ্য, পূর্ণসংখ্যা write_alpha, পূর্ণসংখ্যা scanline_pad, পূর্ণসংখ্যা expand_mono)
 {
    stbiw_uint32 zero = 0;
-   int i,j, j_end;
+   পূর্ণসংখ্যা i,j, j_end;
 
-   if (y <= 0)
-      return;
+   যদি (y <= 0)
+      ফেরত;
 
-   if (stbi__flip_vertically_on_write)
+   যদি (stbi__flip_vertically_on_write)
       vdir *= -1;
 
-   if (vdir < 0)
+   যদি (vdir < 0)
       j_end = -1, j = y-1;
-   else
+   অন্যথা
       j_end =  y, j = 0;
 
-   for (; j != j_end; j += vdir) {
-      for (i=0; i < x; ++i) {
-         unsigned char *d = (unsigned char *) data + (j*x+i)*comp;
+   জন্য (; j != j_end; j += vdir) {
+      জন্য (i=0; i < x; ++i) {
+         unsigned অক্ষর *d = (unsigned অক্ষর *) তথ্য + (j*x+i)*comp;
          stbiw__write_pixel(s, rgb_dir, comp, write_alpha, expand_mono, d);
       }
       s->func(s->context, &zero, scanline_pad);
    }
 }
 
-static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, int expand_mono, void *data, int alpha, int pad, const char *fmt, ...)
+স্থির পূর্ণসংখ্যা stbiw__outfile(stbi__write_context *s, পূর্ণসংখ্যা rgb_dir, পূর্ণসংখ্যা vdir, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, পূর্ণসংখ্যা expand_mono, শূন্য *তথ্য, পূর্ণসংখ্যা alpha, পূর্ণসংখ্যা pad, ধ্রুবক অক্ষর *fmt, ...)
 {
-   if (y < 0 || x < 0) {
-      return 0;
-   } else {
+   যদি (y < 0 || x < 0) {
+      ফেরত 0;
+   } অন্যথা {
       va_list v;
       va_start(v, fmt);
       stbiw__writefv(s, fmt, v);
       va_end(v);
-      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,data,alpha,pad, expand_mono);
-      return 1;
+      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,তথ্য,alpha,pad, expand_mono);
+      ফেরত 1;
    }
 }
 
-static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, const void *data)
+স্থির পূর্ণসংখ্যা stbi_write_bmp_core(stbi__write_context *s, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য)
 {
-   int pad = (-x*3) & 3;
-   return stbiw__outfile(s,-1,-1,x,y,comp,1,(void *) data,0,pad,
+   পূর্ণসংখ্যা pad = (-x*3) & 3;
+   ফেরত stbiw__outfile(s,-1,-1,x,y,comp,1,(শূন্য *) তথ্য,0,pad,
            "11 4 22 4" "4 44 22 444444",
            'B', 'M', 14+40+(x*3+pad)*y, 0,0, 14+40,  // file header
             40, x,y, 1,24, 0,0,0,0,0,0);             // bitmap header
 }
 
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF পূর্ণসংখ্যা stbi_write_bmp_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_bmp_core(&s, x, y, comp, data);
+   ফেরত stbi_write_bmp_core(&s, x, y, comp, তথ্য);
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *data)
+STBIWDEF পূর্ণসংখ্যা stbi_write_bmp(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_bmp_core(&s, x, y, comp, data);
+   যদি (stbi__start_write_file(&s,filename)) {
+      পূর্ণসংখ্যা r = stbi_write_bmp_core(&s, x, y, comp, তথ্য);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      ফেরত r;
+   } অন্যথা
+      ফেরত 0;
 }
 #endif //!STBI_WRITE_NO_STDIO
 
-static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, void *data)
+স্থির পূর্ণসংখ্যা stbi_write_tga_core(stbi__write_context *s, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, শূন্য *তথ্য)
 {
-   int has_alpha = (comp == 2 || comp == 4);
-   int colorbytes = has_alpha ? comp-1 : comp;
-   int format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
+   পূর্ণসংখ্যা has_alpha = (comp == 2 || comp == 4);
+   পূর্ণসংখ্যা colorbytes = has_alpha ? comp-1 : comp;
+   পূর্ণসংখ্যা format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
 
-   if (y < 0 || x < 0)
-      return 0;
+   যদি (y < 0 || x < 0)
+      ফেরত 0;
 
-   if (!stbi_write_tga_with_rle) {
-      return stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *) data, has_alpha, 0,
+   যদি (!stbi_write_tga_with_rle) {
+      ফেরত stbiw__outfile(s, -1, -1, x, y, comp, 0, (শূন্য *) তথ্য, has_alpha, 0,
          "111 221 2222 11", 0, 0, format, 0, 0, 0, 0, 0, x, y, (colorbytes + has_alpha) * 8, has_alpha * 8);
-   } else {
-      int i,j,k;
-      int jend, jdir;
+   } অন্যথা {
+      পূর্ণসংখ্যা i,j,k;
+      পূর্ণসংখ্যা jend, jdir;
 
       stbiw__writef(s, "111 221 2222 11", 0,0,format+8, 0,0,0, 0,0,x,y, (colorbytes + has_alpha) * 8, has_alpha * 8);
 
-      if (stbi__flip_vertically_on_write) {
+      যদি (stbi__flip_vertically_on_write) {
          j = 0;
          jend = y;
          jdir = 1;
-      } else {
+      } অন্যথা {
          j = y-1;
          jend = -1;
          jdir = -1;
       }
-      for (; j != jend; j += jdir) {
-         unsigned char *row = (unsigned char *) data + j * x * comp;
-         int len;
+      জন্য (; j != jend; j += jdir) {
+         unsigned অক্ষর *row = (unsigned অক্ষর *) তথ্য + j * x * comp;
+         পূর্ণসংখ্যা len;
 
-         for (i = 0; i < x; i += len) {
-            unsigned char *begin = row + i * comp;
-            int diff = 1;
+         জন্য (i = 0; i < x; i += len) {
+            unsigned অক্ষর *begin = row + i * comp;
+            পূর্ণসংখ্যা diff = 1;
             len = 1;
 
-            if (i < x - 1) {
+            যদি (i < x - 1) {
                ++len;
                diff = memcmp(begin, row + (i + 1) * comp, comp);
-               if (diff) {
-                  const unsigned char *prev = begin;
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (memcmp(prev, row + k * comp, comp)) {
-                        prev += comp;
+               যদি (diff) {
+                  ধ্রুবক unsigned অক্ষর *পূর্ব = begin;
+                  জন্য (k = i + 2; k < x && len < 128; ++k) {
+                     যদি (memcmp(পূর্ব, row + k * comp, comp)) {
+                        পূর্ব += comp;
                         ++len;
-                     } else {
+                     } অন্যথা {
                         --len;
-                        break;
+                        বিরতি;
                      }
                   }
-               } else {
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (!memcmp(begin, row + k * comp, comp)) {
+               } অন্যথা {
+                  জন্য (k = i + 2; k < x && len < 128; ++k) {
+                     যদি (!memcmp(begin, row + k * comp, comp)) {
                         ++len;
-                     } else {
-                        break;
+                     } অন্যথা {
+                        বিরতি;
                      }
                   }
                }
             }
 
-            if (diff) {
-               unsigned char header = STBIW_UCHAR(len - 1);
+            যদি (diff) {
+               unsigned অক্ষর header = STBIW_UCHAR(len - 1);
                s->func(s->context, &header, 1);
-               for (k = 0; k < len; ++k) {
+               জন্য (k = 0; k < len; ++k) {
                   stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin + k * comp);
                }
-            } else {
-               unsigned char header = STBIW_UCHAR(len - 129);
+            } অন্যথা {
+               unsigned অক্ষর header = STBIW_UCHAR(len - 129);
                s->func(s->context, &header, 1);
                stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin);
             }
          }
       }
    }
-   return 1;
+   ফেরত 1;
 }
 
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF পূর্ণসংখ্যা stbi_write_tga_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   ফেরত stbi_write_tga_core(&s, x, y, comp, (শূন্য *) তথ্য);
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
+STBIWDEF পূর্ণসংখ্যা stbi_write_tga(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   যদি (stbi__start_write_file(&s,filename)) {
+      পূর্ণসংখ্যা r = stbi_write_tga_core(&s, x, y, comp, (শূন্য *) তথ্য);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      ফেরত r;
+   } অন্যথা
+      ফেরত 0;
 }
 #endif
 
@@ -552,78 +552,78 @@ STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const 
 
 #define stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
 
-void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
+শূন্য stbiw__linear_to_rgbe(unsigned অক্ষর *rgbe, দশমিক *linear)
 {
-   int exponent;
-   float maxcomp = stbiw__max(linear[0], stbiw__max(linear[1], linear[2]));
+   পূর্ণসংখ্যা exponent;
+   দশমিক maxcomp = stbiw__max(linear[0], stbiw__max(linear[1], linear[2]));
 
-   if (maxcomp < 1e-32f) {
+   যদি (maxcomp < 1e-32f) {
       rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
-   } else {
-      float normalize = (float) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
+   } অন্যথা {
+      দশমিক normalize = (দশমিক) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
 
-      rgbe[0] = (unsigned char)(linear[0] * normalize);
-      rgbe[1] = (unsigned char)(linear[1] * normalize);
-      rgbe[2] = (unsigned char)(linear[2] * normalize);
-      rgbe[3] = (unsigned char)(exponent + 128);
+      rgbe[0] = (unsigned অক্ষর)(linear[0] * normalize);
+      rgbe[1] = (unsigned অক্ষর)(linear[1] * normalize);
+      rgbe[2] = (unsigned অক্ষর)(linear[2] * normalize);
+      rgbe[3] = (unsigned অক্ষর)(exponent + 128);
    }
 }
 
-void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char databyte)
+শূন্য stbiw_write_run_তথ্য(stbi__write_context *s, পূর্ণসংখ্যা দৈর্ঘ্য, unsigned অক্ষর databyte)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length+128);
-   STBIW_ASSERT(length+128 <= 255);
+   unsigned অক্ষর lengthbyte = STBIW_UCHAR(দৈর্ঘ্য+128);
+   STBIW_ASSERT(দৈর্ঘ্য+128 <= 255);
    s->func(s->context, &lengthbyte, 1);
    s->func(s->context, &databyte, 1);
 }
 
-void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *data)
+শূন্য stbiw_write_dump_তথ্য(stbi__write_context *s, পূর্ণসংখ্যা দৈর্ঘ্য, unsigned অক্ষর *তথ্য)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length);
-   STBIW_ASSERT(length <= 128); // inconsistent with spec but consistent with official code
+   unsigned অক্ষর lengthbyte = STBIW_UCHAR(দৈর্ঘ্য);
+   STBIW_ASSERT(দৈর্ঘ্য <= 128); // inconsistent with spec but consistent with official code
    s->func(s->context, &lengthbyte, 1);
-   s->func(s->context, data, length);
+   s->func(s->context, তথ্য, দৈর্ঘ্য);
 }
 
-void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, unsigned char *scratch, float *scanline)
+শূন্য stbiw__write_hdr_scanline(stbi__write_context *s, পূর্ণসংখ্যা width, পূর্ণসংখ্যা ncomp, unsigned অক্ষর *scratch, দশমিক *scanline)
 {
-   unsigned char scanlineheader[4] = { 2, 2, 0, 0 };
-   unsigned char rgbe[4];
-   float linear[3];
-   int x;
+   unsigned অক্ষর scanlineheader[4] = { 2, 2, 0, 0 };
+   unsigned অক্ষর rgbe[4];
+   দশমিক linear[3];
+   পূর্ণসংখ্যা x;
 
    scanlineheader[2] = (width&0xff00)>>8;
    scanlineheader[3] = (width&0x00ff);
 
    /* skip RLE for images too small or large */
-   if (width < 8 || width >= 32768) {
-      for (x=0; x < width; x++) {
-         switch (ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
+   যদি (width < 8 || width >= 32768) {
+      জন্য (x=0; x < width; x++) {
+         নির্বাচন (ncomp) {
+            ক্ষেত্র 4: /* fallthrough */
+            ক্ষেত্র 3: linear[2] = scanline[x*ncomp + 2];
                     linear[1] = scanline[x*ncomp + 1];
                     linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
+                    বিরতি;
+            পূর্বনির্ধারিত:
                     linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+                    বিরতি;
          }
          stbiw__linear_to_rgbe(rgbe, linear);
          s->func(s->context, rgbe, 4);
       }
-   } else {
-      int c,r;
+   } অন্যথা {
+      পূর্ণসংখ্যা c,r;
       /* encode into scratch buffer */
-      for (x=0; x < width; x++) {
-         switch(ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
+      জন্য (x=0; x < width; x++) {
+         নির্বাচন(ncomp) {
+            ক্ষেত্র 4: /* fallthrough */
+            ক্ষেত্র 3: linear[2] = scanline[x*ncomp + 2];
                     linear[1] = scanline[x*ncomp + 1];
                     linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
+                    বিরতি;
+            পূর্বনির্ধারিত:
                     linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+                    বিরতি;
          }
          stbiw__linear_to_rgbe(rgbe, linear);
          scratch[x + width*0] = rgbe[0];
@@ -635,37 +635,37 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
       s->func(s->context, scanlineheader, 4);
 
       /* RLE each component separately */
-      for (c=0; c < 4; c++) {
-         unsigned char *comp = &scratch[width*c];
+      জন্য (c=0; c < 4; c++) {
+         unsigned অক্ষর *comp = &scratch[width*c];
 
          x = 0;
-         while (x < width) {
+         যখন (x < width) {
             // find first run
             r = x;
-            while (r+2 < width) {
-               if (comp[r] == comp[r+1] && comp[r] == comp[r+2])
-                  break;
+            যখন (r+2 < width) {
+               যদি (comp[r] == comp[r+1] && comp[r] == comp[r+2])
+                  বিরতি;
                ++r;
             }
-            if (r+2 >= width)
+            যদি (r+2 >= width)
                r = width;
             // dump up to first run
-            while (x < r) {
-               int len = r-x;
-               if (len > 128) len = 128;
-               stbiw__write_dump_data(s, len, &comp[x]);
+            যখন (x < r) {
+               পূর্ণসংখ্যা len = r-x;
+               যদি (len > 128) len = 128;
+               stbiw_write_dump_তথ্য(s, len, &comp[x]);
                x += len;
             }
             // if there's a run, output it
-            if (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
+            যদি (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
                // find next byte after run
-               while (r < width && comp[r] == comp[x])
+               যখন (r < width && comp[r] == comp[x])
                   ++r;
                // output run up to r
-               while (x < r) {
-                  int len = r-x;
-                  if (len > 127) len = 127;
-                  stbiw__write_run_data(s, len, comp[x]);
+               যখন (x < r) {
+                  পূর্ণসংখ্যা len = r-x;
+                  যদি (len > 127) len = 127;
+                  stbiw_write_run_তথ্য(s, len, comp[x]);
                   x += len;
                }
             }
@@ -674,49 +674,49 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
    }
 }
 
-static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, float *data)
+স্থির পূর্ণসংখ্যা stbi_write_hdr_core(stbi__write_context *s, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, দশমিক *তথ্য)
 {
-   if (y <= 0 || x <= 0 || data == NULL)
-      return 0;
-   else {
+   যদি (y <= 0 || x <= 0 || তথ্য == ফাঁকা)
+      ফেরত 0;
+   অন্যথা {
       // Each component is stored separately. Allocate scratch space for full output scanline.
-      unsigned char *scratch = (unsigned char *) STBIW_MALLOC(x*4);
-      int i, len;
-      char buffer[128];
-      char header[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
-      s->func(s->context, header, sizeof(header)-1);
+      unsigned অক্ষর *scratch = (unsigned অক্ষর *) STBIW_MALLOC(x*4);
+      পূর্ণসংখ্যা i, len;
+      অক্ষর বাফার[128];
+      অক্ষর header[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
+      s->func(s->context, header, আকার(header)-1);
 
 #ifdef STBI_MSC_SECURE_CRT
-      len = sprintf_s(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#else
-      len = sprintf(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+      len = sprintf_s(বাফার, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#অন্যথা
+      len = sprintf(বাফার, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
 #endif
-      s->func(s->context, buffer, len);
+      s->func(s->context, বাফার, len);
 
-      for(i=0; i < y; i++)
-         stbiw__write_hdr_scanline(s, x, comp, scratch, data + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
+      জন্য(i=0; i < y; i++)
+         stbiw__write_hdr_scanline(s, x, comp, scratch, তথ্য + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
       STBIW_FREE(scratch);
-      return 1;
+      ফেরত 1;
    }
 }
 
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const float *data)
+STBIWDEF পূর্ণসংখ্যা stbi_write_hdr_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক দশমিক *তথ্য)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   ফেরত stbi_write_hdr_core(&s, x, y, comp, (দশমিক *) তথ্য);
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const float *data)
+STBIWDEF পূর্ণসংখ্যা stbi_write_hdr(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক দশমিক *তথ্য)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   যদি (stbi__start_write_file(&s,filename)) {
+      পূর্ণসংখ্যা r = stbi_write_hdr_core(&s, x, y, comp, (দশমিক *) তথ্য);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      ফেরত r;
+   } অন্যথা
+      ফেরত 0;
 }
 #endif // STBI_WRITE_NO_STDIO
 
@@ -728,69 +728,69 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 
 #ifndef STBIW_ZLIB_COMPRESS
 // stretchy buffer; stbiw__sbpush() == vector<>::push_back() -- stbiw__sbcount() == vector<>::size()
-#define stbiw__sbraw(a) ((int *) (a) - 2)
+#define stbiw__sbraw(a) ((পূর্ণসংখ্যা *) (a) - 2)
 #define stbiw__sbm(a)   stbiw__sbraw(a)[0]
 #define stbiw__sbn(a)   stbiw__sbraw(a)[1]
 
 #define stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
 #define stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
-#define stbiw__sbgrow(a,n)  stbiw__sbgrowf((void **) &(a), (n), sizeof(*(a)))
+#define stbiw__sbgrow(a,n)  stbiw__sbgrowf((শূন্য **) &(a), (n), আকার(*(a)))
 
 #define stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
 #define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
 #define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
 
-static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
+স্থির শূন্য *stbiw__sbgrowf(শূন্য **arr, পূর্ণসংখ্যা increment, পূর্ণসংখ্যা itemsize)
 {
-   int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
-   void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(int)*2) : 0, itemsize * m + sizeof(int)*2);
+   পূর্ণসংখ্যা m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
+   শূন্য *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + আকার(পূর্ণসংখ্যা)*2) : 0, itemsize * m + আকার(পূর্ণসংখ্যা)*2);
    STBIW_ASSERT(p);
-   if (p) {
-      if (!*arr) ((int *) p)[1] = 0;
-      *arr = (void *) ((int *) p + 2);
+   যদি (p) {
+      যদি (!*arr) ((পূর্ণসংখ্যা *) p)[1] = 0;
+      *arr = (শূন্য *) ((পূর্ণসংখ্যা *) p + 2);
       stbiw__sbm(*arr) = m;
    }
-   return *arr;
+   ফেরত *arr;
 }
 
-static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
+স্থির unsigned অক্ষর *stbiw__zlib_flushf(unsigned অক্ষর *তথ্য, unsigned পূর্ণসংখ্যা *bitbuffer, পূর্ণসংখ্যা *bitcount)
 {
-   while (*bitcount >= 8) {
-      stbiw__sbpush(data, STBIW_UCHAR(*bitbuffer));
+   যখন (*bitcount >= 8) {
+      stbiw__sbpush(তথ্য, STBIW_UCHAR(*bitbuffer));
       *bitbuffer >>= 8;
       *bitcount -= 8;
    }
-   return data;
+   ফেরত তথ্য;
 }
 
-static int stbiw__zlib_bitrev(int code, int codebits)
+স্থির পূর্ণসংখ্যা stbiw__zlib_bitrev(পূর্ণসংখ্যা code, পূর্ণসংখ্যা codebits)
 {
-   int res=0;
-   while (codebits--) {
+   পূর্ণসংখ্যা res=0;
+   যখন (codebits--) {
       res = (res << 1) | (code & 1);
       code >>= 1;
    }
-   return res;
+   ফেরত res;
 }
 
-static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
+স্থির unsigned পূর্ণসংখ্যা stbiw__zlib_countm(unsigned অক্ষর *a, unsigned অক্ষর *b, পূর্ণসংখ্যা limit)
 {
-   int i;
-   for (i=0; i < limit && i < 258; ++i)
-      if (a[i] != b[i]) break;
-   return i;
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < limit && i < 258; ++i)
+      যদি (a[i] != b[i]) বিরতি;
+   ফেরত i;
 }
 
-static unsigned int stbiw__zhash(unsigned char *data)
+স্থির unsigned পূর্ণসংখ্যা stbiw__zhash(unsigned অক্ষর *তথ্য)
 {
-   stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
+   stbiw_uint32 hash = তথ্য[0] + (তথ্য[1] << 8) + (তথ্য[2] << 16);
    hash ^= hash << 3;
    hash += hash >> 5;
    hash ^= hash << 4;
    hash += hash >> 17;
    hash ^= hash << 25;
    hash += hash >> 6;
-   return hash;
+   ফেরত hash;
 }
 
 #define stbiw__zlib_flush() (out = stbiw__zlib_flushf(out, &bitbuf, &bitcount))
@@ -809,102 +809,102 @@ static unsigned int stbiw__zhash(unsigned char *data)
 
 #endif // STBIW_ZLIB_COMPRESS
 
-unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
+unsigned অক্ষর * stbi_zlib_compress(unsigned অক্ষর *তথ্য, পূর্ণসংখ্যা তথ্য_len, পূর্ণসংখ্যা *out_len, পূর্ণসংখ্যা quality)
 {
 #ifdef STBIW_ZLIB_COMPRESS
    // user provided a zlib compress implementation, use that
-   return STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
-#else // use builtin
-   static unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
-   static unsigned char  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
-   static unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
-   static unsigned char  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
-   unsigned int bitbuf=0;
-   int i,j, bitcount=0;
-   unsigned char *out = NULL;
-   unsigned char ***hash_table = (unsigned char***) STBIW_MALLOC(stbiw__ZHASH * sizeof(char**));
-   if (hash_table == NULL)
-      return NULL;
-   if (quality < 5) quality = 5;
+   ফেরত STBIW_ZLIB_COMPRESS(তথ্য, তথ্য_len, out_len, quality);
+#অন্যথা // use builtin
+   স্থির unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
+   স্থির unsigned অক্ষর  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
+   স্থির unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
+   স্থির unsigned অক্ষর  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
+   unsigned পূর্ণসংখ্যা bitbuf=0;
+   পূর্ণসংখ্যা i,j, bitcount=0;
+   unsigned অক্ষর *out = ফাঁকা;
+   unsigned অক্ষর ***hash_table = (unsigned অক্ষর***) STBIW_MALLOC(stbiw__ZHASH * আকার(অক্ষর**));
+   যদি (hash_table == ফাঁকা)
+      ফেরত ফাঁকা;
+   যদি (quality < 5) quality = 5;
 
    stbiw__sbpush(out, 0x78);   // DEFLATE 32K window
    stbiw__sbpush(out, 0x5e);   // FLEVEL = 1
    stbiw__zlib_add(1,1);  // BFINAL = 1
    stbiw__zlib_add(1,2);  // BTYPE = 1 -- fixed huffman
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      hash_table[i] = NULL;
+   জন্য (i=0; i < stbiw__ZHASH; ++i)
+      hash_table[i] = ফাঁকা;
 
    i=0;
-   while (i < data_len-3) {
+   যখন (i < তথ্য_len-3) {
       // hash next 3 bytes of data to be compressed
-      int h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
-      unsigned char *bestloc = 0;
-      unsigned char **hlist = hash_table[h];
-      int n = stbiw__sbcount(hlist);
-      for (j=0; j < n; ++j) {
-         if (hlist[j]-data > i-32768) { // if entry lies within window
-            int d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
-            if (d >= best) best=d,bestloc=hlist[j];
+      পূর্ণসংখ্যা h = stbiw__zhash(তথ্য+i)&(stbiw__ZHASH-1), best=3;
+      unsigned অক্ষর *bestloc = 0;
+      unsigned অক্ষর **hlist = hash_table[h];
+      পূর্ণসংখ্যা n = stbiw__sbcount(hlist);
+      জন্য (j=0; j < n; ++j) {
+         যদি (hlist[j]-তথ্য > i-32768) { // if entry lies within window
+            পূর্ণসংখ্যা d = stbiw__zlib_countm(hlist[j], তথ্য+i, তথ্য_len-i);
+            যদি (d >= best) best=d,bestloc=hlist[j];
          }
       }
       // when hash table entry is too long, delete half the entries
-      if (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
-         STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, sizeof(hash_table[h][0])*quality);
+      যদি (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
+         STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, আকার(hash_table[h][0])*quality);
          stbiw__sbn(hash_table[h]) = quality;
       }
-      stbiw__sbpush(hash_table[h],data+i);
+      stbiw__sbpush(hash_table[h],তথ্য+i);
 
-      if (bestloc) {
+      যদি (bestloc) {
          // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
-         h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
+         h = stbiw__zhash(তথ্য+i+1)&(stbiw__ZHASH-1);
          hlist = hash_table[h];
          n = stbiw__sbcount(hlist);
-         for (j=0; j < n; ++j) {
-            if (hlist[j]-data > i-32767) {
-               int e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
-               if (e > best) { // if next match is better, bail on current match
-                  bestloc = NULL;
-                  break;
+         জন্য (j=0; j < n; ++j) {
+            যদি (hlist[j]-তথ্য > i-32767) {
+               পূর্ণসংখ্যা e = stbiw__zlib_countm(hlist[j], তথ্য+i+1, তথ্য_len-i-1);
+               যদি (e > best) { // if next match is better, bail on current match
+                  bestloc = ফাঁকা;
+                  বিরতি;
                }
             }
          }
       }
 
-      if (bestloc) {
-         int d = (int) (data+i - bestloc); // distance back
+      যদি (bestloc) {
+         পূর্ণসংখ্যা d = (পূর্ণসংখ্যা) (তথ্য+i - bestloc); // distance back
          STBIW_ASSERT(d <= 32767 && best <= 258);
-         for (j=0; best > lengthc[j+1]-1; ++j);
+         জন্য (j=0; best > lengthc[j+1]-1; ++j);
          stbiw__zlib_huff(j+257);
-         if (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
-         for (j=0; d > distc[j+1]-1; ++j);
+         যদি (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
+         জন্য (j=0; d > distc[j+1]-1; ++j);
          stbiw__zlib_add(stbiw__zlib_bitrev(j,5),5);
-         if (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
+         যদি (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
          i += best;
-      } else {
-         stbiw__zlib_huffb(data[i]);
+      } অন্যথা {
+         stbiw__zlib_huffb(তথ্য[i]);
          ++i;
       }
    }
    // write out final bytes
-   for (;i < data_len; ++i)
-      stbiw__zlib_huffb(data[i]);
+   জন্য (;i < তথ্য_len; ++i)
+      stbiw__zlib_huffb(তথ্য[i]);
    stbiw__zlib_huff(256); // end of block
    // pad with 0 bits to byte boundary
-   while (bitcount)
+   যখন (bitcount)
       stbiw__zlib_add(0,1);
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      (void) stbiw__sbfree(hash_table[i]);
+   জন্য (i=0; i < stbiw__ZHASH; ++i)
+      (শূন্য) stbiw__sbfree(hash_table[i]);
    STBIW_FREE(hash_table);
 
    {
       // compute adler32 on input
-      unsigned int s1=1, s2=0;
-      int blocklen = (int) (data_len % 5552);
+      unsigned পূর্ণসংখ্যা s1=1, s2=0;
+      পূর্ণসংখ্যা blocklen = (পূর্ণসংখ্যা) (তথ্য_len % 5552);
       j=0;
-      while (j < data_len) {
-         for (i=0; i < blocklen; ++i) s1 += data[j+i], s2 += s1;
+      যখন (j < তথ্য_len) {
+         জন্য (i=0; i < blocklen; ++i) s1 += তথ্য[j+i], s2 += s1;
          s1 %= 65521, s2 %= 65521;
          j += blocklen;
          blocklen = 5552;
@@ -917,13 +917,13 @@ unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_l
    *out_len = stbiw__sbn(out);
    // make returned pointer freeable
    STBIW_MEMMOVE(stbiw__sbraw(out), out, *out_len);
-   return (unsigned char *) stbiw__sbraw(out);
+   ফেরত (unsigned অক্ষর *) stbiw__sbraw(out);
 #endif // STBIW_ZLIB_COMPRESS
 }
 
-static unsigned int stbiw__crc32(unsigned char *buffer, int len)
+স্থির unsigned পূর্ণসংখ্যা stbiw__crc32(unsigned অক্ষর *বাফার, পূর্ণসংখ্যা len)
 {
-   static unsigned int crc_table[256] =
+   স্থির unsigned পূর্ণসংখ্যা crc_table[256] =
    {
       0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
       0x0eDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -959,120 +959,120 @@ static unsigned int stbiw__crc32(unsigned char *buffer, int len)
       0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
    };
 
-   unsigned int crc = ~0u;
-   int i;
-   for (i=0; i < len; ++i)
-      crc = (crc >> 8) ^ crc_table[buffer[i] ^ (crc & 0xff)];
-   return ~crc;
+   unsigned পূর্ণসংখ্যা crc = ~0u;
+   পূর্ণসংখ্যা i;
+   জন্য (i=0; i < len; ++i)
+      crc = (crc >> 8) ^ crc_table[বাফার[i] ^ (crc & 0xff)];
+   ফেরত ~crc;
 }
 
 #define stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
-#define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
-#define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
+#define stbiw__wp32(তথ্য,v) stbiw__wpng4(তথ্য, (v)>>24,(v)>>16,(v)>>8,(v));
+#define stbiw__wptag(তথ্য,s) stbiw__wpng4(তথ্য, s[0],s[1],s[2],s[3])
 
-static void stbiw__wpcrc(unsigned char **data, int len)
+স্থির শূন্য stbiw__wpcrc(unsigned অক্ষর **তথ্য, পূর্ণসংখ্যা len)
 {
-   unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
-   stbiw__wp32(*data, crc);
+   unsigned পূর্ণসংখ্যা crc = stbiw__crc32(*তথ্য - len - 4, len+4);
+   stbiw__wp32(*তথ্য, crc);
 }
 
-static unsigned char stbiw__paeth(int a, int b, int c)
+স্থির unsigned অক্ষর stbiw__paeth(পূর্ণসংখ্যা a, পূর্ণসংখ্যা b, পূর্ণসংখ্যা c)
 {
-   int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
-   if (pa <= pb && pa <= pc) return STBIW_UCHAR(a);
-   if (pb <= pc) return STBIW_UCHAR(b);
-   return STBIW_UCHAR(c);
+   পূর্ণসংখ্যা p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
+   যদি (pa <= pb && pa <= pc) ফেরত STBIW_UCHAR(a);
+   যদি (pb <= pc) ফেরত STBIW_UCHAR(b);
+   ফেরত STBIW_UCHAR(c);
 }
 
 // @OPTIMIZE: provide an option that always forces left-predict or paeth predict
-static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
+স্থির শূন্য stbiw_encode_png_সারি(unsigned অক্ষর *pixels, পূর্ণসংখ্যা stride_bytes, পূর্ণসংখ্যা width, পূর্ণসংখ্যা height, পূর্ণসংখ্যা y, পূর্ণসংখ্যা n, পূর্ণসংখ্যা filter_type, signed অক্ষর *সারি_বাফার)
 {
-   static int mapping[] = { 0,1,2,3,4 };
-   static int firstmap[] = { 0,1,0,5,6 };
-   int *mymap = (y != 0) ? mapping : firstmap;
-   int i;
-   int type = mymap[filter_type];
-   unsigned char *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
-   int signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
-   for (i = 0; i < n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - (z[i-signed_stride]>>1); break;
-         case 4: line_buffer[i] = (signed char) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); break;
-         case 5: line_buffer[i] = z[i]; break;
-         case 6: line_buffer[i] = z[i]; break;
+   স্থির পূর্ণসংখ্যা mapping[] = { 0,1,2,3,4 };
+   স্থির পূর্ণসংখ্যা firstmap[] = { 0,1,0,5,6 };
+   পূর্ণসংখ্যা *mymap = (y != 0) ? mapping : firstmap;
+   পূর্ণসংখ্যা i;
+   পূর্ণসংখ্যা type = mymap[filter_type];
+   unsigned অক্ষর *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
+   পূর্ণসংখ্যা signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
+   জন্য (i = 0; i < n; ++i) {
+      নির্বাচন (type) {
+         ক্ষেত্র 0: সারি_বাফার[i] = z[i]; বিরতি;
+         ক্ষেত্র 1: সারি_বাফার[i] = z[i]; বিরতি;
+         ক্ষেত্র 2: সারি_বাফার[i] = z[i] - z[i-signed_stride]; বিরতি;
+         ক্ষেত্র 3: সারি_বাফার[i] = z[i] - (z[i-signed_stride]>>1); বিরতি;
+         ক্ষেত্র 4: সারি_বাফার[i] = (signed অক্ষর) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); বিরতি;
+         ক্ষেত্র 5: সারি_বাফার[i] = z[i]; বিরতি;
+         ক্ষেত্র 6: সারি_বাফার[i] = z[i]; বিরতি;
       }
    }
-   for (i=n; i < width*n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i] - z[i-n]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); break;
-         case 4: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); break;
-         case 5: line_buffer[i] = z[i] - (z[i-n]>>1); break;
-         case 6: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], 0,0); break;
+   জন্য (i=n; i < width*n; ++i) {
+      নির্বাচন (type) {
+         ক্ষেত্র 0: সারি_বাফার[i] = z[i]; বিরতি;
+         ক্ষেত্র 1: সারি_বাফার[i] = z[i] - z[i-n]; বিরতি;
+         ক্ষেত্র 2: সারি_বাফার[i] = z[i] - z[i-signed_stride]; বিরতি;
+         ক্ষেত্র 3: সারি_বাফার[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); বিরতি;
+         ক্ষেত্র 4: সারি_বাফার[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); বিরতি;
+         ক্ষেত্র 5: সারি_বাফার[i] = z[i] - (z[i-n]>>1); বিরতি;
+         ক্ষেত্র 6: সারি_বাফার[i] = z[i] - stbiw__paeth(z[i-n], 0,0); বিরতি;
       }
    }
 }
 
-unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+unsigned অক্ষর *stbi_write_png_to_mem(unsigned অক্ষর *pixels, পূর্ণসংখ্যা stride_bytes, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা n, পূর্ণসংখ্যা *out_len)
 {
-   int force_filter = stbi_write_force_png_filter;
-   int ctype[5] = { -1, 0, 4, 2, 6 };
-   unsigned char sig[8] = { 137,80,78,71,13,10,26,10 };
-   unsigned char *out,*o, *filt, *zlib;
-   signed char *line_buffer;
-   int j,zlen;
+   পূর্ণসংখ্যা force_filter = stbi_write_force_png_filter;
+   পূর্ণসংখ্যা ctype[5] = { -1, 0, 4, 2, 6 };
+   unsigned অক্ষর sig[8] = { 137,80,78,71,13,10,26,10 };
+   unsigned অক্ষর *out,*o, *filt, *zlib;
+   signed অক্ষর *সারি_বাফার;
+   পূর্ণসংখ্যা j,zlen;
 
-   if (stride_bytes == 0)
+   যদি (stride_bytes == 0)
       stride_bytes = x * n;
 
-   if (force_filter >= 5) {
+   যদি (force_filter >= 5) {
       force_filter = -1;
    }
 
-   filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); if (!filt) return 0;
-   line_buffer = (signed char *) STBIW_MALLOC(x * n); if (!line_buffer) { STBIW_FREE(filt); return 0; }
-   for (j=0; j < y; ++j) {
-      int filter_type;
-      if (force_filter > -1) {
+   filt = (unsigned অক্ষর *) STBIW_MALLOC((x*n+1) * y); যদি (!filt) ফেরত 0;
+   সারি_বাফার = (signed অক্ষর *) STBIW_MALLOC(x * n); যদি (!সারি_বাফার) { STBIW_FREE(filt); ফেরত 0; }
+   জন্য (j=0; j < y; ++j) {
+      পূর্ণসংখ্যা filter_type;
+      যদি (force_filter > -1) {
          filter_type = force_filter;
-         stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, force_filter, line_buffer);
-      } else { // Estimate the best filter by running through all of them:
-         int best_filter = 0, best_filter_val = 0x7fffffff, est, i;
-         for (filter_type = 0; filter_type < 5; filter_type++) {
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, filter_type, line_buffer);
+         stbiw_encode_png_সারি(pixels, stride_bytes, x, y, j, n, force_filter, সারি_বাফার);
+      } অন্যথা { // Estimate the best filter by running through all of them:
+         পূর্ণসংখ্যা best_filter = 0, best_filter_val = 0x7fffffff, est, i;
+         জন্য (filter_type = 0; filter_type < 5; filter_type++) {
+            stbiw_encode_png_সারি(pixels, stride_bytes, x, y, j, n, filter_type, সারি_বাফার);
 
             // Estimate the entropy of the line using this filter; the less, the better.
             est = 0;
-            for (i = 0; i < x*n; ++i) {
-               est += abs((signed char) line_buffer[i]);
+            জন্য (i = 0; i < x*n; ++i) {
+               est += abs((signed অক্ষর) সারি_বাফার[i]);
             }
-            if (est < best_filter_val) {
+            যদি (est < best_filter_val) {
                best_filter_val = est;
                best_filter = filter_type;
             }
          }
-         if (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, best_filter, line_buffer);
+         যদি (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
+            stbiw_encode_png_সারি(pixels, stride_bytes, x, y, j, n, best_filter, সারি_বাফার);
             filter_type = best_filter;
          }
       }
       // when we get here, filter_type contains the filter type, and line_buffer contains the data
-      filt[j*(x*n+1)] = (unsigned char) filter_type;
-      STBIW_MEMMOVE(filt+j*(x*n+1)+1, line_buffer, x*n);
+      filt[j*(x*n+1)] = (unsigned অক্ষর) filter_type;
+      STBIW_MEMMOVE(filt+j*(x*n+1)+1, সারি_বাফার, x*n);
    }
-   STBIW_FREE(line_buffer);
+   STBIW_FREE(সারি_বাফার);
    zlib = stbi_zlib_compress(filt, y*( x*n+1), &zlen, stbi_write_png_compression_level);
    STBIW_FREE(filt);
-   if (!zlib) return 0;
+   যদি (!zlib) ফেরত 0;
 
    // each tag requires 12 bytes of overhead
-   out = (unsigned char *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
-   if (!out) return 0;
+   out = (unsigned অক্ষর *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
+   যদি (!out) ফেরত 0;
    *out_len = 8 + 12+13 + 12+zlen + 12;
 
    o=out;
@@ -1101,38 +1101,38 @@ unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, in
 
    STBIW_ASSERT(o == out + *out_len);
 
-   return out;
+   ফেরত out;
 }
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF পূর্ণসংখ্যা stbi_write_png(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য, পূর্ণসংখ্যা stride_bytes)
 {
    FILE *f;
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   পূর্ণসংখ্যা len;
+   unsigned অক্ষর *png = stbi_write_png_to_mem((unsigned অক্ষর *) তথ্য, stride_bytes, x, y, comp, &len);
+   যদি (png == ফাঁকা) ফেরত 0;
 #ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+   যদি (fopen_s(&f, filename, "wb"))
+      f = ফাঁকা;
+#অন্যথা
    f = fopen(filename, "wb");
 #endif
-   if (!f) { STBIW_FREE(png); return 0; }
+   যদি (!f) { STBIW_FREE(png); ফেরত 0; }
    fwrite(png, 1, len, f);
    fclose(f);
    STBIW_FREE(png);
-   return 1;
+   ফেরত 1;
 }
 #endif
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF পূর্ণসংখ্যা stbi_write_png_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য, পূর্ণসংখ্যা stride_bytes)
 {
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   পূর্ণসংখ্যা len;
+   unsigned অক্ষর *png = stbi_write_png_to_mem((unsigned অক্ষর *) তথ্য, stride_bytes, x, y, comp, &len);
+   যদি (png == ফাঁকা) ফেরত 0;
    func(context, png, len);
    STBIW_FREE(png);
-   return 1;
+   ফেরত 1;
 }
 
 
@@ -1144,17 +1144,17 @@ STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x,
  * public domain Simple, Minimalistic JPEG writer - http://www.jonolick.com/code.html
  */
 
-static const unsigned char stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
+স্থির ধ্রুবক unsigned অক্ষর stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
       24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
 
-static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitCntP, const unsigned short *bs) {
-   int bitBuf = *bitBufP, bitCnt = *bitCntP;
+স্থির শূন্য stbiw__jpg_writeBits(stbi__write_context *s, পূর্ণসংখ্যা *bitBufP, পূর্ণসংখ্যা *bitCntP, ধ্রুবক unsigned short *bs) {
+   পূর্ণসংখ্যা bitBuf = *bitBufP, bitCnt = *bitCntP;
    bitCnt += bs[1];
    bitBuf |= bs[0] << (24 - bitCnt);
-   while(bitCnt >= 8) {
-      unsigned char c = (bitBuf >> 16) & 255;
+   যখন(bitCnt >= 8) {
+      unsigned অক্ষর c = (bitBuf >> 16) & 255;
       stbiw__putc(s, c);
-      if(c == 255) {
+      যদি(c == 255) {
          stbiw__putc(s, 0);
       }
       bitBuf <<= 8;
@@ -1164,24 +1164,24 @@ static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitC
    *bitCntP = bitCnt;
 }
 
-static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float *d4p, float *d5p, float *d6p, float *d7p) {
-   float d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
-   float z1, z2, z3, z4, z5, z11, z13;
+স্থির শূন্য stbiw__jpg_DCT(দশমিক *d0p, দশমিক *d1p, দশমিক *d2p, দশমিক *d3p, দশমিক *d4p, দশমিক *d5p, দশমিক *d6p, দশমিক *d7p) {
+   দশমিক d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
+   দশমিক z1, z2, z3, z4, z5, z11, z13;
 
-   float tmp0 = d0 + d7;
-   float tmp7 = d0 - d7;
-   float tmp1 = d1 + d6;
-   float tmp6 = d1 - d6;
-   float tmp2 = d2 + d5;
-   float tmp5 = d2 - d5;
-   float tmp3 = d3 + d4;
-   float tmp4 = d3 - d4;
+   দশমিক tmp0 = d0 + d7;
+   দশমিক tmp7 = d0 - d7;
+   দশমিক tmp1 = d1 + d6;
+   দশমিক tmp6 = d1 - d6;
+   দশমিক tmp2 = d2 + d5;
+   দশমিক tmp5 = d2 - d5;
+   দশমিক tmp3 = d3 + d4;
+   দশমিক tmp4 = d3 - d4;
 
    // Even part
-   float tmp10 = tmp0 + tmp3;   // phase 2
-   float tmp13 = tmp0 - tmp3;
-   float tmp11 = tmp1 + tmp2;
-   float tmp12 = tmp1 - tmp2;
+   দশমিক tmp10 = tmp0 + tmp3;   // phase 2
+   দশমিক tmp13 = tmp0 - tmp3;
+   দশমিক tmp11 = tmp1 + tmp2;
+   দশমিক tmp12 = tmp1 - tmp2;
 
    d0 = tmp10 + tmp11;       // phase 3
    d4 = tmp10 - tmp11;
@@ -1212,43 +1212,43 @@ static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float
    *d0p = d0;  *d2p = d2;  *d4p = d4;  *d6p = d6;
 }
 
-static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
-   int tmp1 = val < 0 ? -val : val;
+স্থির শূন্য stbiw__jpg_calcBits(পূর্ণসংখ্যা val, unsigned short bits[2]) {
+   পূর্ণসংখ্যা tmp1 = val < 0 ? -val : val;
    val = val < 0 ? val-1 : val;
    bits[1] = 1;
-   while(tmp1 >>= 1) {
+   যখন(tmp1 >>= 1) {
       ++bits[1];
    }
    bits[0] = val & ((1<<bits[1])-1);
 }
 
-static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt, float *CDU, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
-   const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
-   const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
-   int dataOff, i, diff, end0pos;
-   int DU[64];
+স্থির পূর্ণসংখ্যা stbiw__jpg_processDU(stbi__write_context *s, পূর্ণসংখ্যা *bitBuf, পূর্ণসংখ্যা *bitCnt, দশমিক *CDU, দশমিক *fdtbl, পূর্ণসংখ্যা DC, ধ্রুবক unsigned short HTDC[256][2], ধ্রুবক unsigned short HTAC[256][2]) {
+   ধ্রুবক unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
+   ধ্রুবক unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
+   পূর্ণসংখ্যা তথ্য_Off, i, diff, end0pos;
+   পূর্ণসংখ্যা DU[64];
 
    // DCT rows
-   for(dataOff=0; dataOff<64; dataOff+=8) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+1], &CDU[dataOff+2], &CDU[dataOff+3], &CDU[dataOff+4], &CDU[dataOff+5], &CDU[dataOff+6], &CDU[dataOff+7]);
+   জন্য(তথ্য_Off=0; তথ্য_Off<64; তথ্য_Off+=8) {
+      stbiw__jpg_DCT(&CDU[তথ্য_Off], &CDU[তথ্য_Off+1], &CDU[তথ্য_Off+2], &CDU[তথ্য_Off+3], &CDU[তথ্য_Off+4], &CDU[তথ্য_Off+5], &CDU[তথ্য_Off+6], &CDU[তথ্য_Off+7]);
    }
    // DCT columns
-   for(dataOff=0; dataOff<8; ++dataOff) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+8], &CDU[dataOff+16], &CDU[dataOff+24], &CDU[dataOff+32], &CDU[dataOff+40], &CDU[dataOff+48], &CDU[dataOff+56]);
+   জন্য(তথ্য_Off=0; তথ্য_Off<8; ++তথ্য_Off) {
+      stbiw__jpg_DCT(&CDU[তথ্য_Off], &CDU[তথ্য_Off+8], &CDU[তথ্য_Off+16], &CDU[তথ্য_Off+24], &CDU[তথ্য_Off+32], &CDU[তথ্য_Off+40], &CDU[তথ্য_Off+48], &CDU[তথ্য_Off+56]);
    }
    // Quantize/descale/zigzag the coefficients
-   for(i=0; i<64; ++i) {
-      float v = CDU[i]*fdtbl[i];
+   জন্য(i=0; i<64; ++i) {
+      দশমিক v = CDU[i]*fdtbl[i];
       // DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? ceilf(v - 0.5f) : floorf(v + 0.5f));
       // ceilf() and floorf() are C99, not C89, but I /think/ they're not needed here anyway?
-      DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? v - 0.5f : v + 0.5f);
+      DU[stbiw__jpg_ZigZag[i]] = (পূর্ণসংখ্যা)(v < 0 ? v - 0.5f : v + 0.5f);
    }
 
    // Encode DC
    diff = DU[0] - DC;
-   if (diff == 0) {
+   যদি (diff == 0) {
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[0]);
-   } else {
+   } অন্যথা {
       unsigned short bits[2];
       stbiw__jpg_calcBits(diff, bits);
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[bits[1]]);
@@ -1256,24 +1256,24 @@ static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt
    }
    // Encode ACs
    end0pos = 63;
-   for(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
+   জন্য(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
    }
    // end0pos = first element in reverse order !=0
-   if(end0pos == 0) {
+   যদি(end0pos == 0) {
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
-      return DU[0];
+      ফেরত DU[0];
    }
-   for(i = 1; i <= end0pos; ++i) {
-      int startpos = i;
-      int nrzeroes;
+   জন্য(i = 1; i <= end0pos; ++i) {
+      পূর্ণসংখ্যা startpos = i;
+      পূর্ণসংখ্যা nrzeroes;
       unsigned short bits[2];
-      for (; DU[i]==0 && i<=end0pos; ++i) {
+      জন্য (; DU[i]==0 && i<=end0pos; ++i) {
       }
       nrzeroes = i-startpos;
-      if ( nrzeroes >= 16 ) {
-         int lng = nrzeroes>>4;
-         int nrmarker;
-         for (nrmarker=1; nrmarker <= lng; ++nrmarker)
+      যদি ( nrzeroes >= 16 ) {
+         পূর্ণসংখ্যা lng = nrzeroes>>4;
+         পূর্ণসংখ্যা nrmarker;
+         জন্য (nrmarker=1; nrmarker <= lng; ++nrmarker)
             stbiw__jpg_writeBits(s, bitBuf, bitCnt, M16zeroes);
          nrzeroes &= 15;
       }
@@ -1281,18 +1281,18 @@ static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTAC[(nrzeroes<<4)+bits[1]]);
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
    }
-   if(end0pos != 63) {
+   যদি(end0pos != 63) {
       stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
    }
-   return DU[0];
+   ফেরত DU[0];
 }
 
-static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, int comp, const void* data, int quality) {
+স্থির পূর্ণসংখ্যা stbi_write_jpg_core(stbi__write_context *s, পূর্ণসংখ্যা width, পূর্ণসংখ্যা height, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য* তথ্য, পূর্ণসংখ্যা quality) {
    // Constants that don't pollute global namespace
-   static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
-   static const unsigned char std_dc_luminance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
-   static const unsigned char std_ac_luminance_values[] = {
+   স্থির ধ্রুবক unsigned অক্ষর std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
+   স্থির ধ্রুবক unsigned অক্ষর std_dc_luminance_মানসমূহ[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   স্থির ধ্রুবক unsigned অক্ষর std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
+   স্থির ধ্রুবক unsigned অক্ষর std_ac_luminance_মানসমূহ[] = {
       0x01,0x02,0x03,0x00,0x04,0x11,0x05,0x12,0x21,0x31,0x41,0x06,0x13,0x51,0x61,0x07,0x22,0x71,0x14,0x32,0x81,0x91,0xa1,0x08,
       0x23,0x42,0xb1,0xc1,0x15,0x52,0xd1,0xf0,0x24,0x33,0x62,0x72,0x82,0x09,0x0a,0x16,0x17,0x18,0x19,0x1a,0x25,0x26,0x27,0x28,
       0x29,0x2a,0x34,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,0x59,
@@ -1301,10 +1301,10 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xb7,0xb8,0xb9,0xba,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xe1,0xe2,
       0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
-   static const unsigned char std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
-   static const unsigned char std_dc_chrominance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
-   static const unsigned char std_ac_chrominance_values[] = {
+   স্থির ধ্রুবক unsigned অক্ষর std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
+   স্থির ধ্রুবক unsigned অক্ষর std_dc_chrominance_মানসমূহ[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   স্থির ধ্রুবক unsigned অক্ষর std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
+   স্থির ধ্রুবক unsigned অক্ষর std_ac_chrominance_মানসমূহ[] = {
       0x00,0x01,0x02,0x03,0x11,0x04,0x05,0x21,0x31,0x06,0x12,0x41,0x51,0x07,0x61,0x71,0x13,0x22,0x32,0x81,0x08,0x14,0x42,0x91,
       0xa1,0xb1,0xc1,0x09,0x23,0x33,0x52,0xf0,0x15,0x62,0x72,0xd1,0x0a,0x16,0x24,0x34,0xe1,0x25,0xf1,0x17,0x18,0x19,0x1a,0x26,
       0x27,0x28,0x29,0x2a,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,
@@ -1314,9 +1314,9 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
    // Huffman tables
-   static const unsigned short YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
-   static const unsigned short UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
-   static const unsigned short YAC_HT[256][2] = {
+   স্থির ধ্রুবক unsigned short YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
+   স্থির ধ্রুবক unsigned short UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
+   স্থির ধ্রুবক unsigned short YAC_HT[256][2] = {
       {10,4},{0,2},{1,2},{4,3},{11,4},{26,5},{120,7},{248,8},{1014,10},{65410,16},{65411,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {12,4},{27,5},{121,7},{502,9},{2038,11},{65412,16},{65413,16},{65414,16},{65415,16},{65416,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {28,5},{249,8},{1015,10},{4084,12},{65417,16},{65418,16},{65419,16},{65420,16},{65421,16},{65422,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1334,7 +1334,7 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {65515,16},{65516,16},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {2041,11},{65525,16},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const unsigned short UVAC_HT[256][2] = {
+   স্থির ধ্রুবক unsigned short UVAC_HT[256][2] = {
       {0,2},{1,2},{4,3},{10,4},{24,5},{25,5},{56,6},{120,7},{500,9},{1014,10},{4084,12},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {11,4},{57,6},{246,8},{501,9},{2038,11},{4085,12},{65416,16},{65417,16},{65418,16},{65419,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {26,5},{247,8},{1015,10},{4086,12},{32706,15},{65420,16},{65421,16},{65422,16},{65423,16},{65424,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1352,34 +1352,34 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {16352,14},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{65525,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {1018,10},{32707,15},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const int YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
+   স্থির ধ্রুবক পূর্ণসংখ্যা YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
                              37,56,68,109,103,77,24,35,55,64,81,104,113,92,49,64,78,87,103,121,120,101,72,92,95,98,112,100,103,99};
-   static const int UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
+   স্থির ধ্রুবক পূর্ণসংখ্যা UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
                               99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
-   static const float aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
+   স্থির ধ্রুবক দশমিক aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
                                  1.0f * 2.828427125f, 0.785694958f * 2.828427125f, 0.541196100f * 2.828427125f, 0.275899379f * 2.828427125f };
 
-   int row, col, i, k;
-   float fdtbl_Y[64], fdtbl_UV[64];
-   unsigned char YTable[64], UVTable[64];
+   পূর্ণসংখ্যা row, col, i, k;
+   দশমিক fdtbl_Y[64], fdtbl_UV[64];
+   unsigned অক্ষর YTable[64], UVTable[64];
 
-   if(!data || !width || !height || comp > 4 || comp < 1) {
-      return 0;
+   যদি(!তথ্য || !width || !height || comp > 4 || comp < 1) {
+      ফেরত 0;
    }
 
    quality = quality ? quality : 90;
    quality = quality < 1 ? 1 : quality > 100 ? 100 : quality;
    quality = quality < 50 ? 5000 / quality : 200 - quality * 2;
 
-   for(i = 0; i < 64; ++i) {
-      int uvti, yti = (YQT[i]*quality+50)/100;
-      YTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
+   জন্য(i = 0; i < 64; ++i) {
+      পূর্ণসংখ্যা uvti, yti = (YQT[i]*quality+50)/100;
+      YTable[stbiw__jpg_ZigZag[i]] = (unsigned অক্ষর) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
       uvti = (UVQT[i]*quality+50)/100;
-      UVTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
+      UVTable[stbiw__jpg_ZigZag[i]] = (unsigned অক্ষর) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
    }
 
-   for(row = 0, k = 0; row < 8; ++row) {
-      for(col = 0; col < 8; ++col, ++k) {
+   জন্য(row = 0, k = 0; row < 8; ++row) {
+      জন্য(col = 0; col < 8; ++col, ++k) {
          fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
          fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
       }
@@ -1387,55 +1387,55 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
 
    // Write Headers
    {
-      static const unsigned char head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
-      static const unsigned char head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
-      const unsigned char head1[] = { 0xFF,0xC0,0,0x11,8,(unsigned char)(height>>8),STBIW_UCHAR(height),(unsigned char)(width>>8),STBIW_UCHAR(width),
+      স্থির ধ্রুবক unsigned অক্ষর head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
+      স্থির ধ্রুবক unsigned অক্ষর head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
+      ধ্রুবক unsigned অক্ষর head1[] = { 0xFF,0xC0,0,0x11,8,(unsigned অক্ষর)(height>>8),STBIW_UCHAR(height),(unsigned অক্ষর)(width>>8),STBIW_UCHAR(width),
                                       3,1,0x11,0,2,0x11,1,3,0x11,1,0xFF,0xC4,0x01,0xA2,0 };
-      s->func(s->context, (void*)head0, sizeof(head0));
-      s->func(s->context, (void*)YTable, sizeof(YTable));
+      s->func(s->context, (শূন্য*)head0, আকার(head0));
+      s->func(s->context, (শূন্য*)YTable, আকার(YTable));
       stbiw__putc(s, 1);
-      s->func(s->context, UVTable, sizeof(UVTable));
-      s->func(s->context, (void*)head1, sizeof(head1));
-      s->func(s->context, (void*)(std_dc_luminance_nrcodes+1), sizeof(std_dc_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_luminance_values, sizeof(std_dc_luminance_values));
+      s->func(s->context, UVTable, আকার(UVTable));
+      s->func(s->context, (শূন্য*)head1, আকার(head1));
+      s->func(s->context, (শূন্য*)(std_dc_luminance_nrcodes+1), আকার(std_dc_luminance_nrcodes)-1);
+      s->func(s->context, (শূন্য*)std_dc_luminance_মানসমূহ, আকার(std_dc_luminance_মানসমূহ));
       stbiw__putc(s, 0x10); // HTYACinfo
-      s->func(s->context, (void*)(std_ac_luminance_nrcodes+1), sizeof(std_ac_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_luminance_values, sizeof(std_ac_luminance_values));
+      s->func(s->context, (শূন্য*)(std_ac_luminance_nrcodes+1), আকার(std_ac_luminance_nrcodes)-1);
+      s->func(s->context, (শূন্য*)std_ac_luminance_মানসমূহ, আকার(std_ac_luminance_মানসমূহ));
       stbiw__putc(s, 1); // HTUDCinfo
-      s->func(s->context, (void*)(std_dc_chrominance_nrcodes+1), sizeof(std_dc_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_chrominance_values, sizeof(std_dc_chrominance_values));
+      s->func(s->context, (শূন্য*)(std_dc_chrominance_nrcodes+1), আকার(std_dc_chrominance_nrcodes)-1);
+      s->func(s->context, (শূন্য*)std_dc_chrominance_মানসমূহ, আকার(std_dc_chrominance_মানসমূহ));
       stbiw__putc(s, 0x11); // HTUACinfo
-      s->func(s->context, (void*)(std_ac_chrominance_nrcodes+1), sizeof(std_ac_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_chrominance_values, sizeof(std_ac_chrominance_values));
-      s->func(s->context, (void*)head2, sizeof(head2));
+      s->func(s->context, (শূন্য*)(std_ac_chrominance_nrcodes+1), আকার(std_ac_chrominance_nrcodes)-1);
+      s->func(s->context, (শূন্য*)std_ac_chrominance_মানসমূহ, আকার(std_ac_chrominance_মানসমূহ));
+      s->func(s->context, (শূন্য*)head2, আকার(head2));
    }
 
    // Encode 8x8 macroblocks
    {
-      static const unsigned short fillBits[] = {0x7F, 7};
-      const unsigned char *imageData = (const unsigned char *)data;
-      int DCY=0, DCU=0, DCV=0;
-      int bitBuf=0, bitCnt=0;
+      স্থির ধ্রুবক unsigned short fillBits[] = {0x7F, 7};
+      ধ্রুবক unsigned অক্ষর *image_তথ্য = (ধ্রুবক unsigned অক্ষর *)তথ্য;
+      পূর্ণসংখ্যা DCY=0, DCU=0, DCV=0;
+      পূর্ণসংখ্যা bitBuf=0, bitCnt=0;
       // comp == 2 is grey+alpha (alpha is ignored)
-      int ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
-      int x, y, pos;
-      for(y = 0; y < height; y += 8) {
-         for(x = 0; x < width; x += 8) {
-            float YDU[64], UDU[64], VDU[64];
-            for(row = y, pos = 0; row < y+8; ++row) {
-               for(col = x; col < x+8; ++col, ++pos) {
-                  int p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
-                  float r, g, b;
-                  if(row >= height) {
+      পূর্ণসংখ্যা ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
+      পূর্ণসংখ্যা x, y, pos;
+      জন্য(y = 0; y < height; y += 8) {
+         জন্য(x = 0; x < width; x += 8) {
+            দশমিক YDU[64], UDU[64], VDU[64];
+            জন্য(row = y, pos = 0; row < y+8; ++row) {
+               জন্য(col = x; col < x+8; ++col, ++pos) {
+                  পূর্ণসংখ্যা p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
+                  দশমিক r, g, b;
+                  যদি(row >= height) {
                      p -= width*comp*(row+1 - height);
                   }
-                  if(col >= width) {
+                  যদি(col >= width) {
                      p -= comp*(col+1 - width);
                   }
 
-                  r = imageData[p+0];
-                  g = imageData[p+ofsG];
-                  b = imageData[p+ofsB];
+                  r = image_তথ্য[p+0];
+                  g = image_তথ্য[p+ofsG];
+                  b = image_তথ্য[p+ofsB];
                   YDU[pos]=+0.29900f*r+0.58700f*g+0.11400f*b-128;
                   UDU[pos]=-0.16874f*r-0.33126f*g+0.50000f*b;
                   VDU[pos]=+0.50000f*r-0.41869f*g-0.08131f*b;
@@ -1456,27 +1456,27 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
    stbiw__putc(s, 0xFF);
    stbiw__putc(s, 0xD9);
 
-   return 1;
+   ফেরত 1;
 }
 
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)
+STBIWDEF পূর্ণসংখ্যা stbi_write_jpg_to_func(stbi_write_func *func, শূন্য *context, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য, পূর্ণসংখ্যা quality)
 {
    stbi__write_context s;
    stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_jpg_core(&s, x, y, comp, (void *) data, quality);
+   ফেরত stbi_write_jpg_core(&s, x, y, comp, (শূন্য *) তথ্য, quality);
 }
 
 
 #ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void *data, int quality)
+STBIWDEF পূর্ণসংখ্যা stbi_write_jpg(অক্ষর ধ্রুবক *filename, পূর্ণসংখ্যা x, পূর্ণসংখ্যা y, পূর্ণসংখ্যা comp, ধ্রুবক শূন্য *তথ্য, পূর্ণসংখ্যা quality)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_jpg_core(&s, x, y, comp, data, quality);
+   যদি (stbi__start_write_file(&s,filename)) {
+      পূর্ণসংখ্যা r = stbi_write_jpg_core(&s, x, y, comp, তথ্য, quality);
       stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+      ফেরত r;
+   } অন্যথা
+      ফেরত 0;
 }
 #endif
 

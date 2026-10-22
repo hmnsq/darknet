@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+শূন্য gemm_bin(পূর্ণসংখ্যা M, পূর্ণসংখ্যা N, পূর্ণসংখ্যা K, দশমিক ALPHA, 
+        অক্ষর  *A, পূর্ণসংখ্যা lda, 
+        দশমিক *B, পূর্ণসংখ্যা ldb,
+        দশমিক *C, পূর্ণসংখ্যা ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+শূন্য gemm(পূর্ণসংখ্যা TA, পূর্ণসংখ্যা TB, পূর্ণসংখ্যা M, পূর্ণসংখ্যা N, পূর্ণসংখ্যা K, দশমিক ALPHA, 
+                    দশমিক *A, পূর্ণসংখ্যা lda, 
+                    দশমিক *B, পূর্ণসংখ্যা ldb,
+                    দশমিক BETA,
+                    দশমিক *C, পূর্ণসংখ্যা ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+শূন্য gemm_cpu(পূর্ণসংখ্যা TA, পূর্ণসংখ্যা TB, পূর্ণসংখ্যা M, পূর্ণসংখ্যা N, পূর্ণসংখ্যা K, দশমিক ALPHA, 
+        দশমিক *A, পূর্ণসংখ্যা lda, 
+        দশমিক *B, পূর্ণসংখ্যা ldb,
+        দশমিক BETA,
+        দশমিক *C, পূর্ণসংখ্যা ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+শূন্য gemm_gpu(পূর্ণসংখ্যা TA, পূর্ণসংখ্যা TB, পূর্ণসংখ্যা M, পূর্ণসংখ্যা N, পূর্ণসংখ্যা K, দশমিক ALPHA, 
+        দশমিক *A_gpu, পূর্ণসংখ্যা lda, 
+        দশমিক *B_gpu, পূর্ণসংখ্যা ldb,
+        দশমিক BETA,
+        দশমিক *C_gpu, পূর্ণসংখ্যা ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+শূন্য gemm_gpu(পূর্ণসংখ্যা TA, পূর্ণসংখ্যা TB, পূর্ণসংখ্যা M, পূর্ণসংখ্যা N, পূর্ণসংখ্যা K, দশমিক ALPHA, 
+        দশমিক *A, পূর্ণসংখ্যা lda, 
+        দশমিক *B, পূর্ণসংখ্যা ldb,
+        দশমিক BETA,
+        দশমিক *C, পূর্ণসংখ্যা ldc);
 #endif
 #endif

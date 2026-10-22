@@ -1,10 +1,10 @@
-#include "dropout_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include <stdlib.h>
-#include <stdio.h>
+#অন্তর্ভাব "dropout_layer.h"
+#অন্তর্ভাব "utils.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব <stdlib.h>
+#অন্তর্ভাব <stdio.h>
 
-dropout_layer make_dropout_layer(int batch, int inputs, float probability)
+dropout_layer make_dropout_layer(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা inputs, দশমিক probability)
 {
     dropout_layer l = {0};
     l.type = DROPOUT;
@@ -12,7 +12,7 @@ dropout_layer make_dropout_layer(int batch, int inputs, float probability)
     l.inputs = inputs;
     l.outputs = inputs;
     l.batch = batch;
-    l.rand = calloc(inputs*batch, sizeof(float));
+    l.rand = calloc(inputs*batch, আকার(দশমিক));
     l.scale = 1./(1.-probability);
     l.forward = forward_dropout_layer;
     l.backward = backward_dropout_layer;
@@ -22,12 +22,12 @@ dropout_layer make_dropout_layer(int batch, int inputs, float probability)
     l.rand_gpu = cuda_make_array(l.rand, inputs*batch);
     #endif
     fprintf(stderr, "dropout       p = %.2f               %4d  ->  %4d\n", probability, inputs, inputs);
-    return l;
+    ফেরত l;
 } 
 
-void resize_dropout_layer(dropout_layer *l, int inputs)
+শূন্য resize_dropout_layer(dropout_layer *l, পূর্ণসংখ্যা inputs)
 {
-    l->rand = realloc(l->rand, l->inputs*l->batch*sizeof(float));
+    l->rand = realloc(l->rand, l->inputs*l->batch*আকার(দশমিক));
     #ifdef GPU
     cuda_free(l->rand_gpu);
 
@@ -35,26 +35,26 @@ void resize_dropout_layer(dropout_layer *l, int inputs)
     #endif
 }
 
-void forward_dropout_layer(dropout_layer l, network net)
+শূন্য forward_dropout_layer(dropout_layer l, network net)
 {
-    int i;
-    if (!net.train) return;
-    for(i = 0; i < l.batch * l.inputs; ++i){
-        float r = rand_uniform(0, 1);
+    পূর্ণসংখ্যা i;
+    যদি (!net.train) ফেরত;
+    জন্য(i = 0; i < l.batch * l.inputs; ++i){
+        দশমিক r = rand_uniform(0, 1);
         l.rand[i] = r;
-        if(r < l.probability) net.input[i] = 0;
-        else net.input[i] *= l.scale;
+        যদি(r < l.probability) net.প্রবেশ[i] = 0;
+        অন্যথা net.প্রবেশ[i] *= l.scale;
     }
 }
 
-void backward_dropout_layer(dropout_layer l, network net)
+শূন্য backward_dropout_layer(dropout_layer l, network net)
 {
-    int i;
-    if(!net.delta) return;
-    for(i = 0; i < l.batch * l.inputs; ++i){
-        float r = l.rand[i];
-        if(r < l.probability) net.delta[i] = 0;
-        else net.delta[i] *= l.scale;
+    পূর্ণসংখ্যা i;
+    যদি(!net.delta) ফেরত;
+    জন্য(i = 0; i < l.batch * l.inputs; ++i){
+        দশমিক r = l.rand[i];
+        যদি(r < l.probability) net.delta[i] = 0;
+        অন্যথা net.delta[i] *= l.scale;
     }
 }
 

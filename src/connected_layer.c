@@ -1,19 +1,19 @@
-#include "connected_layer.h"
-#include "convolutional_layer.h"
-#include "batchnorm_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#অন্তর্ভাব "connected_layer.h"
+#অন্তর্ভাব "convolutional_layer.h"
+#অন্তর্ভাব "batchnorm_layer.h"
+#অন্তর্ভাব "utils.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব "blas.h"
+#অন্তর্ভাব "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#অন্তর্ভাব <math.h>
+#অন্তর্ভাব <stdio.h>
+#অন্তর্ভাব <stdlib.h>
+#অন্তর্ভাব <string.h>
 
-layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activation, int batch_normalize, int adam)
+layer make_connected_layer(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা inputs, পূর্ণসংখ্যা outputs, ACTIVATION activation, পূর্ণসংখ্যা batch_normalize, পূর্ণসংখ্যা adam)
 {
-    int i;
+    পূর্ণসংখ্যা i;
     layer l = {0};
     l.learning_rate_scale = 1;
     l.type = CONNECTED;
@@ -29,54 +29,54 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     l.out_w = 1;
     l.out_c = outputs;
 
-    l.output = calloc(batch*outputs, sizeof(float));
-    l.delta = calloc(batch*outputs, sizeof(float));
+    l.output = calloc(batch*outputs, আকার(দশমিক));
+    l.delta = calloc(batch*outputs, আকার(দশমিক));
 
-    l.weight_updates = calloc(inputs*outputs, sizeof(float));
-    l.bias_updates = calloc(outputs, sizeof(float));
+    l.weight_updates = calloc(inputs*outputs, আকার(দশমিক));
+    l.bias_updates = calloc(outputs, আকার(দশমিক));
 
-    l.weights = calloc(outputs*inputs, sizeof(float));
-    l.biases = calloc(outputs, sizeof(float));
+    l.weights = calloc(outputs*inputs, আকার(দশমিক));
+    l.biases = calloc(outputs, আকার(দশমিক));
 
     l.forward = forward_connected_layer;
     l.backward = backward_connected_layer;
     l.update = update_connected_layer;
 
     //float scale = 1./sqrt(inputs);
-    float scale = sqrt(2./inputs);
-    for(i = 0; i < outputs*inputs; ++i){
+    দশমিক scale = sqrt(2./inputs);
+    জন্য(i = 0; i < outputs*inputs; ++i){
         l.weights[i] = scale*rand_uniform(-1, 1);
     }
 
-    for(i = 0; i < outputs; ++i){
+    জন্য(i = 0; i < outputs; ++i){
         l.biases[i] = 0;
     }
 
-    if(adam){
-        l.m = calloc(l.inputs*l.outputs, sizeof(float));
-        l.v = calloc(l.inputs*l.outputs, sizeof(float));
-        l.bias_m = calloc(l.outputs, sizeof(float));
-        l.scale_m = calloc(l.outputs, sizeof(float));
-        l.bias_v = calloc(l.outputs, sizeof(float));
-        l.scale_v = calloc(l.outputs, sizeof(float));
+    যদি(adam){
+        l.m = calloc(l.inputs*l.outputs, আকার(দশমিক));
+        l.v = calloc(l.inputs*l.outputs, আকার(দশমিক));
+        l.bias_m = calloc(l.outputs, আকার(দশমিক));
+        l.scale_m = calloc(l.outputs, আকার(দশমিক));
+        l.bias_v = calloc(l.outputs, আকার(দশমিক));
+        l.scale_v = calloc(l.outputs, আকার(দশমিক));
     }
-    if(batch_normalize){
-        l.scales = calloc(outputs, sizeof(float));
-        l.scale_updates = calloc(outputs, sizeof(float));
-        for(i = 0; i < outputs; ++i){
+    যদি(batch_normalize){
+        l.scales = calloc(outputs, আকার(দশমিক));
+        l.scale_updates = calloc(outputs, আকার(দশমিক));
+        জন্য(i = 0; i < outputs; ++i){
             l.scales[i] = 1;
         }
 
-        l.mean = calloc(outputs, sizeof(float));
-        l.mean_delta = calloc(outputs, sizeof(float));
-        l.variance = calloc(outputs, sizeof(float));
-        l.variance_delta = calloc(outputs, sizeof(float));
+        l.mean = calloc(outputs, আকার(দশমিক));
+        l.mean_delta = calloc(outputs, আকার(দশমিক));
+        l.variance = calloc(outputs, আকার(দশমিক));
+        l.variance_delta = calloc(outputs, আকার(দশমিক));
 
-        l.rolling_mean = calloc(outputs, sizeof(float));
-        l.rolling_variance = calloc(outputs, sizeof(float));
+        l.rolling_mean = calloc(outputs, আকার(দশমিক));
+        l.rolling_variance = calloc(outputs, আকার(দশমিক));
 
-        l.x = calloc(batch*outputs, sizeof(float));
-        l.x_norm = calloc(batch*outputs, sizeof(float));
+        l.x = calloc(batch*outputs, আকার(দশমিক));
+        l.x_norm = calloc(batch*outputs, আকার(দশমিক));
     }
 
 #ifdef GPU
@@ -92,7 +92,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
 
     l.output_gpu = cuda_make_array(l.output, outputs*batch);
     l.delta_gpu = cuda_make_array(l.delta, outputs*batch);
-    if (adam) {
+    যদি (adam) {
         l.m_gpu =       cuda_make_array(0, inputs*outputs);
         l.v_gpu =       cuda_make_array(0, inputs*outputs);
         l.bias_m_gpu =  cuda_make_array(0, outputs);
@@ -101,7 +101,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
         l.scale_v_gpu = cuda_make_array(0, outputs);
     }
 
-    if(batch_normalize){
+    যদি(batch_normalize){
         l.mean_gpu = cuda_make_array(l.mean, outputs);
         l.variance_gpu = cuda_make_array(l.variance, outputs);
 
@@ -119,26 +119,26 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
 #ifdef CUDNN
         cudnnCreateTensorDescriptor(&l.normTensorDesc);
         cudnnCreateTensorDescriptor(&l.dstTensorDesc);
-        cudnnSetTensor4dDescriptor(l.dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, l.batch, l.out_c, l.out_h, l.out_w); 
-        cudnnSetTensor4dDescriptor(l.normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l.out_c, 1, 1); 
+        cudnnSetTensor4dDescriptor(l.dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_তথ্য_FLOAT, l.batch, l.out_c, l.out_h, l.out_w); 
+        cudnnSetTensor4dDescriptor(l.normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_তথ্য_FLOAT, 1, l.out_c, 1, 1); 
 #endif
     }
 #endif
     l.activation = activation;
     fprintf(stderr, "connected                            %4d  ->  %4d\n", inputs, outputs);
-    return l;
+    ফেরত l;
 }
 
-void update_connected_layer(layer l, update_args a)
+শূন্য update_connected_layer(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    দশমিক learning_rate = a.learning_rate*l.learning_rate_scale;
+    দশমিক momentum = a.momentum;
+    দশমিক decay = a.decay;
+    পূর্ণসংখ্যা batch = a.batch;
     axpy_cpu(l.outputs, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.outputs, momentum, l.bias_updates, 1);
 
-    if(l.batch_normalize){
+    যদি(l.batch_normalize){
         axpy_cpu(l.outputs, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.outputs, momentum, l.scale_updates, 1);
     }
@@ -148,40 +148,40 @@ void update_connected_layer(layer l, update_args a)
     scal_cpu(l.inputs*l.outputs, momentum, l.weight_updates, 1);
 }
 
-void forward_connected_layer(layer l, network net)
+শূন্য forward_connected_layer(layer l, network net)
 {
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
-    int m = l.batch;
-    int k = l.inputs;
-    int n = l.outputs;
-    float *a = net.input;
-    float *b = l.weights;
-    float *c = l.output;
+    পূর্ণসংখ্যা m = l.batch;
+    পূর্ণসংখ্যা k = l.inputs;
+    পূর্ণসংখ্যা n = l.outputs;
+    দশমিক *a = net.প্রবেশ;
+    দশমিক *b = l.weights;
+    দশমিক *c = l.output;
     gemm(0,1,m,n,k,1,a,k,b,k,1,c,n);
-    if(l.batch_normalize){
+    যদি(l.batch_normalize){
         forward_batchnorm_layer(l, net);
-    } else {
+    } অন্যথা {
         add_bias(l.output, l.biases, l.batch, l.outputs, 1);
     }
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_connected_layer(layer l, network net)
+শূন্য backward_connected_layer(layer l, network net)
 {
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    যদি(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } অন্যথা {
         backward_bias(l.bias_updates, l.delta, l.batch, l.outputs, 1);
     }
 
-    int m = l.outputs;
-    int k = l.batch;
-    int n = l.inputs;
-    float *a = l.delta;
-    float *b = net.input;
-    float *c = l.weight_updates;
+    পূর্ণসংখ্যা m = l.outputs;
+    পূর্ণসংখ্যা k = l.batch;
+    পূর্ণসংখ্যা n = l.inputs;
+    দশমিক *a = l.delta;
+    দশমিক *b = net.প্রবেশ;
+    দশমিক *c = l.weight_updates;
     gemm(1,0,m,n,k,1,a,m,b,n,1,c,n);
 
     m = l.batch;
@@ -192,16 +192,16 @@ void backward_connected_layer(layer l, network net)
     b = l.weights;
     c = net.delta;
 
-    if(c) gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);
+    যদি(c) gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);
 }
 
 
-void denormalize_connected_layer(layer l)
+শূন্য denormalize_connected_layer(layer l)
 {
-    int i, j;
-    for(i = 0; i < l.outputs; ++i){
-        float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .000001);
-        for(j = 0; j < l.inputs; ++j){
+    পূর্ণসংখ্যা i, j;
+    জন্য(i = 0; i < l.outputs; ++i){
+        দশমিক scale = l.scales[i]/sqrt(l.rolling_variance[i] + .000001);
+        জন্য(j = 0; j < l.inputs; ++j){
             l.weights[i*l.inputs + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
@@ -212,9 +212,9 @@ void denormalize_connected_layer(layer l)
 }
 
 
-void statistics_connected_layer(layer l)
+শূন্য statistics_connected_layer(layer l)
 {
-    if(l.batch_normalize){
+    যদি(l.batch_normalize){
         printf("Scales ");
         print_statistics(l.scales, l.outputs);
         /*
@@ -232,49 +232,49 @@ void statistics_connected_layer(layer l)
 
 #ifdef GPU
 
-void pull_connected_layer(layer l)
+শূন্য pull_connected_layer(layer l)
 {
     cuda_pull_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
     cuda_pull_array(l.biases_gpu, l.biases, l.outputs);
     cuda_pull_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
     cuda_pull_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
-    if (l.batch_normalize){
+    যদি (l.batch_normalize){
         cuda_pull_array(l.scales_gpu, l.scales, l.outputs);
         cuda_pull_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
         cuda_pull_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
     }
 }
 
-void push_connected_layer(layer l)
+শূন্য ঠেলো_connected_layer(layer l)
 {
-    cuda_push_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
-    cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-    cuda_push_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
-    cuda_push_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
-    if (l.batch_normalize){
-        cuda_push_array(l.scales_gpu, l.scales, l.outputs);
-        cuda_push_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
-        cuda_push_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
+    cuda_ঠেলো_array(l.weights_gpu, l.weights, l.inputs*l.outputs);
+    cuda_ঠেলো_array(l.biases_gpu, l.biases, l.outputs);
+    cuda_ঠেলো_array(l.weight_updates_gpu, l.weight_updates, l.inputs*l.outputs);
+    cuda_ঠেলো_array(l.bias_updates_gpu, l.bias_updates, l.outputs);
+    যদি (l.batch_normalize){
+        cuda_ঠেলো_array(l.scales_gpu, l.scales, l.outputs);
+        cuda_ঠেলো_array(l.rolling_mean_gpu, l.rolling_mean, l.outputs);
+        cuda_ঠেলো_array(l.rolling_variance_gpu, l.rolling_variance, l.outputs);
     }
 }
 
-void update_connected_layer_gpu(layer l, update_args a)
+শূন্য update_connected_layer_gpu(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
-    if(a.adam){
+    দশমিক learning_rate = a.learning_rate*l.learning_rate_scale;
+    দশমিক momentum = a.momentum;
+    দশমিক decay = a.decay;
+    পূর্ণসংখ্যা batch = a.batch;
+    যদি(a.adam){
         adam_update_gpu(l.weights_gpu, l.weight_updates_gpu, l.m_gpu, l.v_gpu, a.B1, a.B2, a.eps, decay, learning_rate, l.inputs*l.outputs, batch, a.t);
         adam_update_gpu(l.biases_gpu, l.bias_updates_gpu, l.bias_m_gpu, l.bias_v_gpu, a.B1, a.B2, a.eps, decay, learning_rate, l.outputs, batch, a.t);
-        if(l.scales_gpu){
+        যদি(l.scales_gpu){
             adam_update_gpu(l.scales_gpu, l.scale_updates_gpu, l.scale_m_gpu, l.scale_v_gpu, a.B1, a.B2, a.eps, decay, learning_rate, l.outputs, batch, a.t);
         }
-    }else{
+    }অন্যথা{
         axpy_gpu(l.outputs, learning_rate/batch, l.bias_updates_gpu, 1, l.biases_gpu, 1);
         scal_gpu(l.outputs, momentum, l.bias_updates_gpu, 1);
 
-        if(l.batch_normalize){
+        যদি(l.batch_normalize){
             axpy_gpu(l.outputs, learning_rate/batch, l.scale_updates_gpu, 1, l.scales_gpu, 1);
             scal_gpu(l.outputs, momentum, l.scale_updates_gpu, 1);
         }
@@ -285,42 +285,42 @@ void update_connected_layer_gpu(layer l, update_args a)
     }
 }
 
-void forward_connected_layer_gpu(layer l, network net)
+শূন্য forward_connected_layer_gpu(layer l, network net)
 {
     fill_gpu(l.outputs*l.batch, 0, l.output_gpu, 1);
 
-    int m = l.batch;
-    int k = l.inputs;
-    int n = l.outputs;
-    float * a = net.input_gpu;
-    float * b = l.weights_gpu;
-    float * c = l.output_gpu;
+    পূর্ণসংখ্যা m = l.batch;
+    পূর্ণসংখ্যা k = l.inputs;
+    পূর্ণসংখ্যা n = l.outputs;
+    দশমিক * a = net.প্রবেশ_gpu;
+    দশমিক * b = l.weights_gpu;
+    দশমিক * c = l.output_gpu;
     gemm_gpu(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-    if (l.batch_normalize) {
+    যদি (l.batch_normalize) {
         forward_batchnorm_layer_gpu(l, net);
-    } else {
+    } অন্যথা {
         add_bias_gpu(l.output_gpu, l.biases_gpu, l.batch, l.outputs, 1);
     }
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_connected_layer_gpu(layer l, network net)
+শূন্য backward_connected_layer_gpu(layer l, network net)
 {
     constrain_gpu(l.outputs*l.batch, 1, l.delta_gpu, 1);
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
-    if(l.batch_normalize){
+    যদি(l.batch_normalize){
         backward_batchnorm_layer_gpu(l, net);
-    } else {
+    } অন্যথা {
         backward_bias_gpu(l.bias_updates_gpu, l.delta_gpu, l.batch, l.outputs, 1);
     }
 
-    int m = l.outputs;
-    int k = l.batch;
-    int n = l.inputs;
-    float * a = l.delta_gpu;
-    float * b = net.input_gpu;
-    float * c = l.weight_updates_gpu;
+    পূর্ণসংখ্যা m = l.outputs;
+    পূর্ণসংখ্যা k = l.batch;
+    পূর্ণসংখ্যা n = l.inputs;
+    দশমিক * a = l.delta_gpu;
+    দশমিক * b = net.প্রবেশ_gpu;
+    দশমিক * c = l.weight_updates_gpu;
     gemm_gpu(1,0,m,n,k,1,a,m,b,n,1,c,n);
 
     m = l.batch;
@@ -331,6 +331,6 @@ void backward_connected_layer_gpu(layer l, network net)
     b = l.weights_gpu;
     c = net.delta_gpu;
 
-    if(c) gemm_gpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
+    যদি(c) gemm_gpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
 }
 #endif

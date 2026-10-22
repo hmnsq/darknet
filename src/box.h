@@ -1,12 +1,12 @@
 #ifndef BOX_H
 #define BOX_H
-#include "darknet.h"
+#অন্তর্ভাব "darknet.h"
 
-typedef struct{
-    float dx, dy, dw, dh;
+প্রকারলেখ কাঠামো{
+    দশমিক dx, dy, dw, dh;
 } dbox;
 
-float box_rmse(box a, box b);
+দশমিক box_rmse(box a, box b);
 dbox diou(box a, box b);
 box decode_box(box b, box anchor);
 box encode_box(box b, box anchor);

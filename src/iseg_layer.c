@@ -1,16 +1,16 @@
-#include "iseg_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#অন্তর্ভাব "iseg_layer.h"
+#অন্তর্ভাব "activations.h"
+#অন্তর্ভাব "blas.h"
+#অন্তর্ভাব "box.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#অন্তর্ভাব <stdio.h>
+#অন্তর্ভাব <assert.h>
+#অন্তর্ভাব <string.h>
+#অন্তর্ভাব <stdlib.h>
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
+layer make_iseg_layer(পূর্ণসংখ্যা batch, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h, পূর্ণসংখ্যা classes, পূর্ণসংখ্যা ids)
 {
     layer l = {0};
     l.type = ISEG;
@@ -24,19 +24,19 @@ layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
     l.classes = classes;
     l.batch = batch;
     l.extra = ids;
-    l.cost = calloc(1, sizeof(float));
+    l.cost = calloc(1, আকার(দশমিক));
     l.outputs = h*w*l.c;
     l.inputs = l.outputs;
     l.truths = 90*(l.w*l.h+1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
+    l.delta = calloc(batch*l.outputs, আকার(দশমিক));
+    l.output = calloc(batch*l.outputs, আকার(দশমিক));
 
-    l.counts = calloc(90, sizeof(int));
-    l.sums = calloc(90, sizeof(float*));
-    if(ids){
-        int i;
-        for(i = 0; i < 90; ++i){
-            l.sums[i] = calloc(ids, sizeof(float));
+    l.counts = calloc(90, আকার(পূর্ণসংখ্যা));
+    l.sums = calloc(90, আকার(দশমিক*));
+    যদি(ids){
+        পূর্ণসংখ্যা i;
+        জন্য(i = 0; i < 90; ++i){
+            l.sums[i] = calloc(ids, আকার(দশমিক));
         }
     }
 
@@ -52,10 +52,10 @@ layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
     fprintf(stderr, "iseg\n");
     srand(0);
 
-    return l;
+    ফেরত l;
 }
 
-void resize_iseg_layer(layer *l, int w, int h)
+শূন্য resize_iseg_layer(layer *l, পূর্ণসংখ্যা w, পূর্ণসংখ্যা h)
 {
     l->w = w;
     l->h = h;
@@ -63,8 +63,8 @@ void resize_iseg_layer(layer *l, int w, int h)
     l->outputs = h*w*l->c;
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*আকার(দশমিক));
+    l->delta = realloc(l->delta, l->batch*l->outputs*আকার(দশমিক));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -75,115 +75,115 @@ void resize_iseg_layer(layer *l, int w, int h)
 #endif
 }
 
-void forward_iseg_layer(const layer l, network net)
+শূন্য forward_iseg_layer(ধ্রুবক layer l, network net)
 {
 
-    double time = what_time_is_it_now();
-    int i,b,j,k;
-    int ids = l.extra;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
+    দ্বিগুণ time = what_time_is_it_now();
+    পূর্ণসংখ্যা i,b,j,k;
+    পূর্ণসংখ্যা ids = l.extra;
+    memcpy(l.output, net.প্রবেশ, l.outputs*l.batch*আকার(দশমিক));
+    memset(l.delta, 0, l.outputs * l.batch * আকার(দশমিক));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        int index = b*l.outputs;
-        activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+    জন্য (b = 0; b < l.batch; ++b){
+        পূর্ণসংখ্যা সূচক = b*l.outputs;
+        activate_array(l.output + সূচক, l.classes*l.w*l.h, LOGISTIC);
     }
 #endif
 
-    for (b = 0; b < l.batch; ++b){
+    জন্য (b = 0; b < l.batch; ++b){
         // a priori, each pixel has no class
-        for(i = 0; i < l.classes; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + i*l.w*l.h + k;
-                l.delta[index] = 0 - l.output[index];
+        জন্য(i = 0; i < l.classes; ++i){
+            জন্য(k = 0; k < l.w*l.h; ++k){
+                পূর্ণসংখ্যা সূচক = b*l.outputs + i*l.w*l.h + k;
+                l.delta[সূচক] = 0 - l.output[সূচক];
             }
         }
 
         // a priori, embedding should be small magnitude
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
-                l.delta[index] = .1 * (0 - l.output[index]);
+        জন্য(i = 0; i < ids; ++i){
+            জন্য(k = 0; k < l.w*l.h; ++k){
+                পূর্ণসংখ্যা সূচক = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+                l.delta[সূচক] = .1 * (0 - l.output[সূচক]);
             }
         }
 
 
-        memset(l.counts, 0, 90*sizeof(int));
-        for(i = 0; i < 90; ++i){
+        memset(l.counts, 0, 90*আকার(পূর্ণসংখ্যা));
+        জন্য(i = 0; i < 90; ++i){
             fill_cpu(ids, 0, l.sums[i], 1);
             
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
+            পূর্ণসংখ্যা c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            যদি(c < 0) বিরতি;
             // add up metric embeddings for each instance
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + c*l.w*l.h + k;
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    l.delta[index] = v - l.output[index];
+            জন্য(k = 0; k < l.w*l.h; ++k){
+                পূর্ণসংখ্যা সূচক = b*l.outputs + c*l.w*l.h + k;
+                দশমিক v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                যদি(v){
+                    l.delta[সূচক] = v - l.output[সূচক];
                     axpy_cpu(ids, 1, l.output + b*l.outputs + l.classes*l.w*l.h + k, l.w*l.h, l.sums[i], 1);
                     ++l.counts[i];
                 }
             }
         }
 
-        float *mse = calloc(90, sizeof(float));
-        for(i = 0; i < 90; ++i){
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
-            for(k = 0; k < l.w*l.h; ++k){
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    int z;
-                    float sum = 0;
-                    for(z = 0; z < ids; ++z){
-                        int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
-                        sum += pow(l.sums[i][z]/l.counts[i] - l.output[index], 2);
+        দশমিক *mse = calloc(90, আকার(দশমিক));
+        জন্য(i = 0; i < 90; ++i){
+            পূর্ণসংখ্যা c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            যদি(c < 0) বিরতি;
+            জন্য(k = 0; k < l.w*l.h; ++k){
+                দশমিক v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                যদি(v){
+                    পূর্ণসংখ্যা z;
+                    দশমিক যোগ = 0;
+                    জন্য(z = 0; z < ids; ++z){
+                        পূর্ণসংখ্যা সূচক = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                        যোগ += pow(l.sums[i][z]/l.counts[i] - l.output[সূচক], 2);
                     }
-                    mse[i] += sum;
+                    mse[i] += যোগ;
                 }
             }
             mse[i] /= l.counts[i];
         }
 
         // Calculate average embedding
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
+        জন্য(i = 0; i < 90; ++i){
+            যদি(!l.counts[i]) চালু;
             scal_cpu(ids, 1.f/l.counts[i], l.sums[i], 1);
-            if(b == 0 && net.gpu_index == 0){
+            যদি(b == 0 && net.gpu_সূচক == 0){
                 printf("%4d, %6.3f, ", l.counts[i], mse[i]);
-                for(j = 0; j < ids; ++j){
+                জন্য(j = 0; j < ids; ++j){
                     printf("%6.3f,", l.sums[i][j]);
                 }
                 printf("\n");
             }
         }
-        free(mse);
+        মুক্ত(mse);
 
         // Calculate embedding loss
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
-            for(k = 0; k < l.w*l.h; ++k){
-                float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    for(j = 0; j < 90; ++j){
-                        if(!l.counts[j])continue;
-                        int z;
-                        for(z = 0; z < ids; ++z){
-                            int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
-                            float diff = l.sums[j][z] - l.output[index];
-                            if (j == i) l.delta[index] +=   diff < 0? -.1 : .1;
-                            else        l.delta[index] += -(diff < 0? -.1 : .1);
+        জন্য(i = 0; i < 90; ++i){
+            যদি(!l.counts[i]) চালু;
+            জন্য(k = 0; k < l.w*l.h; ++k){
+                দশমিক v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
+                যদি(v){
+                    জন্য(j = 0; j < 90; ++j){
+                        যদি(!l.counts[j])চালু;
+                        পূর্ণসংখ্যা z;
+                        জন্য(z = 0; z < ids; ++z){
+                            পূর্ণসংখ্যা সূচক = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                            দশমিক diff = l.sums[j][z] - l.output[সূচক];
+                            যদি (j == i) l.delta[সূচক] +=   diff < 0? -.1 : .1;
+                            অন্যথা        l.delta[সূচক] += -(diff < 0? -.1 : .1);
                         }
                     }
                 }
             }
         }
 
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
-                l.delta[index] *= .01;
+        জন্য(i = 0; i < ids; ++i){
+            জন্য(k = 0; k < l.w*l.h; ++k){
+                পূর্ণসংখ্যা সূচক = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+                l.delta[সূচক] *= .01;
             }
         }
     }
@@ -192,31 +192,31 @@ void forward_iseg_layer(const layer l, network net)
     printf("took %lf sec\n", what_time_is_it_now() - time);
 }
 
-void backward_iseg_layer(const layer l, network net)
+শূন্য backward_iseg_layer(ধ্রুবক layer l, network net)
 {
     axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
 #ifdef GPU
 
-void forward_iseg_layer_gpu(const layer l, network net)
+শূন্য forward_iseg_layer_gpu(ধ্রুবক layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    copy_gpu(l.batch*l.inputs, net.প্রবেশ_gpu, 1, l.output_gpu, 1);
+    পূর্ণসংখ্যা b;
+    জন্য (b = 0; b < l.batch; ++b){
         activate_array_gpu(l.output_gpu + b*l.outputs, l.classes*l.w*l.h, LOGISTIC);
         //if(l.extra) activate_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC);
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.প্রবেশ, l.batch*l.inputs);
     forward_iseg_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_ঠেলো_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_iseg_layer_gpu(const layer l, network net)
+শূন্য backward_iseg_layer_gpu(ধ্রুবক layer l, network net)
 {
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    পূর্ণসংখ্যা b;
+    জন্য (b = 0; b < l.batch; ++b){
         //if(l.extra) gradient_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC, l.delta_gpu + b*l.outputs + l.classes*l.w*l.h);
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);

@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#অন্তর্ভাব <stdlib.h>
+#অন্তর্ভাব <string.h>
+#অন্তর্ভাব "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = malloc(আকার(list));
+	l->আকার_2 = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	ফেরত l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+শূন্য *list_বের_করো(list *l){
+    যদি(!l->back) ফেরত 0;
+    গ্রন্থি *b = l->back;
+    শূন্য *val = b->val;
+    l->back = b->পূর্ব;
+    যদি(l->back) l->back->পরবর্তী = 0;
+    মুক্ত(b);
+    --l->আকার_2;
     
-    return val;
+    ফেরত val;
 }
 
-void list_insert(list *l, void *val)
+শূন্য list_ঢোকাও(list *l, শূন্য *val)
 {
-	node *new = malloc(sizeof(node));
+	গ্রন্থি *new = malloc(আকার(গ্রন্থি));
 	new->val = val;
-	new->next = 0;
+	new->পরবর্তী = 0;
 
-	if(!l->back){
+	যদি(!l->back){
 		l->front = new;
-		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+		new->পূর্ব = 0;
+	}অন্যথা{
+		l->back->পরবর্তী = new;
+		new->পূর্ব = l->back;
 	}
 	l->back = new;
-	++l->size;
+	++l->আকার_2;
 }
 
-void free_node(node *n)
+শূন্য free_গ্রন্থি(গ্রন্থি *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
+	গ্রন্থি *পরবর্তী;
+	যখন(n) {
+		পরবর্তী = n->পরবর্তী;
+		মুক্ত(n);
+		n = পরবর্তী;
 	}
 }
 
-void free_list(list *l)
+শূন্য free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_গ্রন্থি(l->front);
+	মুক্ত(l);
 }
 
-void free_list_contents(list *l)
+শূন্য free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	গ্রন্থি *n = l->front;
+	যখন(n){
+		মুক্ত(n->val);
+		n = n->পরবর্তী;
 	}
 }
 
-void **list_to_array(list *l)
+শূন্য **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+    শূন্য **a = calloc(l->আকার_2, আকার(শূন্য*));
+    পূর্ণসংখ্যা গুনতি = 0;
+    গ্রন্থি *n = l->front;
+    যখন(n){
+        a[গুনতি++] = n->val;
+        n = n->পরবর্তী;
     }
-    return a;
+    ফেরত a;
 }
