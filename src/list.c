@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <string.h>
+#अन्तर्भाव "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(परिमाण(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	पटिनिवत्त l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+शून्य *list_निष्कासय(list *l){
+    सचे(!l->back) पटिनिवत्त 0;
+    ग्रन्थिः *b = l->back;
+    शून्य *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    सचे(l->back) l->back->next = 0;
+    मुक्त(b);
     --l->size;
     
-    return val;
+    पटिनिवत्त val;
 }
 
-void list_insert(list *l, void *val)
+शून्य list_निवेशय(list *l, शून्य *val)
 {
-	node *new = malloc(sizeof(node));
+	ग्रन्थिः *new = malloc(परिमाण(ग्रन्थिः));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	सचे(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}अञ्ञथा{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+शून्य free_ग्रन्थिः(ग्रन्थिः *n)
 {
-	node *next;
-	while(n) {
+	ग्रन्थिः *next;
+	याव(n) {
 		next = n->next;
-		free(n);
+		मुक्त(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+शून्य free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_ग्रन्थिः(l->front);
+	मुक्त(l);
 }
 
-void free_list_contents(list *l)
+शून्य free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	ग्रन्थिः *n = l->front;
+	याव(n){
+		मुक्त(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+शून्य **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    शून्य **a = calloc(l->size, परिमाण(शून्य*));
+    पूर्णाङ्क गणनम् = 0;
+    ग्रन्थिः *n = l->front;
+    याव(n){
+        a[गणनम्++] = n->val;
         n = n->next;
     }
-    return a;
+    पटिनिवत्त a;
 }
