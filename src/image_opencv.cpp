@@ -11,51 +11,51 @@ extern "C" {
 
 IplImage *image_to_ipl(image im)
 {
-    int x,y,c;
+    පූර්ණ_සංඛ්‍යා x,y,c;
     IplImage *disp = cvCreateImage(cvSize(im.w,im.h), IPL_DEPTH_8U, im.c);
-    int step = disp->widthStep;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            for(c= 0; c < im.c; ++c){
+    පූර්ණ_සංඛ්‍යා step = disp->widthStep;
+    සඳහා(y = 0; y < im.h; ++y){
+        සඳහා(x = 0; x < im.w; ++x){
+            සඳහා(c= 0; c < im.c; ++c){
                 float val = im.data[c*im.h*im.w + y*im.w + x];
-                disp->imageData[y*step + x*im.c + c] = (unsigned char)(val*255);
+                disp->imageData[y*step + x*im.c + c] = (unsigned var_na)(val*255);
             }
         }
     }
-    return disp;
+    ආපසු disp;
 }
 
 image ipl_to_image(IplImage* src)
 {
-    int h = src->height;
-    int w = src->width;
-    int c = src->nChannels;
+    පූර්ණ_සංඛ්‍යා h = src->height;
+    පූර්ණ_සංඛ්‍යා w = src->width;
+    පූර්ණ_සංඛ්‍යා c = src->nChannels;
     image im = make_image(w, h, c);
-    unsigned char *data = (unsigned char *)src->imageData;
-    int step = src->widthStep;
-    int i, j, k;
+    unsigned var_na *data = (unsigned var_na *)src->imageData;
+    පූර්ණ_සංඛ්‍යා step = src->widthStep;
+    පූර්ණ_සංඛ්‍යා i, j, k;
 
-    for(i = 0; i < h; ++i){
-        for(k= 0; k < c; ++k){
-            for(j = 0; j < w; ++j){
+    සඳහා(i = 0; i < h; ++i){
+        සඳහා(k= 0; k < c; ++k){
+            සඳහා(j = 0; j < w; ++j){
                 im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
             }
         }
     }
-    return im;
+    ආපසු im;
 }
 
 Mat image_to_mat(image im)
 {
     image copy = copy_image(im);
     constrain_image(copy);
-    if(im.c == 3) rgbgr_image(copy);
+    නම්(im.c == 3) rgbgr_image(copy);
 
     IplImage *ipl = image_to_ipl(copy);
     Mat m = cvarrToMat(ipl, true);
     cvReleaseImage(&ipl);
     free_image(copy);
-    return m;
+    ආපසු m;
 }
 
 image mat_to_image(Mat m)
@@ -63,19 +63,19 @@ image mat_to_image(Mat m)
     IplImage ipl = m;
     image im = ipl_to_image(&ipl);
     rgbgr_image(im);
-    return im;
+    ආපසු im;
 }
 
-void *open_video_stream(const char *f, int c, int w, int h, int fps)
+void *open_video_stream(const var_na *f, පූර්ණ_සංඛ්‍යා c, පූර්ණ_සංඛ්‍යා w, පූර්ණ_සංඛ්‍යා h, පූර්ණ_සංඛ්‍යා fps)
 {
     VideoCapture *cap;
-    if(f) cap = new VideoCapture(f);
-    else cap = new VideoCapture(c);
-    if(!cap->isOpened()) return 0;
-    if(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
-    if(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
-    if(fps) cap->set(CV_CAP_PROP_FPS, w);
-    return (void *) cap;
+    නම්(f) cap = new VideoCapture(f);
+    නැතහොත් cap = new VideoCapture(c);
+    නම්(!cap->isOpened()) ආපසු 0;
+    නම්(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
+    නම්(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
+    නම්(fps) cap->set(CV_CAP_PROP_FPS, w);
+    ආපසු (void *) cap;
 }
 
 image get_image_from_stream(void *p)
@@ -83,50 +83,50 @@ image get_image_from_stream(void *p)
     VideoCapture *cap = (VideoCapture *)p;
     Mat m;
     *cap >> m;
-    if(m.empty()) return make_empty_image(0,0,0);
-    return mat_to_image(m);
+    නම්(m.empty()) ආපසු make_empty_image(0,0,0);
+    ආපසු mat_to_image(m);
 }
 
-image load_image_cv(char *filename, int channels)
+image load_image_cv(var_na *filename, පූර්ණ_සංඛ්‍යා channels)
 {
-    int flag = -1;
-    if (channels == 0) flag = -1;
-    else if (channels == 1) flag = 0;
-    else if (channels == 3) flag = 1;
-    else {
+    පූර්ණ_සංඛ්‍යා flag = -1;
+    නම් (channels == 0) flag = -1;
+    නැතහොත් නම් (channels == 1) flag = 0;
+    නැතහොත් නම් (channels == 3) flag = 1;
+    නැතහොත් {
         fprintf(stderr, "OpenCV can't force load with %d channels\n", channels);
     }
     Mat m;
     m = imread(filename, flag);
-    if(!m.data){
+    නම්(!m.data){
         fprintf(stderr, "Cannot load image \"%s\"\n", filename);
-        char buff[256];
+        var_na buff[256];
         sprintf(buff, "echo %s >> bad.list", filename);
         system(buff);
-        return make_image(10,10,3);
+        ආපසු make_image(10,10,3);
         //exit(0);
     }
     image im = mat_to_image(m);
-    return im;
+    ආපසු im;
 }
 
-int show_image_cv(image im, const char* name, int ms)
+පූර්ණ_සංඛ්‍යා show_image_cv(image im, const var_na* name, පූර්ණ_සංඛ්‍යා ms)
 {
     Mat m = image_to_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
-    if (c != -1) c = c%256;
-    return c;
+    පූර්ණ_සංඛ්‍යා c = waitKey(ms);
+    නම් (c != -1) c = c%256;
+    ආපසු c;
 }
 
-void make_window(char *name, int w, int h, int fullscreen)
+void make_window(var_na *name, පූර්ණ_සංඛ්‍යා w, පූර්ණ_සංඛ්‍යා h, පූර්ණ_සංඛ්‍යා fullscreen)
 {
     namedWindow(name, WINDOW_NORMAL); 
-    if (fullscreen) {
+    නම් (fullscreen) {
         setWindowProperty(name, CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
-    } else {
+    } නැතහොත් {
         resizeWindow(name, w, h);
-        if(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
+        නම්(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
     }
 }
 

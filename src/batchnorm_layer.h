@@ -5,7 +5,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_batchnorm_layer(int batch, int w, int h, int c);
+layer make_batchnorm_layer(පූර්ණ_සංඛ්‍යා batch, පූර්ණ_සංඛ්‍යා w, පූර්ණ_සංඛ්‍යා h, පූර්ණ_සංඛ්‍යා c);
 void forward_batchnorm_layer(layer l, network net);
 void backward_batchnorm_layer(layer l, network net);
 

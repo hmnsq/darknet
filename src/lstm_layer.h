@@ -6,7 +6,7 @@
 #include "network.h"
 #define USET
 
-layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_lstm_layer(පූර්ණ_සංඛ්‍යා batch, පූර්ණ_සංඛ්‍යා inputs, පූර්ණ_සංඛ්‍යා outputs, පූර්ණ_සංඛ්‍යා steps, පූර්ණ_සංඛ්‍යා batch_normalize, පූර්ණ_සංඛ්‍යා adam);
 
 void forward_lstm_layer(layer l, network net); 
 void update_lstm_layer(layer l, update_args a);

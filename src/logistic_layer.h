@@ -3,7 +3,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_logistic_layer(int batch, int inputs);
+layer make_logistic_layer(පූර්ණ_සංඛ්‍යා batch, පූර්ණ_සංඛ්‍යා inputs);
 void forward_logistic_layer(const layer l, network net);
 void backward_logistic_layer(const layer l, network net);
 
