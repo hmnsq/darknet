@@ -1,14 +1,14 @@
-#ifndef BOX_H
-#define BOX_H
-#include "darknet.h"
+#अगर_अघोषित BOX_H
+#घोषणा BOX_H
+#समावेश "darknet.h"
 
-typedef struct{
-    float dx, dy, dw, dh;
+प्रकार काष्ठा{
+    भग्न dx, dy, dw, dh;
 } dbox;
 
-float box_rmse(box a, box b);
+भग्न box_rmse(box a, box b);
 dbox diou(box a, box b);
 box decode_box(box b, box anchor);
 box encode_box(box b, box anchor);
 
-#endif
+#पूर्ण_अगर

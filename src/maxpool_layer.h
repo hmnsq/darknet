@@ -1,23 +1,23 @@
-#ifndef MAXPOOL_LAYER_H
-#define MAXPOOL_LAYER_H
+#अगर_अघोषित MAXPOOL_LAYER_H
+#घोषणा MAXPOOL_LAYER_H
 
-#include "image.h"
-#include "cuda.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "image.h"
+#समावेश "cuda.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-typedef layer maxpool_layer;
+प्रकार layer maxpool_layer;
 
 image get_maxpool_image(maxpool_layer l);
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding);
-void resize_maxpool_layer(maxpool_layer *l, int w, int h);
-void forward_maxpool_layer(const maxpool_layer l, network net);
-void backward_maxpool_layer(const maxpool_layer l, network net);
+maxpool_layer make_maxpool_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक आकार, पूर्णांक stride, पूर्णांक padding);
+व्योम resize_maxpool_layer(maxpool_layer *l, पूर्णांक w, पूर्णांक h);
+व्योम forward_maxpool_layer(स्थिर maxpool_layer l, network net);
+व्योम backward_maxpool_layer(स्थिर maxpool_layer l, network net);
 
-#ifdef GPU
-void forward_maxpool_layer_gpu(maxpool_layer l, network net);
-void backward_maxpool_layer_gpu(maxpool_layer l, network net);
-#endif
+#अगर_घोषित GPU
+व्योम forward_maxpool_layer_gpu(maxpool_layer l, network net);
+व्योम backward_maxpool_layer_gpu(maxpool_layer l, network net);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर
 

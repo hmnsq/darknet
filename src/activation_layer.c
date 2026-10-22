@@ -1,15 +1,15 @@
-#include "activation_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#समावेश "activation_layer.h"
+#समावेश "utils.h"
+#समावेश "cuda.h"
+#समावेश "blas.h"
+#समावेश "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#समावेश <math.h>
+#समावेश <stdio.h>
+#समावेश <stdlib.h>
+#समावेश <string.h>
 
-layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
+layer make_activation_layer(पूर्णांक batch, पूर्णांक inputs, ACTIVATION activation)
 {
     layer l = {0};
     l.type = ACTIVE;
@@ -18,46 +18,46 @@ layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
     l.outputs = inputs;
     l.batch=batch;
 
-    l.output = calloc(batch*inputs, sizeof(float*));
-    l.delta = calloc(batch*inputs, sizeof(float*));
+    l.output = सुस्मृति(batch*inputs, माप(भग्न*));
+    l.delta = सुस्मृति(batch*inputs, माप(भग्न*));
 
     l.forward = forward_activation_layer;
     l.backward = backward_activation_layer;
-#ifdef GPU
+#अगर_घोषित GPU
     l.forward_gpu = forward_activation_layer_gpu;
     l.backward_gpu = backward_activation_layer_gpu;
 
     l.output_gpu = cuda_make_array(l.output, inputs*batch);
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch);
-#endif
+#पूर्ण_अगर
     l.activation = activation;
-    fprintf(stderr, "Activation Layer: %d inputs\n", inputs);
-    return l;
+    ख_लिखो(मानक_त्रुटि, "Activation Layer: %d inputs\n", inputs);
+    वापस l;
 }
 
-void forward_activation_layer(layer l, network net)
+व्योम forward_activation_layer(layer l, network net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    copy_cpu(l.outputs*l.batch, net.निवेश, 1, l.output, 1);
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_activation_layer(layer l, network net)
+व्योम backward_activation_layer(layer l, network net)
 {
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
     copy_cpu(l.outputs*l.batch, l.delta, 1, net.delta, 1);
 }
 
-#ifdef GPU
+#अगर_घोषित GPU
 
-void forward_activation_layer_gpu(layer l, network net)
+व्योम forward_activation_layer_gpu(layer l, network net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.outputs*l.batch, net.निवेश_gpu, 1, l.output_gpu, 1);
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_activation_layer_gpu(layer l, network net)
+व्योम backward_activation_layer_gpu(layer l, network net)
 {
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
     copy_gpu(l.outputs*l.batch, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#पूर्ण_अगर

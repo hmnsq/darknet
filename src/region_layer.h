@@ -1,18 +1,18 @@
-#ifndef REGION_LAYER_H
-#define REGION_LAYER_H
+#अगर_अघोषित REGION_LAYER_H
+#घोषणा REGION_LAYER_H
 
-#include "darknet.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "darknet.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-layer make_region_layer(int batch, int w, int h, int n, int classes, int coords);
-void forward_region_layer(const layer l, network net);
-void backward_region_layer(const layer l, network net);
-void resize_region_layer(layer *l, int w, int h);
+layer make_region_layer(पूर्णांक batch, पूर्णांक w, पूर्णांक h, पूर्णांक n, पूर्णांक classes, पूर्णांक coords);
+व्योम forward_region_layer(स्थिर layer l, network net);
+व्योम backward_region_layer(स्थिर layer l, network net);
+व्योम resize_region_layer(layer *l, पूर्णांक w, पूर्णांक h);
 
-#ifdef GPU
-void forward_region_layer_gpu(const layer l, network net);
-void backward_region_layer_gpu(layer l, network net);
-#endif
+#अगर_घोषित GPU
+व्योम forward_region_layer_gpu(स्थिर layer l, network net);
+व्योम backward_region_layer_gpu(layer l, network net);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर

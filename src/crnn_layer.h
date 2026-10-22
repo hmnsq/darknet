@@ -1,24 +1,24 @@
 
-#ifndef CRNN_LAYER_H
-#define CRNN_LAYER_H
+#अगर_अघोषित CRNN_LAYER_H
+#घोषणा CRNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "activations.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize);
+layer make_crnn_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक hidden_filters, पूर्णांक output_filters, पूर्णांक steps, ACTIVATION activation, पूर्णांक batch_normalize);
 
-void forward_crnn_layer(layer l, network net);
-void backward_crnn_layer(layer l, network net);
-void update_crnn_layer(layer l, update_args a);
+व्योम forward_crnn_layer(layer l, network net);
+व्योम backward_crnn_layer(layer l, network net);
+व्योम update_crnn_layer(layer l, update_args a);
 
-#ifdef GPU
-void forward_crnn_layer_gpu(layer l, network net);
-void backward_crnn_layer_gpu(layer l, network net);
-void update_crnn_layer_gpu(layer l, update_args a);
-void push_crnn_layer(layer l);
-void pull_crnn_layer(layer l);
-#endif
+#अगर_घोषित GPU
+व्योम forward_crnn_layer_gpu(layer l, network net);
+व्योम backward_crnn_layer_gpu(layer l, network net);
+व्योम update_crnn_layer_gpu(layer l, update_args a);
+व्योम धकेलो_crnn_layer(layer l);
+व्योम pull_crnn_layer(layer l);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर
 

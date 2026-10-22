@@ -1,25 +1,25 @@
 
-#ifndef RNN_LAYER_H
-#define RNN_LAYER_H
+#अगर_अघोषित RNN_LAYER_H
+#घोषणा RNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
-#define USET
+#समावेश "activations.h"
+#समावेश "layer.h"
+#समावेश "network.h"
+#घोषणा USET
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam);
+layer make_rnn_layer(पूर्णांक batch, पूर्णांक inputs, पूर्णांक outputs, पूर्णांक steps, ACTIVATION activation, पूर्णांक batch_normalize, पूर्णांक adam);
 
-void forward_rnn_layer(layer l, network net);
-void backward_rnn_layer(layer l, network net);
-void update_rnn_layer(layer l, update_args a);
+व्योम forward_rnn_layer(layer l, network net);
+व्योम backward_rnn_layer(layer l, network net);
+व्योम update_rnn_layer(layer l, update_args a);
 
-#ifdef GPU
-void forward_rnn_layer_gpu(layer l, network net);
-void backward_rnn_layer_gpu(layer l, network net);
-void update_rnn_layer_gpu(layer l, update_args a);
-void push_rnn_layer(layer l);
-void pull_rnn_layer(layer l);
-#endif
+#अगर_घोषित GPU
+व्योम forward_rnn_layer_gpu(layer l, network net);
+व्योम backward_rnn_layer_gpu(layer l, network net);
+व्योम update_rnn_layer_gpu(layer l, update_args a);
+व्योम धकेलो_rnn_layer(layer l);
+व्योम pull_rnn_layer(layer l);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर
 

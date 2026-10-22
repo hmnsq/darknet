@@ -1,13 +1,13 @@
-#ifndef LIST_H
-#define LIST_H
-#include "darknet.h"
+#अगर_अघोषित LIST_H
+#घोषणा LIST_H
+#समावेश "darknet.h"
 
 list *make_list();
-int list_find(list *l, void *val);
+पूर्णांक list_find(list *l, व्योम *val);
 
-void list_insert(list *, void *);
+व्योम list_जोड़ो(list *, व्योम *);
 
 
-void free_list_contents(list *l);
+व्योम free_list_contents(list *l);
 
-#endif
+#पूर्ण_अगर

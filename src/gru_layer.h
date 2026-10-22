@@ -1,24 +1,24 @@
 
-#ifndef GRU_LAYER_H
-#define GRU_LAYER_H
+#अगर_अघोषित GRU_LAYER_H
+#घोषणा GRU_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "activations.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-layer make_gru_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_gru_layer(पूर्णांक batch, पूर्णांक inputs, पूर्णांक outputs, पूर्णांक steps, पूर्णांक batch_normalize, पूर्णांक adam);
 
-void forward_gru_layer(layer l, network state);
-void backward_gru_layer(layer l, network state);
-void update_gru_layer(layer l, update_args a);
+व्योम forward_gru_layer(layer l, network state);
+व्योम backward_gru_layer(layer l, network state);
+व्योम update_gru_layer(layer l, update_args a);
 
-#ifdef GPU
-void forward_gru_layer_gpu(layer l, network state);
-void backward_gru_layer_gpu(layer l, network state);
-void update_gru_layer_gpu(layer l, update_args a);
-void push_gru_layer(layer l);
-void pull_gru_layer(layer l);
-#endif
+#अगर_घोषित GPU
+व्योम forward_gru_layer_gpu(layer l, network state);
+व्योम backward_gru_layer_gpu(layer l, network state);
+व्योम update_gru_layer_gpu(layer l, update_args a);
+व्योम धकेलो_gru_layer(layer l);
+व्योम pull_gru_layer(layer l);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर
 

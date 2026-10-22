@@ -1,149 +1,149 @@
-#include "convolutional_layer.h"
-#include "utils.h"
-#include "batchnorm_layer.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
-#include <stdio.h>
-#include <time.h>
+#समावेश "convolutional_layer.h"
+#समावेश "utils.h"
+#समावेश "batchnorm_layer.h"
+#समावेश "im2col.h"
+#समावेश "col2im.h"
+#समावेश "blas.h"
+#समावेश "gemm.h"
+#समावेश <stdio.h>
+#समावेश <time.h>
 
-#ifdef AI2
-#include "xnor_layer.h"
-#endif
+#अगर_घोषित AI2
+#समावेश "xnor_layer.h"
+#पूर्ण_अगर
 
-void swap_binary(convolutional_layer *l)
+व्योम swap_द्विआधारी(convolutional_layer *l)
 {
-    float *swap = l->weights;
-    l->weights = l->binary_weights;
-    l->binary_weights = swap;
+    भग्न *swap = l->weights;
+    l->weights = l->द्विआधारी_weights;
+    l->द्विआधारी_weights = swap;
 
-#ifdef GPU
+#अगर_घोषित GPU
     swap = l->weights_gpu;
-    l->weights_gpu = l->binary_weights_gpu;
-    l->binary_weights_gpu = swap;
-#endif
+    l->weights_gpu = l->द्विआधारी_weights_gpu;
+    l->द्विआधारी_weights_gpu = swap;
+#पूर्ण_अगर
 }
 
-void binarize_weights(float *weights, int n, int size, float *binary)
+व्योम binarize_weights(भग्न *weights, पूर्णांक n, पूर्णांक आकार, भग्न *द्विआधारी)
 {
-    int i, f;
-    for(f = 0; f < n; ++f){
-        float mean = 0;
-        for(i = 0; i < size; ++i){
-            mean += fabs(weights[f*size + i]);
+    पूर्णांक i, f;
+    क्रम(f = 0; f < n; ++f){
+        भग्न mean = 0;
+        क्रम(i = 0; i < आकार; ++i){
+            mean += भ_असल(weights[f*आकार + i]);
         }
-        mean = mean / size;
-        for(i = 0; i < size; ++i){
-            binary[f*size + i] = (weights[f*size + i] > 0) ? mean : -mean;
+        mean = mean / आकार;
+        क्रम(i = 0; i < आकार; ++i){
+            द्विआधारी[f*आकार + i] = (weights[f*आकार + i] > 0) ? mean : -mean;
         }
     }
 }
 
-void binarize_cpu(float *input, int n, float *binary)
+व्योम binarize_cpu(भग्न *निवेश, पूर्णांक n, भग्न *द्विआधारी)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        binary[i] = (input[i] > 0) ? 1 : -1;
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i){
+        द्विआधारी[i] = (निवेश[i] > 0) ? 1 : -1;
     }
 }
 
-void binarize_input(float *input, int n, int size, float *binary)
+व्योम binarize_निवेश(भग्न *निवेश, पूर्णांक n, पूर्णांक आकार, भग्न *द्विआधारी)
 {
-    int i, s;
-    for(s = 0; s < size; ++s){
-        float mean = 0;
-        for(i = 0; i < n; ++i){
-            mean += fabs(input[i*size + s]);
+    पूर्णांक i, s;
+    क्रम(s = 0; s < आकार; ++s){
+        भग्न mean = 0;
+        क्रम(i = 0; i < n; ++i){
+            mean += भ_असल(निवेश[i*आकार + s]);
         }
         mean = mean / n;
-        for(i = 0; i < n; ++i){
-            binary[i*size + s] = (input[i*size + s] > 0) ? mean : -mean;
+        क्रम(i = 0; i < n; ++i){
+            द्विआधारी[i*आकार + s] = (निवेश[i*आकार + s] > 0) ? mean : -mean;
         }
     }
 }
 
-int convolutional_out_height(convolutional_layer l)
+पूर्णांक convolutional_out_height(convolutional_layer l)
 {
-    return (l.h + 2*l.pad - l.size) / l.stride + 1;
+    वापस (l.h + 2*l.pad - l.आकार) / l.stride + 1;
 }
 
-int convolutional_out_width(convolutional_layer l)
+पूर्णांक convolutional_out_width(convolutional_layer l)
 {
-    return (l.w + 2*l.pad - l.size) / l.stride + 1;
+    वापस (l.w + 2*l.pad - l.आकार) / l.stride + 1;
 }
 
 image get_convolutional_image(convolutional_layer l)
 {
-    return float_to_image(l.out_w,l.out_h,l.out_c,l.output);
+    वापस float_to_image(l.out_w,l.out_h,l.out_c,l.output);
 }
 
 image get_convolutional_delta(convolutional_layer l)
 {
-    return float_to_image(l.out_w,l.out_h,l.out_c,l.delta);
+    वापस float_to_image(l.out_w,l.out_h,l.out_c,l.delta);
 }
 
-static size_t get_workspace_size(layer l){
-#ifdef CUDNN
-    if(gpu_index >= 0){
-        size_t most = 0;
-        size_t s = 0;
-        cudnnGetConvolutionForwardWorkspaceSize(cudnn_handle(),
+अटल माप_प्रकार get_workspace_आकार(layer l){
+#अगर_घोषित CUDNN
+    अगर(gpu_सूचकांक >= 0){
+        माप_प्रकार most = 0;
+        माप_प्रकार s = 0;
+        cudnn_Get_Convolution_Forward_Workspace_आकार(cudnn_handle(),
                 l.srcTensorDesc,
                 l.weightDesc,
                 l.convDesc,
                 l.dstTensorDesc,
                 l.fw_algo,
                 &s);
-        if (s > most) most = s;
-        cudnnGetConvolutionBackwardFilterWorkspaceSize(cudnn_handle(),
+        अगर (s > most) most = s;
+        cudnn_Get_Convolution_Backward_Filter_Workspace_आकार(cudnn_handle(),
                 l.srcTensorDesc,
                 l.ddstTensorDesc,
                 l.convDesc,
                 l.dweightDesc,
                 l.bf_algo,
                 &s);
-        if (s > most) most = s;
-        cudnnGetConvolutionBackwardDataWorkspaceSize(cudnn_handle(),
+        अगर (s > most) most = s;
+        cudnn_Get_Convolution_Backward_तथ्य_Workspace_आकार(cudnn_handle(),
                 l.weightDesc,
                 l.ddstTensorDesc,
                 l.convDesc,
                 l.dsrcTensorDesc,
                 l.bd_algo,
                 &s);
-        if (s > most) most = s;
-        return most;
+        अगर (s > most) most = s;
+        वापस most;
     }
-#endif
-    return (size_t)l.out_h*l.out_w*l.size*l.size*l.c/l.groups*sizeof(float);
+#पूर्ण_अगर
+    वापस (माप_प्रकार)l.out_h*l.out_w*l.आकार*l.आकार*l.c/l.groups*माप(भग्न);
 }
 
-#ifdef GPU
-#ifdef CUDNN
-void cudnn_convolutional_setup(layer *l)
+#अगर_घोषित GPU
+#अगर_घोषित CUDNN
+व्योम cudnn_convolutional_setup(layer *l)
 {
-    cudnnSetTensor4dDescriptor(l->dsrcTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, l->batch, l->c, l->h, l->w); 
-    cudnnSetTensor4dDescriptor(l->ddstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, l->batch, l->out_c, l->out_h, l->out_w); 
+    cudnnSetTensor4dDescriptor(l->dsrcTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_तथ्य_FLOAT, l->batch, l->c, l->h, l->w); 
+    cudnnSetTensor4dDescriptor(l->ddstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_तथ्य_FLOAT, l->batch, l->out_c, l->out_h, l->out_w); 
 
-    cudnnSetTensor4dDescriptor(l->srcTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, l->batch, l->c, l->h, l->w); 
-    cudnnSetTensor4dDescriptor(l->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, l->batch, l->out_c, l->out_h, l->out_w); 
-    cudnnSetTensor4dDescriptor(l->normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, 1, 1); 
+    cudnnSetTensor4dDescriptor(l->srcTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_तथ्य_FLOAT, l->batch, l->c, l->h, l->w); 
+    cudnnSetTensor4dDescriptor(l->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_तथ्य_FLOAT, l->batch, l->out_c, l->out_h, l->out_w); 
+    cudnnSetTensor4dDescriptor(l->normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_तथ्य_FLOAT, 1, l->out_c, 1, 1); 
 
-    cudnnSetFilter4dDescriptor(l->dweightDesc, CUDNN_DATA_FLOAT, CUDNN_TENSOR_NCHW, l->n, l->c/l->groups, l->size, l->size); 
-    cudnnSetFilter4dDescriptor(l->weightDesc, CUDNN_DATA_FLOAT, CUDNN_TENSOR_NCHW, l->n, l->c/l->groups, l->size, l->size); 
-    #if CUDNN_MAJOR >= 6
-    cudnnSetConvolution2dDescriptor(l->convDesc, l->pad, l->pad, l->stride, l->stride, 1, 1, CUDNN_CROSS_CORRELATION, CUDNN_DATA_FLOAT);
-    #else
+    cudnnSetFilter4dDescriptor(l->dweightDesc, CUDNN_तथ्य_FLOAT, CUDNN_TENSOR_NCHW, l->n, l->c/l->groups, l->आकार, l->आकार); 
+    cudnnSetFilter4dDescriptor(l->weightDesc, CUDNN_तथ्य_FLOAT, CUDNN_TENSOR_NCHW, l->n, l->c/l->groups, l->आकार, l->आकार); 
+    #अगर CUDNN_MAJOR >= 6
+    cudnnSetConvolution2dDescriptor(l->convDesc, l->pad, l->pad, l->stride, l->stride, 1, 1, CUDNN_CROSS_CORRELATION, CUDNN_तथ्य_FLOAT);
+    #अन्यथा
     cudnnSetConvolution2dDescriptor(l->convDesc, l->pad, l->pad, l->stride, l->stride, 1, 1, CUDNN_CROSS_CORRELATION);
-    #endif
+    #पूर्ण_अगर
 
-    #if CUDNN_MAJOR >= 7
-    cudnnSetConvolutionGroupCount(l->convDesc, l->groups);
-    #else
-    if(l->groups > 1){
+    #अगर CUDNN_MAJOR >= 7
+    cudnn_Set_Convolution_Group_गिनती(l->convDesc, l->groups);
+    #अन्यथा
+    अगर(l->groups > 1){
         error("CUDNN < 7 doesn't support groups, please upgrade!");
     }
-    #endif
+    #पूर्ण_अगर
 
     cudnnGetConvolutionForwardAlgorithm(cudnn_handle(),
             l->srcTensorDesc,
@@ -153,12 +153,12 @@ void cudnn_convolutional_setup(layer *l)
             CUDNN_CONVOLUTION_FWD_SPECIFY_WORKSPACE_LIMIT,
             2000000000,
             &l->fw_algo);
-    cudnnGetConvolutionBackwardDataAlgorithm(cudnn_handle(),
+    cudnn_Get_Convolution_Backward_तथ्य_Algorithm(cudnn_handle(),
             l->weightDesc,
             l->ddstTensorDesc,
             l->convDesc,
             l->dsrcTensorDesc,
-            CUDNN_CONVOLUTION_BWD_DATA_SPECIFY_WORKSPACE_LIMIT,
+            CUDNN_CONVOLUTION_BWD_तथ्य_SPECIFY_WORKSPACE_LIMIT,
             2000000000,
             &l->bd_algo);
     cudnnGetConvolutionBackwardFilterAlgorithm(cudnn_handle(),
@@ -170,12 +170,12 @@ void cudnn_convolutional_setup(layer *l)
             2000000000,
             &l->bf_algo);
 }
-#endif
-#endif
+#पूर्ण_अगर
+#पूर्ण_अगर
 
-convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam)
+convolutional_layer make_convolutional_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक n, पूर्णांक groups, पूर्णांक आकार, पूर्णांक stride, पूर्णांक padding, ACTIVATION activation, पूर्णांक batch_normalize, पूर्णांक द्विआधारी, पूर्णांक xnor, पूर्णांक adam)
 {
-    int i;
+    पूर्णांक i;
     convolutional_layer l = {0};
     l.type = CONVOLUTIONAL;
 
@@ -184,87 +184,87 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
     l.w = w;
     l.c = c;
     l.n = n;
-    l.binary = binary;
+    l.द्विआधारी = द्विआधारी;
     l.xnor = xnor;
     l.batch = batch;
     l.stride = stride;
-    l.size = size;
+    l.आकार = आकार;
     l.pad = padding;
     l.batch_normalize = batch_normalize;
 
-    l.weights = calloc(c/groups*n*size*size, sizeof(float));
-    l.weight_updates = calloc(c/groups*n*size*size, sizeof(float));
+    l.weights = सुस्मृति(c/groups*n*आकार*आकार, माप(भग्न));
+    l.weight_updates = सुस्मृति(c/groups*n*आकार*आकार, माप(भग्न));
 
-    l.biases = calloc(n, sizeof(float));
-    l.bias_updates = calloc(n, sizeof(float));
+    l.biases = सुस्मृति(n, माप(भग्न));
+    l.bias_updates = सुस्मृति(n, माप(भग्न));
 
-    l.nweights = c/groups*n*size*size;
+    l.nweights = c/groups*n*आकार*आकार;
     l.nbiases = n;
 
     // float scale = 1./sqrt(size*size*c);
-    float scale = sqrt(2./(size*size*c/l.groups));
+    भग्न scale = वर्ग_मूल(2./(आकार*आकार*c/l.groups));
     //printf("convscale %f\n", scale);
     //scale = .02;
     //for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1, 1);
-    for(i = 0; i < l.nweights; ++i) l.weights[i] = scale*rand_normal();
-    int out_w = convolutional_out_width(l);
-    int out_h = convolutional_out_height(l);
+    क्रम(i = 0; i < l.nweights; ++i) l.weights[i] = scale*rand_normal();
+    पूर्णांक out_w = convolutional_out_width(l);
+    पूर्णांक out_h = convolutional_out_height(l);
     l.out_h = out_h;
     l.out_w = out_w;
     l.out_c = n;
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    l.output = calloc(l.batch*l.outputs, sizeof(float));
-    l.delta  = calloc(l.batch*l.outputs, sizeof(float));
+    l.output = सुस्मृति(l.batch*l.outputs, माप(भग्न));
+    l.delta  = सुस्मृति(l.batch*l.outputs, माप(भग्न));
 
     l.forward = forward_convolutional_layer;
     l.backward = backward_convolutional_layer;
     l.update = update_convolutional_layer;
-    if(binary){
-        l.binary_weights = calloc(l.nweights, sizeof(float));
-        l.cweights = calloc(l.nweights, sizeof(char));
-        l.scales = calloc(n, sizeof(float));
+    अगर(द्विआधारी){
+        l.द्विआधारी_weights = सुस्मृति(l.nweights, माप(भग्न));
+        l.cweights = सुस्मृति(l.nweights, माप(अक्षर));
+        l.scales = सुस्मृति(n, माप(भग्न));
     }
-    if(xnor){
-        l.binary_weights = calloc(l.nweights, sizeof(float));
-        l.binary_input = calloc(l.inputs*l.batch, sizeof(float));
+    अगर(xnor){
+        l.द्विआधारी_weights = सुस्मृति(l.nweights, माप(भग्न));
+        l.द्विआधारी_निवेश = सुस्मृति(l.inputs*l.batch, माप(भग्न));
     }
 
-    if(batch_normalize){
-        l.scales = calloc(n, sizeof(float));
-        l.scale_updates = calloc(n, sizeof(float));
-        for(i = 0; i < n; ++i){
+    अगर(batch_normalize){
+        l.scales = सुस्मृति(n, माप(भग्न));
+        l.scale_updates = सुस्मृति(n, माप(भग्न));
+        क्रम(i = 0; i < n; ++i){
             l.scales[i] = 1;
         }
 
-        l.mean = calloc(n, sizeof(float));
-        l.variance = calloc(n, sizeof(float));
+        l.mean = सुस्मृति(n, माप(भग्न));
+        l.variance = सुस्मृति(n, माप(भग्न));
 
-        l.mean_delta = calloc(n, sizeof(float));
-        l.variance_delta = calloc(n, sizeof(float));
+        l.mean_delta = सुस्मृति(n, माप(भग्न));
+        l.variance_delta = सुस्मृति(n, माप(भग्न));
 
-        l.rolling_mean = calloc(n, sizeof(float));
-        l.rolling_variance = calloc(n, sizeof(float));
-        l.x = calloc(l.batch*l.outputs, sizeof(float));
-        l.x_norm = calloc(l.batch*l.outputs, sizeof(float));
+        l.rolling_mean = सुस्मृति(n, माप(भग्न));
+        l.rolling_variance = सुस्मृति(n, माप(भग्न));
+        l.x = सुस्मृति(l.batch*l.outputs, माप(भग्न));
+        l.x_norm = सुस्मृति(l.batch*l.outputs, माप(भग्न));
     }
-    if(adam){
-        l.m = calloc(l.nweights, sizeof(float));
-        l.v = calloc(l.nweights, sizeof(float));
-        l.bias_m = calloc(n, sizeof(float));
-        l.scale_m = calloc(n, sizeof(float));
-        l.bias_v = calloc(n, sizeof(float));
-        l.scale_v = calloc(n, sizeof(float));
+    अगर(adam){
+        l.m = सुस्मृति(l.nweights, माप(भग्न));
+        l.v = सुस्मृति(l.nweights, माप(भग्न));
+        l.bias_m = सुस्मृति(n, माप(भग्न));
+        l.scale_m = सुस्मृति(n, माप(भग्न));
+        l.bias_v = सुस्मृति(n, माप(भग्न));
+        l.scale_v = सुस्मृति(n, माप(भग्न));
     }
 
-#ifdef GPU
+#अगर_घोषित GPU
     l.forward_gpu = forward_convolutional_layer_gpu;
     l.backward_gpu = backward_convolutional_layer_gpu;
     l.update_gpu = update_convolutional_layer_gpu;
 
-    if(gpu_index >= 0){
-        if (adam) {
+    अगर(gpu_सूचकांक >= 0){
+        अगर (adam) {
             l.m_gpu = cuda_make_array(l.m, l.nweights);
             l.v_gpu = cuda_make_array(l.v, l.nweights);
             l.bias_m_gpu = cuda_make_array(l.bias_m, n);
@@ -282,15 +282,15 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
         l.delta_gpu = cuda_make_array(l.delta, l.batch*out_h*out_w*n);
         l.output_gpu = cuda_make_array(l.output, l.batch*out_h*out_w*n);
 
-        if(binary){
-            l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
+        अगर(द्विआधारी){
+            l.द्विआधारी_weights_gpu = cuda_make_array(l.weights, l.nweights);
         }
-        if(xnor){
-            l.binary_weights_gpu = cuda_make_array(l.weights, l.nweights);
-            l.binary_input_gpu = cuda_make_array(0, l.inputs*l.batch);
+        अगर(xnor){
+            l.द्विआधारी_weights_gpu = cuda_make_array(l.weights, l.nweights);
+            l.द्विआधारी_निवेश_gpu = cuda_make_array(0, l.inputs*l.batch);
         }
 
-        if(batch_normalize){
+        अगर(batch_normalize){
             l.mean_gpu = cuda_make_array(l.mean, n);
             l.variance_gpu = cuda_make_array(l.variance, n);
 
@@ -306,7 +306,7 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
             l.x_gpu = cuda_make_array(l.output, l.batch*out_h*out_w*n);
             l.x_norm_gpu = cuda_make_array(l.output, l.batch*out_h*out_w*n);
         }
-#ifdef CUDNN
+#अगर_घोषित CUDNN
         cudnnCreateTensorDescriptor(&l.normTensorDesc);
         cudnnCreateTensorDescriptor(&l.srcTensorDesc);
         cudnnCreateTensorDescriptor(&l.dstTensorDesc);
@@ -316,24 +316,24 @@ convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int
         cudnnCreateFilterDescriptor(&l.dweightDesc);
         cudnnCreateConvolutionDescriptor(&l.convDesc);
         cudnn_convolutional_setup(&l);
-#endif
+#पूर्ण_अगर
     }
-#endif
-    l.workspace_size = get_workspace_size(l);
+#पूर्ण_अगर
+    l.workspace_आकार = get_workspace_आकार(l);
     l.activation = activation;
 
-    fprintf(stderr, "conv  %5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.size*l.size*l.c/l.groups * l.out_h*l.out_w)/1000000000.);
+    ख_लिखो(मानक_त्रुटि, "conv  %5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d  %5.3f BFLOPs\n", n, आकार, आकार, stride, w, h, c, l.out_w, l.out_h, l.out_c, (2.0 * l.n * l.आकार*l.आकार*l.c/l.groups * l.out_h*l.out_w)/1000000000.);
 
-    return l;
+    वापस l;
 }
 
-void denormalize_convolutional_layer(convolutional_layer l)
+व्योम denormalize_convolutional_layer(convolutional_layer l)
 {
-    int i, j;
-    for(i = 0; i < l.n; ++i){
-        float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
-        for(j = 0; j < l.c/l.groups*l.size*l.size; ++j){
-            l.weights[i*l.c/l.groups*l.size*l.size + j] *= scale;
+    पूर्णांक i, j;
+    क्रम(i = 0; i < l.n; ++i){
+        भग्न scale = l.scales[i]/वर्ग_मूल(l.rolling_variance[i] + .00001);
+        क्रम(j = 0; j < l.c/l.groups*l.आकार*l.आकार; ++j){
+            l.weights[i*l.c/l.groups*l.आकार*l.आकार + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
         l.scales[i] = 1;
@@ -367,12 +367,12 @@ void test_convolutional_layer()
 }
 */
 
-void resize_convolutional_layer(convolutional_layer *l, int w, int h)
+व्योम resize_convolutional_layer(convolutional_layer *l, पूर्णांक w, पूर्णांक h)
 {
     l->w = w;
     l->h = h;
-    int out_w = convolutional_out_width(*l);
-    int out_h = convolutional_out_height(*l);
+    पूर्णांक out_w = convolutional_out_width(*l);
+    पूर्णांक out_h = convolutional_out_height(*l);
 
     l->out_w = out_w;
     l->out_h = out_h;
@@ -380,172 +380,172 @@ void resize_convolutional_layer(convolutional_layer *l, int w, int h)
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->w * l->h * l->c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta  = realloc(l->delta,  l->batch*l->outputs*sizeof(float));
-    if(l->batch_normalize){
-        l->x = realloc(l->x, l->batch*l->outputs*sizeof(float));
-        l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*sizeof(float));
+    l->output = पुनः_स्मृति(l->output, l->batch*l->outputs*माप(भग्न));
+    l->delta  = पुनः_स्मृति(l->delta,  l->batch*l->outputs*माप(भग्न));
+    अगर(l->batch_normalize){
+        l->x = पुनः_स्मृति(l->x, l->batch*l->outputs*माप(भग्न));
+        l->x_norm  = पुनः_स्मृति(l->x_norm, l->batch*l->outputs*माप(भग्न));
     }
 
-#ifdef GPU
+#अगर_घोषित GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
 
     l->delta_gpu =  cuda_make_array(l->delta,  l->batch*l->outputs);
     l->output_gpu = cuda_make_array(l->output, l->batch*l->outputs);
 
-    if(l->batch_normalize){
+    अगर(l->batch_normalize){
         cuda_free(l->x_gpu);
         cuda_free(l->x_norm_gpu);
 
         l->x_gpu = cuda_make_array(l->output, l->batch*l->outputs);
         l->x_norm_gpu = cuda_make_array(l->output, l->batch*l->outputs);
     }
-#ifdef CUDNN
+#अगर_घोषित CUDNN
     cudnn_convolutional_setup(l);
-#endif
-#endif
-    l->workspace_size = get_workspace_size(*l);
+#पूर्ण_अगर
+#पूर्ण_अगर
+    l->workspace_आकार = get_workspace_आकार(*l);
 }
 
-void add_bias(float *output, float *biases, int batch, int n, int size)
+व्योम add_bias(भग्न *output, भग्न *biases, पूर्णांक batch, पूर्णांक n, पूर्णांक आकार)
 {
-    int i,j,b;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < n; ++i){
-            for(j = 0; j < size; ++j){
-                output[(b*n + i)*size + j] += biases[i];
+    पूर्णांक i,j,b;
+    क्रम(b = 0; b < batch; ++b){
+        क्रम(i = 0; i < n; ++i){
+            क्रम(j = 0; j < आकार; ++j){
+                output[(b*n + i)*आकार + j] += biases[i];
             }
         }
     }
 }
 
-void scale_bias(float *output, float *scales, int batch, int n, int size)
+व्योम scale_bias(भग्न *output, भग्न *scales, पूर्णांक batch, पूर्णांक n, पूर्णांक आकार)
 {
-    int i,j,b;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < n; ++i){
-            for(j = 0; j < size; ++j){
-                output[(b*n + i)*size + j] *= scales[i];
+    पूर्णांक i,j,b;
+    क्रम(b = 0; b < batch; ++b){
+        क्रम(i = 0; i < n; ++i){
+            क्रम(j = 0; j < आकार; ++j){
+                output[(b*n + i)*आकार + j] *= scales[i];
             }
         }
     }
 }
 
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size)
+व्योम backward_bias(भग्न *bias_updates, भग्न *delta, पूर्णांक batch, पूर्णांक n, पूर्णांक आकार)
 {
-    int i,b;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < n; ++i){
-            bias_updates[i] += sum_array(delta+size*(i+b*n), size);
+    पूर्णांक i,b;
+    क्रम(b = 0; b < batch; ++b){
+        क्रम(i = 0; i < n; ++i){
+            bias_updates[i] += योग_array(delta+आकार*(i+b*n), आकार);
         }
     }
 }
 
-void forward_convolutional_layer(convolutional_layer l, network net)
+व्योम forward_convolutional_layer(convolutional_layer l, network net)
 {
-    int i, j;
+    पूर्णांक i, j;
 
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
 
-    if(l.xnor){
-        binarize_weights(l.weights, l.n, l.c/l.groups*l.size*l.size, l.binary_weights);
-        swap_binary(&l);
-        binarize_cpu(net.input, l.c*l.h*l.w*l.batch, l.binary_input);
-        net.input = l.binary_input;
+    अगर(l.xnor){
+        binarize_weights(l.weights, l.n, l.c/l.groups*l.आकार*l.आकार, l.द्विआधारी_weights);
+        swap_द्विआधारी(&l);
+        binarize_cpu(net.निवेश, l.c*l.h*l.w*l.batch, l.द्विआधारी_निवेश);
+        net.निवेश = l.द्विआधारी_निवेश;
     }
 
-    int m = l.n/l.groups;
-    int k = l.size*l.size*l.c/l.groups;
-    int n = l.out_w*l.out_h;
-    for(i = 0; i < l.batch; ++i){
-        for(j = 0; j < l.groups; ++j){
-            float *a = l.weights + j*l.nweights/l.groups;
-            float *b = net.workspace;
-            float *c = l.output + (i*l.groups + j)*n*m;
-            float *im =  net.input + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
+    पूर्णांक m = l.n/l.groups;
+    पूर्णांक k = l.आकार*l.आकार*l.c/l.groups;
+    पूर्णांक n = l.out_w*l.out_h;
+    क्रम(i = 0; i < l.batch; ++i){
+        क्रम(j = 0; j < l.groups; ++j){
+            भग्न *a = l.weights + j*l.nweights/l.groups;
+            भग्न *b = net.workspace;
+            भग्न *c = l.output + (i*l.groups + j)*n*m;
+            भग्न *im =  net.निवेश + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
 
-            if (l.size == 1) {
+            अगर (l.आकार == 1) {
                 b = im;
-            } else {
-                im2col_cpu(im, l.c/l.groups, l.h, l.w, l.size, l.stride, l.pad, b);
+            } अन्यथा {
+                im2col_cpu(im, l.c/l.groups, l.h, l.w, l.आकार, l.stride, l.pad, b);
             }
             gemm(0,0,m,n,k,1,a,k,b,n,1,c,n);
         }
     }
 
-    if(l.batch_normalize){
+    अगर(l.batch_normalize){
         forward_batchnorm_layer(l, net);
-    } else {
+    } अन्यथा {
         add_bias(l.output, l.biases, l.batch, l.n, l.out_h*l.out_w);
     }
 
     activate_array(l.output, l.outputs*l.batch, l.activation);
-    if(l.binary || l.xnor) swap_binary(&l);
+    अगर(l.द्विआधारी || l.xnor) swap_द्विआधारी(&l);
 }
 
-void backward_convolutional_layer(convolutional_layer l, network net)
+व्योम backward_convolutional_layer(convolutional_layer l, network net)
 {
-    int i, j;
-    int m = l.n/l.groups;
-    int n = l.size*l.size*l.c/l.groups;
-    int k = l.out_w*l.out_h;
+    पूर्णांक i, j;
+    पूर्णांक m = l.n/l.groups;
+    पूर्णांक n = l.आकार*l.आकार*l.c/l.groups;
+    पूर्णांक k = l.out_w*l.out_h;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    अगर(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } अन्यथा {
         backward_bias(l.bias_updates, l.delta, l.batch, l.n, k);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        for(j = 0; j < l.groups; ++j){
-            float *a = l.delta + (i*l.groups + j)*m*k;
-            float *b = net.workspace;
-            float *c = l.weight_updates + j*l.nweights/l.groups;
+    क्रम(i = 0; i < l.batch; ++i){
+        क्रम(j = 0; j < l.groups; ++j){
+            भग्न *a = l.delta + (i*l.groups + j)*m*k;
+            भग्न *b = net.workspace;
+            भग्न *c = l.weight_updates + j*l.nweights/l.groups;
 
-            float *im  = net.input + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
-            float *imd = net.delta + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
+            भग्न *im  = net.निवेश + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
+            भग्न *imd = net.delta + (i*l.groups + j)*l.c/l.groups*l.h*l.w;
 
-            if(l.size == 1){
+            अगर(l.आकार == 1){
                 b = im;
-            } else {
+            } अन्यथा {
                 im2col_cpu(im, l.c/l.groups, l.h, l.w, 
-                        l.size, l.stride, l.pad, b);
+                        l.आकार, l.stride, l.pad, b);
             }
 
             gemm(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-            if (net.delta) {
+            अगर (net.delta) {
                 a = l.weights + j*l.nweights/l.groups;
                 b = l.delta + (i*l.groups + j)*m*k;
                 c = net.workspace;
-                if (l.size == 1) {
+                अगर (l.आकार == 1) {
                     c = imd;
                 }
 
                 gemm(1,0,n,k,m,1,a,n,b,k,0,c,k);
 
-                if (l.size != 1) {
-                    col2im_cpu(net.workspace, l.c/l.groups, l.h, l.w, l.size, l.stride, l.pad, imd);
+                अगर (l.आकार != 1) {
+                    col2im_cpu(net.workspace, l.c/l.groups, l.h, l.w, l.आकार, l.stride, l.pad, imd);
                 }
             }
         }
     }
 }
 
-void update_convolutional_layer(convolutional_layer l, update_args a)
+व्योम update_convolutional_layer(convolutional_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    भग्न learning_rate = a.learning_rate*l.learning_rate_scale;
+    भग्न momentum = a.momentum;
+    भग्न decay = a.decay;
+    पूर्णांक batch = a.batch;
 
     axpy_cpu(l.n, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.n, momentum, l.bias_updates, 1);
 
-    if(l.scales){
+    अगर(l.scales){
         axpy_cpu(l.n, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.n, momentum, l.scale_updates, 1);
     }
@@ -556,43 +556,43 @@ void update_convolutional_layer(convolutional_layer l, update_args a)
 }
 
 
-image get_convolutional_weight(convolutional_layer l, int i)
+image get_convolutional_weight(convolutional_layer l, पूर्णांक i)
 {
-    int h = l.size;
-    int w = l.size;
-    int c = l.c/l.groups;
-    return float_to_image(w,h,c,l.weights+i*h*w*c);
+    पूर्णांक h = l.आकार;
+    पूर्णांक w = l.आकार;
+    पूर्णांक c = l.c/l.groups;
+    वापस float_to_image(w,h,c,l.weights+i*h*w*c);
 }
 
-void rgbgr_weights(convolutional_layer l)
+व्योम rgbgr_weights(convolutional_layer l)
 {
-    int i;
-    for(i = 0; i < l.n; ++i){
+    पूर्णांक i;
+    क्रम(i = 0; i < l.n; ++i){
         image im = get_convolutional_weight(l, i);
-        if (im.c == 3) {
+        अगर (im.c == 3) {
             rgbgr_image(im);
         }
     }
 }
 
-void rescale_weights(convolutional_layer l, float scale, float trans)
+व्योम rescale_weights(convolutional_layer l, भग्न scale, भग्न trans)
 {
-    int i;
-    for(i = 0; i < l.n; ++i){
+    पूर्णांक i;
+    क्रम(i = 0; i < l.n; ++i){
         image im = get_convolutional_weight(l, i);
-        if (im.c == 3) {
+        अगर (im.c == 3) {
             scale_image(im, scale);
-            float sum = sum_array(im.data, im.w*im.h*im.c);
-            l.biases[i] += sum*trans;
+            भग्न योग = योग_array(im.तथ्य, im.w*im.h*im.c);
+            l.biases[i] += योग*trans;
         }
     }
 }
 
 image *get_weights(convolutional_layer l)
 {
-    image *weights = calloc(l.n, sizeof(image));
-    int i;
-    for(i = 0; i < l.n; ++i){
+    image *weights = सुस्मृति(l.n, माप(image));
+    पूर्णांक i;
+    क्रम(i = 0; i < l.n; ++i){
         weights[i] = copy_image(get_convolutional_weight(l, i));
         normalize_image(weights[i]);
         /*
@@ -602,21 +602,21 @@ image *get_weights(convolutional_layer l)
          */
     }
     //error("hey");
-    return weights;
+    वापस weights;
 }
 
-image *visualize_convolutional_layer(convolutional_layer l, char *window, image *prev_weights)
+image *visualize_convolutional_layer(convolutional_layer l, अक्षर *window, image *पूर्व_weights)
 {
     image *single_weights = get_weights(l);
     show_images(single_weights, l.n, window);
 
     image delta = get_convolutional_image(l);
     image dc = collapse_image_layers(delta, 1);
-    char buff[256];
-    sprintf(buff, "%s: Output", window);
+    अक्षर buff[256];
+    प्र_लिखो(buff, "%s: Output", window);
     //show_image(dc, buff);
     //save_image(dc, buff);
     free_image(dc);
-    return single_weights;
+    वापस single_weights;
 }
 

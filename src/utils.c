@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#समावेश <stdio.h>
+#समावेश <stdlib.h>
+#समावेश <string.h>
+#समावेश <math.h>
+#समावेश <assert.h>
+#समावेश <unistd.h>
+#समावेश <float.h>
+#समावेश <limits.h>
+#समावेश <time.h>
+#समावेश <sys/time.h>
 
-#include "utils.h"
+#समावेश "utils.h"
 
 
 /*
@@ -24,652 +24,652 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+द्विगुन what_time_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    काष्ठा timeval समय;
+    अगर (gettimeofday(&समय,शून्य)){
+        वापस 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    वापस (द्विगुन)समय.tv_sec + (द्विगुन)समय.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+पूर्णांक *read_intlist(अक्षर *gpu_list, पूर्णांक *ngpus, पूर्णांक d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    पूर्णांक *gpus = 0;
+    अगर(gpu_list){
+        पूर्णांक len = म_माप(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        पूर्णांक i;
+        क्रम(i = 0; i < len; ++i){
+            अगर (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
-            gpus[i] = atoi(gpu_list);
-            gpu_list = strchr(gpu_list, ',')+1;
+        gpus = सुस्मृति(*ngpus, माप(पूर्णांक));
+        क्रम(i = 0; i < *ngpus; ++i){
+            gpus[i] = म_से_प(gpu_list);
+            gpu_list = म_अक्षर(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } अन्यथा {
+        gpus = सुस्मृति(1, माप(भग्न));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    वापस gpus;
 }
 
-int *read_map(char *filename)
+पूर्णांक *read_map(अक्षर *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
-    FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    पूर्णांक n = 0;
+    पूर्णांक *map = 0;
+    अक्षर *str;
+    खाता *file = ख_खोलो(filename, "r");
+    अगर(!file) file_error(filename);
+    जबतक((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
-        map[n-1] = atoi(str);
+        map = पुनः_स्मृति(map, n*माप(पूर्णांक));
+        map[n-1] = म_से_प(str);
     }
-    return map;
+    वापस map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+व्योम sorta_shuffle(व्योम *arr, माप_प्रकार n, माप_प्रकार आकार, माप_प्रकार sections)
 {
-    size_t i;
-    for(i = 0; i < sections; ++i){
-        size_t start = n*i/sections;
-        size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
-    }
-}
-
-void shuffle(void *arr, size_t n, size_t size)
-{
-    size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
-        size_t j = i + rand()/(RAND_MAX / (n-i)+1);
-        memcpy(swp,          arr+(j*size), size);
-        memcpy(arr+(j*size), arr+(i*size), size);
-        memcpy(arr+(i*size), swp,          size);
+    माप_प्रकार i;
+    क्रम(i = 0; i < sections; ++i){
+        माप_प्रकार start = n*i/sections;
+        माप_प्रकार end = n*(i+1)/sections;
+        माप_प्रकार अंक = end-start;
+        shuffle(arr+(start*आकार), अंक, आकार);
     }
 }
 
-int *random_index_order(int min, int max)
+व्योम shuffle(व्योम *arr, माप_प्रकार n, माप_प्रकार आकार)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    माप_प्रकार i;
+    व्योम *swp = सुस्मृति(1, आकार);
+    क्रम(i = 0; i < n-1; ++i){
+        माप_प्रकार j = i + अक्रम()/(अक्रम_उच्च / (n-i)+1);
+        स_नकल(swp,          arr+(j*आकार), आकार);
+        स_नकल(arr+(j*आकार), arr+(i*आकार), आकार);
+        स_नकल(arr+(i*आकार), swp,          आकार);
+    }
+}
+
+पूर्णांक *random_सूचकांक_order(पूर्णांक min, पूर्णांक max)
+{
+    पूर्णांक *inds = सुस्मृति(max-min, माप(पूर्णांक));
+    पूर्णांक i;
+    क्रम(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
-        inds[i] = inds[index];
-        inds[index] = swap;
+    क्रम(i = min; i < max-1; ++i){
+        पूर्णांक swap = inds[i];
+        पूर्णांक सूचकांक = i + अक्रम()%(max-i);
+        inds[i] = inds[सूचकांक];
+        inds[सूचकांक] = swap;
     }
-    return inds;
+    वापस inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+व्योम del_arg(पूर्णांक argc, अक्षर **argv, पूर्णांक सूचकांक)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    पूर्णांक i;
+    क्रम(i = सूचकांक; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+पूर्णांक find_arg(पूर्णांक argc, अक्षर* argv[], अक्षर *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    पूर्णांक i;
+    क्रम(i = 0; i < argc; ++i) {
+        अगर(!argv[i]) जारी;
+        अगर(0==म_भेद(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            वापस 1;
         }
     }
-    return 0;
+    वापस 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+पूर्णांक find_int_arg(पूर्णांक argc, अक्षर **argv, अक्षर *arg, पूर्णांक def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
-            def = atoi(argv[i+1]);
+    पूर्णांक i;
+    क्रम(i = 0; i < argc-1; ++i){
+        अगर(!argv[i]) जारी;
+        अगर(0==म_भेद(argv[i], arg)){
+            def = म_से_प(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            अवरोध;
         }
     }
-    return def;
+    वापस def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+भग्न find_float_arg(पूर्णांक argc, अक्षर **argv, अक्षर *arg, भग्न def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
-            def = atof(argv[i+1]);
+    पूर्णांक i;
+    क्रम(i = 0; i < argc-1; ++i){
+        अगर(!argv[i]) जारी;
+        अगर(0==म_भेद(argv[i], arg)){
+            def = म_से_भ(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            अवरोध;
         }
     }
-    return def;
+    वापस def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+अक्षर *find_char_arg(पूर्णांक argc, अक्षर **argv, अक्षर *arg, अक्षर *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    पूर्णांक i;
+    क्रम(i = 0; i < argc-1; ++i){
+        अगर(!argv[i]) जारी;
+        अगर(0==म_भेद(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            अवरोध;
         }
     }
-    return def;
+    वापस def;
 }
 
 
-char *basecfg(char *cfgfile)
+अक्षर *basecfg(अक्षर *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    अक्षर *c = cfgfile;
+    अक्षर *अग्र;
+    जबतक((अग्र = म_अक्षर(c, '/')))
     {
-        c = next+1;
+        c = अग्र+1;
     }
     c = copy_string(c);
-    next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    अग्र = म_अक्षर(c, '.');
+    अगर (अग्र) *अग्र = 0;
+    वापस c;
 }
 
-int alphanum_to_int(char c)
+पूर्णांक alphanum_to_int(अक्षर c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    वापस (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+अक्षर int_to_alphanum(पूर्णांक i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    अगर (i == 36) वापस '.';
+    वापस (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+व्योम pm(पूर्णांक M, पूर्णांक N, भग्न *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
-        printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
-            printf("%2.4f, ", A[i*N+j]);
+    पूर्णांक i,j;
+    क्रम(i =0 ; i < M; ++i){
+        म_लिखो("%d ", i+1);
+        क्रम(j = 0; j < N; ++j){
+            म_लिखो("%2.4f, ", A[i*N+j]);
         }
-        printf("\n");
+        म_लिखो("\n");
     }
-    printf("\n");
+    म_लिखो("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+व्योम find_replace(अक्षर *str, अक्षर *orig, अक्षर *rep, अक्षर *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    अक्षर बफर[4096] = {0};
+    अक्षर *p;
 
-    sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
-        sprintf(output, "%s", str);
-        return;
+    प्र_लिखो(बफर, "%s", str);
+    अगर(!(p = म_माला(बफर, orig))){  // Is 'orig' even in 'str'?
+        प्र_लिखो(output, "%s", str);
+        वापस;
     }
 
     *p = '\0';
 
-    sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
+    प्र_लिखो(output, "%s%s%s", बफर, rep, p+म_माप(orig));
 }
 
-float sec(clock_t clocks)
+भग्न sec(घड़ी_प्रकार clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    वापस (भग्न)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+व्योम शीर्ष_k(भग्न *a, पूर्णांक n, पूर्णांक k, पूर्णांक *सूचकांक)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
-                curr = index[j];
-                index[j] = swap;
+    पूर्णांक i,j;
+    क्रम(j = 0; j < k; ++j) सूचकांक[j] = -1;
+    क्रम(i = 0; i < n; ++i){
+        पूर्णांक curr = i;
+        क्रम(j = 0; j < k; ++j){
+            अगर((सूचकांक[j] < 0) || a[curr] > a[सूचकांक[j]]){
+                पूर्णांक swap = curr;
+                curr = सूचकांक[j];
+                सूचकांक[j] = swap;
             }
         }
     }
 }
 
-void error(const char *s)
+व्योम error(स्थिर अक्षर *s)
 {
-    perror(s);
-    assert(0);
-    exit(-1);
+    लिखो_त्रुटि(s);
+    निश्चित(0);
+    निकास(-1);
 }
 
-unsigned char *read_file(char *filename)
+अचिन्हित अक्षर *read_file(अक्षर *filename)
 {
-    FILE *fp = fopen(filename, "rb");
-    size_t size;
+    खाता *fp = ख_खोलो(filename, "rb");
+    माप_प्रकार आकार;
 
-    fseek(fp, 0, SEEK_END); 
-    size = ftell(fp);
-    fseek(fp, 0, SEEK_SET); 
+    ख_जाओ(fp, 0, अंत_से); 
+    आकार = ख_बताओ(fp);
+    ख_जाओ(fp, 0, शुरू_से); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
-    fread(text, 1, size, fp);
-    fclose(fp);
-    return text;
+    अचिन्हित अक्षर *text = सुस्मृति(आकार+1, माप(अक्षर));
+    ख_पढ़ो(text, 1, आकार, fp);
+    ख_बंद(fp);
+    वापस text;
 }
 
-void malloc_error()
+व्योम malloc_error()
 {
-    fprintf(stderr, "Malloc error\n");
-    exit(-1);
+    ख_लिखो(मानक_त्रुटि, "Malloc error\n");
+    निकास(-1);
 }
 
-void file_error(char *s)
+व्योम file_error(अक्षर *s)
 {
-    fprintf(stderr, "Couldn't open file: %s\n", s);
-    exit(0);
+    ख_लिखो(मानक_त्रुटि, "Couldn't open file: %s\n", s);
+    निकास(0);
 }
 
-list *split_str(char *s, char delim)
+list *split_str(अक्षर *s, अक्षर delim)
 {
-    size_t i;
-    size_t len = strlen(s);
+    माप_प्रकार i;
+    माप_प्रकार len = म_माप(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_जोड़ो(l, s);
+    क्रम(i = 0; i < len; ++i){
+        अगर(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_जोड़ो(l, &(s[i+1]));
         }
     }
-    return l;
+    वापस l;
 }
 
-void strip(char *s)
+व्योम strip(अक्षर *s)
 {
-    size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    माप_प्रकार i;
+    माप_प्रकार len = म_माप(s);
+    माप_प्रकार offset = 0;
+    क्रम(i = 0; i < len; ++i){
+        अक्षर c = s[i];
+        अगर(c==' '||c=='\t'||c=='\n') ++offset;
+        अन्यथा s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void strip_char(char *s, char bad)
+व्योम strip_char(अक्षर *s, अक्षर bad)
 {
-    size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    माप_प्रकार i;
+    माप_प्रकार len = म_माप(s);
+    माप_प्रकार offset = 0;
+    क्रम(i = 0; i < len; ++i){
+        अक्षर c = s[i];
+        अगर(c==bad) ++offset;
+        अन्यथा s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+व्योम free_ptrs(व्योम **ptrs, पूर्णांक n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i) मुक्त(ptrs[i]);
+    मुक्त(ptrs);
 }
 
-char *fgetl(FILE *fp)
+अक्षर *fgetl(खाता *fp)
 {
-    if(feof(fp)) return 0;
-    size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    अगर(ख_पूर्ण(fp)) वापस 0;
+    माप_प्रकार आकार = 512;
+    अक्षर *पंक्ति = दो_स्मृति(आकार*माप(अक्षर));
+    अगर(!ख_माला_लो(पंक्ति, आकार, fp)){
+        मुक्त(पंक्ति);
+        वापस 0;
     }
 
-    size_t curr = strlen(line);
+    माप_प्रकार curr = म_माप(पंक्ति);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
-            size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
-                printf("%ld\n", size);
+    जबतक((पंक्ति[curr-1] != '\n') && !ख_पूर्ण(fp)){
+        अगर(curr == आकार-1){
+            आकार *= 2;
+            पंक्ति = पुनः_स्मृति(पंक्ति, आकार*माप(अक्षर));
+            अगर(!पंक्ति) {
+                म_लिखो("%ld\n", आकार);
                 malloc_error();
             }
         }
-        size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        माप_प्रकार readsize = आकार-curr;
+        अगर(readsize > पूर्णांक_उच्च) readsize = पूर्णांक_उच्च-1;
+        ख_माला_लो(&पंक्ति[curr], readsize, fp);
+        curr = म_माप(पंक्ति);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    अगर(पंक्ति[curr-1] == '\n') पंक्ति[curr-1] = '\0';
 
-    return line;
+    वापस पंक्ति;
 }
 
-int read_int(int fd)
+पूर्णांक read_int(पूर्णांक fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    पूर्णांक n = 0;
+    पूर्णांक अग्र = पढ़ो(fd, &n, माप(पूर्णांक));
+    अगर(अग्र <= 0) वापस -1;
+    वापस n;
 }
 
-void write_int(int fd, int n)
+व्योम write_int(पूर्णांक fd, पूर्णांक n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    पूर्णांक अग्र = ग_लिखो(fd, &n, माप(पूर्णांक));
+    अगर(अग्र <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+पूर्णांक read_all_fail(पूर्णांक fd, अक्षर *बफर, माप_प्रकार bytes)
 {
-    size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    माप_प्रकार n = 0;
+    जबतक(n < bytes){
+        पूर्णांक अग्र = पढ़ो(fd, बफर + n, bytes-n);
+        अगर(अग्र <= 0) वापस 1;
+        n += अग्र;
     }
-    return 0;
+    वापस 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+पूर्णांक write_all_fail(पूर्णांक fd, अक्षर *बफर, माप_प्रकार bytes)
 {
-    size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    माप_प्रकार n = 0;
+    जबतक(n < bytes){
+        माप_प्रकार अग्र = ग_लिखो(fd, बफर + n, bytes-n);
+        अगर(अग्र <= 0) वापस 1;
+        n += अग्र;
     }
-    return 0;
+    वापस 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+व्योम read_all(पूर्णांक fd, अक्षर *बफर, माप_प्रकार bytes)
 {
-    size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
-    }
-}
-
-void write_all(int fd, char *buffer, size_t bytes)
-{
-    size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
-        n += next;
+    माप_प्रकार n = 0;
+    जबतक(n < bytes){
+        पूर्णांक अग्र = पढ़ो(fd, बफर + n, bytes-n);
+        अगर(अग्र <= 0) error("read failed");
+        n += अग्र;
     }
 }
 
-
-char *copy_string(char *s)
+व्योम write_all(पूर्णांक fd, अक्षर *बफर, माप_प्रकार bytes)
 {
-    char *copy = malloc(strlen(s)+1);
-    strncpy(copy, s, strlen(s)+1);
-    return copy;
+    माप_प्रकार n = 0;
+    जबतक(n < bytes){
+        माप_प्रकार अग्र = ग_लिखो(fd, बफर + n, bytes-n);
+        अगर(अग्र <= 0) error("write failed");
+        n += अग्र;
+    }
 }
 
-list *parse_csv_line(char *line)
+
+अक्षर *copy_string(अक्षर *s)
+{
+    अक्षर *copy = दो_स्मृति(म_माप(s)+1);
+    म_नकलन(copy, s, म_माप(s)+1);
+    वापस copy;
+}
+
+list *parse_csv_पंक्ति(अक्षर *पंक्ति)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    अक्षर *c, *p;
+    पूर्णांक in = 0;
+    क्रम(c = पंक्ति, p = पंक्ति; *c != '\0'; ++c){
+        अगर(*c == '"') in = !in;
+        अन्यथा अगर(*c == ',' && !in){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_जोड़ो(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_जोड़ो(l, copy_string(p));
+    वापस l;
 }
 
-int count_fields(char *line)
+पूर्णांक गिनती_fields(अक्षर *पंक्ति)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
+    पूर्णांक गिनती = 0;
+    पूर्णांक done = 0;
+    अक्षर *c;
+    क्रम(c = पंक्ति; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        अगर(*c == ',' || done) ++गिनती;
     }
-    return count;
+    वापस गिनती;
 }
 
-float *parse_fields(char *line, int n)
+भग्न *parse_fields(अक्षर *पंक्ति, पूर्णांक n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
+    भग्न *field = सुस्मृति(n, माप(भग्न));
+    अक्षर *c, *p, *end;
+    पूर्णांक गिनती = 0;
+    पूर्णांक done = 0;
+    क्रम(c = पंक्ति, p = पंक्ति; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done){
+        अगर(*c == ',' || done){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            field[गिनती] = म_से_भग्न(p, &end);
+            अगर(p == c) field[गिनती] = nan("");
+            अगर(end != c && (end != c-1 || *end != '\r')) field[गिनती] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++गिनती;
         }
     }
-    return field;
+    वापस field;
 }
 
-float sum_array(float *a, int n)
+भग्न योग_array(भग्न *a, पूर्णांक n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    पूर्णांक i;
+    भग्न योग = 0;
+    क्रम(i = 0; i < n; ++i) योग += a[i];
+    वापस योग;
 }
 
-float mean_array(float *a, int n)
+भग्न mean_array(भग्न *a, पूर्णांक n)
 {
-    return sum_array(a,n)/n;
+    वापस योग_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+व्योम mean_arrays(भग्न **a, पूर्णांक n, पूर्णांक els, भग्न *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    पूर्णांक i;
+    पूर्णांक j;
+    स_रखो(avg, 0, els*माप(भग्न));
+    क्रम(j = 0; j < n; ++j){
+        क्रम(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    क्रम(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+व्योम print_statistics(भग्न *a, पूर्णांक n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
-    printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
+    भग्न m = mean_array(a, n);
+    भग्न v = variance_array(a, n);
+    म_लिखो("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+भग्न variance_array(भग्न *a, पूर्णांक n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    पूर्णांक i;
+    भग्न योग = 0;
+    भग्न mean = mean_array(a, n);
+    क्रम(i = 0; i < n; ++i) योग += (a[i] - mean)*(a[i]-mean);
+    भग्न variance = योग/n;
+    वापस variance;
 }
 
-int constrain_int(int a, int min, int max)
+पूर्णांक constrain_int(पूर्णांक a, पूर्णांक min, पूर्णांक max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    अगर (a < min) वापस min;
+    अगर (a > max) वापस max;
+    वापस a;
 }
 
-float constrain(float min, float max, float a)
+भग्न constrain(भग्न min, भग्न max, भग्न a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    अगर (a < min) वापस min;
+    अगर (a > max) वापस max;
+    वापस a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+भग्न dist_array(भग्न *a, भग्न *b, पूर्णांक n, पूर्णांक sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    पूर्णांक i;
+    भग्न योग = 0;
+    क्रम(i = 0; i < n; i += sub) योग += घात(a[i]-b[i], 2);
+    वापस वर्ग_मूल(योग);
 }
 
-float mse_array(float *a, int n)
+भग्न mse_array(भग्न *a, पूर्णांक n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    पूर्णांक i;
+    भग्न योग = 0;
+    क्रम(i = 0; i < n; ++i) योग += a[i]*a[i];
+    वापस वर्ग_मूल(योग/n);
 }
 
-void normalize_array(float *a, int n)
+व्योम normalize_array(भग्न *a, पूर्णांक n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    पूर्णांक i;
+    भग्न mu = mean_array(a,n);
+    भग्न sigma = वर्ग_मूल(variance_array(a,n));
+    क्रम(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
     mu = mean_array(a,n);
-    sigma = sqrt(variance_array(a,n));
+    sigma = वर्ग_मूल(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+व्योम translate_array(भग्न *a, पूर्णांक n, भग्न s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+भग्न mag_array(भग्न *a, पूर्णांक n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        sum += a[i]*a[i];   
+    पूर्णांक i;
+    भग्न योग = 0;
+    क्रम(i = 0; i < n; ++i){
+        योग += a[i]*a[i];   
     }
-    return sqrt(sum);
+    वापस वर्ग_मूल(योग);
 }
 
-void scale_array(float *a, int n, float s)
+व्योम scale_array(भग्न *a, पूर्णांक n, भग्न s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+पूर्णांक sample_array(भग्न *a, पूर्णांक n)
 {
-    float sum = sum_array(a, n);
-    scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    भग्न योग = योग_array(a, n);
+    scale_array(a, n, 1./योग);
+    भग्न r = rand_uniform(0, 1);
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        अगर (r <= 0) वापस i;
     }
-    return n-1;
+    वापस n-1;
 }
 
-int max_int_index(int *a, int n)
+पूर्णांक max_int_सूचकांक(पूर्णांक *a, पूर्णांक n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    अगर(n <= 0) वापस -1;
+    पूर्णांक i, max_i = 0;
+    पूर्णांक max = a[0];
+    क्रम(i = 1; i < n; ++i){
+        अगर(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    वापस max_i;
 }
 
-int max_index(float *a, int n)
+पूर्णांक max_सूचकांक(भग्न *a, पूर्णांक n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    अगर(n <= 0) वापस -1;
+    पूर्णांक i, max_i = 0;
+    भग्न max = a[0];
+    क्रम(i = 1; i < n; ++i){
+        अगर(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    वापस max_i;
 }
 
-int int_index(int *a, int val, int n)
+पूर्णांक int_सूचकांक(पूर्णांक *a, पूर्णांक val, पूर्णांक n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i){
+        अगर(a[i] == val) वापस i;
     }
-    return -1;
+    वापस -1;
 }
 
-int rand_int(int min, int max)
+पूर्णांक rand_int(पूर्णांक min, पूर्णांक max)
 {
-    if (max < min){
-        int s = min;
+    अगर (max < min){
+        पूर्णांक s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    पूर्णांक r = (अक्रम()%(max - min + 1)) + min;
+    वापस r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+भग्न rand_normal()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    अटल पूर्णांक haveSpare = 0;
+    अटल द्विगुन rand1, rand2;
 
-    if(haveSpare)
+    अगर(haveSpare)
     {
         haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        वापस वर्ग_मूल(rand1) * sin(rand2);
     }
 
     haveSpare = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = अक्रम() / ((द्विगुन) अक्रम_उच्च);
+    अगर(rand1 < 1e-100) rand1 = 1e-100;
     rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand2 = (अक्रम() / ((द्विगुन) अक्रम_उच्च)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    वापस वर्ग_मूल(rand1) * cos(rand2);
 }
 
 /*
@@ -683,44 +683,44 @@ float rand_normal()
    }
  */
 
-size_t rand_size_t()
+माप_प्रकार rand_आकार_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
-        ((size_t)(rand()&0xff) << 48) |
-        ((size_t)(rand()&0xff) << 40) |
-        ((size_t)(rand()&0xff) << 32) |
-        ((size_t)(rand()&0xff) << 24) |
-        ((size_t)(rand()&0xff) << 16) |
-        ((size_t)(rand()&0xff) << 8) |
-        ((size_t)(rand()&0xff) << 0);
+    वापस  ((माप_प्रकार)(अक्रम()&0xff) << 56) | 
+        ((माप_प्रकार)(अक्रम()&0xff) << 48) |
+        ((माप_प्रकार)(अक्रम()&0xff) << 40) |
+        ((माप_प्रकार)(अक्रम()&0xff) << 32) |
+        ((माप_प्रकार)(अक्रम()&0xff) << 24) |
+        ((माप_प्रकार)(अक्रम()&0xff) << 16) |
+        ((माप_प्रकार)(अक्रम()&0xff) << 8) |
+        ((माप_प्रकार)(अक्रम()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+भग्न rand_uniform(भग्न min, भग्न max)
 {
-    if(max < min){
-        float swap = min;
+    अगर(max < min){
+        भग्न swap = min;
         min = max;
         max = swap;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    वापस ((भग्न)अक्रम()/अक्रम_उच्च * (max - min)) + min;
 }
 
-float rand_scale(float s)
+भग्न rand_scale(भग्न s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    भग्न scale = rand_uniform(1, s);
+    अगर(अक्रम()%2) वापस scale;
+    वापस 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+भग्न **one_hot_encode(भग्न *a, पूर्णांक n, पूर्णांक k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
-        t[i][index] = 1;
+    पूर्णांक i;
+    भग्न **t = सुस्मृति(n, माप(भग्न*));
+    क्रम(i = 0; i < n; ++i){
+        t[i] = सुस्मृति(k, माप(भग्न));
+        पूर्णांक सूचकांक = (पूर्णांक)a[i];
+        t[i][सूचकांक] = 1;
     }
-    return t;
+    वापस t;
 }
 

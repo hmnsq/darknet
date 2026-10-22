@@ -1,19 +1,19 @@
-#ifndef NORMALIZATION_LAYER_H
-#define NORMALIZATION_LAYER_H
+#अगर_अघोषित NORMALIZATION_LAYER_H
+#घोषणा NORMALIZATION_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "image.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-layer make_normalization_layer(int batch, int w, int h, int c, int size, float alpha, float beta, float kappa);
-void resize_normalization_layer(layer *layer, int h, int w);
-void forward_normalization_layer(const layer layer, network net);
-void backward_normalization_layer(const layer layer, network net);
-void visualize_normalization_layer(layer layer, char *window);
+layer make_normalization_layer(पूर्णांक batch, पूर्णांक w, पूर्णांक h, पूर्णांक c, पूर्णांक आकार, भग्न alpha, भग्न beta, भग्न kappa);
+व्योम resize_normalization_layer(layer *layer, पूर्णांक h, पूर्णांक w);
+व्योम forward_normalization_layer(स्थिर layer layer, network net);
+व्योम backward_normalization_layer(स्थिर layer layer, network net);
+व्योम visualize_normalization_layer(layer layer, अक्षर *window);
 
-#ifdef GPU
-void forward_normalization_layer_gpu(const layer layer, network net);
-void backward_normalization_layer_gpu(const layer layer, network net);
-#endif
+#अगर_घोषित GPU
+व्योम forward_normalization_layer_gpu(स्थिर layer layer, network net);
+व्योम backward_normalization_layer_gpu(स्थिर layer layer, network net);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर

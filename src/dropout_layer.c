@@ -1,10 +1,10 @@
-#include "dropout_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include <stdlib.h>
-#include <stdio.h>
+#समावेश "dropout_layer.h"
+#समावेश "utils.h"
+#समावेश "cuda.h"
+#समावेश <stdlib.h>
+#समावेश <stdio.h>
 
-dropout_layer make_dropout_layer(int batch, int inputs, float probability)
+dropout_layer make_dropout_layer(पूर्णांक batch, पूर्णांक inputs, भग्न probability)
 {
     dropout_layer l = {0};
     l.type = DROPOUT;
@@ -12,49 +12,49 @@ dropout_layer make_dropout_layer(int batch, int inputs, float probability)
     l.inputs = inputs;
     l.outputs = inputs;
     l.batch = batch;
-    l.rand = calloc(inputs*batch, sizeof(float));
+    l.अक्रम = सुस्मृति(inputs*batch, माप(भग्न));
     l.scale = 1./(1.-probability);
     l.forward = forward_dropout_layer;
     l.backward = backward_dropout_layer;
-    #ifdef GPU
+    #अगर_घोषित GPU
     l.forward_gpu = forward_dropout_layer_gpu;
     l.backward_gpu = backward_dropout_layer_gpu;
-    l.rand_gpu = cuda_make_array(l.rand, inputs*batch);
-    #endif
-    fprintf(stderr, "dropout       p = %.2f               %4d  ->  %4d\n", probability, inputs, inputs);
-    return l;
+    l.rand_gpu = cuda_make_array(l.अक्रम, inputs*batch);
+    #पूर्ण_अगर
+    ख_लिखो(मानक_त्रुटि, "dropout       p = %.2f               %4d  ->  %4d\n", probability, inputs, inputs);
+    वापस l;
 } 
 
-void resize_dropout_layer(dropout_layer *l, int inputs)
+व्योम resize_dropout_layer(dropout_layer *l, पूर्णांक inputs)
 {
-    l->rand = realloc(l->rand, l->inputs*l->batch*sizeof(float));
-    #ifdef GPU
+    l->अक्रम = पुनः_स्मृति(l->अक्रम, l->inputs*l->batch*माप(भग्न));
+    #अगर_घोषित GPU
     cuda_free(l->rand_gpu);
 
-    l->rand_gpu = cuda_make_array(l->rand, inputs*l->batch);
-    #endif
+    l->rand_gpu = cuda_make_array(l->अक्रम, inputs*l->batch);
+    #पूर्ण_अगर
 }
 
-void forward_dropout_layer(dropout_layer l, network net)
+व्योम forward_dropout_layer(dropout_layer l, network net)
 {
-    int i;
-    if (!net.train) return;
-    for(i = 0; i < l.batch * l.inputs; ++i){
-        float r = rand_uniform(0, 1);
-        l.rand[i] = r;
-        if(r < l.probability) net.input[i] = 0;
-        else net.input[i] *= l.scale;
+    पूर्णांक i;
+    अगर (!net.train) वापस;
+    क्रम(i = 0; i < l.batch * l.inputs; ++i){
+        भग्न r = rand_uniform(0, 1);
+        l.अक्रम[i] = r;
+        अगर(r < l.probability) net.निवेश[i] = 0;
+        अन्यथा net.निवेश[i] *= l.scale;
     }
 }
 
-void backward_dropout_layer(dropout_layer l, network net)
+व्योम backward_dropout_layer(dropout_layer l, network net)
 {
-    int i;
-    if(!net.delta) return;
-    for(i = 0; i < l.batch * l.inputs; ++i){
-        float r = l.rand[i];
-        if(r < l.probability) net.delta[i] = 0;
-        else net.delta[i] *= l.scale;
+    पूर्णांक i;
+    अगर(!net.delta) वापस;
+    क्रम(i = 0; i < l.batch * l.inputs; ++i){
+        भग्न r = l.अक्रम[i];
+        अगर(r < l.probability) net.delta[i] = 0;
+        अन्यथा net.delta[i] *= l.scale;
     }
 }
 

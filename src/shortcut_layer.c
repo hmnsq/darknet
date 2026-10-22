@@ -1,14 +1,14 @@
-#include "shortcut_layer.h"
-#include "cuda.h"
-#include "blas.h"
-#include "activations.h"
+#समावेश "shortcut_layer.h"
+#समावेश "cuda.h"
+#समावेश "blas.h"
+#समावेश "activations.h"
 
-#include <stdio.h>
-#include <assert.h>
+#समावेश <stdio.h>
+#समावेश <assert.h>
 
-layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2)
+layer make_shortcut_layer(पूर्णांक batch, पूर्णांक सूचकांक, पूर्णांक w, पूर्णांक h, पूर्णांक c, पूर्णांक w2, पूर्णांक h2, पूर्णांक c2)
 {
-    fprintf(stderr, "res  %3d                %4d x%4d x%4d   ->  %4d x%4d x%4d\n",index, w2,h2,c2, w,h,c);
+    ख_लिखो(मानक_त्रुटि, "res  %3d                %4d x%4d x%4d   ->  %4d x%4d x%4d\n",सूचकांक, w2,h2,c2, w,h,c);
     layer l = {0};
     l.type = SHORTCUT;
     l.batch = batch;
@@ -21,70 +21,70 @@ layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int
     l.outputs = w*h*c;
     l.inputs = l.outputs;
 
-    l.index = index;
+    l.सूचकांक = सूचकांक;
 
-    l.delta =  calloc(l.outputs*batch, sizeof(float));
-    l.output = calloc(l.outputs*batch, sizeof(float));;
+    l.delta =  सुस्मृति(l.outputs*batch, माप(भग्न));
+    l.output = सुस्मृति(l.outputs*batch, माप(भग्न));;
 
     l.forward = forward_shortcut_layer;
     l.backward = backward_shortcut_layer;
-    #ifdef GPU
+    #अगर_घोषित GPU
     l.forward_gpu = forward_shortcut_layer_gpu;
     l.backward_gpu = backward_shortcut_layer_gpu;
 
     l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
-    #endif
-    return l;
+    #पूर्ण_अगर
+    वापस l;
 }
 
-void resize_shortcut_layer(layer *l, int w, int h)
+व्योम resize_shortcut_layer(layer *l, पूर्णांक w, पूर्णांक h)
 {
-    assert(l->w == l->out_w);
-    assert(l->h == l->out_h);
+    निश्चित(l->w == l->out_w);
+    निश्चित(l->h == l->out_h);
     l->w = l->out_w = w;
     l->h = l->out_h = h;
     l->outputs = w*h*l->out_c;
     l->inputs = l->outputs;
-    l->delta =  realloc(l->delta, l->outputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, l->outputs*l->batch*sizeof(float));
+    l->delta =  पुनः_स्मृति(l->delta, l->outputs*l->batch*माप(भग्न));
+    l->output = पुनः_स्मृति(l->output, l->outputs*l->batch*माप(भग्न));
 
-#ifdef GPU
+#अगर_घोषित GPU
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
     l->output_gpu  = cuda_make_array(l->output, l->outputs*l->batch);
     l->delta_gpu   = cuda_make_array(l->delta,  l->outputs*l->batch);
-#endif
+#पूर्ण_अगर
     
 }
 
 
-void forward_shortcut_layer(const layer l, network net)
+व्योम forward_shortcut_layer(स्थिर layer l, network net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
-    shortcut_cpu(l.batch, l.w, l.h, l.c, net.layers[l.index].output, l.out_w, l.out_h, l.out_c, l.alpha, l.beta, l.output);
+    copy_cpu(l.outputs*l.batch, net.निवेश, 1, l.output, 1);
+    shortcut_cpu(l.batch, l.w, l.h, l.c, net.layers[l.सूचकांक].output, l.out_w, l.out_h, l.out_c, l.alpha, l.beta, l.output);
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_shortcut_layer(const layer l, network net)
+व्योम backward_shortcut_layer(स्थिर layer l, network net)
 {
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
     axpy_cpu(l.outputs*l.batch, l.alpha, l.delta, 1, net.delta, 1);
-    shortcut_cpu(l.batch, l.out_w, l.out_h, l.out_c, l.delta, l.w, l.h, l.c, 1, l.beta, net.layers[l.index].delta);
+    shortcut_cpu(l.batch, l.out_w, l.out_h, l.out_c, l.delta, l.w, l.h, l.c, 1, l.beta, net.layers[l.सूचकांक].delta);
 }
 
-#ifdef GPU
-void forward_shortcut_layer_gpu(const layer l, network net)
+#अगर_घोषित GPU
+व्योम forward_shortcut_layer_gpu(स्थिर layer l, network net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
-    shortcut_gpu(l.batch, l.w, l.h, l.c, net.layers[l.index].output_gpu, l.out_w, l.out_h, l.out_c, l.alpha, l.beta, l.output_gpu);
+    copy_gpu(l.outputs*l.batch, net.निवेश_gpu, 1, l.output_gpu, 1);
+    shortcut_gpu(l.batch, l.w, l.h, l.c, net.layers[l.सूचकांक].output_gpu, l.out_w, l.out_h, l.out_c, l.alpha, l.beta, l.output_gpu);
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_shortcut_layer_gpu(const layer l, network net)
+व्योम backward_shortcut_layer_gpu(स्थिर layer l, network net)
 {
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
     axpy_gpu(l.outputs*l.batch, l.alpha, l.delta_gpu, 1, net.delta_gpu, 1);
-    shortcut_gpu(l.batch, l.out_w, l.out_h, l.out_c, l.delta_gpu, l.w, l.h, l.c, 1, l.beta, net.layers[l.index].delta_gpu);
+    shortcut_gpu(l.batch, l.out_w, l.out_h, l.out_c, l.delta_gpu, l.w, l.h, l.c, 1, l.beta, net.layers[l.सूचकांक].delta_gpu);
 }
-#endif
+#पूर्ण_अगर

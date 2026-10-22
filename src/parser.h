@@ -1,9 +1,9 @@
-#ifndef PARSER_H
-#define PARSER_H
-#include "darknet.h"
-#include "network.h"
+#अगर_अघोषित PARSER_H
+#घोषणा PARSER_H
+#समावेश "darknet.h"
+#समावेश "network.h"
 
-void save_network(network net, char *filename);
-void save_weights_double(network net, char *filename);
+व्योम save_network(network net, अक्षर *filename);
+व्योम save_weights_double(network net, अक्षर *filename);
 
-#endif
+#पूर्ण_अगर

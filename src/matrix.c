@@ -1,74 +1,74 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#समावेश "matrix.h"
+#समावेश "utils.h"
+#समावेश "blas.h"
+#समावेश <stdio.h>
+#समावेश <stdlib.h>
+#समावेश <string.h>
+#समावेश <assert.h>
+#समावेश <math.h>
 
-void free_matrix(matrix m)
+व्योम free_matrix(matrix m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    पूर्णांक i;
+    क्रम(i = 0; i < m.rows; ++i) मुक्त(m.vals[i]);
+    मुक्त(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+भग्न matrix_topk_accuracy(matrix truth, matrix guess, पूर्णांक k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    पूर्णांक *indexes = सुस्मृति(k, माप(पूर्णांक));
+    पूर्णांक n = truth.cols;
+    पूर्णांक i,j;
+    पूर्णांक correct = 0;
+    क्रम(i = 0; i < truth.rows; ++i){
+        शीर्ष_k(guess.vals[i], n, k, indexes);
+        क्रम(j = 0; j < k; ++j){
+            पूर्णांक class = indexes[j];
+            अगर(truth.vals[i][class]){
                 ++correct;
-                break;
+                अवरोध;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    मुक्त(indexes);
+    वापस (भग्न)correct/truth.rows;
 }
 
-void scale_matrix(matrix m, float scale)
+व्योम scale_matrix(matrix m, भग्न scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    पूर्णांक i,j;
+    क्रम(i = 0; i < m.rows; ++i){
+        क्रम(j = 0; j < m.cols; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+matrix resize_matrix(matrix m, पूर्णांक आकार)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    पूर्णांक i;
+    अगर (m.rows == आकार) वापस m;
+    अगर (m.rows < आकार) {
+        m.vals = पुनः_स्मृति(m.vals, आकार*माप(भग्न*));
+        क्रम (i = m.rows; i < आकार; ++i) {
+            m.vals[i] = सुस्मृति(m.cols, माप(भग्न));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } अन्यथा अगर (m.rows > आकार) {
+        क्रम (i = आकार; i < m.rows; ++i) {
+            मुक्त(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = पुनः_स्मृति(m.vals, आकार*माप(भग्न*));
     }
-    m.rows = size;
-    return m;
+    m.rows = आकार;
+    वापस m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+व्योम matrix_add_matrix(matrix from, matrix to)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
+    निश्चित(from.rows == to.rows && from.cols == to.cols);
+    पूर्णांक i,j;
+    क्रम(i = 0; i < from.rows; ++i){
+        क्रम(j = 0; j < from.cols; ++j){
             to.vals[i][j] += from.vals[i][j];
         }
     }
@@ -79,118 +79,118 @@ matrix copy_matrix(matrix m)
     matrix c = {0};
     c.rows = m.rows;
     c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
+    c.vals = सुस्मृति(c.rows, माप(भग्न *));
+    पूर्णांक i;
+    क्रम(i = 0; i < c.rows; ++i){
+        c.vals[i] = सुस्मृति(c.cols, माप(भग्न));
         copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    वापस c;
 }
 
-matrix make_matrix(int rows, int cols)
+matrix make_matrix(पूर्णांक rows, पूर्णांक cols)
 {
-    int i;
+    पूर्णांक i;
     matrix m;
     m.rows = rows;
     m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    m.vals = सुस्मृति(m.rows, माप(भग्न *));
+    क्रम(i = 0; i < m.rows; ++i){
+        m.vals[i] = सुस्मृति(m.cols, माप(भग्न));
     }
-    return m;
+    वापस m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+matrix hold_out_matrix(matrix *m, पूर्णांक n)
 {
-    int i;
+    पूर्णांक i;
     matrix h;
     h.rows = n;
     h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
-        h.vals[i] = m->vals[index];
-        m->vals[index] = m->vals[--(m->rows)];
+    h.vals = सुस्मृति(h.rows, माप(भग्न *));
+    क्रम(i = 0; i < n; ++i){
+        पूर्णांक सूचकांक = अक्रम()%m->rows;
+        h.vals[i] = m->vals[सूचकांक];
+        m->vals[सूचकांक] = m->vals[--(m->rows)];
     }
-    return h;
+    वापस h;
 }
 
-float *pop_column(matrix *m, int c)
+भग्न *निकालो_column(matrix *m, पूर्णांक c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
+    भग्न *col = सुस्मृति(m->rows, माप(भग्न));
+    पूर्णांक i, j;
+    क्रम(i = 0; i < m->rows; ++i){
         col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+        क्रम(j = c; j < m->cols-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
     --m->cols;
-    return col;
+    वापस col;
 }
 
-matrix csv_to_matrix(char *filename)
+matrix csv_to_matrix(अक्षर *filename)
 {
-    FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    खाता *fp = ख_खोलो(filename, "r");
+    अगर(!fp) file_error(filename);
 
     matrix m;
     m.cols = -1;
 
-    char *line;
+    अक्षर *पंक्ति;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
-            size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+    पूर्णांक n = 0;
+    पूर्णांक आकार = 1024;
+    m.vals = सुस्मृति(आकार, माप(भग्न*));
+    जबतक((पंक्ति = fgetl(fp))){
+        अगर(m.cols == -1) m.cols = गिनती_fields(पंक्ति);
+        अगर(n == आकार){
+            आकार *= 2;
+            m.vals = पुनः_स्मृति(m.vals, आकार*माप(भग्न*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(पंक्ति, m.cols);
+        मुक्त(पंक्ति);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
+    m.vals = पुनः_स्मृति(m.vals, n*माप(भग्न*));
     m.rows = n;
-    return m;
+    वापस m;
 }
 
-void matrix_to_csv(matrix m)
+व्योम matrix_to_csv(matrix m)
 {
-    int i, j;
+    पूर्णांक i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
-            printf("%.17g", m.vals[i][j]);
+    क्रम(i = 0; i < m.rows; ++i){
+        क्रम(j = 0; j < m.cols; ++j){
+            अगर(j > 0) म_लिखो(",");
+            म_लिखो("%.17g", m.vals[i][j]);
         }
-        printf("\n");
+        म_लिखो("\n");
     }
 }
 
-void print_matrix(matrix m)
+व्योम print_matrix(matrix m)
 {
-    int i, j;
-    printf("%d X %d Matrix:\n",m.rows, m.cols);
-    printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__ \n");
+    पूर्णांक i, j;
+    म_लिखो("%d X %d Matrix:\n",m.rows, m.cols);
+    म_लिखो(" __");
+    क्रम(j = 0; j < 16*m.cols-1; ++j) म_लिखो(" ");
+    म_लिखो("__ \n");
 
-    printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("  |\n");
+    म_लिखो("|  ");
+    क्रम(j = 0; j < 16*m.cols-1; ++j) म_लिखो(" ");
+    म_लिखो("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
-        printf("|  ");
-        for(j = 0; j < m.cols; ++j){
-            printf("%15.7f ", m.vals[i][j]);
+    क्रम(i = 0; i < m.rows; ++i){
+        म_लिखो("|  ");
+        क्रम(j = 0; j < m.cols; ++j){
+            म_लिखो("%15.7f ", m.vals[i][j]);
         }
-        printf(" |\n");
+        म_लिखो(" |\n");
     }
-    printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__|\n");
+    म_लिखो("|__");
+    क्रम(j = 0; j < 16*m.cols-1; ++j) म_लिखो(" ");
+    म_लिखो("__|\n");
 }

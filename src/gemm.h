@@ -1,34 +1,34 @@
-#ifndef GEMM_H
-#define GEMM_H
+#अगर_अघोषित GEMM_H
+#घोषणा GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+व्योम gemm_bin(पूर्णांक M, पूर्णांक N, पूर्णांक K, भग्न ALPHA, 
+        अक्षर  *A, पूर्णांक lda, 
+        भग्न *B, पूर्णांक ldb,
+        भग्न *C, पूर्णांक ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+व्योम gemm(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, भग्न ALPHA, 
+                    भग्न *A, पूर्णांक lda, 
+                    भग्न *B, पूर्णांक ldb,
+                    भग्न BETA,
+                    भग्न *C, पूर्णांक ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+व्योम gemm_cpu(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, भग्न ALPHA, 
+        भग्न *A, पूर्णांक lda, 
+        भग्न *B, पूर्णांक ldb,
+        भग्न BETA,
+        भग्न *C, पूर्णांक ldc);
 
-#ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+#अगर_घोषित GPU
+व्योम gemm_gpu(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, भग्न ALPHA, 
+        भग्न *A_gpu, पूर्णांक lda, 
+        भग्न *B_gpu, पूर्णांक ldb,
+        भग्न BETA,
+        भग्न *C_gpu, पूर्णांक ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
-#endif
-#endif
+व्योम gemm_gpu(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, भग्न ALPHA, 
+        भग्न *A, पूर्णांक lda, 
+        भग्न *B, पूर्णांक ldb,
+        भग्न BETA,
+        भग्न *C, पूर्णांक ldc);
+#पूर्ण_अगर
+#पूर्ण_अगर

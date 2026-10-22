@@ -1,15 +1,15 @@
-#ifndef IM2COL_H
-#define IM2COL_H
+#अगर_अघोषित IM2COL_H
+#घोषणा IM2COL_H
 
-void im2col_cpu(float* data_im,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_col);
+व्योम im2col_cpu(भग्न* तथ्य_im,
+        पूर्णांक channels, पूर्णांक height, पूर्णांक width,
+        पूर्णांक ksize, पूर्णांक stride, पूर्णांक pad, भग्न* तथ्य_col);
 
-#ifdef GPU
+#अगर_घोषित GPU
 
-void im2col_gpu(float *im,
-         int channels, int height, int width,
-         int ksize, int stride, int pad,float *data_col);
+व्योम im2col_gpu(भग्न *im,
+         पूर्णांक channels, पूर्णांक height, पूर्णांक width,
+         पूर्णांक ksize, पूर्णांक stride, पूर्णांक pad,भग्न *तथ्य_col);
 
-#endif
-#endif
+#पूर्ण_अगर
+#पूर्ण_अगर

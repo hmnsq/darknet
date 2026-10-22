@@ -1,20 +1,20 @@
-#ifndef COST_LAYER_H
-#define COST_LAYER_H
-#include "layer.h"
-#include "network.h"
+#अगर_अघोषित COST_LAYER_H
+#घोषणा COST_LAYER_H
+#समावेश "layer.h"
+#समावेश "network.h"
 
-typedef layer cost_layer;
+प्रकार layer cost_layer;
 
-COST_TYPE get_cost_type(char *s);
-char *get_cost_string(COST_TYPE a);
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE type, float scale);
-void forward_cost_layer(const cost_layer l, network net);
-void backward_cost_layer(const cost_layer l, network net);
-void resize_cost_layer(cost_layer *l, int inputs);
+COST_TYPE get_cost_type(अक्षर *s);
+अक्षर *get_cost_string(COST_TYPE a);
+cost_layer make_cost_layer(पूर्णांक batch, पूर्णांक inputs, COST_TYPE type, भग्न scale);
+व्योम forward_cost_layer(स्थिर cost_layer l, network net);
+व्योम backward_cost_layer(स्थिर cost_layer l, network net);
+व्योम resize_cost_layer(cost_layer *l, पूर्णांक inputs);
 
-#ifdef GPU
-void forward_cost_layer_gpu(cost_layer l, network net);
-void backward_cost_layer_gpu(const cost_layer l, network net);
-#endif
+#अगर_घोषित GPU
+व्योम forward_cost_layer_gpu(cost_layer l, network net);
+व्योम backward_cost_layer_gpu(स्थिर cost_layer l, network net);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर

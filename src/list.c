@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#समावेश <stdlib.h>
+#समावेश <string.h>
+#समावेश "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = दो_स्मृति(माप(list));
+	l->आकार = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	वापस l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+व्योम *list_निकालो(list *l){
+    अगर(!l->back) वापस 0;
+    गाँठ *b = l->back;
+    व्योम *val = b->val;
+    l->back = b->पूर्व;
+    अगर(l->back) l->back->अग्र = 0;
+    मुक्त(b);
+    --l->आकार;
     
-    return val;
+    वापस val;
 }
 
-void list_insert(list *l, void *val)
+व्योम list_जोड़ो(list *l, व्योम *val)
 {
-	node *new = malloc(sizeof(node));
+	गाँठ *new = दो_स्मृति(माप(गाँठ));
 	new->val = val;
-	new->next = 0;
+	new->अग्र = 0;
 
-	if(!l->back){
+	अगर(!l->back){
 		l->front = new;
-		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+		new->पूर्व = 0;
+	}अन्यथा{
+		l->back->अग्र = new;
+		new->पूर्व = l->back;
 	}
 	l->back = new;
-	++l->size;
+	++l->आकार;
 }
 
-void free_node(node *n)
+व्योम free_गाँठ(गाँठ *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
+	गाँठ *अग्र;
+	जबतक(n) {
+		अग्र = n->अग्र;
+		मुक्त(n);
+		n = अग्र;
 	}
 }
 
-void free_list(list *l)
+व्योम free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_गाँठ(l->front);
+	मुक्त(l);
 }
 
-void free_list_contents(list *l)
+व्योम free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	गाँठ *n = l->front;
+	जबतक(n){
+		मुक्त(n->val);
+		n = n->अग्र;
 	}
 }
 
-void **list_to_array(list *l)
+व्योम **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+    व्योम **a = सुस्मृति(l->आकार, माप(व्योम*));
+    पूर्णांक गिनती = 0;
+    गाँठ *n = l->front;
+    जबतक(n){
+        a[गिनती++] = n->val;
+        n = n->अग्र;
     }
-    return a;
+    वापस a;
 }

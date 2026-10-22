@@ -1,19 +1,19 @@
-#ifndef ISEG_LAYER_H
-#define ISEG_LAYER_H
+#अगर_अघोषित ISEG_LAYER_H
+#घोषणा ISEG_LAYER_H
 
-#include "darknet.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "darknet.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids);
-void forward_iseg_layer(const layer l, network net);
-void backward_iseg_layer(const layer l, network net);
-void resize_iseg_layer(layer *l, int w, int h);
-int iseg_num_detections(layer l, float thresh);
+layer make_iseg_layer(पूर्णांक batch, पूर्णांक w, पूर्णांक h, पूर्णांक classes, पूर्णांक ids);
+व्योम forward_iseg_layer(स्थिर layer l, network net);
+व्योम backward_iseg_layer(स्थिर layer l, network net);
+व्योम resize_iseg_layer(layer *l, पूर्णांक w, पूर्णांक h);
+पूर्णांक iseg_अंक_detections(layer l, भग्न thresh);
 
-#ifdef GPU
-void forward_iseg_layer_gpu(const layer l, network net);
-void backward_iseg_layer_gpu(layer l, network net);
-#endif
+#अगर_घोषित GPU
+व्योम forward_iseg_layer_gpu(स्थिर layer l, network net);
+व्योम backward_iseg_layer_gpu(layer l, network net);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर

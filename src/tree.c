@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#समावेश <stdio.h>
+#समावेश <stdlib.h>
+#समावेश "tree.h"
+#समावेश "utils.h"
+#समावेश "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+व्योम change_leaves(वृक्ष *t, अक्षर *leaf_list)
 {
     list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
+    अक्षर **leaves = (अक्षर **)list_to_array(llist);
+    पूर्णांक n = llist->आकार;
+    पूर्णांक i,j;
+    पूर्णांक found = 0;
+    क्रम(i = 0; i < t->n; ++i){
         t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
+        क्रम(j = 0; j < n; ++j){
+            अगर (0==म_भेद(t->name[i], leaves[j])){
                 t->leaf[i] = 1;
                 ++found;
-                break;
+                अवरोध;
             }
         }
     }
-    fprintf(stderr, "Found %d leaves.\n", found);
+    ख_लिखो(मानक_त्रुटि, "Found %d leaves.\n", found);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+भग्न get_hierarchy_probability(भग्न *x, वृक्ष *hier, पूर्णांक c, पूर्णांक stride)
 {
-    float p = 1;
-    while(c >= 0){
+    भग्न p = 1;
+    जबतक(c >= 0){
         p = p * x[c*stride];
         c = hier->parent[c];
     }
-    return p;
+    वापस p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+व्योम hierarchy_predictions(भग्न *predictions, पूर्णांक n, वृक्ष *hier, पूर्णांक only_leaves, पूर्णांक stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
+    पूर्णांक j;
+    क्रम(j = 0; j < n; ++j){
+        पूर्णांक parent = hier->parent[j];
+        अगर(parent >= 0){
             predictions[j*stride] *= predictions[parent*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    अगर(only_leaves){
+        क्रम(j = 0; j < n; ++j){
+            अगर(!hier->leaf[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+पूर्णांक hierarchy_शीर्ष_prediction(भग्न *predictions, वृक्ष *hier, भग्न thresh, पूर्णांक stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    भग्न p = 1;
+    पूर्णांक group = 0;
+    पूर्णांक i;
+    जबतक(1){
+        भग्न max = 0;
+        पूर्णांक max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
-                max_i = index;
+        क्रम(i = 0; i < hier->group_आकार[group]; ++i){
+            पूर्णांक सूचकांक = i + hier->group_offset[group];
+            भग्न val = predictions[(i + hier->group_offset[group])*stride];
+            अगर(val > max){
+                max_i = सूचकांक;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        अगर(p*max > thresh){
             p = p*max;
             group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            अगर(hier->child[max_i] < 0) वापस max_i;
+        } अन्यथा अगर (group == 0){
+            वापस max_i;
+        } अन्यथा {
+            वापस hier->parent[hier->group_offset[group]];
         }
     }
-    return 0;
+    वापस 0;
 }
 
-tree *read_tree(char *filename)
+वृक्ष *read_वृक्ष(अक्षर *filename)
 {
-    tree t = {0};
-    FILE *fp = fopen(filename, "r");
+    वृक्ष t = {0};
+    खाता *fp = ख_खोलो(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
+    अक्षर *पंक्ति;
+    पूर्णांक last_parent = -1;
+    पूर्णांक group_आकार = 0;
+    पूर्णांक groups = 0;
+    पूर्णांक n = 0;
+    जबतक((पंक्ति=fgetl(fp)) != 0){
+        अक्षर *id = सुस्मृति(256, माप(अक्षर));
+        पूर्णांक parent = -1;
+        माला_पूछो(पंक्ति, "%s %d", id, &parent);
+        t.parent = पुनः_स्मृति(t.parent, (n+1)*माप(पूर्णांक));
         t.parent[n] = parent;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
+        t.child = पुनः_स्मृति(t.child, (n+1)*माप(पूर्णांक));
         t.child[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = पुनः_स्मृति(t.name, (n+1)*माप(अक्षर *));
         t.name[n] = id;
-        if(parent != last_parent){
+        अगर(parent != last_parent){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-            t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
-            t.group_size[groups - 1] = group_size;
-            group_size = 0;
+            t.group_offset = पुनः_स्मृति(t.group_offset, groups * माप(पूर्णांक));
+            t.group_offset[groups - 1] = n - group_आकार;
+            t.group_आकार = पुनः_स्मृति(t.group_आकार, groups * माप(पूर्णांक));
+            t.group_आकार[groups - 1] = group_आकार;
+            group_आकार = 0;
             last_parent = parent;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
+        t.group = पुनः_स्मृति(t.group, (n+1)*माप(पूर्णांक));
         t.group[n] = groups;
-        if (parent >= 0) {
+        अगर (parent >= 0) {
             t.child[parent] = groups;
         }
         ++n;
-        ++group_size;
+        ++group_आकार;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-    t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
-    t.group_size[groups - 1] = group_size;
+    t.group_offset = पुनः_स्मृति(t.group_offset, groups * माप(पूर्णांक));
+    t.group_offset[groups - 1] = n - group_आकार;
+    t.group_आकार = पुनः_स्मृति(t.group_आकार, groups * माप(पूर्णांक));
+    t.group_आकार[groups - 1] = group_आकार;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.leaf = सुस्मृति(n, माप(पूर्णांक));
+    पूर्णांक i;
+    क्रम(i = 0; i < n; ++i) t.leaf[i] = 1;
+    क्रम(i = 0; i < n; ++i) अगर(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
 
-    fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    ख_बंद(fp);
+    वृक्ष *वृक्ष_ptr = सुस्मृति(1, माप(वृक्ष));
+    *वृक्ष_ptr = t;
     //error(0);
-    return tree_ptr;
+    वापस वृक्ष_ptr;
 }

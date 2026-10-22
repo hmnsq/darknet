@@ -1,6 +1,6 @@
-#ifndef DEMO_H
-#define DEMO_H
+#अगर_अघोषित DEMO_H
+#घोषणा DEMO_H
 
-#include "image.h"
+#समावेश "image.h"
 
-#endif
+#पूर्ण_अगर

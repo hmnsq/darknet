@@ -1,19 +1,19 @@
-#ifndef BATCHNORM_LAYER_H
-#define BATCHNORM_LAYER_H
+#अगर_अघोषित BATCHNORM_LAYER_H
+#घोषणा BATCHNORM_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#समावेश "image.h"
+#समावेश "layer.h"
+#समावेश "network.h"
 
-layer make_batchnorm_layer(int batch, int w, int h, int c);
-void forward_batchnorm_layer(layer l, network net);
-void backward_batchnorm_layer(layer l, network net);
+layer make_batchnorm_layer(पूर्णांक batch, पूर्णांक w, पूर्णांक h, पूर्णांक c);
+व्योम forward_batchnorm_layer(layer l, network net);
+व्योम backward_batchnorm_layer(layer l, network net);
 
-#ifdef GPU
-void forward_batchnorm_layer_gpu(layer l, network net);
-void backward_batchnorm_layer_gpu(layer l, network net);
-void pull_batchnorm_layer(layer l);
-void push_batchnorm_layer(layer l);
-#endif
+#अगर_घोषित GPU
+व्योम forward_batchnorm_layer_gpu(layer l, network net);
+व्योम backward_batchnorm_layer_gpu(layer l, network net);
+व्योम pull_batchnorm_layer(layer l);
+व्योम धकेलो_batchnorm_layer(layer l);
+#पूर्ण_अगर
 
-#endif
+#पूर्ण_अगर

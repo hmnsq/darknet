@@ -1,31 +1,31 @@
-#include "local_layer.h"
-#include "utils.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
-#include <stdio.h>
-#include <time.h>
+#समावेश "local_layer.h"
+#समावेश "utils.h"
+#समावेश "im2col.h"
+#समावेश "col2im.h"
+#समावेश "blas.h"
+#समावेश "gemm.h"
+#समावेश <stdio.h>
+#समावेश <time.h>
 
-int local_out_height(local_layer l)
+पूर्णांक local_out_height(local_layer l)
 {
-    int h = l.h;
-    if (!l.pad) h -= l.size;
-    else h -= 1;
-    return h/l.stride + 1;
+    पूर्णांक h = l.h;
+    अगर (!l.pad) h -= l.आकार;
+    अन्यथा h -= 1;
+    वापस h/l.stride + 1;
 }
 
-int local_out_width(local_layer l)
+पूर्णांक local_out_width(local_layer l)
 {
-    int w = l.w;
-    if (!l.pad) w -= l.size;
-    else w -= 1;
-    return w/l.stride + 1;
+    पूर्णांक w = l.w;
+    अगर (!l.pad) w -= l.आकार;
+    अन्यथा w -= 1;
+    वापस w/l.stride + 1;
 }
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation)
+local_layer make_local_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक n, पूर्णांक आकार, पूर्णांक stride, पूर्णांक pad, ACTIVATION activation)
 {
-    int i;
+    पूर्णांक i;
     local_layer l = {0};
     l.type = LOCAL;
 
@@ -35,44 +35,44 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
     l.n = n;
     l.batch = batch;
     l.stride = stride;
-    l.size = size;
+    l.आकार = आकार;
     l.pad = pad;
 
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int locations = out_h*out_w;
+    पूर्णांक out_h = local_out_height(l);
+    पूर्णांक out_w = local_out_width(l);
+    पूर्णांक locations = out_h*out_w;
     l.out_h = out_h;
     l.out_w = out_w;
     l.out_c = n;
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    l.weights = calloc(c*n*size*size*locations, sizeof(float));
-    l.weight_updates = calloc(c*n*size*size*locations, sizeof(float));
+    l.weights = सुस्मृति(c*n*आकार*आकार*locations, माप(भग्न));
+    l.weight_updates = सुस्मृति(c*n*आकार*आकार*locations, माप(भग्न));
 
-    l.biases = calloc(l.outputs, sizeof(float));
-    l.bias_updates = calloc(l.outputs, sizeof(float));
+    l.biases = सुस्मृति(l.outputs, माप(भग्न));
+    l.bias_updates = सुस्मृति(l.outputs, माप(भग्न));
 
     // float scale = 1./sqrt(size*size*c);
-    float scale = sqrt(2./(size*size*c));
-    for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1,1);
+    भग्न scale = वर्ग_मूल(2./(आकार*आकार*c));
+    क्रम(i = 0; i < c*n*आकार*आकार; ++i) l.weights[i] = scale*rand_uniform(-1,1);
 
-    l.output = calloc(l.batch*out_h * out_w * n, sizeof(float));
-    l.delta  = calloc(l.batch*out_h * out_w * n, sizeof(float));
+    l.output = सुस्मृति(l.batch*out_h * out_w * n, माप(भग्न));
+    l.delta  = सुस्मृति(l.batch*out_h * out_w * n, माप(भग्न));
 
-    l.workspace_size = out_h*out_w*size*size*c;
+    l.workspace_आकार = out_h*out_w*आकार*आकार*c;
     
     l.forward = forward_local_layer;
     l.backward = backward_local_layer;
     l.update = update_local_layer;
 
-#ifdef GPU
+#अगर_घोषित GPU
     l.forward_gpu = forward_local_layer_gpu;
     l.backward_gpu = backward_local_layer_gpu;
     l.update_gpu = update_local_layer_gpu;
 
-    l.weights_gpu = cuda_make_array(l.weights, c*n*size*size*locations);
-    l.weight_updates_gpu = cuda_make_array(l.weight_updates, c*n*size*size*locations);
+    l.weights_gpu = cuda_make_array(l.weights, c*n*आकार*आकार*locations);
+    l.weight_updates_gpu = cuda_make_array(l.weight_updates, c*n*आकार*आकार*locations);
 
     l.biases_gpu = cuda_make_array(l.biases, l.outputs);
     l.bias_updates_gpu = cuda_make_array(l.bias_updates, l.outputs);
@@ -80,38 +80,38 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
     l.delta_gpu = cuda_make_array(l.delta, l.batch*out_h*out_w*n);
     l.output_gpu = cuda_make_array(l.output, l.batch*out_h*out_w*n);
 
-#endif
+#पूर्ण_अगर
     l.activation = activation;
 
-    fprintf(stderr, "Local Layer: %d x %d x %d image, %d filters -> %d x %d x %d image\n", h,w,c,n, out_h, out_w, n);
+    ख_लिखो(मानक_त्रुटि, "Local Layer: %d x %d x %d image, %d filters -> %d x %d x %d image\n", h,w,c,n, out_h, out_w, n);
 
-    return l;
+    वापस l;
 }
 
-void forward_local_layer(const local_layer l, network net)
+व्योम forward_local_layer(स्थिर local_layer l, network net)
 {
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int i, j;
-    int locations = out_h * out_w;
+    पूर्णांक out_h = local_out_height(l);
+    पूर्णांक out_w = local_out_width(l);
+    पूर्णांक i, j;
+    पूर्णांक locations = out_h * out_w;
 
-    for(i = 0; i < l.batch; ++i){
+    क्रम(i = 0; i < l.batch; ++i){
         copy_cpu(l.outputs, l.biases, 1, l.output + i*l.outputs, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
-        im2col_cpu(input, l.c, l.h, l.w, 
-                l.size, l.stride, l.pad, net.workspace);
-        float *output = l.output + i*l.outputs;
-        for(j = 0; j < locations; ++j){
-            float *a = l.weights + j*l.size*l.size*l.c*l.n;
-            float *b = net.workspace + j;
-            float *c = output + j;
+    क्रम(i = 0; i < l.batch; ++i){
+        भग्न *निवेश = net.निवेश + i*l.w*l.h*l.c;
+        im2col_cpu(निवेश, l.c, l.h, l.w, 
+                l.आकार, l.stride, l.pad, net.workspace);
+        भग्न *output = l.output + i*l.outputs;
+        क्रम(j = 0; j < locations; ++j){
+            भग्न *a = l.weights + j*l.आकार*l.आकार*l.c*l.n;
+            भग्न *b = net.workspace + j;
+            भग्न *c = output + j;
 
-            int m = l.n;
-            int n = 1;
-            int k = l.size*l.size*l.c;
+            पूर्णांक m = l.n;
+            पूर्णांक n = 1;
+            पूर्णांक k = l.आकार*l.आकार*l.c;
 
             gemm(0,0,m,n,k,1,a,k,b,locations,1,c,locations);
         }
@@ -119,94 +119,94 @@ void forward_local_layer(const local_layer l, network net)
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_local_layer(local_layer l, network net)
+व्योम backward_local_layer(local_layer l, network net)
 {
-    int i, j;
-    int locations = l.out_w*l.out_h;
+    पूर्णांक i, j;
+    पूर्णांक locations = l.out_w*l.out_h;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    for(i = 0; i < l.batch; ++i){
+    क्रम(i = 0; i < l.batch; ++i){
         axpy_cpu(l.outputs, 1, l.delta + i*l.outputs, 1, l.bias_updates, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
-        im2col_cpu(input, l.c, l.h, l.w, 
-                l.size, l.stride, l.pad, net.workspace);
+    क्रम(i = 0; i < l.batch; ++i){
+        भग्न *निवेश = net.निवेश + i*l.w*l.h*l.c;
+        im2col_cpu(निवेश, l.c, l.h, l.w, 
+                l.आकार, l.stride, l.pad, net.workspace);
 
-        for(j = 0; j < locations; ++j){ 
-            float *a = l.delta + i*l.outputs + j;
-            float *b = net.workspace + j;
-            float *c = l.weight_updates + j*l.size*l.size*l.c*l.n;
-            int m = l.n;
-            int n = l.size*l.size*l.c;
-            int k = 1;
+        क्रम(j = 0; j < locations; ++j){ 
+            भग्न *a = l.delta + i*l.outputs + j;
+            भग्न *b = net.workspace + j;
+            भग्न *c = l.weight_updates + j*l.आकार*l.आकार*l.c*l.n;
+            पूर्णांक m = l.n;
+            पूर्णांक n = l.आकार*l.आकार*l.c;
+            पूर्णांक k = 1;
 
             gemm(0,1,m,n,k,1,a,locations,b,locations,1,c,n);
         }
 
-        if(net.delta){
-            for(j = 0; j < locations; ++j){ 
-                float *a = l.weights + j*l.size*l.size*l.c*l.n;
-                float *b = l.delta + i*l.outputs + j;
-                float *c = net.workspace + j;
+        अगर(net.delta){
+            क्रम(j = 0; j < locations; ++j){ 
+                भग्न *a = l.weights + j*l.आकार*l.आकार*l.c*l.n;
+                भग्न *b = l.delta + i*l.outputs + j;
+                भग्न *c = net.workspace + j;
 
-                int m = l.size*l.size*l.c;
-                int n = 1;
-                int k = l.n;
+                पूर्णांक m = l.आकार*l.आकार*l.c;
+                पूर्णांक n = 1;
+                पूर्णांक k = l.n;
 
                 gemm(1,0,m,n,k,1,a,m,b,locations,0,c,locations);
             }
 
-            col2im_cpu(net.workspace, l.c,  l.h,  l.w,  l.size,  l.stride, l.pad, net.delta+i*l.c*l.h*l.w);
+            col2im_cpu(net.workspace, l.c,  l.h,  l.w,  l.आकार,  l.stride, l.pad, net.delta+i*l.c*l.h*l.w);
         }
     }
 }
 
-void update_local_layer(local_layer l, update_args a)
+व्योम update_local_layer(local_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    भग्न learning_rate = a.learning_rate*l.learning_rate_scale;
+    भग्न momentum = a.momentum;
+    भग्न decay = a.decay;
+    पूर्णांक batch = a.batch;
 
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    पूर्णांक locations = l.out_w*l.out_h;
+    पूर्णांक आकार = l.आकार*l.आकार*l.c*l.n*locations;
     axpy_cpu(l.outputs, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.outputs, momentum, l.bias_updates, 1);
 
-    axpy_cpu(size, -decay*batch, l.weights, 1, l.weight_updates, 1);
-    axpy_cpu(size, learning_rate/batch, l.weight_updates, 1, l.weights, 1);
-    scal_cpu(size, momentum, l.weight_updates, 1);
+    axpy_cpu(आकार, -decay*batch, l.weights, 1, l.weight_updates, 1);
+    axpy_cpu(आकार, learning_rate/batch, l.weight_updates, 1, l.weights, 1);
+    scal_cpu(आकार, momentum, l.weight_updates, 1);
 }
 
-#ifdef GPU
+#अगर_घोषित GPU
 
-void forward_local_layer_gpu(const local_layer l, network net)
+व्योम forward_local_layer_gpu(स्थिर local_layer l, network net)
 {
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int i, j;
-    int locations = out_h * out_w;
+    पूर्णांक out_h = local_out_height(l);
+    पूर्णांक out_w = local_out_width(l);
+    पूर्णांक i, j;
+    पूर्णांक locations = out_h * out_w;
 
-    for(i = 0; i < l.batch; ++i){
+    क्रम(i = 0; i < l.batch; ++i){
         copy_gpu(l.outputs, l.biases_gpu, 1, l.output_gpu + i*l.outputs, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
-        im2col_gpu(input, l.c, l.h, l.w, 
-                l.size, l.stride, l.pad, net.workspace);
-        float *output = l.output_gpu + i*l.outputs;
-        for(j = 0; j < locations; ++j){
-            float *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
-            float *b = net.workspace + j;
-            float *c = output + j;
+    क्रम(i = 0; i < l.batch; ++i){
+        भग्न *निवेश = net.निवेश_gpu + i*l.w*l.h*l.c;
+        im2col_gpu(निवेश, l.c, l.h, l.w, 
+                l.आकार, l.stride, l.pad, net.workspace);
+        भग्न *output = l.output_gpu + i*l.outputs;
+        क्रम(j = 0; j < locations; ++j){
+            भग्न *a = l.weights_gpu + j*l.आकार*l.आकार*l.c*l.n;
+            भग्न *b = net.workspace + j;
+            भग्न *c = output + j;
 
-            int m = l.n;
-            int n = 1;
-            int k = l.size*l.size*l.c;
+            पूर्णांक m = l.n;
+            पूर्णांक n = 1;
+            पूर्णांक k = l.आकार*l.आकार*l.c;
 
             gemm_gpu(0,0,m,n,k,1,a,k,b,locations,1,c,locations);
         }
@@ -214,80 +214,80 @@ void forward_local_layer_gpu(const local_layer l, network net)
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_local_layer_gpu(local_layer l, network net)
+व्योम backward_local_layer_gpu(local_layer l, network net)
 {
-    int i, j;
-    int locations = l.out_w*l.out_h;
+    पूर्णांक i, j;
+    पूर्णांक locations = l.out_w*l.out_h;
 
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
-    for(i = 0; i < l.batch; ++i){
+    क्रम(i = 0; i < l.batch; ++i){
         axpy_gpu(l.outputs, 1, l.delta_gpu + i*l.outputs, 1, l.bias_updates_gpu, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
-        im2col_gpu(input, l.c, l.h, l.w, 
-                l.size, l.stride, l.pad, net.workspace);
+    क्रम(i = 0; i < l.batch; ++i){
+        भग्न *निवेश = net.निवेश_gpu + i*l.w*l.h*l.c;
+        im2col_gpu(निवेश, l.c, l.h, l.w, 
+                l.आकार, l.stride, l.pad, net.workspace);
 
-        for(j = 0; j < locations; ++j){ 
-            float *a = l.delta_gpu + i*l.outputs + j;
-            float *b = net.workspace + j;
-            float *c = l.weight_updates_gpu + j*l.size*l.size*l.c*l.n;
-            int m = l.n;
-            int n = l.size*l.size*l.c;
-            int k = 1;
+        क्रम(j = 0; j < locations; ++j){ 
+            भग्न *a = l.delta_gpu + i*l.outputs + j;
+            भग्न *b = net.workspace + j;
+            भग्न *c = l.weight_updates_gpu + j*l.आकार*l.आकार*l.c*l.n;
+            पूर्णांक m = l.n;
+            पूर्णांक n = l.आकार*l.आकार*l.c;
+            पूर्णांक k = 1;
 
             gemm_gpu(0,1,m,n,k,1,a,locations,b,locations,1,c,n);
         }
 
-        if(net.delta_gpu){
-            for(j = 0; j < locations; ++j){ 
-                float *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
-                float *b = l.delta_gpu + i*l.outputs + j;
-                float *c = net.workspace + j;
+        अगर(net.delta_gpu){
+            क्रम(j = 0; j < locations; ++j){ 
+                भग्न *a = l.weights_gpu + j*l.आकार*l.आकार*l.c*l.n;
+                भग्न *b = l.delta_gpu + i*l.outputs + j;
+                भग्न *c = net.workspace + j;
 
-                int m = l.size*l.size*l.c;
-                int n = 1;
-                int k = l.n;
+                पूर्णांक m = l.आकार*l.आकार*l.c;
+                पूर्णांक n = 1;
+                पूर्णांक k = l.n;
 
                 gemm_gpu(1,0,m,n,k,1,a,m,b,locations,0,c,locations);
             }
 
-            col2im_gpu(net.workspace, l.c,  l.h,  l.w,  l.size,  l.stride, l.pad, net.delta_gpu+i*l.c*l.h*l.w);
+            col2im_gpu(net.workspace, l.c,  l.h,  l.w,  l.आकार,  l.stride, l.pad, net.delta_gpu+i*l.c*l.h*l.w);
         }
     }
 }
 
-void update_local_layer_gpu(local_layer l, update_args a)
+व्योम update_local_layer_gpu(local_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    भग्न learning_rate = a.learning_rate*l.learning_rate_scale;
+    भग्न momentum = a.momentum;
+    भग्न decay = a.decay;
+    पूर्णांक batch = a.batch;
 
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    पूर्णांक locations = l.out_w*l.out_h;
+    पूर्णांक आकार = l.आकार*l.आकार*l.c*l.n*locations;
     axpy_gpu(l.outputs, learning_rate/batch, l.bias_updates_gpu, 1, l.biases_gpu, 1);
     scal_gpu(l.outputs, momentum, l.bias_updates_gpu, 1);
 
-    axpy_gpu(size, -decay*batch, l.weights_gpu, 1, l.weight_updates_gpu, 1);
-    axpy_gpu(size, learning_rate/batch, l.weight_updates_gpu, 1, l.weights_gpu, 1);
-    scal_gpu(size, momentum, l.weight_updates_gpu, 1);
+    axpy_gpu(आकार, -decay*batch, l.weights_gpu, 1, l.weight_updates_gpu, 1);
+    axpy_gpu(आकार, learning_rate/batch, l.weight_updates_gpu, 1, l.weights_gpu, 1);
+    scal_gpu(आकार, momentum, l.weight_updates_gpu, 1);
 }
 
-void pull_local_layer(local_layer l)
+व्योम pull_local_layer(local_layer l)
 {
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
-    cuda_pull_array(l.weights_gpu, l.weights, size);
+    पूर्णांक locations = l.out_w*l.out_h;
+    पूर्णांक आकार = l.आकार*l.आकार*l.c*l.n*locations;
+    cuda_pull_array(l.weights_gpu, l.weights, आकार);
     cuda_pull_array(l.biases_gpu, l.biases, l.outputs);
 }
 
-void push_local_layer(local_layer l)
+व्योम धकेलो_local_layer(local_layer l)
 {
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
-    cuda_push_array(l.weights_gpu, l.weights, size);
-    cuda_push_array(l.biases_gpu, l.biases, l.outputs);
+    पूर्णांक locations = l.out_w*l.out_h;
+    पूर्णांक आकार = l.आकार*l.आकार*l.c*l.n*locations;
+    cuda_धकेलो_array(l.weights_gpu, l.weights, आकार);
+    cuda_धकेलो_array(l.biases_gpu, l.biases, l.outputs);
 }
-#endif
+#पूर्ण_अगर
