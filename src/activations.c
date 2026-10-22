@@ -5,101 +5,101 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *get_activation_string(ACTIVATION a)
+var_na *get_activation_string(ACTIVATION a)
 {
     switch(a){
-        case LOGISTIC:
-            return "logistic";
-        case LOGGY:
-            return "loggy";
-        case RELU:
-            return "relu";
-        case ELU:
-            return "elu";
-        case SELU:
-            return "selu";
-        case RELIE:
-            return "relie";
-        case RAMP:
-            return "ramp";
-        case LINEAR:
-            return "linear";
-        case TANH:
-            return "tanh";
-        case PLSE:
-            return "plse";
-        case LEAKY:
-            return "leaky";
-        case STAIR:
-            return "stair";
-        case HARDTAN:
-            return "hardtan";
-        case LHTAN:
-            return "lhtan";
+        pak_sa LOGISTIC:
+            ပွၵ်ႈ "logistic";
+        pak_sa LOGGY:
+            ပွၵ်ႈ "loggy";
+        pak_sa RELU:
+            ပွၵ်ႈ "relu";
+        pak_sa ELU:
+            ပွၵ်ႈ "elu";
+        pak_sa SELU:
+            ပွၵ်ႈ "selu";
+        pak_sa RELIE:
+            ပွၵ်ႈ "relie";
+        pak_sa RAMP:
+            ပွၵ်ႈ "ramp";
+        pak_sa LINEAR:
+            ပွၵ်ႈ "linear";
+        pak_sa TANH:
+            ပွၵ်ႈ "tanh";
+        pak_sa PLSE:
+            ပွၵ်ႈ "plse";
+        pak_sa LEAKY:
+            ပွၵ်ႈ "leaky";
+        pak_sa STAIR:
+            ပွၵ်ႈ "stair";
+        pak_sa HARDTAN:
+            ပွၵ်ႈ "hardtan";
+        pak_sa LHTAN:
+            ပွၵ်ႈ "lhtan";
         default:
-            break;
+            bha_nga;
     }
-    return "relu";
+    ပွၵ်ႈ "relu";
 }
 
-ACTIVATION get_activation(char *s)
+ACTIVATION get_activation(var_na *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    ပေႃး (strcmp(s, "logistic")==0) ပွၵ်ႈ LOGISTIC;
+    ပေႃး (strcmp(s, "loggy")==0) ပွၵ်ႈ LOGGY;
+    ပေႃး (strcmp(s, "relu")==0) ပွၵ်ႈ RELU;
+    ပေႃး (strcmp(s, "elu")==0) ပွၵ်ႈ ELU;
+    ပေႃး (strcmp(s, "selu")==0) ပွၵ်ႈ SELU;
+    ပေႃး (strcmp(s, "relie")==0) ပွၵ်ႈ RELIE;
+    ပေႃး (strcmp(s, "plse")==0) ပွၵ်ႈ PLSE;
+    ပေႃး (strcmp(s, "hardtan")==0) ပွၵ်ႈ HARDTAN;
+    ပေႃး (strcmp(s, "lhtan")==0) ပွၵ်ႈ LHTAN;
+    ပေႃး (strcmp(s, "linear")==0) ပွၵ်ႈ LINEAR;
+    ပေႃး (strcmp(s, "ramp")==0) ပွၵ်ႈ RAMP;
+    ပေႃး (strcmp(s, "leaky")==0) ပွၵ်ႈ LEAKY;
+    ပေႃး (strcmp(s, "tanh")==0) ပွၵ်ႈ TANH;
+    ပေႃး (strcmp(s, "stair")==0) ပွၵ်ႈ STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    ပွၵ်ႈ RELU;
 }
 
 float activate(float x, ACTIVATION a)
 {
     switch(a){
-        case LINEAR:
-            return linear_activate(x);
-        case LOGISTIC:
-            return logistic_activate(x);
-        case LOGGY:
-            return loggy_activate(x);
-        case RELU:
-            return relu_activate(x);
-        case ELU:
-            return elu_activate(x);
-        case SELU:
-            return selu_activate(x);
-        case RELIE:
-            return relie_activate(x);
-        case RAMP:
-            return ramp_activate(x);
-        case LEAKY:
-            return leaky_activate(x);
-        case TANH:
-            return tanh_activate(x);
-        case PLSE:
-            return plse_activate(x);
-        case STAIR:
-            return stair_activate(x);
-        case HARDTAN:
-            return hardtan_activate(x);
-        case LHTAN:
-            return lhtan_activate(x);
+        pak_sa LINEAR:
+            ပွၵ်ႈ linear_activate(x);
+        pak_sa LOGISTIC:
+            ပွၵ်ႈ logistic_activate(x);
+        pak_sa LOGGY:
+            ပွၵ်ႈ loggy_activate(x);
+        pak_sa RELU:
+            ပွၵ်ႈ relu_activate(x);
+        pak_sa ELU:
+            ပွၵ်ႈ elu_activate(x);
+        pak_sa SELU:
+            ပွၵ်ႈ selu_activate(x);
+        pak_sa RELIE:
+            ပွၵ်ႈ relie_activate(x);
+        pak_sa RAMP:
+            ပွၵ်ႈ ramp_activate(x);
+        pak_sa LEAKY:
+            ပွၵ်ႈ leaky_activate(x);
+        pak_sa TANH:
+            ပွၵ်ႈ tanh_activate(x);
+        pak_sa PLSE:
+            ပွၵ်ႈ plse_activate(x);
+        pak_sa STAIR:
+            ပွၵ်ႈ stair_activate(x);
+        pak_sa HARDTAN:
+            ပွၵ်ႈ hardtan_activate(x);
+        pak_sa LHTAN:
+            ပွၵ်ႈ lhtan_activate(x);
     }
-    return 0;
+    ပွၵ်ႈ 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+void activate_array(float *x, const puur_naa_nka n, const ACTIVATION a)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
@@ -108,41 +108,41 @@ void activate_array(float *x, const int n, const ACTIVATION a)
 float gradient(float x, ACTIVATION a)
 {
     switch(a){
-        case LINEAR:
-            return linear_gradient(x);
-        case LOGISTIC:
-            return logistic_gradient(x);
-        case LOGGY:
-            return loggy_gradient(x);
-        case RELU:
-            return relu_gradient(x);
-        case ELU:
-            return elu_gradient(x);
-        case SELU:
-            return selu_gradient(x);
-        case RELIE:
-            return relie_gradient(x);
-        case RAMP:
-            return ramp_gradient(x);
-        case LEAKY:
-            return leaky_gradient(x);
-        case TANH:
-            return tanh_gradient(x);
-        case PLSE:
-            return plse_gradient(x);
-        case STAIR:
-            return stair_gradient(x);
-        case HARDTAN:
-            return hardtan_gradient(x);
-        case LHTAN:
-            return lhtan_gradient(x);
+        pak_sa LINEAR:
+            ပွၵ်ႈ linear_gradient(x);
+        pak_sa LOGISTIC:
+            ပွၵ်ႈ logistic_gradient(x);
+        pak_sa LOGGY:
+            ပွၵ်ႈ loggy_gradient(x);
+        pak_sa RELU:
+            ပွၵ်ႈ relu_gradient(x);
+        pak_sa ELU:
+            ပွၵ်ႈ elu_gradient(x);
+        pak_sa SELU:
+            ပွၵ်ႈ selu_gradient(x);
+        pak_sa RELIE:
+            ပွၵ်ႈ relie_gradient(x);
+        pak_sa RAMP:
+            ပွၵ်ႈ ramp_gradient(x);
+        pak_sa LEAKY:
+            ပွၵ်ႈ leaky_gradient(x);
+        pak_sa TANH:
+            ပွၵ်ႈ tanh_gradient(x);
+        pak_sa PLSE:
+            ပွၵ်ႈ plse_gradient(x);
+        pak_sa STAIR:
+            ပွၵ်ႈ stair_gradient(x);
+        pak_sa HARDTAN:
+            ပွၵ်ႈ hardtan_gradient(x);
+        pak_sa LHTAN:
+            ပွၵ်ႈ lhtan_gradient(x);
     }
-    return 0;
+    ပွၵ်ႈ 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+void gradient_array(const float *x, const puur_naa_nka n, const ACTIVATION a, float *delta)
 {
-    int i;
+    puur_naa_nka i;
     for(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }

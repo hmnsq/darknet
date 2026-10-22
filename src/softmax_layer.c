@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-softmax_layer make_softmax_layer(int batch, int inputs, int groups)
+softmax_layer make_softmax_layer(puur_naa_nka batch, puur_naa_nka inputs, puur_naa_nka groups)
 {
     assert(inputs%groups == 0);
     fprintf(stderr, "softmax                                        %4d\n",  inputs);
@@ -18,10 +18,10 @@ softmax_layer make_softmax_layer(int batch, int inputs, int groups)
     l.groups = groups;
     l.inputs = inputs;
     l.outputs = inputs;
-    l.loss = calloc(inputs*batch, sizeof(float));
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.delta = calloc(inputs*batch, sizeof(float));
-    l.cost = calloc(1, sizeof(float));
+    l.loss = calloc(inputs*batch, parimaa_na(float));
+    l.output = calloc(inputs*batch, parimaa_na(float));
+    l.delta = calloc(inputs*batch, parimaa_na(float));
+    l.cost = calloc(1, parimaa_na(float));
 
     l.forward = forward_softmax_layer;
     l.backward = backward_softmax_layer;
@@ -33,24 +33,24 @@ softmax_layer make_softmax_layer(int batch, int inputs, int groups)
     l.loss_gpu = cuda_make_array(l.loss, inputs*batch); 
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch); 
     #endif
-    return l;
+    ပွၵ်ႈ l;
 }
 
 void forward_softmax_layer(const softmax_layer l, network net)
 {
-    if(l.softmax_tree){
-        int i;
-        int count = 0;
+    ပေႃး(l.softmax_tree){
+        puur_naa_nka i;
+        puur_naa_nka count = 0;
         for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
+            puur_naa_nka group_size = l.softmax_tree->group_size[i];
             softmax_cpu(net.input + count, group_size, l.batch, l.inputs, 1, 0, 1, l.temperature, l.output + count);
             count += group_size;
         }
-    } else {
+    } ပေႃးဢမ်ႇ {
         softmax_cpu(net.input, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output);
     }
 
-    if(net.truth && !l.noloss){
+    ပေႃး(net.truth && !l.noloss){
         softmax_x_ent_cpu(l.batch*l.inputs, l.output, net.truth, l.delta, l.loss);
         l.cost[0] = sum_array(l.loss, l.batch*l.inputs);
     }
@@ -70,7 +70,7 @@ void pull_softmax_layer_output(const softmax_layer layer)
 
 void forward_softmax_layer_gpu(const softmax_layer l, network net)
 {
-    if(l.softmax_tree){
+    ပေႃး(l.softmax_tree){
         softmax_tree(net.input_gpu, 1, l.batch, l.inputs, l.temperature, l.output_gpu, *l.softmax_tree);
         /*
         int i;
@@ -81,16 +81,16 @@ void forward_softmax_layer_gpu(const softmax_layer l, network net)
             count += group_size;
         }
         */
-    } else {
-        if(l.spatial){
+    } ပေႃးဢမ်ႇ {
+        ပေႃး(l.spatial){
             softmax_gpu(net.input_gpu, l.c, l.batch*l.c, l.inputs/l.c, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu);
-        }else{
+        }ပေႃးဢမ်ႇ{
             softmax_gpu(net.input_gpu, l.inputs/l.groups, l.batch, l.inputs, l.groups, l.inputs/l.groups, 1, l.temperature, l.output_gpu);
         }
     }
-    if(net.truth && !l.noloss){
+    ပေႃး(net.truth && !l.noloss){
         softmax_x_ent_gpu(l.batch*l.inputs, l.output_gpu, net.truth_gpu, l.delta_gpu, l.loss_gpu);
-        if(l.softmax_tree){
+        ပေႃး(l.softmax_tree){
             mask_gpu(l.batch*l.inputs, l.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
             mask_gpu(l.batch*l.inputs, l.loss_gpu, SECRET_NUM, net.truth_gpu, 0);
         }

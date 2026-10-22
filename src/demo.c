@@ -13,73 +13,73 @@
 
 #ifdef OPENCV
 
-static char **demo_names;
+static var_na **demo_names;
 static image **demo_alphabet;
-static int demo_classes;
+static puur_naa_nka demo_classes;
 
 static network *net;
 static image buff [3];
 static image buff_letter[3];
-static int buff_index = 0;
+static puur_naa_nka buff_index = 0;
 static void * cap;
 static float fps = 0;
 static float demo_thresh = 0;
 static float demo_hier = .5;
-static int running = 0;
+static puur_naa_nka running = 0;
 
-static int demo_frame = 3;
-static int demo_index = 0;
+static puur_naa_nka demo_frame = 3;
+static puur_naa_nka demo_index = 0;
 static float **predictions;
 static float *avg;
-static int demo_done = 0;
-static int demo_total = 0;
-double demo_time;
+static puur_naa_nka demo_done = 0;
+static puur_naa_nka demo_total = 0;
+dviguu_na demo_time;
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num);
+detection *get_network_boxes(network *net, puur_naa_nka w, puur_naa_nka h, float thresh, float hier, puur_naa_nka *map, puur_naa_nka relative, puur_naa_nka *num);
 
-int size_network(network *net)
+puur_naa_nka size_network(network *net)
 {
-    int i;
-    int count = 0;
+    puur_naa_nka i;
+    puur_naa_nka count = 0;
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+        ပေႃး(l.type == YOLO || l.type == REGION || l.type == DETECTION){
             count += l.outputs;
         }
     }
-    return count;
+    ပွၵ်ႈ count;
 }
 
 void remember_network(network *net)
 {
-    int i;
-    int count = 0;
+    puur_naa_nka i;
+    puur_naa_nka count = 0;
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(predictions[demo_index] + count, net->layers[i].output, sizeof(float) * l.outputs);
+        ပေႃး(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            memcpy(predictions[demo_index] + count, net->layers[i].output, parimaa_na(float) * l.outputs);
             count += l.outputs;
         }
     }
 }
 
-detection *avg_predictions(network *net, int *nboxes)
+detection *avg_predictions(network *net, puur_naa_nka *nboxes)
 {
-    int i, j;
-    int count = 0;
+    puur_naa_nka i, j;
+    puur_naa_nka count = 0;
     fill_cpu(demo_total, 0, avg, 1);
     for(j = 0; j < demo_frame; ++j){
         axpy_cpu(demo_total, 1./demo_frame, predictions[j], 1, avg, 1);
     }
     for(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(l.output, avg + count, sizeof(float) * l.outputs);
+        ပေႃး(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            memcpy(l.output, avg + count, parimaa_na(float) * l.outputs);
             count += l.outputs;
         }
     }
     detection *dets = get_network_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
-    return dets;
+    ပွၵ်ႈ dets;
 }
 
 void *detect_in_thread(void *ptr)
@@ -97,7 +97,7 @@ void *detect_in_thread(void *ptr)
        } else */
     remember_network(net);
     detection *dets = 0;
-    int nboxes = 0;
+    puur_naa_nka nboxes = 0;
     dets = avg_predictions(net, &nboxes);
 
 
@@ -122,7 +122,7 @@ void *detect_in_thread(void *ptr)
     }
      */
 
-    if (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
+    ပေႃး (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
 
     printf("\033[2J");
     printf("\033[1;1H");
@@ -134,57 +134,57 @@ void *detect_in_thread(void *ptr)
 
     demo_index = (demo_index + 1)%demo_frame;
     running = 0;
-    return 0;
+    ပွၵ်ႈ 0;
 }
 
 void *fetch_in_thread(void *ptr)
 {
     free_image(buff[buff_index]);
     buff[buff_index] = get_image_from_stream(cap);
-    if(buff[buff_index].data == 0) {
+    ပေႃး(buff[buff_index].data == 0) {
         demo_done = 1;
-        return 0;
+        ပွၵ်ႈ 0;
     }
     letterbox_image_into(buff[buff_index], net->w, net->h, buff_letter[buff_index]);
-    return 0;
+    ပွၵ်ႈ 0;
 }
 
 void *display_in_thread(void *ptr)
 {
-    int c = show_image(buff[(buff_index + 1)%3], "Demo", 1);
-    if (c != -1) c = c%256;
-    if (c == 27) {
+    puur_naa_nka c = show_image(buff[(buff_index + 1)%3], "Demo", 1);
+    ပေႃး (c != -1) c = c%256;
+    ပေႃး (c == 27) {
         demo_done = 1;
-        return 0;
-    } else if (c == 82) {
+        ပွၵ်ႈ 0;
+    } ပေႃးဢမ်ႇ ပေႃး (c == 82) {
         demo_thresh += .02;
-    } else if (c == 84) {
+    } ပေႃးဢမ်ႇ ပေႃး (c == 84) {
         demo_thresh -= .02;
-        if(demo_thresh <= .02) demo_thresh = .02;
-    } else if (c == 83) {
+        ပေႃး(demo_thresh <= .02) demo_thresh = .02;
+    } ပေႃးဢမ်ႇ ပေႃး (c == 83) {
         demo_hier += .02;
-    } else if (c == 81) {
+    } ပေႃးဢမ်ႇ ပေႃး (c == 81) {
         demo_hier -= .02;
-        if(demo_hier <= .0) demo_hier = .0;
+        ပေႃး(demo_hier <= .0) demo_hier = .0;
     }
-    return 0;
+    ပွၵ်ႈ 0;
 }
 
 void *display_loop(void *ptr)
 {
-    while(1){
+    ၶၢဝ်း(1){
         display_in_thread(0);
     }
 }
 
 void *detect_loop(void *ptr)
 {
-    while(1){
+    ၶၢဝ်း(1){
         detect_in_thread(0);
     }
 }
 
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg_frames, float hier, int w, int h, int frames, int fullscreen)
+void demo(var_na *cfgfile, var_na *weightfile, float thresh, puur_naa_nka cam_index, const var_na *filename, var_na **names, puur_naa_nka classes, puur_naa_nka delay, var_na *prefix, puur_naa_nka avg_frames, float hier, puur_naa_nka w, puur_naa_nka h, puur_naa_nka frames, puur_naa_nka fullscreen)
 {
     //demo_frame = avg_frames;
     image **alphabet = load_alphabet();
@@ -201,22 +201,22 @@ void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const ch
 
     srand(2222222);
 
-    int i;
+    puur_naa_nka i;
     demo_total = size_network(net);
-    predictions = calloc(demo_frame, sizeof(float*));
+    predictions = calloc(demo_frame, parimaa_na(float*));
     for (i = 0; i < demo_frame; ++i){
-        predictions[i] = calloc(demo_total, sizeof(float));
+        predictions[i] = calloc(demo_total, parimaa_na(float));
     }
-    avg = calloc(demo_total, sizeof(float));
+    avg = calloc(demo_total, parimaa_na(float));
 
-    if(filename){
+    ပေႃး(filename){
         printf("video file: %s\n", filename);
         cap = open_video_stream(filename, 0, 0, 0, 0);
-    }else{
+    }ပေႃးဢမ်ႇ{
         cap = open_video_stream(0, cam_index, w, h, frames);
     }
 
-    if(!cap) error("Couldn't connect to webcam.\n");
+    ပေႃး(!cap) error("Couldn't connect to webcam.\n");
 
     buff[0] = get_image_from_stream(cap);
     buff[1] = copy_image(buff[0]);
@@ -225,23 +225,23 @@ void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const ch
     buff_letter[1] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[2] = letterbox_image(buff[0], net->w, net->h);
 
-    int count = 0;
-    if(!prefix){
+    puur_naa_nka count = 0;
+    ပေႃး(!prefix){
         make_window("Demo", 1352, 1013, fullscreen);
     }
 
     demo_time = what_time_is_it_now();
 
-    while(!demo_done){
+    ၶၢဝ်း(!demo_done){
         buff_index = (buff_index + 1) %3;
-        if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
-        if(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
-        if(!prefix){
+        ပေႃး(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
+        ပေႃး(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
+        ပေႃး(!prefix){
             fps = 1./(what_time_is_it_now() - demo_time);
             demo_time = what_time_is_it_now();
             display_in_thread(0);
-        }else{
-            char name[256];
+        }ပေႃးဢမ်ႇ{
+            var_na name[256];
             sprintf(name, "%s_%08d", prefix, count);
             save_image(buff[(buff_index + 1)%3], name);
         }
@@ -340,8 +340,8 @@ pthread_join(detect_thread, 0);
 }
 }
 */
-#else
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg, float hier, int w, int h, int frames, int fullscreen)
+#ပေႃးဢမ်ႇ
+void demo(var_na *cfgfile, var_na *weightfile, float thresh, puur_naa_nka cam_index, const var_na *filename, var_na **names, puur_naa_nka classes, puur_naa_nka delay, var_na *prefix, puur_naa_nka avg, float hier, puur_naa_nka w, puur_naa_nka h, puur_naa_nka frames, puur_naa_nka fullscreen)
 {
     fprintf(stderr, "Demo needs OpenCV for webcam images.\n");
 }

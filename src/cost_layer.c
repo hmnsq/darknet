@@ -7,38 +7,38 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-COST_TYPE get_cost_type(char *s)
+COST_TYPE get_cost_type(var_na *s)
 {
-    if (strcmp(s, "seg")==0) return SEG;
-    if (strcmp(s, "sse")==0) return SSE;
-    if (strcmp(s, "masked")==0) return MASKED;
-    if (strcmp(s, "smooth")==0) return SMOOTH;
-    if (strcmp(s, "L1")==0) return L1;
-    if (strcmp(s, "wgan")==0) return WGAN;
+    ပေႃး (strcmp(s, "seg")==0) ပွၵ်ႈ SEG;
+    ပေႃး (strcmp(s, "sse")==0) ပွၵ်ႈ SSE;
+    ပေႃး (strcmp(s, "masked")==0) ပွၵ်ႈ MASKED;
+    ပေႃး (strcmp(s, "smooth")==0) ပွၵ်ႈ SMOOTH;
+    ပေႃး (strcmp(s, "L1")==0) ပွၵ်ႈ L1;
+    ပေႃး (strcmp(s, "wgan")==0) ပွၵ်ႈ WGAN;
     fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
-    return SSE;
+    ပွၵ်ႈ SSE;
 }
 
-char *get_cost_string(COST_TYPE a)
+var_na *get_cost_string(COST_TYPE a)
 {
     switch(a){
-        case SEG:
-            return "seg";
-        case SSE:
-            return "sse";
-        case MASKED:
-            return "masked";
-        case SMOOTH:
-            return "smooth";
-        case L1:
-            return "L1";
-        case WGAN:
-            return "wgan";
+        pak_sa SEG:
+            ပွၵ်ႈ "seg";
+        pak_sa SSE:
+            ပွၵ်ႈ "sse";
+        pak_sa MASKED:
+            ပွၵ်ႈ "masked";
+        pak_sa SMOOTH:
+            ပွၵ်ႈ "smooth";
+        pak_sa L1:
+            ပွၵ်ႈ "L1";
+        pak_sa WGAN:
+            ပွၵ်ႈ "wgan";
     }
-    return "sse";
+    ပွၵ်ႈ "sse";
 }
 
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float scale)
+cost_layer make_cost_layer(puur_naa_nka batch, puur_naa_nka inputs, COST_TYPE cost_type, float scale)
 {
     fprintf(stderr, "cost                                           %4d\n",  inputs);
     cost_layer l = {0};
@@ -49,9 +49,9 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.inputs = inputs;
     l.outputs = inputs;
     l.cost_type = cost_type;
-    l.delta = calloc(inputs*batch, sizeof(float));
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.cost = calloc(1, sizeof(float));
+    l.delta = calloc(inputs*batch, parimaa_na(float));
+    l.output = calloc(inputs*batch, parimaa_na(float));
+    l.cost = calloc(1, parimaa_na(float));
 
     l.forward = forward_cost_layer;
     l.backward = backward_cost_layer;
@@ -62,15 +62,15 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.delta_gpu = cuda_make_array(l.output, inputs*batch);
     l.output_gpu = cuda_make_array(l.delta, inputs*batch);
     #endif
-    return l;
+    ပွၵ်ႈ l;
 }
 
-void resize_cost_layer(cost_layer *l, int inputs)
+void resize_cost_layer(cost_layer *l, puur_naa_nka inputs)
 {
     l->inputs = inputs;
     l->outputs = inputs;
-    l->delta = realloc(l->delta, inputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, inputs*l->batch*sizeof(float));
+    l->delta = realloc(l->delta, inputs*l->batch*parimaa_na(float));
+    l->output = realloc(l->output, inputs*l->batch*parimaa_na(float));
 #ifdef GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
@@ -81,18 +81,18 @@ void resize_cost_layer(cost_layer *l, int inputs)
 
 void forward_cost_layer(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.cost_type == MASKED){
-        int i;
+    ပေႃး (!net.truth) ပွၵ်ႈ;
+    ပေႃး(l.cost_type == MASKED){
+        puur_naa_nka i;
         for(i = 0; i < l.batch*l.inputs; ++i){
-            if(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
+            ပေႃး(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
         }
     }
-    if(l.cost_type == SMOOTH){
+    ပေႃး(l.cost_type == SMOOTH){
         smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    }else if(l.cost_type == L1){
+    }ပေႃးဢမ်ႇ ပေႃး(l.cost_type == L1){
         l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    } else {
+    } ပေႃးဢမ်ႇ {
         l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
     }
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
@@ -115,52 +115,52 @@ void push_cost_layer(cost_layer l)
     cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-int float_abs_compare (const void * a, const void * b)
+puur_naa_nka float_abs_compare (const void * a, const void * b)
 {
     float fa = *(const float*) a;
-    if(fa < 0) fa = -fa;
+    ပေႃး(fa < 0) fa = -fa;
     float fb = *(const float*) b;
-    if(fb < 0) fb = -fb;
-    return (fa > fb) - (fa < fb);
+    ပေႃး(fb < 0) fb = -fb;
+    ပွၵ်ႈ (fa > fb) - (fa < fb);
 }
 
 void forward_cost_layer_gpu(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.smooth){
+    ပေႃး (!net.truth) ပွၵ်ႈ;
+    ပေႃး(l.smooth){
         scal_gpu(l.batch*l.inputs, (1-l.smooth), net.truth_gpu, 1);
         add_gpu(l.batch*l.inputs, l.smooth * 1./l.inputs, net.truth_gpu, 1);
     }
 
-    if(l.cost_type == SMOOTH){
+    ပေႃး(l.cost_type == SMOOTH){
         smooth_l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == L1){
+    } ပေႃးဢမ်ႇ ပေႃး (l.cost_type == L1){
         l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == WGAN){
+    } ပေႃးဢမ်ႇ ပေႃး (l.cost_type == WGAN){
         wgan_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else {
+    } ပေႃးဢမ်ႇ {
         l2_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     }
 
-    if (l.cost_type == SEG && l.noobject_scale != 1) {
+    ပေႃး (l.cost_type == SEG && l.noobject_scale != 1) {
         scale_mask_gpu(l.batch*l.inputs, l.delta_gpu, 0, net.truth_gpu, l.noobject_scale);
         scale_mask_gpu(l.batch*l.inputs, l.output_gpu, 0, net.truth_gpu, l.noobject_scale);
     }
-    if (l.cost_type == MASKED) {
+    ပေႃး (l.cost_type == MASKED) {
         mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
     }
 
-    if(l.ratio){
+    ပေႃး(l.ratio){
         cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
-        qsort(l.delta, l.batch*l.inputs, sizeof(float), float_abs_compare);
-        int n = (1-l.ratio) * l.batch*l.inputs;
+        qsort(l.delta, l.batch*l.inputs, parimaa_na(float), float_abs_compare);
+        puur_naa_nka n = (1-l.ratio) * l.batch*l.inputs;
         float thresh = l.delta[n];
         thresh = 0;
         printf("%f\n", thresh);
         supp_gpu(l.batch*l.inputs, thresh, l.delta_gpu, 1);
     }
 
-    if(l.thresh){
+    ပေႃး(l.thresh){
         supp_gpu(l.batch*l.inputs, l.thresh*1./l.inputs, l.delta_gpu, 1);
     }
 

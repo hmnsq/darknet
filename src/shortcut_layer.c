@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2)
+layer make_shortcut_layer(puur_naa_nka batch, puur_naa_nka index, puur_naa_nka w, puur_naa_nka h, puur_naa_nka c, puur_naa_nka w2, puur_naa_nka h2, puur_naa_nka c2)
 {
     fprintf(stderr, "res  %3d                %4d x%4d x%4d   ->  %4d x%4d x%4d\n",index, w2,h2,c2, w,h,c);
     layer l = {0};
@@ -23,8 +23,8 @@ layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int
 
     l.index = index;
 
-    l.delta =  calloc(l.outputs*batch, sizeof(float));
-    l.output = calloc(l.outputs*batch, sizeof(float));;
+    l.delta =  calloc(l.outputs*batch, parimaa_na(float));
+    l.output = calloc(l.outputs*batch, parimaa_na(float));;
 
     l.forward = forward_shortcut_layer;
     l.backward = backward_shortcut_layer;
@@ -35,10 +35,10 @@ layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int
     l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     #endif
-    return l;
+    ပွၵ်ႈ l;
 }
 
-void resize_shortcut_layer(layer *l, int w, int h)
+void resize_shortcut_layer(layer *l, puur_naa_nka w, puur_naa_nka h)
 {
     assert(l->w == l->out_w);
     assert(l->h == l->out_h);
@@ -46,8 +46,8 @@ void resize_shortcut_layer(layer *l, int w, int h)
     l->h = l->out_h = h;
     l->outputs = w*h*l->out_c;
     l->inputs = l->outputs;
-    l->delta =  realloc(l->delta, l->outputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, l->outputs*l->batch*sizeof(float));
+    l->delta =  realloc(l->delta, l->outputs*l->batch*parimaa_na(float));
+    l->output = realloc(l->output, l->outputs*l->batch*parimaa_na(float));
 
 #ifdef GPU
     cuda_free(l->output_gpu);

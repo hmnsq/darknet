@@ -10,9 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void increment_layer(layer *l, int steps)
+static void increment_layer(layer *l, puur_naa_nka steps)
 {
-    int num = l->outputs*l->batch*steps;
+    puur_naa_nka num = l->outputs*l->batch*steps;
     l->output += num;
     l->delta += num;
     l->x += num;
@@ -26,7 +26,7 @@ static void increment_layer(layer *l, int steps)
 #endif
 }
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam)
+layer make_rnn_layer(puur_naa_nka batch, puur_naa_nka inputs, puur_naa_nka outputs, puur_naa_nka steps, ACTIVATION activation, puur_naa_nka batch_normalize, puur_naa_nka adam)
 {
     fprintf(stderr, "RNN Layer: %d inputs, %d outputs\n", inputs, outputs);
     batch = batch / steps;
@@ -36,20 +36,20 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
     l.steps = steps;
     l.inputs = inputs;
 
-    l.state = calloc(batch*outputs, sizeof(float));
-    l.prev_state = calloc(batch*outputs, sizeof(float));
+    l.state = calloc(batch*outputs, parimaa_na(float));
+    l.prev_state = calloc(batch*outputs, parimaa_na(float));
 
-    l.input_layer = malloc(sizeof(layer));
+    l.input_layer = malloc(parimaa_na(layer));
     fprintf(stderr, "\t\t");
     *(l.input_layer) = make_connected_layer(batch*steps, inputs, outputs, activation, batch_normalize, adam);
     l.input_layer->batch = batch;
 
-    l.self_layer = malloc(sizeof(layer));
+    l.self_layer = malloc(parimaa_na(layer));
     fprintf(stderr, "\t\t");
     *(l.self_layer) = make_connected_layer(batch*steps, outputs, outputs, activation, batch_normalize, adam);
     l.self_layer->batch = batch;
 
-    l.output_layer = malloc(sizeof(layer));
+    l.output_layer = malloc(parimaa_na(layer));
     fprintf(stderr, "\t\t");
     *(l.output_layer) = make_connected_layer(batch*steps, outputs, outputs, activation, batch_normalize, adam);
     l.output_layer->batch = batch;
@@ -76,7 +76,7 @@ layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION a
 #endif
 #endif
 
-    return l;
+    ပွၵ်ႈ l;
 }
 
 void update_rnn_layer(layer l, update_args a)
@@ -90,7 +90,7 @@ void forward_rnn_layer(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
+    puur_naa_nka i;
     layer input_layer = *(l.input_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
@@ -98,7 +98,7 @@ void forward_rnn_layer(layer l, network net)
     fill_cpu(l.outputs * l.batch * l.steps, 0, output_layer.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, self_layer.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, input_layer.delta, 1);
-    if(net.train) fill_cpu(l.outputs * l.batch, 0, l.state, 1);
+    ပေႃး(net.train) fill_cpu(l.outputs * l.batch, 0, l.state, 1);
 
     for (i = 0; i < l.steps; ++i) {
         s.input = net.input;
@@ -108,10 +108,10 @@ void forward_rnn_layer(layer l, network net)
         forward_connected_layer(self_layer, s);
 
         float *old_state = l.state;
-        if(net.train) l.state += l.outputs*l.batch;
-        if(l.shortcut){
+        ပေႃး(net.train) l.state += l.outputs*l.batch;
+        ပေႃး(l.shortcut){
             copy_cpu(l.outputs * l.batch, old_state, 1, l.state, 1);
-        }else{
+        }ပေႃးဢမ်ႇ{
             fill_cpu(l.outputs * l.batch, 0, l.state, 1);
         }
         axpy_cpu(l.outputs * l.batch, 1, input_layer.output, 1, l.state, 1);
@@ -131,7 +131,7 @@ void backward_rnn_layer(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
+    puur_naa_nka i;
     layer input_layer = *(l.input_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
@@ -161,14 +161,14 @@ void backward_rnn_layer(layer l, network net)
 
         s.input = l.state;
         s.delta = self_layer.delta - l.outputs*l.batch;
-        if (i == 0) s.delta = 0;
+        ပေႃး (i == 0) s.delta = 0;
         backward_connected_layer(self_layer, s);
 
         copy_cpu(l.outputs*l.batch, self_layer.delta, 1, input_layer.delta, 1);
-        if (i > 0 && l.shortcut) axpy_cpu(l.outputs*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.outputs*l.batch, 1);
+        ပေႃး (i > 0 && l.shortcut) axpy_cpu(l.outputs*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.outputs*l.batch, 1);
         s.input = net.input + i*l.inputs*l.batch;
-        if(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
-        else s.delta = 0;
+        ပေႃး(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
+        ပေႃးဢမ်ႇ s.delta = 0;
         backward_connected_layer(input_layer, s);
 
         increment_layer(&input_layer, -1);
@@ -204,7 +204,7 @@ void forward_rnn_layer_gpu(layer l, network net)
 {
     network s = {0};
     s.train = net.train;
-    int i;
+    puur_naa_nka i;
     layer input_layer = *(l.input_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
@@ -213,7 +213,7 @@ void forward_rnn_layer_gpu(layer l, network net)
     fill_gpu(l.outputs * l.batch * l.steps, 0, self_layer.delta_gpu, 1);
     fill_gpu(l.outputs * l.batch * l.steps, 0, input_layer.delta_gpu, 1);
 
-    if(net.train) {
+    ပေႃး(net.train) {
         fill_gpu(l.outputs * l.batch * l.steps, 0, l.delta_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.state_gpu, 1, l.prev_state_gpu, 1);
     }
@@ -243,7 +243,7 @@ void backward_rnn_layer_gpu(layer l, network net)
 {
     network s = {0};
     s.train = net.train;
-    int i;
+    puur_naa_nka i;
     layer input_layer = *(l.input_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
@@ -261,11 +261,11 @@ void backward_rnn_layer_gpu(layer l, network net)
         s.delta_gpu = self_layer.delta_gpu;
         backward_connected_layer_gpu(output_layer, s);
 
-        if(i != 0) {
+        ပေႃး(i != 0) {
             fill_gpu(l.outputs * l.batch, 0, l.state_gpu, 1);
             axpy_gpu(l.outputs * l.batch, 1, input_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
             axpy_gpu(l.outputs * l.batch, 1, self_layer.output_gpu - l.outputs*l.batch, 1, l.state_gpu, 1);
-        }else {
+        }ပေႃးဢမ်ႇ {
             copy_gpu(l.outputs*l.batch, l.prev_state_gpu, 1, l.state_gpu, 1);
         }
 
@@ -273,12 +273,12 @@ void backward_rnn_layer_gpu(layer l, network net)
 
         s.input_gpu = l.state_gpu;
         s.delta_gpu = (i > 0) ? self_layer.delta_gpu - l.outputs*l.batch : 0;
-        if (i == 0) s.delta_gpu = 0;
+        ပေႃး (i == 0) s.delta_gpu = 0;
         backward_connected_layer_gpu(self_layer, s);
 
         s.input_gpu = net.input_gpu + i*l.inputs*l.batch;
-        if(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
-        else s.delta_gpu = 0;
+        ပေႃး(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
+        ပေႃးဢမ်ႇ s.delta_gpu = 0;
         backward_connected_layer_gpu(input_layer, s);
 
         increment_layer(&input_layer,  -1);
