@@ -10,9 +10,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes)
+layer make_yolo_layer(puur_naa_nka batch, puur_naa_nka w, puur_naa_nka h, puur_naa_nka n, puur_naa_nka total, puur_naa_nka *mask, puur_naa_nka classes)
 {
-    int i;
+    puur_naa_nka i;
     layer l = {0};
     l.type = YOLO;
 
@@ -26,21 +26,21 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     l.out_h = l.h;
     l.out_c = l.c;
     l.classes = classes;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(total*2, sizeof(float));
-    if(mask) l.mask = mask;
-    else{
-        l.mask = calloc(n, sizeof(int));
+    l.cost = calloc(1, parimaa_na(float));
+    l.biases = calloc(total*2, parimaa_na(float));
+    ᨀᨘ(mask) l.mask = mask;
+    ᨀᨘᨁ{
+        l.mask = calloc(n, parimaa_na(puur_naa_nka));
         for(i = 0; i < n; ++i){
             l.mask[i] = i;
         }
     }
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.bias_updates = calloc(n*2, parimaa_na(float));
     l.outputs = h*w*n*(classes + 4 + 1);
     l.inputs = l.outputs;
     l.truths = 90*(4 + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
+    l.delta = calloc(batch*l.outputs, parimaa_na(float));
+    l.output = calloc(batch*l.outputs, parimaa_na(float));
     for(i = 0; i < total*2; ++i){
         l.biases[i] = .5;
     }
@@ -57,10 +57,10 @@ layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int 
     fprintf(stderr, "yolo\n");
     srand(0);
 
-    return l;
+    ᨀᨘᨒ l;
 }
 
-void resize_yolo_layer(layer *l, int w, int h)
+void resize_yolo_layer(layer *l, puur_naa_nka w, puur_naa_nka h)
 {
     l->w = w;
     l->h = h;
@@ -68,8 +68,8 @@ void resize_yolo_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + 4 + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*parimaa_na(float));
+    l->delta = realloc(l->delta, l->batch*l->outputs*parimaa_na(float));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -80,17 +80,17 @@ void resize_yolo_layer(layer *l, int w, int h)
 #endif
 }
 
-box get_yolo_box(float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, int stride)
+box get_yolo_box(float *x, float *biases, puur_naa_nka n, puur_naa_nka index, puur_naa_nka i, puur_naa_nka j, puur_naa_nka lw, puur_naa_nka lh, puur_naa_nka w, puur_naa_nka h, puur_naa_nka stride)
 {
     box b;
     b.x = (i + x[index + 0*stride]) / lw;
     b.y = (j + x[index + 1*stride]) / lh;
     b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
     b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    ᨀᨘᨒ b;
 }
 
-float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, float *delta, float scale, int stride)
+float delta_yolo_box(box truth, float *x, float *biases, puur_naa_nka n, puur_naa_nka index, puur_naa_nka i, puur_naa_nka j, puur_naa_nka lw, puur_naa_nka lh, puur_naa_nka w, puur_naa_nka h, float *delta, float scale, puur_naa_nka stride)
 {
     box pred = get_yolo_box(x, biases, n, index, i, j, lw, lh, w, h, stride);
     float iou = box_iou(pred, truth);
@@ -104,40 +104,40 @@ float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i
     delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
     delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
     delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    ᨀᨘᨒ iou;
 }
 
 
-void delta_yolo_class(float *output, float *delta, int index, int class, int classes, int stride, float *avg_cat)
+void delta_yolo_class(float *output, float *delta, puur_naa_nka index, puur_naa_nka class, puur_naa_nka classes, puur_naa_nka stride, float *avg_cat)
 {
-    int n;
-    if (delta[index]){
+    puur_naa_nka n;
+    ᨀᨘ (delta[index]){
         delta[index + stride*class] = 1 - output[index + stride*class];
-        if(avg_cat) *avg_cat += output[index + stride*class];
-        return;
+        ᨀᨘ(avg_cat) *avg_cat += output[index + stride*class];
+        ᨀᨘᨒ;
     }
     for(n = 0; n < classes; ++n){
         delta[index + stride*n] = ((n == class)?1 : 0) - output[index + stride*n];
-        if(n == class && avg_cat) *avg_cat += output[index + stride*n];
+        ᨀᨘ(n == class && avg_cat) *avg_cat += output[index + stride*n];
     }
 }
 
-static int entry_index(layer l, int batch, int location, int entry)
+static puur_naa_nka entry_index(layer l, puur_naa_nka batch, puur_naa_nka location, puur_naa_nka entry)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
+    puur_naa_nka n =   location / (l.w*l.h);
+    puur_naa_nka loc = location % (l.w*l.h);
+    ᨀᨘᨒ batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
 }
 
 void forward_yolo_layer(const layer l, network net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    puur_naa_nka i,j,b,t,n;
+    memcpy(l.output, net.input, l.outputs*l.batch*parimaa_na(float));
 
 #ifndef GPU
     for (b = 0; b < l.batch; ++b){
         for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+            puur_naa_nka index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, 4);
             activate_array(l.output + index, (1+l.classes)*l.w*l.h, LOGISTIC);
@@ -145,46 +145,46 @@ void forward_yolo_layer(const layer l, network net)
     }
 #endif
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
+    memset(l.delta, 0, l.outputs * l.batch * parimaa_na(float));
+    ᨀᨘ(!net.train) ᨀᨘᨒ;
     float avg_iou = 0;
     float recall = 0;
     float recall75 = 0;
     float avg_cat = 0;
     float avg_obj = 0;
     float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    puur_naa_nka count = 0;
+    puur_naa_nka class_count = 0;
     *(l.cost) = 0;
     for (b = 0; b < l.batch; ++b) {
         for (j = 0; j < l.h; ++j) {
             for (i = 0; i < l.w; ++i) {
                 for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+                    puur_naa_nka box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                     box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
                     float best_iou = 0;
-                    int best_t = 0;
+                    puur_naa_nka best_t = 0;
                     for(t = 0; t < l.max_boxes; ++t){
                         box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
+                        ᨀᨘ(!truth.x) bha_nga;
                         float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
+                        ᨀᨘ (iou > best_iou) {
                             best_iou = iou;
                             best_t = t;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
+                    puur_naa_nka obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
                     avg_anyobj += l.output[obj_index];
                     l.delta[obj_index] = 0 - l.output[obj_index];
-                    if (best_iou > l.ignore_thresh) {
+                    ᨀᨘ (best_iou > l.ignore_thresh) {
                         l.delta[obj_index] = 0;
                     }
-                    if (best_iou > l.truth_thresh) {
+                    ᨀᨘ (best_iou > l.truth_thresh) {
                         l.delta[obj_index] = 1 - l.output[obj_index];
 
-                        int class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
-                        if (l.map) class = l.map[class];
-                        int class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
+                        puur_naa_nka class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
+                        ᨀᨘ (l.map) class = l.map[class];
+                        puur_naa_nka class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
                         delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, 0);
                         box truth = float_to_box(net.truth + best_t*(4 + 1) + b*l.truths, 1);
                         delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
@@ -195,9 +195,9 @@ void forward_yolo_layer(const layer l, network net)
         for(t = 0; t < l.max_boxes; ++t){
             box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
+            ᨀᨘ(!truth.x) bha_nga;
             float best_iou = 0;
-            int best_n = 0;
+            puur_naa_nka best_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
             box truth_shift = truth;
@@ -207,30 +207,30 @@ void forward_yolo_layer(const layer l, network net)
                 pred.w = l.biases[2*n]/net.w;
                 pred.h = l.biases[2*n+1]/net.h;
                 float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
+                ᨀᨘ (iou > best_iou){
                     best_iou = iou;
                     best_n = n;
                 }
             }
 
-            int mask_n = int_index(l.mask, best_n, l.n);
-            if(mask_n >= 0){
-                int box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
+            puur_naa_nka mask_n = int_index(l.mask, best_n, l.n);
+            ᨀᨘ(mask_n >= 0){
+                puur_naa_nka box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
                 float iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
 
-                int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
+                puur_naa_nka obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
                 avg_obj += l.output[obj_index];
                 l.delta[obj_index] = 1 - l.output[obj_index];
 
-                int class = net.truth[t*(4 + 1) + b*l.truths + 4];
-                if (l.map) class = l.map[class];
-                int class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
+                puur_naa_nka class = net.truth[t*(4 + 1) + b*l.truths + 4];
+                ᨀᨘ (l.map) class = l.map[class];
+                puur_naa_nka class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
                 delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, &avg_cat);
 
                 ++count;
                 ++class_count;
-                if(iou > .5) recall += 1;
-                if(iou > .75) recall75 += 1;
+                ᨀᨘ(iou > .5) recall += 1;
+                ᨀᨘ(iou > .75) recall75 += 1;
                 avg_iou += iou;
             }
         }
@@ -244,15 +244,15 @@ void backward_yolo_layer(const layer l, network net)
    axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+void correct_yolo_boxes(detection *dets, puur_naa_nka n, puur_naa_nka w, puur_naa_nka h, puur_naa_nka netw, puur_naa_nka neth, puur_naa_nka relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    puur_naa_nka i;
+    puur_naa_nka new_w=0;
+    puur_naa_nka new_h=0;
+    ᨀᨘ (((float)netw/w) < ((float)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } ᨀᨘᨁ {
         new_h = neth;
         new_w = (w * neth)/h;
     }
@@ -262,7 +262,7 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
         b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
         b.w *= (float)netw/new_w;
         b.h *= (float)neth/new_h;
-        if(!relative){
+        ᨀᨘ(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -272,35 +272,35 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
     }
 }
 
-int yolo_num_detections(layer l, float thresh)
+puur_naa_nka yolo_num_detections(layer l, float thresh)
 {
-    int i, n;
-    int count = 0;
+    puur_naa_nka i, n;
+    puur_naa_nka count = 0;
     for (i = 0; i < l.w*l.h; ++i){
         for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            if(l.output[obj_index] > thresh){
+            puur_naa_nka obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ᨀᨘ(l.output[obj_index] > thresh){
                 ++count;
             }
         }
     }
-    return count;
+    ᨀᨘᨒ count;
 }
 
 void avg_flipped_yolo(layer l)
 {
-    int i,j,n,z;
+    puur_naa_nka i,j,n,z;
     float *flip = l.output + l.outputs;
     for (j = 0; j < l.h; ++j) {
         for (i = 0; i < l.w/2; ++i) {
             for (n = 0; n < l.n; ++n) {
                 for(z = 0; z < l.classes + 4 + 1; ++z){
-                    int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                    int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                    puur_naa_nka i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                    puur_naa_nka i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
                     float swap = flip[i1];
                     flip[i1] = flip[i2];
                     flip[i2] = swap;
-                    if(z == 0){
+                    ᨀᨘ(z == 0){
                         flip[i1] = -flip[i1];
                         flip[i2] = -flip[i2];
                     }
@@ -313,25 +313,25 @@ void avg_flipped_yolo(layer l)
     }
 }
 
-int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets)
+puur_naa_nka get_yolo_detections(layer l, puur_naa_nka w, puur_naa_nka h, puur_naa_nka netw, puur_naa_nka neth, float thresh, puur_naa_nka *map, puur_naa_nka relative, detection *dets)
 {
-    int i,j,n;
+    puur_naa_nka i,j,n;
     float *predictions = l.output;
-    if (l.batch == 2) avg_flipped_yolo(l);
-    int count = 0;
+    ᨀᨘ (l.batch == 2) avg_flipped_yolo(l);
+    puur_naa_nka count = 0;
     for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
+        puur_naa_nka row = i / l.w;
+        puur_naa_nka col = i % l.w;
         for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
+            puur_naa_nka obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
             float objectness = predictions[obj_index];
-            if(objectness <= thresh) continue;
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
+            ᨀᨘ(objectness <= thresh) continue;
+            puur_naa_nka box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
             dets[count].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
             dets[count].objectness = objectness;
             dets[count].classes = l.classes;
             for(j = 0; j < l.classes; ++j){
-                int class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
+                puur_naa_nka class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
                 float prob = objectness*predictions[class_index];
                 dets[count].prob[j] = (prob > thresh) ? prob : 0;
             }
@@ -339,7 +339,7 @@ int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh,
         }
     }
     correct_yolo_boxes(dets, count, w, h, netw, neth, relative);
-    return count;
+    ᨀᨘᨒ count;
 }
 
 #ifdef GPU
@@ -347,18 +347,18 @@ int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh,
 void forward_yolo_layer_gpu(const layer l, network net)
 {
     copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
+    puur_naa_nka b, n;
     for (b = 0; b < l.batch; ++b){
         for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+            puur_naa_nka index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, 4);
             activate_array_gpu(l.output_gpu + index, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-    if(!net.train || l.onlyforward){
+    ᨀᨘ(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ᨀᨘᨒ;
     }
 
     cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
