@@ -2,12 +2,12 @@
 #define COL2IM_H
 
 void col2im_cpu(float* data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_im);
+        ကိန်းပြည့် channels, ကိန်းပြည့် height, ကိန်းပြည့် width,
+        ကိန်းပြည့် ksize, ကိန်းပြည့် stride, ကိန်းပြည့် pad, float* data_im);
 
 #ifdef GPU
 void col2im_gpu(float *data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float *data_im);
+        ကိန်းပြည့် channels, ကိန်းပြည့် height, ကိန်းပြည့် width,
+        ကိန်းပြည့် ksize, ကိန်းပြည့် stride, ကိန်းပြည့် pad, float *data_im);
 #endif
 #endif

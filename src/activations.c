@@ -5,102 +5,102 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *get_activation_string(ACTIVATION a)
+var_na *get_activation_string(ACTIVATION a)
 {
     switch(a){
-        case LOGISTIC:
-            return "logistic";
-        case LOGGY:
-            return "loggy";
-        case RELU:
-            return "relu";
-        case ELU:
-            return "elu";
-        case SELU:
-            return "selu";
-        case RELIE:
-            return "relie";
-        case RAMP:
-            return "ramp";
-        case LINEAR:
-            return "linear";
-        case TANH:
-            return "tanh";
-        case PLSE:
-            return "plse";
-        case LEAKY:
-            return "leaky";
-        case STAIR:
-            return "stair";
-        case HARDTAN:
-            return "hardtan";
-        case LHTAN:
-            return "lhtan";
+        pak_sa LOGISTIC:
+            ပြန်ပေး "logistic";
+        pak_sa LOGGY:
+            ပြန်ပေး "loggy";
+        pak_sa RELU:
+            ပြန်ပေး "relu";
+        pak_sa ELU:
+            ပြန်ပေး "elu";
+        pak_sa SELU:
+            ပြန်ပေး "selu";
+        pak_sa RELIE:
+            ပြန်ပေး "relie";
+        pak_sa RAMP:
+            ပြန်ပေး "ramp";
+        pak_sa LINEAR:
+            ပြန်ပေး "linear";
+        pak_sa TANH:
+            ပြန်ပေး "tanh";
+        pak_sa PLSE:
+            ပြန်ပေး "plse";
+        pak_sa LEAKY:
+            ပြန်ပေး "leaky";
+        pak_sa STAIR:
+            ပြန်ပေး "stair";
+        pak_sa HARDTAN:
+            ပြန်ပေး "hardtan";
+        pak_sa LHTAN:
+            ပြန်ပေး "lhtan";
         default:
-            break;
+            bha_nga;
     }
-    return "relu";
+    ပြန်ပေး "relu";
 }
 
-ACTIVATION get_activation(char *s)
+ACTIVATION get_activation(var_na *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    အကယ်၍ (strcmp(s, "logistic")==0) ပြန်ပေး LOGISTIC;
+    အကယ်၍ (strcmp(s, "loggy")==0) ပြန်ပေး LOGGY;
+    အကယ်၍ (strcmp(s, "relu")==0) ပြန်ပေး RELU;
+    အကယ်၍ (strcmp(s, "elu")==0) ပြန်ပေး ELU;
+    အကယ်၍ (strcmp(s, "selu")==0) ပြန်ပေး SELU;
+    အကယ်၍ (strcmp(s, "relie")==0) ပြန်ပေး RELIE;
+    အကယ်၍ (strcmp(s, "plse")==0) ပြန်ပေး PLSE;
+    အကယ်၍ (strcmp(s, "hardtan")==0) ပြန်ပေး HARDTAN;
+    အကယ်၍ (strcmp(s, "lhtan")==0) ပြန်ပေး LHTAN;
+    အကယ်၍ (strcmp(s, "linear")==0) ပြန်ပေး LINEAR;
+    အကယ်၍ (strcmp(s, "ramp")==0) ပြန်ပေး RAMP;
+    အကယ်၍ (strcmp(s, "leaky")==0) ပြန်ပေး LEAKY;
+    အကယ်၍ (strcmp(s, "tanh")==0) ပြန်ပေး TANH;
+    အကယ်၍ (strcmp(s, "stair")==0) ပြန်ပေး STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    ပြန်ပေး RELU;
 }
 
 float activate(float x, ACTIVATION a)
 {
     switch(a){
-        case LINEAR:
-            return linear_activate(x);
-        case LOGISTIC:
-            return logistic_activate(x);
-        case LOGGY:
-            return loggy_activate(x);
-        case RELU:
-            return relu_activate(x);
-        case ELU:
-            return elu_activate(x);
-        case SELU:
-            return selu_activate(x);
-        case RELIE:
-            return relie_activate(x);
-        case RAMP:
-            return ramp_activate(x);
-        case LEAKY:
-            return leaky_activate(x);
-        case TANH:
-            return tanh_activate(x);
-        case PLSE:
-            return plse_activate(x);
-        case STAIR:
-            return stair_activate(x);
-        case HARDTAN:
-            return hardtan_activate(x);
-        case LHTAN:
-            return lhtan_activate(x);
+        pak_sa LINEAR:
+            ပြန်ပေး linear_activate(x);
+        pak_sa LOGISTIC:
+            ပြန်ပေး logistic_activate(x);
+        pak_sa LOGGY:
+            ပြန်ပေး loggy_activate(x);
+        pak_sa RELU:
+            ပြန်ပေး relu_activate(x);
+        pak_sa ELU:
+            ပြန်ပေး elu_activate(x);
+        pak_sa SELU:
+            ပြန်ပေး selu_activate(x);
+        pak_sa RELIE:
+            ပြန်ပေး relie_activate(x);
+        pak_sa RAMP:
+            ပြန်ပေး ramp_activate(x);
+        pak_sa LEAKY:
+            ပြန်ပေး leaky_activate(x);
+        pak_sa TANH:
+            ပြန်ပေး tanh_activate(x);
+        pak_sa PLSE:
+            ပြန်ပေး plse_activate(x);
+        pak_sa STAIR:
+            ပြန်ပေး stair_activate(x);
+        pak_sa HARDTAN:
+            ပြန်ပေး hardtan_activate(x);
+        pak_sa LHTAN:
+            ပြန်ပေး lhtan_activate(x);
     }
-    return 0;
+    ပြန်ပေး 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+void activate_array(float *x, const ကိန်းပြည့် n, const ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ကိန်းပြည့် i;
+    အတွက်(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
 }
@@ -108,42 +108,42 @@ void activate_array(float *x, const int n, const ACTIVATION a)
 float gradient(float x, ACTIVATION a)
 {
     switch(a){
-        case LINEAR:
-            return linear_gradient(x);
-        case LOGISTIC:
-            return logistic_gradient(x);
-        case LOGGY:
-            return loggy_gradient(x);
-        case RELU:
-            return relu_gradient(x);
-        case ELU:
-            return elu_gradient(x);
-        case SELU:
-            return selu_gradient(x);
-        case RELIE:
-            return relie_gradient(x);
-        case RAMP:
-            return ramp_gradient(x);
-        case LEAKY:
-            return leaky_gradient(x);
-        case TANH:
-            return tanh_gradient(x);
-        case PLSE:
-            return plse_gradient(x);
-        case STAIR:
-            return stair_gradient(x);
-        case HARDTAN:
-            return hardtan_gradient(x);
-        case LHTAN:
-            return lhtan_gradient(x);
+        pak_sa LINEAR:
+            ပြန်ပေး linear_gradient(x);
+        pak_sa LOGISTIC:
+            ပြန်ပေး logistic_gradient(x);
+        pak_sa LOGGY:
+            ပြန်ပေး loggy_gradient(x);
+        pak_sa RELU:
+            ပြန်ပေး relu_gradient(x);
+        pak_sa ELU:
+            ပြန်ပေး elu_gradient(x);
+        pak_sa SELU:
+            ပြန်ပေး selu_gradient(x);
+        pak_sa RELIE:
+            ပြန်ပေး relie_gradient(x);
+        pak_sa RAMP:
+            ပြန်ပေး ramp_gradient(x);
+        pak_sa LEAKY:
+            ပြန်ပေး leaky_gradient(x);
+        pak_sa TANH:
+            ပြန်ပေး tanh_gradient(x);
+        pak_sa PLSE:
+            ပြန်ပေး plse_gradient(x);
+        pak_sa STAIR:
+            ပြန်ပေး stair_gradient(x);
+        pak_sa HARDTAN:
+            ပြန်ပေး hardtan_gradient(x);
+        pak_sa LHTAN:
+            ပြန်ပေး lhtan_gradient(x);
     }
-    return 0;
+    ပြန်ပေး 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+void gradient_array(const float *x, const ကိန်းပြည့် n, const ACTIVATION a, float *delta)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ကိန်းပြည့် i;
+    အတွက်(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }
 } 

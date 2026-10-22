@@ -5,11 +5,11 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_normalization_layer(int batch, int w, int h, int c, int size, float alpha, float beta, float kappa);
-void resize_normalization_layer(layer *layer, int h, int w);
+layer make_normalization_layer(ကိန်းပြည့် batch, ကိန်းပြည့် w, ကိန်းပြည့် h, ကိန်းပြည့် c, ကိန်းပြည့် size, float alpha, float beta, float kappa);
+void resize_normalization_layer(layer *layer, ကိန်းပြည့် h, ကိန်းပြည့် w);
 void forward_normalization_layer(const layer layer, network net);
 void backward_normalization_layer(const layer layer, network net);
-void visualize_normalization_layer(layer layer, char *window);
+void visualize_normalization_layer(layer layer, var_na *window);
 
 #ifdef GPU
 void forward_normalization_layer_gpu(const layer layer, network net);

@@ -6,7 +6,7 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_gru_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_gru_layer(ကိန်းပြည့် batch, ကိန်းပြည့် inputs, ကိန်းပြည့် outputs, ကိန်းပြည့် steps, ကိန်းပြည့် batch_normalize, ကိန်းပြည့် adam);
 
 void forward_gru_layer(layer l, network state);
 void backward_gru_layer(layer l, network state);
