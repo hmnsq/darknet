@@ -10,9 +10,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void increment_layer(layer *l, int steps)
+static void increment_layer(layer *l, 整数 steps)
 {
-    int num = l->outputs*l->batch*steps;
+    整数 num = l->outputs*l->batch*steps;
     l->output += num;
     l->delta += num;
     l->x += num;
@@ -26,7 +26,7 @@ static void increment_layer(layer *l, int steps)
 #endif
 }
 
-layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam)
+layer make_lstm_layer(整数 batch, 整数 inputs, 整数 outputs, 整数 steps, 整数 batch_normalize, 整数 adam)
 {
     fprintf(stderr, "LSTM Layer: %d inputs, %d outputs\n", inputs, outputs);
     batch = batch / steps;
@@ -138,7 +138,7 @@ layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_n
 
 #endif
 
-    return l;
+    戻る l;
 }
 
 void update_lstm_layer(layer l, update_args a)
@@ -157,7 +157,7 @@ void forward_lstm_layer(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    整数 i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -177,11 +177,11 @@ void forward_lstm_layer(layer l, network state)
     fill_cpu(l.outputs * l.batch * l.steps, 0, ui.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, ug.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, uo.delta, 1);
-    if (state.train) {
+    もし (state.train) {
         fill_cpu(l.outputs * l.batch * l.steps, 0, l.delta, 1);
     }
 
-    for (i = 0; i < l.steps; ++i) {
+    ために (i = 0; i < l.steps; ++i) {
         s.input = l.h_cpu;
         forward_connected_layer(wf, s);							
         forward_connected_layer(wi, s);							
@@ -243,7 +243,7 @@ void backward_lstm_layer(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    整数 i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -265,16 +265,16 @@ void backward_lstm_layer(layer l, network state)
     increment_layer(&uo, l.steps - 1);
 
     state.input += l.inputs*l.batch*(l.steps - 1);
-    if (state.delta) state.delta += l.inputs*l.batch*(l.steps - 1);
+    もし (state.delta) state.delta += l.inputs*l.batch*(l.steps - 1);
 
     l.output += l.outputs*l.batch*(l.steps - 1);
     l.cell_cpu += l.outputs*l.batch*(l.steps - 1);
     l.delta += l.outputs*l.batch*(l.steps - 1);
 
-    for (i = l.steps - 1; i >= 0; --i) {
-        if (i != 0) copy_cpu(l.outputs*l.batch, l.cell_cpu - l.outputs*l.batch, 1, l.prev_cell_cpu, 1);
+    ために (i = l.steps - 1; i >= 0; --i) {
+        もし (i != 0) copy_cpu(l.outputs*l.batch, l.cell_cpu - l.outputs*l.batch, 1, l.prev_cell_cpu, 1);
         copy_cpu(l.outputs*l.batch, l.cell_cpu, 1, l.c_cpu, 1);
-        if (i != 0) copy_cpu(l.outputs*l.batch, l.output - l.outputs*l.batch, 1, l.prev_state_cpu, 1);
+        もし (i != 0) copy_cpu(l.outputs*l.batch, l.output - l.outputs*l.batch, 1, l.prev_state_cpu, 1);
         copy_cpu(l.outputs*l.batch, l.output, 1, l.h_cpu, 1);
 
         l.dh_cpu = (i == 0) ? 0 : l.delta - l.outputs*l.batch;
@@ -365,7 +365,7 @@ void backward_lstm_layer(layer l, network state)
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, l.dc_cpu, 1);				
 
         state.input -= l.inputs*l.batch;
-        if (state.delta) state.delta -= l.inputs*l.batch;
+        もし (state.delta) state.delta -= l.inputs*l.batch;
         l.output -= l.outputs*l.batch;
         l.cell_cpu -= l.outputs*l.batch;
         l.delta -= l.outputs*l.batch;
@@ -399,7 +399,7 @@ void forward_lstm_layer_gpu(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    整数 i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -419,11 +419,11 @@ void forward_lstm_layer_gpu(layer l, network state)
     fill_gpu(l.outputs * l.batch * l.steps, 0, ui.delta_gpu, 1);
     fill_gpu(l.outputs * l.batch * l.steps, 0, ug.delta_gpu, 1);
     fill_gpu(l.outputs * l.batch * l.steps, 0, uo.delta_gpu, 1);
-    if (state.train) {
+    もし (state.train) {
         fill_gpu(l.outputs * l.batch * l.steps, 0, l.delta_gpu, 1);
     }
 
-    for (i = 0; i < l.steps; ++i) {
+    ために (i = 0; i < l.steps; ++i) {
         s.input_gpu = l.h_gpu;
         forward_connected_layer_gpu(wf, s);							
         forward_connected_layer_gpu(wi, s);							
@@ -485,7 +485,7 @@ void backward_lstm_layer_gpu(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    整数 i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -507,16 +507,16 @@ void backward_lstm_layer_gpu(layer l, network state)
     increment_layer(&uo, l.steps - 1);
 
     state.input_gpu += l.inputs*l.batch*(l.steps - 1);
-    if (state.delta_gpu) state.delta_gpu += l.inputs*l.batch*(l.steps - 1);
+    もし (state.delta_gpu) state.delta_gpu += l.inputs*l.batch*(l.steps - 1);
 
     l.output_gpu += l.outputs*l.batch*(l.steps - 1);
     l.cell_gpu += l.outputs*l.batch*(l.steps - 1);
     l.delta_gpu += l.outputs*l.batch*(l.steps - 1);
 
-    for (i = l.steps - 1; i >= 0; --i) {
-        if (i != 0) copy_gpu(l.outputs*l.batch, l.cell_gpu - l.outputs*l.batch, 1, l.prev_cell_gpu, 1);
+    ために (i = l.steps - 1; i >= 0; --i) {
+        もし (i != 0) copy_gpu(l.outputs*l.batch, l.cell_gpu - l.outputs*l.batch, 1, l.prev_cell_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.cell_gpu, 1, l.c_gpu, 1);
-        if (i != 0) copy_gpu(l.outputs*l.batch, l.output_gpu - l.outputs*l.batch, 1, l.prev_state_gpu, 1);
+        もし (i != 0) copy_gpu(l.outputs*l.batch, l.output_gpu - l.outputs*l.batch, 1, l.prev_state_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.output_gpu, 1, l.h_gpu, 1);
 
         l.dh_gpu = (i == 0) ? 0 : l.delta_gpu - l.outputs*l.batch;
@@ -607,7 +607,7 @@ void backward_lstm_layer_gpu(layer l, network state)
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, l.dc_gpu, 1);				
 
         state.input_gpu -= l.inputs*l.batch;
-        if (state.delta_gpu) state.delta_gpu -= l.inputs*l.batch;
+        もし (state.delta_gpu) state.delta_gpu -= l.inputs*l.batch;
         l.output_gpu -= l.outputs*l.batch;
         l.cell_gpu -= l.outputs*l.batch;
         l.delta_gpu -= l.outputs*l.batch;

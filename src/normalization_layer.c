@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-layer make_normalization_layer(int batch, int w, int h, int c, int size, float alpha, float beta, float kappa)
+layer make_normalization_layer(整数 batch, 整数 w, 整数 h, 整数 c, 整数 size, float alpha, float beta, float kappa)
 {
     fprintf(stderr, "Local Response Normalization Layer: %d x %d x %d image, %d size\n", w,h,c,size);
     layer layer = {0};
@@ -34,13 +34,13 @@ layer make_normalization_layer(int batch, int w, int h, int c, int size, float a
     layer.squared_gpu = cuda_make_array(layer.squared, h * w * c * batch);
     layer.norms_gpu =   cuda_make_array(layer.norms, h * w * c * batch);
     #endif
-    return layer;
+    戻る layer;
 }
 
-void resize_normalization_layer(layer *layer, int w, int h)
+void resize_normalization_layer(layer *layer, 整数 w, 整数 h)
 {
-    int c = layer->c;
-    int batch = layer->batch;
+    整数 c = layer->c;
+    整数 batch = layer->batch;
     layer->h = h;
     layer->w = w;
     layer->out_h = h;
@@ -65,29 +65,29 @@ void resize_normalization_layer(layer *layer, int w, int h)
 
 void forward_normalization_layer(const layer layer, network net)
 {
-    int k,b;
-    int w = layer.w;
-    int h = layer.h;
-    int c = layer.c;
+    整数 k,b;
+    整数 w = layer.w;
+    整数 h = layer.h;
+    整数 c = layer.c;
     scal_cpu(w*h*c*layer.batch, 0, layer.squared, 1);
 
-    for(b = 0; b < layer.batch; ++b){
+    ために(b = 0; b < layer.batch; ++b){
         float *squared = layer.squared + w*h*c*b;
         float *norms   = layer.norms + w*h*c*b;
         float *input   = net.input + w*h*c*b;
         pow_cpu(w*h*c, 2, input, 1, squared, 1);
 
         const_cpu(w*h, layer.kappa, norms, 1);
-        for(k = 0; k < layer.size/2; ++k){
+        ために(k = 0; k < layer.size/2; ++k){
             axpy_cpu(w*h, layer.alpha, squared + w*h*k, 1, norms, 1);
         }
 
-        for(k = 1; k < layer.c; ++k){
+        ために(k = 1; k < layer.c; ++k){
             copy_cpu(w*h, norms + w*h*(k-1), 1, norms + w*h*k, 1);
-            int prev = k - ((layer.size-1)/2) - 1;
-            int next = k + (layer.size/2);
-            if(prev >= 0)      axpy_cpu(w*h, -layer.alpha, squared + w*h*prev, 1, norms + w*h*k, 1);
-            if(next < layer.c) axpy_cpu(w*h,  layer.alpha, squared + w*h*next, 1, norms + w*h*k, 1);
+            整数 prev = k - ((layer.size-1)/2) - 1;
+            整数 next = k + (layer.size/2);
+            もし(prev >= 0)      axpy_cpu(w*h, -layer.alpha, squared + w*h*prev, 1, norms + w*h*k, 1);
+            もし(next < layer.c) axpy_cpu(w*h,  layer.alpha, squared + w*h*next, 1, norms + w*h*k, 1);
         }
     }
     pow_cpu(w*h*c*layer.batch, -layer.beta, layer.norms, 1, layer.output, 1);
@@ -99,9 +99,9 @@ void backward_normalization_layer(const layer layer, network net)
     // TODO This is approximate ;-)
     // Also this should add in to delta instead of overwritting.
 
-    int w = layer.w;
-    int h = layer.h;
-    int c = layer.c;
+    整数 w = layer.w;
+    整数 h = layer.h;
+    整数 c = layer.c;
     pow_cpu(w*h*c*layer.batch, -layer.beta, layer.norms, 1, net.delta, 1);
     mul_cpu(w*h*c*layer.batch, layer.delta, 1, net.delta, 1);
 }
@@ -109,29 +109,29 @@ void backward_normalization_layer(const layer layer, network net)
 #ifdef GPU
 void forward_normalization_layer_gpu(const layer layer, network net)
 {
-    int k,b;
-    int w = layer.w;
-    int h = layer.h;
-    int c = layer.c;
+    整数 k,b;
+    整数 w = layer.w;
+    整数 h = layer.h;
+    整数 c = layer.c;
     scal_gpu(w*h*c*layer.batch, 0, layer.squared_gpu, 1);
 
-    for(b = 0; b < layer.batch; ++b){
+    ために(b = 0; b < layer.batch; ++b){
         float *squared = layer.squared_gpu + w*h*c*b;
         float *norms   = layer.norms_gpu + w*h*c*b;
         float *input   = net.input_gpu + w*h*c*b;
         pow_gpu(w*h*c, 2, input, 1, squared, 1);
 
         const_gpu(w*h, layer.kappa, norms, 1);
-        for(k = 0; k < layer.size/2; ++k){
+        ために(k = 0; k < layer.size/2; ++k){
             axpy_gpu(w*h, layer.alpha, squared + w*h*k, 1, norms, 1);
         }
 
-        for(k = 1; k < layer.c; ++k){
+        ために(k = 1; k < layer.c; ++k){
             copy_gpu(w*h, norms + w*h*(k-1), 1, norms + w*h*k, 1);
-            int prev = k - ((layer.size-1)/2) - 1;
-            int next = k + (layer.size/2);
-            if(prev >= 0)      axpy_gpu(w*h, -layer.alpha, squared + w*h*prev, 1, norms + w*h*k, 1);
-            if(next < layer.c) axpy_gpu(w*h,  layer.alpha, squared + w*h*next, 1, norms + w*h*k, 1);
+            整数 prev = k - ((layer.size-1)/2) - 1;
+            整数 next = k + (layer.size/2);
+            もし(prev >= 0)      axpy_gpu(w*h, -layer.alpha, squared + w*h*prev, 1, norms + w*h*k, 1);
+            もし(next < layer.c) axpy_gpu(w*h,  layer.alpha, squared + w*h*next, 1, norms + w*h*k, 1);
         }
     }
     pow_gpu(w*h*c*layer.batch, -layer.beta, layer.norms_gpu, 1, layer.output_gpu, 1);
@@ -142,9 +142,9 @@ void backward_normalization_layer_gpu(const layer layer, network net)
 {
     // TODO This is approximate ;-)
 
-    int w = layer.w;
-    int h = layer.h;
-    int c = layer.c;
+    整数 w = layer.w;
+    整数 h = layer.h;
+    整数 c = layer.c;
     pow_gpu(w*h*c*layer.batch, -layer.beta, layer.norms_gpu, 1, net.delta_gpu, 1);
     mul_gpu(w*h*c*layer.batch, layer.delta_gpu, 1, net.delta_gpu, 1);
 }

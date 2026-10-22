@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-layer make_l2norm_layer(int batch, int inputs)
+layer make_l2norm_layer(整数 batch, 整数 inputs)
 {
     fprintf(stderr, "l2norm                                         %4d\n",  inputs);
     layer l = {0};
@@ -31,7 +31,7 @@ layer make_l2norm_layer(int batch, int inputs)
     l.scales_gpu = cuda_make_array(l.output, inputs*batch); 
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch); 
     #endif
-    return l;
+    戻る l;
 }
 
 void forward_l2norm_layer(const layer l, network net)

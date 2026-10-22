@@ -16,13 +16,13 @@ void pull_network_output(network *net);
 void compare_networks(network *n1, network *n2, data d);
 char *get_layer_string(LAYER_TYPE a);
 
-network *make_network(int n);
+network *make_network(整数 n);
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
+float network_accuracy_multi(network *net, data d, 整数 n);
+整数 get_predicted_class_network(network *net);
 void print_network(network *net);
-int resize_network(network *net, int w, int h);
+整数 resize_network(network *net, 整数 w, 整数 h);
 void calc_network_cost(network *net);
 
 #endif

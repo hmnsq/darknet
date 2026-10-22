@@ -15,8 +15,8 @@ void push_deconvolutional_layer(layer l);
 void pull_deconvolutional_layer(layer l);
 #endif
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam);
-void resize_deconvolutional_layer(layer *l, int h, int w);
+layer make_deconvolutional_layer(整数 batch, 整数 h, 整数 w, 整数 c, 整数 n, 整数 size, 整数 stride, 整数 padding, ACTIVATION activation, 整数 batch_normalize, 整数 adam);
+void resize_deconvolutional_layer(layer *l, 整数 h, 整数 w);
 void forward_deconvolutional_layer(const layer l, network net);
 void update_deconvolutional_layer(layer l, update_args a);
 void backward_deconvolutional_layer(layer l, network net);

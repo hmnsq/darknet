@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+void gemm_bin(整数 M, 整数 N, 整数 K, float ALPHA, 
+        char  *A, 整数 lda, 
+        float *B, 整数 ldb,
+        float *C, 整数 ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
+void gemm(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+                    float *A, 整数 lda, 
+                    float *B, 整数 ldb,
                     float BETA,
-                    float *C, int ldc);
+                    float *C, 整数 ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_cpu(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
         float BETA,
-        float *C, int ldc);
+        float *C, 整数 ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
+void gemm_gpu(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A_gpu, 整数 lda, 
+        float *B_gpu, 整数 ldb,
         float BETA,
-        float *C_gpu, int ldc);
+        float *C_gpu, 整数 ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_gpu(整数 TA, 整数 TB, 整数 M, 整数 N, 整数 K, float ALPHA, 
+        float *A, 整数 lda, 
+        float *B, 整数 ldb,
         float BETA,
-        float *C, int ldc);
+        float *C, 整数 ldc);
 #endif
 #endif

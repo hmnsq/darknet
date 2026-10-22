@@ -10,7 +10,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
+layer make_iseg_layer(整数 batch, 整数 w, 整数 h, 整数 classes, 整数 ids)
 {
     layer l = {0};
     l.type = ISEG;
@@ -31,11 +31,11 @@ layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
     l.delta = calloc(batch*l.outputs, sizeof(float));
     l.output = calloc(batch*l.outputs, sizeof(float));
 
-    l.counts = calloc(90, sizeof(int));
+    l.counts = calloc(90, sizeof(整数));
     l.sums = calloc(90, sizeof(float*));
-    if(ids){
-        int i;
-        for(i = 0; i < 90; ++i){
+    もし(ids){
+        整数 i;
+        ために(i = 0; i < 90; ++i){
             l.sums[i] = calloc(ids, sizeof(float));
         }
     }
@@ -52,10 +52,10 @@ layer make_iseg_layer(int batch, int w, int h, int classes, int ids)
     fprintf(stderr, "iseg\n");
     srand(0);
 
-    return l;
+    戻る l;
 }
 
-void resize_iseg_layer(layer *l, int w, int h)
+void resize_iseg_layer(layer *l, 整数 w, 整数 h)
 {
     l->w = w;
     l->h = h;
@@ -79,47 +79,47 @@ void forward_iseg_layer(const layer l, network net)
 {
 
     double time = what_time_is_it_now();
-    int i,b,j,k;
-    int ids = l.extra;
+    整数 i,b,j,k;
+    整数 ids = l.extra;
     memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
     memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        int index = b*l.outputs;
+    ために (b = 0; b < l.batch; ++b){
+        整数 index = b*l.outputs;
         activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
     }
 #endif
 
-    for (b = 0; b < l.batch; ++b){
+    ために (b = 0; b < l.batch; ++b){
         // a priori, each pixel has no class
-        for(i = 0; i < l.classes; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + i*l.w*l.h + k;
+        ために(i = 0; i < l.classes; ++i){
+            ために(k = 0; k < l.w*l.h; ++k){
+                整数 index = b*l.outputs + i*l.w*l.h + k;
                 l.delta[index] = 0 - l.output[index];
             }
         }
 
         // a priori, embedding should be small magnitude
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+        ために(i = 0; i < ids; ++i){
+            ために(k = 0; k < l.w*l.h; ++k){
+                整数 index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
                 l.delta[index] = .1 * (0 - l.output[index]);
             }
         }
 
 
-        memset(l.counts, 0, 90*sizeof(int));
-        for(i = 0; i < 90; ++i){
+        memset(l.counts, 0, 90*sizeof(整数));
+        ために(i = 0; i < 90; ++i){
             fill_cpu(ids, 0, l.sums[i], 1);
             
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
+            整数 c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            もし(c < 0) break;
             // add up metric embeddings for each instance
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + c*l.w*l.h + k;
+            ために(k = 0; k < l.w*l.h; ++k){
+                整数 index = b*l.outputs + c*l.w*l.h + k;
                 float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
+                もし(v){
                     l.delta[index] = v - l.output[index];
                     axpy_cpu(ids, 1, l.output + b*l.outputs + l.classes*l.w*l.h + k, l.w*l.h, l.sums[i], 1);
                     ++l.counts[i];
@@ -128,16 +128,16 @@ void forward_iseg_layer(const layer l, network net)
         }
 
         float *mse = calloc(90, sizeof(float));
-        for(i = 0; i < 90; ++i){
-            int c = net.truth[b*l.truths + i*(l.w*l.h+1)];
-            if(c < 0) break;
-            for(k = 0; k < l.w*l.h; ++k){
+        ために(i = 0; i < 90; ++i){
+            整数 c = net.truth[b*l.truths + i*(l.w*l.h+1)];
+            もし(c < 0) break;
+            ために(k = 0; k < l.w*l.h; ++k){
                 float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    int z;
+                もし(v){
+                    整数 z;
                     float sum = 0;
-                    for(z = 0; z < ids; ++z){
-                        int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                    ために(z = 0; z < ids; ++z){
+                        整数 index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
                         sum += pow(l.sums[i][z]/l.counts[i] - l.output[index], 2);
                     }
                     mse[i] += sum;
@@ -147,12 +147,12 @@ void forward_iseg_layer(const layer l, network net)
         }
 
         // Calculate average embedding
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
+        ために(i = 0; i < 90; ++i){
+            もし(!l.counts[i]) continue;
             scal_cpu(ids, 1.f/l.counts[i], l.sums[i], 1);
-            if(b == 0 && net.gpu_index == 0){
+            もし(b == 0 && net.gpu_index == 0){
                 printf("%4d, %6.3f, ", l.counts[i], mse[i]);
-                for(j = 0; j < ids; ++j){
+                ために(j = 0; j < ids; ++j){
                     printf("%6.3f,", l.sums[i][j]);
                 }
                 printf("\n");
@@ -161,28 +161,28 @@ void forward_iseg_layer(const layer l, network net)
         free(mse);
 
         // Calculate embedding loss
-        for(i = 0; i < 90; ++i){
-            if(!l.counts[i]) continue;
-            for(k = 0; k < l.w*l.h; ++k){
+        ために(i = 0; i < 90; ++i){
+            もし(!l.counts[i]) continue;
+            ために(k = 0; k < l.w*l.h; ++k){
                 float v = net.truth[b*l.truths + i*(l.w*l.h + 1) + 1 + k];
-                if(v){
-                    for(j = 0; j < 90; ++j){
-                        if(!l.counts[j])continue;
-                        int z;
-                        for(z = 0; z < ids; ++z){
-                            int index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
+                もし(v){
+                    ために(j = 0; j < 90; ++j){
+                        もし(!l.counts[j])continue;
+                        整数 z;
+                        ために(z = 0; z < ids; ++z){
+                            整数 index = b*l.outputs + (l.classes + z)*l.w*l.h + k;
                             float diff = l.sums[j][z] - l.output[index];
-                            if (j == i) l.delta[index] +=   diff < 0? -.1 : .1;
-                            else        l.delta[index] += -(diff < 0? -.1 : .1);
+                            もし (j == i) l.delta[index] +=   diff < 0? -.1 : .1;
+                            否则        l.delta[index] += -(diff < 0? -.1 : .1);
                         }
                     }
                 }
             }
         }
 
-        for(i = 0; i < ids; ++i){
-            for(k = 0; k < l.w*l.h; ++k){
-                int index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
+        ために(i = 0; i < ids; ++i){
+            ために(k = 0; k < l.w*l.h; ++k){
+                整数 index = b*l.outputs + (i+l.classes)*l.w*l.h + k;
                 l.delta[index] *= .01;
             }
         }
@@ -202,8 +202,8 @@ void backward_iseg_layer(const layer l, network net)
 void forward_iseg_layer_gpu(const layer l, network net)
 {
     copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    整数 b;
+    ために (b = 0; b < l.batch; ++b){
         activate_array_gpu(l.output_gpu + b*l.outputs, l.classes*l.w*l.h, LOGISTIC);
         //if(l.extra) activate_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC);
     }
@@ -215,8 +215,8 @@ void forward_iseg_layer_gpu(const layer l, network net)
 
 void backward_iseg_layer_gpu(const layer l, network net)
 {
-    int b;
-    for (b = 0; b < l.batch; ++b){
+    整数 b;
+    ために (b = 0; b < l.batch; ++b){
         //if(l.extra) gradient_array_gpu(l.output_gpu + b*l.outputs + l.classes*l.w*l.h, l.extra*l.w*l.h, LOGISTIC, l.delta_gpu + b*l.outputs + l.classes*l.w*l.h);
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);

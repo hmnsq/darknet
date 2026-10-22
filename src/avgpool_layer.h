@@ -9,8 +9,8 @@
 typedef layer avgpool_layer;
 
 image get_avgpool_image(avgpool_layer l);
-avgpool_layer make_avgpool_layer(int batch, int w, int h, int c);
-void resize_avgpool_layer(avgpool_layer *l, int w, int h);
+avgpool_layer make_avgpool_layer(整数 batch, 整数 w, 整数 h, 整数 c);
+void resize_avgpool_layer(avgpool_layer *l, 整数 w, 整数 h);
 void forward_avgpool_layer(const avgpool_layer l, network net);
 void backward_avgpool_layer(const avgpool_layer l, network net);
 
