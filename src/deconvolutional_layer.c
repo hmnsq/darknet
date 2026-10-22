@@ -1,30 +1,30 @@
-#include "deconvolutional_layer.h"
-#include "convolutional_layer.h"
-#include "batchnorm_layer.h"
-#include "utils.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
+#ضمن "deconvolutional_layer.h"
+#ضمن "convolutional_layer.h"
+#ضمن "batchnorm_layer.h"
+#ضمن "utils.h"
+#ضمن "im2col.h"
+#ضمن "col2im.h"
+#ضمن "blas.h"
+#ضمن "gemm.h"
 
-#include <stdio.h>
-#include <time.h>
+#ضمن <stdio.h>
+#ضمن <time.h>
 
 
-static size_t get_workspace_size(layer l){
-    return (size_t)l.h*l.w*l.size*l.size*l.n*sizeof(float);
+ساكن size_t get_workspace_size(layer l){
+    ܦܢܐ (size_t)l.h*l.w*l.size*l.size*l.n*حجم(عائم);
 }
 
-void bilinear_init(layer l)
+فراغ bilinear_init(layer l)
 {
-    int i,j,f;
-    float center = (l.size-1) / 2.;
-    for(f = 0; f < l.n; ++f){
-        for(j = 0; j < l.size; ++j){
-            for(i = 0; i < l.size; ++i){
-                float val = (1 - fabs(i - center)) * (1 - fabs(j - center));
-                int c = f%l.c;
-                int ind = f*l.size*l.size*l.c + c*l.size*l.size + j*l.size + i;
+    صحيح i,j,f;
+    عائم center = (l.size-1) / 2.;
+    لكل(f = 0; f < l.n; ++f){
+        لكل(j = 0; j < l.size; ++j){
+            لكل(i = 0; i < l.size; ++i){
+                عائم val = (1 - fabs(i - center)) * (1 - fabs(j - center));
+                صحيح c = f%l.c;
+                صحيح ind = f*l.size*l.size*l.c + c*l.size*l.size + j*l.size + i;
                 l.weights[ind] = val;
             }
         }
@@ -32,9 +32,9 @@ void bilinear_init(layer l)
 }
 
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam)
+layer make_deconvolutional_layer(صحيح batch, صحيح h, صحيح w, صحيح c, صحيح n, صحيح size, صحيح stride, صحيح padding, ACTIVATION activation, صحيح batch_normalize, صحيح adam)
 {
-    int i;
+    صحيح i;
     layer l = {0};
     l.type = DECONVOLUTIONAL;
 
@@ -49,17 +49,17 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.nweights = c*n*size*size;
     l.nbiases = n;
 
-    l.weights = calloc(c*n*size*size, sizeof(float));
-    l.weight_updates = calloc(c*n*size*size, sizeof(float));
+    l.weights = calloc(c*n*size*size, حجم(عائم));
+    l.weight_updates = calloc(c*n*size*size, حجم(عائم));
 
-    l.biases = calloc(n, sizeof(float));
-    l.bias_updates = calloc(n, sizeof(float));
+    l.biases = calloc(n, حجم(عائم));
+    l.bias_updates = calloc(n, حجم(عائم));
     //float scale = n/(size*size*c);
     //printf("scale: %f\n", scale);
-    float scale = .02;
-    for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_normal();
+    عائم scale = .02;
+    لكل(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_normal();
     //bilinear_init(l);
-    for(i = 0; i < n; ++i){
+    لكل(i = 0; i < n; ++i){
         l.biases[i] = 0;
     }
     l.pad = padding;
@@ -70,10 +70,10 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.outputs = l.out_w * l.out_h * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    scal_cpu(l.nweights, (float)l.out_w*l.out_h/(l.w*l.h), l.weights, 1);
+    scal_cpu(l.nweights, (عائم)l.out_w*l.out_h/(l.w*l.h), l.weights, 1);
 
-    l.output = calloc(l.batch*l.outputs, sizeof(float));
-    l.delta  = calloc(l.batch*l.outputs, sizeof(float));
+    l.output = calloc(l.batch*l.outputs, حجم(عائم));
+    l.delta  = calloc(l.batch*l.outputs, حجم(عائم));
 
     l.forward = forward_deconvolutional_layer;
     l.backward = backward_deconvolutional_layer;
@@ -81,31 +81,31 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
 
     l.batch_normalize = batch_normalize;
 
-    if(batch_normalize){
-        l.scales = calloc(n, sizeof(float));
-        l.scale_updates = calloc(n, sizeof(float));
-        for(i = 0; i < n; ++i){
+    ܐܢ(batch_normalize){
+        l.scales = calloc(n, حجم(عائم));
+        l.scale_updates = calloc(n, حجم(عائم));
+        لكل(i = 0; i < n; ++i){
             l.scales[i] = 1;
         }
 
-        l.mean = calloc(n, sizeof(float));
-        l.variance = calloc(n, sizeof(float));
+        l.mean = calloc(n, حجم(عائم));
+        l.variance = calloc(n, حجم(عائم));
 
-        l.mean_delta = calloc(n, sizeof(float));
-        l.variance_delta = calloc(n, sizeof(float));
+        l.mean_delta = calloc(n, حجم(عائم));
+        l.variance_delta = calloc(n, حجم(عائم));
 
-        l.rolling_mean = calloc(n, sizeof(float));
-        l.rolling_variance = calloc(n, sizeof(float));
-        l.x = calloc(l.batch*l.outputs, sizeof(float));
-        l.x_norm = calloc(l.batch*l.outputs, sizeof(float));
+        l.rolling_mean = calloc(n, حجم(عائم));
+        l.rolling_variance = calloc(n, حجم(عائم));
+        l.x = calloc(l.batch*l.outputs, حجم(عائم));
+        l.x_norm = calloc(l.batch*l.outputs, حجم(عائم));
     }
-    if(adam){
-        l.m = calloc(c*n*size*size, sizeof(float));
-        l.v = calloc(c*n*size*size, sizeof(float));
-        l.bias_m = calloc(n, sizeof(float));
-        l.scale_m = calloc(n, sizeof(float));
-        l.bias_v = calloc(n, sizeof(float));
-        l.scale_v = calloc(n, sizeof(float));
+    ܐܢ(adam){
+        l.m = calloc(c*n*size*size, حجم(عائم));
+        l.v = calloc(c*n*size*size, حجم(عائم));
+        l.bias_m = calloc(n, حجم(عائم));
+        l.scale_m = calloc(n, حجم(عائم));
+        l.bias_v = calloc(n, حجم(عائم));
+        l.scale_v = calloc(n, حجم(عائم));
     }
 
 #ifdef GPU
@@ -113,9 +113,9 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.backward_gpu = backward_deconvolutional_layer_gpu;
     l.update_gpu = update_deconvolutional_layer_gpu;
 
-    if(gpu_index >= 0){
+    ܐܢ(gpu_index >= 0){
 
-        if (adam) {
+        ܐܢ (adam) {
             l.m_gpu = cuda_make_array(l.m, c*n*size*size);
             l.v_gpu = cuda_make_array(l.v, c*n*size*size);
             l.bias_m_gpu = cuda_make_array(l.bias_m, n);
@@ -132,7 +132,7 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
         l.delta_gpu = cuda_make_array(l.delta, l.batch*l.out_h*l.out_w*n);
         l.output_gpu = cuda_make_array(l.output, l.batch*l.out_h*l.out_w*n);
 
-        if(batch_normalize){
+        ܐܢ(batch_normalize){
             l.mean_gpu = cuda_make_array(0, n);
             l.variance_gpu = cuda_make_array(0, n);
 
@@ -162,15 +162,15 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
 
     fprintf(stderr, "deconv%5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
 
-    return l;
+    ܦܢܐ l;
 }
 
-void denormalize_deconvolutional_layer(layer l)
+فراغ denormalize_deconvolutional_layer(layer l)
 {
-    int i, j;
-    for(i = 0; i < l.n; ++i){
-        float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
-        for(j = 0; j < l.c*l.size*l.size; ++j){
+    صحيح i, j;
+    لكل(i = 0; i < l.n; ++i){
+        عائم scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
+        لكل(j = 0; j < l.c*l.size*l.size; ++j){
             l.weights[i*l.c*l.size*l.size + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
@@ -180,7 +180,7 @@ void denormalize_deconvolutional_layer(layer l)
     }
 }
 
-void resize_deconvolutional_layer(layer *l, int h, int w)
+فراغ resize_deconvolutional_layer(layer *l, صحيح h, صحيح w)
 {
     l->h = h;
     l->w = w;
@@ -190,11 +190,11 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->w * l->h * l->c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta  = realloc(l->delta,  l->batch*l->outputs*sizeof(float));
-    if(l->batch_normalize){
-        l->x = realloc(l->x, l->batch*l->outputs*sizeof(float));
-        l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*حجم(عائم));
+    l->delta  = realloc(l->delta,  l->batch*l->outputs*حجم(عائم));
+    ܐܢ(l->batch_normalize){
+        l->x = realloc(l->x, l->batch*l->outputs*حجم(عائم));
+        l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*حجم(عائم));
     }
 
 #ifdef GPU
@@ -204,7 +204,7 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->delta_gpu =  cuda_make_array(l->delta,  l->batch*l->outputs);
     l->output_gpu = cuda_make_array(l->output, l->batch*l->outputs);
 
-    if(l->batch_normalize){
+    ܐܢ(l->batch_normalize){
         cuda_free(l->x_gpu);
         cuda_free(l->x_norm_gpu);
 
@@ -219,86 +219,86 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->workspace_size = get_workspace_size(*l);
 }
 
-void forward_deconvolutional_layer(const layer l, network net)
+فراغ forward_deconvolutional_layer(ثابت layer l, network net)
 {
-    int i;
+    صحيح i;
 
-    int m = l.size*l.size*l.n;
-    int n = l.h*l.w;
-    int k = l.c;
+    صحيح m = l.size*l.size*l.n;
+    صحيح n = l.h*l.w;
+    صحيح k = l.c;
 
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
 
-    for(i = 0; i < l.batch; ++i){
-        float *a = l.weights;
-        float *b = net.input + i*l.c*l.h*l.w;
-        float *c = net.workspace;
+    لكل(i = 0; i < l.batch; ++i){
+        عائم *a = l.weights;
+        عائم *b = net.input + i*l.c*l.h*l.w;
+        عائم *c = net.workspace;
 
         gemm_cpu(1,0,m,n,k,1,a,m,b,n,0,c,n);
 
         col2im_cpu(net.workspace, l.out_c, l.out_h, l.out_w, l.size, l.stride, l.pad, l.output+i*l.outputs);
     }
-    if (l.batch_normalize) {
+    ܐܢ (l.batch_normalize) {
         forward_batchnorm_layer(l, net);
-    } else {
+    } ܐܚܪܢܐ {
         add_bias(l.output, l.biases, l.batch, l.n, l.out_w*l.out_h);
     }
     activate_array(l.output, l.batch*l.n*l.out_w*l.out_h, l.activation);
 }
 
-void backward_deconvolutional_layer(layer l, network net)
+فراغ backward_deconvolutional_layer(layer l, network net)
 {
-    int i;
+    صحيح i;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    ܐܢ(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } ܐܚܪܢܐ {
         backward_bias(l.bias_updates, l.delta, l.batch, l.n, l.out_w*l.out_h);
     }
 
     //if(net.delta) memset(net.delta, 0, l.batch*l.h*l.w*l.c*sizeof(float));
 
-    for(i = 0; i < l.batch; ++i){
-        int m = l.c;
-        int n = l.size*l.size*l.n;
-        int k = l.h*l.w;
+    لكل(i = 0; i < l.batch; ++i){
+        صحيح m = l.c;
+        صحيح n = l.size*l.size*l.n;
+        صحيح k = l.h*l.w;
 
-        float *a = net.input + i*m*k;
-        float *b = net.workspace;
-        float *c = l.weight_updates;
+        عائم *a = net.input + i*m*k;
+        عائم *b = net.workspace;
+        عائم *c = l.weight_updates;
 
         im2col_cpu(l.delta + i*l.outputs, l.out_c, l.out_h, l.out_w, 
                 l.size, l.stride, l.pad, b);
         gemm_cpu(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-        if(net.delta){
-            int m = l.c;
-            int n = l.h*l.w;
-            int k = l.size*l.size*l.n;
+        ܐܢ(net.delta){
+            صحيح m = l.c;
+            صحيح n = l.h*l.w;
+            صحيح k = l.size*l.size*l.n;
 
-            float *a = l.weights;
-            float *b = net.workspace;
-            float *c = net.delta + i*n*m;
+            عائم *a = l.weights;
+            عائم *b = net.workspace;
+            عائم *c = net.delta + i*n*m;
 
             gemm_cpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
         }
     }
 }
 
-void update_deconvolutional_layer(layer l, update_args a)
+فراغ update_deconvolutional_layer(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    عائم learning_rate = a.learning_rate*l.learning_rate_scale;
+    عائم momentum = a.momentum;
+    عائم decay = a.decay;
+    صحيح batch = a.batch;
 
-    int size = l.size*l.size*l.c*l.n;
+    صحيح size = l.size*l.size*l.c*l.n;
     axpy_cpu(l.n, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.n, momentum, l.bias_updates, 1);
 
-    if(l.scales){
+    ܐܢ(l.scales){
         axpy_cpu(l.n, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.n, momentum, l.scale_updates, 1);
     }

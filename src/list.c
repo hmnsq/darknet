@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(حجم(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	ܦܢܐ l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
+فراغ *list_pop(list *l){
+    ܐܢ(!l->back) ܦܢܐ 0;
     node *b = l->back;
-    void *val = b->val;
+    فراغ *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    ܐܢ(l->back) l->back->next = 0;
+    حرر(b);
     --l->size;
     
-    return val;
+    ܦܢܐ val;
 }
 
-void list_insert(list *l, void *val)
+فراغ list_insert(list *l, فراغ *val)
 {
-	node *new = malloc(sizeof(node));
+	node *new = malloc(حجم(node));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	ܐܢ(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}ܐܚܪܢܐ{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+فراغ free_node(node *n)
 {
 	node *next;
-	while(n) {
+	ܟܡܐ(n) {
 		next = n->next;
-		free(n);
+		حرر(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+فراغ free_list(list *l)
 {
 	free_node(l->front);
-	free(l);
+	حرر(l);
 }
 
-void free_list_contents(list *l)
+فراغ free_list_contents(list *l)
 {
 	node *n = l->front;
-	while(n){
-		free(n->val);
+	ܟܡܐ(n){
+		حرر(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+فراغ **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
+    فراغ **a = calloc(l->size, حجم(فراغ*));
+    صحيح count = 0;
     node *n = l->front;
-    while(n){
+    ܟܡܐ(n){
         a[count++] = n->val;
         n = n->next;
     }
-    return a;
+    ܦܢܐ a;
 }

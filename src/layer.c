@@ -1,97 +1,97 @@
-#include "layer.h"
-#include "cuda.h"
+#ضمن "layer.h"
+#ضمن "cuda.h"
 
-#include <stdlib.h>
+#ضمن <stdlib.h>
 
-void free_layer(layer l)
+فراغ free_layer(layer l)
 {
-    if(l.type == DROPOUT){
-        if(l.rand)           free(l.rand);
+    ܐܢ(l.type == DROPOUT){
+        ܐܢ(l.rand)           حرر(l.rand);
 #ifdef GPU
-        if(l.rand_gpu)             cuda_free(l.rand_gpu);
+        ܐܢ(l.rand_gpu)             cuda_free(l.rand_gpu);
 #endif
-        return;
+        ܦܢܐ;
     }
-    if(l.cweights)           free(l.cweights);
-    if(l.indexes)            free(l.indexes);
-    if(l.input_layers)       free(l.input_layers);
-    if(l.input_sizes)        free(l.input_sizes);
-    if(l.map)                free(l.map);
-    if(l.rand)               free(l.rand);
-    if(l.cost)               free(l.cost);
-    if(l.state)              free(l.state);
-    if(l.prev_state)         free(l.prev_state);
-    if(l.forgot_state)       free(l.forgot_state);
-    if(l.forgot_delta)       free(l.forgot_delta);
-    if(l.state_delta)        free(l.state_delta);
-    if(l.concat)             free(l.concat);
-    if(l.concat_delta)       free(l.concat_delta);
-    if(l.binary_weights)     free(l.binary_weights);
-    if(l.biases)             free(l.biases);
-    if(l.bias_updates)       free(l.bias_updates);
-    if(l.scales)             free(l.scales);
-    if(l.scale_updates)      free(l.scale_updates);
-    if(l.weights)            free(l.weights);
-    if(l.weight_updates)     free(l.weight_updates);
-    if(l.delta)              free(l.delta);
-    if(l.output)             free(l.output);
-    if(l.squared)            free(l.squared);
-    if(l.norms)              free(l.norms);
-    if(l.spatial_mean)       free(l.spatial_mean);
-    if(l.mean)               free(l.mean);
-    if(l.variance)           free(l.variance);
-    if(l.mean_delta)         free(l.mean_delta);
-    if(l.variance_delta)     free(l.variance_delta);
-    if(l.rolling_mean)       free(l.rolling_mean);
-    if(l.rolling_variance)   free(l.rolling_variance);
-    if(l.x)                  free(l.x);
-    if(l.x_norm)             free(l.x_norm);
-    if(l.m)                  free(l.m);
-    if(l.v)                  free(l.v);
-    if(l.z_cpu)              free(l.z_cpu);
-    if(l.r_cpu)              free(l.r_cpu);
-    if(l.h_cpu)              free(l.h_cpu);
-    if(l.binary_input)       free(l.binary_input);
+    ܐܢ(l.cweights)           حرر(l.cweights);
+    ܐܢ(l.indexes)            حرر(l.indexes);
+    ܐܢ(l.input_layers)       حرر(l.input_layers);
+    ܐܢ(l.input_sizes)        حرر(l.input_sizes);
+    ܐܢ(l.map)                حرر(l.map);
+    ܐܢ(l.rand)               حرر(l.rand);
+    ܐܢ(l.cost)               حرر(l.cost);
+    ܐܢ(l.state)              حرر(l.state);
+    ܐܢ(l.prev_state)         حرر(l.prev_state);
+    ܐܢ(l.forgot_state)       حرر(l.forgot_state);
+    ܐܢ(l.forgot_delta)       حرر(l.forgot_delta);
+    ܐܢ(l.state_delta)        حرر(l.state_delta);
+    ܐܢ(l.concat)             حرر(l.concat);
+    ܐܢ(l.concat_delta)       حرر(l.concat_delta);
+    ܐܢ(l.binary_weights)     حرر(l.binary_weights);
+    ܐܢ(l.biases)             حرر(l.biases);
+    ܐܢ(l.bias_updates)       حرر(l.bias_updates);
+    ܐܢ(l.scales)             حرر(l.scales);
+    ܐܢ(l.scale_updates)      حرر(l.scale_updates);
+    ܐܢ(l.weights)            حرر(l.weights);
+    ܐܢ(l.weight_updates)     حرر(l.weight_updates);
+    ܐܢ(l.delta)              حرر(l.delta);
+    ܐܢ(l.output)             حرر(l.output);
+    ܐܢ(l.squared)            حرر(l.squared);
+    ܐܢ(l.norms)              حرر(l.norms);
+    ܐܢ(l.spatial_mean)       حرر(l.spatial_mean);
+    ܐܢ(l.mean)               حرر(l.mean);
+    ܐܢ(l.variance)           حرر(l.variance);
+    ܐܢ(l.mean_delta)         حرر(l.mean_delta);
+    ܐܢ(l.variance_delta)     حرر(l.variance_delta);
+    ܐܢ(l.rolling_mean)       حرر(l.rolling_mean);
+    ܐܢ(l.rolling_variance)   حرر(l.rolling_variance);
+    ܐܢ(l.x)                  حرر(l.x);
+    ܐܢ(l.x_norm)             حرر(l.x_norm);
+    ܐܢ(l.m)                  حرر(l.m);
+    ܐܢ(l.v)                  حرر(l.v);
+    ܐܢ(l.z_cpu)              حرر(l.z_cpu);
+    ܐܢ(l.r_cpu)              حرر(l.r_cpu);
+    ܐܢ(l.h_cpu)              حرر(l.h_cpu);
+    ܐܢ(l.binary_input)       حرر(l.binary_input);
 
 #ifdef GPU
-    if(l.indexes_gpu)           cuda_free((float *)l.indexes_gpu);
+    ܐܢ(l.indexes_gpu)           cuda_free((عائم *)l.indexes_gpu);
 
-    if(l.z_gpu)                   cuda_free(l.z_gpu);
-    if(l.r_gpu)                   cuda_free(l.r_gpu);
-    if(l.h_gpu)                   cuda_free(l.h_gpu);
-    if(l.m_gpu)                   cuda_free(l.m_gpu);
-    if(l.v_gpu)                   cuda_free(l.v_gpu);
-    if(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
-    if(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
-    if(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
-    if(l.state_gpu)               cuda_free(l.state_gpu);
-    if(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
-    if(l.gate_gpu)                cuda_free(l.gate_gpu);
-    if(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
-    if(l.save_gpu)                cuda_free(l.save_gpu);
-    if(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
-    if(l.concat_gpu)              cuda_free(l.concat_gpu);
-    if(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
-    if(l.binary_input_gpu)        cuda_free(l.binary_input_gpu);
-    if(l.binary_weights_gpu)      cuda_free(l.binary_weights_gpu);
-    if(l.mean_gpu)                cuda_free(l.mean_gpu);
-    if(l.variance_gpu)            cuda_free(l.variance_gpu);
-    if(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
-    if(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
-    if(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
-    if(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
-    if(l.x_gpu)                   cuda_free(l.x_gpu);
-    if(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
-    if(l.weights_gpu)             cuda_free(l.weights_gpu);
-    if(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
-    if(l.biases_gpu)              cuda_free(l.biases_gpu);
-    if(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
-    if(l.scales_gpu)              cuda_free(l.scales_gpu);
-    if(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
-    if(l.output_gpu)              cuda_free(l.output_gpu);
-    if(l.delta_gpu)               cuda_free(l.delta_gpu);
-    if(l.rand_gpu)                cuda_free(l.rand_gpu);
-    if(l.squared_gpu)             cuda_free(l.squared_gpu);
-    if(l.norms_gpu)               cuda_free(l.norms_gpu);
+    ܐܢ(l.z_gpu)                   cuda_free(l.z_gpu);
+    ܐܢ(l.r_gpu)                   cuda_free(l.r_gpu);
+    ܐܢ(l.h_gpu)                   cuda_free(l.h_gpu);
+    ܐܢ(l.m_gpu)                   cuda_free(l.m_gpu);
+    ܐܢ(l.v_gpu)                   cuda_free(l.v_gpu);
+    ܐܢ(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
+    ܐܢ(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
+    ܐܢ(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
+    ܐܢ(l.state_gpu)               cuda_free(l.state_gpu);
+    ܐܢ(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
+    ܐܢ(l.gate_gpu)                cuda_free(l.gate_gpu);
+    ܐܢ(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
+    ܐܢ(l.save_gpu)                cuda_free(l.save_gpu);
+    ܐܢ(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
+    ܐܢ(l.concat_gpu)              cuda_free(l.concat_gpu);
+    ܐܢ(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
+    ܐܢ(l.binary_input_gpu)        cuda_free(l.binary_input_gpu);
+    ܐܢ(l.binary_weights_gpu)      cuda_free(l.binary_weights_gpu);
+    ܐܢ(l.mean_gpu)                cuda_free(l.mean_gpu);
+    ܐܢ(l.variance_gpu)            cuda_free(l.variance_gpu);
+    ܐܢ(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
+    ܐܢ(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
+    ܐܢ(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
+    ܐܢ(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
+    ܐܢ(l.x_gpu)                   cuda_free(l.x_gpu);
+    ܐܢ(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
+    ܐܢ(l.weights_gpu)             cuda_free(l.weights_gpu);
+    ܐܢ(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
+    ܐܢ(l.biases_gpu)              cuda_free(l.biases_gpu);
+    ܐܢ(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
+    ܐܢ(l.scales_gpu)              cuda_free(l.scales_gpu);
+    ܐܢ(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
+    ܐܢ(l.output_gpu)              cuda_free(l.output_gpu);
+    ܐܢ(l.delta_gpu)               cuda_free(l.delta_gpu);
+    ܐܢ(l.rand_gpu)                cuda_free(l.rand_gpu);
+    ܐܢ(l.squared_gpu)             cuda_free(l.squared_gpu);
+    ܐܢ(l.norms_gpu)               cuda_free(l.norms_gpu);
 #endif
 }
