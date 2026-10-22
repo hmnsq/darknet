@@ -1,178 +1,178 @@
-int gpu_index = 0;
+पूर्णाङ्क gpu_सूचकांक = 0;
 
-#ifdef GPU
+#यदि_परिभाषितम् GPU
 
-#include "cuda.h"
-#include "utils.h"
-#include "blas.h"
-#include <assert.h>
-#include <stdlib.h>
-#include <time.h>
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "blas.h"
+#अन्तर्भाव <assert.h>
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <time.h>
 
-void cuda_set_device(int n)
+शून्य cuda_समुच्चयः_device(पूर्णाङ्क n)
 {
-    gpu_index = n;
-    cudaError_t status = cudaSetDevice(n);
-    check_error(status);
+    gpu_सूचकांक = n;
+    cudaError_t स्थितिः = cuda_समुच्चयः_Device(n);
+    check_error(स्थितिः);
 }
 
-int cuda_get_device()
+पूर्णाङ्क cuda_get_device()
 {
-    int n = 0;
-    cudaError_t status = cudaGetDevice(&n);
-    check_error(status);
-    return n;
+    पूर्णाङ्क n = 0;
+    cudaError_t स्थितिः = cudaGetDevice(&n);
+    check_error(स्थितिः);
+    प्रत्यागम n;
 }
 
-void check_error(cudaError_t status)
+शून्य check_error(cudaError_t स्थितिः)
 {
     //cudaDeviceSynchronize();
-    cudaError_t status2 = cudaGetLastError();
-    if (status != cudaSuccess)
+    cudaError_t status2 = cuda_Get_चरमः_Error();
+    यदि (स्थितिः != cudaSuccess)
     {   
-        const char *s = cudaGetErrorString(status);
-        char buffer[256];
-        printf("CUDA Error: %s\n", s);
-        assert(0);
-        snprintf(buffer, 256, "CUDA Error: %s", s);
-        error(buffer);
+        ध्रुव वर्ण *s = cudaGetErrorString(स्थितिः);
+        वर्ण बफर[256];
+        प्रारूप_लिख("CUDA Error: %s\n", s);
+        प्रतिज्ञा(0);
+        snprintf(बफर, 256, "CUDA Error: %s", s);
+        error(बफर);
     } 
-    if (status2 != cudaSuccess)
+    यदि (status2 != cudaSuccess)
     {   
-        const char *s = cudaGetErrorString(status);
-        char buffer[256];
-        printf("CUDA Error Prev: %s\n", s);
-        assert(0);
-        snprintf(buffer, 256, "CUDA Error Prev: %s", s);
-        error(buffer);
+        ध्रुव वर्ण *s = cudaGetErrorString(स्थितिः);
+        वर्ण बफर[256];
+        प्रारूप_लिख("CUDA Error Prev: %s\n", s);
+        प्रतिज्ञा(0);
+        snprintf(बफर, 256, "CUDA Error Prev: %s", s);
+        error(बफर);
     } 
 }
 
 dim3 cuda_gridsize(size_t n){
-    size_t k = (n-1) / BLOCK + 1;
+    size_t k = (n-1) / खण्डम् + 1;
     size_t x = k;
     size_t y = 1;
-    if(x > 65535){
-        x = ceil(sqrt(k));
-        y = (n-1)/(x*BLOCK) + 1;
+    यदि(x > 65535){
+        x = ceil(वर्गमूलम्(k));
+        y = (n-1)/(x*खण्डम्) + 1;
     }
     dim3 d = {x, y, 1};
     //printf("%ld %ld %ld %ld\n", n, x, y, x*y*BLOCK);
-    return d;
+    प्रत्यागम d;
 }
 
-#ifdef CUDNN
+#यदि_परिभाषितम् CUDNN
 cudnnHandle_t cudnn_handle()
 {
-    static int init[16] = {0};
-    static cudnnHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    स्थिर पूर्णाङ्क init[16] = {0};
+    स्थिर cudnnHandle_t handle[16];
+    पूर्णाङ्क i = cuda_get_device();
+    यदि(!init[i]) {
         cudnnCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    प्रत्यागम handle[i];
 }
-#endif
+#यदि_अन्तः
 
 cublasHandle_t blas_handle()
 {
-    static int init[16] = {0};
-    static cublasHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    स्थिर पूर्णाङ्क init[16] = {0};
+    स्थिर cublasHandle_t handle[16];
+    पूर्णाङ्क i = cuda_get_device();
+    यदि(!init[i]) {
         cublasCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    प्रत्यागम handle[i];
 }
 
-float *cuda_make_array(float *x, size_t n)
+भिन्न *cuda_make_array(भिन्न *x, size_t n)
 {
-    float *x_gpu;
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMalloc((void **)&x_gpu, size);
-    check_error(status);
-    if(x){
-        status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-        check_error(status);
-    } else {
+    भिन्न *x_gpu;
+    size_t आकार = परिमाण(भिन्न)*n;
+    cudaError_t स्थितिः = cudaMalloc((शून्य **)&x_gpu, आकार);
+    check_error(स्थितिः);
+    यदि(x){
+        स्थितिः = cudaMemcpy(x_gpu, x, आकार, cuda_Memcpy_Host_गन्तव्यम्_Device);
+        check_error(स्थितिः);
+    } अन्यथा {
         fill_gpu(n, 0, x_gpu, 1);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    यदि(!x_gpu) error("Cuda malloc failed\n");
+    प्रत्यागम x_gpu;
 }
 
-void cuda_random(float *x_gpu, size_t n)
+शून्य cuda_random(भिन्न *x_gpu, size_t n)
 {
-    static curandGenerator_t gen[16];
-    static int init[16] = {0};
-    int i = cuda_get_device();
-    if(!init[i]){
+    स्थिर curandGenerator_t gen[16];
+    स्थिर पूर्णाङ्क init[16] = {0};
+    पूर्णाङ्क i = cuda_get_device();
+    यदि(!init[i]){
         curandCreateGenerator(&gen[i], CURAND_RNG_PSEUDO_DEFAULT);
-        curandSetPseudoRandomGeneratorSeed(gen[i], time(0));
+        curand_समुच्चयः_Pseudo_Random_Generator_बीजम्(gen[i], time(0));
         init[i] = 1;
     }
-    curandGenerateUniform(gen[i], x_gpu, n);
-    check_error(cudaPeekAtLastError());
+    curand_Generate_एकरूपम्(gen[i], x_gpu, n);
+    check_error(cuda_Peek_At_चरमः_Error());
 }
 
-float cuda_compare(float *x_gpu, float *x, size_t n, char *s)
+भिन्न cuda_compare(भिन्न *x_gpu, भिन्न *x, size_t n, वर्ण *s)
 {
-    float *tmp = calloc(n, sizeof(float));
+    भिन्न *tmp = शून्यस्मृतिं_देहि(n, परिमाण(भिन्न));
     cuda_pull_array(x_gpu, tmp, n);
     //int i;
     //for(i = 0; i < n; ++i) printf("%f %f\n", tmp[i], x[i]);
     axpy_cpu(n, -1, x, 1, tmp, 1);
-    float err = dot_cpu(n, tmp, 1, tmp, 1);
-    printf("Error %s: %f\n", s, sqrt(err/n));
-    free(tmp);
-    return err;
+    भिन्न err = dot_cpu(n, tmp, 1, tmp, 1);
+    प्रारूप_लिख("Error %s: %f\n", s, वर्गमूलम्(err/n));
+    मुक्त(tmp);
+    प्रत्यागम err;
 }
 
-int *cuda_make_int_array(int *x, size_t n)
+पूर्णाङ्क *cuda_make_int_array(पूर्णाङ्क *x, size_t n)
 {
-    int *x_gpu;
-    size_t size = sizeof(int)*n;
-    cudaError_t status = cudaMalloc((void **)&x_gpu, size);
-    check_error(status);
-    if(x){
-        status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-        check_error(status);
+    पूर्णाङ्क *x_gpu;
+    size_t आकार = परिमाण(पूर्णाङ्क)*n;
+    cudaError_t स्थितिः = cudaMalloc((शून्य **)&x_gpu, आकार);
+    check_error(स्थितिः);
+    यदि(x){
+        स्थितिः = cudaMemcpy(x_gpu, x, आकार, cuda_Memcpy_Host_गन्तव्यम्_Device);
+        check_error(स्थितिः);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    यदि(!x_gpu) error("Cuda malloc failed\n");
+    प्रत्यागम x_gpu;
 }
 
-void cuda_free(float *x_gpu)
+शून्य cuda_free(भिन्न *x_gpu)
 {
-    cudaError_t status = cudaFree(x_gpu);
-    check_error(status);
+    cudaError_t स्थितिः = cudaFree(x_gpu);
+    check_error(स्थितिः);
 }
 
-void cuda_push_array(float *x_gpu, float *x, size_t n)
+शून्य cuda_प्रक्षिप_array(भिन्न *x_gpu, भिन्न *x, size_t n)
 {
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-    check_error(status);
+    size_t आकार = परिमाण(भिन्न)*n;
+    cudaError_t स्थितिः = cudaMemcpy(x_gpu, x, आकार, cuda_Memcpy_Host_गन्तव्यम्_Device);
+    check_error(स्थितिः);
 }
 
-void cuda_pull_array(float *x_gpu, float *x, size_t n)
+शून्य cuda_pull_array(भिन्न *x_gpu, भिन्न *x, size_t n)
 {
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMemcpy(x, x_gpu, size, cudaMemcpyDeviceToHost);
-    check_error(status);
+    size_t आकार = परिमाण(भिन्न)*n;
+    cudaError_t स्थितिः = cudaMemcpy(x, x_gpu, आकार, cuda_Memcpy_Device_गन्तव्यम्_Host);
+    check_error(स्थितिः);
 }
 
-float cuda_mag_array(float *x_gpu, size_t n)
+भिन्न cuda_mag_array(भिन्न *x_gpu, size_t n)
 {
-    float *temp = calloc(n, sizeof(float));
-    cuda_pull_array(x_gpu, temp, n);
-    float m = mag_array(temp, n);
-    free(temp);
-    return m;
+    भिन्न *अस्थायी = शून्यस्मृतिं_देहि(n, परिमाण(भिन्न));
+    cuda_pull_array(x_gpu, अस्थायी, n);
+    भिन्न m = mag_array(अस्थायी, n);
+    मुक्त(अस्थायी);
+    प्रत्यागम m;
 }
-#else
-void cuda_set_device(int n){}
+#अन्यथा
+शून्य cuda_समुच्चयः_device(पूर्णाङ्क n){}
 
-#endif
+#यदि_अन्तः

@@ -1,20 +1,20 @@
-#ifndef LSTM_LAYER_H
-#define LSTM_LAYER_H
+#यदि_अपरिभाषितम् LSTM_LAYER_H
+#परिभाषय LSTM_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
-#define USET
+#अन्तर्भाव "activations.h"
+#अन्तर्भाव "layer.h"
+#अन्तर्भाव "network.h"
+#परिभाषय USET
 
-layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_lstm_layer(पूर्णाङ्क batch, पूर्णाङ्क inputs, पूर्णाङ्क outputs, पूर्णाङ्क चरणाः, पूर्णाङ्क batch_normalize, पूर्णाङ्क adam);
 
-void forward_lstm_layer(layer l, network net); 
-void update_lstm_layer(layer l, update_args a);
+शून्य forward_lstm_layer(layer l, जालम् net); 
+शून्य update_lstm_layer(layer l, update_तर्काः a);
 
-#ifdef GPU
-void forward_lstm_layer_gpu(layer l, network net);
-void backward_lstm_layer_gpu(layer l, network net);
-void update_lstm_layer_gpu(layer l, update_args a); 
+#यदि_परिभाषितम् GPU
+शून्य forward_lstm_layer_gpu(layer l, जालम् net);
+शून्य backward_lstm_layer_gpu(layer l, जालम् net);
+शून्य update_lstm_layer_gpu(layer l, update_तर्काः a); 
 
-#endif
-#endif
+#यदि_अन्तः
+#यदि_अन्तः

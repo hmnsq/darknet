@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <string.h>
+#अन्तर्भाव "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = स्मृतिं_देहि(परिमाण(list));
+	l->आकार = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->पृष्ठभागः = 0;
+	प्रत्यागम l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+शून्य *list_निष्कासय(list *l){
+    यदि(!l->पृष्ठभागः) प्रत्यागम 0;
+    ग्रन्थिः *b = l->पृष्ठभागः;
+    शून्य *val = b->val;
+    l->पृष्ठभागः = b->पूर्व;
+    यदि(l->पृष्ठभागः) l->पृष्ठभागः->अग्र = 0;
+    मुक्त(b);
+    --l->आकार;
     
-    return val;
+    प्रत्यागम val;
 }
 
-void list_insert(list *l, void *val)
+शून्य list_निवेशय(list *l, शून्य *val)
 {
-	node *new = malloc(sizeof(node));
+	ग्रन्थिः *new = स्मृतिं_देहि(परिमाण(ग्रन्थिः));
 	new->val = val;
-	new->next = 0;
+	new->अग्र = 0;
 
-	if(!l->back){
+	यदि(!l->पृष्ठभागः){
 		l->front = new;
-		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+		new->पूर्व = 0;
+	}अन्यथा{
+		l->पृष्ठभागः->अग्र = new;
+		new->पूर्व = l->पृष्ठभागः;
 	}
-	l->back = new;
-	++l->size;
+	l->पृष्ठभागः = new;
+	++l->आकार;
 }
 
-void free_node(node *n)
+शून्य free_ग्रन्थिः(ग्रन्थिः *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	ग्रन्थिः *अग्र;
+	यावत्(n) {
+		अग्र = n->अग्र;
+		मुक्त(n);
+		n = अग्र;
 	}
 }
 
-void **list_to_array(list *l)
+शून्य free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_ग्रन्थिः(l->front);
+	मुक्त(l);
+}
+
+शून्य free_list_contents(list *l)
+{
+	ग्रन्थिः *n = l->front;
+	यावत्(n){
+		मुक्त(n->val);
+		n = n->अग्र;
+	}
+}
+
+शून्य **list_गन्तव्यम्_array(list *l)
+{
+    शून्य **a = शून्यस्मृतिं_देहि(l->आकार, परिमाण(शून्य*));
+    पूर्णाङ्क गणनम् = 0;
+    ग्रन्थिः *n = l->front;
+    यावत्(n){
+        a[गणनम्++] = n->val;
+        n = n->अग्र;
     }
-    return a;
+    प्रत्यागम a;
 }

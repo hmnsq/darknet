@@ -1,29 +1,29 @@
 // Oh boy, why am I about to do this....
-#ifndef NETWORK_H
-#define NETWORK_H
-#include "darknet.h"
+#यदि_अपरिभाषितम् जालम्_H
+#परिभाषय जालम्_H
+#अन्तर्भाव "darknet.h"
 
-#include "image.h"
-#include "layer.h"
-#include "data.h"
-#include "tree.h"
-
-
-#ifdef GPU
-void pull_network_output(network *net);
-#endif
-
-void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
-
-network *make_network(int n);
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "layer.h"
+#अन्तर्भाव "data.h"
+#अन्तर्भाव "tree.h"
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
-void print_network(network *net);
-int resize_network(network *net, int w, int h);
-void calc_network_cost(network *net);
+#यदि_परिभाषितम् GPU
+शून्य pull_जालम्_output(जालम् *net);
+#यदि_अन्तः
 
-#endif
+शून्य compare_networks(जालम् *n1, जालम् *n2, दत्त d);
+वर्ण *get_layer_string(LAYER_TYPE a);
+
+जालम् *make_जालम्(पूर्णाङ्क n);
+
+
+भिन्न जालम्_accuracy_multi(जालम् *net, दत्त d, पूर्णाङ्क n);
+पूर्णाङ्क get_predicted_class_जालम्(जालम् *net);
+शून्य print_जालम्(जालम् *net);
+पूर्णाङ्क resize_जालम्(जालम् *net, पूर्णाङ्क w, पूर्णाङ्क h);
+शून्य calc_जालम्_cost(जालम् *net);
+
+#यदि_अन्तः
 

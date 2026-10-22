@@ -1,31 +1,31 @@
-#ifndef LOCAL_LAYER_H
-#define LOCAL_LAYER_H
+#यदि_अपरिभाषितम् LOCAL_LAYER_H
+#परिभाषय LOCAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "activations.h"
+#अन्तर्भाव "layer.h"
+#अन्तर्भाव "network.h"
 
-typedef layer local_layer;
+प्रकारनिर्देश layer local_layer;
 
-#ifdef GPU
-void forward_local_layer_gpu(local_layer layer, network net);
-void backward_local_layer_gpu(local_layer layer, network net);
-void update_local_layer_gpu(local_layer layer, update_args a);
+#यदि_परिभाषितम् GPU
+शून्य forward_local_layer_gpu(local_layer layer, जालम् net);
+शून्य backward_local_layer_gpu(local_layer layer, जालम् net);
+शून्य update_local_layer_gpu(local_layer layer, update_तर्काः a);
 
-void push_local_layer(local_layer layer);
-void pull_local_layer(local_layer layer);
-#endif
+शून्य प्रक्षिप_local_layer(local_layer layer);
+शून्य pull_local_layer(local_layer layer);
+#यदि_अन्तः
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation);
+local_layer make_local_layer(पूर्णाङ्क batch, पूर्णाङ्क h, पूर्णाङ्क w, पूर्णाङ्क c, पूर्णाङ्क n, पूर्णाङ्क आकार, पूर्णाङ्क stride, पूर्णाङ्क pad, ACTIVATION activation);
 
-void forward_local_layer(const local_layer layer, network net);
-void backward_local_layer(local_layer layer, network net);
-void update_local_layer(local_layer layer, update_args a);
+शून्य forward_local_layer(ध्रुव local_layer layer, जालम् net);
+शून्य backward_local_layer(local_layer layer, जालम् net);
+शून्य update_local_layer(local_layer layer, update_तर्काः a);
 
-void bias_output(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+शून्य bias_output(भिन्न *output, भिन्न *biases, पूर्णाङ्क batch, पूर्णाङ्क n, पूर्णाङ्क आकार);
+शून्य backward_bias(भिन्न *bias_updates, भिन्न *delta, पूर्णाङ्क batch, पूर्णाङ्क n, पूर्णाङ्क आकार);
 
-#endif
+#यदि_अन्तः
 

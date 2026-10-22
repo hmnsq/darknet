@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव "tree.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+शून्य change_leaves(वृक्षः *t, वर्ण *पर्णम्_list)
 {
-    list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
-        t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
-                t->leaf[i] = 1;
-                ++found;
-                break;
+    list *llist = get_paths(पर्णम्_list);
+    वर्ण **leaves = (वर्ण **)list_गन्तव्यम्_array(llist);
+    पूर्णाङ्क n = llist->आकार;
+    पूर्णाङ्क i,j;
+    पूर्णाङ्क प्राप्तम् = 0;
+    प्रति(i = 0; i < t->n; ++i){
+        t->पर्णम्[i] = 0;
+        प्रति(j = 0; j < n; ++j){
+            यदि (0==वाक्यं_तुलय(t->name[i], leaves[j])){
+                t->पर्णम्[i] = 1;
+                ++प्राप्तम्;
+                भङ्ग;
             }
         }
     }
-    fprintf(stderr, "Found %d leaves.\n", found);
+    fprintf(stderr, "Found %d leaves.\n", प्राप्तम्);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+भिन्न get_hierarchy_probability(भिन्न *x, वृक्षः *hier, पूर्णाङ्क c, पूर्णाङ्क stride)
 {
-    float p = 1;
-    while(c >= 0){
+    भिन्न p = 1;
+    यावत्(c >= 0){
         p = p * x[c*stride];
         c = hier->parent[c];
     }
-    return p;
+    प्रत्यागम p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+शून्य hierarchy_predictions(भिन्न *predictions, पूर्णाङ्क n, वृक्षः *hier, पूर्णाङ्क only_leaves, पूर्णाङ्क stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
+    पूर्णाङ्क j;
+    प्रति(j = 0; j < n; ++j){
+        पूर्णाङ्क parent = hier->parent[j];
+        यदि(parent >= 0){
             predictions[j*stride] *= predictions[parent*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    यदि(only_leaves){
+        प्रति(j = 0; j < n; ++j){
+            यदि(!hier->पर्णम्[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+पूर्णाङ्क hierarchy_शिखरम्_prediction(भिन्न *predictions, वृक्षः *hier, भिन्न thresh, पूर्णाङ्क stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    भिन्न p = 1;
+    पूर्णाङ्क गणः = 0;
+    पूर्णाङ्क i;
+    यावत्(1){
+        भिन्न max = 0;
+        पूर्णाङ्क max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
-                max_i = index;
+        प्रति(i = 0; i < hier->गणः_आकार[गणः]; ++i){
+            पूर्णाङ्क सूचकांक = i + hier->गणः_विस्थापनम्[गणः];
+            भिन्न val = predictions[(i + hier->गणः_विस्थापनम्[गणः])*stride];
+            यदि(val > max){
+                max_i = सूचकांक;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        यदि(p*max > thresh){
             p = p*max;
-            group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            गणः = hier->child[max_i];
+            यदि(hier->child[max_i] < 0) प्रत्यागम max_i;
+        } अन्यथा यदि (गणः == 0){
+            प्रत्यागम max_i;
+        } अन्यथा {
+            प्रत्यागम hier->parent[hier->गणः_विस्थापनम्[गणः]];
         }
     }
-    return 0;
+    प्रत्यागम 0;
 }
 
-tree *read_tree(char *filename)
+वृक्षः *read_वृक्षः(वर्ण *filename)
 {
-    tree t = {0};
+    वृक्षः t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
+    वर्ण *पङ्क्तिः;
+    पूर्णाङ्क चरमः_parent = -1;
+    पूर्णाङ्क गणः_आकार = 0;
+    पूर्णाङ्क groups = 0;
+    पूर्णाङ्क n = 0;
+    यावत्((पङ्क्तिः=fgetl(fp)) != 0){
+        वर्ण *id = शून्यस्मृतिं_देहि(256, परिमाण(वर्ण));
+        पूर्णाङ्क parent = -1;
+        वाक्यात्_पठ(पङ्क्तिः, "%s %d", id, &parent);
+        t.parent = realloc(t.parent, (n+1)*परिमाण(पूर्णाङ्क));
         t.parent[n] = parent;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
+        t.child = realloc(t.child, (n+1)*परिमाण(पूर्णाङ्क));
         t.child[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*परिमाण(वर्ण *));
         t.name[n] = id;
-        if(parent != last_parent){
+        यदि(parent != चरमः_parent){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-            t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
-            t.group_size[groups - 1] = group_size;
-            group_size = 0;
-            last_parent = parent;
+            t.गणः_विस्थापनम् = realloc(t.गणः_विस्थापनम्, groups * परिमाण(पूर्णाङ्क));
+            t.गणः_विस्थापनम्[groups - 1] = n - गणः_आकार;
+            t.गणः_आकार = realloc(t.गणः_आकार, groups * परिमाण(पूर्णाङ्क));
+            t.गणः_आकार[groups - 1] = गणः_आकार;
+            गणः_आकार = 0;
+            चरमः_parent = parent;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
-        t.group[n] = groups;
-        if (parent >= 0) {
+        t.गणः = realloc(t.गणः, (n+1)*परिमाण(पूर्णाङ्क));
+        t.गणः[n] = groups;
+        यदि (parent >= 0) {
             t.child[parent] = groups;
         }
         ++n;
-        ++group_size;
+        ++गणः_आकार;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-    t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
-    t.group_size[groups - 1] = group_size;
+    t.गणः_विस्थापनम् = realloc(t.गणः_विस्थापनम्, groups * परिमाण(पूर्णाङ्क));
+    t.गणः_विस्थापनम्[groups - 1] = n - गणः_आकार;
+    t.गणः_आकार = realloc(t.गणः_आकार, groups * परिमाण(पूर्णाङ्क));
+    t.गणः_आकार[groups - 1] = गणः_आकार;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.पर्णम् = शून्यस्मृतिं_देहि(n, परिमाण(पूर्णाङ्क));
+    पूर्णाङ्क i;
+    प्रति(i = 0; i < n; ++i) t.पर्णम्[i] = 1;
+    प्रति(i = 0; i < n; ++i) यदि(t.parent[i] >= 0) t.पर्णम्[t.parent[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    वृक्षः *वृक्षः_ptr = शून्यस्मृतिं_देहि(1, परिमाण(वृक्षः));
+    *वृक्षः_ptr = t;
     //error(0);
-    return tree_ptr;
+    प्रत्यागम वृक्षः_ptr;
 }

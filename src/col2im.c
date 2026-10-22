@@ -1,36 +1,36 @@
-#include <stdio.h>
-#include <math.h>
-void col2im_add_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad, float val)
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <math.h>
+शून्य col2im_सङ्कलय_pixel(भिन्न *im, पूर्णाङ्क height, पूर्णाङ्क विस्तारः, पूर्णाङ्क channels,
+                        पूर्णाङ्क row, पूर्णाङ्क col, पूर्णाङ्क channel, पूर्णाङ्क pad, भिन्न val)
 {
     row -= pad;
     col -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return;
-    im[col + width*(row + height*channel)] += val;
+    यदि (row < 0 || col < 0 ||
+        row >= height || col >= विस्तारः) प्रत्यागम;
+    im[col + विस्तारः*(row + height*channel)] += val;
 }
 //This one might be too, can't remember.
-void col2im_cpu(float* data_col,
-         int channels,  int height,  int width,
-         int ksize,  int stride, int pad, float* data_im) 
+शून्य col2im_cpu(भिन्न* दत्त_col,
+         पूर्णाङ्क channels,  पूर्णाङ्क height,  पूर्णाङ्क विस्तारः,
+         पूर्णाङ्क ksize,  पूर्णाङ्क stride, पूर्णाङ्क pad, भिन्न* दत्त_im) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    पूर्णाङ्क c,h,w;
+    पूर्णाङ्क height_col = (height + 2*pad - ksize) / stride + 1;
+    पूर्णाङ्क विस्तारः_col = (विस्तारः + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                double val = data_col[col_index];
-                col2im_add_pixel(data_im, height, width, channels,
+    पूर्णाङ्क channels_col = channels * ksize * ksize;
+    प्रति (c = 0; c < channels_col; ++c) {
+        पूर्णाङ्क w_विस्थापनम् = c % ksize;
+        पूर्णाङ्क h_विस्थापनम् = (c / ksize) % ksize;
+        पूर्णाङ्क c_im = c / ksize / ksize;
+        प्रति (h = 0; h < height_col; ++h) {
+            प्रति (w = 0; w < विस्तारः_col; ++w) {
+                पूर्णाङ्क im_row = h_विस्थापनम् + h * stride;
+                पूर्णाङ्क im_col = w_विस्थापनम् + w * stride;
+                पूर्णाङ्क col_सूचकांक = (c * height_col + h) * विस्तारः_col + w;
+                द्विगुण val = दत्त_col[col_सूचकांक];
+                col2im_सङ्कलय_pixel(दत्त_im, height, विस्तारः, channels,
                         im_row, im_col, c_im, pad, val);
             }
         }

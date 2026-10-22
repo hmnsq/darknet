@@ -1,318 +1,318 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <assert.h>
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <string.h>
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <assert.h>
 
-#include "activation_layer.h"
-#include "logistic_layer.h"
-#include "l2norm_layer.h"
-#include "activations.h"
-#include "avgpool_layer.h"
-#include "batchnorm_layer.h"
-#include "blas.h"
-#include "connected_layer.h"
-#include "deconvolutional_layer.h"
-#include "convolutional_layer.h"
-#include "cost_layer.h"
-#include "crnn_layer.h"
-#include "crop_layer.h"
-#include "detection_layer.h"
-#include "dropout_layer.h"
-#include "gru_layer.h"
-#include "list.h"
-#include "local_layer.h"
-#include "maxpool_layer.h"
-#include "normalization_layer.h"
-#include "option_list.h"
-#include "parser.h"
-#include "region_layer.h"
-#include "yolo_layer.h"
-#include "iseg_layer.h"
-#include "reorg_layer.h"
-#include "rnn_layer.h"
-#include "route_layer.h"
-#include "upsample_layer.h"
-#include "shortcut_layer.h"
-#include "softmax_layer.h"
-#include "lstm_layer.h"
-#include "utils.h"
+#अन्तर्भाव "activation_layer.h"
+#अन्तर्भाव "logistic_layer.h"
+#अन्तर्भाव "l2norm_layer.h"
+#अन्तर्भाव "activations.h"
+#अन्तर्भाव "avgpool_layer.h"
+#अन्तर्भाव "batchnorm_layer.h"
+#अन्तर्भाव "blas.h"
+#अन्तर्भाव "connected_layer.h"
+#अन्तर्भाव "deconvolutional_layer.h"
+#अन्तर्भाव "convolutional_layer.h"
+#अन्तर्भाव "cost_layer.h"
+#अन्तर्भाव "crnn_layer.h"
+#अन्तर्भाव "crop_layer.h"
+#अन्तर्भाव "detection_layer.h"
+#अन्तर्भाव "dropout_layer.h"
+#अन्तर्भाव "gru_layer.h"
+#अन्तर्भाव "list.h"
+#अन्तर्भाव "local_layer.h"
+#अन्तर्भाव "maxpool_layer.h"
+#अन्तर्भाव "normalization_layer.h"
+#अन्तर्भाव "option_list.h"
+#अन्तर्भाव "parser.h"
+#अन्तर्भाव "region_layer.h"
+#अन्तर्भाव "yolo_layer.h"
+#अन्तर्भाव "iseg_layer.h"
+#अन्तर्भाव "reorg_layer.h"
+#अन्तर्भाव "rnn_layer.h"
+#अन्तर्भाव "route_layer.h"
+#अन्तर्भाव "upsample_layer.h"
+#अन्तर्भाव "shortcut_layer.h"
+#अन्तर्भाव "softmax_layer.h"
+#अन्तर्भाव "lstm_layer.h"
+#अन्तर्भाव "utils.h"
 
-typedef struct{
-    char *type;
+प्रकारनिर्देश संरचना{
+    वर्ण *type;
     list *options;
 }section;
 
-list *read_cfg(char *filename);
+list *read_cfg(वर्ण *filename);
 
-LAYER_TYPE string_to_layer_type(char * type)
+LAYER_TYPE string_गन्तव्यम्_layer_type(वर्ण * type)
 {
 
-    if (strcmp(type, "[shortcut]")==0) return SHORTCUT;
-    if (strcmp(type, "[crop]")==0) return CROP;
-    if (strcmp(type, "[cost]")==0) return COST;
-    if (strcmp(type, "[detection]")==0) return DETECTION;
-    if (strcmp(type, "[region]")==0) return REGION;
-    if (strcmp(type, "[yolo]")==0) return YOLO;
-    if (strcmp(type, "[iseg]")==0) return ISEG;
-    if (strcmp(type, "[local]")==0) return LOCAL;
-    if (strcmp(type, "[conv]")==0
-            || strcmp(type, "[convolutional]")==0) return CONVOLUTIONAL;
-    if (strcmp(type, "[deconv]")==0
-            || strcmp(type, "[deconvolutional]")==0) return DECONVOLUTIONAL;
-    if (strcmp(type, "[activation]")==0) return ACTIVE;
-    if (strcmp(type, "[logistic]")==0) return LOGXENT;
-    if (strcmp(type, "[l2norm]")==0) return L2NORM;
-    if (strcmp(type, "[net]")==0
-            || strcmp(type, "[network]")==0) return NETWORK;
-    if (strcmp(type, "[crnn]")==0) return CRNN;
-    if (strcmp(type, "[gru]")==0) return GRU;
-    if (strcmp(type, "[lstm]") == 0) return LSTM;
-    if (strcmp(type, "[rnn]")==0) return RNN;
-    if (strcmp(type, "[conn]")==0
-            || strcmp(type, "[connected]")==0) return CONNECTED;
-    if (strcmp(type, "[max]")==0
-            || strcmp(type, "[maxpool]")==0) return MAXPOOL;
-    if (strcmp(type, "[reorg]")==0) return REORG;
-    if (strcmp(type, "[avg]")==0
-            || strcmp(type, "[avgpool]")==0) return AVGPOOL;
-    if (strcmp(type, "[dropout]")==0) return DROPOUT;
-    if (strcmp(type, "[lrn]")==0
-            || strcmp(type, "[normalization]")==0) return NORMALIZATION;
-    if (strcmp(type, "[batchnorm]")==0) return BATCHNORM;
-    if (strcmp(type, "[soft]")==0
-            || strcmp(type, "[softmax]")==0) return SOFTMAX;
-    if (strcmp(type, "[route]")==0) return ROUTE;
-    if (strcmp(type, "[upsample]")==0) return UPSAMPLE;
-    return BLANK;
+    यदि (वाक्यं_तुलय(type, "[shortcut]")==0) प्रत्यागम SHORTCUT;
+    यदि (वाक्यं_तुलय(type, "[crop]")==0) प्रत्यागम CROP;
+    यदि (वाक्यं_तुलय(type, "[cost]")==0) प्रत्यागम COST;
+    यदि (वाक्यं_तुलय(type, "[detection]")==0) प्रत्यागम DETECTION;
+    यदि (वाक्यं_तुलय(type, "[region]")==0) प्रत्यागम REGION;
+    यदि (वाक्यं_तुलय(type, "[yolo]")==0) प्रत्यागम YOLO;
+    यदि (वाक्यं_तुलय(type, "[iseg]")==0) प्रत्यागम ISEG;
+    यदि (वाक्यं_तुलय(type, "[local]")==0) प्रत्यागम LOCAL;
+    यदि (वाक्यं_तुलय(type, "[conv]")==0
+            || वाक्यं_तुलय(type, "[convolutional]")==0) प्रत्यागम CONVOLUTIONAL;
+    यदि (वाक्यं_तुलय(type, "[deconv]")==0
+            || वाक्यं_तुलय(type, "[deconvolutional]")==0) प्रत्यागम DECONVOLUTIONAL;
+    यदि (वाक्यं_तुलय(type, "[activation]")==0) प्रत्यागम सक्रिय;
+    यदि (वाक्यं_तुलय(type, "[logistic]")==0) प्रत्यागम LOGXENT;
+    यदि (वाक्यं_तुलय(type, "[l2norm]")==0) प्रत्यागम L2NORM;
+    यदि (वाक्यं_तुलय(type, "[net]")==0
+            || वाक्यं_तुलय(type, "[network]")==0) प्रत्यागम जालम्_2;
+    यदि (वाक्यं_तुलय(type, "[crnn]")==0) प्रत्यागम CRNN;
+    यदि (वाक्यं_तुलय(type, "[gru]")==0) प्रत्यागम GRU;
+    यदि (वाक्यं_तुलय(type, "[lstm]") == 0) प्रत्यागम LSTM;
+    यदि (वाक्यं_तुलय(type, "[rnn]")==0) प्रत्यागम RNN;
+    यदि (वाक्यं_तुलय(type, "[conn]")==0
+            || वाक्यं_तुलय(type, "[connected]")==0) प्रत्यागम CONNECTED;
+    यदि (वाक्यं_तुलय(type, "[max]")==0
+            || वाक्यं_तुलय(type, "[maxpool]")==0) प्रत्यागम MAXPOOL;
+    यदि (वाक्यं_तुलय(type, "[reorg]")==0) प्रत्यागम REORG;
+    यदि (वाक्यं_तुलय(type, "[avg]")==0
+            || वाक्यं_तुलय(type, "[avgpool]")==0) प्रत्यागम AVGPOOL;
+    यदि (वाक्यं_तुलय(type, "[dropout]")==0) प्रत्यागम DROPOUT;
+    यदि (वाक्यं_तुलय(type, "[lrn]")==0
+            || वाक्यं_तुलय(type, "[normalization]")==0) प्रत्यागम NORMALIZATION;
+    यदि (वाक्यं_तुलय(type, "[batchnorm]")==0) प्रत्यागम BATCHNORM;
+    यदि (वाक्यं_तुलय(type, "[soft]")==0
+            || वाक्यं_तुलय(type, "[softmax]")==0) प्रत्यागम SOFTMAX;
+    यदि (वाक्यं_तुलय(type, "[route]")==0) प्रत्यागम ROUTE;
+    यदि (वाक्यं_तुलय(type, "[upsample]")==0) प्रत्यागम UPSAMPLE;
+    प्रत्यागम BLANK;
 }
 
-void free_section(section *s)
+शून्य free_section(section *s)
 {
-    free(s->type);
-    node *n = s->options->front;
-    while(n){
+    मुक्त(s->type);
+    ग्रन्थिः *n = s->options->front;
+    यावत्(n){
         kvp *pair = (kvp *)n->val;
-        free(pair->key);
-        free(pair);
-        node *next = n->next;
-        free(n);
-        n = next;
+        मुक्त(pair->कुञ्चिका);
+        मुक्त(pair);
+        ग्रन्थिः *अग्र = n->अग्र;
+        मुक्त(n);
+        n = अग्र;
     }
-    free(s->options);
-    free(s);
+    मुक्त(s->options);
+    मुक्त(s);
 }
 
-void parse_data(char *data, float *a, int n)
+शून्य parse_दत्त(वर्ण *दत्त, भिन्न *a, पूर्णाङ्क n)
 {
-    int i;
-    if(!data) return;
-    char *curr = data;
-    char *next = data;
-    int done = 0;
-    for(i = 0; i < n && !done; ++i){
-        while(*++next !='\0' && *next != ',');
-        if(*next == '\0') done = 1;
-        *next = '\0';
-        sscanf(curr, "%g", &a[i]);
-        curr = next+1;
+    पूर्णाङ्क i;
+    यदि(!दत्त) प्रत्यागम;
+    वर्ण *curr = दत्त;
+    वर्ण *अग्र = दत्त;
+    पूर्णाङ्क समाप्तम् = 0;
+    प्रति(i = 0; i < n && !समाप्तम्; ++i){
+        यावत्(*++अग्र !='\0' && *अग्र != ',');
+        यदि(*अग्र == '\0') समाप्तम् = 1;
+        *अग्र = '\0';
+        वाक्यात्_पठ(curr, "%g", &a[i]);
+        curr = अग्र+1;
     }
 }
 
-typedef struct size_params{
-    int batch;
-    int inputs;
-    int h;
-    int w;
-    int c;
-    int index;
-    int time_steps;
-    network *net;
-} size_params;
+प्रकारनिर्देश संरचना आकार_params{
+    पूर्णाङ्क batch;
+    पूर्णाङ्क inputs;
+    पूर्णाङ्क h;
+    पूर्णाङ्क w;
+    पूर्णाङ्क c;
+    पूर्णाङ्क सूचकांक;
+    पूर्णाङ्क time_चरणाः;
+    जालम् *net;
+} आकार_params;
 
-local_layer parse_local(list *options, size_params params)
+local_layer parse_local(list *options, आकार_params params)
 {
-    int n = option_find_int(options, "filters",1);
-    int size = option_find_int(options, "size",1);
-    int stride = option_find_int(options, "stride",1);
-    int pad = option_find_int(options, "pad",0);
-    char *activation_s = option_find_str(options, "activation", "logistic");
+    पूर्णाङ्क n = option_find_int(options, "filters",1);
+    पूर्णाङ्क आकार = option_find_int(options, "size",1);
+    पूर्णाङ्क stride = option_find_int(options, "stride",1);
+    पूर्णाङ्क pad = option_find_int(options, "pad",0);
+    वर्ण *activation_s = option_find_str(options, "activation", "logistic");
     ACTIVATION activation = get_activation(activation_s);
 
-    int batch,h,w,c;
+    पूर्णाङ्क batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before local layer must output image.");
+    यदि(!(h && w && c)) error("Layer before local layer must output image.");
 
-    local_layer layer = make_local_layer(batch,h,w,c,n,size,stride,pad,activation);
+    local_layer layer = make_local_layer(batch,h,w,c,n,आकार,stride,pad,activation);
 
-    return layer;
+    प्रत्यागम layer;
 }
 
-layer parse_deconvolutional(list *options, size_params params)
+layer parse_deconvolutional(list *options, आकार_params params)
 {
-    int n = option_find_int(options, "filters",1);
-    int size = option_find_int(options, "size",1);
-    int stride = option_find_int(options, "stride",1);
+    पूर्णाङ्क n = option_find_int(options, "filters",1);
+    पूर्णाङ्क आकार = option_find_int(options, "size",1);
+    पूर्णाङ्क stride = option_find_int(options, "stride",1);
 
-    char *activation_s = option_find_str(options, "activation", "logistic");
+    वर्ण *activation_s = option_find_str(options, "activation", "logistic");
     ACTIVATION activation = get_activation(activation_s);
 
-    int batch,h,w,c;
+    पूर्णाङ्क batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before deconvolutional layer must output image.");
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
-    int pad = option_find_int_quiet(options, "pad",0);
-    int padding = option_find_int_quiet(options, "padding",0);
-    if(pad) padding = size/2;
+    यदि(!(h && w && c)) error("Layer before deconvolutional layer must output image.");
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क pad = option_find_int_quiet(options, "pad",0);
+    पूर्णाङ्क padding = option_find_int_quiet(options, "padding",0);
+    यदि(pad) padding = आकार/2;
 
-    layer l = make_deconvolutional_layer(batch,h,w,c,n,size,stride,padding, activation, batch_normalize, params.net->adam);
+    layer l = make_deconvolutional_layer(batch,h,w,c,n,आकार,stride,padding, activation, batch_normalize, params.net->adam);
 
-    return l;
+    प्रत्यागम l;
 }
 
 
-convolutional_layer parse_convolutional(list *options, size_params params)
+convolutional_layer parse_convolutional(list *options, आकार_params params)
 {
-    int n = option_find_int(options, "filters",1);
-    int size = option_find_int(options, "size",1);
-    int stride = option_find_int(options, "stride",1);
-    int pad = option_find_int_quiet(options, "pad",0);
-    int padding = option_find_int_quiet(options, "padding",0);
-    int groups = option_find_int_quiet(options, "groups", 1);
-    if(pad) padding = size/2;
+    पूर्णाङ्क n = option_find_int(options, "filters",1);
+    पूर्णाङ्क आकार = option_find_int(options, "size",1);
+    पूर्णाङ्क stride = option_find_int(options, "stride",1);
+    पूर्णाङ्क pad = option_find_int_quiet(options, "pad",0);
+    पूर्णाङ्क padding = option_find_int_quiet(options, "padding",0);
+    पूर्णाङ्क groups = option_find_int_quiet(options, "groups", 1);
+    यदि(pad) padding = आकार/2;
 
-    char *activation_s = option_find_str(options, "activation", "logistic");
+    वर्ण *activation_s = option_find_str(options, "activation", "logistic");
     ACTIVATION activation = get_activation(activation_s);
 
-    int batch,h,w,c;
+    पूर्णाङ्क batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before convolutional layer must output image.");
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
-    int binary = option_find_int_quiet(options, "binary", 0);
-    int xnor = option_find_int_quiet(options, "xnor", 0);
+    यदि(!(h && w && c)) error("Layer before convolutional layer must output image.");
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क द्विमान = option_find_int_quiet(options, "binary", 0);
+    पूर्णाङ्क xnor = option_find_int_quiet(options, "xnor", 0);
 
-    convolutional_layer layer = make_convolutional_layer(batch,h,w,c,n,groups,size,stride,padding,activation, batch_normalize, binary, xnor, params.net->adam);
+    convolutional_layer layer = make_convolutional_layer(batch,h,w,c,n,groups,आकार,stride,padding,activation, batch_normalize, द्विमान, xnor, params.net->adam);
     layer.flipped = option_find_int_quiet(options, "flipped", 0);
     layer.dot = option_find_float_quiet(options, "dot", 0);
 
-    return layer;
+    प्रत्यागम layer;
 }
 
-layer parse_crnn(list *options, size_params params)
+layer parse_crnn(list *options, आकार_params params)
 {
-    int output_filters = option_find_int(options, "output_filters",1);
-    int hidden_filters = option_find_int(options, "hidden_filters",1);
-    char *activation_s = option_find_str(options, "activation", "logistic");
+    पूर्णाङ्क output_filters = option_find_int(options, "output_filters",1);
+    पूर्णाङ्क hidden_filters = option_find_int(options, "hidden_filters",1);
+    वर्ण *activation_s = option_find_str(options, "activation", "logistic");
     ACTIVATION activation = get_activation(activation_s);
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
 
-    layer l = make_crnn_layer(params.batch, params.w, params.h, params.c, hidden_filters, output_filters, params.time_steps, activation, batch_normalize);
+    layer l = make_crnn_layer(params.batch, params.w, params.h, params.c, hidden_filters, output_filters, params.time_चरणाः, activation, batch_normalize);
 
     l.shortcut = option_find_int_quiet(options, "shortcut", 0);
 
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_rnn(list *options, size_params params)
+layer parse_rnn(list *options, आकार_params params)
 {
-    int output = option_find_int(options, "output",1);
-    char *activation_s = option_find_str(options, "activation", "logistic");
+    पूर्णाङ्क output = option_find_int(options, "output",1);
+    वर्ण *activation_s = option_find_str(options, "activation", "logistic");
     ACTIVATION activation = get_activation(activation_s);
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
 
-    layer l = make_rnn_layer(params.batch, params.inputs, output, params.time_steps, activation, batch_normalize, params.net->adam);
+    layer l = make_rnn_layer(params.batch, params.inputs, output, params.time_चरणाः, activation, batch_normalize, params.net->adam);
 
     l.shortcut = option_find_int_quiet(options, "shortcut", 0);
 
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_gru(list *options, size_params params)
+layer parse_gru(list *options, आकार_params params)
 {
-    int output = option_find_int(options, "output",1);
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क output = option_find_int(options, "output",1);
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
 
-    layer l = make_gru_layer(params.batch, params.inputs, output, params.time_steps, batch_normalize, params.net->adam);
+    layer l = make_gru_layer(params.batch, params.inputs, output, params.time_चरणाः, batch_normalize, params.net->adam);
     l.tanh = option_find_int_quiet(options, "tanh", 0);
 
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_lstm(list *options, size_params params)
+layer parse_lstm(list *options, आकार_params params)
 {
-    int output = option_find_int(options, "output", 1);
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क output = option_find_int(options, "output", 1);
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
 
-    layer l = make_lstm_layer(params.batch, params.inputs, output, params.time_steps, batch_normalize, params.net->adam);
+    layer l = make_lstm_layer(params.batch, params.inputs, output, params.time_चरणाः, batch_normalize, params.net->adam);
 
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_connected(list *options, size_params params)
+layer parse_connected(list *options, आकार_params params)
 {
-    int output = option_find_int(options, "output",1);
-    char *activation_s = option_find_str(options, "activation", "logistic");
+    पूर्णाङ्क output = option_find_int(options, "output",1);
+    वर्ण *activation_s = option_find_str(options, "activation", "logistic");
     ACTIVATION activation = get_activation(activation_s);
-    int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
+    पूर्णाङ्क batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
 
     layer l = make_connected_layer(params.batch, params.inputs, output, activation, batch_normalize, params.net->adam);
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_softmax(list *options, size_params params)
+layer parse_softmax(list *options, आकार_params params)
 {
-    int groups = option_find_int_quiet(options, "groups",1);
+    पूर्णाङ्क groups = option_find_int_quiet(options, "groups",1);
     layer l = make_softmax_layer(params.batch, params.inputs, groups);
     l.temperature = option_find_float_quiet(options, "temperature", 1);
-    char *tree_file = option_find_str(options, "tree", 0);
-    if (tree_file) l.softmax_tree = read_tree(tree_file);
+    वर्ण *वृक्षः_file = option_find_str(options, "tree", 0);
+    यदि (वृक्षः_file) l.softmax_वृक्षः = read_वृक्षः(वृक्षः_file);
     l.w = params.w;
     l.h = params.h;
     l.c = params.c;
     l.spatial = option_find_float_quiet(options, "spatial", 0);
     l.noloss =  option_find_int_quiet(options, "noloss", 0);
-    return l;
+    प्रत्यागम l;
 }
 
-int *parse_yolo_mask(char *a, int *num)
+पूर्णाङ्क *parse_yolo_आवरणम्(वर्ण *a, पूर्णाङ्क *अङ्कः)
 {
-    int *mask = 0;
-    if(a){
-        int len = strlen(a);
-        int n = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (a[i] == ',') ++n;
+    पूर्णाङ्क *आवरणम् = 0;
+    यदि(a){
+        पूर्णाङ्क len = वाक्यदैर्घ्यम्(a);
+        पूर्णाङ्क n = 1;
+        पूर्णाङ्क i;
+        प्रति(i = 0; i < len; ++i){
+            यदि (a[i] == ',') ++n;
         }
-        mask = calloc(n, sizeof(int));
-        for(i = 0; i < n; ++i){
-            int val = atoi(a);
-            mask[i] = val;
+        आवरणम् = शून्यस्मृतिं_देहि(n, परिमाण(पूर्णाङ्क));
+        प्रति(i = 0; i < n; ++i){
+            पूर्णाङ्क val = atoi(a);
+            आवरणम्[i] = val;
             a = strchr(a, ',')+1;
         }
-        *num = n;
+        *अङ्कः = n;
     }
-    return mask;
+    प्रत्यागम आवरणम्;
 }
 
-layer parse_yolo(list *options, size_params params)
+layer parse_yolo(list *options, आकार_params params)
 {
-    int classes = option_find_int(options, "classes", 20);
-    int total = option_find_int(options, "num", 1);
-    int num = total;
+    पूर्णाङ्क classes = option_find_int(options, "classes", 20);
+    पूर्णाङ्क योग_2 = option_find_int(options, "num", 1);
+    पूर्णाङ्क अङ्कः = योग_2;
 
-    char *a = option_find_str(options, "mask", 0);
-    int *mask = parse_yolo_mask(a, &num);
-    layer l = make_yolo_layer(params.batch, params.w, params.h, num, total, mask, classes);
-    assert(l.outputs == params.inputs);
+    वर्ण *a = option_find_str(options, "mask", 0);
+    पूर्णाङ्क *आवरणम् = parse_yolo_आवरणम्(a, &अङ्कः);
+    layer l = make_yolo_layer(params.batch, params.w, params.h, अङ्कः, योग_2, आवरणम्, classes);
+    प्रतिज्ञा(l.outputs == params.inputs);
 
     l.max_boxes = option_find_int_quiet(options, "max",90);
     l.jitter = option_find_float(options, "jitter", .2);
@@ -321,46 +321,46 @@ layer parse_yolo(list *options, size_params params)
     l.truth_thresh = option_find_float(options, "truth_thresh", 1);
     l.random = option_find_int_quiet(options, "random", 0);
 
-    char *map_file = option_find_str(options, "map", 0);
-    if (map_file) l.map = read_map(map_file);
+    वर्ण *map_file = option_find_str(options, "map", 0);
+    यदि (map_file) l.map = read_map(map_file);
 
     a = option_find_str(options, "anchors", 0);
-    if(a){
-        int len = strlen(a);
-        int n = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (a[i] == ',') ++n;
+    यदि(a){
+        पूर्णाङ्क len = वाक्यदैर्घ्यम्(a);
+        पूर्णाङ्क n = 1;
+        पूर्णाङ्क i;
+        प्रति(i = 0; i < len; ++i){
+            यदि (a[i] == ',') ++n;
         }
-        for(i = 0; i < n; ++i){
-            float bias = atof(a);
+        प्रति(i = 0; i < n; ++i){
+            भिन्न bias = atof(a);
             l.biases[i] = bias;
             a = strchr(a, ',')+1;
         }
     }
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_iseg(list *options, size_params params)
+layer parse_iseg(list *options, आकार_params params)
 {
-    int classes = option_find_int(options, "classes", 20);
-    int ids = option_find_int(options, "ids", 32);
+    पूर्णाङ्क classes = option_find_int(options, "classes", 20);
+    पूर्णाङ्क ids = option_find_int(options, "ids", 32);
     layer l = make_iseg_layer(params.batch, params.w, params.h, classes, ids);
-    assert(l.outputs == params.inputs);
-    return l;
+    प्रतिज्ञा(l.outputs == params.inputs);
+    प्रत्यागम l;
 }
 
-layer parse_region(list *options, size_params params)
+layer parse_region(list *options, आकार_params params)
 {
-    int coords = option_find_int(options, "coords", 4);
-    int classes = option_find_int(options, "classes", 20);
-    int num = option_find_int(options, "num", 1);
+    पूर्णाङ्क coords = option_find_int(options, "coords", 4);
+    पूर्णाङ्क classes = option_find_int(options, "classes", 20);
+    पूर्णाङ्क अङ्कः = option_find_int(options, "num", 1);
 
-    layer l = make_region_layer(params.batch, params.w, params.h, num, classes, coords);
-    assert(l.outputs == params.inputs);
+    layer l = make_region_layer(params.batch, params.w, params.h, अङ्कः, classes, coords);
+    प्रतिज्ञा(l.outputs == params.inputs);
 
-    l.log = option_find_int_quiet(options, "log", 0);
-    l.sqrt = option_find_int_quiet(options, "sqrt", 0);
+    l.लघुगणकः = option_find_int_quiet(options, "log", 0);
+    l.वर्गमूलम् = option_find_int_quiet(options, "sqrt", 0);
 
     l.softmax = option_find_int(options, "softmax", 0);
     l.background = option_find_int_quiet(options, "background", 0);
@@ -376,43 +376,43 @@ layer parse_region(list *options, size_params params)
     l.coord_scale = option_find_float(options, "coord_scale", 1);
     l.object_scale = option_find_float(options, "object_scale", 1);
     l.noobject_scale = option_find_float(options, "noobject_scale", 1);
-    l.mask_scale = option_find_float(options, "mask_scale", 1);
+    l.आवरणम्_scale = option_find_float(options, "mask_scale", 1);
     l.class_scale = option_find_float(options, "class_scale", 1);
-    l.bias_match = option_find_int_quiet(options, "bias_match",0);
+    l.bias_मेलनम् = option_find_int_quiet(options, "bias_match",0);
 
-    char *tree_file = option_find_str(options, "tree", 0);
-    if (tree_file) l.softmax_tree = read_tree(tree_file);
-    char *map_file = option_find_str(options, "map", 0);
-    if (map_file) l.map = read_map(map_file);
+    वर्ण *वृक्षः_file = option_find_str(options, "tree", 0);
+    यदि (वृक्षः_file) l.softmax_वृक्षः = read_वृक्षः(वृक्षः_file);
+    वर्ण *map_file = option_find_str(options, "map", 0);
+    यदि (map_file) l.map = read_map(map_file);
 
-    char *a = option_find_str(options, "anchors", 0);
-    if(a){
-        int len = strlen(a);
-        int n = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (a[i] == ',') ++n;
+    वर्ण *a = option_find_str(options, "anchors", 0);
+    यदि(a){
+        पूर्णाङ्क len = वाक्यदैर्घ्यम्(a);
+        पूर्णाङ्क n = 1;
+        पूर्णाङ्क i;
+        प्रति(i = 0; i < len; ++i){
+            यदि (a[i] == ',') ++n;
         }
-        for(i = 0; i < n; ++i){
-            float bias = atof(a);
+        प्रति(i = 0; i < n; ++i){
+            भिन्न bias = atof(a);
             l.biases[i] = bias;
             a = strchr(a, ',')+1;
         }
     }
-    return l;
+    प्रत्यागम l;
 }
 
-detection_layer parse_detection(list *options, size_params params)
+detection_layer parse_detection(list *options, आकार_params params)
 {
-    int coords = option_find_int(options, "coords", 1);
-    int classes = option_find_int(options, "classes", 1);
-    int rescore = option_find_int(options, "rescore", 0);
-    int num = option_find_int(options, "num", 1);
-    int side = option_find_int(options, "side", 7);
-    detection_layer layer = make_detection_layer(params.batch, params.inputs, num, side, classes, coords, rescore);
+    पूर्णाङ्क coords = option_find_int(options, "coords", 1);
+    पूर्णाङ्क classes = option_find_int(options, "classes", 1);
+    पूर्णाङ्क rescore = option_find_int(options, "rescore", 0);
+    पूर्णाङ्क अङ्कः = option_find_int(options, "num", 1);
+    पूर्णाङ्क side = option_find_int(options, "side", 7);
+    detection_layer layer = make_detection_layer(params.batch, params.inputs, अङ्कः, side, classes, coords, rescore);
 
     layer.softmax = option_find_int(options, "softmax", 0);
-    layer.sqrt = option_find_int(options, "sqrt", 0);
+    layer.वर्गमूलम् = option_find_int(options, "sqrt", 0);
 
     layer.max_boxes = option_find_int_quiet(options, "max",90);
     layer.coord_scale = option_find_float(options, "coord_scale", 1);
@@ -423,251 +423,251 @@ detection_layer parse_detection(list *options, size_params params)
     layer.jitter = option_find_float(options, "jitter", .2);
     layer.random = option_find_int_quiet(options, "random", 0);
     layer.reorg = option_find_int_quiet(options, "reorg", 0);
-    return layer;
+    प्रत्यागम layer;
 }
 
-cost_layer parse_cost(list *options, size_params params)
+cost_layer parse_cost(list *options, आकार_params params)
 {
-    char *type_s = option_find_str(options, "type", "sse");
+    वर्ण *type_s = option_find_str(options, "type", "sse");
     COST_TYPE type = get_cost_type(type_s);
-    float scale = option_find_float_quiet(options, "scale",1);
+    भिन्न scale = option_find_float_quiet(options, "scale",1);
     cost_layer layer = make_cost_layer(params.batch, params.inputs, type, scale);
-    layer.ratio =  option_find_float_quiet(options, "ratio",0);
+    layer.अनुपातः =  option_find_float_quiet(options, "ratio",0);
     layer.noobject_scale =  option_find_float_quiet(options, "noobj", 1);
     layer.thresh =  option_find_float_quiet(options, "thresh",0);
-    return layer;
+    प्रत्यागम layer;
 }
 
-crop_layer parse_crop(list *options, size_params params)
+crop_layer parse_crop(list *options, आकार_params params)
 {
-    int crop_height = option_find_int(options, "crop_height",1);
-    int crop_width = option_find_int(options, "crop_width",1);
-    int flip = option_find_int(options, "flip",0);
-    float angle = option_find_float(options, "angle",0);
-    float saturation = option_find_float(options, "saturation",1);
-    float exposure = option_find_float(options, "exposure",1);
+    पूर्णाङ्क crop_height = option_find_int(options, "crop_height",1);
+    पूर्णाङ्क crop_विस्तारः = option_find_int(options, "crop_width",1);
+    पूर्णाङ्क flip = option_find_int(options, "flip",0);
+    भिन्न angle = option_find_float(options, "angle",0);
+    भिन्न saturation = option_find_float(options, "saturation",1);
+    भिन्न exposure = option_find_float(options, "exposure",1);
 
-    int batch,h,w,c;
+    पूर्णाङ्क batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before crop layer must output image.");
+    यदि(!(h && w && c)) error("Layer before crop layer must output image.");
 
-    int noadjust = option_find_int_quiet(options, "noadjust",0);
+    पूर्णाङ्क noadjust = option_find_int_quiet(options, "noadjust",0);
 
-    crop_layer l = make_crop_layer(batch,h,w,c,crop_height,crop_width,flip, angle, saturation, exposure);
-    l.shift = option_find_float(options, "shift", 0);
+    crop_layer l = make_crop_layer(batch,h,w,c,crop_height,crop_विस्तारः,flip, angle, saturation, exposure);
+    l.सरणम् = option_find_float(options, "shift", 0);
     l.noadjust = noadjust;
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_reorg(list *options, size_params params)
+layer parse_reorg(list *options, आकार_params params)
 {
-    int stride = option_find_int(options, "stride",1);
-    int reverse = option_find_int_quiet(options, "reverse",0);
-    int flatten = option_find_int_quiet(options, "flatten",0);
-    int extra = option_find_int_quiet(options, "extra",0);
+    पूर्णाङ्क stride = option_find_int(options, "stride",1);
+    पूर्णाङ्क reverse = option_find_int_quiet(options, "reverse",0);
+    पूर्णाङ्क flatten = option_find_int_quiet(options, "flatten",0);
+    पूर्णाङ्क extra = option_find_int_quiet(options, "extra",0);
 
-    int batch,h,w,c;
+    पूर्णाङ्क batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before reorg layer must output image.");
+    यदि(!(h && w && c)) error("Layer before reorg layer must output image.");
 
     layer layer = make_reorg_layer(batch,w,h,c,stride,reverse, flatten, extra);
-    return layer;
+    प्रत्यागम layer;
 }
 
-maxpool_layer parse_maxpool(list *options, size_params params)
+maxpool_layer parse_maxpool(list *options, आकार_params params)
 {
-    int stride = option_find_int(options, "stride",1);
-    int size = option_find_int(options, "size",stride);
-    int padding = option_find_int_quiet(options, "padding", size-1);
+    पूर्णाङ्क stride = option_find_int(options, "stride",1);
+    पूर्णाङ्क आकार = option_find_int(options, "size",stride);
+    पूर्णाङ्क padding = option_find_int_quiet(options, "padding", आकार-1);
 
-    int batch,h,w,c;
+    पूर्णाङ्क batch,h,w,c;
     h = params.h;
     w = params.w;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before maxpool layer must output image.");
+    यदि(!(h && w && c)) error("Layer before maxpool layer must output image.");
 
-    maxpool_layer layer = make_maxpool_layer(batch,h,w,c,size,stride,padding);
-    return layer;
+    maxpool_layer layer = make_maxpool_layer(batch,h,w,c,आकार,stride,padding);
+    प्रत्यागम layer;
 }
 
-avgpool_layer parse_avgpool(list *options, size_params params)
+avgpool_layer parse_avgpool(list *options, आकार_params params)
 {
-    int batch,w,h,c;
+    पूर्णाङ्क batch,w,h,c;
     w = params.w;
     h = params.h;
     c = params.c;
     batch=params.batch;
-    if(!(h && w && c)) error("Layer before avgpool layer must output image.");
+    यदि(!(h && w && c)) error("Layer before avgpool layer must output image.");
 
     avgpool_layer layer = make_avgpool_layer(batch,w,h,c);
-    return layer;
+    प्रत्यागम layer;
 }
 
-dropout_layer parse_dropout(list *options, size_params params)
+dropout_layer parse_dropout(list *options, आकार_params params)
 {
-    float probability = option_find_float(options, "probability", .5);
+    भिन्न probability = option_find_float(options, "probability", .5);
     dropout_layer layer = make_dropout_layer(params.batch, params.inputs, probability);
-    layer.out_w = params.w;
-    layer.out_h = params.h;
-    layer.out_c = params.c;
-    return layer;
+    layer.बहिर्गमनम्_w = params.w;
+    layer.बहिर्गमनम्_h = params.h;
+    layer.बहिर्गमनम्_c = params.c;
+    प्रत्यागम layer;
 }
 
-layer parse_normalization(list *options, size_params params)
+layer parse_normalization(list *options, आकार_params params)
 {
-    float alpha = option_find_float(options, "alpha", .0001);
-    float beta =  option_find_float(options, "beta" , .75);
-    float kappa = option_find_float(options, "kappa", 1);
-    int size = option_find_int(options, "size", 5);
-    layer l = make_normalization_layer(params.batch, params.w, params.h, params.c, size, alpha, beta, kappa);
-    return l;
+    भिन्न alpha = option_find_float(options, "alpha", .0001);
+    भिन्न beta =  option_find_float(options, "beta" , .75);
+    भिन्न kappa = option_find_float(options, "kappa", 1);
+    पूर्णाङ्क आकार = option_find_int(options, "size", 5);
+    layer l = make_normalization_layer(params.batch, params.w, params.h, params.c, आकार, alpha, beta, kappa);
+    प्रत्यागम l;
 }
 
-layer parse_batchnorm(list *options, size_params params)
+layer parse_batchnorm(list *options, आकार_params params)
 {
     layer l = make_batchnorm_layer(params.batch, params.w, params.h, params.c);
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_shortcut(list *options, size_params params, network *net)
+layer parse_shortcut(list *options, आकार_params params, जालम् *net)
 {
-    char *l = option_find(options, "from");
-    int index = atoi(l);
-    if(index < 0) index = params.index + index;
+    वर्ण *l = option_find(options, "from");
+    पूर्णाङ्क सूचकांक = atoi(l);
+    यदि(सूचकांक < 0) सूचकांक = params.सूचकांक + सूचकांक;
 
-    int batch = params.batch;
-    layer from = net->layers[index];
+    पूर्णाङ्क batch = params.batch;
+    layer from = net->layers[सूचकांक];
 
-    layer s = make_shortcut_layer(batch, index, params.w, params.h, params.c, from.out_w, from.out_h, from.out_c);
+    layer s = make_shortcut_layer(batch, सूचकांक, params.w, params.h, params.c, from.बहिर्गमनम्_w, from.बहिर्गमनम्_h, from.बहिर्गमनम्_c);
 
-    char *activation_s = option_find_str(options, "activation", "linear");
+    वर्ण *activation_s = option_find_str(options, "activation", "linear");
     ACTIVATION activation = get_activation(activation_s);
     s.activation = activation;
     s.alpha = option_find_float_quiet(options, "alpha", 1);
     s.beta = option_find_float_quiet(options, "beta", 1);
-    return s;
+    प्रत्यागम s;
 }
 
 
-layer parse_l2norm(list *options, size_params params)
+layer parse_l2norm(list *options, आकार_params params)
 {
     layer l = make_l2norm_layer(params.batch, params.inputs);
-    l.h = l.out_h = params.h;
-    l.w = l.out_w = params.w;
-    l.c = l.out_c = params.c;
-    return l;
+    l.h = l.बहिर्गमनम्_h = params.h;
+    l.w = l.बहिर्गमनम्_w = params.w;
+    l.c = l.बहिर्गमनम्_c = params.c;
+    प्रत्यागम l;
 }
 
 
-layer parse_logistic(list *options, size_params params)
+layer parse_logistic(list *options, आकार_params params)
 {
     layer l = make_logistic_layer(params.batch, params.inputs);
-    l.h = l.out_h = params.h;
-    l.w = l.out_w = params.w;
-    l.c = l.out_c = params.c;
-    return l;
+    l.h = l.बहिर्गमनम्_h = params.h;
+    l.w = l.बहिर्गमनम्_w = params.w;
+    l.c = l.बहिर्गमनम्_c = params.c;
+    प्रत्यागम l;
 }
 
-layer parse_activation(list *options, size_params params)
+layer parse_activation(list *options, आकार_params params)
 {
-    char *activation_s = option_find_str(options, "activation", "linear");
+    वर्ण *activation_s = option_find_str(options, "activation", "linear");
     ACTIVATION activation = get_activation(activation_s);
 
     layer l = make_activation_layer(params.batch, params.inputs, activation);
 
-    l.h = l.out_h = params.h;
-    l.w = l.out_w = params.w;
-    l.c = l.out_c = params.c;
+    l.h = l.बहिर्गमनम्_h = params.h;
+    l.w = l.बहिर्गमनम्_w = params.w;
+    l.c = l.बहिर्गमनम्_c = params.c;
 
-    return l;
+    प्रत्यागम l;
 }
 
-layer parse_upsample(list *options, size_params params, network *net)
+layer parse_upsample(list *options, आकार_params params, जालम् *net)
 {
 
-    int stride = option_find_int(options, "stride",2);
+    पूर्णाङ्क stride = option_find_int(options, "stride",2);
     layer l = make_upsample_layer(params.batch, params.w, params.h, params.c, stride);
     l.scale = option_find_float_quiet(options, "scale", 1);
-    return l;
+    प्रत्यागम l;
 }
 
-route_layer parse_route(list *options, size_params params, network *net)
+route_layer parse_route(list *options, आकार_params params, जालम् *net)
 {
-    char *l = option_find(options, "layers");
-    int len = strlen(l);
-    if(!l) error("Route Layer must specify input layers");
-    int n = 1;
-    int i;
-    for(i = 0; i < len; ++i){
-        if (l[i] == ',') ++n;
+    वर्ण *l = option_find(options, "layers");
+    पूर्णाङ्क len = वाक्यदैर्घ्यम्(l);
+    यदि(!l) error("Route Layer must specify input layers");
+    पूर्णाङ्क n = 1;
+    पूर्णाङ्क i;
+    प्रति(i = 0; i < len; ++i){
+        यदि (l[i] == ',') ++n;
     }
 
-    int *layers = calloc(n, sizeof(int));
-    int *sizes = calloc(n, sizeof(int));
-    for(i = 0; i < n; ++i){
-        int index = atoi(l);
+    पूर्णाङ्क *layers = शून्यस्मृतिं_देहि(n, परिमाण(पूर्णाङ्क));
+    पूर्णाङ्क *sizes = शून्यस्मृतिं_देहि(n, परिमाण(पूर्णाङ्क));
+    प्रति(i = 0; i < n; ++i){
+        पूर्णाङ्क सूचकांक = atoi(l);
         l = strchr(l, ',')+1;
-        if(index < 0) index = params.index + index;
-        layers[i] = index;
-        sizes[i] = net->layers[index].outputs;
+        यदि(सूचकांक < 0) सूचकांक = params.सूचकांक + सूचकांक;
+        layers[i] = सूचकांक;
+        sizes[i] = net->layers[सूचकांक].outputs;
     }
-    int batch = params.batch;
+    पूर्णाङ्क batch = params.batch;
 
     route_layer layer = make_route_layer(batch, n, layers, sizes);
 
     convolutional_layer first = net->layers[layers[0]];
-    layer.out_w = first.out_w;
-    layer.out_h = first.out_h;
-    layer.out_c = first.out_c;
-    for(i = 1; i < n; ++i){
-        int index = layers[i];
-        convolutional_layer next = net->layers[index];
-        if(next.out_w == first.out_w && next.out_h == first.out_h){
-            layer.out_c += next.out_c;
-        }else{
-            layer.out_h = layer.out_w = layer.out_c = 0;
+    layer.बहिर्गमनम्_w = first.बहिर्गमनम्_w;
+    layer.बहिर्गमनम्_h = first.बहिर्गमनम्_h;
+    layer.बहिर्गमनम्_c = first.बहिर्गमनम्_c;
+    प्रति(i = 1; i < n; ++i){
+        पूर्णाङ्क सूचकांक = layers[i];
+        convolutional_layer अग्र = net->layers[सूचकांक];
+        यदि(अग्र.बहिर्गमनम्_w == first.बहिर्गमनम्_w && अग्र.बहिर्गमनम्_h == first.बहिर्गमनम्_h){
+            layer.बहिर्गमनम्_c += अग्र.बहिर्गमनम्_c;
+        }अन्यथा{
+            layer.बहिर्गमनम्_h = layer.बहिर्गमनम्_w = layer.बहिर्गमनम्_c = 0;
         }
     }
 
-    return layer;
+    प्रत्यागम layer;
 }
 
-learning_rate_policy get_policy(char *s)
+learning_दरः_policy get_policy(वर्ण *s)
 {
-    if (strcmp(s, "random")==0) return RANDOM;
-    if (strcmp(s, "poly")==0) return POLY;
-    if (strcmp(s, "constant")==0) return CONSTANT;
-    if (strcmp(s, "step")==0) return STEP;
-    if (strcmp(s, "exp")==0) return EXP;
-    if (strcmp(s, "sigmoid")==0) return SIG;
-    if (strcmp(s, "steps")==0) return STEPS;
+    यदि (वाक्यं_तुलय(s, "random")==0) प्रत्यागम RANDOM;
+    यदि (वाक्यं_तुलय(s, "poly")==0) प्रत्यागम POLY;
+    यदि (वाक्यं_तुलय(s, "constant")==0) प्रत्यागम CONSTANT;
+    यदि (वाक्यं_तुलय(s, "step")==0) प्रत्यागम चरणः_2;
+    यदि (वाक्यं_तुलय(s, "exp")==0) प्रत्यागम EXP;
+    यदि (वाक्यं_तुलय(s, "sigmoid")==0) प्रत्यागम SIG;
+    यदि (वाक्यं_तुलय(s, "steps")==0) प्रत्यागम चरणाः_2;
     fprintf(stderr, "Couldn't find policy %s, going with constant\n", s);
-    return CONSTANT;
+    प्रत्यागम CONSTANT;
 }
 
-void parse_net_options(list *options, network *net)
+शून्य parse_net_options(list *options, जालम् *net)
 {
     net->batch = option_find_int(options, "batch",1);
-    net->learning_rate = option_find_float(options, "learning_rate", .001);
+    net->learning_दरः = option_find_float(options, "learning_rate", .001);
     net->momentum = option_find_float(options, "momentum", .9);
     net->decay = option_find_float(options, "decay", .0001);
-    int subdivs = option_find_int(options, "subdivisions",1);
-    net->time_steps = option_find_int_quiet(options, "time_steps",1);
+    पूर्णाङ्क subdivs = option_find_int(options, "subdivisions",1);
+    net->time_चरणाः = option_find_int_quiet(options, "time_steps",1);
     net->notruth = option_find_int_quiet(options, "notruth",0);
     net->batch /= subdivs;
-    net->batch *= net->time_steps;
+    net->batch *= net->time_चरणाः;
     net->subdivisions = subdivs;
     net->random = option_find_int_quiet(options, "random", 0);
 
     net->adam = option_find_int_quiet(options, "adam", 0);
-    if(net->adam){
+    यदि(net->adam){
         net->B1 = option_find_float(options, "B1", .9);
         net->B2 = option_find_float(options, "B2", .999);
         net->eps = option_find_float(options, "eps", .0000001);
@@ -679,8 +679,8 @@ void parse_net_options(list *options, network *net)
     net->inputs = option_find_int_quiet(options, "inputs", net->h * net->w * net->c);
     net->max_crop = option_find_int_quiet(options, "max_crop",net->w*2);
     net->min_crop = option_find_int_quiet(options, "min_crop",net->w);
-    net->max_ratio = option_find_float_quiet(options, "max_ratio", (float) net->max_crop / net->w);
-    net->min_ratio = option_find_float_quiet(options, "min_ratio", (float) net->min_crop / net->w);
+    net->max_अनुपातः = option_find_float_quiet(options, "max_ratio", (भिन्न) net->max_crop / net->w);
+    net->min_अनुपातः = option_find_float_quiet(options, "min_ratio", (भिन्न) net->min_crop / net->w);
     net->center = option_find_int_quiet(options, "center",0);
     net->clip = option_find_float_quiet(options, "clip", 0);
 
@@ -690,67 +690,67 @@ void parse_net_options(list *options, network *net)
     net->exposure = option_find_float_quiet(options, "exposure", 1);
     net->hue = option_find_float_quiet(options, "hue", 0);
 
-    if(!net->inputs && !(net->h && net->w && net->c)) error("No input parameters supplied");
+    यदि(!net->inputs && !(net->h && net->w && net->c)) error("No input parameters supplied");
 
-    char *policy_s = option_find_str(options, "policy", "constant");
+    वर्ण *policy_s = option_find_str(options, "policy", "constant");
     net->policy = get_policy(policy_s);
-    net->burn_in = option_find_int_quiet(options, "burn_in", 0);
+    net->burn_अन्तर् = option_find_int_quiet(options, "burn_in", 0);
     net->power = option_find_float_quiet(options, "power", 4);
-    if(net->policy == STEP){
-        net->step = option_find_int(options, "step", 1);
+    यदि(net->policy == चरणः_2){
+        net->चरणः = option_find_int(options, "step", 1);
         net->scale = option_find_float(options, "scale", 1);
-    } else if (net->policy == STEPS){
-        char *l = option_find(options, "steps");
-        char *p = option_find(options, "scales");
-        if(!l || !p) error("STEPS policy must have steps and scales in cfg file");
+    } अन्यथा यदि (net->policy == चरणाः_2){
+        वर्ण *l = option_find(options, "steps");
+        वर्ण *p = option_find(options, "scales");
+        यदि(!l || !p) error("STEPS policy must have steps and scales in cfg file");
 
-        int len = strlen(l);
-        int n = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (l[i] == ',') ++n;
+        पूर्णाङ्क len = वाक्यदैर्घ्यम्(l);
+        पूर्णाङ्क n = 1;
+        पूर्णाङ्क i;
+        प्रति(i = 0; i < len; ++i){
+            यदि (l[i] == ',') ++n;
         }
-        int *steps = calloc(n, sizeof(int));
-        float *scales = calloc(n, sizeof(float));
-        for(i = 0; i < n; ++i){
-            int step    = atoi(l);
-            float scale = atof(p);
+        पूर्णाङ्क *चरणाः = शून्यस्मृतिं_देहि(n, परिमाण(पूर्णाङ्क));
+        भिन्न *scales = शून्यस्मृतिं_देहि(n, परिमाण(भिन्न));
+        प्रति(i = 0; i < n; ++i){
+            पूर्णाङ्क चरणः    = atoi(l);
+            भिन्न scale = atof(p);
             l = strchr(l, ',')+1;
             p = strchr(p, ',')+1;
-            steps[i] = step;
+            चरणाः[i] = चरणः;
             scales[i] = scale;
         }
         net->scales = scales;
-        net->steps = steps;
-        net->num_steps = n;
-    } else if (net->policy == EXP){
+        net->चरणाः = चरणाः;
+        net->अङ्कः_चरणाः = n;
+    } अन्यथा यदि (net->policy == EXP){
         net->gamma = option_find_float(options, "gamma", 1);
-    } else if (net->policy == SIG){
+    } अन्यथा यदि (net->policy == SIG){
         net->gamma = option_find_float(options, "gamma", 1);
-        net->step = option_find_int(options, "step", 1);
-    } else if (net->policy == POLY || net->policy == RANDOM){
+        net->चरणः = option_find_int(options, "step", 1);
+    } अन्यथा यदि (net->policy == POLY || net->policy == RANDOM){
     }
     net->max_batches = option_find_int(options, "max_batches", 0);
 }
 
-int is_network(section *s)
+पूर्णाङ्क is_जालम्(section *s)
 {
-    return (strcmp(s->type, "[net]")==0
-            || strcmp(s->type, "[network]")==0);
+    प्रत्यागम (वाक्यं_तुलय(s->type, "[net]")==0
+            || वाक्यं_तुलय(s->type, "[network]")==0);
 }
 
-network *parse_network_cfg(char *filename)
+जालम् *parse_जालम्_cfg(वर्ण *filename)
 {
     list *sections = read_cfg(filename);
-    node *n = sections->front;
-    if(!n) error("Config file has no sections");
-    network *net = make_network(sections->size - 1);
-    net->gpu_index = gpu_index;
-    size_params params;
+    ग्रन्थिः *n = sections->front;
+    यदि(!n) error("Config file has no sections");
+    जालम् *net = make_जालम्(sections->आकार - 1);
+    net->gpu_सूचकांक = gpu_सूचकांक;
+    आकार_params params;
 
     section *s = (section *)n->val;
     list *options = s->options;
-    if(!is_network(s)) error("First section must be [net] or [network]");
+    यदि(!is_जालम्(s)) error("First section must be [net] or [network]");
     parse_net_options(options, net);
 
     params.h = net->h;
@@ -758,83 +758,83 @@ network *parse_network_cfg(char *filename)
     params.c = net->c;
     params.inputs = net->inputs;
     params.batch = net->batch;
-    params.time_steps = net->time_steps;
+    params.time_चरणाः = net->time_चरणाः;
     params.net = net;
 
-    size_t workspace_size = 0;
-    n = n->next;
-    int count = 0;
+    size_t workspace_आकार = 0;
+    n = n->अग्र;
+    पूर्णाङ्क गणनम् = 0;
     free_section(s);
     fprintf(stderr, "layer     filters    size              input                output\n");
-    while(n){
-        params.index = count;
-        fprintf(stderr, "%5d ", count);
+    यावत्(n){
+        params.सूचकांक = गणनम्;
+        fprintf(stderr, "%5d ", गणनम्);
         s = (section *)n->val;
         options = s->options;
         layer l = {0};
-        LAYER_TYPE lt = string_to_layer_type(s->type);
-        if(lt == CONVOLUTIONAL){
+        LAYER_TYPE lt = string_गन्तव्यम्_layer_type(s->type);
+        यदि(lt == CONVOLUTIONAL){
             l = parse_convolutional(options, params);
-        }else if(lt == DECONVOLUTIONAL){
+        }अन्यथा यदि(lt == DECONVOLUTIONAL){
             l = parse_deconvolutional(options, params);
-        }else if(lt == LOCAL){
+        }अन्यथा यदि(lt == LOCAL){
             l = parse_local(options, params);
-        }else if(lt == ACTIVE){
+        }अन्यथा यदि(lt == सक्रिय){
             l = parse_activation(options, params);
-        }else if(lt == LOGXENT){
+        }अन्यथा यदि(lt == LOGXENT){
             l = parse_logistic(options, params);
-        }else if(lt == L2NORM){
+        }अन्यथा यदि(lt == L2NORM){
             l = parse_l2norm(options, params);
-        }else if(lt == RNN){
+        }अन्यथा यदि(lt == RNN){
             l = parse_rnn(options, params);
-        }else if(lt == GRU){
+        }अन्यथा यदि(lt == GRU){
             l = parse_gru(options, params);
-        }else if (lt == LSTM) {
+        }अन्यथा यदि (lt == LSTM) {
             l = parse_lstm(options, params);
-        }else if(lt == CRNN){
+        }अन्यथा यदि(lt == CRNN){
             l = parse_crnn(options, params);
-        }else if(lt == CONNECTED){
+        }अन्यथा यदि(lt == CONNECTED){
             l = parse_connected(options, params);
-        }else if(lt == CROP){
+        }अन्यथा यदि(lt == CROP){
             l = parse_crop(options, params);
-        }else if(lt == COST){
+        }अन्यथा यदि(lt == COST){
             l = parse_cost(options, params);
-        }else if(lt == REGION){
+        }अन्यथा यदि(lt == REGION){
             l = parse_region(options, params);
-        }else if(lt == YOLO){
+        }अन्यथा यदि(lt == YOLO){
             l = parse_yolo(options, params);
-        }else if(lt == ISEG){
+        }अन्यथा यदि(lt == ISEG){
             l = parse_iseg(options, params);
-        }else if(lt == DETECTION){
+        }अन्यथा यदि(lt == DETECTION){
             l = parse_detection(options, params);
-        }else if(lt == SOFTMAX){
+        }अन्यथा यदि(lt == SOFTMAX){
             l = parse_softmax(options, params);
-            net->hierarchy = l.softmax_tree;
-        }else if(lt == NORMALIZATION){
+            net->hierarchy = l.softmax_वृक्षः;
+        }अन्यथा यदि(lt == NORMALIZATION){
             l = parse_normalization(options, params);
-        }else if(lt == BATCHNORM){
+        }अन्यथा यदि(lt == BATCHNORM){
             l = parse_batchnorm(options, params);
-        }else if(lt == MAXPOOL){
+        }अन्यथा यदि(lt == MAXPOOL){
             l = parse_maxpool(options, params);
-        }else if(lt == REORG){
+        }अन्यथा यदि(lt == REORG){
             l = parse_reorg(options, params);
-        }else if(lt == AVGPOOL){
+        }अन्यथा यदि(lt == AVGPOOL){
             l = parse_avgpool(options, params);
-        }else if(lt == ROUTE){
+        }अन्यथा यदि(lt == ROUTE){
             l = parse_route(options, params, net);
-        }else if(lt == UPSAMPLE){
+        }अन्यथा यदि(lt == UPSAMPLE){
             l = parse_upsample(options, params, net);
-        }else if(lt == SHORTCUT){
+        }अन्यथा यदि(lt == SHORTCUT){
             l = parse_shortcut(options, params, net);
-        }else if(lt == DROPOUT){
+        }अन्यथा यदि(lt == DROPOUT){
             l = parse_dropout(options, params);
-            l.output = net->layers[count-1].output;
-            l.delta = net->layers[count-1].delta;
-#ifdef GPU
-            l.output_gpu = net->layers[count-1].output_gpu;
-            l.delta_gpu = net->layers[count-1].delta_gpu;
-#endif
-        }else{
+            l.output = net->layers[गणनम्-1].output;
+            l.delta = net->layers[गणनम्-1].delta;
+#यदि_परिभाषितम् GPU
+            l.output_gpu = net->layers[गणनम्-1].output_gpu;
+            l.delta_gpu = net->layers[गणनम्-1].delta_gpu;
+#यदि_अन्तः
+        }अन्यथा{
             fprintf(stderr, "Type not recognized: %s\n", s->type);
         }
         l.clip = net->clip;
@@ -845,199 +845,199 @@ network *parse_network_cfg(char *filename)
         l.dontload = option_find_int_quiet(options, "dontload", 0);
         l.numload = option_find_int_quiet(options, "numload", 0);
         l.dontloadscales = option_find_int_quiet(options, "dontloadscales", 0);
-        l.learning_rate_scale = option_find_float_quiet(options, "learning_rate", 1);
+        l.learning_दरः_scale = option_find_float_quiet(options, "learning_rate", 1);
         l.smooth = option_find_float_quiet(options, "smooth", 0);
-        option_unused(options);
-        net->layers[count] = l;
-        if (l.workspace_size > workspace_size) workspace_size = l.workspace_size;
+        option_अप्रयुक्तम्(options);
+        net->layers[गणनम्] = l;
+        यदि (l.workspace_आकार > workspace_आकार) workspace_आकार = l.workspace_आकार;
         free_section(s);
-        n = n->next;
-        ++count;
-        if(n){
-            params.h = l.out_h;
-            params.w = l.out_w;
-            params.c = l.out_c;
+        n = n->अग्र;
+        ++गणनम्;
+        यदि(n){
+            params.h = l.बहिर्गमनम्_h;
+            params.w = l.बहिर्गमनम्_w;
+            params.c = l.बहिर्गमनम्_c;
             params.inputs = l.outputs;
         }
     }
     free_list(sections);
-    layer out = get_network_output_layer(net);
-    net->outputs = out.outputs;
-    net->truths = out.outputs;
-    if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
-    net->output = out.output;
-    net->input = calloc(net->inputs*net->batch, sizeof(float));
-    net->truth = calloc(net->truths*net->batch, sizeof(float));
-#ifdef GPU
-    net->output_gpu = out.output_gpu;
-    net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
+    layer बहिर्गमनम् = get_जालम्_output_layer(net);
+    net->outputs = बहिर्गमनम्.outputs;
+    net->truths = बहिर्गमनम्.outputs;
+    यदि(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
+    net->output = बहिर्गमनम्.output;
+    net->निवेशः = शून्यस्मृतिं_देहि(net->inputs*net->batch, परिमाण(भिन्न));
+    net->truth = शून्यस्मृतिं_देहि(net->truths*net->batch, परिमाण(भिन्न));
+#यदि_परिभाषितम् GPU
+    net->output_gpu = बहिर्गमनम्.output_gpu;
+    net->निवेशः_gpu = cuda_make_array(net->निवेशः, net->inputs*net->batch);
     net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
-#endif
-    if(workspace_size){
+#यदि_अन्तः
+    यदि(workspace_आकार){
         //printf("%ld\n", workspace_size);
-#ifdef GPU
-        if(gpu_index >= 0){
-            net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
-        }else {
-            net->workspace = calloc(1, workspace_size);
+#यदि_परिभाषितम् GPU
+        यदि(gpu_सूचकांक >= 0){
+            net->workspace = cuda_make_array(0, (workspace_आकार-1)/परिमाण(भिन्न)+1);
+        }अन्यथा {
+            net->workspace = शून्यस्मृतिं_देहि(1, workspace_आकार);
         }
-#else
-        net->workspace = calloc(1, workspace_size);
-#endif
+#अन्यथा
+        net->workspace = शून्यस्मृतिं_देहि(1, workspace_आकार);
+#यदि_अन्तः
     }
-    return net;
+    प्रत्यागम net;
 }
 
-list *read_cfg(char *filename)
+list *read_cfg(वर्ण *filename)
 {
     FILE *file = fopen(filename, "r");
-    if(file == 0) file_error(filename);
-    char *line;
-    int nu = 0;
+    यदि(file == 0) file_error(filename);
+    वर्ण *पङ्क्तिः;
+    पूर्णाङ्क nu = 0;
     list *options = make_list();
     section *current = 0;
-    while((line=fgetl(file)) != 0){
+    यावत्((पङ्क्तिः=fgetl(file)) != 0){
         ++ nu;
-        strip(line);
-        switch(line[0]){
-            case '[':
-                current = malloc(sizeof(section));
-                list_insert(options, current);
+        strip(पङ्क्तिः);
+        विकल्प(पङ्क्तिः[0]){
+            पक्ष '[':
+                current = स्मृतिं_देहि(परिमाण(section));
+                list_निवेशय(options, current);
                 current->options = make_list();
-                current->type = line;
-                break;
-            case '\0':
-            case '#':
-            case ';':
-                free(line);
-                break;
-            default:
-                if(!read_option(line, current->options)){
-                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+                current->type = पङ्क्तिः;
+                भङ्ग;
+            पक्ष '\0':
+            पक्ष '#':
+            पक्ष ';':
+                मुक्त(पङ्क्तिः);
+                भङ्ग;
+            स्वभाव:
+                यदि(!read_option(पङ्क्तिः, current->options)){
+                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, पङ्क्तिः);
+                    मुक्त(पङ्क्तिः);
                 }
-                break;
+                भङ्ग;
         }
     }
     fclose(file);
-    return options;
+    प्रत्यागम options;
 }
 
-void save_convolutional_weights_binary(layer l, FILE *fp)
+शून्य save_convolutional_weights_द्विमान(layer l, FILE *fp)
 {
-#ifdef GPU
-    if(gpu_index >= 0){
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
         pull_convolutional_layer(l);
     }
-#endif
-    binarize_weights(l.weights, l.n, l.c*l.size*l.size, l.binary_weights);
-    int size = l.c*l.size*l.size;
-    int i, j, k;
-    fwrite(l.biases, sizeof(float), l.n, fp);
-    if (l.batch_normalize){
-        fwrite(l.scales, sizeof(float), l.n, fp);
-        fwrite(l.rolling_mean, sizeof(float), l.n, fp);
-        fwrite(l.rolling_variance, sizeof(float), l.n, fp);
+#यदि_अन्तः
+    binarize_weights(l.weights, l.n, l.c*l.आकार*l.आकार, l.द्विमान_weights);
+    पूर्णाङ्क आकार = l.c*l.आकार*l.आकार;
+    पूर्णाङ्क i, j, k;
+    fwrite(l.biases, परिमाण(भिन्न), l.n, fp);
+    यदि (l.batch_normalize){
+        fwrite(l.scales, परिमाण(भिन्न), l.n, fp);
+        fwrite(l.rolling_माध्यम्, परिमाण(भिन्न), l.n, fp);
+        fwrite(l.rolling_variance, परिमाण(भिन्न), l.n, fp);
     }
-    for(i = 0; i < l.n; ++i){
-        float mean = l.binary_weights[i*size];
-        if(mean < 0) mean = -mean;
-        fwrite(&mean, sizeof(float), 1, fp);
-        for(j = 0; j < size/8; ++j){
-            int index = i*size + j*8;
-            unsigned char c = 0;
-            for(k = 0; k < 8; ++k){
-                if (j*8 + k >= size) break;
-                if (l.binary_weights[index + k] > 0) c = (c | 1<<k);
+    प्रति(i = 0; i < l.n; ++i){
+        भिन्न माध्यम् = l.द्विमान_weights[i*आकार];
+        यदि(माध्यम् < 0) माध्यम् = -माध्यम्;
+        fwrite(&माध्यम्, परिमाण(भिन्न), 1, fp);
+        प्रति(j = 0; j < आकार/8; ++j){
+            पूर्णाङ्क सूचकांक = i*आकार + j*8;
+            अचिह्नित वर्ण c = 0;
+            प्रति(k = 0; k < 8; ++k){
+                यदि (j*8 + k >= आकार) भङ्ग;
+                यदि (l.द्विमान_weights[सूचकांक + k] > 0) c = (c | 1<<k);
             }
-            fwrite(&c, sizeof(char), 1, fp);
+            fwrite(&c, परिमाण(वर्ण), 1, fp);
         }
     }
 }
 
-void save_convolutional_weights(layer l, FILE *fp)
+शून्य save_convolutional_weights(layer l, FILE *fp)
 {
-    if(l.binary){
+    यदि(l.द्विमान){
         //save_convolutional_weights_binary(l, fp);
         //return;
     }
-#ifdef GPU
-    if(gpu_index >= 0){
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
         pull_convolutional_layer(l);
     }
-#endif
-    int num = l.nweights;
-    fwrite(l.biases, sizeof(float), l.n, fp);
-    if (l.batch_normalize){
-        fwrite(l.scales, sizeof(float), l.n, fp);
-        fwrite(l.rolling_mean, sizeof(float), l.n, fp);
-        fwrite(l.rolling_variance, sizeof(float), l.n, fp);
+#यदि_अन्तः
+    पूर्णाङ्क अङ्कः = l.nweights;
+    fwrite(l.biases, परिमाण(भिन्न), l.n, fp);
+    यदि (l.batch_normalize){
+        fwrite(l.scales, परिमाण(भिन्न), l.n, fp);
+        fwrite(l.rolling_माध्यम्, परिमाण(भिन्न), l.n, fp);
+        fwrite(l.rolling_variance, परिमाण(भिन्न), l.n, fp);
     }
-    fwrite(l.weights, sizeof(float), num, fp);
+    fwrite(l.weights, परिमाण(भिन्न), अङ्कः, fp);
 }
 
-void save_batchnorm_weights(layer l, FILE *fp)
+शून्य save_batchnorm_weights(layer l, FILE *fp)
 {
-#ifdef GPU
-    if(gpu_index >= 0){
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
         pull_batchnorm_layer(l);
     }
-#endif
-    fwrite(l.scales, sizeof(float), l.c, fp);
-    fwrite(l.rolling_mean, sizeof(float), l.c, fp);
-    fwrite(l.rolling_variance, sizeof(float), l.c, fp);
+#यदि_अन्तः
+    fwrite(l.scales, परिमाण(भिन्न), l.c, fp);
+    fwrite(l.rolling_माध्यम्, परिमाण(भिन्न), l.c, fp);
+    fwrite(l.rolling_variance, परिमाण(भिन्न), l.c, fp);
 }
 
-void save_connected_weights(layer l, FILE *fp)
+शून्य save_connected_weights(layer l, FILE *fp)
 {
-#ifdef GPU
-    if(gpu_index >= 0){
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
         pull_connected_layer(l);
     }
-#endif
-    fwrite(l.biases, sizeof(float), l.outputs, fp);
-    fwrite(l.weights, sizeof(float), l.outputs*l.inputs, fp);
-    if (l.batch_normalize){
-        fwrite(l.scales, sizeof(float), l.outputs, fp);
-        fwrite(l.rolling_mean, sizeof(float), l.outputs, fp);
-        fwrite(l.rolling_variance, sizeof(float), l.outputs, fp);
+#यदि_अन्तः
+    fwrite(l.biases, परिमाण(भिन्न), l.outputs, fp);
+    fwrite(l.weights, परिमाण(भिन्न), l.outputs*l.inputs, fp);
+    यदि (l.batch_normalize){
+        fwrite(l.scales, परिमाण(भिन्न), l.outputs, fp);
+        fwrite(l.rolling_माध्यम्, परिमाण(भिन्न), l.outputs, fp);
+        fwrite(l.rolling_variance, परिमाण(भिन्न), l.outputs, fp);
     }
 }
 
-void save_weights_upto(network *net, char *filename, int cutoff)
+शून्य save_weights_upto(जालम् *net, वर्ण *filename, पूर्णाङ्क cutoff)
 {
-#ifdef GPU
-    if(net->gpu_index >= 0){
-        cuda_set_device(net->gpu_index);
+#यदि_परिभाषितम् GPU
+    यदि(net->gpu_सूचकांक >= 0){
+        cuda_समुच्चयः_device(net->gpu_सूचकांक);
     }
-#endif
+#यदि_अन्तः
     fprintf(stderr, "Saving weights to %s\n", filename);
     FILE *fp = fopen(filename, "wb");
-    if(!fp) file_error(filename);
+    यदि(!fp) file_error(filename);
 
-    int major = 0;
-    int minor = 2;
-    int revision = 0;
-    fwrite(&major, sizeof(int), 1, fp);
-    fwrite(&minor, sizeof(int), 1, fp);
-    fwrite(&revision, sizeof(int), 1, fp);
-    fwrite(net->seen, sizeof(size_t), 1, fp);
+    पूर्णाङ्क major = 0;
+    पूर्णाङ्क minor = 2;
+    पूर्णाङ्क revision = 0;
+    fwrite(&major, परिमाण(पूर्णाङ्क), 1, fp);
+    fwrite(&minor, परिमाण(पूर्णाङ्क), 1, fp);
+    fwrite(&revision, परिमाण(पूर्णाङ्क), 1, fp);
+    fwrite(net->आलोकितम्, परिमाण(size_t), 1, fp);
 
-    int i;
-    for(i = 0; i < net->n && i < cutoff; ++i){
+    पूर्णाङ्क i;
+    प्रति(i = 0; i < net->n && i < cutoff; ++i){
         layer l = net->layers[i];
-        if (l.dontsave) continue;
-        if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+        यदि (l.dontsave) अनुवर्त;
+        यदि(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
             save_convolutional_weights(l, fp);
-        } if(l.type == CONNECTED){
+        } यदि(l.type == CONNECTED){
             save_connected_weights(l, fp);
-        } if(l.type == BATCHNORM){
+        } यदि(l.type == BATCHNORM){
             save_batchnorm_weights(l, fp);
-        } if(l.type == RNN){
-            save_connected_weights(*(l.input_layer), fp);
+        } यदि(l.type == RNN){
+            save_connected_weights(*(l.निवेशः_layer), fp);
             save_connected_weights(*(l.self_layer), fp);
             save_connected_weights(*(l.output_layer), fp);
-        } if (l.type == LSTM) {
+        } यदि (l.type == LSTM) {
             save_connected_weights(*(l.wi), fp);
             save_connected_weights(*(l.wf), fp);
             save_connected_weights(*(l.wo), fp);
@@ -1046,267 +1046,267 @@ void save_weights_upto(network *net, char *filename, int cutoff)
             save_connected_weights(*(l.uf), fp);
             save_connected_weights(*(l.uo), fp);
             save_connected_weights(*(l.ug), fp);
-        } if (l.type == GRU) {
-            if(1){
+        } यदि (l.type == GRU) {
+            यदि(1){
                 save_connected_weights(*(l.wz), fp);
                 save_connected_weights(*(l.wr), fp);
                 save_connected_weights(*(l.wh), fp);
                 save_connected_weights(*(l.uz), fp);
                 save_connected_weights(*(l.ur), fp);
                 save_connected_weights(*(l.uh), fp);
-            }else{
+            }अन्यथा{
                 save_connected_weights(*(l.reset_layer), fp);
                 save_connected_weights(*(l.update_layer), fp);
                 save_connected_weights(*(l.state_layer), fp);
             }
-        }  if(l.type == CRNN){
-            save_convolutional_weights(*(l.input_layer), fp);
+        }  यदि(l.type == CRNN){
+            save_convolutional_weights(*(l.निवेशः_layer), fp);
             save_convolutional_weights(*(l.self_layer), fp);
             save_convolutional_weights(*(l.output_layer), fp);
-        } if(l.type == LOCAL){
-#ifdef GPU
-            if(gpu_index >= 0){
+        } यदि(l.type == LOCAL){
+#यदि_परिभाषितम् GPU
+            यदि(gpu_सूचकांक >= 0){
                 pull_local_layer(l);
             }
-#endif
-            int locations = l.out_w*l.out_h;
-            int size = l.size*l.size*l.c*l.n*locations;
-            fwrite(l.biases, sizeof(float), l.outputs, fp);
-            fwrite(l.weights, sizeof(float), size, fp);
+#यदि_अन्तः
+            पूर्णाङ्क locations = l.बहिर्गमनम्_w*l.बहिर्गमनम्_h;
+            पूर्णाङ्क आकार = l.आकार*l.आकार*l.c*l.n*locations;
+            fwrite(l.biases, परिमाण(भिन्न), l.outputs, fp);
+            fwrite(l.weights, परिमाण(भिन्न), आकार, fp);
         }
     }
     fclose(fp);
 }
-void save_weights(network *net, char *filename)
+शून्य save_weights(जालम् *net, वर्ण *filename)
 {
     save_weights_upto(net, filename, net->n);
 }
 
-void transpose_matrix(float *a, int rows, int cols)
+शून्य transpose_matrix(भिन्न *a, पूर्णाङ्क पङ्क्तिकाः, पूर्णाङ्क स्तम्भसङ्ख्या)
 {
-    float *transpose = calloc(rows*cols, sizeof(float));
-    int x, y;
-    for(x = 0; x < rows; ++x){
-        for(y = 0; y < cols; ++y){
-            transpose[y*rows + x] = a[x*cols + y];
+    भिन्न *transpose = शून्यस्मृतिं_देहि(पङ्क्तिकाः*स्तम्भसङ्ख्या, परिमाण(भिन्न));
+    पूर्णाङ्क x, y;
+    प्रति(x = 0; x < पङ्क्तिकाः; ++x){
+        प्रति(y = 0; y < स्तम्भसङ्ख्या; ++y){
+            transpose[y*पङ्क्तिकाः + x] = a[x*स्तम्भसङ्ख्या + y];
         }
     }
-    memcpy(a, transpose, rows*cols*sizeof(float));
-    free(transpose);
+    स्मृतिं_प्रतिलिख(a, transpose, पङ्क्तिकाः*स्तम्भसङ्ख्या*परिमाण(भिन्न));
+    मुक्त(transpose);
 }
 
-void load_connected_weights(layer l, FILE *fp, int transpose)
+शून्य आरोपय_connected_weights(layer l, FILE *fp, पूर्णाङ्क transpose)
 {
-    fread(l.biases, sizeof(float), l.outputs, fp);
-    fread(l.weights, sizeof(float), l.outputs*l.inputs, fp);
-    if(transpose){
+    fread(l.biases, परिमाण(भिन्न), l.outputs, fp);
+    fread(l.weights, परिमाण(भिन्न), l.outputs*l.inputs, fp);
+    यदि(transpose){
         transpose_matrix(l.weights, l.inputs, l.outputs);
     }
     //printf("Biases: %f mean %f variance\n", mean_array(l.biases, l.outputs), variance_array(l.biases, l.outputs));
     //printf("Weights: %f mean %f variance\n", mean_array(l.weights, l.outputs*l.inputs), variance_array(l.weights, l.outputs*l.inputs));
-    if (l.batch_normalize && (!l.dontloadscales)){
-        fread(l.scales, sizeof(float), l.outputs, fp);
-        fread(l.rolling_mean, sizeof(float), l.outputs, fp);
-        fread(l.rolling_variance, sizeof(float), l.outputs, fp);
+    यदि (l.batch_normalize && (!l.dontloadscales)){
+        fread(l.scales, परिमाण(भिन्न), l.outputs, fp);
+        fread(l.rolling_माध्यम्, परिमाण(भिन्न), l.outputs, fp);
+        fread(l.rolling_variance, परिमाण(भिन्न), l.outputs, fp);
         //printf("Scales: %f mean %f variance\n", mean_array(l.scales, l.outputs), variance_array(l.scales, l.outputs));
         //printf("rolling_mean: %f mean %f variance\n", mean_array(l.rolling_mean, l.outputs), variance_array(l.rolling_mean, l.outputs));
         //printf("rolling_variance: %f mean %f variance\n", mean_array(l.rolling_variance, l.outputs), variance_array(l.rolling_variance, l.outputs));
     }
-#ifdef GPU
-    if(gpu_index >= 0){
-        push_connected_layer(l);
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
+        प्रक्षिप_connected_layer(l);
     }
-#endif
+#यदि_अन्तः
 }
 
-void load_batchnorm_weights(layer l, FILE *fp)
+शून्य आरोपय_batchnorm_weights(layer l, FILE *fp)
 {
-    fread(l.scales, sizeof(float), l.c, fp);
-    fread(l.rolling_mean, sizeof(float), l.c, fp);
-    fread(l.rolling_variance, sizeof(float), l.c, fp);
-#ifdef GPU
-    if(gpu_index >= 0){
-        push_batchnorm_layer(l);
+    fread(l.scales, परिमाण(भिन्न), l.c, fp);
+    fread(l.rolling_माध्यम्, परिमाण(भिन्न), l.c, fp);
+    fread(l.rolling_variance, परिमाण(भिन्न), l.c, fp);
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
+        प्रक्षिप_batchnorm_layer(l);
     }
-#endif
+#यदि_अन्तः
 }
 
-void load_convolutional_weights_binary(layer l, FILE *fp)
+शून्य आरोपय_convolutional_weights_द्विमान(layer l, FILE *fp)
 {
-    fread(l.biases, sizeof(float), l.n, fp);
-    if (l.batch_normalize && (!l.dontloadscales)){
-        fread(l.scales, sizeof(float), l.n, fp);
-        fread(l.rolling_mean, sizeof(float), l.n, fp);
-        fread(l.rolling_variance, sizeof(float), l.n, fp);
+    fread(l.biases, परिमाण(भिन्न), l.n, fp);
+    यदि (l.batch_normalize && (!l.dontloadscales)){
+        fread(l.scales, परिमाण(भिन्न), l.n, fp);
+        fread(l.rolling_माध्यम्, परिमाण(भिन्न), l.n, fp);
+        fread(l.rolling_variance, परिमाण(भिन्न), l.n, fp);
     }
-    int size = l.c*l.size*l.size;
-    int i, j, k;
-    for(i = 0; i < l.n; ++i){
-        float mean = 0;
-        fread(&mean, sizeof(float), 1, fp);
-        for(j = 0; j < size/8; ++j){
-            int index = i*size + j*8;
-            unsigned char c = 0;
-            fread(&c, sizeof(char), 1, fp);
-            for(k = 0; k < 8; ++k){
-                if (j*8 + k >= size) break;
-                l.weights[index + k] = (c & 1<<k) ? mean : -mean;
+    पूर्णाङ्क आकार = l.c*l.आकार*l.आकार;
+    पूर्णाङ्क i, j, k;
+    प्रति(i = 0; i < l.n; ++i){
+        भिन्न माध्यम् = 0;
+        fread(&माध्यम्, परिमाण(भिन्न), 1, fp);
+        प्रति(j = 0; j < आकार/8; ++j){
+            पूर्णाङ्क सूचकांक = i*आकार + j*8;
+            अचिह्नित वर्ण c = 0;
+            fread(&c, परिमाण(वर्ण), 1, fp);
+            प्रति(k = 0; k < 8; ++k){
+                यदि (j*8 + k >= आकार) भङ्ग;
+                l.weights[सूचकांक + k] = (c & 1<<k) ? माध्यम् : -माध्यम्;
             }
         }
     }
-#ifdef GPU
-    if(gpu_index >= 0){
-        push_convolutional_layer(l);
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
+        प्रक्षिप_convolutional_layer(l);
     }
-#endif
+#यदि_अन्तः
 }
 
-void load_convolutional_weights(layer l, FILE *fp)
+शून्य आरोपय_convolutional_weights(layer l, FILE *fp)
 {
-    if(l.binary){
+    यदि(l.द्विमान){
         //load_convolutional_weights_binary(l, fp);
         //return;
     }
-    if(l.numload) l.n = l.numload;
-    int num = l.c/l.groups*l.n*l.size*l.size;
-    fread(l.biases, sizeof(float), l.n, fp);
-    if (l.batch_normalize && (!l.dontloadscales)){
-        fread(l.scales, sizeof(float), l.n, fp);
-        fread(l.rolling_mean, sizeof(float), l.n, fp);
-        fread(l.rolling_variance, sizeof(float), l.n, fp);
-        if(0){
-            int i;
-            for(i = 0; i < l.n; ++i){
-                printf("%g, ", l.rolling_mean[i]);
+    यदि(l.numload) l.n = l.numload;
+    पूर्णाङ्क अङ्कः = l.c/l.groups*l.n*l.आकार*l.आकार;
+    fread(l.biases, परिमाण(भिन्न), l.n, fp);
+    यदि (l.batch_normalize && (!l.dontloadscales)){
+        fread(l.scales, परिमाण(भिन्न), l.n, fp);
+        fread(l.rolling_माध्यम्, परिमाण(भिन्न), l.n, fp);
+        fread(l.rolling_variance, परिमाण(भिन्न), l.n, fp);
+        यदि(0){
+            पूर्णाङ्क i;
+            प्रति(i = 0; i < l.n; ++i){
+                प्रारूप_लिख("%g, ", l.rolling_माध्यम्[i]);
             }
-            printf("\n");
-            for(i = 0; i < l.n; ++i){
-                printf("%g, ", l.rolling_variance[i]);
+            प्रारूप_लिख("\n");
+            प्रति(i = 0; i < l.n; ++i){
+                प्रारूप_लिख("%g, ", l.rolling_variance[i]);
             }
-            printf("\n");
+            प्रारूप_लिख("\n");
         }
-        if(0){
-            fill_cpu(l.n, 0, l.rolling_mean, 1);
+        यदि(0){
+            fill_cpu(l.n, 0, l.rolling_माध्यम्, 1);
             fill_cpu(l.n, 0, l.rolling_variance, 1);
         }
-        if(0){
-            int i;
-            for(i = 0; i < l.n; ++i){
-                printf("%g, ", l.rolling_mean[i]);
+        यदि(0){
+            पूर्णाङ्क i;
+            प्रति(i = 0; i < l.n; ++i){
+                प्रारूप_लिख("%g, ", l.rolling_माध्यम्[i]);
             }
-            printf("\n");
-            for(i = 0; i < l.n; ++i){
-                printf("%g, ", l.rolling_variance[i]);
+            प्रारूप_लिख("\n");
+            प्रति(i = 0; i < l.n; ++i){
+                प्रारूप_लिख("%g, ", l.rolling_variance[i]);
             }
-            printf("\n");
+            प्रारूप_लिख("\n");
         }
     }
-    fread(l.weights, sizeof(float), num, fp);
+    fread(l.weights, परिमाण(भिन्न), अङ्कः, fp);
     //if(l.c == 3) scal_cpu(num, 1./256, l.weights, 1);
-    if (l.flipped) {
-        transpose_matrix(l.weights, l.c*l.size*l.size, l.n);
+    यदि (l.flipped) {
+        transpose_matrix(l.weights, l.c*l.आकार*l.आकार, l.n);
     }
     //if (l.binary) binarize_weights(l.weights, l.n, l.c*l.size*l.size, l.weights);
-#ifdef GPU
-    if(gpu_index >= 0){
-        push_convolutional_layer(l);
+#यदि_परिभाषितम् GPU
+    यदि(gpu_सूचकांक >= 0){
+        प्रक्षिप_convolutional_layer(l);
     }
-#endif
+#यदि_अन्तः
 }
 
 
-void load_weights_upto(network *net, char *filename, int start, int cutoff)
+शून्य आरोपय_weights_upto(जालम् *net, वर्ण *filename, पूर्णाङ्क start, पूर्णाङ्क cutoff)
 {
-#ifdef GPU
-    if(net->gpu_index >= 0){
-        cuda_set_device(net->gpu_index);
+#यदि_परिभाषितम् GPU
+    यदि(net->gpu_सूचकांक >= 0){
+        cuda_समुच्चयः_device(net->gpu_सूचकांक);
     }
-#endif
+#यदि_अन्तः
     fprintf(stderr, "Loading weights from %s...", filename);
     fflush(stdout);
     FILE *fp = fopen(filename, "rb");
-    if(!fp) file_error(filename);
+    यदि(!fp) file_error(filename);
 
-    int major;
-    int minor;
-    int revision;
-    fread(&major, sizeof(int), 1, fp);
-    fread(&minor, sizeof(int), 1, fp);
-    fread(&revision, sizeof(int), 1, fp);
-    if ((major*10 + minor) >= 2 && major < 1000 && minor < 1000){
-        fread(net->seen, sizeof(size_t), 1, fp);
-    } else {
-        int iseen = 0;
-        fread(&iseen, sizeof(int), 1, fp);
-        *net->seen = iseen;
+    पूर्णाङ्क major;
+    पूर्णाङ्क minor;
+    पूर्णाङ्क revision;
+    fread(&major, परिमाण(पूर्णाङ्क), 1, fp);
+    fread(&minor, परिमाण(पूर्णाङ्क), 1, fp);
+    fread(&revision, परिमाण(पूर्णाङ्क), 1, fp);
+    यदि ((major*10 + minor) >= 2 && major < 1000 && minor < 1000){
+        fread(net->आलोकितम्, परिमाण(size_t), 1, fp);
+    } अन्यथा {
+        पूर्णाङ्क iseen = 0;
+        fread(&iseen, परिमाण(पूर्णाङ्क), 1, fp);
+        *net->आलोकितम् = iseen;
     }
-    int transpose = (major > 1000) || (minor > 1000);
+    पूर्णाङ्क transpose = (major > 1000) || (minor > 1000);
 
-    int i;
-    for(i = start; i < net->n && i < cutoff; ++i){
+    पूर्णाङ्क i;
+    प्रति(i = start; i < net->n && i < cutoff; ++i){
         layer l = net->layers[i];
-        if (l.dontload) continue;
-        if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
-            load_convolutional_weights(l, fp);
+        यदि (l.dontload) अनुवर्त;
+        यदि(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+            आरोपय_convolutional_weights(l, fp);
         }
-        if(l.type == CONNECTED){
-            load_connected_weights(l, fp, transpose);
+        यदि(l.type == CONNECTED){
+            आरोपय_connected_weights(l, fp, transpose);
         }
-        if(l.type == BATCHNORM){
-            load_batchnorm_weights(l, fp);
+        यदि(l.type == BATCHNORM){
+            आरोपय_batchnorm_weights(l, fp);
         }
-        if(l.type == CRNN){
-            load_convolutional_weights(*(l.input_layer), fp);
-            load_convolutional_weights(*(l.self_layer), fp);
-            load_convolutional_weights(*(l.output_layer), fp);
+        यदि(l.type == CRNN){
+            आरोपय_convolutional_weights(*(l.निवेशः_layer), fp);
+            आरोपय_convolutional_weights(*(l.self_layer), fp);
+            आरोपय_convolutional_weights(*(l.output_layer), fp);
         }
-        if(l.type == RNN){
-            load_connected_weights(*(l.input_layer), fp, transpose);
-            load_connected_weights(*(l.self_layer), fp, transpose);
-            load_connected_weights(*(l.output_layer), fp, transpose);
+        यदि(l.type == RNN){
+            आरोपय_connected_weights(*(l.निवेशः_layer), fp, transpose);
+            आरोपय_connected_weights(*(l.self_layer), fp, transpose);
+            आरोपय_connected_weights(*(l.output_layer), fp, transpose);
         }
-        if (l.type == LSTM) {
-            load_connected_weights(*(l.wi), fp, transpose);
-            load_connected_weights(*(l.wf), fp, transpose);
-            load_connected_weights(*(l.wo), fp, transpose);
-            load_connected_weights(*(l.wg), fp, transpose);
-            load_connected_weights(*(l.ui), fp, transpose);
-            load_connected_weights(*(l.uf), fp, transpose);
-            load_connected_weights(*(l.uo), fp, transpose);
-            load_connected_weights(*(l.ug), fp, transpose);
+        यदि (l.type == LSTM) {
+            आरोपय_connected_weights(*(l.wi), fp, transpose);
+            आरोपय_connected_weights(*(l.wf), fp, transpose);
+            आरोपय_connected_weights(*(l.wo), fp, transpose);
+            आरोपय_connected_weights(*(l.wg), fp, transpose);
+            आरोपय_connected_weights(*(l.ui), fp, transpose);
+            आरोपय_connected_weights(*(l.uf), fp, transpose);
+            आरोपय_connected_weights(*(l.uo), fp, transpose);
+            आरोपय_connected_weights(*(l.ug), fp, transpose);
         }
-        if (l.type == GRU) {
-            if(1){
-                load_connected_weights(*(l.wz), fp, transpose);
-                load_connected_weights(*(l.wr), fp, transpose);
-                load_connected_weights(*(l.wh), fp, transpose);
-                load_connected_weights(*(l.uz), fp, transpose);
-                load_connected_weights(*(l.ur), fp, transpose);
-                load_connected_weights(*(l.uh), fp, transpose);
-            }else{
-                load_connected_weights(*(l.reset_layer), fp, transpose);
-                load_connected_weights(*(l.update_layer), fp, transpose);
-                load_connected_weights(*(l.state_layer), fp, transpose);
+        यदि (l.type == GRU) {
+            यदि(1){
+                आरोपय_connected_weights(*(l.wz), fp, transpose);
+                आरोपय_connected_weights(*(l.wr), fp, transpose);
+                आरोपय_connected_weights(*(l.wh), fp, transpose);
+                आरोपय_connected_weights(*(l.uz), fp, transpose);
+                आरोपय_connected_weights(*(l.ur), fp, transpose);
+                आरोपय_connected_weights(*(l.uh), fp, transpose);
+            }अन्यथा{
+                आरोपय_connected_weights(*(l.reset_layer), fp, transpose);
+                आरोपय_connected_weights(*(l.update_layer), fp, transpose);
+                आरोपय_connected_weights(*(l.state_layer), fp, transpose);
             }
         }
-        if(l.type == LOCAL){
-            int locations = l.out_w*l.out_h;
-            int size = l.size*l.size*l.c*l.n*locations;
-            fread(l.biases, sizeof(float), l.outputs, fp);
-            fread(l.weights, sizeof(float), size, fp);
-#ifdef GPU
-            if(gpu_index >= 0){
-                push_local_layer(l);
+        यदि(l.type == LOCAL){
+            पूर्णाङ्क locations = l.बहिर्गमनम्_w*l.बहिर्गमनम्_h;
+            पूर्णाङ्क आकार = l.आकार*l.आकार*l.c*l.n*locations;
+            fread(l.biases, परिमाण(भिन्न), l.outputs, fp);
+            fread(l.weights, परिमाण(भिन्न), आकार, fp);
+#यदि_परिभाषितम् GPU
+            यदि(gpu_सूचकांक >= 0){
+                प्रक्षिप_local_layer(l);
             }
-#endif
+#यदि_अन्तः
         }
     }
     fprintf(stderr, "Done!\n");
     fclose(fp);
 }
 
-void load_weights(network *net, char *filename)
+शून्य आरोपय_weights(जालम् *net, वर्ण *filename)
 {
-    load_weights_upto(net, filename, 0, net->n);
+    आरोपय_weights_upto(net, filename, 0, net->n);
 }
 
