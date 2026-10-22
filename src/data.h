@@ -1,50 +1,50 @@
 #ifndef DATA_H
 #define DATA_H
-#include <pthread.h>
+#ضمن <pthread.h>
 
-#include "darknet.h"
-#include "matrix.h"
-#include "list.h"
-#include "image.h"
-#include "tree.h"
+#ضمن "darknet.h"
+#ضمن "matrix.h"
+#ضمن "list.h"
+#ضمن "image.h"
+#ضمن "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+ساكن مضمن عائم distance_from_edge(صحيح x, صحيح max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    صحيح dx = (max/2) - x;
+    𐤀𐤌 (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
-    float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    عائم dist = (عائم)dx/max;
+    𐤀𐤌 (dist > 1) dist = 1;
+    أرجع dist;
 }
-void load_data_blocking(load_args args);
+فراغ load_data_blocking(load_args args);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+فراغ print_letters(عائم *pred, صحيح n);
+data load_data_captcha(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح w, صحيح h);
+data load_data_captcha_encode(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h);
+data load_data_detection(صحيح n, حرف **paths, صحيح m, صحيح w, صحيح h, صحيح boxes, صحيح classes, عائم jitter, عائم hue, عائم saturation, عائم exposure);
+data load_data_tag(حرف **paths, صحيح n, صحيح m, صحيح k, صحيح min, صحيح max, صحيح size, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure);
+matrix load_image_augment_paths(حرف **paths, صحيح n, صحيح min, صحيح max, صحيح size, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح center);
+data load_data_super(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h, صحيح scale);
+data load_data_augment(حرف **paths, صحيح n, صحيح m, حرف **labels, صحيح k, tree *hierarchy, صحيح min, صحيح max, صحيح size, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure, صحيح center);
+data load_data_regression(حرف **paths, صحيح n, صحيح m, صحيح classes, صحيح min, صحيح max, صحيح size, عائم angle, عائم aspect, عائم hue, عائم saturation, عائم exposure);
+data load_go(حرف *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+data load_data_writing(حرف **paths, صحيح n, صحيح m, صحيح w, صحيح h, صحيح out_w, صحيح out_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
-void normalize_data_rows(data d);
-void scale_data_rows(data d, float s);
-void translate_data_rows(data d, float s);
-void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+فراغ get_random_batch(data d, صحيح n, عائم *X, عائم *y);
+data get_data_part(data d, صحيح part, صحيح total);
+data get_random_data(data d, صحيح num);
+data load_categorical_data_csv(حرف *filename, صحيح target, صحيح k);
+فراغ normalize_data_rows(data d);
+فراغ scale_data_rows(data d, عائم s);
+فراغ translate_data_rows(data d, عائم s);
+فراغ randomize_data(data d);
+data *split_data(data d, صحيح part, صحيح total);
+data concat_datas(data *d, صحيح n);
+فراغ fill_truth(حرف *path, حرف **labels, صحيح k, عائم *truth);
 
 #endif
