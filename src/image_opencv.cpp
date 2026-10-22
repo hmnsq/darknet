@@ -11,51 +11,51 @@ extern "C" {
 
 IplImage *image_to_ipl(image im)
 {
-    int x,y,c;
+    จำนวนเต็ม x,y,c;
     IplImage *disp = cvCreateImage(cvSize(im.w,im.h), IPL_DEPTH_8U, im.c);
-    int step = disp->widthStep;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            for(c= 0; c < im.c; ++c){
+    จำนวนเต็ม step = disp->widthStep;
+    สำหรับ(y = 0; y < im.h; ++y){
+        สำหรับ(x = 0; x < im.w; ++x){
+            สำหรับ(c= 0; c < im.c; ++c){
                 float val = im.data[c*im.h*im.w + y*im.w + x];
-                disp->imageData[y*step + x*im.c + c] = (unsigned char)(val*255);
+                disp->imageData[y*step + x*im.c + c] = (unsigned var_na)(val*255);
             }
         }
     }
-    return disp;
+    คืน disp;
 }
 
 image ipl_to_image(IplImage* src)
 {
-    int h = src->height;
-    int w = src->width;
-    int c = src->nChannels;
+    จำนวนเต็ม h = src->height;
+    จำนวนเต็ม w = src->width;
+    จำนวนเต็ม c = src->nChannels;
     image im = make_image(w, h, c);
-    unsigned char *data = (unsigned char *)src->imageData;
-    int step = src->widthStep;
-    int i, j, k;
+    unsigned var_na *data = (unsigned var_na *)src->imageData;
+    จำนวนเต็ม step = src->widthStep;
+    จำนวนเต็ม i, j, k;
 
-    for(i = 0; i < h; ++i){
-        for(k= 0; k < c; ++k){
-            for(j = 0; j < w; ++j){
+    สำหรับ(i = 0; i < h; ++i){
+        สำหรับ(k= 0; k < c; ++k){
+            สำหรับ(j = 0; j < w; ++j){
                 im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
             }
         }
     }
-    return im;
+    คืน im;
 }
 
 Mat image_to_mat(image im)
 {
     image copy = copy_image(im);
     constrain_image(copy);
-    if(im.c == 3) rgbgr_image(copy);
+    ถ้า(im.c == 3) rgbgr_image(copy);
 
     IplImage *ipl = image_to_ipl(copy);
     Mat m = cvarrToMat(ipl, true);
     cvReleaseImage(&ipl);
     free_image(copy);
-    return m;
+    คืน m;
 }
 
 image mat_to_image(Mat m)
@@ -63,19 +63,19 @@ image mat_to_image(Mat m)
     IplImage ipl = m;
     image im = ipl_to_image(&ipl);
     rgbgr_image(im);
-    return im;
+    คืน im;
 }
 
-void *open_video_stream(const char *f, int c, int w, int h, int fps)
+void *open_video_stream(const var_na *f, จำนวนเต็ม c, จำนวนเต็ม w, จำนวนเต็ม h, จำนวนเต็ม fps)
 {
     VideoCapture *cap;
-    if(f) cap = new VideoCapture(f);
-    else cap = new VideoCapture(c);
-    if(!cap->isOpened()) return 0;
-    if(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
-    if(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
-    if(fps) cap->set(CV_CAP_PROP_FPS, w);
-    return (void *) cap;
+    ถ้า(f) cap = new VideoCapture(f);
+    มิฉะนั้น cap = new VideoCapture(c);
+    ถ้า(!cap->isOpened()) คืน 0;
+    ถ้า(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
+    ถ้า(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
+    ถ้า(fps) cap->set(CV_CAP_PROP_FPS, w);
+    คืน (void *) cap;
 }
 
 image get_image_from_stream(void *p)
@@ -83,50 +83,50 @@ image get_image_from_stream(void *p)
     VideoCapture *cap = (VideoCapture *)p;
     Mat m;
     *cap >> m;
-    if(m.empty()) return make_empty_image(0,0,0);
-    return mat_to_image(m);
+    ถ้า(m.empty()) คืน make_empty_image(0,0,0);
+    คืน mat_to_image(m);
 }
 
-image load_image_cv(char *filename, int channels)
+image load_image_cv(var_na *filename, จำนวนเต็ม channels)
 {
-    int flag = -1;
-    if (channels == 0) flag = -1;
-    else if (channels == 1) flag = 0;
-    else if (channels == 3) flag = 1;
-    else {
+    จำนวนเต็ม flag = -1;
+    ถ้า (channels == 0) flag = -1;
+    มิฉะนั้น ถ้า (channels == 1) flag = 0;
+    มิฉะนั้น ถ้า (channels == 3) flag = 1;
+    มิฉะนั้น {
         fprintf(stderr, "OpenCV can't force load with %d channels\n", channels);
     }
     Mat m;
     m = imread(filename, flag);
-    if(!m.data){
+    ถ้า(!m.data){
         fprintf(stderr, "Cannot load image \"%s\"\n", filename);
-        char buff[256];
+        var_na buff[256];
         sprintf(buff, "echo %s >> bad.list", filename);
         system(buff);
-        return make_image(10,10,3);
+        คืน make_image(10,10,3);
         //exit(0);
     }
     image im = mat_to_image(m);
-    return im;
+    คืน im;
 }
 
-int show_image_cv(image im, const char* name, int ms)
+จำนวนเต็ม show_image_cv(image im, const var_na* name, จำนวนเต็ม ms)
 {
     Mat m = image_to_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
-    if (c != -1) c = c%256;
-    return c;
+    จำนวนเต็ม c = waitKey(ms);
+    ถ้า (c != -1) c = c%256;
+    คืน c;
 }
 
-void make_window(char *name, int w, int h, int fullscreen)
+void make_window(var_na *name, จำนวนเต็ม w, จำนวนเต็ม h, จำนวนเต็ม fullscreen)
 {
     namedWindow(name, WINDOW_NORMAL); 
-    if (fullscreen) {
+    ถ้า (fullscreen) {
         setWindowProperty(name, CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
-    } else {
+    } มิฉะนั้น {
         resizeWindow(name, w, h);
-        if(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
+        ถ้า(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
     }
 }
 

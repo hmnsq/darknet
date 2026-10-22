@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+void gemm_bin(จำนวนเต็ม M, จำนวนเต็ม N, จำนวนเต็ม K, float ALPHA, 
+        var_na  *A, จำนวนเต็ม lda, 
+        float *B, จำนวนเต็ม ldb,
+        float *C, จำนวนเต็ม ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
+void gemm(จำนวนเต็ม TA, จำนวนเต็ม TB, จำนวนเต็ม M, จำนวนเต็ม N, จำนวนเต็ม K, float ALPHA, 
+                    float *A, จำนวนเต็ม lda, 
+                    float *B, จำนวนเต็ม ldb,
                     float BETA,
-                    float *C, int ldc);
+                    float *C, จำนวนเต็ม ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_cpu(จำนวนเต็ม TA, จำนวนเต็ม TB, จำนวนเต็ม M, จำนวนเต็ม N, จำนวนเต็ม K, float ALPHA, 
+        float *A, จำนวนเต็ม lda, 
+        float *B, จำนวนเต็ม ldb,
         float BETA,
-        float *C, int ldc);
+        float *C, จำนวนเต็ม ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
+void gemm_gpu(จำนวนเต็ม TA, จำนวนเต็ม TB, จำนวนเต็ม M, จำนวนเต็ม N, จำนวนเต็ม K, float ALPHA, 
+        float *A_gpu, จำนวนเต็ม lda, 
+        float *B_gpu, จำนวนเต็ม ldb,
         float BETA,
-        float *C_gpu, int ldc);
+        float *C_gpu, จำนวนเต็ม ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
+void gemm_gpu(จำนวนเต็ม TA, จำนวนเต็ม TB, จำนวนเต็ม M, จำนวนเต็ม N, จำนวนเต็ม K, float ALPHA, 
+        float *A, จำนวนเต็ม lda, 
+        float *B, จำนวนเต็ม ldb,
         float BETA,
-        float *C, int ldc);
+        float *C, จำนวนเต็ม ldc);
 #endif
 #endif

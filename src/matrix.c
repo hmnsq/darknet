@@ -9,66 +9,66 @@
 
 void free_matrix(matrix m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < m.rows; ++i) free(m.vals[i]);
     free(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+float matrix_topk_accuracy(matrix truth, matrix guess, จำนวนเต็ม k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
+    จำนวนเต็ม *indexes = calloc(k, parimaa_na(จำนวนเต็ม));
+    จำนวนเต็ม n = truth.cols;
+    จำนวนเต็ม i,j;
+    จำนวนเต็ม correct = 0;
+    สำหรับ(i = 0; i < truth.rows; ++i){
         top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+        สำหรับ(j = 0; j < k; ++j){
+            จำนวนเต็ม class = indexes[j];
+            ถ้า(truth.vals[i][class]){
                 ++correct;
-                break;
+                bha_nga;
             }
         }
     }
     free(indexes);
-    return (float)correct/truth.rows;
+    คืน (float)correct/truth.rows;
 }
 
 void scale_matrix(matrix m, float scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    จำนวนเต็ม i,j;
+    สำหรับ(i = 0; i < m.rows; ++i){
+        สำหรับ(j = 0; j < m.cols; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+matrix resize_matrix(matrix m, จำนวนเต็ม size)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    จำนวนเต็ม i;
+    ถ้า (m.rows == size) คืน m;
+    ถ้า (m.rows < size) {
+        m.vals = realloc(m.vals, size*parimaa_na(float*));
+        สำหรับ (i = m.rows; i < size; ++i) {
+            m.vals[i] = calloc(m.cols, parimaa_na(float));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
+    } มิฉะนั้น ถ้า (m.rows > size) {
+        สำหรับ (i = size; i < m.rows; ++i) {
             free(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, size*parimaa_na(float*));
     }
     m.rows = size;
-    return m;
+    คืน m;
 }
 
 void matrix_add_matrix(matrix from, matrix to)
 {
     assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
+    จำนวนเต็ม i,j;
+    สำหรับ(i = 0; i < from.rows; ++i){
+        สำหรับ(j = 0; j < from.cols; ++j){
             to.vals[i][j] += from.vals[i][j];
         }
     }
@@ -79,92 +79,92 @@ matrix copy_matrix(matrix m)
     matrix c = {0};
     c.rows = m.rows;
     c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
+    c.vals = calloc(c.rows, parimaa_na(float *));
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < c.rows; ++i){
+        c.vals[i] = calloc(c.cols, parimaa_na(float));
         copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    คืน c;
 }
 
-matrix make_matrix(int rows, int cols)
+matrix make_matrix(จำนวนเต็ม rows, จำนวนเต็ม cols)
 {
-    int i;
+    จำนวนเต็ม i;
     matrix m;
     m.rows = rows;
     m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    m.vals = calloc(m.rows, parimaa_na(float *));
+    สำหรับ(i = 0; i < m.rows; ++i){
+        m.vals[i] = calloc(m.cols, parimaa_na(float));
     }
-    return m;
+    คืน m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+matrix hold_out_matrix(matrix *m, จำนวนเต็ม n)
 {
-    int i;
+    จำนวนเต็ม i;
     matrix h;
     h.rows = n;
     h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
+    h.vals = calloc(h.rows, parimaa_na(float *));
+    สำหรับ(i = 0; i < n; ++i){
+        จำนวนเต็ม index = rand()%m->rows;
         h.vals[i] = m->vals[index];
         m->vals[index] = m->vals[--(m->rows)];
     }
-    return h;
+    คืน h;
 }
 
-float *pop_column(matrix *m, int c)
+float *pop_column(matrix *m, จำนวนเต็ม c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
+    float *col = calloc(m->rows, parimaa_na(float));
+    จำนวนเต็ม i, j;
+    สำหรับ(i = 0; i < m->rows; ++i){
         col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+        สำหรับ(j = c; j < m->cols-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
     --m->cols;
-    return col;
+    คืน col;
 }
 
-matrix csv_to_matrix(char *filename)
+matrix csv_to_matrix(var_na *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    ถ้า(!fp) file_error(filename);
 
     matrix m;
     m.cols = -1;
 
-    char *line;
+    var_na *line;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
+    จำนวนเต็ม n = 0;
+    จำนวนเต็ม size = 1024;
+    m.vals = calloc(size, parimaa_na(float*));
+    ขณะ((line = fgetl(fp))){
+        ถ้า(m.cols == -1) m.cols = count_fields(line);
+        ถ้า(n == size){
             size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+            m.vals = realloc(m.vals, size*parimaa_na(float*));
         }
         m.vals[n] = parse_fields(line, m.cols);
         free(line);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
+    m.vals = realloc(m.vals, n*parimaa_na(float*));
     m.rows = n;
-    return m;
+    คืน m;
 }
 
 void matrix_to_csv(matrix m)
 {
-    int i, j;
+    จำนวนเต็ม i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
+    สำหรับ(i = 0; i < m.rows; ++i){
+        สำหรับ(j = 0; j < m.cols; ++j){
+            ถ้า(j > 0) printf(",");
             printf("%.17g", m.vals[i][j]);
         }
         printf("\n");
@@ -173,24 +173,24 @@ void matrix_to_csv(matrix m)
 
 void print_matrix(matrix m)
 {
-    int i, j;
+    จำนวนเต็ม i, j;
     printf("%d X %d Matrix:\n",m.rows, m.cols);
     printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    สำหรับ(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("__ \n");
 
     printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    สำหรับ(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
+    สำหรับ(i = 0; i < m.rows; ++i){
         printf("|  ");
-        for(j = 0; j < m.cols; ++j){
+        สำหรับ(j = 0; j < m.cols; ++j){
             printf("%15.7f ", m.vals[i][j]);
         }
         printf(" |\n");
     }
     printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
+    สำหรับ(j = 0; j < 16*m.cols-1; ++j) printf(" ");
     printf("__|\n");
 }

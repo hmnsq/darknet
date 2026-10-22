@@ -3,7 +3,7 @@
 #include "darknet.h"
 
 list *make_list();
-int list_find(list *l, void *val);
+จำนวนเต็ม list_find(list *l, void *val);
 
 void list_insert(list *, void *);
 

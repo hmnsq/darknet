@@ -47,35 +47,35 @@ load_args get_base_args(network *net)
     args.center = net->center;
     args.saturation = net->saturation;
     args.hue = net->hue;
-    return args;
+    คืน args;
 }
 
-network *load_network(char *cfg, char *weights, int clear)
+network *load_network(var_na *cfg, var_na *weights, จำนวนเต็ม clear)
 {
     network *net = parse_network_cfg(cfg);
-    if(weights && weights[0] != 0){
+    ถ้า(weights && weights[0] != 0){
         load_weights(net, weights);
     }
-    if(clear) (*net->seen) = 0;
-    return net;
+    ถ้า(clear) (*net->seen) = 0;
+    คืน net;
 }
 
 size_t get_current_batch(network *net)
 {
     size_t batch_num = (*net->seen)/(net->batch*net->subdivisions);
-    return batch_num;
+    คืน batch_num;
 }
 
-void reset_network_state(network *net, int b)
+void reset_network_state(network *net, จำนวนเต็ม b)
 {
-    int i;
-    for (i = 0; i < net->n; ++i) {
+    จำนวนเต็ม i;
+    สำหรับ (i = 0; i < net->n; ++i) {
         #ifdef GPU
         layer l = net->layers[i];
-        if(l.state_gpu){
+        ถ้า(l.state_gpu){
             fill_gpu(l.outputs, 0, l.state_gpu + l.outputs*b, 1);
         }
-        if(l.h_gpu){
+        ถ้า(l.h_gpu){
             fill_gpu(l.outputs, 0, l.h_gpu + l.outputs*b, 1);
         }
         #endif
@@ -90,120 +90,120 @@ void reset_rnn(network *net)
 float get_current_rate(network *net)
 {
     size_t batch_num = get_current_batch(net);
-    int i;
+    จำนวนเต็ม i;
     float rate;
-    if (batch_num < net->burn_in) return net->learning_rate * pow((float)batch_num / net->burn_in, net->power);
+    ถ้า (batch_num < net->burn_in) คืน net->learning_rate * pow((float)batch_num / net->burn_in, net->power);
     switch (net->policy) {
-        case CONSTANT:
-            return net->learning_rate;
-        case STEP:
-            return net->learning_rate * pow(net->scale, batch_num/net->step);
-        case STEPS:
+        pak_sa CONSTANT:
+            คืน net->learning_rate;
+        pak_sa STEP:
+            คืน net->learning_rate * pow(net->scale, batch_num/net->step);
+        pak_sa STEPS:
             rate = net->learning_rate;
-            for(i = 0; i < net->num_steps; ++i){
-                if(net->steps[i] > batch_num) return rate;
+            สำหรับ(i = 0; i < net->num_steps; ++i){
+                ถ้า(net->steps[i] > batch_num) คืน rate;
                 rate *= net->scales[i];
             }
-            return rate;
-        case EXP:
-            return net->learning_rate * pow(net->gamma, batch_num);
-        case POLY:
-            return net->learning_rate * pow(1 - (float)batch_num / net->max_batches, net->power);
-        case RANDOM:
-            return net->learning_rate * pow(rand_uniform(0,1), net->power);
-        case SIG:
-            return net->learning_rate * (1./(1.+exp(net->gamma*(batch_num - net->step))));
+            คืน rate;
+        pak_sa EXP:
+            คืน net->learning_rate * pow(net->gamma, batch_num);
+        pak_sa POLY:
+            คืน net->learning_rate * pow(1 - (float)batch_num / net->max_batches, net->power);
+        pak_sa RANDOM:
+            คืน net->learning_rate * pow(rand_uniform(0,1), net->power);
+        pak_sa SIG:
+            คืน net->learning_rate * (1./(1.+exp(net->gamma*(batch_num - net->step))));
         default:
             fprintf(stderr, "Policy is weird!\n");
-            return net->learning_rate;
+            คืน net->learning_rate;
     }
 }
 
-char *get_layer_string(LAYER_TYPE a)
+var_na *get_layer_string(LAYER_TYPE a)
 {
     switch(a){
-        case CONVOLUTIONAL:
-            return "convolutional";
-        case ACTIVE:
-            return "activation";
-        case LOCAL:
-            return "local";
-        case DECONVOLUTIONAL:
-            return "deconvolutional";
-        case CONNECTED:
-            return "connected";
-        case RNN:
-            return "rnn";
-        case GRU:
-            return "gru";
-        case LSTM:
-	    return "lstm";
-        case CRNN:
-            return "crnn";
-        case MAXPOOL:
-            return "maxpool";
-        case REORG:
-            return "reorg";
-        case AVGPOOL:
-            return "avgpool";
-        case SOFTMAX:
-            return "softmax";
-        case DETECTION:
-            return "detection";
-        case REGION:
-            return "region";
-        case YOLO:
-            return "yolo";
-        case DROPOUT:
-            return "dropout";
-        case CROP:
-            return "crop";
-        case COST:
-            return "cost";
-        case ROUTE:
-            return "route";
-        case SHORTCUT:
-            return "shortcut";
-        case NORMALIZATION:
-            return "normalization";
-        case BATCHNORM:
-            return "batchnorm";
+        pak_sa CONVOLUTIONAL:
+            คืน "convolutional";
+        pak_sa ACTIVE:
+            คืน "activation";
+        pak_sa LOCAL:
+            คืน "local";
+        pak_sa DECONVOLUTIONAL:
+            คืน "deconvolutional";
+        pak_sa CONNECTED:
+            คืน "connected";
+        pak_sa RNN:
+            คืน "rnn";
+        pak_sa GRU:
+            คืน "gru";
+        pak_sa LSTM:
+	    คืน "lstm";
+        pak_sa CRNN:
+            คืน "crnn";
+        pak_sa MAXPOOL:
+            คืน "maxpool";
+        pak_sa REORG:
+            คืน "reorg";
+        pak_sa AVGPOOL:
+            คืน "avgpool";
+        pak_sa SOFTMAX:
+            คืน "softmax";
+        pak_sa DETECTION:
+            คืน "detection";
+        pak_sa REGION:
+            คืน "region";
+        pak_sa YOLO:
+            คืน "yolo";
+        pak_sa DROPOUT:
+            คืน "dropout";
+        pak_sa CROP:
+            คืน "crop";
+        pak_sa COST:
+            คืน "cost";
+        pak_sa ROUTE:
+            คืน "route";
+        pak_sa SHORTCUT:
+            คืน "shortcut";
+        pak_sa NORMALIZATION:
+            คืน "normalization";
+        pak_sa BATCHNORM:
+            คืน "batchnorm";
         default:
-            break;
+            bha_nga;
     }
-    return "none";
+    คืน "none";
 }
 
-network *make_network(int n)
+network *make_network(จำนวนเต็ม n)
 {
-    network *net = calloc(1, sizeof(network));
+    network *net = calloc(1, parimaa_na(network));
     net->n = n;
-    net->layers = calloc(net->n, sizeof(layer));
-    net->seen = calloc(1, sizeof(size_t));
-    net->t    = calloc(1, sizeof(int));
-    net->cost = calloc(1, sizeof(float));
-    return net;
+    net->layers = calloc(net->n, parimaa_na(layer));
+    net->seen = calloc(1, parimaa_na(size_t));
+    net->t    = calloc(1, parimaa_na(จำนวนเต็ม));
+    net->cost = calloc(1, parimaa_na(float));
+    คืน net;
 }
 
 void forward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    ถ้า(netp->gpu_index >= 0){
         forward_network_gpu(netp);   
-        return;
+        คืน;
     }
 #endif
     network net = *netp;
-    int i;
-    for(i = 0; i < net.n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta){
+        ถ้า(l.delta){
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
         l.forward(l, net);
         net.input = l.output;
-        if(l.truth) {
+        ถ้า(l.truth) {
             net.truth = l.output;
         }
     }
@@ -213,13 +213,13 @@ void forward_network(network *netp)
 void update_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    ถ้า(netp->gpu_index >= 0){
         update_network_gpu(netp);   
-        return;
+        คืน;
     }
 #endif
     network net = *netp;
-    int i;
+    จำนวนเต็ม i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -232,9 +232,9 @@ void update_network(network *netp)
     ++*net.t;
     a.t = *net.t;
 
-    for(i = 0; i < net.n; ++i){
+    สำหรับ(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update){
+        ถ้า(l.update){
             l.update(l, a);
         }
     }
@@ -243,11 +243,11 @@ void update_network(network *netp)
 void calc_network_cost(network *netp)
 {
     network net = *netp;
-    int i;
+    จำนวนเต็ม i;
     float sum = 0;
-    int count = 0;
-    for(i = 0; i < net.n; ++i){
-        if(net.layers[i].cost){
+    จำนวนเต็ม count = 0;
+    สำหรับ(i = 0; i < net.n; ++i){
+        ถ้า(net.layers[i].cost){
             sum += net.layers[i].cost[0];
             ++count;
         }
@@ -255,28 +255,28 @@ void calc_network_cost(network *netp)
     *net.cost = sum/count;
 }
 
-int get_predicted_class_network(network *net)
+จำนวนเต็ม get_predicted_class_network(network *net)
 {
-    return max_index(net->output, net->outputs);
+    คืน max_index(net->output, net->outputs);
 }
 
 void backward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    ถ้า(netp->gpu_index >= 0){
         backward_network_gpu(netp);   
-        return;
+        คืน;
     }
 #endif
     network net = *netp;
-    int i;
+    จำนวนเต็ม i;
     network orig = net;
-    for(i = net.n-1; i >= 0; --i){
+    สำหรับ(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        ถ้า(l.stopbackward) bha_nga;
+        ถ้า(i == 0){
             net = orig;
-        }else{
+        }มิฉะนั้น{
             layer prev = net.layers[i-1];
             net.input = prev.output;
             net.delta = prev.delta;
@@ -293,60 +293,60 @@ float train_network_datum(network *net)
     forward_network(net);
     backward_network(net);
     float error = *net->cost;
-    if(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
-    return error;
+    ถ้า(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
+    คืน error;
 }
 
-float train_network_sgd(network *net, data d, int n)
+float train_network_sgd(network *net, data d, จำนวนเต็ม n)
 {
-    int batch = net->batch;
+    จำนวนเต็ม batch = net->batch;
 
-    int i;
+    จำนวนเต็ม i;
     float sum = 0;
-    for(i = 0; i < n; ++i){
+    สำหรับ(i = 0; i < n; ++i){
         get_random_batch(d, batch, net->input, net->truth);
         float err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    คืน (float)sum/(n*batch);
 }
 
 float train_network(network *net, data d)
 {
     assert(d.X.rows % net->batch == 0);
-    int batch = net->batch;
-    int n = d.X.rows / batch;
+    จำนวนเต็ม batch = net->batch;
+    จำนวนเต็ม n = d.X.rows / batch;
 
-    int i;
+    จำนวนเต็ม i;
     float sum = 0;
-    for(i = 0; i < n; ++i){
+    สำหรับ(i = 0; i < n; ++i){
         get_next_batch(d, batch, i*batch, net->input, net->truth);
         float err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    คืน (float)sum/(n*batch);
 }
 
 void set_temp_network(network *net, float t)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net->n; ++i){
         net->layers[i].temperature = t;
     }
 }
 
 
-void set_batch_network(network *net, int b)
+void set_batch_network(network *net, จำนวนเต็ม b)
 {
     net->batch = b;
-    int i;
-    for(i = 0; i < net->n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net->n; ++i){
         net->layers[i].batch = b;
 #ifdef CUDNN
-        if(net->layers[i].type == CONVOLUTIONAL){
+        ถ้า(net->layers[i].type == CONVOLUTIONAL){
             cudnn_convolutional_setup(net->layers + i);
         }
-        if(net->layers[i].type == DECONVOLUTIONAL){
+        ถ้า(net->layers[i].type == DECONVOLUTIONAL){
             layer *l = net->layers + i;
             cudnnSetTensor4dDescriptor(l->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, l->out_h, l->out_w);
             cudnnSetTensor4dDescriptor(l->normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, 1, 1); 
@@ -355,140 +355,140 @@ void set_batch_network(network *net, int b)
     }
 }
 
-int resize_network(network *net, int w, int h)
+จำนวนเต็ม resize_network(network *net, จำนวนเต็ม w, จำนวนเต็ม h)
 {
 #ifdef GPU
     cuda_set_device(net->gpu_index);
     cuda_free(net->workspace);
 #endif
-    int i;
+    จำนวนเต็ม i;
     //if(w == net->w && h == net->h) return 0;
     net->w = w;
     net->h = h;
-    int inputs = 0;
+    จำนวนเต็ม inputs = 0;
     size_t workspace_size = 0;
     //fprintf(stderr, "Resizing to %d x %d...\n", w, h);
     //fflush(stderr);
-    for (i = 0; i < net->n; ++i){
+    สำหรับ (i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        ถ้า(l.type == CONVOLUTIONAL){
             resize_convolutional_layer(&l, w, h);
-        }else if(l.type == CROP){
+        }มิฉะนั้น ถ้า(l.type == CROP){
             resize_crop_layer(&l, w, h);
-        }else if(l.type == MAXPOOL){
+        }มิฉะนั้น ถ้า(l.type == MAXPOOL){
             resize_maxpool_layer(&l, w, h);
-        }else if(l.type == REGION){
+        }มิฉะนั้น ถ้า(l.type == REGION){
             resize_region_layer(&l, w, h);
-        }else if(l.type == YOLO){
+        }มิฉะนั้น ถ้า(l.type == YOLO){
             resize_yolo_layer(&l, w, h);
-        }else if(l.type == ROUTE){
+        }มิฉะนั้น ถ้า(l.type == ROUTE){
             resize_route_layer(&l, net);
-        }else if(l.type == SHORTCUT){
+        }มิฉะนั้น ถ้า(l.type == SHORTCUT){
             resize_shortcut_layer(&l, w, h);
-        }else if(l.type == UPSAMPLE){
+        }มิฉะนั้น ถ้า(l.type == UPSAMPLE){
             resize_upsample_layer(&l, w, h);
-        }else if(l.type == REORG){
+        }มิฉะนั้น ถ้า(l.type == REORG){
             resize_reorg_layer(&l, w, h);
-        }else if(l.type == AVGPOOL){
+        }มิฉะนั้น ถ้า(l.type == AVGPOOL){
             resize_avgpool_layer(&l, w, h);
-        }else if(l.type == NORMALIZATION){
+        }มิฉะนั้น ถ้า(l.type == NORMALIZATION){
             resize_normalization_layer(&l, w, h);
-        }else if(l.type == COST){
+        }มิฉะนั้น ถ้า(l.type == COST){
             resize_cost_layer(&l, inputs);
-        }else{
+        }มิฉะนั้น{
             error("Cannot resize this type of layer");
         }
-        if(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
-        if(l.workspace_size > 2000000000) assert(0);
+        ถ้า(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
+        ถ้า(l.workspace_size > 2000000000) assert(0);
         inputs = l.outputs;
         net->layers[i] = l;
         w = l.out_w;
         h = l.out_h;
-        if(l.type == AVGPOOL) break;
+        ถ้า(l.type == AVGPOOL) bha_nga;
     }
     layer out = get_network_output_layer(net);
     net->inputs = net->layers[0].inputs;
     net->outputs = out.outputs;
     net->truths = out.outputs;
-    if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
+    ถ้า(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
     net->output = out.output;
     free(net->input);
     free(net->truth);
-    net->input = calloc(net->inputs*net->batch, sizeof(float));
-    net->truth = calloc(net->truths*net->batch, sizeof(float));
+    net->input = calloc(net->inputs*net->batch, parimaa_na(float));
+    net->truth = calloc(net->truths*net->batch, parimaa_na(float));
 #ifdef GPU
-    if(gpu_index >= 0){
+    ถ้า(gpu_index >= 0){
         cuda_free(net->input_gpu);
         cuda_free(net->truth_gpu);
         net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
         net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
-        if(workspace_size){
-            net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
+        ถ้า(workspace_size){
+            net->workspace = cuda_make_array(0, (workspace_size-1)/parimaa_na(float)+1);
         }
-    }else {
+    }มิฉะนั้น {
         free(net->workspace);
         net->workspace = calloc(1, workspace_size);
     }
-#else
+#มิฉะนั้น
     free(net->workspace);
     net->workspace = calloc(1, workspace_size);
 #endif
     //fprintf(stderr, " Done!\n");
-    return 0;
+    คืน 0;
 }
 
 layer get_network_detection_layer(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
-        if(net->layers[i].type == DETECTION){
-            return net->layers[i];
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net->n; ++i){
+        ถ้า(net->layers[i].type == DETECTION){
+            คืน net->layers[i];
         }
     }
     fprintf(stderr, "Detection layer not found!!\n");
     layer l = {0};
-    return l;
+    คืน l;
 }
 
-image get_network_image_layer(network *net, int i)
+image get_network_image_layer(network *net, จำนวนเต็ม i)
 {
     layer l = net->layers[i];
 #ifdef GPU
     //cuda_pull_array(l.output_gpu, l.output, l.outputs);
 #endif
-    if (l.out_w && l.out_h && l.out_c){
-        return float_to_image(l.out_w, l.out_h, l.out_c, l.output);
+    ถ้า (l.out_w && l.out_h && l.out_c){
+        คืน float_to_image(l.out_w, l.out_h, l.out_c, l.output);
     }
     image def = {0};
-    return def;
+    คืน def;
 }
 
 image get_network_image(network *net)
 {
-    int i;
-    for(i = net->n-1; i >= 0; --i){
+    จำนวนเต็ม i;
+    สำหรับ(i = net->n-1; i >= 0; --i){
         image m = get_network_image_layer(net, i);
-        if(m.h != 0) return m;
+        ถ้า(m.h != 0) คืน m;
     }
     image def = {0};
-    return def;
+    คืน def;
 }
 
 void visualize_network(network *net)
 {
     image *prev = 0;
-    int i;
-    char buff[256];
-    for(i = 0; i < net->n; ++i){
+    จำนวนเต็ม i;
+    var_na buff[256];
+    สำหรับ(i = 0; i < net->n; ++i){
         sprintf(buff, "Layer %d", i);
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        ถ้า(l.type == CONVOLUTIONAL){
             prev = visualize_convolutional_layer(l, buff, prev);
         }
     } 
 }
 
-void top_predictions(network *net, int k, int *index)
+void top_predictions(network *net, จำนวนเต็ม k, จำนวนเต็ม *index)
 {
     top_k(net->output, net->outputs, k, index);
 }
@@ -504,74 +504,74 @@ float *network_predict(network *net, float *input)
     forward_network(net);
     float *out = net->output;
     *net = orig;
-    return out;
+    คืน out;
 }
 
-int num_detections(network *net, float thresh)
+จำนวนเต็ม num_detections(network *net, float thresh)
 {
-    int i;
-    int s = 0;
-    for(i = 0; i < net->n; ++i){
+    จำนวนเต็ม i;
+    จำนวนเต็ม s = 0;
+    สำหรับ(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO){
+        ถ้า(l.type == YOLO){
             s += yolo_num_detections(l, thresh);
         }
-        if(l.type == DETECTION || l.type == REGION){
+        ถ้า(l.type == DETECTION || l.type == REGION){
             s += l.w*l.h*l.n;
         }
     }
-    return s;
+    คืน s;
 }
 
-detection *make_network_boxes(network *net, float thresh, int *num)
+detection *make_network_boxes(network *net, float thresh, จำนวนเต็ม *num)
 {
     layer l = net->layers[net->n - 1];
-    int i;
-    int nboxes = num_detections(net, thresh);
-    if(num) *num = nboxes;
-    detection *dets = calloc(nboxes, sizeof(detection));
-    for(i = 0; i < nboxes; ++i){
-        dets[i].prob = calloc(l.classes, sizeof(float));
-        if(l.coords > 4){
-            dets[i].mask = calloc(l.coords-4, sizeof(float));
+    จำนวนเต็ม i;
+    จำนวนเต็ม nboxes = num_detections(net, thresh);
+    ถ้า(num) *num = nboxes;
+    detection *dets = calloc(nboxes, parimaa_na(detection));
+    สำหรับ(i = 0; i < nboxes; ++i){
+        dets[i].prob = calloc(l.classes, parimaa_na(float));
+        ถ้า(l.coords > 4){
+            dets[i].mask = calloc(l.coords-4, parimaa_na(float));
         }
     }
-    return dets;
+    คืน dets;
 }
 
-void fill_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, detection *dets)
+void fill_network_boxes(network *net, จำนวนเต็ม w, จำนวนเต็ม h, float thresh, float hier, จำนวนเต็ม *map, จำนวนเต็ม relative, detection *dets)
 {
-    int j;
-    for(j = 0; j < net->n; ++j){
+    จำนวนเต็ม j;
+    สำหรับ(j = 0; j < net->n; ++j){
         layer l = net->layers[j];
-        if(l.type == YOLO){
-            int count = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
+        ถ้า(l.type == YOLO){
+            จำนวนเต็ม count = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
             dets += count;
         }
-        if(l.type == REGION){
+        ถ้า(l.type == REGION){
             get_region_detections(l, w, h, net->w, net->h, thresh, map, hier, relative, dets);
             dets += l.w*l.h*l.n;
         }
-        if(l.type == DETECTION){
+        ถ้า(l.type == DETECTION){
             get_detection_detections(l, w, h, thresh, dets);
             dets += l.w*l.h*l.n;
         }
     }
 }
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+detection *get_network_boxes(network *net, จำนวนเต็ม w, จำนวนเต็ม h, float thresh, float hier, จำนวนเต็ม *map, จำนวนเต็ม relative, จำนวนเต็ม *num)
 {
     detection *dets = make_network_boxes(net, thresh, num);
     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
-    return dets;
+    คืน dets;
 }
 
-void free_detections(detection *dets, int n)
+void free_detections(detection *dets, จำนวนเต็ม n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < n; ++i){
         free(dets[i].prob);
-        if(dets[i].mask) free(dets[i].mask);
+        ถ้า(dets[i].mask) free(dets[i].mask);
     }
     free(dets);
 }
@@ -582,73 +582,73 @@ float *network_predict_image(network *net, image im)
     set_batch_network(net, 1);
     float *p = network_predict(net, imr.data);
     free_image(imr);
-    return p;
+    คืน p;
 }
 
-int network_width(network *net){return net->w;}
-int network_height(network *net){return net->h;}
+จำนวนเต็ม network_width(network *net){คืน net->w;}
+จำนวนเต็ม network_height(network *net){คืน net->h;}
 
-matrix network_predict_data_multi(network *net, data test, int n)
+matrix network_predict_data_multi(network *net, data test, จำนวนเต็ม n)
 {
-    int i,j,b,m;
-    int k = net->outputs;
+    จำนวนเต็ม i,j,b,m;
+    จำนวนเต็ม k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.rows, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    float *X = calloc(net->batch*test.X.rows, parimaa_na(float));
+    สำหรับ(i = 0; i < test.X.rows; i += net->batch){
+        สำหรับ(b = 0; b < net->batch; ++b){
+            ถ้า(i+b == test.X.rows) bha_nga;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*parimaa_na(float));
         }
-        for(m = 0; m < n; ++m){
+        สำหรับ(m = 0; m < n; ++m){
             float *out = network_predict(net, X);
-            for(b = 0; b < net->batch; ++b){
-                if(i+b == test.X.rows) break;
-                for(j = 0; j < k; ++j){
+            สำหรับ(b = 0; b < net->batch; ++b){
+                ถ้า(i+b == test.X.rows) bha_nga;
+                สำหรับ(j = 0; j < k; ++j){
                     pred.vals[i+b][j] += out[j+b*k]/n;
                 }
             }
         }
     }
     free(X);
-    return pred;   
+    คืน pred;   
 }
 
 matrix network_predict_data(network *net, data test)
 {
-    int i,j,b;
-    int k = net->outputs;
+    จำนวนเต็ม i,j,b;
+    จำนวนเต็ม k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.cols, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    float *X = calloc(net->batch*test.X.cols, parimaa_na(float));
+    สำหรับ(i = 0; i < test.X.rows; i += net->batch){
+        สำหรับ(b = 0; b < net->batch; ++b){
+            ถ้า(i+b == test.X.rows) bha_nga;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*parimaa_na(float));
         }
         float *out = network_predict(net, X);
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            for(j = 0; j < k; ++j){
+        สำหรับ(b = 0; b < net->batch; ++b){
+            ถ้า(i+b == test.X.rows) bha_nga;
+            สำหรับ(j = 0; j < k; ++j){
                 pred.vals[i+b][j] = out[j+b*k];
             }
         }
     }
     free(X);
-    return pred;   
+    คืน pred;   
 }
 
 void print_network(network *net)
 {
-    int i,j;
-    for(i = 0; i < net->n; ++i){
+    จำนวนเต็ม i,j;
+    สำหรับ(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
         float *output = l.output;
-        int n = l.outputs;
+        จำนวนเต็ม n = l.outputs;
         float mean = mean_array(output, n);
         float vari = variance_array(output, n);
         fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
-        if(n > 100) n = 100;
-        for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
-        if(n == 100)fprintf(stderr,".....\n");
+        ถ้า(n > 100) n = 100;
+        สำหรับ(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
+        ถ้า(n == 100)fprintf(stderr,".....\n");
         fprintf(stderr, "\n");
     }
 }
@@ -657,19 +657,19 @@ void compare_networks(network *n1, network *n2, data test)
 {
     matrix g1 = network_predict_data(n1, test);
     matrix g2 = network_predict_data(n2, test);
-    int i;
-    int a,b,c,d;
+    จำนวนเต็ม i;
+    จำนวนเต็ม a,b,c,d;
     a = b = c = d = 0;
-    for(i = 0; i < g1.rows; ++i){
-        int truth = max_index(test.y.vals[i], test.y.cols);
-        int p1 = max_index(g1.vals[i], g1.cols);
-        int p2 = max_index(g2.vals[i], g2.cols);
-        if(p1 == truth){
-            if(p2 == truth) ++d;
-            else ++c;
-        }else{
-            if(p2 == truth) ++b;
-            else ++a;
+    สำหรับ(i = 0; i < g1.rows; ++i){
+        จำนวนเต็ม truth = max_index(test.y.vals[i], test.y.cols);
+        จำนวนเต็ม p1 = max_index(g1.vals[i], g1.cols);
+        จำนวนเต็ม p2 = max_index(g2.vals[i], g2.cols);
+        ถ้า(p1 == truth){
+            ถ้า(p2 == truth) ++d;
+            มิฉะนั้น ++c;
+        }มิฉะนั้น{
+            ถ้า(p2 == truth) ++b;
+            มิฉะนั้น ++a;
         }
     }
     printf("%5d %5d\n%5d %5d\n", a, b, c, d);
@@ -683,48 +683,48 @@ float network_accuracy(network *net, data d)
     matrix guess = network_predict_data(net, d);
     float acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    คืน acc;
 }
 
-float *network_accuracies(network *net, data d, int n)
+float *network_accuracies(network *net, data d, จำนวนเต็ม n)
 {
     static float acc[2];
     matrix guess = network_predict_data(net, d);
     acc[0] = matrix_topk_accuracy(d.y, guess, 1);
     acc[1] = matrix_topk_accuracy(d.y, guess, n);
     free_matrix(guess);
-    return acc;
+    คืน acc;
 }
 
 layer get_network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    จำนวนเต็ม i;
+    สำหรับ(i = net->n - 1; i >= 0; --i){
+        ถ้า(net->layers[i].type != COST) bha_nga;
     }
-    return net->layers[i];
+    คืน net->layers[i];
 }
 
-float network_accuracy_multi(network *net, data d, int n)
+float network_accuracy_multi(network *net, data d, จำนวนเต็ม n)
 {
     matrix guess = network_predict_data_multi(net, d, n);
     float acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    คืน acc;
 }
 
 void free_network(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net->n; ++i){
         free_layer(net->layers[i]);
     }
     free(net->layers);
-    if(net->input) free(net->input);
-    if(net->truth) free(net->truth);
+    ถ้า(net->input) free(net->input);
+    ถ้า(net->truth) free(net->truth);
 #ifdef GPU
-    if(net->input_gpu) cuda_free(net->input_gpu);
-    if(net->truth_gpu) cuda_free(net->truth_gpu);
+    ถ้า(net->input_gpu) cuda_free(net->input_gpu);
+    ถ้า(net->truth_gpu) cuda_free(net->truth_gpu);
 #endif
     free(net);
 }
@@ -735,26 +735,26 @@ void free_network(network *net)
 
 layer network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    จำนวนเต็ม i;
+    สำหรับ(i = net->n - 1; i >= 0; --i){
+        ถ้า(net->layers[i].type != COST) bha_nga;
     }
-    return net->layers[i];
+    คืน net->layers[i];
 }
 
-int network_inputs(network *net)
+จำนวนเต็ม network_inputs(network *net)
 {
-    return net->layers[0].inputs;
+    คืน net->layers[0].inputs;
 }
 
-int network_outputs(network *net)
+จำนวนเต็ม network_outputs(network *net)
 {
-    return network_output_layer(net).outputs;
+    คืน network_output_layer(net).outputs;
 }
 
 float *network_output(network *net)
 {
-    return network_output_layer(net).output;
+    คืน network_output_layer(net).output;
 }
 
 #ifdef GPU
@@ -764,21 +764,21 @@ void forward_network_gpu(network *netp)
     network net = *netp;
     cuda_set_device(net.gpu_index);
     cuda_push_array(net.input_gpu, net.input, net.inputs*net.batch);
-    if(net.truth){
+    ถ้า(net.truth){
         cuda_push_array(net.truth_gpu, net.truth, net.truths*net.batch);
     }
 
-    int i;
-    for(i = 0; i < net.n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta_gpu){
+        ถ้า(l.delta_gpu){
             fill_gpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
         }
         l.forward_gpu(l, net);
         net.input_gpu = l.output_gpu;
         net.input = l.output;
-        if(l.truth) {
+        ถ้า(l.truth) {
             net.truth_gpu = l.output_gpu;
             net.truth = l.output;
         }
@@ -789,16 +789,16 @@ void forward_network_gpu(network *netp)
 
 void backward_network_gpu(network *netp)
 {
-    int i;
+    จำนวนเต็ม i;
     network net = *netp;
     network orig = net;
     cuda_set_device(net.gpu_index);
-    for(i = net.n-1; i >= 0; --i){
+    สำหรับ(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        ถ้า(l.stopbackward) bha_nga;
+        ถ้า(i == 0){
             net = orig;
-        }else{
+        }มิฉะนั้น{
             layer prev = net.layers[i-1];
             net.input = prev.output;
             net.delta = prev.delta;
@@ -814,7 +814,7 @@ void update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
+    จำนวนเต็ม i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -827,9 +827,9 @@ void update_network_gpu(network *netp)
     ++*net.t;
     a.t = (*net.t);
 
-    for(i = 0; i < net.n; ++i){
+    สำหรับ(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update_gpu){
+        ถ้า(l.update_gpu){
             l.update_gpu(l, a);
         }
     }
@@ -839,16 +839,16 @@ void harmless_update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
-    for(i = 0; i < net.n; ++i){
+    จำนวนเต็ม i;
+    สำหรับ(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
-        if(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
-        if(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
+        ถ้า(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
+        ถ้า(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
+        ถ้า(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
     }
 }
 
-typedef struct {
+typedef sa_nracanaa {
     network *net;
     data d;
     float *err;
@@ -860,29 +860,29 @@ void *train_thread(void *ptr)
     free(ptr);
     cuda_set_device(args.net->gpu_index);
     *args.err = train_network(args.net, args.d);
-    return 0;
+    คืน 0;
 }
 
 pthread_t train_network_in_thread(network *net, data d, float *err)
 {
     pthread_t thread;
-    train_args *ptr = (train_args *)calloc(1, sizeof(train_args));
+    train_args *ptr = (train_args *)calloc(1, parimaa_na(train_args));
     ptr->net = net;
     ptr->d = d;
     ptr->err = err;
-    if(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
-    return thread;
+    ถ้า(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
+    คืน thread;
 }
 
 void merge_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL) {
+    ถ้า (l.type == CONVOLUTIONAL) {
         axpy_cpu(l.n, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.nweights, 1, l.weight_updates, 1, base.weights, 1);
-        if (l.scales) {
+        ถ้า (l.scales) {
             axpy_cpu(l.n, 1, l.scale_updates, 1, base.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } มิฉะนั้น ถ้า(l.type == CONNECTED) {
         axpy_cpu(l.outputs, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.outputs*l.inputs, 1, l.weight_updates, 1, base.weights, 1);
     }
@@ -890,13 +890,13 @@ void merge_weights(layer l, layer base)
 
 void scale_weights(layer l, float s)
 {
-    if (l.type == CONVOLUTIONAL) {
+    ถ้า (l.type == CONVOLUTIONAL) {
         scal_cpu(l.n, s, l.biases, 1);
         scal_cpu(l.nweights, s, l.weights, 1);
-        if (l.scales) {
+        ถ้า (l.scales) {
             scal_cpu(l.n, s, l.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } มิฉะนั้น ถ้า(l.type == CONNECTED) {
         scal_cpu(l.outputs, s, l.biases, 1);
         scal_cpu(l.outputs*l.inputs, s, l.weights, 1);
     }
@@ -905,11 +905,11 @@ void scale_weights(layer l, float s)
 
 void pull_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+    ถ้า(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.n);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.nweights);
-        if(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
-    } else if(l.type == CONNECTED){
+        ถ้า(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
+    } มิฉะนั้น ถ้า(l.type == CONNECTED){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.outputs);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.outputs*l.inputs);
     }
@@ -917,11 +917,11 @@ void pull_weights(layer l)
 
 void push_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+    ถ้า(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
         cuda_push_array(l.biases_gpu, l.biases, l.n);
         cuda_push_array(l.weights_gpu, l.weights, l.nweights);
-        if(l.scales) cuda_push_array(l.scales_gpu, l.scales, l.n);
-    } else if(l.type == CONNECTED){
+        ถ้า(l.scales) cuda_push_array(l.scales_gpu, l.scales, l.n);
+    } มิฉะนั้น ถ้า(l.type == CONNECTED){
         cuda_push_array(l.biases_gpu, l.biases, l.outputs);
         cuda_push_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
     }
@@ -929,11 +929,11 @@ void push_weights(layer l)
 
 void distribute_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
+    ถ้า (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
         cuda_push_array(l.biases_gpu, base.biases, l.n);
         cuda_push_array(l.weights_gpu, base.weights, l.nweights);
-        if (base.scales) cuda_push_array(l.scales_gpu, base.scales, l.n);
-    } else if (l.type == CONNECTED) {
+        ถ้า (base.scales) cuda_push_array(l.scales_gpu, base.scales, l.n);
+    } มิฉะนั้น ถ้า (l.type == CONNECTED) {
         cuda_push_array(l.biases_gpu, base.biases, l.outputs);
         cuda_push_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
     }
@@ -1024,30 +1024,30 @@ void distribute_weights(layer l, layer base)
    }
  */
 
-void sync_layer(network **nets, int n, int j)
+void sync_layer(network **nets, จำนวนเต็ม n, จำนวนเต็ม j)
 {
-    int i;
+    จำนวนเต็ม i;
     network *net = nets[0];
     layer base = net->layers[j];
     scale_weights(base, 0);
-    for (i = 0; i < n; ++i) {
+    สำหรับ (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         pull_weights(l);
         merge_weights(l, base);
     }
     scale_weights(base, 1./n);
-    for (i = 0; i < n; ++i) {
+    สำหรับ (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         distribute_weights(l, base);
     }
 }
 
-typedef struct{
+typedef sa_nracanaa{
     network **nets;
-    int n;
-    int j;
+    จำนวนเต็ม n;
+    จำนวนเต็ม j;
 } sync_args;
 
 void *sync_layer_thread(void *ptr)
@@ -1055,60 +1055,60 @@ void *sync_layer_thread(void *ptr)
     sync_args args = *(sync_args*)ptr;
     sync_layer(args.nets, args.n, args.j);
     free(ptr);
-    return 0;
+    คืน 0;
 }
 
-pthread_t sync_layer_in_thread(network **nets, int n, int j)
+pthread_t sync_layer_in_thread(network **nets, จำนวนเต็ม n, จำนวนเต็ม j)
 {
     pthread_t thread;
-    sync_args *ptr = (sync_args *)calloc(1, sizeof(sync_args));
+    sync_args *ptr = (sync_args *)calloc(1, parimaa_na(sync_args));
     ptr->nets = nets;
     ptr->n = n;
     ptr->j = j;
-    if(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
-    return thread;
+    ถ้า(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
+    คืน thread;
 }
 
-void sync_nets(network **nets, int n, int interval)
+void sync_nets(network **nets, จำนวนเต็ม n, จำนวนเต็ม interval)
 {
-    int j;
-    int layers = nets[0]->n;
-    pthread_t *threads = (pthread_t *) calloc(layers, sizeof(pthread_t));
+    จำนวนเต็ม j;
+    จำนวนเต็ม layers = nets[0]->n;
+    pthread_t *threads = (pthread_t *) calloc(layers, parimaa_na(pthread_t));
 
     *(nets[0]->seen) += interval * (n-1) * nets[0]->batch * nets[0]->subdivisions;
-    for (j = 0; j < n; ++j){
+    สำหรับ (j = 0; j < n; ++j){
         *(nets[j]->seen) = *(nets[0]->seen);
     }
-    for (j = 0; j < layers; ++j) {
+    สำหรับ (j = 0; j < layers; ++j) {
         threads[j] = sync_layer_in_thread(nets, n, j);
     }
-    for (j = 0; j < layers; ++j) {
+    สำหรับ (j = 0; j < layers; ++j) {
         pthread_join(threads[j], 0);
     }
     free(threads);
 }
 
-float train_networks(network **nets, int n, data d, int interval)
+float train_networks(network **nets, จำนวนเต็ม n, data d, จำนวนเต็ม interval)
 {
-    int i;
-    int batch = nets[0]->batch;
-    int subdivisions = nets[0]->subdivisions;
+    จำนวนเต็ม i;
+    จำนวนเต็ม batch = nets[0]->batch;
+    จำนวนเต็ม subdivisions = nets[0]->subdivisions;
     assert(batch * subdivisions * n == d.X.rows);
-    pthread_t *threads = (pthread_t *) calloc(n, sizeof(pthread_t));
-    float *errors = (float *) calloc(n, sizeof(float));
+    pthread_t *threads = (pthread_t *) calloc(n, parimaa_na(pthread_t));
+    float *errors = (float *) calloc(n, parimaa_na(float));
 
     float sum = 0;
-    for(i = 0; i < n; ++i){
+    สำหรับ(i = 0; i < n; ++i){
         data p = get_data_part(d, i, n);
         threads[i] = train_network_in_thread(nets[i], p, errors + i);
     }
-    for(i = 0; i < n; ++i){
+    สำหรับ(i = 0; i < n; ++i){
         pthread_join(threads[i], 0);
         //printf("%f\n", errors[i]);
         sum += errors[i];
     }
     //cudaDeviceSynchronize();
-    if (get_current_batch(nets[0]) % interval == 0) {
+    ถ้า (get_current_batch(nets[0]) % interval == 0) {
         printf("Syncing... ");
         fflush(stdout);
         sync_nets(nets, n, interval);
@@ -1117,7 +1117,7 @@ float train_networks(network **nets, int n, data d, int interval)
     //cudaDeviceSynchronize();
     free(threads);
     free(errors);
-    return (float)sum/(n);
+    คืน (float)sum/(n);
 }
 
 void pull_network_output(network *net)
