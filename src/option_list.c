@@ -1,140 +1,140 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "option_list.h"
-#include "utils.h"
+#شامل <stdlib.h>
+#شامل <stdio.h>
+#شامل <string.h>
+#شامل "option_list.h"
+#شامل "utils.h"
 
-list *read_data_cfg(char *filename)
+list *read_data_cfg(نویسه *filename)
 {
     FILE *file = fopen(filename, "r");
-    if(file == 0) file_error(filename);
-    char *line;
-    int nu = 0;
+    اگر(file == 0) file_error(filename);
+    نویسه *سطر;
+    صحیح nu = 0;
     list *options = make_list();
-    while((line=fgetl(file)) != 0){
+    وقتی((سطر=fgetl(file)) != 0){
         ++ nu;
-        strip(line);
-        switch(line[0]){
-            case '\0':
-            case '#':
-            case ';':
-                free(line);
-                break;
-            default:
-                if(!read_option(line, options)){
-                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+        strip(سطر);
+        انتخاب(سطر[0]){
+            حالت '\0':
+            حالت '#':
+            حالت ';':
+                آزاد(سطر);
+                بشکن;
+            پیشفرض:
+                اگر(!read_option(سطر, options)){
+                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, سطر);
+                    آزاد(سطر);
                 }
-                break;
+                بشکن;
         }
     }
     fclose(file);
-    return options;
+    بازگشت options;
 }
 
-metadata get_metadata(char *file)
+metadata get_metadata(نویسه *file)
 {
     metadata m = {0};
     list *options = read_data_cfg(file);
 
-    char *name_list = option_find_str(options, "names", 0);
-    if(!name_list) name_list = option_find_str(options, "labels", 0);
-    if(!name_list) {
+    نویسه *name_list = option_find_str(options, "names", 0);
+    اگر(!name_list) name_list = option_find_str(options, "labels", 0);
+    اگر(!name_list) {
         fprintf(stderr, "No names or labels found\n");
-    } else {
+    } وگرنه {
         m.names = get_labels(name_list);
     }
     m.classes = option_find_int(options, "classes", 2);
     free_list(options);
-    return m;
+    بازگشت m;
 }
 
-int read_option(char *s, list *options)
+صحیح read_option(نویسه *s, list *options)
 {
     size_t i;
     size_t len = strlen(s);
-    char *val = 0;
-    for(i = 0; i < len; ++i){
-        if(s[i] == '='){
+    نویسه *val = 0;
+    برای(i = 0; i < len; ++i){
+        اگر(s[i] == '='){
             s[i] = '\0';
             val = s+i+1;
-            break;
+            بشکن;
         }
     }
-    if(i == len-1) return 0;
-    char *key = s;
-    option_insert(options, key, val);
-    return 1;
+    اگر(i == len-1) بازگشت 0;
+    نویسه *کلید = s;
+    option_درج(options, کلید, val);
+    بازگشت 1;
 }
 
-void option_insert(list *l, char *key, char *val)
+تهی option_درج(list *l, نویسه *کلید, نویسه *val)
 {
-    kvp *p = malloc(sizeof(kvp));
-    p->key = key;
+    kvp *p = malloc(اندازه(kvp));
+    p->کلید = کلید;
     p->val = val;
     p->used = 0;
-    list_insert(l, p);
+    list_درج(l, p);
 }
 
-void option_unused(list *l)
+تهی option_unused(list *l)
 {
-    node *n = l->front;
-    while(n){
+    گره *n = l->front;
+    وقتی(n){
         kvp *p = (kvp *)n->val;
-        if(!p->used){
-            fprintf(stderr, "Unused field: '%s = %s'\n", p->key, p->val);
+        اگر(!p->used){
+            fprintf(stderr, "Unused field: '%s = %s'\n", p->کلید, p->val);
         }
         n = n->next;
     }
 }
 
-char *option_find(list *l, char *key)
+نویسه *option_find(list *l, نویسه *کلید)
 {
-    node *n = l->front;
-    while(n){
+    گره *n = l->front;
+    وقتی(n){
         kvp *p = (kvp *)n->val;
-        if(strcmp(p->key, key) == 0){
+        اگر(strcmp(p->کلید, کلید) == 0){
             p->used = 1;
-            return p->val;
+            بازگشت p->val;
         }
         n = n->next;
     }
-    return 0;
+    بازگشت 0;
 }
-char *option_find_str(list *l, char *key, char *def)
+نویسه *option_find_str(list *l, نویسه *کلید, نویسه *def)
 {
-    char *v = option_find(l, key);
-    if(v) return v;
-    if(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
-    return def;
-}
-
-int option_find_int(list *l, char *key, int def)
-{
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    fprintf(stderr, "%s: Using default '%d'\n", key, def);
-    return def;
+    نویسه *v = option_find(l, کلید);
+    اگر(v) بازگشت v;
+    اگر(def) fprintf(stderr, "%s: Using default '%s'\n", کلید, def);
+    بازگشت def;
 }
 
-int option_find_int_quiet(list *l, char *key, int def)
+صحیح option_find_int(list *l, نویسه *کلید, صحیح def)
 {
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    return def;
+    نویسه *v = option_find(l, کلید);
+    اگر(v) بازگشت atoi(v);
+    fprintf(stderr, "%s: Using default '%d'\n", کلید, def);
+    بازگشت def;
 }
 
-float option_find_float_quiet(list *l, char *key, float def)
+صحیح option_find_int_quiet(list *l, نویسه *کلید, صحیح def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    return def;
+    نویسه *v = option_find(l, کلید);
+    اگر(v) بازگشت atoi(v);
+    بازگشت def;
 }
 
-float option_find_float(list *l, char *key, float def)
+اعشاری option_find_float_quiet(list *l, نویسه *کلید, اعشاری def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    fprintf(stderr, "%s: Using default '%lf'\n", key, def);
-    return def;
+    نویسه *v = option_find(l, کلید);
+    اگر(v) بازگشت atof(v);
+    بازگشت def;
+}
+
+اعشاری option_find_float(list *l, نویسه *کلید, اعشاری def)
+{
+    نویسه *v = option_find(l, کلید);
+    اگر(v) بازگشت atof(v);
+    fprintf(stderr, "%s: Using default '%lf'\n", کلید, def);
+    بازگشت def;
 }

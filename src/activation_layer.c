@@ -1,15 +1,15 @@
-#include "activation_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#شامل "activation_layer.h"
+#شامل "utils.h"
+#شامل "cuda.h"
+#شامل "blas.h"
+#شامل "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#شامل <math.h>
+#شامل <stdio.h>
+#شامل <stdlib.h>
+#شامل <string.h>
 
-layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
+layer make_activation_layer(صحیح batch, صحیح inputs, ACTIVATION activation)
 {
     layer l = {0};
     l.type = ACTIVE;
@@ -18,8 +18,8 @@ layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
     l.outputs = inputs;
     l.batch=batch;
 
-    l.output = calloc(batch*inputs, sizeof(float*));
-    l.delta = calloc(batch*inputs, sizeof(float*));
+    l.output = calloc(batch*inputs, اندازه(اعشاری*));
+    l.delta = calloc(batch*inputs, اندازه(اعشاری*));
 
     l.forward = forward_activation_layer;
     l.backward = backward_activation_layer;
@@ -32,16 +32,16 @@ layer make_activation_layer(int batch, int inputs, ACTIVATION activation)
 #endif
     l.activation = activation;
     fprintf(stderr, "Activation Layer: %d inputs\n", inputs);
-    return l;
+    بازگشت l;
 }
 
-void forward_activation_layer(layer l, network net)
+تهی forward_activation_layer(layer l, network net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    copy_cpu(l.outputs*l.batch, net.درون_داد, 1, l.output, 1);
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_activation_layer(layer l, network net)
+تهی backward_activation_layer(layer l, network net)
 {
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
     copy_cpu(l.outputs*l.batch, l.delta, 1, net.delta, 1);
@@ -49,13 +49,13 @@ void backward_activation_layer(layer l, network net)
 
 #ifdef GPU
 
-void forward_activation_layer_gpu(layer l, network net)
+تهی forward_activation_layer_gpu(layer l, network net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.outputs*l.batch, net.درون_داد_gpu, 1, l.output_gpu, 1);
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_activation_layer_gpu(layer l, network net)
+تهی backward_activation_layer_gpu(layer l, network net)
 {
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
     copy_gpu(l.outputs*l.batch, l.delta_gpu, 1, net.delta_gpu, 1);

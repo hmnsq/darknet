@@ -1,8 +1,8 @@
-#ifndef TREE_H
-#define TREE_H
-#include "darknet.h"
+#ifndef درخت_H
+#define درخت_H
+#شامل "darknet.h"
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride);
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride);
+صحیح hierarchy_بالاترین_prediction(اعشاری *predictions, درخت *hier, اعشاری thresh, صحیح stride);
+اعشاری get_hierarchy_probability(اعشاری *x, درخت *hier, صحیح c, صحیح stride);
 
 #endif

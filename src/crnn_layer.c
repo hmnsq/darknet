@@ -1,32 +1,32 @@
-#include "crnn_layer.h"
-#include "convolutional_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#شامل "crnn_layer.h"
+#شامل "convolutional_layer.h"
+#شامل "utils.h"
+#شامل "cuda.h"
+#شامل "blas.h"
+#شامل "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#شامل <math.h>
+#شامل <stdio.h>
+#شامل <stdlib.h>
+#شامل <string.h>
 
-static void increment_layer(layer *l, int steps)
+ایستا تهی increment_layer(layer *l, صحیح steps)
 {
-    int num = l->outputs*l->batch*steps;
-    l->output += num;
-    l->delta += num;
-    l->x += num;
-    l->x_norm += num;
+    صحیح رقم = l->outputs*l->batch*steps;
+    l->output += رقم;
+    l->delta += رقم;
+    l->x += رقم;
+    l->x_norm += رقم;
 
 #ifdef GPU
-    l->output_gpu += num;
-    l->delta_gpu += num;
-    l->x_gpu += num;
-    l->x_norm_gpu += num;
+    l->output_gpu += رقم;
+    l->delta_gpu += رقم;
+    l->x_gpu += رقم;
+    l->x_norm_gpu += رقم;
 #endif
 }
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize)
+layer make_crnn_layer(صحیح batch, صحیح h, صحیح w, صحیح c, صحیح hidden_filters, صحیح output_filters, صحیح steps, ACTIVATION activation, صحیح batch_normalize)
 {
     fprintf(stderr, "CRNN Layer: %d x %d x %d image, %d filters\n", h,w,c,output_filters);
     batch = batch / steps;
@@ -44,19 +44,19 @@ layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int ou
     l.hidden = h * w * hidden_filters;
     l.outputs = l.out_h * l.out_w * l.out_c;
 
-    l.state = calloc(l.hidden*batch*(steps+1), sizeof(float));
+    l.state = calloc(l.hidden*batch*(steps+1), اندازه(اعشاری));
 
-    l.input_layer = malloc(sizeof(layer));
+    l.درون_داد_layer = malloc(اندازه(layer));
     fprintf(stderr, "\t\t");
-    *(l.input_layer) = make_convolutional_layer(batch*steps, h, w, c, hidden_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
-    l.input_layer->batch = batch;
+    *(l.درون_داد_layer) = make_convolutional_layer(batch*steps, h, w, c, hidden_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
+    l.درون_داد_layer->batch = batch;
 
-    l.self_layer = malloc(sizeof(layer));
+    l.self_layer = malloc(اندازه(layer));
     fprintf(stderr, "\t\t");
     *(l.self_layer) = make_convolutional_layer(batch*steps, h, w, hidden_filters, hidden_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
     l.self_layer->batch = batch;
 
-    l.output_layer = malloc(sizeof(layer));
+    l.output_layer = malloc(اندازه(layer));
     fprintf(stderr, "\t\t");
     *(l.output_layer) = make_convolutional_layer(batch*steps, h, w, hidden_filters, output_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
     l.output_layer->batch = batch;
@@ -78,75 +78,75 @@ layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int ou
     l.delta_gpu = l.output_layer->delta_gpu;
 #endif
 
-    return l;
+    بازگشت l;
 }
 
-void update_crnn_layer(layer l, update_args a)
+تهی update_crnn_layer(layer l, update_args a)
 {
-    update_convolutional_layer(*(l.input_layer),  a);
+    update_convolutional_layer(*(l.درون_داد_layer),  a);
     update_convolutional_layer(*(l.self_layer),   a);
     update_convolutional_layer(*(l.output_layer), a);
 }
 
-void forward_crnn_layer(layer l, network net)
+تهی forward_crnn_layer(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحیح i;
+    layer درون_داد_layer = *(l.درون_داد_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
     fill_cpu(l.outputs * l.batch * l.steps, 0, output_layer.delta, 1);
     fill_cpu(l.hidden * l.batch * l.steps, 0, self_layer.delta, 1);
-    fill_cpu(l.hidden * l.batch * l.steps, 0, input_layer.delta, 1);
-    if(net.train) fill_cpu(l.hidden * l.batch, 0, l.state, 1);
+    fill_cpu(l.hidden * l.batch * l.steps, 0, درون_داد_layer.delta, 1);
+    اگر(net.train) fill_cpu(l.hidden * l.batch, 0, l.state, 1);
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input = net.input;
-        forward_convolutional_layer(input_layer, s);
+    برای (i = 0; i < l.steps; ++i) {
+        s.درون_داد = net.درون_داد;
+        forward_convolutional_layer(درون_داد_layer, s);
 
-        s.input = l.state;
+        s.درون_داد = l.state;
         forward_convolutional_layer(self_layer, s);
 
-        float *old_state = l.state;
-        if(net.train) l.state += l.hidden*l.batch;
-        if(l.shortcut){
+        اعشاری *old_state = l.state;
+        اگر(net.train) l.state += l.hidden*l.batch;
+        اگر(l.shortcut){
             copy_cpu(l.hidden * l.batch, old_state, 1, l.state, 1);
-        }else{
+        }وگرنه{
             fill_cpu(l.hidden * l.batch, 0, l.state, 1);
         }
-        axpy_cpu(l.hidden * l.batch, 1, input_layer.output, 1, l.state, 1);
+        axpy_cpu(l.hidden * l.batch, 1, درون_داد_layer.output, 1, l.state, 1);
         axpy_cpu(l.hidden * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.درون_داد = l.state;
         forward_convolutional_layer(output_layer, s);
 
-        net.input += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.درون_داد += l.inputs*l.batch;
+        increment_layer(&درون_داد_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_crnn_layer(layer l, network net)
+تهی backward_crnn_layer(layer l, network net)
 {
     network s = net;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحیح i;
+    layer درون_داد_layer = *(l.درون_داد_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
-    increment_layer(&input_layer, l.steps-1);
+    increment_layer(&درون_داد_layer, l.steps-1);
     increment_layer(&self_layer, l.steps-1);
     increment_layer(&output_layer, l.steps-1);
 
     l.state += l.hidden*l.batch*l.steps;
-    for (i = l.steps-1; i >= 0; --i) {
-        copy_cpu(l.hidden * l.batch, input_layer.output, 1, l.state, 1);
+    برای (i = l.steps-1; i >= 0; --i) {
+        copy_cpu(l.hidden * l.batch, درون_داد_layer.output, 1, l.state, 1);
         axpy_cpu(l.hidden * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.درون_داد = l.state;
         s.delta = self_layer.delta;
         backward_convolutional_layer(output_layer, s);
 
@@ -160,19 +160,19 @@ void backward_crnn_layer(layer l, network net)
            }
          */
 
-        s.input = l.state;
+        s.درون_داد = l.state;
         s.delta = self_layer.delta - l.hidden*l.batch;
-        if (i == 0) s.delta = 0;
+        اگر (i == 0) s.delta = 0;
         backward_convolutional_layer(self_layer, s);
 
-        copy_cpu(l.hidden*l.batch, self_layer.delta, 1, input_layer.delta, 1);
-        if (i > 0 && l.shortcut) axpy_cpu(l.hidden*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.hidden*l.batch, 1);
-        s.input = net.input + i*l.inputs*l.batch;
-        if(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
-        else s.delta = 0;
-        backward_convolutional_layer(input_layer, s);
+        copy_cpu(l.hidden*l.batch, self_layer.delta, 1, درون_داد_layer.delta, 1);
+        اگر (i > 0 && l.shortcut) axpy_cpu(l.hidden*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.hidden*l.batch, 1);
+        s.درون_داد = net.درون_داد + i*l.inputs*l.batch;
+        اگر(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
+        وگرنه s.delta = 0;
+        backward_convolutional_layer(درون_داد_layer, s);
 
-        increment_layer(&input_layer, -1);
+        increment_layer(&درون_داد_layer, -1);
         increment_layer(&self_layer, -1);
         increment_layer(&output_layer, -1);
     }
@@ -180,102 +180,102 @@ void backward_crnn_layer(layer l, network net)
 
 #ifdef GPU
 
-void pull_crnn_layer(layer l)
+تهی pull_crnn_layer(layer l)
 {
-    pull_convolutional_layer(*(l.input_layer));
+    pull_convolutional_layer(*(l.درون_داد_layer));
     pull_convolutional_layer(*(l.self_layer));
     pull_convolutional_layer(*(l.output_layer));
 }
 
-void push_crnn_layer(layer l)
+تهی افزودن_crnn_layer(layer l)
 {
-    push_convolutional_layer(*(l.input_layer));
-    push_convolutional_layer(*(l.self_layer));
-    push_convolutional_layer(*(l.output_layer));
+    افزودن_convolutional_layer(*(l.درون_داد_layer));
+    افزودن_convolutional_layer(*(l.self_layer));
+    افزودن_convolutional_layer(*(l.output_layer));
 }
 
-void update_crnn_layer_gpu(layer l, update_args a)
+تهی update_crnn_layer_gpu(layer l, update_args a)
 {
-    update_convolutional_layer_gpu(*(l.input_layer),  a);
+    update_convolutional_layer_gpu(*(l.درون_داد_layer),  a);
     update_convolutional_layer_gpu(*(l.self_layer),   a);
     update_convolutional_layer_gpu(*(l.output_layer), a);
 }
 
-void forward_crnn_layer_gpu(layer l, network net)
+تهی forward_crnn_layer_gpu(layer l, network net)
 {
     network s = net;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحیح i;
+    layer درون_داد_layer = *(l.درون_داد_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
     fill_gpu(l.outputs * l.batch * l.steps, 0, output_layer.delta_gpu, 1);
     fill_gpu(l.hidden * l.batch * l.steps, 0, self_layer.delta_gpu, 1);
-    fill_gpu(l.hidden * l.batch * l.steps, 0, input_layer.delta_gpu, 1);
-    if(net.train) fill_gpu(l.hidden * l.batch, 0, l.state_gpu, 1);
+    fill_gpu(l.hidden * l.batch * l.steps, 0, درون_داد_layer.delta_gpu, 1);
+    اگر(net.train) fill_gpu(l.hidden * l.batch, 0, l.state_gpu, 1);
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input_gpu = net.input_gpu;
-        forward_convolutional_layer_gpu(input_layer, s);
+    برای (i = 0; i < l.steps; ++i) {
+        s.درون_داد_gpu = net.درون_داد_gpu;
+        forward_convolutional_layer_gpu(درون_داد_layer, s);
 
-        s.input_gpu = l.state_gpu;
+        s.درون_داد_gpu = l.state_gpu;
         forward_convolutional_layer_gpu(self_layer, s);
 
-        float *old_state = l.state_gpu;
-        if(net.train) l.state_gpu += l.hidden*l.batch;
-        if(l.shortcut){
+        اعشاری *old_state = l.state_gpu;
+        اگر(net.train) l.state_gpu += l.hidden*l.batch;
+        اگر(l.shortcut){
             copy_gpu(l.hidden * l.batch, old_state, 1, l.state_gpu, 1);
-        }else{
+        }وگرنه{
             fill_gpu(l.hidden * l.batch, 0, l.state_gpu, 1);
         }
-        axpy_gpu(l.hidden * l.batch, 1, input_layer.output_gpu, 1, l.state_gpu, 1);
+        axpy_gpu(l.hidden * l.batch, 1, درون_داد_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.hidden * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.درون_داد_gpu = l.state_gpu;
         forward_convolutional_layer_gpu(output_layer, s);
 
-        net.input_gpu += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.درون_داد_gpu += l.inputs*l.batch;
+        increment_layer(&درون_داد_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_crnn_layer_gpu(layer l, network net)
+تهی backward_crnn_layer_gpu(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    صحیح i;
+    layer درون_داد_layer = *(l.درون_داد_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
-    increment_layer(&input_layer,  l.steps - 1);
+    increment_layer(&درون_داد_layer,  l.steps - 1);
     increment_layer(&self_layer,   l.steps - 1);
     increment_layer(&output_layer, l.steps - 1);
     l.state_gpu += l.hidden*l.batch*l.steps;
-    for (i = l.steps-1; i >= 0; --i) {
-        copy_gpu(l.hidden * l.batch, input_layer.output_gpu, 1, l.state_gpu, 1);
+    برای (i = l.steps-1; i >= 0; --i) {
+        copy_gpu(l.hidden * l.batch, درون_داد_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.hidden * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.درون_داد_gpu = l.state_gpu;
         s.delta_gpu = self_layer.delta_gpu;
         backward_convolutional_layer_gpu(output_layer, s);
 
         l.state_gpu -= l.hidden*l.batch;
 
-        s.input_gpu = l.state_gpu;
+        s.درون_داد_gpu = l.state_gpu;
         s.delta_gpu = self_layer.delta_gpu - l.hidden*l.batch;
-        if (i == 0) s.delta_gpu = 0;
+        اگر (i == 0) s.delta_gpu = 0;
         backward_convolutional_layer_gpu(self_layer, s);
 
-        copy_gpu(l.hidden*l.batch, self_layer.delta_gpu, 1, input_layer.delta_gpu, 1);
-        if (i > 0 && l.shortcut) axpy_gpu(l.hidden*l.batch, 1, self_layer.delta_gpu, 1, self_layer.delta_gpu - l.hidden*l.batch, 1);
-        s.input_gpu = net.input_gpu + i*l.inputs*l.batch;
-        if(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
-        else s.delta_gpu = 0;
-        backward_convolutional_layer_gpu(input_layer, s);
+        copy_gpu(l.hidden*l.batch, self_layer.delta_gpu, 1, درون_داد_layer.delta_gpu, 1);
+        اگر (i > 0 && l.shortcut) axpy_gpu(l.hidden*l.batch, 1, self_layer.delta_gpu, 1, self_layer.delta_gpu - l.hidden*l.batch, 1);
+        s.درون_داد_gpu = net.درون_داد_gpu + i*l.inputs*l.batch;
+        اگر(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
+        وگرنه s.delta_gpu = 0;
+        backward_convolutional_layer_gpu(درون_داد_layer, s);
 
-        increment_layer(&input_layer,  -1);
+        increment_layer(&درون_داد_layer,  -1);
         increment_layer(&self_layer,   -1);
         increment_layer(&output_layer, -1);
     }

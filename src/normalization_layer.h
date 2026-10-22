@@ -1,19 +1,19 @@
 #ifndef NORMALIZATION_LAYER_H
 #define NORMALIZATION_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#شامل "image.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-layer make_normalization_layer(int batch, int w, int h, int c, int size, float alpha, float beta, float kappa);
-void resize_normalization_layer(layer *layer, int h, int w);
-void forward_normalization_layer(const layer layer, network net);
-void backward_normalization_layer(const layer layer, network net);
-void visualize_normalization_layer(layer layer, char *window);
+layer make_normalization_layer(صحیح batch, صحیح w, صحیح h, صحیح c, صحیح size, اعشاری alpha, اعشاری beta, اعشاری kappa);
+تهی resize_normalization_layer(layer *layer, صحیح h, صحیح w);
+تهی forward_normalization_layer(ثابت layer layer, network net);
+تهی backward_normalization_layer(ثابت layer layer, network net);
+تهی visualize_normalization_layer(layer layer, نویسه *window);
 
 #ifdef GPU
-void forward_normalization_layer_gpu(const layer layer, network net);
-void backward_normalization_layer_gpu(const layer layer, network net);
+تهی forward_normalization_layer_gpu(ثابت layer layer, network net);
+تهی backward_normalization_layer_gpu(ثابت layer layer, network net);
 #endif
 
 #endif

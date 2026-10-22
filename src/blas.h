@@ -1,105 +1,105 @@
 #ifndef BLAS_H
 #define BLAS_H
-#include "darknet.h"
+#شامل "darknet.h"
 
-void flatten(float *x, int size, int layers, int batch, int forward);
-void pm(int M, int N, float *A);
-float *random_matrix(int rows, int cols);
-void time_random_matrix(int TA, int TB, int m, int k, int n);
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+تهی flatten(اعشاری *x, صحیح size, صحیح layers, صحیح batch, صحیح forward);
+تهی pm(صحیح M, صحیح N, اعشاری *A);
+اعشاری *random_matrix(صحیح rows, صحیح cols);
+تهی time_random_matrix(صحیح TA, صحیح TB, صحیح m, صحیح k, صحیح n);
+تهی reorg_cpu(اعشاری *x, صحیح w, صحیح h, صحیح c, صحیح batch, صحیح stride, صحیح forward, اعشاری *out);
 
-void test_blas();
+تهی test_blas();
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z);
+تهی inter_cpu(صحیح NX, اعشاری *X, صحیح NY, اعشاری *Y, صحیح B, اعشاری *OUT);
+تهی deinter_cpu(صحیح NX, اعشاری *X, صحیح NY, اعشاری *Y, صحیح B, اعشاری *OUT);
+تهی mult_add_into_cpu(صحیح N, اعشاری *X, اعشاری *Y, اعشاری *Z);
 
-void const_cpu(int N, float ALPHA, float *X, int INCX);
-void constrain_gpu(int N, float ALPHA, float * X, int INCX);
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY);
+تهی const_cpu(صحیح N, اعشاری ALPHA, اعشاری *X, صحیح INCX);
+تهی constrain_gpu(صحیح N, اعشاری ALPHA, اعشاری * X, صحیح INCX);
+تهی pow_cpu(صحیح N, اعشاری ALPHA, اعشاری *X, صحیح INCX, اعشاری *Y, صحیح INCY);
+تهی mul_cpu(صحیح N, اعشاری *X, صحیح INCX, اعشاری *Y, صحیح INCY);
 
-int test_gpu_blas();
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
+صحیح test_gpu_blas();
+تهی shortcut_cpu(صحیح batch, صحیح w1, صحیح h1, صحیح c1, اعشاری *add, صحیح w2, صحیح h2, صحیح c2, اعشاری s1, اعشاری s2, اعشاری *out);
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
+تهی mean_cpu(اعشاری *x, صحیح batch, صحیح filters, صحیح spatial, اعشاری *mean);
+تهی variance_cpu(اعشاری *x, اعشاری *mean, صحیح batch, صحیح filters, صحیح spatial, اعشاری *variance);
 
-void scale_bias(float *output, float *scales, int batch, int n, int size);
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial);
+تهی scale_bias(اعشاری *output, اعشاری *scales, صحیح batch, صحیح n, صحیح size);
+تهی backward_scale_cpu(اعشاری *x_norm, اعشاری *delta, صحیح batch, صحیح n, صحیح size, اعشاری *scale_updates);
+تهی mean_delta_cpu(اعشاری *delta, اعشاری *variance, صحیح batch, صحیح filters, صحیح spatial, اعشاری *mean_delta);
+تهی  variance_delta_cpu(اعشاری *x, اعشاری *delta, اعشاری *mean, اعشاری *variance, صحیح batch, صحیح filters, صحیح spatial, اعشاری *variance_delta);
+تهی normalize_delta_cpu(اعشاری *x, اعشاری *mean, اعشاری *variance, اعشاری *mean_delta, اعشاری *variance_delta, صحیح batch, صحیح filters, صحیح spatial, اعشاری *delta);
+تهی l2normalize_cpu(اعشاری *x, اعشاری *dx, صحیح batch, صحیح filters, صحیح spatial);
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_sum_cpu(float *a, float *b, float *s, int num, float *c);
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc);
+تهی smooth_l1_cpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی l2_cpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی l1_cpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی logistic_x_ent_cpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی softmax_x_ent_cpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی weighted_sum_cpu(اعشاری *a, اعشاری *b, اعشاری *s, صحیح رقم, اعشاری *c);
+تهی weighted_delta_cpu(اعشاری *a, اعشاری *b, اعشاری *s, اعشاری *da, اعشاری *db, اعشاری *ds, صحیح n, اعشاری *dc);
 
-void softmax(float *input, int n, float temp, int stride, float *output);
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+تهی softmax(اعشاری *درون_داد, صحیح n, اعشاری temp, صحیح stride, اعشاری *output);
+تهی softmax_cpu(اعشاری *درون_داد, صحیح n, صحیح batch, صحیح batch_offset, صحیح groups, صحیح group_offset, صحیح stride, اعشاری temp, اعشاری *output);
+تهی upsample_cpu(اعشاری *in, صحیح w, صحیح h, صحیح c, صحیح batch, صحیح stride, صحیح forward, اعشاری scale, اعشاری *out);
 
 #ifdef GPU
-#include "cuda.h"
-#include "tree.h"
+#شامل "cuda.h"
+#شامل "tree.h"
 
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void axpy_gpu_offset(int N, float ALPHA, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
-void copy_gpu_offset(int N, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void add_gpu(int N, float ALPHA, float * X, int INCX);
-void supp_gpu(int N, float ALPHA, float * X, int INCX);
-void mask_gpu(int N, float * X, float mask_num, float * mask, float val);
-void scale_mask_gpu(int N, float * X, float mask_num, float * mask, float scale);
-void const_gpu(int N, float ALPHA, float *X, int INCX);
-void pow_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_gpu(int N, float *X, int INCX, float *Y, int INCY);
+تهی axpy_gpu(صحیح N, اعشاری ALPHA, اعشاری * X, صحیح INCX, اعشاری * Y, صحیح INCY);
+تهی axpy_gpu_offset(صحیح N, اعشاری ALPHA, اعشاری * X, صحیح OFFX, صحیح INCX, اعشاری * Y, صحیح OFFY, صحیح INCY);
+تهی copy_gpu(صحیح N, اعشاری * X, صحیح INCX, اعشاری * Y, صحیح INCY);
+تهی copy_gpu_offset(صحیح N, اعشاری * X, صحیح OFFX, صحیح INCX, اعشاری * Y, صحیح OFFY, صحیح INCY);
+تهی add_gpu(صحیح N, اعشاری ALPHA, اعشاری * X, صحیح INCX);
+تهی supp_gpu(صحیح N, اعشاری ALPHA, اعشاری * X, صحیح INCX);
+تهی mask_gpu(صحیح N, اعشاری * X, اعشاری mask_رقم, اعشاری * mask, اعشاری val);
+تهی scale_mask_gpu(صحیح N, اعشاری * X, اعشاری mask_رقم, اعشاری * mask, اعشاری scale);
+تهی const_gpu(صحیح N, اعشاری ALPHA, اعشاری *X, صحیح INCX);
+تهی pow_gpu(صحیح N, اعشاری ALPHA, اعشاری *X, صحیح INCX, اعشاری *Y, صحیح INCY);
+تهی mul_gpu(صحیح N, اعشاری *X, صحیح INCX, اعشاری *Y, صحیح INCY);
 
-void mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void normalize_gpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
-void l2normalize_gpu(float *x, float *dx, int batch, int filters, int spatial);
+تهی mean_gpu(اعشاری *x, صحیح batch, صحیح filters, صحیح spatial, اعشاری *mean);
+تهی variance_gpu(اعشاری *x, اعشاری *mean, صحیح batch, صحیح filters, صحیح spatial, اعشاری *variance);
+تهی normalize_gpu(اعشاری *x, اعشاری *mean, اعشاری *variance, صحیح batch, صحیح filters, صحیح spatial);
+تهی l2normalize_gpu(اعشاری *x, اعشاری *dx, صحیح batch, صحیح filters, صحیح spatial);
 
-void normalize_delta_gpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
+تهی normalize_delta_gpu(اعشاری *x, اعشاری *mean, اعشاری *variance, اعشاری *mean_delta, اعشاری *variance_delta, صحیح batch, صحیح filters, صحیح spatial, اعشاری *delta);
 
-void fast_mean_delta_gpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void fast_variance_delta_gpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
+تهی fast_mean_delta_gpu(اعشاری *delta, اعشاری *variance, صحیح batch, صحیح filters, صحیح spatial, اعشاری *mean_delta);
+تهی fast_variance_delta_gpu(اعشاری *x, اعشاری *delta, اعشاری *mean, اعشاری *variance, صحیح batch, صحیح filters, صحیح spatial, اعشاری *variance_delta);
 
-void fast_variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void fast_mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void shortcut_gpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_scale_gpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
+تهی fast_variance_gpu(اعشاری *x, اعشاری *mean, صحیح batch, صحیح filters, صحیح spatial, اعشاری *variance);
+تهی fast_mean_gpu(اعشاری *x, صحیح batch, صحیح filters, صحیح spatial, اعشاری *mean);
+تهی shortcut_gpu(صحیح batch, صحیح w1, صحیح h1, صحیح c1, اعشاری *add, صحیح w2, صحیح h2, صحیح c2, اعشاری s1, اعشاری s2, اعشاری *out);
+تهی scale_bias_gpu(اعشاری *output, اعشاری *biases, صحیح batch, صحیح n, صحیح size);
+تهی backward_scale_gpu(اعشاری *x_norm, اعشاری *delta, صحیح batch, صحیح n, صحیح size, اعشاری *scale_updates);
+تهی scale_bias_gpu(اعشاری *output, اعشاری *biases, صحیح batch, صحیح n, صحیح size);
+تهی add_bias_gpu(اعشاری *output, اعشاری *biases, صحیح batch, صحیح n, صحیح size);
+تهی backward_bias_gpu(اعشاری *bias_updates, اعشاری *delta, صحیح batch, صحیح n, صحیح size);
 
-void logistic_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void smooth_l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void wgan_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_delta_gpu(float *a, float *b, float *s, float *da, float *db, float *ds, int num, float *dc);
-void weighted_sum_gpu(float *a, float *b, float *s, int num, float *c);
-void mult_add_into_gpu(int num, float *a, float *b, float *c);
-void inter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
+تهی logistic_x_ent_gpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی softmax_x_ent_gpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی smooth_l1_gpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی l2_gpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی l1_gpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی wgan_gpu(صحیح n, اعشاری *pred, اعشاری *truth, اعشاری *delta, اعشاری *error);
+تهی weighted_delta_gpu(اعشاری *a, اعشاری *b, اعشاری *s, اعشاری *da, اعشاری *db, اعشاری *ds, صحیح رقم, اعشاری *dc);
+تهی weighted_sum_gpu(اعشاری *a, اعشاری *b, اعشاری *s, صحیح رقم, اعشاری *c);
+تهی mult_add_into_gpu(صحیح رقم, اعشاری *a, اعشاری *b, اعشاری *c);
+تهی inter_gpu(صحیح NX, اعشاری *X, صحیح NY, اعشاری *Y, صحیح B, اعشاری *OUT);
+تهی deinter_gpu(صحیح NX, اعشاری *X, صحیح NY, اعشاری *Y, صحیح B, اعشاری *OUT);
 
-void reorg_gpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+تهی reorg_gpu(اعشاری *x, صحیح w, صحیح h, صحیح c, صحیح batch, صحیح stride, صحیح forward, اعشاری *out);
 
-void softmax_gpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-void adam_gpu(int n, float *x, float *m, float *v, float B1, float B2, float rate, float eps, int t);
+تهی softmax_gpu(اعشاری *درون_داد, صحیح n, صحیح batch, صحیح batch_offset, صحیح groups, صحیح group_offset, صحیح stride, اعشاری temp, اعشاری *output);
+تهی adam_update_gpu(اعشاری *w, اعشاری *d, اعشاری *m, اعشاری *v, اعشاری B1, اعشاری B2, اعشاری eps, اعشاری decay, اعشاری rate, صحیح n, صحیح batch, صحیح t);
+تهی adam_gpu(صحیح n, اعشاری *x, اعشاری *m, اعشاری *v, اعشاری B1, اعشاری B2, اعشاری rate, اعشاری eps, صحیح t);
 
-void flatten_gpu(float *x, int spatial, int layers, int batch, int forward, float *out);
-void softmax_tree(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
-void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+تهی flatten_gpu(اعشاری *x, صحیح spatial, صحیح layers, صحیح batch, صحیح forward, اعشاری *out);
+تهی softmax_درخت(اعشاری *درون_داد, صحیح spatial, صحیح batch, صحیح stride, اعشاری temp, اعشاری *output, درخت hier);
+تهی upsample_gpu(اعشاری *in, صحیح w, صحیح h, صحیح c, صحیح batch, صحیح stride, صحیح forward, اعشاری scale, اعشاری *out);
 
 #endif
 #endif

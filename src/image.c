@@ -1,141 +1,141 @@
-#include "image.h"
-#include "utils.h"
-#include "blas.h"
-#include "cuda.h"
-#include <stdio.h>
-#include <math.h>
+#شامل "image.h"
+#شامل "utils.h"
+#شامل "blas.h"
+#شامل "cuda.h"
+#شامل <stdio.h>
+#شامل <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#شامل "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#شامل "stb_image_write.h"
 
-int windows = 0;
+صحیح windows = 0;
 
-float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
+اعشاری colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
 
-float get_color(int c, int x, int max)
+اعشاری get_color(صحیح c, صحیح x, صحیح max)
 {
-    float ratio = ((float)x/max)*5;
-    int i = floor(ratio);
-    int j = ceil(ratio);
+    اعشاری ratio = ((اعشاری)x/max)*5;
+    صحیح i = floor(ratio);
+    صحیح j = ceil(ratio);
     ratio -= i;
-    float r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
+    اعشاری r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
     //printf("%f\n", r);
-    return r;
+    بازگشت r;
 }
 
 image mask_to_rgb(image mask)
 {
-    int n = mask.c;
+    صحیح n = mask.c;
     image im = make_image(mask.w, mask.h, 3);
-    int i, j;
-    for(j = 0; j < n; ++j){
-        int offset = j*123457 % n;
-        float red = get_color(2,offset,n);
-        float green = get_color(1,offset,n);
-        float blue = get_color(0,offset,n);
-        for(i = 0; i < im.w*im.h; ++i){
+    صحیح i, j;
+    برای(j = 0; j < n; ++j){
+        صحیح offset = j*123457 % n;
+        اعشاری red = get_color(2,offset,n);
+        اعشاری green = get_color(1,offset,n);
+        اعشاری blue = get_color(0,offset,n);
+        برای(i = 0; i < im.w*im.h; ++i){
             im.data[i + 0*im.w*im.h] += mask.data[j*im.h*im.w + i]*red;
             im.data[i + 1*im.w*im.h] += mask.data[j*im.h*im.w + i]*green;
             im.data[i + 2*im.w*im.h] += mask.data[j*im.h*im.w + i]*blue;
         }
     }
-    return im;
+    بازگشت im;
 }
 
-static float get_pixel(image m, int x, int y, int c)
+ایستا اعشاری get_pixel(image m, صحیح x, صحیح y, صحیح c)
 {
-    assert(x < m.w && y < m.h && c < m.c);
-    return m.data[c*m.h*m.w + y*m.w + x];
+    أكد(x < m.w && y < m.h && c < m.c);
+    بازگشت m.data[c*m.h*m.w + y*m.w + x];
 }
-static float get_pixel_extend(image m, int x, int y, int c)
+ایستا اعشاری get_pixel_extend(image m, صحیح x, صحیح y, صحیح c)
 {
-    if(x < 0 || x >= m.w || y < 0 || y >= m.h) return 0;
+    اگر(x < 0 || x >= m.w || y < 0 || y >= m.h) بازگشت 0;
     /*
     if(x < 0) x = 0;
     if(x >= m.w) x = m.w-1;
     if(y < 0) y = 0;
     if(y >= m.h) y = m.h-1;
     */
-    if(c < 0 || c >= m.c) return 0;
-    return get_pixel(m, x, y, c);
+    اگر(c < 0 || c >= m.c) بازگشت 0;
+    بازگشت get_pixel(m, x, y, c);
 }
-static void set_pixel(image m, int x, int y, int c, float val)
+ایستا تهی set_pixel(image m, صحیح x, صحیح y, صحیح c, اعشاری val)
 {
-    if (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) return;
-    assert(x < m.w && y < m.h && c < m.c);
+    اگر (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) بازگشت;
+    أكد(x < m.w && y < m.h && c < m.c);
     m.data[c*m.h*m.w + y*m.w + x] = val;
 }
-static void add_pixel(image m, int x, int y, int c, float val)
+ایستا تهی add_pixel(image m, صحیح x, صحیح y, صحیح c, اعشاری val)
 {
-    assert(x < m.w && y < m.h && c < m.c);
+    أكد(x < m.w && y < m.h && c < m.c);
     m.data[c*m.h*m.w + y*m.w + x] += val;
 }
 
-static float bilinear_interpolate(image im, float x, float y, int c)
+ایستا اعشاری bilinear_interpolate(image im, اعشاری x, اعشاری y, صحیح c)
 {
-    int ix = (int) floorf(x);
-    int iy = (int) floorf(y);
+    صحیح ix = (صحیح) floorf(x);
+    صحیح iy = (صحیح) floorf(y);
 
-    float dx = x - ix;
-    float dy = y - iy;
+    اعشاری dx = x - ix;
+    اعشاری dy = y - iy;
 
-    float val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
+    اعشاری val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
         dy     * (1-dx) * get_pixel_extend(im, ix, iy+1, c) + 
         (1-dy) *   dx   * get_pixel_extend(im, ix+1, iy, c) +
         dy     *   dx   * get_pixel_extend(im, ix+1, iy+1, c);
-    return val;
+    بازگشت val;
 }
 
 
-void composite_image(image source, image dest, int dx, int dy)
+تهی composite_image(image source, image dest, صحیح dx, صحیح dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x, y, k);
-                float val2 = get_pixel_extend(dest, dx+x, dy+y, k);
+    صحیح x,y,k;
+    برای(k = 0; k < source.c; ++k){
+        برای(y = 0; y < source.h; ++y){
+            برای(x = 0; x < source.w; ++x){
+                اعشاری val = get_pixel(source, x, y, k);
+                اعشاری val2 = get_pixel_extend(dest, dx+x, dy+y, k);
                 set_pixel(dest, dx+x, dy+y, k, val * val2);
             }
         }
     }
 }
 
-image border_image(image a, int border)
+image border_image(image a, صحیح border)
 {
     image b = make_image(a.w + 2*border, a.h + 2*border, a.c);
-    int x,y,k;
-    for(k = 0; k < b.c; ++k){
-        for(y = 0; y < b.h; ++y){
-            for(x = 0; x < b.w; ++x){
-                float val = get_pixel_extend(a, x - border, y - border, k);
-                if(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
+    صحیح x,y,k;
+    برای(k = 0; k < b.c; ++k){
+        برای(y = 0; y < b.h; ++y){
+            برای(x = 0; x < b.w; ++x){
+                اعشاری val = get_pixel_extend(a, x - border, y - border, k);
+                اگر(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
                 set_pixel(b, x, y, k, val);
             }
         }
     }
-    return b;
+    بازگشت b;
 }
 
-image tile_images(image a, image b, int dx)
+image tile_images(image a, image b, صحیح dx)
 {
-    if(a.w == 0) return copy_image(b);
+    اگر(a.w == 0) بازگشت copy_image(b);
     image c = make_image(a.w + b.w + dx, (a.h > b.h) ? a.h : b.h, (a.c > b.c) ? a.c : b.c);
     fill_cpu(c.w*c.h*c.c, 1, c.data, 1);
     embed_image(a, c, 0, 0); 
     composite_image(b, c, a.w + dx, 0);
-    return c;
+    بازگشت c;
 }
 
-image get_label(image **characters, char *string, int size)
+image get_label(image **characters, نویسه *string, صحیح size)
 {
     size = size/10;
-    if(size > 7) size = 7;
+    اگر(size > 7) size = 7;
     image label = make_empty_image(0,0,0);
-    while(*string){
-        image l = characters[size][(int)*string];
+    وقتی(*string){
+        image l = characters[size][(صحیح)*string];
         image n = tile_images(label, l, -size - 1 + (size+1)/2);
         free_image(label);
         label = n;
@@ -143,41 +143,41 @@ image get_label(image **characters, char *string, int size)
     }
     image b = border_image(label, label.h*.25);
     free_image(label);
-    return b;
+    بازگشت b;
 }
 
-void draw_label(image a, int r, int c, image label, const float *rgb)
+تهی draw_label(image a, صحیح r, صحیح c, image label, ثابت اعشاری *rgb)
 {
-    int w = label.w;
-    int h = label.h;
-    if (r - h >= 0) r = r - h;
+    صحیح w = label.w;
+    صحیح h = label.h;
+    اگر (r - h >= 0) r = r - h;
 
-    int i, j, k;
-    for(j = 0; j < h && j + r < a.h; ++j){
-        for(i = 0; i < w && i + c < a.w; ++i){
-            for(k = 0; k < label.c; ++k){
-                float val = get_pixel(label, i, j, k);
+    صحیح i, j, k;
+    برای(j = 0; j < h && j + r < a.h; ++j){
+        برای(i = 0; i < w && i + c < a.w; ++i){
+            برای(k = 0; k < label.c; ++k){
+                اعشاری val = get_pixel(label, i, j, k);
                 set_pixel(a, i+c, j+r, k, rgb[k] * val);
             }
         }
     }
 }
 
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b)
+تهی draw_box(image a, صحیح x1, صحیح y1, صحیح x2, صحیح y2, اعشاری r, اعشاری g, اعشاری b)
 {
     //normalize_image(a);
-    int i;
-    if(x1 < 0) x1 = 0;
-    if(x1 >= a.w) x1 = a.w-1;
-    if(x2 < 0) x2 = 0;
-    if(x2 >= a.w) x2 = a.w-1;
+    صحیح i;
+    اگر(x1 < 0) x1 = 0;
+    اگر(x1 >= a.w) x1 = a.w-1;
+    اگر(x2 < 0) x2 = 0;
+    اگر(x2 >= a.w) x2 = a.w-1;
 
-    if(y1 < 0) y1 = 0;
-    if(y1 >= a.h) y1 = a.h-1;
-    if(y2 < 0) y2 = 0;
-    if(y2 >= a.h) y2 = a.h-1;
+    اگر(y1 < 0) y1 = 0;
+    اگر(y1 >= a.h) y1 = a.h-1;
+    اگر(y2 < 0) y2 = 0;
+    اگر(y2 >= a.h) y2 = a.h-1;
 
-    for(i = x1; i <= x2; ++i){
+    برای(i = x1; i <= x2; ++i){
         a.data[i + y1*a.w + 0*a.w*a.h] = r;
         a.data[i + y2*a.w + 0*a.w*a.h] = r;
 
@@ -187,7 +187,7 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
         a.data[i + y1*a.w + 2*a.w*a.h] = b;
         a.data[i + y2*a.w + 2*a.w*a.h] = b;
     }
-    for(i = y1; i <= y2; ++i){
+    برای(i = y1; i <= y2; ++i){
         a.data[x1 + i*a.w + 0*a.w*a.h] = r;
         a.data[x2 + i*a.w + 0*a.w*a.h] = r;
 
@@ -199,64 +199,64 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
     }
 }
 
-void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
+تهی draw_box_width(image a, صحیح x1, صحیح y1, صحیح x2, صحیح y2, صحیح w, اعشاری r, اعشاری g, اعشاری b)
 {
-    int i;
-    for(i = 0; i < w; ++i){
+    صحیح i;
+    برای(i = 0; i < w; ++i){
         draw_box(a, x1+i, y1+i, x2-i, y2-i, r, g, b);
     }
 }
 
-void draw_bbox(image a, box bbox, int w, float r, float g, float b)
+تهی draw_bbox(image a, box bbox, صحیح w, اعشاری r, اعشاری g, اعشاری b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
-    int bot   = (bbox.y+bbox.h/2)*a.h;
+    صحیح چپ  = (bbox.x-bbox.w/2)*a.w;
+    صحیح راست = (bbox.x+bbox.w/2)*a.w;
+    صحیح بالاترین   = (bbox.y-bbox.h/2)*a.h;
+    صحیح bot   = (bbox.y+bbox.h/2)*a.h;
 
-    int i;
-    for(i = 0; i < w; ++i){
-        draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
+    صحیح i;
+    برای(i = 0; i < w; ++i){
+        draw_box(a, چپ+i, بالاترین+i, راست-i, bot-i, r, g, b);
     }
 }
 
 image **load_alphabet()
 {
-    int i, j;
-    const int nsize = 8;
-    image **alphabets = calloc(nsize, sizeof(image));
-    for(j = 0; j < nsize; ++j){
-        alphabets[j] = calloc(128, sizeof(image));
-        for(i = 32; i < 127; ++i){
-            char buff[256];
+    صحیح i, j;
+    ثابت صحیح nsize = 8;
+    image **alphabets = calloc(nsize, اندازه(image));
+    برای(j = 0; j < nsize; ++j){
+        alphabets[j] = calloc(128, اندازه(image));
+        برای(i = 32; i < 127; ++i){
+            نویسه buff[256];
             sprintf(buff, "data/labels/%d_%d.png", i, j);
             alphabets[j][i] = load_image_color(buff, 0, 0);
         }
     }
-    return alphabets;
+    بازگشت alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+تهی draw_detections(image im, detection *dets, صحیح رقم, اعشاری thresh, نویسه **names, image **alphabet, صحیح classes)
 {
-    int i,j;
+    صحیح i,j;
 
-    for(i = 0; i < num; ++i){
-        char labelstr[4096] = {0};
-        int class = -1;
-        for(j = 0; j < classes; ++j){
-            if (dets[i].prob[j] > thresh){
-                if (class < 0) {
+    برای(i = 0; i < رقم; ++i){
+        نویسه labelstr[4096] = {0};
+        صحیح class = -1;
+        برای(j = 0; j < classes; ++j){
+            اگر (dets[i].prob[j] > thresh){
+                اگر (class < 0) {
                     strcat(labelstr, names[j]);
                     class = j;
-                } else {
+                } وگرنه {
                     strcat(labelstr, ", ");
                     strcat(labelstr, names[j]);
                 }
                 printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
             }
         }
-        if(class >= 0){
-            int width = im.h * .006;
+        اگر(class >= 0){
+            صحیح width = im.h * .006;
 
             /*
                if(0){
@@ -266,11 +266,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
              */
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
-            int offset = class*123457 % classes;
-            float red = get_color(2,offset,classes);
-            float green = get_color(1,offset,classes);
-            float blue = get_color(0,offset,classes);
-            float rgb[3];
+            صحیح offset = class*123457 % classes;
+            اعشاری red = get_color(2,offset,classes);
+            اعشاری green = get_color(1,offset,classes);
+            اعشاری blue = get_color(0,offset,classes);
+            اعشاری rgb[3];
 
             //width = prob*20+2;
 
@@ -280,27 +280,27 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             box b = dets[i].bbox;
             //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
-            int bot   = (b.y+b.h/2.)*im.h;
+            صحیح چپ  = (b.x-b.w/2.)*im.w;
+            صحیح راست = (b.x+b.w/2.)*im.w;
+            صحیح بالاترین   = (b.y-b.h/2.)*im.h;
+            صحیح bot   = (b.y+b.h/2.)*im.h;
 
-            if(left < 0) left = 0;
-            if(right > im.w-1) right = im.w-1;
-            if(top < 0) top = 0;
-            if(bot > im.h-1) bot = im.h-1;
+            اگر(چپ < 0) چپ = 0;
+            اگر(راست > im.w-1) راست = im.w-1;
+            اگر(بالاترین < 0) بالاترین = 0;
+            اگر(bot > im.h-1) bot = im.h-1;
 
-            draw_box_width(im, left, top, right, bot, width, red, green, blue);
-            if (alphabet) {
+            draw_box_width(im, چپ, بالاترین, راست, bot, width, red, green, blue);
+            اگر (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.03));
-                draw_label(im, top + width, left, label, rgb);
+                draw_label(im, بالاترین + width, چپ, label, rgb);
                 free_image(label);
             }
-            if (dets[i].mask){
+            اگر (dets[i].mask){
                 image mask = float_to_image(14, 14, 1, dets[i].mask);
                 image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
                 image tmask = threshold_image(resized_mask, .5);
-                embed_image(tmask, im, left, top);
+                embed_image(tmask, im, چپ, بالاترین);
                 free_image(mask);
                 free_image(resized_mask);
                 free_image(tmask);
@@ -309,15 +309,15 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
     }
 }
 
-void transpose_image(image im)
+تهی transpose_image(image im)
 {
-    assert(im.w == im.h);
-    int n, m;
-    int c;
-    for(c = 0; c < im.c; ++c){
-        for(n = 0; n < im.w-1; ++n){
-            for(m = n + 1; m < im.w; ++m){
-                float swap = im.data[m + im.w*(n + im.h*c)];
+    أكد(im.w == im.h);
+    صحیح n, m;
+    صحیح c;
+    برای(c = 0; c < im.c; ++c){
+        برای(n = 0; n < im.w-1; ++n){
+            برای(m = n + 1; m < im.w; ++m){
+                اعشاری swap = im.data[m + im.w*(n + im.h*c)];
                 im.data[m + im.w*(n + im.h*c)] = im.data[n + im.w*(m + im.h*c)];
                 im.data[n + im.w*(m + im.h*c)] = swap;
             }
@@ -325,17 +325,17 @@ void transpose_image(image im)
     }
 }
 
-void rotate_image_cw(image im, int times)
+تهی rotate_image_cw(image im, صحیح times)
 {
-    assert(im.w == im.h);
+    أكد(im.w == im.h);
     times = (times + 400) % 4;
-    int i, x, y, c;
-    int n = im.w;
-    for(i = 0; i < times; ++i){
-        for(c = 0; c < im.c; ++c){
-            for(x = 0; x < n/2; ++x){
-                for(y = 0; y < (n-1)/2 + 1; ++y){
-                    float temp = im.data[y + im.w*(x + im.h*c)];
+    صحیح i, x, y, c;
+    صحیح n = im.w;
+    برای(i = 0; i < times; ++i){
+        برای(c = 0; c < im.c; ++c){
+            برای(x = 0; x < n/2; ++x){
+                برای(y = 0; y < (n-1)/2 + 1; ++y){
+                    اعشاری temp = im.data[y + im.w*(x + im.h*c)];
                     im.data[y + im.w*(x + im.h*c)] = im.data[n-1-x + im.w*(y + im.h*c)];
                     im.data[n-1-x + im.w*(y + im.h*c)] = im.data[n-1-y + im.w*(n-1-x + im.h*c)];
                     im.data[n-1-y + im.w*(n-1-x + im.h*c)] = im.data[x + im.w*(n-1-y + im.h*c)];
@@ -346,15 +346,15 @@ void rotate_image_cw(image im, int times)
     }
 }
 
-void flip_image(image a)
+تهی flip_image(image a)
 {
-    int i,j,k;
-    for(k = 0; k < a.c; ++k){
-        for(i = 0; i < a.h; ++i){
-            for(j = 0; j < a.w/2; ++j){
-                int index = j + a.w*(i + a.h*(k));
-                int flip = (a.w - j - 1) + a.w*(i + a.h*(k));
-                float swap = a.data[flip];
+    صحیح i,j,k;
+    برای(k = 0; k < a.c; ++k){
+        برای(i = 0; i < a.h; ++i){
+            برای(j = 0; j < a.w/2; ++j){
+                صحیح index = j + a.w*(i + a.h*(k));
+                صحیح flip = (a.w - j - 1) + a.w*(i + a.h*(k));
+                اعشاری swap = a.data[flip];
                 a.data[flip] = a.data[index];
                 a.data[index] = swap;
             }
@@ -364,60 +364,60 @@ void flip_image(image a)
 
 image image_distance(image a, image b)
 {
-    int i,j;
+    صحیح i,j;
     image dist = make_image(a.w, a.h, 1);
-    for(i = 0; i < a.c; ++i){
-        for(j = 0; j < a.h*a.w; ++j){
+    برای(i = 0; i < a.c; ++i){
+        برای(j = 0; j < a.h*a.w; ++j){
             dist.data[j] += pow(a.data[i*a.h*a.w+j]-b.data[i*a.h*a.w+j],2);
         }
     }
-    for(j = 0; j < a.h*a.w; ++j){
+    برای(j = 0; j < a.h*a.w; ++j){
         dist.data[j] = sqrt(dist.data[j]);
     }
-    return dist;
+    بازگشت dist;
 }
 
-void ghost_image(image source, image dest, int dx, int dy)
+تهی ghost_image(image source, image dest, صحیح dx, صحیح dy)
 {
-    int x,y,k;
-    float max_dist = sqrt((-source.w/2. + .5)*(-source.w/2. + .5));
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float dist = sqrt((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
-                float alpha = (1 - dist/max_dist);
-                if(alpha < 0) alpha = 0;
-                float v1 = get_pixel(source, x,y,k);
-                float v2 = get_pixel(dest, dx+x,dy+y,k);
-                float val = alpha*v1 + (1-alpha)*v2;
+    صحیح x,y,k;
+    اعشاری max_dist = sqrt((-source.w/2. + .5)*(-source.w/2. + .5));
+    برای(k = 0; k < source.c; ++k){
+        برای(y = 0; y < source.h; ++y){
+            برای(x = 0; x < source.w; ++x){
+                اعشاری dist = sqrt((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
+                اعشاری alpha = (1 - dist/max_dist);
+                اگر(alpha < 0) alpha = 0;
+                اعشاری v1 = get_pixel(source, x,y,k);
+                اعشاری v2 = get_pixel(dest, dx+x,dy+y,k);
+                اعشاری val = alpha*v1 + (1-alpha)*v2;
                 set_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-void blocky_image(image im, int s)
+تهی blocky_image(image im, صحیح s)
 {
-    int i,j,k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
+    صحیح i,j,k;
+    برای(k = 0; k < im.c; ++k){
+        برای(j = 0; j < im.h; ++j){
+            برای(i = 0; i < im.w; ++i){
                 im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
             }
         }
     }
 }
 
-void censor_image(image im, int dx, int dy, int w, int h)
+تهی censor_image(image im, صحیح dx, صحیح dy, صحیح w, صحیح h)
 {
-    int i,j,k;
-    int s = 32;
-    if(dx < 0) dx = 0;
-    if(dy < 0) dy = 0;
+    صحیح i,j,k;
+    صحیح s = 32;
+    اگر(dx < 0) dx = 0;
+    اگر(dy < 0) dy = 0;
 
-    for(k = 0; k < im.c; ++k){
-        for(j = dy; j < dy + h && j < im.h; ++j){
-            for(i = dx; i < dx + w && i < im.w; ++i){
+    برای(k = 0; k < im.c; ++k){
+        برای(j = dy; j < dy + h && j < im.h; ++j){
+            برای(i = dx; i < dx + w && i < im.w; ++i){
                 im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
                 //im.data[i + j*im.w + k*im.w*im.h] = 0;
             }
@@ -425,162 +425,162 @@ void censor_image(image im, int dx, int dy, int w, int h)
     }
 }
 
-void embed_image(image source, image dest, int dx, int dy)
+تهی embed_image(image source, image dest, صحیح dx, صحیح dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x,y,k);
+    صحیح x,y,k;
+    برای(k = 0; k < source.c; ++k){
+        برای(y = 0; y < source.h; ++y){
+            برای(x = 0; x < source.w; ++x){
+                اعشاری val = get_pixel(source, x,y,k);
                 set_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-image collapse_image_layers(image source, int border)
+image collapse_image_layers(image source, صحیح border)
 {
-    int h = source.h;
+    صحیح h = source.h;
     h = (h+border)*source.c - border;
     image dest = make_image(source.w, h, 1);
-    int i;
-    for(i = 0; i < source.c; ++i){
+    صحیح i;
+    برای(i = 0; i < source.c; ++i){
         image layer = get_image_layer(source, i);
-        int h_offset = i*(source.h+border);
+        صحیح h_offset = i*(source.h+border);
         embed_image(layer, dest, 0, h_offset);
         free_image(layer);
     }
-    return dest;
+    بازگشت dest;
 }
 
-void constrain_image(image im)
+تهی constrain_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        if(im.data[i] < 0) im.data[i] = 0;
-        if(im.data[i] > 1) im.data[i] = 1;
+    صحیح i;
+    برای(i = 0; i < im.w*im.h*im.c; ++i){
+        اگر(im.data[i] < 0) im.data[i] = 0;
+        اگر(im.data[i] > 1) im.data[i] = 1;
     }
 }
 
-void normalize_image(image p)
+تهی normalize_image(image p)
 {
-    int i;
-    float min = 9999999;
-    float max = -999999;
+    صحیح i;
+    اعشاری min = 9999999;
+    اعشاری max = -999999;
 
-    for(i = 0; i < p.h*p.w*p.c; ++i){
-        float v = p.data[i];
-        if(v < min) min = v;
-        if(v > max) max = v;
+    برای(i = 0; i < p.h*p.w*p.c; ++i){
+        اعشاری v = p.data[i];
+        اگر(v < min) min = v;
+        اگر(v > max) max = v;
     }
-    if(max - min < .000000001){
+    اگر(max - min < .000000001){
         min = 0;
         max = 1;
     }
-    for(i = 0; i < p.c*p.w*p.h; ++i){
+    برای(i = 0; i < p.c*p.w*p.h; ++i){
         p.data[i] = (p.data[i] - min)/(max-min);
     }
 }
 
-void normalize_image2(image p)
+تهی normalize_image2(image p)
 {
-    float *min = calloc(p.c, sizeof(float));
-    float *max = calloc(p.c, sizeof(float));
-    int i,j;
-    for(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
+    اعشاری *min = calloc(p.c, اندازه(اعشاری));
+    اعشاری *max = calloc(p.c, اندازه(اعشاری));
+    صحیح i,j;
+    برای(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
 
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.h*p.w; ++i){
-            float v = p.data[i+j*p.h*p.w];
-            if(v < min[j]) min[j] = v;
-            if(v > max[j]) max[j] = v;
+    برای(j = 0; j < p.c; ++j){
+        برای(i = 0; i < p.h*p.w; ++i){
+            اعشاری v = p.data[i+j*p.h*p.w];
+            اگر(v < min[j]) min[j] = v;
+            اگر(v > max[j]) max[j] = v;
         }
     }
-    for(i = 0; i < p.c; ++i){
-        if(max[i] - min[i] < .000000001){
+    برای(i = 0; i < p.c; ++i){
+        اگر(max[i] - min[i] < .000000001){
             min[i] = 0;
             max[i] = 1;
         }
     }
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.w*p.h; ++i){
+    برای(j = 0; j < p.c; ++j){
+        برای(i = 0; i < p.w*p.h; ++i){
             p.data[i+j*p.h*p.w] = (p.data[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
         }
     }
-    free(min);
-    free(max);
+    آزاد(min);
+    آزاد(max);
 }
 
-void copy_image_into(image src, image dest)
+تهی copy_image_into(image src, image dest)
 {
-    memcpy(dest.data, src.data, src.h*src.w*src.c*sizeof(float));
+    memcpy(dest.data, src.data, src.h*src.w*src.c*اندازه(اعشاری));
 }
 
 image copy_image(image p)
 {
     image copy = p;
-    copy.data = calloc(p.h*p.w*p.c, sizeof(float));
-    memcpy(copy.data, p.data, p.h*p.w*p.c*sizeof(float));
-    return copy;
+    copy.data = calloc(p.h*p.w*p.c, اندازه(اعشاری));
+    memcpy(copy.data, p.data, p.h*p.w*p.c*اندازه(اعشاری));
+    بازگشت copy;
 }
 
-void rgbgr_image(image im)
+تهی rgbgr_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        float swap = im.data[i];
+    صحیح i;
+    برای(i = 0; i < im.w*im.h; ++i){
+        اعشاری swap = im.data[i];
         im.data[i] = im.data[i+im.w*im.h*2];
         im.data[i+im.w*im.h*2] = swap;
     }
 }
 
-int show_image(image p, const char *name, int ms)
+صحیح show_image(image p, ثابت نویسه *name, صحیح ms)
 {
 #ifdef OPENCV
-    int c = show_image_cv(p, name, ms);
-    return c;
-#else
+    صحیح c = show_image_cv(p, name, ms);
+    بازگشت c;
+#وگرنه
     fprintf(stderr, "Not compiled with OpenCV, saving to %s.png instead\n", name);
     save_image(p, name);
-    return -1;
+    بازگشت -1;
 #endif
 }
 
-void save_image_options(image im, const char *name, IMTYPE f, int quality)
+تهی save_image_options(image im, ثابت نویسه *name, IMTYPE f, صحیح quality)
 {
-    char buff[256];
+    نویسه buff[256];
     //sprintf(buff, "%s (%d)", name, windows);
-    if(f == PNG)       sprintf(buff, "%s.png", name);
-    else if (f == BMP) sprintf(buff, "%s.bmp", name);
-    else if (f == TGA) sprintf(buff, "%s.tga", name);
-    else if (f == JPG) sprintf(buff, "%s.jpg", name);
-    else               sprintf(buff, "%s.png", name);
-    unsigned char *data = calloc(im.w*im.h*im.c, sizeof(char));
-    int i,k;
-    for(k = 0; k < im.c; ++k){
-        for(i = 0; i < im.w*im.h; ++i){
-            data[i*im.c+k] = (unsigned char) (255*im.data[i + k*im.w*im.h]);
+    اگر(f == PNG)       sprintf(buff, "%s.png", name);
+    وگرنه اگر (f == BMP) sprintf(buff, "%s.bmp", name);
+    وگرنه اگر (f == TGA) sprintf(buff, "%s.tga", name);
+    وگرنه اگر (f == JPG) sprintf(buff, "%s.jpg", name);
+    وگرنه               sprintf(buff, "%s.png", name);
+    unsigned نویسه *data = calloc(im.w*im.h*im.c, اندازه(نویسه));
+    صحیح i,k;
+    برای(k = 0; k < im.c; ++k){
+        برای(i = 0; i < im.w*im.h; ++i){
+            data[i*im.c+k] = (unsigned نویسه) (255*im.data[i + k*im.w*im.h]);
         }
     }
-    int success = 0;
-    if(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
-    else if (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
-    else if (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
-    else if (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
-    free(data);
-    if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
+    صحیح success = 0;
+    اگر(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
+    وگرنه اگر (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
+    وگرنه اگر (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
+    وگرنه اگر (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
+    آزاد(data);
+    اگر(!success) fprintf(stderr, "Failed to write image %s\n", buff);
 }
 
-void save_image(image im, const char *name)
+تهی save_image(image im, ثابت نویسه *name)
 {
     save_image_options(im, name, JPG, 80);
 }
 
-void show_image_layers(image p, char *name)
+تهی show_image_layers(image p, نویسه *name)
 {
-    int i;
-    char buff[256];
-    for(i = 0; i < p.c; ++i){
+    صحیح i;
+    نویسه buff[256];
+    برای(i = 0; i < p.c; ++i){
         sprintf(buff, "%s - Layer %d", name, i);
         image layer = get_image_layer(p, i);
         show_image(layer, buff, 1);
@@ -588,138 +588,138 @@ void show_image_layers(image p, char *name)
     }
 }
 
-void show_image_collapsed(image p, char *name)
+تهی show_image_collapsed(image p, نویسه *name)
 {
     image c = collapse_image_layers(p, 1);
     show_image(c, name, 1);
     free_image(c);
 }
 
-image make_empty_image(int w, int h, int c)
+image make_empty_image(صحیح w, صحیح h, صحیح c)
 {
     image out;
     out.data = 0;
     out.h = h;
     out.w = w;
     out.c = c;
-    return out;
+    بازگشت out;
 }
 
-image make_image(int w, int h, int c)
+image make_image(صحیح w, صحیح h, صحیح c)
 {
     image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    return out;
+    out.data = calloc(h*w*c, اندازه(اعشاری));
+    بازگشت out;
 }
 
-image make_random_image(int w, int h, int c)
+image make_random_image(صحیح w, صحیح h, صحیح c)
 {
     image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    int i;
-    for(i = 0; i < w*h*c; ++i){
+    out.data = calloc(h*w*c, اندازه(اعشاری));
+    صحیح i;
+    برای(i = 0; i < w*h*c; ++i){
         out.data[i] = (rand_normal() * .25) + .5;
     }
-    return out;
+    بازگشت out;
 }
 
-image float_to_image(int w, int h, int c, float *data)
+image float_to_image(صحیح w, صحیح h, صحیح c, اعشاری *data)
 {
     image out = make_empty_image(w,h,c);
     out.data = data;
-    return out;
+    بازگشت out;
 }
 
-void place_image(image im, int w, int h, int dx, int dy, image canvas)
+تهی place_image(image im, صحیح w, صحیح h, صحیح dx, صحیح dy, image canvas)
 {
-    int x, y, c;
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = ((float)x / w) * im.w;
-                float ry = ((float)y / h) * im.h;
-                float val = bilinear_interpolate(im, rx, ry, c);
+    صحیح x, y, c;
+    برای(c = 0; c < im.c; ++c){
+        برای(y = 0; y < h; ++y){
+            برای(x = 0; x < w; ++x){
+                اعشاری rx = ((اعشاری)x / w) * im.w;
+                اعشاری ry = ((اعشاری)y / h) * im.h;
+                اعشاری val = bilinear_interpolate(im, rx, ry, c);
                 set_pixel(canvas, x + dx, y + dy, c, val);
             }
         }
     }
 }
 
-image center_crop_image(image im, int w, int h)
+image center_crop_image(image im, صحیح w, صحیح h)
 {
-    int m = (im.w < im.h) ? im.w : im.h;   
+    صحیح m = (im.w < im.h) ? im.w : im.h;   
     image c = crop_image(im, (im.w - m) / 2, (im.h - m)/2, m, m);
     image r = resize_image(c, w, h);
     free_image(c);
-    return r;
+    بازگشت r;
 }
 
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect)
+image rotate_crop_image(image im, اعشاری rad, اعشاری s, صحیح w, صحیح h, اعشاری dx, اعشاری dy, اعشاری aspect)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    صحیح x, y, c;
+    اعشاری cx = im.w/2.;
+    اعشاری cy = im.h/2.;
     image rot = make_image(w, h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
-                float ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
+    برای(c = 0; c < im.c; ++c){
+        برای(y = 0; y < h; ++y){
+            برای(x = 0; x < w; ++x){
+                اعشاری rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
+                اعشاری ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
+                اعشاری val = bilinear_interpolate(im, rx, ry, c);
                 set_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    بازگشت rot;
 }
 
-image rotate_image(image im, float rad)
+image rotate_image(image im, اعشاری rad)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    صحیح x, y, c;
+    اعشاری cx = im.w/2.;
+    اعشاری cy = im.h/2.;
     image rot = make_image(im.w, im.h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < im.h; ++y){
-            for(x = 0; x < im.w; ++x){
-                float rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
-                float ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
+    برای(c = 0; c < im.c; ++c){
+        برای(y = 0; y < im.h; ++y){
+            برای(x = 0; x < im.w; ++x){
+                اعشاری rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
+                اعشاری ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
+                اعشاری val = bilinear_interpolate(im, rx, ry, c);
                 set_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    بازگشت rot;
 }
 
-void fill_image(image m, float s)
+تهی fill_image(image m, اعشاری s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
+    صحیح i;
+    برای(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
 }
 
-void translate_image(image m, float s)
+تهی translate_image(image m, اعشاری s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
+    صحیح i;
+    برای(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
 }
 
-void scale_image(image m, float s)
+تهی scale_image(image m, اعشاری s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
+    صحیح i;
+    برای(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
 }
 
-image crop_image(image im, int dx, int dy, int w, int h)
+image crop_image(image im, صحیح dx, صحیح dy, صحیح w, صحیح h)
 {
     image cropped = make_image(w, h, im.c);
-    int i, j, k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int r = j + dy;
-                int c = i + dx;
-                float val = 0;
+    صحیح i, j, k;
+    برای(k = 0; k < im.c; ++k){
+        برای(j = 0; j < h; ++j){
+            برای(i = 0; i < w; ++i){
+                صحیح r = j + dy;
+                صحیح c = i + dx;
+                اعشاری val = 0;
                 r = constrain_int(r, 0, im.h-1);
                 c = constrain_int(c, 0, im.w-1);
                 val = get_pixel(im, c, r, k);
@@ -727,80 +727,80 @@ image crop_image(image im, int dx, int dy, int w, int h)
             }
         }
     }
-    return cropped;
+    بازگشت cropped;
 }
 
-int best_3d_shift_r(image a, image b, int min, int max)
+صحیح best_3d_shift_r(image a, image b, صحیح min, صحیح max)
 {
-    if(min == max) return min;
-    int mid = floor((min + max) / 2.);
+    اگر(min == max) بازگشت min;
+    صحیح mid = floor((min + max) / 2.);
     image c1 = crop_image(b, 0, mid, b.w, b.h);
     image c2 = crop_image(b, 0, mid+1, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
+    اعشاری d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
+    اعشاری d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
     free_image(c1);
     free_image(c2);
-    if(d1 < d2) return best_3d_shift_r(a, b, min, mid);
-    else return best_3d_shift_r(a, b, mid+1, max);
+    اگر(d1 < d2) بازگشت best_3d_shift_r(a, b, min, mid);
+    وگرنه بازگشت best_3d_shift_r(a, b, mid+1, max);
 }
 
-int best_3d_shift(image a, image b, int min, int max)
+صحیح best_3d_shift(image a, image b, صحیح min, صحیح max)
 {
-    int i;
-    int best = 0;
-    float best_distance = FLT_MAX;
-    for(i = min; i <= max; i += 2){
+    صحیح i;
+    صحیح best = 0;
+    اعشاری best_distance = FLT_MAX;
+    برای(i = min; i <= max; i += 2){
         image c = crop_image(b, 0, i, b.w, b.h);
-        float d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
-        if(d < best_distance){
+        اعشاری d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
+        اگر(d < best_distance){
             best_distance = d;
             best = i;
         }
         printf("%d %f\n", i, d);
         free_image(c);
     }
-    return best;
+    بازگشت best;
 }
 
-void composite_3d(char *f1, char *f2, char *out, int delta)
+تهی composite_3d(نویسه *f1, نویسه *f2, نویسه *out, صحیح delta)
 {
-    if(!out) out = "out";
+    اگر(!out) out = "out";
     image a = load_image(f1, 0,0,0);
     image b = load_image(f2, 0,0,0);
-    int shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
+    صحیح shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
 
     image c1 = crop_image(b, 10, shift, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
+    اعشاری d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
     image c2 = crop_image(b, -10, shift, b.w, b.h);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
+    اعشاری d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
 
-    if(d2 < d1 && 0){
+    اگر(d2 < d1 && 0){
         image swap = a;
         a = b;
         b = swap;
         shift = -shift;
         printf("swapped, %d\n", shift);
     }
-    else{
+    وگرنه{
         printf("%d\n", shift);
     }
 
     image c = crop_image(b, delta, shift, a.w, a.h);
-    int i;
-    for(i = 0; i < c.w*c.h; ++i){
+    صحیح i;
+    برای(i = 0; i < c.w*c.h; ++i){
         c.data[i] = a.data[i];
     }
     save_image(c, out);
 }
 
-void letterbox_image_into(image im, int w, int h, image boxed)
+تهی letterbox_image_into(image im, صحیح w, صحیح h, image boxed)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    صحیح new_w = im.w;
+    صحیح new_h = im.h;
+    اگر (((اعشاری)w/im.w) < ((اعشاری)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } وگرنه {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -809,14 +809,14 @@ void letterbox_image_into(image im, int w, int h, image boxed)
     free_image(resized);
 }
 
-image letterbox_image(image im, int w, int h)
+image letterbox_image(image im, صحیح w, صحیح h)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    صحیح new_w = im.w;
+    صحیح new_h = im.h;
+    اگر (((اعشاری)w/im.w) < ((اعشاری)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } وگرنه {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -827,61 +827,61 @@ image letterbox_image(image im, int w, int h)
     //for(i = 0; i < boxed.w*boxed.h*boxed.c; ++i) boxed.data[i] = 0;
     embed_image(resized, boxed, (w-new_w)/2, (h-new_h)/2); 
     free_image(resized);
-    return boxed;
+    بازگشت boxed;
 }
 
-image resize_max(image im, int max)
+image resize_max(image im, صحیح max)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w > h){
+    صحیح w = im.w;
+    صحیح h = im.h;
+    اگر(w > h){
         h = (h * max) / w;
         w = max;
-    } else {
+    } وگرنه {
         w = (w * max) / h;
         h = max;
     }
-    if(w == im.w && h == im.h) return im;
+    اگر(w == im.w && h == im.h) بازگشت im;
     image resized = resize_image(im, w, h);
-    return resized;
+    بازگشت resized;
 }
 
-image resize_min(image im, int min)
+image resize_min(image im, صحیح min)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w < h){
+    صحیح w = im.w;
+    صحیح h = im.h;
+    اگر(w < h){
         h = (h * min) / w;
         w = min;
-    } else {
+    } وگرنه {
         w = (w * min) / h;
         h = min;
     }
-    if(w == im.w && h == im.h) return im;
+    اگر(w == im.w && h == im.h) بازگشت im;
     image resized = resize_image(im, w, h);
-    return resized;
+    بازگشت resized;
 }
 
-image random_crop_image(image im, int w, int h)
+image random_crop_image(image im, صحیح w, صحیح h)
 {
-    int dx = rand_int(0, im.w - w);
-    int dy = rand_int(0, im.h - h);
+    صحیح dx = rand_int(0, im.w - w);
+    صحیح dy = rand_int(0, im.h - h);
     image crop = crop_image(im, dx, dy, w, h);
-    return crop;
+    بازگشت crop;
 }
 
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h)
+augment_args random_augment_args(image im, اعشاری angle, اعشاری aspect, صحیح کم, صحیح بالا, صحیح w, صحیح h)
 {
     augment_args a = {0};
     aspect = rand_scale(aspect);
-    int r = rand_int(low, high);
-    int min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
-    float scale = (float)r / min;
+    صحیح r = rand_int(کم, بالا);
+    صحیح min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
+    اعشاری scale = (اعشاری)r / min;
 
-    float rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
+    اعشاری rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
 
-    float dx = (im.w*scale/aspect - w) / 2.;
-    float dy = (im.h*scale - w) / 2.;
+    اعشاری dx = (im.w*scale/aspect - w) / 2.;
+    اعشاری dy = (im.h*scale - w) / 2.;
     //if(dx < 0) dx = 0;
     //if(dy < 0) dy = 0;
     dx = rand_uniform(-dx, dx);
@@ -894,34 +894,34 @@ augment_args random_augment_args(image im, float angle, float aspect, int low, i
     a.dx = dx;
     a.dy = dy;
     a.aspect = aspect;
-    return a;
+    بازگشت a;
 }
 
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h)
+image random_augment_image(image im, اعشاری angle, اعشاری aspect, صحیح کم, صحیح بالا, صحیح w, صحیح h)
 {
-    augment_args a = random_augment_args(im, angle, aspect, low, high, w, h);
+    augment_args a = random_augment_args(im, angle, aspect, کم, بالا, w, h);
     image crop = rotate_crop_image(im, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
-    return crop;
+    بازگشت crop;
 }
 
-float three_way_max(float a, float b, float c)
+اعشاری three_way_max(اعشاری a, اعشاری b, اعشاری c)
 {
-    return (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
+    بازگشت (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
 }
 
-float three_way_min(float a, float b, float c)
+اعشاری three_way_min(اعشاری a, اعشاری b, اعشاری c)
 {
-    return (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
+    بازگشت (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
 }
 
-void yuv_to_rgb(image im)
+تهی yuv_to_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    أكد(im.c == 3);
+    صحیح i, j;
+    اعشاری r, g, b;
+    اعشاری y, u, v;
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
             y = get_pixel(im, i , j, 0);
             u = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
@@ -937,14 +937,14 @@ void yuv_to_rgb(image im)
     }
 }
 
-void rgb_to_yuv(image im)
+تهی rgb_to_yuv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    أكد(im.c == 3);
+    صحیح i, j;
+    اعشاری r, g, b;
+    اعشاری y, u, v;
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
@@ -961,34 +961,34 @@ void rgb_to_yuv(image im)
 }
 
 // http://www.cs.rit.edu/~ncs/color/t_convert.html
-void rgb_to_hsv(image im)
+تهی rgb_to_hsv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    أكد(im.c == 3);
+    صحیح i, j;
+    اعشاری r, g, b;
+    اعشاری h, s, v;
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
-            float max = three_way_max(r,g,b);
-            float min = three_way_min(r,g,b);
-            float delta = max - min;
+            اعشاری max = three_way_max(r,g,b);
+            اعشاری min = three_way_min(r,g,b);
+            اعشاری delta = max - min;
             v = max;
-            if(max == 0){
+            اگر(max == 0){
                 s = 0;
                 h = 0;
-            }else{
+            }وگرنه{
                 s = delta/max;
-                if(r == max){
+                اگر(r == max){
                     h = (g - b) / delta;
-                } else if (g == max) {
+                } وگرنه اگر (g == max) {
                     h = 2 + (b - r) / delta;
-                } else {
+                } وگرنه {
                     h = 4 + (r - g) / delta;
                 }
-                if (h < 0) h += 6;
+                اگر (h < 0) h += 6;
                 h = h/6.;
             }
             set_pixel(im, i, j, 0, h);
@@ -998,37 +998,37 @@ void rgb_to_hsv(image im)
     }
 }
 
-void hsv_to_rgb(image im)
+تهی hsv_to_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    float f, p, q, t;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    أكد(im.c == 3);
+    صحیح i, j;
+    اعشاری r, g, b;
+    اعشاری h, s, v;
+    اعشاری f, p, q, t;
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
             h = 6 * get_pixel(im, i , j, 0);
             s = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
-            if (s == 0) {
+            اگر (s == 0) {
                 r = g = b = v;
-            } else {
-                int index = floor(h);
+            } وگرنه {
+                صحیح index = floor(h);
                 f = h - index;
                 p = v*(1-s);
                 q = v*(1-s*f);
                 t = v*(1-s*(1-f));
-                if(index == 0){
+                اگر(index == 0){
                     r = v; g = t; b = p;
-                } else if(index == 1){
+                } وگرنه اگر(index == 1){
                     r = q; g = v; b = p;
-                } else if(index == 2){
+                } وگرنه اگر(index == 2){
                     r = p; g = v; b = t;
-                } else if(index == 3){
+                } وگرنه اگر(index == 3){
                     r = p; g = q; b = v;
-                } else if(index == 4){
+                } وگرنه اگر(index == 4){
                     r = t; g = p; b = v;
-                } else {
+                } وگرنه {
                     r = v; g = p; b = q;
                 }
             }
@@ -1039,15 +1039,15 @@ void hsv_to_rgb(image im)
     }
 }
 
-void grayscale_image_3c(image im)
+تهی grayscale_image_3c(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
-    float scale[] = {0.299, 0.587, 0.114};
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float val = 0;
-            for(k = 0; k < 3; ++k){
+    أكد(im.c == 3);
+    صحیح i, j, k;
+    اعشاری scale[] = {0.299, 0.587, 0.114};
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
+            اعشاری val = 0;
+            برای(k = 0; k < 3; ++k){
                 val += scale[k]*get_pixel(im, i, j, k);
             }
             im.data[0*im.h*im.w + im.w*j + i] = val;
@@ -1059,65 +1059,65 @@ void grayscale_image_3c(image im)
 
 image grayscale_image(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
+    أكد(im.c == 3);
+    صحیح i, j, k;
     image gray = make_image(im.w, im.h, 1);
-    float scale[] = {0.299, 0.587, 0.114};
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
+    اعشاری scale[] = {0.299, 0.587, 0.114};
+    برای(k = 0; k < im.c; ++k){
+        برای(j = 0; j < im.h; ++j){
+            برای(i = 0; i < im.w; ++i){
                 gray.data[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
             }
         }
     }
-    return gray;
+    بازگشت gray;
 }
 
-image threshold_image(image im, float thresh)
+image threshold_image(image im, اعشاری thresh)
 {
-    int i;
+    صحیح i;
     image t = make_image(im.w, im.h, im.c);
-    for(i = 0; i < im.w*im.h*im.c; ++i){
+    برای(i = 0; i < im.w*im.h*im.c; ++i){
         t.data[i] = im.data[i]>thresh ? 1 : 0;
     }
-    return t;
+    بازگشت t;
 }
 
-image blend_image(image fore, image back, float alpha)
+image blend_image(image fore, image back, اعشاری alpha)
 {
-    assert(fore.w == back.w && fore.h == back.h && fore.c == back.c);
+    أكد(fore.w == back.w && fore.h == back.h && fore.c == back.c);
     image blend = make_image(fore.w, fore.h, fore.c);
-    int i, j, k;
-    for(k = 0; k < fore.c; ++k){
-        for(j = 0; j < fore.h; ++j){
-            for(i = 0; i < fore.w; ++i){
-                float val = alpha * get_pixel(fore, i, j, k) + 
+    صحیح i, j, k;
+    برای(k = 0; k < fore.c; ++k){
+        برای(j = 0; j < fore.h; ++j){
+            برای(i = 0; i < fore.w; ++i){
+                اعشاری val = alpha * get_pixel(fore, i, j, k) + 
                     (1 - alpha)* get_pixel(back, i, j, k);
                 set_pixel(blend, i, j, k, val);
             }
         }
     }
-    return blend;
+    بازگشت blend;
 }
 
-void scale_image_channel(image im, int c, float v)
+تهی scale_image_channel(image im, صحیح c, اعشاری v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    صحیح i, j;
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
+            اعشاری pix = get_pixel(im, i, j, c);
             pix = pix*v;
             set_pixel(im, i, j, c, pix);
         }
     }
 }
 
-void translate_image_channel(image im, int c, float v)
+تهی translate_image_channel(image im, صحیح c, اعشاری v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    صحیح i, j;
+    برای(j = 0; j < im.h; ++j){
+        برای(i = 0; i < im.w; ++i){
+            اعشاری pix = get_pixel(im, i, j, c);
             pix = pix+v;
             set_pixel(im, i, j, c, pix);
         }
@@ -1127,15 +1127,15 @@ void translate_image_channel(image im, int c, float v)
 image binarize_image(image im)
 {
     image c = copy_image(im);
-    int i;
-    for(i = 0; i < im.w * im.h * im.c; ++i){
-        if(c.data[i] > .5) c.data[i] = 1;
-        else c.data[i] = 0;
+    صحیح i;
+    برای(i = 0; i < im.w * im.h * im.c; ++i){
+        اگر(c.data[i] > .5) c.data[i] = 1;
+        وگرنه c.data[i] = 0;
     }
-    return c;
+    بازگشت c;
 }
 
-void saturate_image(image im, float sat)
+تهی saturate_image(image im, اعشاری sat)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
@@ -1143,20 +1143,20 @@ void saturate_image(image im, float sat)
     constrain_image(im);
 }
 
-void hue_image(image im, float hue)
+تهی hue_image(image im, اعشاری hue)
 {
     rgb_to_hsv(im);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    صحیح i;
+    برای(i = 0; i < im.w*im.h; ++i){
         im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+        اگر (im.data[i] > 1) im.data[i] -= 1;
+        اگر (im.data[i] < 0) im.data[i] += 1;
     }
     hsv_to_rgb(im);
     constrain_image(im);
 }
 
-void exposure_image(image im, float sat)
+تهی exposure_image(image im, اعشاری sat)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 2, sat);
@@ -1164,30 +1164,30 @@ void exposure_image(image im, float sat)
     constrain_image(im);
 }
 
-void distort_image(image im, float hue, float sat, float val)
+تهی distort_image(image im, اعشاری hue, اعشاری sat, اعشاری val)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, val);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    صحیح i;
+    برای(i = 0; i < im.w*im.h; ++i){
         im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+        اگر (im.data[i] > 1) im.data[i] -= 1;
+        اگر (im.data[i] < 0) im.data[i] += 1;
     }
     hsv_to_rgb(im);
     constrain_image(im);
 }
 
-void random_distort_image(image im, float hue, float saturation, float exposure)
+تهی random_distort_image(image im, اعشاری hue, اعشاری saturation, اعشاری exposure)
 {
-    float dhue = rand_uniform(-hue, hue);
-    float dsat = rand_scale(saturation);
-    float dexp = rand_scale(exposure);
+    اعشاری dhue = rand_uniform(-hue, hue);
+    اعشاری dsat = rand_scale(saturation);
+    اعشاری dexp = rand_scale(exposure);
     distort_image(im, dhue, dsat, dexp);
 }
 
-void saturate_exposure_image(image im, float sat, float exposure)
+تهی saturate_exposure_image(image im, اعشاری sat, اعشاری exposure)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
@@ -1196,55 +1196,55 @@ void saturate_exposure_image(image im, float sat, float exposure)
     constrain_image(im);
 }
 
-image resize_image(image im, int w, int h)
+image resize_image(image im, صحیح w, صحیح h)
 {
     image resized = make_image(w, h, im.c);   
     image part = make_image(w, im.h, im.c);
-    int r, c, k;
-    float w_scale = (float)(im.w - 1) / (w - 1);
-    float h_scale = (float)(im.h - 1) / (h - 1);
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < im.h; ++r){
-            for(c = 0; c < w; ++c){
-                float val = 0;
-                if(c == w-1 || im.w == 1){
+    صحیح r, c, k;
+    اعشاری w_scale = (اعشاری)(im.w - 1) / (w - 1);
+    اعشاری h_scale = (اعشاری)(im.h - 1) / (h - 1);
+    برای(k = 0; k < im.c; ++k){
+        برای(r = 0; r < im.h; ++r){
+            برای(c = 0; c < w; ++c){
+                اعشاری val = 0;
+                اگر(c == w-1 || im.w == 1){
                     val = get_pixel(im, im.w-1, r, k);
-                } else {
-                    float sx = c*w_scale;
-                    int ix = (int) sx;
-                    float dx = sx - ix;
+                } وگرنه {
+                    اعشاری sx = c*w_scale;
+                    صحیح ix = (صحیح) sx;
+                    اعشاری dx = sx - ix;
                     val = (1 - dx) * get_pixel(im, ix, r, k) + dx * get_pixel(im, ix+1, r, k);
                 }
                 set_pixel(part, c, r, k, val);
             }
         }
     }
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < h; ++r){
-            float sy = r*h_scale;
-            int iy = (int) sy;
-            float dy = sy - iy;
-            for(c = 0; c < w; ++c){
-                float val = (1-dy) * get_pixel(part, c, iy, k);
+    برای(k = 0; k < im.c; ++k){
+        برای(r = 0; r < h; ++r){
+            اعشاری sy = r*h_scale;
+            صحیح iy = (صحیح) sy;
+            اعشاری dy = sy - iy;
+            برای(c = 0; c < w; ++c){
+                اعشاری val = (1-dy) * get_pixel(part, c, iy, k);
                 set_pixel(resized, c, r, k, val);
             }
-            if(r == h-1 || im.h == 1) continue;
-            for(c = 0; c < w; ++c){
-                float val = dy * get_pixel(part, c, iy+1, k);
+            اگر(r == h-1 || im.h == 1) ادامه;
+            برای(c = 0; c < w; ++c){
+                اعشاری val = dy * get_pixel(part, c, iy+1, k);
                 add_pixel(resized, c, r, k, val);
             }
         }
     }
 
     free_image(part);
-    return resized;
+    بازگشت resized;
 }
 
 
-void test_resize(char *filename)
+تهی test_resize(نویسه *filename)
 {
     image im = load_image(filename, 0,0, 3);
-    float mag = mag_array(im.data, im.w*im.h*im.c);
+    اعشاری mag = mag_array(im.data, im.w*im.h*im.c);
     printf("L2 Norm: %f\n", mag);
     image gray = grayscale_image(im);
 
@@ -1265,21 +1265,21 @@ void test_resize(char *filename)
     show_image(c3, "C3", 1);
     show_image(c4, "C4", 1);
 #ifdef OPENCV
-    while(1){
+    وقتی(1){
         image aug = random_augment_image(im, 0, .75, 320, 448, 320, 320);
         show_image(aug, "aug", 1);
         free_image(aug);
 
 
-        float exposure = 1.15;
-        float saturation = 1.15;
-        float hue = .05;
+        اعشاری exposure = 1.15;
+        اعشاری saturation = 1.15;
+        اعشاری hue = .05;
 
         image c = copy_image(im);
 
-        float dexp = rand_scale(exposure);
-        float dsat = rand_scale(saturation);
-        float dhue = rand_uniform(-hue, hue);
+        اعشاری dexp = rand_scale(exposure);
+        اعشاری dsat = rand_scale(saturation);
+        اعشاری dhue = rand_uniform(-hue, hue);
 
         distort_image(c, dhue, dsat, dexp);
         show_image(c, "rand", 1);
@@ -1290,102 +1290,102 @@ void test_resize(char *filename)
 }
 
 
-image load_image_stb(char *filename, int channels)
+image load_image_stb(نویسه *filename, صحیح channels)
 {
-    int w, h, c;
-    unsigned char *data = stbi_load(filename, &w, &h, &c, channels);
-    if (!data) {
+    صحیح w, h, c;
+    unsigned نویسه *data = stbi_load(filename, &w, &h, &c, channels);
+    اگر (!data) {
         fprintf(stderr, "Cannot load image \"%s\"\nSTB Reason: %s\n", filename, stbi_failure_reason());
         exit(0);
     }
-    if(channels) c = channels;
-    int i,j,k;
+    اگر(channels) c = channels;
+    صحیح i,j,k;
     image im = make_image(w, h, c);
-    for(k = 0; k < c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int dst_index = i + w*j + w*h*k;
-                int src_index = k + c*i + c*w*j;
-                im.data[dst_index] = (float)data[src_index]/255.;
+    برای(k = 0; k < c; ++k){
+        برای(j = 0; j < h; ++j){
+            برای(i = 0; i < w; ++i){
+                صحیح dst_index = i + w*j + w*h*k;
+                صحیح src_index = k + c*i + c*w*j;
+                im.data[dst_index] = (اعشاری)data[src_index]/255.;
             }
         }
     }
-    free(data);
-    return im;
+    آزاد(data);
+    بازگشت im;
 }
 
-image load_image(char *filename, int w, int h, int c)
+image load_image(نویسه *filename, صحیح w, صحیح h, صحیح c)
 {
 #ifdef OPENCV
     image out = load_image_cv(filename, c);
-#else
+#وگرنه
     image out = load_image_stb(filename, c);
 #endif
 
-    if((h && w) && (h != out.h || w != out.w)){
+    اگر((h && w) && (h != out.h || w != out.w)){
         image resized = resize_image(out, w, h);
         free_image(out);
         out = resized;
     }
-    return out;
+    بازگشت out;
 }
 
-image load_image_color(char *filename, int w, int h)
+image load_image_color(نویسه *filename, صحیح w, صحیح h)
 {
-    return load_image(filename, w, h, 3);
+    بازگشت load_image(filename, w, h, 3);
 }
 
-image get_image_layer(image m, int l)
+image get_image_layer(image m, صحیح l)
 {
     image out = make_image(m.w, m.h, 1);
-    int i;
-    for(i = 0; i < m.h*m.w; ++i){
+    صحیح i;
+    برای(i = 0; i < m.h*m.w; ++i){
         out.data[i] = m.data[i+l*m.h*m.w];
     }
-    return out;
+    بازگشت out;
 }
-void print_image(image m)
+تهی print_image(image m)
 {
-    int i, j, k;
-    for(i =0 ; i < m.c; ++i){
-        for(j =0 ; j < m.h; ++j){
-            for(k = 0; k < m.w; ++k){
+    صحیح i, j, k;
+    برای(i =0 ; i < m.c; ++i){
+        برای(j =0 ; j < m.h; ++j){
+            برای(k = 0; k < m.w; ++k){
                 printf("%.2lf, ", m.data[i*m.h*m.w + j*m.w + k]);
-                if(k > 30) break;
+                اگر(k > 30) بشکن;
             }
             printf("\n");
-            if(j > 30) break;
+            اگر(j > 30) بشکن;
         }
         printf("\n");
     }
     printf("\n");
 }
 
-image collapse_images_vert(image *ims, int n)
+image collapse_images_vert(image *ims, صحیح n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
+    صحیح color = 1;
+    صحیح border = 1;
+    صحیح h,w,c;
     w = ims[0].w;
     h = (ims[0].h + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    اگر(c != 3 || !color){
         w = (w+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int h_offset = i*(ims[0].h+border);
+    صحیح i,j;
+    برای(i = 0; i < n; ++i){
+        صحیح h_offset = i*(ims[0].h+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
+        اگر(c == 3 && color){
             embed_image(copy, filters, 0, h_offset);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int w_offset = j*(ims[0].w+border);
+        وگرنه{
+            برای(j = 0; j < copy.c; ++j){
+                صحیح w_offset = j*(ims[0].w+border);
                 image layer = get_image_layer(copy, j);
                 embed_image(layer, filters, w_offset, h_offset);
                 free_image(layer);
@@ -1393,35 +1393,35 @@ image collapse_images_vert(image *ims, int n)
         }
         free_image(copy);
     }
-    return filters;
+    بازگشت filters;
 } 
 
-image collapse_images_horz(image *ims, int n)
+image collapse_images_horz(image *ims, صحیح n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
-    int size = ims[0].h;
+    صحیح color = 1;
+    صحیح border = 1;
+    صحیح h,w,c;
+    صحیح size = ims[0].h;
     h = size;
     w = (ims[0].w + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    اگر(c != 3 || !color){
         h = (h+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int w_offset = i*(size+border);
+    صحیح i,j;
+    برای(i = 0; i < n; ++i){
+        صحیح w_offset = i*(size+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
+        اگر(c == 3 && color){
             embed_image(copy, filters, w_offset, 0);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int h_offset = j*(size+border);
+        وگرنه{
+            برای(j = 0; j < copy.c; ++j){
+                صحیح h_offset = j*(size+border);
                 image layer = get_image_layer(copy, j);
                 embed_image(layer, filters, w_offset, h_offset);
                 free_image(layer);
@@ -1429,10 +1429,10 @@ image collapse_images_horz(image *ims, int n)
         }
         free_image(copy);
     }
-    return filters;
+    بازگشت filters;
 } 
 
-void show_image_normalized(image im, const char *name)
+تهی show_image_normalized(image im, ثابت نویسه *name)
 {
     image c = copy_image(im);
     normalize_image(c);
@@ -1440,7 +1440,7 @@ void show_image_normalized(image im, const char *name)
     free_image(c);
 }
 
-void show_images(image *ims, int n, char *window)
+تهی show_images(image *ims, صحیح n, نویسه *window)
 {
     image m = collapse_images_vert(ims, n);
     /*
@@ -1458,9 +1458,9 @@ void show_images(image *ims, int n, char *window)
     free_image(m);
 }
 
-void free_image(image m)
+تهی free_image(image m)
 {
-    if(m.data){
-        free(m.data);
+    اگر(m.data){
+        آزاد(m.data);
     }
 }

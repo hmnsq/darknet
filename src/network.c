@@ -1,36 +1,36 @@
-#include <stdio.h>
-#include <time.h>
-#include <assert.h>
-#include "network.h"
-#include "image.h"
-#include "data.h"
-#include "utils.h"
-#include "blas.h"
+#شامل <stdio.h>
+#شامل <time.h>
+#شامل <assert.h>
+#شامل "network.h"
+#شامل "image.h"
+#شامل "data.h"
+#شامل "utils.h"
+#شامل "blas.h"
 
-#include "crop_layer.h"
-#include "connected_layer.h"
-#include "gru_layer.h"
-#include "rnn_layer.h"
-#include "crnn_layer.h"
-#include "local_layer.h"
-#include "convolutional_layer.h"
-#include "activation_layer.h"
-#include "detection_layer.h"
-#include "region_layer.h"
-#include "yolo_layer.h"
-#include "normalization_layer.h"
-#include "batchnorm_layer.h"
-#include "maxpool_layer.h"
-#include "reorg_layer.h"
-#include "avgpool_layer.h"
-#include "cost_layer.h"
-#include "softmax_layer.h"
-#include "dropout_layer.h"
-#include "route_layer.h"
-#include "upsample_layer.h"
-#include "shortcut_layer.h"
-#include "parser.h"
-#include "data.h"
+#شامل "crop_layer.h"
+#شامل "connected_layer.h"
+#شامل "gru_layer.h"
+#شامل "rnn_layer.h"
+#شامل "crnn_layer.h"
+#شامل "local_layer.h"
+#شامل "convolutional_layer.h"
+#شامل "activation_layer.h"
+#شامل "detection_layer.h"
+#شامل "region_layer.h"
+#شامل "yolo_layer.h"
+#شامل "normalization_layer.h"
+#شامل "batchnorm_layer.h"
+#شامل "maxpool_layer.h"
+#شامل "reorg_layer.h"
+#شامل "avgpool_layer.h"
+#شامل "cost_layer.h"
+#شامل "softmax_layer.h"
+#شامل "dropout_layer.h"
+#شامل "route_layer.h"
+#شامل "upsample_layer.h"
+#شامل "shortcut_layer.h"
+#شامل "parser.h"
+#شامل "data.h"
 
 load_args get_base_args(network *net)
 {
@@ -47,179 +47,179 @@ load_args get_base_args(network *net)
     args.center = net->center;
     args.saturation = net->saturation;
     args.hue = net->hue;
-    return args;
+    بازگشت args;
 }
 
-network *load_network(char *cfg, char *weights, int clear)
+network *load_network(نویسه *cfg, نویسه *weights, صحیح clear)
 {
     network *net = parse_network_cfg(cfg);
-    if(weights && weights[0] != 0){
+    اگر(weights && weights[0] != 0){
         load_weights(net, weights);
     }
-    if(clear) (*net->seen) = 0;
-    return net;
+    اگر(clear) (*net->seen) = 0;
+    بازگشت net;
 }
 
 size_t get_current_batch(network *net)
 {
-    size_t batch_num = (*net->seen)/(net->batch*net->subdivisions);
-    return batch_num;
+    size_t batch_رقم = (*net->seen)/(net->batch*net->subdivisions);
+    بازگشت batch_رقم;
 }
 
-void reset_network_state(network *net, int b)
+تهی reset_network_state(network *net, صحیح b)
 {
-    int i;
-    for (i = 0; i < net->n; ++i) {
+    صحیح i;
+    برای (i = 0; i < net->n; ++i) {
         #ifdef GPU
         layer l = net->layers[i];
-        if(l.state_gpu){
+        اگر(l.state_gpu){
             fill_gpu(l.outputs, 0, l.state_gpu + l.outputs*b, 1);
         }
-        if(l.h_gpu){
+        اگر(l.h_gpu){
             fill_gpu(l.outputs, 0, l.h_gpu + l.outputs*b, 1);
         }
         #endif
     }
 }
 
-void reset_rnn(network *net)
+تهی reset_rnn(network *net)
 {
     reset_network_state(net, 0);
 }
 
-float get_current_rate(network *net)
+اعشاری get_current_rate(network *net)
 {
-    size_t batch_num = get_current_batch(net);
-    int i;
-    float rate;
-    if (batch_num < net->burn_in) return net->learning_rate * pow((float)batch_num / net->burn_in, net->power);
-    switch (net->policy) {
-        case CONSTANT:
-            return net->learning_rate;
-        case STEP:
-            return net->learning_rate * pow(net->scale, batch_num/net->step);
-        case STEPS:
+    size_t batch_رقم = get_current_batch(net);
+    صحیح i;
+    اعشاری rate;
+    اگر (batch_رقم < net->burn_in) بازگشت net->learning_rate * pow((اعشاری)batch_رقم / net->burn_in, net->power);
+    انتخاب (net->policy) {
+        حالت CONSTANT:
+            بازگشت net->learning_rate;
+        حالت STEP:
+            بازگشت net->learning_rate * pow(net->scale, batch_رقم/net->step);
+        حالت STEPS:
             rate = net->learning_rate;
-            for(i = 0; i < net->num_steps; ++i){
-                if(net->steps[i] > batch_num) return rate;
+            برای(i = 0; i < net->رقم_steps; ++i){
+                اگر(net->steps[i] > batch_رقم) بازگشت rate;
                 rate *= net->scales[i];
             }
-            return rate;
-        case EXP:
-            return net->learning_rate * pow(net->gamma, batch_num);
-        case POLY:
-            return net->learning_rate * pow(1 - (float)batch_num / net->max_batches, net->power);
-        case RANDOM:
-            return net->learning_rate * pow(rand_uniform(0,1), net->power);
-        case SIG:
-            return net->learning_rate * (1./(1.+exp(net->gamma*(batch_num - net->step))));
-        default:
+            بازگشت rate;
+        حالت EXP:
+            بازگشت net->learning_rate * pow(net->gamma, batch_رقم);
+        حالت POLY:
+            بازگشت net->learning_rate * pow(1 - (اعشاری)batch_رقم / net->max_batches, net->power);
+        حالت RANDOM:
+            بازگشت net->learning_rate * pow(rand_uniform(0,1), net->power);
+        حالت SIG:
+            بازگشت net->learning_rate * (1./(1.+exp(net->gamma*(batch_رقم - net->step))));
+        پیشفرض:
             fprintf(stderr, "Policy is weird!\n");
-            return net->learning_rate;
+            بازگشت net->learning_rate;
     }
 }
 
-char *get_layer_string(LAYER_TYPE a)
+نویسه *get_layer_string(LAYER_TYPE a)
 {
-    switch(a){
-        case CONVOLUTIONAL:
-            return "convolutional";
-        case ACTIVE:
-            return "activation";
-        case LOCAL:
-            return "local";
-        case DECONVOLUTIONAL:
-            return "deconvolutional";
-        case CONNECTED:
-            return "connected";
-        case RNN:
-            return "rnn";
-        case GRU:
-            return "gru";
-        case LSTM:
-	    return "lstm";
-        case CRNN:
-            return "crnn";
-        case MAXPOOL:
-            return "maxpool";
-        case REORG:
-            return "reorg";
-        case AVGPOOL:
-            return "avgpool";
-        case SOFTMAX:
-            return "softmax";
-        case DETECTION:
-            return "detection";
-        case REGION:
-            return "region";
-        case YOLO:
-            return "yolo";
-        case DROPOUT:
-            return "dropout";
-        case CROP:
-            return "crop";
-        case COST:
-            return "cost";
-        case ROUTE:
-            return "route";
-        case SHORTCUT:
-            return "shortcut";
-        case NORMALIZATION:
-            return "normalization";
-        case BATCHNORM:
-            return "batchnorm";
-        default:
-            break;
+    انتخاب(a){
+        حالت CONVOLUTIONAL:
+            بازگشت "convolutional";
+        حالت ACTIVE:
+            بازگشت "activation";
+        حالت LOCAL:
+            بازگشت "local";
+        حالت DECONVOLUTIONAL:
+            بازگشت "deconvolutional";
+        حالت CONNECTED:
+            بازگشت "connected";
+        حالت RNN:
+            بازگشت "rnn";
+        حالت GRU:
+            بازگشت "gru";
+        حالت LSTM:
+	    بازگشت "lstm";
+        حالت CRNN:
+            بازگشت "crnn";
+        حالت MAXPOOL:
+            بازگشت "maxpool";
+        حالت REORG:
+            بازگشت "reorg";
+        حالت AVGPOOL:
+            بازگشت "avgpool";
+        حالت SOFTMAX:
+            بازگشت "softmax";
+        حالت DETECTION:
+            بازگشت "detection";
+        حالت REGION:
+            بازگشت "region";
+        حالت YOLO:
+            بازگشت "yolo";
+        حالت DROPOUT:
+            بازگشت "dropout";
+        حالت CROP:
+            بازگشت "crop";
+        حالت COST:
+            بازگشت "cost";
+        حالت ROUTE:
+            بازگشت "route";
+        حالت SHORTCUT:
+            بازگشت "shortcut";
+        حالت NORMALIZATION:
+            بازگشت "normalization";
+        حالت BATCHNORM:
+            بازگشت "batchnorm";
+        پیشفرض:
+            بشکن;
     }
-    return "none";
+    بازگشت "none";
 }
 
-network *make_network(int n)
+network *make_network(صحیح n)
 {
-    network *net = calloc(1, sizeof(network));
+    network *net = calloc(1, اندازه(network));
     net->n = n;
-    net->layers = calloc(net->n, sizeof(layer));
-    net->seen = calloc(1, sizeof(size_t));
-    net->t    = calloc(1, sizeof(int));
-    net->cost = calloc(1, sizeof(float));
-    return net;
+    net->layers = calloc(net->n, اندازه(layer));
+    net->seen = calloc(1, اندازه(size_t));
+    net->t    = calloc(1, اندازه(صحیح));
+    net->cost = calloc(1, اندازه(اعشاری));
+    بازگشت net;
 }
 
-void forward_network(network *netp)
+تهی forward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    اگر(netp->gpu_index >= 0){
         forward_network_gpu(netp);   
-        return;
+        بازگشت;
     }
 #endif
     network net = *netp;
-    int i;
-    for(i = 0; i < net.n; ++i){
+    صحیح i;
+    برای(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta){
+        اگر(l.delta){
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
         l.forward(l, net);
-        net.input = l.output;
-        if(l.truth) {
+        net.درون_داد = l.output;
+        اگر(l.truth) {
             net.truth = l.output;
         }
     }
     calc_network_cost(netp);
 }
 
-void update_network(network *netp)
+تهی update_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    اگر(netp->gpu_index >= 0){
         update_network_gpu(netp);   
-        return;
+        بازگشت;
     }
 #endif
     network net = *netp;
-    int i;
+    صحیح i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -232,53 +232,53 @@ void update_network(network *netp)
     ++*net.t;
     a.t = *net.t;
 
-    for(i = 0; i < net.n; ++i){
+    برای(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update){
+        اگر(l.update){
             l.update(l, a);
         }
     }
 }
 
-void calc_network_cost(network *netp)
+تهی calc_network_cost(network *netp)
 {
     network net = *netp;
-    int i;
-    float sum = 0;
-    int count = 0;
-    for(i = 0; i < net.n; ++i){
-        if(net.layers[i].cost){
+    صحیح i;
+    اعشاری sum = 0;
+    صحیح شمار = 0;
+    برای(i = 0; i < net.n; ++i){
+        اگر(net.layers[i].cost){
             sum += net.layers[i].cost[0];
-            ++count;
+            ++شمار;
         }
     }
-    *net.cost = sum/count;
+    *net.cost = sum/شمار;
 }
 
-int get_predicted_class_network(network *net)
+صحیح get_predicted_class_network(network *net)
 {
-    return max_index(net->output, net->outputs);
+    بازگشت max_index(net->output, net->outputs);
 }
 
-void backward_network(network *netp)
+تهی backward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    اگر(netp->gpu_index >= 0){
         backward_network_gpu(netp);   
-        return;
+        بازگشت;
     }
 #endif
     network net = *netp;
-    int i;
+    صحیح i;
     network orig = net;
-    for(i = net.n-1; i >= 0; --i){
+    برای(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        اگر(l.stopbackward) بشکن;
+        اگر(i == 0){
             net = orig;
-        }else{
+        }وگرنه{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.درون_داد = prev.output;
             net.delta = prev.delta;
         }
         net.index = i;
@@ -286,67 +286,67 @@ void backward_network(network *netp)
     }
 }
 
-float train_network_datum(network *net)
+اعشاری train_network_datum(network *net)
 {
     *net->seen += net->batch;
     net->train = 1;
     forward_network(net);
     backward_network(net);
-    float error = *net->cost;
-    if(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
-    return error;
+    اعشاری error = *net->cost;
+    اگر(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
+    بازگشت error;
 }
 
-float train_network_sgd(network *net, data d, int n)
+اعشاری train_network_sgd(network *net, data d, صحیح n)
 {
-    int batch = net->batch;
+    صحیح batch = net->batch;
 
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        get_random_batch(d, batch, net->input, net->truth);
-        float err = train_network_datum(net);
+    صحیح i;
+    اعشاری sum = 0;
+    برای(i = 0; i < n; ++i){
+        get_random_batch(d, batch, net->درون_داد, net->truth);
+        اعشاری err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    بازگشت (اعشاری)sum/(n*batch);
 }
 
-float train_network(network *net, data d)
+اعشاری train_network(network *net, data d)
 {
-    assert(d.X.rows % net->batch == 0);
-    int batch = net->batch;
-    int n = d.X.rows / batch;
+    أكد(d.X.rows % net->batch == 0);
+    صحیح batch = net->batch;
+    صحیح n = d.X.rows / batch;
 
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        get_next_batch(d, batch, i*batch, net->input, net->truth);
-        float err = train_network_datum(net);
+    صحیح i;
+    اعشاری sum = 0;
+    برای(i = 0; i < n; ++i){
+        get_next_batch(d, batch, i*batch, net->درون_داد, net->truth);
+        اعشاری err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    بازگشت (اعشاری)sum/(n*batch);
 }
 
-void set_temp_network(network *net, float t)
+تهی set_temp_network(network *net, اعشاری t)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    صحیح i;
+    برای(i = 0; i < net->n; ++i){
         net->layers[i].temperature = t;
     }
 }
 
 
-void set_batch_network(network *net, int b)
+تهی set_batch_network(network *net, صحیح b)
 {
     net->batch = b;
-    int i;
-    for(i = 0; i < net->n; ++i){
+    صحیح i;
+    برای(i = 0; i < net->n; ++i){
         net->layers[i].batch = b;
 #ifdef CUDNN
-        if(net->layers[i].type == CONVOLUTIONAL){
+        اگر(net->layers[i].type == CONVOLUTIONAL){
             cudnn_convolutional_setup(net->layers + i);
         }
-        if(net->layers[i].type == DECONVOLUTIONAL){
+        اگر(net->layers[i].type == DECONVOLUTIONAL){
             layer *l = net->layers + i;
             cudnnSetTensor4dDescriptor(l->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, l->out_h, l->out_w);
             cudnnSetTensor4dDescriptor(l->normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, 1, 1); 
@@ -355,378 +355,378 @@ void set_batch_network(network *net, int b)
     }
 }
 
-int resize_network(network *net, int w, int h)
+صحیح resize_network(network *net, صحیح w, صحیح h)
 {
 #ifdef GPU
     cuda_set_device(net->gpu_index);
     cuda_free(net->workspace);
 #endif
-    int i;
+    صحیح i;
     //if(w == net->w && h == net->h) return 0;
     net->w = w;
     net->h = h;
-    int inputs = 0;
+    صحیح inputs = 0;
     size_t workspace_size = 0;
     //fprintf(stderr, "Resizing to %d x %d...\n", w, h);
     //fflush(stderr);
-    for (i = 0; i < net->n; ++i){
+    برای (i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        اگر(l.type == CONVOLUTIONAL){
             resize_convolutional_layer(&l, w, h);
-        }else if(l.type == CROP){
+        }وگرنه اگر(l.type == CROP){
             resize_crop_layer(&l, w, h);
-        }else if(l.type == MAXPOOL){
+        }وگرنه اگر(l.type == MAXPOOL){
             resize_maxpool_layer(&l, w, h);
-        }else if(l.type == REGION){
+        }وگرنه اگر(l.type == REGION){
             resize_region_layer(&l, w, h);
-        }else if(l.type == YOLO){
+        }وگرنه اگر(l.type == YOLO){
             resize_yolo_layer(&l, w, h);
-        }else if(l.type == ROUTE){
+        }وگرنه اگر(l.type == ROUTE){
             resize_route_layer(&l, net);
-        }else if(l.type == SHORTCUT){
+        }وگرنه اگر(l.type == SHORTCUT){
             resize_shortcut_layer(&l, w, h);
-        }else if(l.type == UPSAMPLE){
+        }وگرنه اگر(l.type == UPSAMPLE){
             resize_upsample_layer(&l, w, h);
-        }else if(l.type == REORG){
+        }وگرنه اگر(l.type == REORG){
             resize_reorg_layer(&l, w, h);
-        }else if(l.type == AVGPOOL){
+        }وگرنه اگر(l.type == AVGPOOL){
             resize_avgpool_layer(&l, w, h);
-        }else if(l.type == NORMALIZATION){
+        }وگرنه اگر(l.type == NORMALIZATION){
             resize_normalization_layer(&l, w, h);
-        }else if(l.type == COST){
+        }وگرنه اگر(l.type == COST){
             resize_cost_layer(&l, inputs);
-        }else{
+        }وگرنه{
             error("Cannot resize this type of layer");
         }
-        if(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
-        if(l.workspace_size > 2000000000) assert(0);
+        اگر(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
+        اگر(l.workspace_size > 2000000000) أكد(0);
         inputs = l.outputs;
         net->layers[i] = l;
         w = l.out_w;
         h = l.out_h;
-        if(l.type == AVGPOOL) break;
+        اگر(l.type == AVGPOOL) بشکن;
     }
     layer out = get_network_output_layer(net);
     net->inputs = net->layers[0].inputs;
     net->outputs = out.outputs;
     net->truths = out.outputs;
-    if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
+    اگر(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
     net->output = out.output;
-    free(net->input);
-    free(net->truth);
-    net->input = calloc(net->inputs*net->batch, sizeof(float));
-    net->truth = calloc(net->truths*net->batch, sizeof(float));
+    آزاد(net->درون_داد);
+    آزاد(net->truth);
+    net->درون_داد = calloc(net->inputs*net->batch, اندازه(اعشاری));
+    net->truth = calloc(net->truths*net->batch, اندازه(اعشاری));
 #ifdef GPU
-    if(gpu_index >= 0){
-        cuda_free(net->input_gpu);
+    اگر(gpu_index >= 0){
+        cuda_free(net->درون_داد_gpu);
         cuda_free(net->truth_gpu);
-        net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
+        net->درون_داد_gpu = cuda_make_array(net->درون_داد, net->inputs*net->batch);
         net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
-        if(workspace_size){
-            net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
+        اگر(workspace_size){
+            net->workspace = cuda_make_array(0, (workspace_size-1)/اندازه(اعشاری)+1);
         }
-    }else {
-        free(net->workspace);
+    }وگرنه {
+        آزاد(net->workspace);
         net->workspace = calloc(1, workspace_size);
     }
-#else
-    free(net->workspace);
+#وگرنه
+    آزاد(net->workspace);
     net->workspace = calloc(1, workspace_size);
 #endif
     //fprintf(stderr, " Done!\n");
-    return 0;
+    بازگشت 0;
 }
 
 layer get_network_detection_layer(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
-        if(net->layers[i].type == DETECTION){
-            return net->layers[i];
+    صحیح i;
+    برای(i = 0; i < net->n; ++i){
+        اگر(net->layers[i].type == DETECTION){
+            بازگشت net->layers[i];
         }
     }
     fprintf(stderr, "Detection layer not found!!\n");
     layer l = {0};
-    return l;
+    بازگشت l;
 }
 
-image get_network_image_layer(network *net, int i)
+image get_network_image_layer(network *net, صحیح i)
 {
     layer l = net->layers[i];
 #ifdef GPU
     //cuda_pull_array(l.output_gpu, l.output, l.outputs);
 #endif
-    if (l.out_w && l.out_h && l.out_c){
-        return float_to_image(l.out_w, l.out_h, l.out_c, l.output);
+    اگر (l.out_w && l.out_h && l.out_c){
+        بازگشت float_to_image(l.out_w, l.out_h, l.out_c, l.output);
     }
     image def = {0};
-    return def;
+    بازگشت def;
 }
 
 image get_network_image(network *net)
 {
-    int i;
-    for(i = net->n-1; i >= 0; --i){
+    صحیح i;
+    برای(i = net->n-1; i >= 0; --i){
         image m = get_network_image_layer(net, i);
-        if(m.h != 0) return m;
+        اگر(m.h != 0) بازگشت m;
     }
     image def = {0};
-    return def;
+    بازگشت def;
 }
 
-void visualize_network(network *net)
+تهی visualize_network(network *net)
 {
     image *prev = 0;
-    int i;
-    char buff[256];
-    for(i = 0; i < net->n; ++i){
+    صحیح i;
+    نویسه buff[256];
+    برای(i = 0; i < net->n; ++i){
         sprintf(buff, "Layer %d", i);
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        اگر(l.type == CONVOLUTIONAL){
             prev = visualize_convolutional_layer(l, buff, prev);
         }
     } 
 }
 
-void top_predictions(network *net, int k, int *index)
+تهی بالاترین_predictions(network *net, صحیح k, صحیح *index)
 {
-    top_k(net->output, net->outputs, k, index);
+    بالاترین_k(net->output, net->outputs, k, index);
 }
 
 
-float *network_predict(network *net, float *input)
+اعشاری *network_predict(network *net, اعشاری *درون_داد)
 {
     network orig = *net;
-    net->input = input;
+    net->درون_داد = درون_داد;
     net->truth = 0;
     net->train = 0;
     net->delta = 0;
     forward_network(net);
-    float *out = net->output;
+    اعشاری *out = net->output;
     *net = orig;
-    return out;
+    بازگشت out;
 }
 
-int num_detections(network *net, float thresh)
+صحیح رقم_detections(network *net, اعشاری thresh)
 {
-    int i;
-    int s = 0;
-    for(i = 0; i < net->n; ++i){
+    صحیح i;
+    صحیح s = 0;
+    برای(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO){
-            s += yolo_num_detections(l, thresh);
+        اگر(l.type == YOLO){
+            s += yolo_رقم_detections(l, thresh);
         }
-        if(l.type == DETECTION || l.type == REGION){
+        اگر(l.type == DETECTION || l.type == REGION){
             s += l.w*l.h*l.n;
         }
     }
-    return s;
+    بازگشت s;
 }
 
-detection *make_network_boxes(network *net, float thresh, int *num)
+detection *make_network_boxes(network *net, اعشاری thresh, صحیح *رقم)
 {
     layer l = net->layers[net->n - 1];
-    int i;
-    int nboxes = num_detections(net, thresh);
-    if(num) *num = nboxes;
-    detection *dets = calloc(nboxes, sizeof(detection));
-    for(i = 0; i < nboxes; ++i){
-        dets[i].prob = calloc(l.classes, sizeof(float));
-        if(l.coords > 4){
-            dets[i].mask = calloc(l.coords-4, sizeof(float));
+    صحیح i;
+    صحیح nboxes = رقم_detections(net, thresh);
+    اگر(رقم) *رقم = nboxes;
+    detection *dets = calloc(nboxes, اندازه(detection));
+    برای(i = 0; i < nboxes; ++i){
+        dets[i].prob = calloc(l.classes, اندازه(اعشاری));
+        اگر(l.coords > 4){
+            dets[i].mask = calloc(l.coords-4, اندازه(اعشاری));
         }
     }
-    return dets;
+    بازگشت dets;
 }
 
-void fill_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, detection *dets)
+تهی fill_network_boxes(network *net, صحیح w, صحیح h, اعشاری thresh, اعشاری hier, صحیح *map, صحیح relative, detection *dets)
 {
-    int j;
-    for(j = 0; j < net->n; ++j){
+    صحیح j;
+    برای(j = 0; j < net->n; ++j){
         layer l = net->layers[j];
-        if(l.type == YOLO){
-            int count = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
-            dets += count;
+        اگر(l.type == YOLO){
+            صحیح شمار = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
+            dets += شمار;
         }
-        if(l.type == REGION){
+        اگر(l.type == REGION){
             get_region_detections(l, w, h, net->w, net->h, thresh, map, hier, relative, dets);
             dets += l.w*l.h*l.n;
         }
-        if(l.type == DETECTION){
+        اگر(l.type == DETECTION){
             get_detection_detections(l, w, h, thresh, dets);
             dets += l.w*l.h*l.n;
         }
     }
 }
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+detection *get_network_boxes(network *net, صحیح w, صحیح h, اعشاری thresh, اعشاری hier, صحیح *map, صحیح relative, صحیح *رقم)
 {
-    detection *dets = make_network_boxes(net, thresh, num);
+    detection *dets = make_network_boxes(net, thresh, رقم);
     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
-    return dets;
+    بازگشت dets;
 }
 
-void free_detections(detection *dets, int n)
+تهی free_detections(detection *dets, صحیح n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        free(dets[i].prob);
-        if(dets[i].mask) free(dets[i].mask);
+    صحیح i;
+    برای(i = 0; i < n; ++i){
+        آزاد(dets[i].prob);
+        اگر(dets[i].mask) آزاد(dets[i].mask);
     }
-    free(dets);
+    آزاد(dets);
 }
 
-float *network_predict_image(network *net, image im)
+اعشاری *network_predict_image(network *net, image im)
 {
     image imr = letterbox_image(im, net->w, net->h);
     set_batch_network(net, 1);
-    float *p = network_predict(net, imr.data);
+    اعشاری *p = network_predict(net, imr.data);
     free_image(imr);
-    return p;
+    بازگشت p;
 }
 
-int network_width(network *net){return net->w;}
-int network_height(network *net){return net->h;}
+صحیح network_width(network *net){بازگشت net->w;}
+صحیح network_height(network *net){بازگشت net->h;}
 
-matrix network_predict_data_multi(network *net, data test, int n)
+matrix network_predict_data_multi(network *net, data test, صحیح n)
 {
-    int i,j,b,m;
-    int k = net->outputs;
+    صحیح i,j,b,m;
+    صحیح k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.rows, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    اعشاری *X = calloc(net->batch*test.X.rows, اندازه(اعشاری));
+    برای(i = 0; i < test.X.rows; i += net->batch){
+        برای(b = 0; b < net->batch; ++b){
+            اگر(i+b == test.X.rows) بشکن;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*اندازه(اعشاری));
         }
-        for(m = 0; m < n; ++m){
-            float *out = network_predict(net, X);
-            for(b = 0; b < net->batch; ++b){
-                if(i+b == test.X.rows) break;
-                for(j = 0; j < k; ++j){
+        برای(m = 0; m < n; ++m){
+            اعشاری *out = network_predict(net, X);
+            برای(b = 0; b < net->batch; ++b){
+                اگر(i+b == test.X.rows) بشکن;
+                برای(j = 0; j < k; ++j){
                     pred.vals[i+b][j] += out[j+b*k]/n;
                 }
             }
         }
     }
-    free(X);
-    return pred;   
+    آزاد(X);
+    بازگشت pred;   
 }
 
 matrix network_predict_data(network *net, data test)
 {
-    int i,j,b;
-    int k = net->outputs;
+    صحیح i,j,b;
+    صحیح k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.cols, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    اعشاری *X = calloc(net->batch*test.X.cols, اندازه(اعشاری));
+    برای(i = 0; i < test.X.rows; i += net->batch){
+        برای(b = 0; b < net->batch; ++b){
+            اگر(i+b == test.X.rows) بشکن;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*اندازه(اعشاری));
         }
-        float *out = network_predict(net, X);
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            for(j = 0; j < k; ++j){
+        اعشاری *out = network_predict(net, X);
+        برای(b = 0; b < net->batch; ++b){
+            اگر(i+b == test.X.rows) بشکن;
+            برای(j = 0; j < k; ++j){
                 pred.vals[i+b][j] = out[j+b*k];
             }
         }
     }
-    free(X);
-    return pred;   
+    آزاد(X);
+    بازگشت pred;   
 }
 
-void print_network(network *net)
+تهی print_network(network *net)
 {
-    int i,j;
-    for(i = 0; i < net->n; ++i){
+    صحیح i,j;
+    برای(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        float *output = l.output;
-        int n = l.outputs;
-        float mean = mean_array(output, n);
-        float vari = variance_array(output, n);
+        اعشاری *output = l.output;
+        صحیح n = l.outputs;
+        اعشاری mean = mean_array(output, n);
+        اعشاری vari = variance_array(output, n);
         fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
-        if(n > 100) n = 100;
-        for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
-        if(n == 100)fprintf(stderr,".....\n");
+        اگر(n > 100) n = 100;
+        برای(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
+        اگر(n == 100)fprintf(stderr,".....\n");
         fprintf(stderr, "\n");
     }
 }
 
-void compare_networks(network *n1, network *n2, data test)
+تهی compare_networks(network *n1, network *n2, data test)
 {
     matrix g1 = network_predict_data(n1, test);
     matrix g2 = network_predict_data(n2, test);
-    int i;
-    int a,b,c,d;
+    صحیح i;
+    صحیح a,b,c,d;
     a = b = c = d = 0;
-    for(i = 0; i < g1.rows; ++i){
-        int truth = max_index(test.y.vals[i], test.y.cols);
-        int p1 = max_index(g1.vals[i], g1.cols);
-        int p2 = max_index(g2.vals[i], g2.cols);
-        if(p1 == truth){
-            if(p2 == truth) ++d;
-            else ++c;
-        }else{
-            if(p2 == truth) ++b;
-            else ++a;
+    برای(i = 0; i < g1.rows; ++i){
+        صحیح truth = max_index(test.y.vals[i], test.y.cols);
+        صحیح p1 = max_index(g1.vals[i], g1.cols);
+        صحیح p2 = max_index(g2.vals[i], g2.cols);
+        اگر(p1 == truth){
+            اگر(p2 == truth) ++d;
+            وگرنه ++c;
+        }وگرنه{
+            اگر(p2 == truth) ++b;
+            وگرنه ++a;
         }
     }
     printf("%5d %5d\n%5d %5d\n", a, b, c, d);
-    float num = pow((abs(b - c) - 1.), 2.);
-    float den = b + c;
-    printf("%f\n", num/den); 
+    اعشاری رقم = pow((abs(b - c) - 1.), 2.);
+    اعشاری den = b + c;
+    printf("%f\n", رقم/den); 
 }
 
-float network_accuracy(network *net, data d)
+اعشاری network_accuracy(network *net, data d)
 {
     matrix guess = network_predict_data(net, d);
-    float acc = matrix_topk_accuracy(d.y, guess,1);
+    اعشاری acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    بازگشت acc;
 }
 
-float *network_accuracies(network *net, data d, int n)
+اعشاری *network_accuracies(network *net, data d, صحیح n)
 {
-    static float acc[2];
+    ایستا اعشاری acc[2];
     matrix guess = network_predict_data(net, d);
     acc[0] = matrix_topk_accuracy(d.y, guess, 1);
     acc[1] = matrix_topk_accuracy(d.y, guess, n);
     free_matrix(guess);
-    return acc;
+    بازگشت acc;
 }
 
 layer get_network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    صحیح i;
+    برای(i = net->n - 1; i >= 0; --i){
+        اگر(net->layers[i].type != COST) بشکن;
     }
-    return net->layers[i];
+    بازگشت net->layers[i];
 }
 
-float network_accuracy_multi(network *net, data d, int n)
+اعشاری network_accuracy_multi(network *net, data d, صحیح n)
 {
     matrix guess = network_predict_data_multi(net, d, n);
-    float acc = matrix_topk_accuracy(d.y, guess,1);
+    اعشاری acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    بازگشت acc;
 }
 
-void free_network(network *net)
+تهی free_network(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    صحیح i;
+    برای(i = 0; i < net->n; ++i){
         free_layer(net->layers[i]);
     }
-    free(net->layers);
-    if(net->input) free(net->input);
-    if(net->truth) free(net->truth);
+    آزاد(net->layers);
+    اگر(net->درون_داد) آزاد(net->درون_داد);
+    اگر(net->truth) آزاد(net->truth);
 #ifdef GPU
-    if(net->input_gpu) cuda_free(net->input_gpu);
-    if(net->truth_gpu) cuda_free(net->truth_gpu);
+    اگر(net->درون_داد_gpu) cuda_free(net->درون_داد_gpu);
+    اگر(net->truth_gpu) cuda_free(net->truth_gpu);
 #endif
-    free(net);
+    آزاد(net);
 }
 
 // Some day...
@@ -735,50 +735,50 @@ void free_network(network *net)
 
 layer network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    صحیح i;
+    برای(i = net->n - 1; i >= 0; --i){
+        اگر(net->layers[i].type != COST) بشکن;
     }
-    return net->layers[i];
+    بازگشت net->layers[i];
 }
 
-int network_inputs(network *net)
+صحیح network_inputs(network *net)
 {
-    return net->layers[0].inputs;
+    بازگشت net->layers[0].inputs;
 }
 
-int network_outputs(network *net)
+صحیح network_outputs(network *net)
 {
-    return network_output_layer(net).outputs;
+    بازگشت network_output_layer(net).outputs;
 }
 
-float *network_output(network *net)
+اعشاری *network_output(network *net)
 {
-    return network_output_layer(net).output;
+    بازگشت network_output_layer(net).output;
 }
 
 #ifdef GPU
 
-void forward_network_gpu(network *netp)
+تهی forward_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    cuda_push_array(net.input_gpu, net.input, net.inputs*net.batch);
-    if(net.truth){
-        cuda_push_array(net.truth_gpu, net.truth, net.truths*net.batch);
+    cuda_افزودن_array(net.درون_داد_gpu, net.درون_داد, net.inputs*net.batch);
+    اگر(net.truth){
+        cuda_افزودن_array(net.truth_gpu, net.truth, net.truths*net.batch);
     }
 
-    int i;
-    for(i = 0; i < net.n; ++i){
+    صحیح i;
+    برای(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta_gpu){
+        اگر(l.delta_gpu){
             fill_gpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
         }
         l.forward_gpu(l, net);
-        net.input_gpu = l.output_gpu;
-        net.input = l.output;
-        if(l.truth) {
+        net.درون_داد_gpu = l.output_gpu;
+        net.درون_داد = l.output;
+        اگر(l.truth) {
             net.truth_gpu = l.output_gpu;
             net.truth = l.output;
         }
@@ -787,22 +787,22 @@ void forward_network_gpu(network *netp)
     calc_network_cost(netp);
 }
 
-void backward_network_gpu(network *netp)
+تهی backward_network_gpu(network *netp)
 {
-    int i;
+    صحیح i;
     network net = *netp;
     network orig = net;
     cuda_set_device(net.gpu_index);
-    for(i = net.n-1; i >= 0; --i){
+    برای(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        اگر(l.stopbackward) بشکن;
+        اگر(i == 0){
             net = orig;
-        }else{
+        }وگرنه{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.درون_داد = prev.output;
             net.delta = prev.delta;
-            net.input_gpu = prev.output_gpu;
+            net.درون_داد_gpu = prev.output_gpu;
             net.delta_gpu = prev.delta_gpu;
         }
         net.index = i;
@@ -810,11 +810,11 @@ void backward_network_gpu(network *netp)
     }
 }
 
-void update_network_gpu(network *netp)
+تهی update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
+    صحیح i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -827,115 +827,115 @@ void update_network_gpu(network *netp)
     ++*net.t;
     a.t = (*net.t);
 
-    for(i = 0; i < net.n; ++i){
+    برای(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update_gpu){
+        اگر(l.update_gpu){
             l.update_gpu(l, a);
         }
     }
 }
 
-void harmless_update_network_gpu(network *netp)
+تهی harmless_update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
-    for(i = 0; i < net.n; ++i){
+    صحیح i;
+    برای(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
-        if(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
-        if(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
+        اگر(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
+        اگر(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
+        اگر(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
     }
 }
 
-typedef struct {
+تعریفنوع ساختار {
     network *net;
     data d;
-    float *err;
+    اعشاری *err;
 } train_args;
 
-void *train_thread(void *ptr)
+تهی *train_thread(تهی *ptr)
 {
     train_args args = *(train_args*)ptr;
-    free(ptr);
+    آزاد(ptr);
     cuda_set_device(args.net->gpu_index);
     *args.err = train_network(args.net, args.d);
-    return 0;
+    بازگشت 0;
 }
 
-pthread_t train_network_in_thread(network *net, data d, float *err)
+pthread_t train_network_in_thread(network *net, data d, اعشاری *err)
 {
     pthread_t thread;
-    train_args *ptr = (train_args *)calloc(1, sizeof(train_args));
+    train_args *ptr = (train_args *)calloc(1, اندازه(train_args));
     ptr->net = net;
     ptr->d = d;
     ptr->err = err;
-    if(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
-    return thread;
+    اگر(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
+    بازگشت thread;
 }
 
-void merge_weights(layer l, layer base)
+تهی merge_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL) {
+    اگر (l.type == CONVOLUTIONAL) {
         axpy_cpu(l.n, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.nweights, 1, l.weight_updates, 1, base.weights, 1);
-        if (l.scales) {
+        اگر (l.scales) {
             axpy_cpu(l.n, 1, l.scale_updates, 1, base.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } وگرنه اگر(l.type == CONNECTED) {
         axpy_cpu(l.outputs, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.outputs*l.inputs, 1, l.weight_updates, 1, base.weights, 1);
     }
 }
 
-void scale_weights(layer l, float s)
+تهی scale_weights(layer l, اعشاری s)
 {
-    if (l.type == CONVOLUTIONAL) {
+    اگر (l.type == CONVOLUTIONAL) {
         scal_cpu(l.n, s, l.biases, 1);
         scal_cpu(l.nweights, s, l.weights, 1);
-        if (l.scales) {
+        اگر (l.scales) {
             scal_cpu(l.n, s, l.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } وگرنه اگر(l.type == CONNECTED) {
         scal_cpu(l.outputs, s, l.biases, 1);
         scal_cpu(l.outputs*l.inputs, s, l.weights, 1);
     }
 }
 
 
-void pull_weights(layer l)
+تهی pull_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+    اگر(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.n);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.nweights);
-        if(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
-    } else if(l.type == CONNECTED){
+        اگر(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
+    } وگرنه اگر(l.type == CONNECTED){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.outputs);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.outputs*l.inputs);
     }
 }
 
-void push_weights(layer l)
+تهی افزودن_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
-        cuda_push_array(l.biases_gpu, l.biases, l.n);
-        cuda_push_array(l.weights_gpu, l.weights, l.nweights);
-        if(l.scales) cuda_push_array(l.scales_gpu, l.scales, l.n);
-    } else if(l.type == CONNECTED){
-        cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
+    اگر(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+        cuda_افزودن_array(l.biases_gpu, l.biases, l.n);
+        cuda_افزودن_array(l.weights_gpu, l.weights, l.nweights);
+        اگر(l.scales) cuda_افزودن_array(l.scales_gpu, l.scales, l.n);
+    } وگرنه اگر(l.type == CONNECTED){
+        cuda_افزودن_array(l.biases_gpu, l.biases, l.outputs);
+        cuda_افزودن_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
     }
 }
 
-void distribute_weights(layer l, layer base)
+تهی distribute_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
-        cuda_push_array(l.biases_gpu, base.biases, l.n);
-        cuda_push_array(l.weights_gpu, base.weights, l.nweights);
-        if (base.scales) cuda_push_array(l.scales_gpu, base.scales, l.n);
-    } else if (l.type == CONNECTED) {
-        cuda_push_array(l.biases_gpu, base.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
+    اگر (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
+        cuda_افزودن_array(l.biases_gpu, base.biases, l.n);
+        cuda_افزودن_array(l.weights_gpu, base.weights, l.nweights);
+        اگر (base.scales) cuda_افزودن_array(l.scales_gpu, base.scales, l.n);
+    } وگرنه اگر (l.type == CONNECTED) {
+        cuda_افزودن_array(l.biases_gpu, base.biases, l.outputs);
+        cuda_افزودن_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
     }
 }
 
@@ -1024,103 +1024,103 @@ void distribute_weights(layer l, layer base)
    }
  */
 
-void sync_layer(network **nets, int n, int j)
+تهی sync_layer(network **nets, صحیح n, صحیح j)
 {
-    int i;
+    صحیح i;
     network *net = nets[0];
     layer base = net->layers[j];
     scale_weights(base, 0);
-    for (i = 0; i < n; ++i) {
+    برای (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         pull_weights(l);
         merge_weights(l, base);
     }
     scale_weights(base, 1./n);
-    for (i = 0; i < n; ++i) {
+    برای (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         distribute_weights(l, base);
     }
 }
 
-typedef struct{
+تعریفنوع ساختار{
     network **nets;
-    int n;
-    int j;
+    صحیح n;
+    صحیح j;
 } sync_args;
 
-void *sync_layer_thread(void *ptr)
+تهی *sync_layer_thread(تهی *ptr)
 {
     sync_args args = *(sync_args*)ptr;
     sync_layer(args.nets, args.n, args.j);
-    free(ptr);
-    return 0;
+    آزاد(ptr);
+    بازگشت 0;
 }
 
-pthread_t sync_layer_in_thread(network **nets, int n, int j)
+pthread_t sync_layer_in_thread(network **nets, صحیح n, صحیح j)
 {
     pthread_t thread;
-    sync_args *ptr = (sync_args *)calloc(1, sizeof(sync_args));
+    sync_args *ptr = (sync_args *)calloc(1, اندازه(sync_args));
     ptr->nets = nets;
     ptr->n = n;
     ptr->j = j;
-    if(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
-    return thread;
+    اگر(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
+    بازگشت thread;
 }
 
-void sync_nets(network **nets, int n, int interval)
+تهی sync_nets(network **nets, صحیح n, صحیح interval)
 {
-    int j;
-    int layers = nets[0]->n;
-    pthread_t *threads = (pthread_t *) calloc(layers, sizeof(pthread_t));
+    صحیح j;
+    صحیح layers = nets[0]->n;
+    pthread_t *threads = (pthread_t *) calloc(layers, اندازه(pthread_t));
 
     *(nets[0]->seen) += interval * (n-1) * nets[0]->batch * nets[0]->subdivisions;
-    for (j = 0; j < n; ++j){
+    برای (j = 0; j < n; ++j){
         *(nets[j]->seen) = *(nets[0]->seen);
     }
-    for (j = 0; j < layers; ++j) {
+    برای (j = 0; j < layers; ++j) {
         threads[j] = sync_layer_in_thread(nets, n, j);
     }
-    for (j = 0; j < layers; ++j) {
+    برای (j = 0; j < layers; ++j) {
         pthread_join(threads[j], 0);
     }
-    free(threads);
+    آزاد(threads);
 }
 
-float train_networks(network **nets, int n, data d, int interval)
+اعشاری train_networks(network **nets, صحیح n, data d, صحیح interval)
 {
-    int i;
-    int batch = nets[0]->batch;
-    int subdivisions = nets[0]->subdivisions;
-    assert(batch * subdivisions * n == d.X.rows);
-    pthread_t *threads = (pthread_t *) calloc(n, sizeof(pthread_t));
-    float *errors = (float *) calloc(n, sizeof(float));
+    صحیح i;
+    صحیح batch = nets[0]->batch;
+    صحیح subdivisions = nets[0]->subdivisions;
+    أكد(batch * subdivisions * n == d.X.rows);
+    pthread_t *threads = (pthread_t *) calloc(n, اندازه(pthread_t));
+    اعشاری *errors = (اعشاری *) calloc(n, اندازه(اعشاری));
 
-    float sum = 0;
-    for(i = 0; i < n; ++i){
+    اعشاری sum = 0;
+    برای(i = 0; i < n; ++i){
         data p = get_data_part(d, i, n);
         threads[i] = train_network_in_thread(nets[i], p, errors + i);
     }
-    for(i = 0; i < n; ++i){
+    برای(i = 0; i < n; ++i){
         pthread_join(threads[i], 0);
         //printf("%f\n", errors[i]);
         sum += errors[i];
     }
     //cudaDeviceSynchronize();
-    if (get_current_batch(nets[0]) % interval == 0) {
+    اگر (get_current_batch(nets[0]) % interval == 0) {
         printf("Syncing... ");
         fflush(stdout);
         sync_nets(nets, n, interval);
         printf("Done!\n");
     }
     //cudaDeviceSynchronize();
-    free(threads);
-    free(errors);
-    return (float)sum/(n);
+    آزاد(threads);
+    آزاد(errors);
+    بازگشت (اعشاری)sum/(n);
 }
 
-void pull_network_output(network *net)
+تهی pull_network_output(network *net)
 {
     layer l = get_network_output_layer(net);
     cuda_pull_array(l.output_gpu, l.output, l.outputs*l.batch);

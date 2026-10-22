@@ -1,19 +1,19 @@
 #ifndef ISEG_LAYER_H
 #define ISEG_LAYER_H
 
-#include "darknet.h"
-#include "layer.h"
-#include "network.h"
+#شامل "darknet.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids);
-void forward_iseg_layer(const layer l, network net);
-void backward_iseg_layer(const layer l, network net);
-void resize_iseg_layer(layer *l, int w, int h);
-int iseg_num_detections(layer l, float thresh);
+layer make_iseg_layer(صحیح batch, صحیح w, صحیح h, صحیح classes, صحیح ids);
+تهی forward_iseg_layer(ثابت layer l, network net);
+تهی backward_iseg_layer(ثابت layer l, network net);
+تهی resize_iseg_layer(layer *l, صحیح w, صحیح h);
+صحیح iseg_رقم_detections(layer l, اعشاری thresh);
 
 #ifdef GPU
-void forward_iseg_layer_gpu(const layer l, network net);
-void backward_iseg_layer_gpu(layer l, network net);
+تهی forward_iseg_layer_gpu(ثابت layer l, network net);
+تهی backward_iseg_layer_gpu(layer l, network net);
 #endif
 
 #endif

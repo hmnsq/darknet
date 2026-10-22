@@ -1,97 +1,97 @@
-#include "layer.h"
-#include "cuda.h"
+#شامل "layer.h"
+#شامل "cuda.h"
 
-#include <stdlib.h>
+#شامل <stdlib.h>
 
-void free_layer(layer l)
+تهی free_layer(layer l)
 {
-    if(l.type == DROPOUT){
-        if(l.rand)           free(l.rand);
+    اگر(l.type == DROPOUT){
+        اگر(l.rand)           آزاد(l.rand);
 #ifdef GPU
-        if(l.rand_gpu)             cuda_free(l.rand_gpu);
+        اگر(l.rand_gpu)             cuda_free(l.rand_gpu);
 #endif
-        return;
+        بازگشت;
     }
-    if(l.cweights)           free(l.cweights);
-    if(l.indexes)            free(l.indexes);
-    if(l.input_layers)       free(l.input_layers);
-    if(l.input_sizes)        free(l.input_sizes);
-    if(l.map)                free(l.map);
-    if(l.rand)               free(l.rand);
-    if(l.cost)               free(l.cost);
-    if(l.state)              free(l.state);
-    if(l.prev_state)         free(l.prev_state);
-    if(l.forgot_state)       free(l.forgot_state);
-    if(l.forgot_delta)       free(l.forgot_delta);
-    if(l.state_delta)        free(l.state_delta);
-    if(l.concat)             free(l.concat);
-    if(l.concat_delta)       free(l.concat_delta);
-    if(l.binary_weights)     free(l.binary_weights);
-    if(l.biases)             free(l.biases);
-    if(l.bias_updates)       free(l.bias_updates);
-    if(l.scales)             free(l.scales);
-    if(l.scale_updates)      free(l.scale_updates);
-    if(l.weights)            free(l.weights);
-    if(l.weight_updates)     free(l.weight_updates);
-    if(l.delta)              free(l.delta);
-    if(l.output)             free(l.output);
-    if(l.squared)            free(l.squared);
-    if(l.norms)              free(l.norms);
-    if(l.spatial_mean)       free(l.spatial_mean);
-    if(l.mean)               free(l.mean);
-    if(l.variance)           free(l.variance);
-    if(l.mean_delta)         free(l.mean_delta);
-    if(l.variance_delta)     free(l.variance_delta);
-    if(l.rolling_mean)       free(l.rolling_mean);
-    if(l.rolling_variance)   free(l.rolling_variance);
-    if(l.x)                  free(l.x);
-    if(l.x_norm)             free(l.x_norm);
-    if(l.m)                  free(l.m);
-    if(l.v)                  free(l.v);
-    if(l.z_cpu)              free(l.z_cpu);
-    if(l.r_cpu)              free(l.r_cpu);
-    if(l.h_cpu)              free(l.h_cpu);
-    if(l.binary_input)       free(l.binary_input);
+    اگر(l.cweights)           آزاد(l.cweights);
+    اگر(l.indexes)            آزاد(l.indexes);
+    اگر(l.درون_داد_layers)       آزاد(l.درون_داد_layers);
+    اگر(l.درون_داد_sizes)        آزاد(l.درون_داد_sizes);
+    اگر(l.map)                آزاد(l.map);
+    اگر(l.rand)               آزاد(l.rand);
+    اگر(l.cost)               آزاد(l.cost);
+    اگر(l.state)              آزاد(l.state);
+    اگر(l.prev_state)         آزاد(l.prev_state);
+    اگر(l.forgot_state)       آزاد(l.forgot_state);
+    اگر(l.forgot_delta)       آزاد(l.forgot_delta);
+    اگر(l.state_delta)        آزاد(l.state_delta);
+    اگر(l.concat)             آزاد(l.concat);
+    اگر(l.concat_delta)       آزاد(l.concat_delta);
+    اگر(l.دودویی_weights)     آزاد(l.دودویی_weights);
+    اگر(l.biases)             آزاد(l.biases);
+    اگر(l.bias_updates)       آزاد(l.bias_updates);
+    اگر(l.scales)             آزاد(l.scales);
+    اگر(l.scale_updates)      آزاد(l.scale_updates);
+    اگر(l.weights)            آزاد(l.weights);
+    اگر(l.weight_updates)     آزاد(l.weight_updates);
+    اگر(l.delta)              آزاد(l.delta);
+    اگر(l.output)             آزاد(l.output);
+    اگر(l.squared)            آزاد(l.squared);
+    اگر(l.norms)              آزاد(l.norms);
+    اگر(l.spatial_mean)       آزاد(l.spatial_mean);
+    اگر(l.mean)               آزاد(l.mean);
+    اگر(l.variance)           آزاد(l.variance);
+    اگر(l.mean_delta)         آزاد(l.mean_delta);
+    اگر(l.variance_delta)     آزاد(l.variance_delta);
+    اگر(l.rolling_mean)       آزاد(l.rolling_mean);
+    اگر(l.rolling_variance)   آزاد(l.rolling_variance);
+    اگر(l.x)                  آزاد(l.x);
+    اگر(l.x_norm)             آزاد(l.x_norm);
+    اگر(l.m)                  آزاد(l.m);
+    اگر(l.v)                  آزاد(l.v);
+    اگر(l.z_cpu)              آزاد(l.z_cpu);
+    اگر(l.r_cpu)              آزاد(l.r_cpu);
+    اگر(l.h_cpu)              آزاد(l.h_cpu);
+    اگر(l.دودویی_درون_داد)       آزاد(l.دودویی_درون_داد);
 
 #ifdef GPU
-    if(l.indexes_gpu)           cuda_free((float *)l.indexes_gpu);
+    اگر(l.indexes_gpu)           cuda_free((اعشاری *)l.indexes_gpu);
 
-    if(l.z_gpu)                   cuda_free(l.z_gpu);
-    if(l.r_gpu)                   cuda_free(l.r_gpu);
-    if(l.h_gpu)                   cuda_free(l.h_gpu);
-    if(l.m_gpu)                   cuda_free(l.m_gpu);
-    if(l.v_gpu)                   cuda_free(l.v_gpu);
-    if(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
-    if(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
-    if(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
-    if(l.state_gpu)               cuda_free(l.state_gpu);
-    if(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
-    if(l.gate_gpu)                cuda_free(l.gate_gpu);
-    if(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
-    if(l.save_gpu)                cuda_free(l.save_gpu);
-    if(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
-    if(l.concat_gpu)              cuda_free(l.concat_gpu);
-    if(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
-    if(l.binary_input_gpu)        cuda_free(l.binary_input_gpu);
-    if(l.binary_weights_gpu)      cuda_free(l.binary_weights_gpu);
-    if(l.mean_gpu)                cuda_free(l.mean_gpu);
-    if(l.variance_gpu)            cuda_free(l.variance_gpu);
-    if(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
-    if(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
-    if(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
-    if(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
-    if(l.x_gpu)                   cuda_free(l.x_gpu);
-    if(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
-    if(l.weights_gpu)             cuda_free(l.weights_gpu);
-    if(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
-    if(l.biases_gpu)              cuda_free(l.biases_gpu);
-    if(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
-    if(l.scales_gpu)              cuda_free(l.scales_gpu);
-    if(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
-    if(l.output_gpu)              cuda_free(l.output_gpu);
-    if(l.delta_gpu)               cuda_free(l.delta_gpu);
-    if(l.rand_gpu)                cuda_free(l.rand_gpu);
-    if(l.squared_gpu)             cuda_free(l.squared_gpu);
-    if(l.norms_gpu)               cuda_free(l.norms_gpu);
+    اگر(l.z_gpu)                   cuda_free(l.z_gpu);
+    اگر(l.r_gpu)                   cuda_free(l.r_gpu);
+    اگر(l.h_gpu)                   cuda_free(l.h_gpu);
+    اگر(l.m_gpu)                   cuda_free(l.m_gpu);
+    اگر(l.v_gpu)                   cuda_free(l.v_gpu);
+    اگر(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
+    اگر(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
+    اگر(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
+    اگر(l.state_gpu)               cuda_free(l.state_gpu);
+    اگر(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
+    اگر(l.gate_gpu)                cuda_free(l.gate_gpu);
+    اگر(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
+    اگر(l.save_gpu)                cuda_free(l.save_gpu);
+    اگر(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
+    اگر(l.concat_gpu)              cuda_free(l.concat_gpu);
+    اگر(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
+    اگر(l.دودویی_درون_داد_gpu)        cuda_free(l.دودویی_درون_داد_gpu);
+    اگر(l.دودویی_weights_gpu)      cuda_free(l.دودویی_weights_gpu);
+    اگر(l.mean_gpu)                cuda_free(l.mean_gpu);
+    اگر(l.variance_gpu)            cuda_free(l.variance_gpu);
+    اگر(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
+    اگر(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
+    اگر(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
+    اگر(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
+    اگر(l.x_gpu)                   cuda_free(l.x_gpu);
+    اگر(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
+    اگر(l.weights_gpu)             cuda_free(l.weights_gpu);
+    اگر(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
+    اگر(l.biases_gpu)              cuda_free(l.biases_gpu);
+    اگر(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
+    اگر(l.scales_gpu)              cuda_free(l.scales_gpu);
+    اگر(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
+    اگر(l.output_gpu)              cuda_free(l.output_gpu);
+    اگر(l.delta_gpu)               cuda_free(l.delta_gpu);
+    اگر(l.rand_gpu)                cuda_free(l.rand_gpu);
+    اگر(l.squared_gpu)             cuda_free(l.squared_gpu);
+    اگر(l.norms_gpu)               cuda_free(l.norms_gpu);
 #endif
 }
