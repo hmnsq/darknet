@@ -1,18 +1,18 @@
-#ifndef ROUTE_LAYER_H
-#define ROUTE_LAYER_H
-#include "network.h"
-#include "layer.h"
+#جيڪڏهن_وصف_نه_ٿيل ROUTE_LAYER_H
+#وصف_ڪريو ROUTE_LAYER_H
+#ضمن "network.h"
+#ضمن "layer.h"
 
-typedef layer route_layer;
+تعريفنوع layer route_layer;
 
-route_layer make_route_layer(int batch, int n, int *input_layers, int *input_size);
-void forward_route_layer(const route_layer l, network net);
-void backward_route_layer(const route_layer l, network net);
-void resize_route_layer(route_layer *l, network *net);
+route_layer make_route_layer(صحيح batch, صحيح n, صحيح *داخلا_layers, صحيح *داخلا_سائيز);
+فراغ forward_route_layer(ثابت route_layer l, ڄار net);
+فراغ backward_route_layer(ثابت route_layer l, ڄار net);
+فراغ resize_route_layer(route_layer *l, ڄار *net);
 
-#ifdef GPU
-void forward_route_layer_gpu(const route_layer l, network net);
-void backward_route_layer_gpu(const route_layer l, network net);
-#endif
+#جيڪڏهن_وصف_ٿيل GPU
+فراغ forward_route_layer_gpu(ثابت route_layer l, ڄار net);
+فراغ backward_route_layer_gpu(ثابت route_layer l, ڄار net);
+#جيڪڏهن_پورو
 
-#endif
+#جيڪڏهن_پورو

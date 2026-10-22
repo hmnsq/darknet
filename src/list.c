@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = يادگيري_ڏيو(حجم(list));
+	l->سائيز = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->پٺ = 0;
+	أرجع l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+فراغ *list_ڪڍو(list *l){
+    إذا(!l->پٺ) أرجع 0;
+    ڳنڍ *b = l->پٺ;
+    فراغ *val = b->val;
+    l->پٺ = b->prev;
+    إذا(l->پٺ) l->پٺ->ايندڙ = 0;
+    حرر(b);
+    --l->سائيز;
     
-    return val;
+    أرجع val;
 }
 
-void list_insert(list *l, void *val)
+فراغ list_وجهو(list *l, فراغ *val)
 {
-	node *new = malloc(sizeof(node));
+	ڳنڍ *new = يادگيري_ڏيو(حجم(ڳنڍ));
 	new->val = val;
-	new->next = 0;
+	new->ايندڙ = 0;
 
-	if(!l->back){
+	إذا(!l->پٺ){
 		l->front = new;
 		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+	}وإلا{
+		l->پٺ->ايندڙ = new;
+		new->prev = l->پٺ;
 	}
-	l->back = new;
-	++l->size;
+	l->پٺ = new;
+	++l->سائيز;
 }
 
-void free_node(node *n)
+فراغ free_ڳنڍ(ڳنڍ *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	ڳنڍ *ايندڙ;
+	طالما(n) {
+		ايندڙ = n->ايندڙ;
+		حرر(n);
+		n = ايندڙ;
 	}
 }
 
-void **list_to_array(list *l)
+فراغ free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_ڳنڍ(l->front);
+	حرر(l);
+}
+
+فراغ free_list_contents(list *l)
+{
+	ڳنڍ *n = l->front;
+	طالما(n){
+		حرر(n->val);
+		n = n->ايندڙ;
+	}
+}
+
+فراغ **list_منزل_array(list *l)
+{
+    فراغ **a = صفر_يادگيري_ڏيو(l->سائيز, حجم(فراغ*));
+    صحيح ڳڻپ = 0;
+    ڳنڍ *n = l->front;
+    طالما(n){
+        a[ڳڻپ++] = n->val;
+        n = n->ايندڙ;
     }
-    return a;
+    أرجع a;
 }

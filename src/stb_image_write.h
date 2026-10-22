@@ -145,189 +145,189 @@ LICENSE
 
 */
 
-#ifndef INCLUDE_STB_IMAGE_WRITE_H
-#define INCLUDE_STB_IMAGE_WRITE_H
+#جيڪڏهن_وصف_نه_ٿيل INCLUDE_STB_IMAGE_WRITE_H
+#وصف_ڪريو INCLUDE_STB_IMAGE_WRITE_H
 
 // if STB_IMAGE_WRITE_STATIC causes problems, try defining STBIWDEF to 'inline' or 'static inline'
-#ifndef STBIWDEF
-#ifdef STB_IMAGE_WRITE_STATIC
-#define STBIWDEF  static
-#else
-#ifdef __cplusplus
-#define STBIWDEF  extern "C"
-#else
-#define STBIWDEF  extern
-#endif
-#endif
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STBIWDEF
+#جيڪڏهن_وصف_ٿيل STB_IMAGE_WRITE_STATIC
+#وصف_ڪريو STBIWDEF  ساكن
+#وإلا
+#جيڪڏهن_وصف_ٿيل __cplusplus
+#وصف_ڪريو STBIWDEF  خارجي "C"
+#وإلا
+#وصف_ڪريو STBIWDEF  خارجي
+#جيڪڏهن_پورو
+#جيڪڏهن_پورو
+#جيڪڏهن_پورو
 
-#ifndef STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
-extern int stbi_write_tga_with_rle;
-extern int stbi_write_png_compression_level;
-extern int stbi_write_force_png_filter;
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
+خارجي صحيح stbi_write_tga_with_rle;
+خارجي صحيح stbi_write_png_compression_level;
+خارجي صحيح stbi_write_force_png_filter;
+#جيڪڏهن_پورو
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void  *data, int quality);
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+STBIWDEF صحيح stbi_write_png(حرف ثابت *filename, صحيح w, صحيح h, صحيح comp, ثابت فراغ  *معلومات, صحيح stride_اندريون_بائيٽون);
+STBIWDEF صحيح stbi_write_bmp(حرف ثابت *filename, صحيح w, صحيح h, صحيح comp, ثابت فراغ  *معلومات);
+STBIWDEF صحيح stbi_write_tga(حرف ثابت *filename, صحيح w, صحيح h, صحيح comp, ثابت فراغ  *معلومات);
+STBIWDEF صحيح stbi_write_hdr(حرف ثابت *filename, صحيح w, صحيح h, صحيح comp, ثابت عائم *معلومات);
+STBIWDEF صحيح stbi_write_jpg(حرف ثابت *filename, صحيح x, صحيح y, صحيح comp, ثابت فراغ  *معلومات, صحيح quality);
+#جيڪڏهن_پورو
 
-typedef void stbi_write_func(void *context, void *data, int size);
+تعريفنوع فراغ stbi_write_func(فراغ *context, فراغ *معلومات, صحيح سائيز);
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF صحيح stbi_write_png_منزل_func(stbi_write_func *func, فراغ *context, صحيح w, صحيح h, صحيح comp, ثابت فراغ  *معلومات, صحيح stride_اندريون_بائيٽون);
+STBIWDEF صحيح stbi_write_bmp_منزل_func(stbi_write_func *func, فراغ *context, صحيح w, صحيح h, صحيح comp, ثابت فراغ  *معلومات);
+STBIWDEF صحيح stbi_write_tga_منزل_func(stbi_write_func *func, فراغ *context, صحيح w, صحيح h, صحيح comp, ثابت فراغ  *معلومات);
+STBIWDEF صحيح stbi_write_hdr_منزل_func(stbi_write_func *func, فراغ *context, صحيح w, صحيح h, صحيح comp, ثابت عائم *معلومات);
+STBIWDEF صحيح stbi_write_jpg_منزل_func(stbi_write_func *func, فراغ *context, صحيح x, صحيح y, صحيح comp, ثابت فراغ  *معلومات, صحيح quality);
 
-STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
+STBIWDEF فراغ stbi_flip_vertically_on_write(صحيح flip_boolean);
 
-#endif//INCLUDE_STB_IMAGE_WRITE_H
+#جيڪڏهن_پورو//INCLUDE_STB_IMAGE_WRITE_H
 
-#ifdef STB_IMAGE_WRITE_IMPLEMENTATION
+#جيڪڏهن_وصف_ٿيل STB_IMAGE_WRITE_IMPLEMENTATION
 
-#ifdef _WIN32
-   #ifndef _CRT_SECURE_NO_WARNINGS
-   #define _CRT_SECURE_NO_WARNINGS
-   #endif
-   #ifndef _CRT_NONSTDC_NO_DEPRECATE
-   #define _CRT_NONSTDC_NO_DEPRECATE
-   #endif
-#endif
+#جيڪڏهن_وصف_ٿيل _WIN32
+   #جيڪڏهن_وصف_نه_ٿيل _CRT_SECURE_NO_WARNINGS
+   #وصف_ڪريو _CRT_SECURE_NO_WARNINGS
+   #جيڪڏهن_پورو
+   #جيڪڏهن_وصف_نه_ٿيل _CRT_NONSTDC_NO_DEPRECATE
+   #وصف_ڪريو _CRT_NONSTDC_NO_DEPRECATE
+   #جيڪڏهن_پورو
+#جيڪڏهن_پورو
 
-#ifndef STBI_WRITE_NO_STDIO
-#include <stdio.h>
-#endif // STBI_WRITE_NO_STDIO
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+#ضمن <stdio.h>
+#جيڪڏهن_پورو // STBI_WRITE_NO_STDIO
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#ضمن <stdarg.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن <math.h>
 
-#if defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
+#إذا defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
 // ok
-#elif !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
+#وإلاإذا !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
 // ok
-#else
-#error "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
-#endif
+#وإلا
+#غلطي "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
+#جيڪڏهن_پورو
 
-#ifndef STBIW_MALLOC
-#define STBIW_MALLOC(sz)        malloc(sz)
-#define STBIW_REALLOC(p,newsz)  realloc(p,newsz)
-#define STBIW_FREE(p)           free(p)
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STBIW_MALLOC
+#وصف_ڪريو STBIW_MALLOC(sz)        يادگيري_ڏيو(sz)
+#وصف_ڪريو STBIW_REALLOC(p,newsz)  realloc(p,newsz)
+#وصف_ڪريو STBIW_FREE(p)           حرر(p)
+#جيڪڏهن_پورو
 
-#ifndef STBIW_REALLOC_SIZED
-#define STBIW_REALLOC_SIZED(p,oldsz,newsz) STBIW_REALLOC(p,newsz)
-#endif
-
-
-#ifndef STBIW_MEMMOVE
-#define STBIW_MEMMOVE(a,b,sz) memmove(a,b,sz)
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STBIW_REALLOC_SIZED
+#وصف_ڪريو STBIW_REALLOC_SIZED(p,oldsz,newsz) STBIW_REALLOC(p,newsz)
+#جيڪڏهن_پورو
 
 
-#ifndef STBIW_ASSERT
-#include <assert.h>
-#define STBIW_ASSERT(x) assert(x)
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STBIW_MEMMOVE
+#وصف_ڪريو STBIW_MEMMOVE(a,b,sz) memmove(a,b,sz)
+#جيڪڏهن_پورو
 
-#define STBIW_UCHAR(x) (unsigned char) ((x) & 0xff)
 
-#ifdef STB_IMAGE_WRITE_STATIC
-static int stbi__flip_vertically_on_write=0;
-static int stbi_write_png_compression_level = 8;
-static int stbi_write_tga_with_rle = 1;
-static int stbi_write_force_png_filter = -1;
-#else
-int stbi_write_png_compression_level = 8;
-int stbi__flip_vertically_on_write=0;
-int stbi_write_tga_with_rle = 1;
-int stbi_write_force_png_filter = -1;
-#endif
+#جيڪڏهن_وصف_نه_ٿيل STBIW_ASSERT
+#ضمن <assert.h>
+#وصف_ڪريو STBIW_ASSERT(x) أكد(x)
+#جيڪڏهن_پورو
 
-STBIWDEF void stbi_flip_vertically_on_write(int flag)
+#وصف_ڪريو STBIW_UCHAR(x) (بنانشان حرف) ((x) & 0xff)
+
+#جيڪڏهن_وصف_ٿيل STB_IMAGE_WRITE_STATIC
+ساكن صحيح stbi__flip_vertically_on_write=0;
+ساكن صحيح stbi_write_png_compression_level = 8;
+ساكن صحيح stbi_write_tga_with_rle = 1;
+ساكن صحيح stbi_write_force_png_filter = -1;
+#وإلا
+صحيح stbi_write_png_compression_level = 8;
+صحيح stbi__flip_vertically_on_write=0;
+صحيح stbi_write_tga_with_rle = 1;
+صحيح stbi_write_force_png_filter = -1;
+#جيڪڏهن_پورو
+
+STBIWDEF فراغ stbi_flip_vertically_on_write(صحيح flag)
 {
    stbi__flip_vertically_on_write = flag;
 }
 
-typedef struct
+تعريفنوع بنية
 {
    stbi_write_func *func;
-   void *context;
+   فراغ *context;
 } stbi__write_context;
 
 // initialize a callback-based context
-static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func *c, void *context)
+ساكن فراغ stbi_شروعات_write_callbacks(stbi__write_context *s, stbi_write_func *c, فراغ *context)
 {
    s->func    = c;
    s->context = context;
 }
 
-#ifndef STBI_WRITE_NO_STDIO
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
 
-static void stbi__stdio_write(void *context, void *data, int size)
+ساكن فراغ stbi__stdio_write(فراغ *context, فراغ *معلومات, صحيح سائيز)
 {
-   fwrite(data,1,size,(FILE*) context);
+   fwrite(معلومات,1,سائيز,(FILE*) context);
 }
 
-static int stbi__start_write_file(stbi__write_context *s, const char *filename)
+ساكن صحيح stbi_شروعات_write_file(stbi__write_context *s, ثابت حرف *filename)
 {
    FILE *f;
-#ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+#جيڪڏهن_وصف_ٿيل STBI_MSC_SECURE_CRT
+   إذا (fopen_s(&f, filename, "wb"))
+      f = عدم;
+#وإلا
    f = fopen(filename, "wb");
-#endif
-   stbi__start_write_callbacks(s, stbi__stdio_write, (void *) f);
-   return f != NULL;
+#جيڪڏهن_پورو
+   stbi_شروعات_write_callbacks(s, stbi__stdio_write, (فراغ *) f);
+   أرجع f != عدم;
 }
 
-static void stbi__end_write_file(stbi__write_context *s)
+ساكن فراغ stbi_پڇاڙي_write_file(stbi__write_context *s)
 {
    fclose((FILE *)s->context);
 }
 
-#endif // !STBI_WRITE_NO_STDIO
+#جيڪڏهن_پورو // !STBI_WRITE_NO_STDIO
 
-typedef unsigned int stbiw_uint32;
-typedef int stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
+تعريفنوع بنانشان صحيح stbiw_uint32;
+تعريفنوع صحيح stb_image_write_test[حجم(stbiw_uint32)==4 ? 1 : -1];
 
-static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
+ساكن فراغ stbiw__writefv(stbi__write_context *s, ثابت حرف *fmt, va_list v)
 {
-   while (*fmt) {
-      switch (*fmt++) {
-         case ' ': break;
-         case '1': { unsigned char x = STBIW_UCHAR(va_arg(v, int));
+   طالما (*fmt) {
+      بدل (*fmt++) {
+         حالة ' ': اكسر;
+         حالة '1': { بنانشان حرف x = STBIW_UCHAR(va_arg(v, صحيح));
                      s->func(s->context,&x,1);
-                     break; }
-         case '2': { int x = va_arg(v,int);
-                     unsigned char b[2];
+                     اكسر; }
+         حالة '2': { صحيح x = va_arg(v,صحيح);
+                     بنانشان حرف b[2];
                      b[0] = STBIW_UCHAR(x);
                      b[1] = STBIW_UCHAR(x>>8);
                      s->func(s->context,b,2);
-                     break; }
-         case '4': { stbiw_uint32 x = va_arg(v,int);
-                     unsigned char b[4];
+                     اكسر; }
+         حالة '4': { stbiw_uint32 x = va_arg(v,صحيح);
+                     بنانشان حرف b[4];
                      b[0]=STBIW_UCHAR(x);
                      b[1]=STBIW_UCHAR(x>>8);
                      b[2]=STBIW_UCHAR(x>>16);
                      b[3]=STBIW_UCHAR(x>>24);
                      s->func(s->context,b,4);
-                     break; }
-         default:
+                     اكسر; }
+         افتراضي:
             STBIW_ASSERT(0);
-            return;
+            أرجع;
       }
    }
 }
 
-static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
+ساكن فراغ stbiw__writef(stbi__write_context *s, ثابت حرف *fmt, ...)
 {
    va_list v;
    va_start(v, fmt);
@@ -335,337 +335,337 @@ static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
    va_end(v);
 }
 
-static void stbiw__putc(stbi__write_context *s, unsigned char c)
+ساكن فراغ stbiw__putc(stbi__write_context *s, بنانشان حرف c)
 {
    s->func(s->context, &c, 1);
 }
 
-static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char b, unsigned char c)
+ساكن فراغ stbiw__write3(stbi__write_context *s, بنانشان حرف a, بنانشان حرف b, بنانشان حرف c)
 {
-   unsigned char arr[3];
+   بنانشان حرف arr[3];
    arr[0] = a, arr[1] = b, arr[2] = c;
    s->func(s->context, arr, 3);
 }
 
-static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, int write_alpha, int expand_mono, unsigned char *d)
+ساكن فراغ stbiw__write_pixel(stbi__write_context *s, صحيح rgb_dir, صحيح comp, صحيح write_alpha, صحيح expand_mono, بنانشان حرف *d)
 {
-   unsigned char bg[3] = { 255, 0, 255}, px[3];
-   int k;
+   بنانشان حرف bg[3] = { 255, 0, 255}, px[3];
+   صحيح k;
 
-   if (write_alpha < 0)
+   إذا (write_alpha < 0)
       s->func(s->context, &d[comp - 1], 1);
 
-   switch (comp) {
-      case 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
-      case 1:
-         if (expand_mono)
+   بدل (comp) {
+      حالة 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
+      حالة 1:
+         إذا (expand_mono)
             stbiw__write3(s, d[0], d[0], d[0]); // monochrome bmp
-         else
+         وإلا
             s->func(s->context, d, 1);  // monochrome TGA
-         break;
-      case 4:
-         if (!write_alpha) {
+         اكسر;
+      حالة 4:
+         إذا (!write_alpha) {
             // composite against pink background
-            for (k = 0; k < 3; ++k)
+            لكل (k = 0; k < 3; ++k)
                px[k] = bg[k] + ((d[k] - bg[k]) * d[3]) / 255;
             stbiw__write3(s, px[1 - rgb_dir], px[1], px[1 + rgb_dir]);
-            break;
+            اكسر;
          }
          /* FALLTHROUGH */
-      case 3:
+      حالة 3:
          stbiw__write3(s, d[1 - rgb_dir], d[1], d[1 + rgb_dir]);
-         break;
+         اكسر;
    }
-   if (write_alpha > 0)
+   إذا (write_alpha > 0)
       s->func(s->context, &d[comp - 1], 1);
 }
 
-static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, void *data, int write_alpha, int scanline_pad, int expand_mono)
+ساكن فراغ stbiw__write_pixels(stbi__write_context *s, صحيح rgb_dir, صحيح vdir, صحيح x, صحيح y, صحيح comp, فراغ *معلومات, صحيح write_alpha, صحيح scanline_pad, صحيح expand_mono)
 {
    stbiw_uint32 zero = 0;
-   int i,j, j_end;
+   صحيح i,j, j_پڇاڙي;
 
-   if (y <= 0)
-      return;
+   إذا (y <= 0)
+      أرجع;
 
-   if (stbi__flip_vertically_on_write)
+   إذا (stbi__flip_vertically_on_write)
       vdir *= -1;
 
-   if (vdir < 0)
-      j_end = -1, j = y-1;
-   else
-      j_end =  y, j = 0;
+   إذا (vdir < 0)
+      j_پڇاڙي = -1, j = y-1;
+   وإلا
+      j_پڇاڙي =  y, j = 0;
 
-   for (; j != j_end; j += vdir) {
-      for (i=0; i < x; ++i) {
-         unsigned char *d = (unsigned char *) data + (j*x+i)*comp;
+   لكل (; j != j_پڇاڙي; j += vdir) {
+      لكل (i=0; i < x; ++i) {
+         بنانشان حرف *d = (بنانشان حرف *) معلومات + (j*x+i)*comp;
          stbiw__write_pixel(s, rgb_dir, comp, write_alpha, expand_mono, d);
       }
       s->func(s->context, &zero, scanline_pad);
    }
 }
 
-static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, int expand_mono, void *data, int alpha, int pad, const char *fmt, ...)
+ساكن صحيح stbiw__outfile(stbi__write_context *s, صحيح rgb_dir, صحيح vdir, صحيح x, صحيح y, صحيح comp, صحيح expand_mono, فراغ *معلومات, صحيح alpha, صحيح pad, ثابت حرف *fmt, ...)
 {
-   if (y < 0 || x < 0) {
-      return 0;
-   } else {
+   إذا (y < 0 || x < 0) {
+      أرجع 0;
+   } وإلا {
       va_list v;
       va_start(v, fmt);
       stbiw__writefv(s, fmt, v);
       va_end(v);
-      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,data,alpha,pad, expand_mono);
-      return 1;
+      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,معلومات,alpha,pad, expand_mono);
+      أرجع 1;
    }
 }
 
-static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, const void *data)
+ساكن صحيح stbi_write_bmp_core(stbi__write_context *s, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات)
 {
-   int pad = (-x*3) & 3;
-   return stbiw__outfile(s,-1,-1,x,y,comp,1,(void *) data,0,pad,
+   صحيح pad = (-x*3) & 3;
+   أرجع stbiw__outfile(s,-1,-1,x,y,comp,1,(فراغ *) معلومات,0,pad,
            "11 4 22 4" "4 44 22 444444",
            'B', 'M', 14+40+(x*3+pad)*y, 0,0, 14+40,  // file header
             40, x,y, 1,24, 0,0,0,0,0,0);             // bitmap header
 }
 
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF صحيح stbi_write_bmp_منزل_func(stbi_write_func *func, فراغ *context, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_bmp_core(&s, x, y, comp, data);
+   stbi_شروعات_write_callbacks(&s, func, context);
+   أرجع stbi_write_bmp_core(&s, x, y, comp, معلومات);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *data)
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+STBIWDEF صحيح stbi_write_bmp(حرف ثابت *filename, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_bmp_core(&s, x, y, comp, data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   إذا (stbi_شروعات_write_file(&s,filename)) {
+      صحيح r = stbi_write_bmp_core(&s, x, y, comp, معلومات);
+      stbi_پڇاڙي_write_file(&s);
+      أرجع r;
+   } وإلا
+      أرجع 0;
 }
-#endif //!STBI_WRITE_NO_STDIO
+#جيڪڏهن_پورو //!STBI_WRITE_NO_STDIO
 
-static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, void *data)
+ساكن صحيح stbi_write_tga_core(stbi__write_context *s, صحيح x, صحيح y, صحيح comp, فراغ *معلومات)
 {
-   int has_alpha = (comp == 2 || comp == 4);
-   int colorbytes = has_alpha ? comp-1 : comp;
-   int format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
+   صحيح has_alpha = (comp == 2 || comp == 4);
+   صحيح colorbytes = has_alpha ? comp-1 : comp;
+   صحيح format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
 
-   if (y < 0 || x < 0)
-      return 0;
+   إذا (y < 0 || x < 0)
+      أرجع 0;
 
-   if (!stbi_write_tga_with_rle) {
-      return stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *) data, has_alpha, 0,
+   إذا (!stbi_write_tga_with_rle) {
+      أرجع stbiw__outfile(s, -1, -1, x, y, comp, 0, (فراغ *) معلومات, has_alpha, 0,
          "111 221 2222 11", 0, 0, format, 0, 0, 0, 0, 0, x, y, (colorbytes + has_alpha) * 8, has_alpha * 8);
-   } else {
-      int i,j,k;
-      int jend, jdir;
+   } وإلا {
+      صحيح i,j,k;
+      صحيح jend, jdir;
 
       stbiw__writef(s, "111 221 2222 11", 0,0,format+8, 0,0,0, 0,0,x,y, (colorbytes + has_alpha) * 8, has_alpha * 8);
 
-      if (stbi__flip_vertically_on_write) {
+      إذا (stbi__flip_vertically_on_write) {
          j = 0;
          jend = y;
          jdir = 1;
-      } else {
+      } وإلا {
          j = y-1;
          jend = -1;
          jdir = -1;
       }
-      for (; j != jend; j += jdir) {
-         unsigned char *row = (unsigned char *) data + j * x * comp;
-         int len;
+      لكل (; j != jend; j += jdir) {
+         بنانشان حرف *صف = (بنانشان حرف *) معلومات + j * x * comp;
+         صحيح len;
 
-         for (i = 0; i < x; i += len) {
-            unsigned char *begin = row + i * comp;
-            int diff = 1;
+         لكل (i = 0; i < x; i += len) {
+            بنانشان حرف *begin = صف + i * comp;
+            صحيح diff = 1;
             len = 1;
 
-            if (i < x - 1) {
+            إذا (i < x - 1) {
                ++len;
-               diff = memcmp(begin, row + (i + 1) * comp, comp);
-               if (diff) {
-                  const unsigned char *prev = begin;
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (memcmp(prev, row + k * comp, comp)) {
+               diff = memcmp(begin, صف + (i + 1) * comp, comp);
+               إذا (diff) {
+                  ثابت بنانشان حرف *prev = begin;
+                  لكل (k = i + 2; k < x && len < 128; ++k) {
+                     إذا (memcmp(prev, صف + k * comp, comp)) {
                         prev += comp;
                         ++len;
-                     } else {
+                     } وإلا {
                         --len;
-                        break;
+                        اكسر;
                      }
                   }
-               } else {
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (!memcmp(begin, row + k * comp, comp)) {
+               } وإلا {
+                  لكل (k = i + 2; k < x && len < 128; ++k) {
+                     إذا (!memcmp(begin, صف + k * comp, comp)) {
                         ++len;
-                     } else {
-                        break;
+                     } وإلا {
+                        اكسر;
                      }
                   }
                }
             }
 
-            if (diff) {
-               unsigned char header = STBIW_UCHAR(len - 1);
-               s->func(s->context, &header, 1);
-               for (k = 0; k < len; ++k) {
+            إذا (diff) {
+               بنانشان حرف سرو = STBIW_UCHAR(len - 1);
+               s->func(s->context, &سرو, 1);
+               لكل (k = 0; k < len; ++k) {
                   stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin + k * comp);
                }
-            } else {
-               unsigned char header = STBIW_UCHAR(len - 129);
-               s->func(s->context, &header, 1);
+            } وإلا {
+               بنانشان حرف سرو = STBIW_UCHAR(len - 129);
+               s->func(s->context, &سرو, 1);
                stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin);
             }
          }
       }
    }
-   return 1;
+   أرجع 1;
 }
 
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF صحيح stbi_write_tga_منزل_func(stbi_write_func *func, فراغ *context, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   stbi_شروعات_write_callbacks(&s, func, context);
+   أرجع stbi_write_tga_core(&s, x, y, comp, (فراغ *) معلومات);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+STBIWDEF صحيح stbi_write_tga(حرف ثابت *filename, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_tga_core(&s, x, y, comp, (void *) data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   إذا (stbi_شروعات_write_file(&s,filename)) {
+      صحيح r = stbi_write_tga_core(&s, x, y, comp, (فراغ *) معلومات);
+      stbi_پڇاڙي_write_file(&s);
+      أرجع r;
+   } وإلا
+      أرجع 0;
 }
-#endif
+#جيڪڏهن_پورو
 
 // *************************************************************************************************
 // Radiance RGBE HDR writer
 // by Baldur Karlsson
 
-#define stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
+#وصف_ڪريو stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
 
-void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
+فراغ stbiw_لڪيري_منزل_rgbe(بنانشان حرف *rgbe, عائم *لڪيري_2)
 {
-   int exponent;
-   float maxcomp = stbiw__max(linear[0], stbiw__max(linear[1], linear[2]));
+   صحيح exponent;
+   عائم maxcomp = stbiw__max(لڪيري_2[0], stbiw__max(لڪيري_2[1], لڪيري_2[2]));
 
-   if (maxcomp < 1e-32f) {
+   إذا (maxcomp < 1e-32f) {
       rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
-   } else {
-      float normalize = (float) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
+   } وإلا {
+      عائم normalize = (عائم) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
 
-      rgbe[0] = (unsigned char)(linear[0] * normalize);
-      rgbe[1] = (unsigned char)(linear[1] * normalize);
-      rgbe[2] = (unsigned char)(linear[2] * normalize);
-      rgbe[3] = (unsigned char)(exponent + 128);
+      rgbe[0] = (بنانشان حرف)(لڪيري_2[0] * normalize);
+      rgbe[1] = (بنانشان حرف)(لڪيري_2[1] * normalize);
+      rgbe[2] = (بنانشان حرف)(لڪيري_2[2] * normalize);
+      rgbe[3] = (بنانشان حرف)(exponent + 128);
    }
 }
 
-void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char databyte)
+فراغ stbiw_write_لاڳيتو_معلومات(stbi__write_context *s, صحيح ڊيگهائي, بنانشان حرف databyte)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length+128);
-   STBIW_ASSERT(length+128 <= 255);
+   بنانشان حرف lengthbyte = STBIW_UCHAR(ڊيگهائي+128);
+   STBIW_ASSERT(ڊيگهائي+128 <= 255);
    s->func(s->context, &lengthbyte, 1);
    s->func(s->context, &databyte, 1);
 }
 
-void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *data)
+فراغ stbiw_write_dump_معلومات(stbi__write_context *s, صحيح ڊيگهائي, بنانشان حرف *معلومات)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length);
-   STBIW_ASSERT(length <= 128); // inconsistent with spec but consistent with official code
+   بنانشان حرف lengthbyte = STBIW_UCHAR(ڊيگهائي);
+   STBIW_ASSERT(ڊيگهائي <= 128); // inconsistent with spec but consistent with official code
    s->func(s->context, &lengthbyte, 1);
-   s->func(s->context, data, length);
+   s->func(s->context, معلومات, ڊيگهائي);
 }
 
-void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, unsigned char *scratch, float *scanline)
+فراغ stbiw__write_hdr_scanline(stbi__write_context *s, صحيح ويڪر, صحيح ncomp, بنانشان حرف *scratch, عائم *scanline)
 {
-   unsigned char scanlineheader[4] = { 2, 2, 0, 0 };
-   unsigned char rgbe[4];
-   float linear[3];
-   int x;
+   بنانشان حرف scanlineheader[4] = { 2, 2, 0, 0 };
+   بنانشان حرف rgbe[4];
+   عائم لڪيري_2[3];
+   صحيح x;
 
-   scanlineheader[2] = (width&0xff00)>>8;
-   scanlineheader[3] = (width&0x00ff);
+   scanlineheader[2] = (ويڪر&0xff00)>>8;
+   scanlineheader[3] = (ويڪر&0x00ff);
 
    /* skip RLE for images too small or large */
-   if (width < 8 || width >= 32768) {
-      for (x=0; x < width; x++) {
-         switch (ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
-                    linear[1] = scanline[x*ncomp + 1];
-                    linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
-                    linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+   إذا (ويڪر < 8 || ويڪر >= 32768) {
+      لكل (x=0; x < ويڪر; x++) {
+         بدل (ncomp) {
+            حالة 4: /* fallthrough */
+            حالة 3: لڪيري_2[2] = scanline[x*ncomp + 2];
+                    لڪيري_2[1] = scanline[x*ncomp + 1];
+                    لڪيري_2[0] = scanline[x*ncomp + 0];
+                    اكسر;
+            افتراضي:
+                    لڪيري_2[0] = لڪيري_2[1] = لڪيري_2[2] = scanline[x*ncomp + 0];
+                    اكسر;
          }
-         stbiw__linear_to_rgbe(rgbe, linear);
+         stbiw_لڪيري_منزل_rgbe(rgbe, لڪيري_2);
          s->func(s->context, rgbe, 4);
       }
-   } else {
-      int c,r;
+   } وإلا {
+      صحيح c,r;
       /* encode into scratch buffer */
-      for (x=0; x < width; x++) {
-         switch(ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
-                    linear[1] = scanline[x*ncomp + 1];
-                    linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
-                    linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+      لكل (x=0; x < ويڪر; x++) {
+         بدل(ncomp) {
+            حالة 4: /* fallthrough */
+            حالة 3: لڪيري_2[2] = scanline[x*ncomp + 2];
+                    لڪيري_2[1] = scanline[x*ncomp + 1];
+                    لڪيري_2[0] = scanline[x*ncomp + 0];
+                    اكسر;
+            افتراضي:
+                    لڪيري_2[0] = لڪيري_2[1] = لڪيري_2[2] = scanline[x*ncomp + 0];
+                    اكسر;
          }
-         stbiw__linear_to_rgbe(rgbe, linear);
-         scratch[x + width*0] = rgbe[0];
-         scratch[x + width*1] = rgbe[1];
-         scratch[x + width*2] = rgbe[2];
-         scratch[x + width*3] = rgbe[3];
+         stbiw_لڪيري_منزل_rgbe(rgbe, لڪيري_2);
+         scratch[x + ويڪر*0] = rgbe[0];
+         scratch[x + ويڪر*1] = rgbe[1];
+         scratch[x + ويڪر*2] = rgbe[2];
+         scratch[x + ويڪر*3] = rgbe[3];
       }
 
       s->func(s->context, scanlineheader, 4);
 
       /* RLE each component separately */
-      for (c=0; c < 4; c++) {
-         unsigned char *comp = &scratch[width*c];
+      لكل (c=0; c < 4; c++) {
+         بنانشان حرف *comp = &scratch[ويڪر*c];
 
          x = 0;
-         while (x < width) {
+         طالما (x < ويڪر) {
             // find first run
             r = x;
-            while (r+2 < width) {
-               if (comp[r] == comp[r+1] && comp[r] == comp[r+2])
-                  break;
+            طالما (r+2 < ويڪر) {
+               إذا (comp[r] == comp[r+1] && comp[r] == comp[r+2])
+                  اكسر;
                ++r;
             }
-            if (r+2 >= width)
-               r = width;
+            إذا (r+2 >= ويڪر)
+               r = ويڪر;
             // dump up to first run
-            while (x < r) {
-               int len = r-x;
-               if (len > 128) len = 128;
-               stbiw__write_dump_data(s, len, &comp[x]);
+            طالما (x < r) {
+               صحيح len = r-x;
+               إذا (len > 128) len = 128;
+               stbiw_write_dump_معلومات(s, len, &comp[x]);
                x += len;
             }
             // if there's a run, output it
-            if (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
+            إذا (r+2 < ويڪر) { // same test as what we break out of in search loop, so only true if we break'd
                // find next byte after run
-               while (r < width && comp[r] == comp[x])
+               طالما (r < ويڪر && comp[r] == comp[x])
                   ++r;
                // output run up to r
-               while (x < r) {
-                  int len = r-x;
-                  if (len > 127) len = 127;
-                  stbiw__write_run_data(s, len, comp[x]);
+               طالما (x < r) {
+                  صحيح len = r-x;
+                  إذا (len > 127) len = 127;
+                  stbiw_write_لاڳيتو_معلومات(s, len, comp[x]);
                   x += len;
                }
             }
@@ -674,51 +674,51 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
    }
 }
 
-static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, float *data)
+ساكن صحيح stbi_write_hdr_core(stbi__write_context *s, صحيح x, صحيح y, صحيح comp, عائم *معلومات)
 {
-   if (y <= 0 || x <= 0 || data == NULL)
-      return 0;
-   else {
+   إذا (y <= 0 || x <= 0 || معلومات == عدم)
+      أرجع 0;
+   وإلا {
       // Each component is stored separately. Allocate scratch space for full output scanline.
-      unsigned char *scratch = (unsigned char *) STBIW_MALLOC(x*4);
-      int i, len;
-      char buffer[128];
-      char header[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
-      s->func(s->context, header, sizeof(header)-1);
+      بنانشان حرف *scratch = (بنانشان حرف *) STBIW_MALLOC(x*4);
+      صحيح i, len;
+      حرف بفر[128];
+      حرف سرو[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
+      s->func(s->context, سرو, حجم(سرو)-1);
 
-#ifdef STBI_MSC_SECURE_CRT
-      len = sprintf_s(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#else
-      len = sprintf(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#endif
-      s->func(s->context, buffer, len);
+#جيڪڏهن_وصف_ٿيل STBI_MSC_SECURE_CRT
+      len = sprintf_s(بفر, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#وإلا
+      len = sprintf(بفر, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#جيڪڏهن_پورو
+      s->func(s->context, بفر, len);
 
-      for(i=0; i < y; i++)
-         stbiw__write_hdr_scanline(s, x, comp, scratch, data + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
+      لكل(i=0; i < y; i++)
+         stbiw__write_hdr_scanline(s, x, comp, scratch, معلومات + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
       STBIW_FREE(scratch);
-      return 1;
+      أرجع 1;
    }
 }
 
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const float *data)
+STBIWDEF صحيح stbi_write_hdr_منزل_func(stbi_write_func *func, فراغ *context, صحيح x, صحيح y, صحيح comp, ثابت عائم *معلومات)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   stbi_شروعات_write_callbacks(&s, func, context);
+   أرجع stbi_write_hdr_core(&s, x, y, comp, (عائم *) معلومات);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const float *data)
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+STBIWDEF صحيح stbi_write_hdr(حرف ثابت *filename, صحيح x, صحيح y, صحيح comp, ثابت عائم *معلومات)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_hdr_core(&s, x, y, comp, (float *) data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   إذا (stbi_شروعات_write_file(&s,filename)) {
+      صحيح r = stbi_write_hdr_core(&s, x, y, comp, (عائم *) معلومات);
+      stbi_پڇاڙي_write_file(&s);
+      أرجع r;
+   } وإلا
+      أرجع 0;
 }
-#endif // STBI_WRITE_NO_STDIO
+#جيڪڏهن_پورو // STBI_WRITE_NO_STDIO
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -726,204 +726,204 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 // PNG writer
 //
 
-#ifndef STBIW_ZLIB_COMPRESS
+#جيڪڏهن_وصف_نه_ٿيل STBIW_ZLIB_COMPRESS
 // stretchy buffer; stbiw__sbpush() == vector<>::push_back() -- stbiw__sbcount() == vector<>::size()
-#define stbiw__sbraw(a) ((int *) (a) - 2)
-#define stbiw__sbm(a)   stbiw__sbraw(a)[0]
-#define stbiw__sbn(a)   stbiw__sbraw(a)[1]
+#وصف_ڪريو stbiw__sbraw(a) ((صحيح *) (a) - 2)
+#وصف_ڪريو stbiw__sbm(a)   stbiw__sbraw(a)[0]
+#وصف_ڪريو stbiw__sbn(a)   stbiw__sbraw(a)[1]
 
-#define stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
-#define stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
-#define stbiw__sbgrow(a,n)  stbiw__sbgrowf((void **) &(a), (n), sizeof(*(a)))
+#وصف_ڪريو stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
+#وصف_ڪريو stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
+#وصف_ڪريو stbiw__sbgrow(a,n)  stbiw__sbgrowf((فراغ **) &(a), (n), حجم(*(a)))
 
-#define stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
-#define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
-#define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
+#وصف_ڪريو stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
+#وصف_ڪريو stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
+#وصف_ڪريو stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
 
-static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
+ساكن فراغ *stbiw__sbgrowf(فراغ **arr, صحيح increment, صحيح itemsize)
 {
-   int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
-   void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(int)*2) : 0, itemsize * m + sizeof(int)*2);
+   صحيح m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
+   فراغ *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + حجم(صحيح)*2) : 0, itemsize * m + حجم(صحيح)*2);
    STBIW_ASSERT(p);
-   if (p) {
-      if (!*arr) ((int *) p)[1] = 0;
-      *arr = (void *) ((int *) p + 2);
+   إذا (p) {
+      إذا (!*arr) ((صحيح *) p)[1] = 0;
+      *arr = (فراغ *) ((صحيح *) p + 2);
       stbiw__sbm(*arr) = m;
    }
-   return *arr;
+   أرجع *arr;
 }
 
-static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
+ساكن بنانشان حرف *stbiw__zlib_flushf(بنانشان حرف *معلومات, بنانشان صحيح *bitbuffer, صحيح *bitcount)
 {
-   while (*bitcount >= 8) {
-      stbiw__sbpush(data, STBIW_UCHAR(*bitbuffer));
+   طالما (*bitcount >= 8) {
+      stbiw__sbpush(معلومات, STBIW_UCHAR(*bitbuffer));
       *bitbuffer >>= 8;
       *bitcount -= 8;
    }
-   return data;
+   أرجع معلومات;
 }
 
-static int stbiw__zlib_bitrev(int code, int codebits)
+ساكن صحيح stbiw__zlib_bitrev(صحيح ڪوڊ, صحيح codebits)
 {
-   int res=0;
-   while (codebits--) {
-      res = (res << 1) | (code & 1);
-      code >>= 1;
+   صحيح res=0;
+   طالما (codebits--) {
+      res = (res << 1) | (ڪوڊ & 1);
+      ڪوڊ >>= 1;
    }
-   return res;
+   أرجع res;
 }
 
-static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
+ساكن بنانشان صحيح stbiw__zlib_countm(بنانشان حرف *a, بنانشان حرف *b, صحيح حد_بندي)
 {
-   int i;
-   for (i=0; i < limit && i < 258; ++i)
-      if (a[i] != b[i]) break;
-   return i;
+   صحيح i;
+   لكل (i=0; i < حد_بندي && i < 258; ++i)
+      إذا (a[i] != b[i]) اكسر;
+   أرجع i;
 }
 
-static unsigned int stbiw__zhash(unsigned char *data)
+ساكن بنانشان صحيح stbiw__zhash(بنانشان حرف *معلومات)
 {
-   stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
+   stbiw_uint32 hash = معلومات[0] + (معلومات[1] << 8) + (معلومات[2] << 16);
    hash ^= hash << 3;
    hash += hash >> 5;
    hash ^= hash << 4;
    hash += hash >> 17;
    hash ^= hash << 25;
    hash += hash >> 6;
-   return hash;
+   أرجع hash;
 }
 
-#define stbiw__zlib_flush() (out = stbiw__zlib_flushf(out, &bitbuf, &bitcount))
-#define stbiw__zlib_add(code,codebits) \
-      (bitbuf |= (code) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
-#define stbiw__zlib_huffa(b,c)  stbiw__zlib_add(stbiw__zlib_bitrev(b,c),c)
+#وصف_ڪريو stbiw__zlib_flush() (ٻاهريون = stbiw__zlib_flushf(ٻاهريون, &bitbuf, &bitcount))
+#وصف_ڪريو stbiw_zlib_جوڙيو(ڪوڊ,codebits) \
+      (bitbuf |= (ڪوڊ) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
+#وصف_ڪريو stbiw__zlib_huffa(b,c)  stbiw_zlib_جوڙيو(stbiw__zlib_bitrev(b,c),c)
 // default huffman tables
-#define stbiw__zlib_huff1(n)  stbiw__zlib_huffa(0x30 + (n), 8)
-#define stbiw__zlib_huff2(n)  stbiw__zlib_huffa(0x190 + (n)-144, 9)
-#define stbiw__zlib_huff3(n)  stbiw__zlib_huffa(0 + (n)-256,7)
-#define stbiw__zlib_huff4(n)  stbiw__zlib_huffa(0xc0 + (n)-280,8)
-#define stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
-#define stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
+#وصف_ڪريو stbiw__zlib_huff1(n)  stbiw__zlib_huffa(0x30 + (n), 8)
+#وصف_ڪريو stbiw__zlib_huff2(n)  stbiw__zlib_huffa(0x190 + (n)-144, 9)
+#وصف_ڪريو stbiw__zlib_huff3(n)  stbiw__zlib_huffa(0 + (n)-256,7)
+#وصف_ڪريو stbiw__zlib_huff4(n)  stbiw__zlib_huffa(0xc0 + (n)-280,8)
+#وصف_ڪريو stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
+#وصف_ڪريو stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
 
-#define stbiw__ZHASH   16384
+#وصف_ڪريو stbiw__ZHASH   16384
 
-#endif // STBIW_ZLIB_COMPRESS
+#جيڪڏهن_پورو // STBIW_ZLIB_COMPRESS
 
-unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
+بنانشان حرف * stbi_zlib_compress(بنانشان حرف *معلومات, صحيح معلومات_len, صحيح *ٻاهريون_len, صحيح quality)
 {
-#ifdef STBIW_ZLIB_COMPRESS
+#جيڪڏهن_وصف_ٿيل STBIW_ZLIB_COMPRESS
    // user provided a zlib compress implementation, use that
-   return STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
-#else // use builtin
-   static unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
-   static unsigned char  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
-   static unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
-   static unsigned char  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
-   unsigned int bitbuf=0;
-   int i,j, bitcount=0;
-   unsigned char *out = NULL;
-   unsigned char ***hash_table = (unsigned char***) STBIW_MALLOC(stbiw__ZHASH * sizeof(char**));
-   if (hash_table == NULL)
-      return NULL;
-   if (quality < 5) quality = 5;
+   أرجع STBIW_ZLIB_COMPRESS(معلومات, معلومات_len, ٻاهريون_len, quality);
+#وإلا // use builtin
+   ساكن بنانشان ننڍو lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
+   ساكن بنانشان حرف  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
+   ساكن بنانشان ننڍو distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
+   ساكن بنانشان حرف  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
+   بنانشان صحيح bitbuf=0;
+   صحيح i,j, bitcount=0;
+   بنانشان حرف *ٻاهريون = عدم;
+   بنانشان حرف ***hash_جدول = (بنانشان حرف***) STBIW_MALLOC(stbiw__ZHASH * حجم(حرف**));
+   إذا (hash_جدول == عدم)
+      أرجع عدم;
+   إذا (quality < 5) quality = 5;
 
-   stbiw__sbpush(out, 0x78);   // DEFLATE 32K window
-   stbiw__sbpush(out, 0x5e);   // FLEVEL = 1
-   stbiw__zlib_add(1,1);  // BFINAL = 1
-   stbiw__zlib_add(1,2);  // BTYPE = 1 -- fixed huffman
+   stbiw__sbpush(ٻاهريون, 0x78);   // DEFLATE 32K window
+   stbiw__sbpush(ٻاهريون, 0x5e);   // FLEVEL = 1
+   stbiw_zlib_جوڙيو(1,1);  // BFINAL = 1
+   stbiw_zlib_جوڙيو(1,2);  // BTYPE = 1 -- fixed huffman
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      hash_table[i] = NULL;
+   لكل (i=0; i < stbiw__ZHASH; ++i)
+      hash_جدول[i] = عدم;
 
    i=0;
-   while (i < data_len-3) {
+   طالما (i < معلومات_len-3) {
       // hash next 3 bytes of data to be compressed
-      int h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
-      unsigned char *bestloc = 0;
-      unsigned char **hlist = hash_table[h];
-      int n = stbiw__sbcount(hlist);
-      for (j=0; j < n; ++j) {
-         if (hlist[j]-data > i-32768) { // if entry lies within window
-            int d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
-            if (d >= best) best=d,bestloc=hlist[j];
+      صحيح h = stbiw__zhash(معلومات+i)&(stbiw__ZHASH-1), بهترين=3;
+      بنانشان حرف *bestloc = 0;
+      بنانشان حرف **hlist = hash_جدول[h];
+      صحيح n = stbiw__sbcount(hlist);
+      لكل (j=0; j < n; ++j) {
+         إذا (hlist[j]-معلومات > i-32768) { // if entry lies within window
+            صحيح d = stbiw__zlib_countm(hlist[j], معلومات+i, معلومات_len-i);
+            إذا (d >= بهترين) بهترين=d,bestloc=hlist[j];
          }
       }
       // when hash table entry is too long, delete half the entries
-      if (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
-         STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, sizeof(hash_table[h][0])*quality);
-         stbiw__sbn(hash_table[h]) = quality;
+      إذا (hash_جدول[h] && stbiw__sbn(hash_جدول[h]) == 2*quality) {
+         STBIW_MEMMOVE(hash_جدول[h], hash_جدول[h]+quality, حجم(hash_جدول[h][0])*quality);
+         stbiw__sbn(hash_جدول[h]) = quality;
       }
-      stbiw__sbpush(hash_table[h],data+i);
+      stbiw__sbpush(hash_جدول[h],معلومات+i);
 
-      if (bestloc) {
+      إذا (bestloc) {
          // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
-         h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
-         hlist = hash_table[h];
+         h = stbiw__zhash(معلومات+i+1)&(stbiw__ZHASH-1);
+         hlist = hash_جدول[h];
          n = stbiw__sbcount(hlist);
-         for (j=0; j < n; ++j) {
-            if (hlist[j]-data > i-32767) {
-               int e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
-               if (e > best) { // if next match is better, bail on current match
-                  bestloc = NULL;
-                  break;
+         لكل (j=0; j < n; ++j) {
+            إذا (hlist[j]-معلومات > i-32767) {
+               صحيح e = stbiw__zlib_countm(hlist[j], معلومات+i+1, معلومات_len-i-1);
+               إذا (e > بهترين) { // if next match is better, bail on current match
+                  bestloc = عدم;
+                  اكسر;
                }
             }
          }
       }
 
-      if (bestloc) {
-         int d = (int) (data+i - bestloc); // distance back
-         STBIW_ASSERT(d <= 32767 && best <= 258);
-         for (j=0; best > lengthc[j+1]-1; ++j);
+      إذا (bestloc) {
+         صحيح d = (صحيح) (معلومات+i - bestloc); // distance back
+         STBIW_ASSERT(d <= 32767 && بهترين <= 258);
+         لكل (j=0; بهترين > lengthc[j+1]-1; ++j);
          stbiw__zlib_huff(j+257);
-         if (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
-         for (j=0; d > distc[j+1]-1; ++j);
-         stbiw__zlib_add(stbiw__zlib_bitrev(j,5),5);
-         if (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
-         i += best;
-      } else {
-         stbiw__zlib_huffb(data[i]);
+         إذا (lengtheb[j]) stbiw_zlib_جوڙيو(بهترين - lengthc[j], lengtheb[j]);
+         لكل (j=0; d > distc[j+1]-1; ++j);
+         stbiw_zlib_جوڙيو(stbiw__zlib_bitrev(j,5),5);
+         إذا (disteb[j]) stbiw_zlib_جوڙيو(d - distc[j], disteb[j]);
+         i += بهترين;
+      } وإلا {
+         stbiw__zlib_huffb(معلومات[i]);
          ++i;
       }
    }
    // write out final bytes
-   for (;i < data_len; ++i)
-      stbiw__zlib_huffb(data[i]);
+   لكل (;i < معلومات_len; ++i)
+      stbiw__zlib_huffb(معلومات[i]);
    stbiw__zlib_huff(256); // end of block
    // pad with 0 bits to byte boundary
-   while (bitcount)
-      stbiw__zlib_add(0,1);
+   طالما (bitcount)
+      stbiw_zlib_جوڙيو(0,1);
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      (void) stbiw__sbfree(hash_table[i]);
-   STBIW_FREE(hash_table);
+   لكل (i=0; i < stbiw__ZHASH; ++i)
+      (فراغ) stbiw__sbfree(hash_جدول[i]);
+   STBIW_FREE(hash_جدول);
 
    {
       // compute adler32 on input
-      unsigned int s1=1, s2=0;
-      int blocklen = (int) (data_len % 5552);
+      بنانشان صحيح s1=1, s2=0;
+      صحيح blocklen = (صحيح) (معلومات_len % 5552);
       j=0;
-      while (j < data_len) {
-         for (i=0; i < blocklen; ++i) s1 += data[j+i], s2 += s1;
+      طالما (j < معلومات_len) {
+         لكل (i=0; i < blocklen; ++i) s1 += معلومات[j+i], s2 += s1;
          s1 %= 65521, s2 %= 65521;
          j += blocklen;
          blocklen = 5552;
       }
-      stbiw__sbpush(out, STBIW_UCHAR(s2 >> 8));
-      stbiw__sbpush(out, STBIW_UCHAR(s2));
-      stbiw__sbpush(out, STBIW_UCHAR(s1 >> 8));
-      stbiw__sbpush(out, STBIW_UCHAR(s1));
+      stbiw__sbpush(ٻاهريون, STBIW_UCHAR(s2 >> 8));
+      stbiw__sbpush(ٻاهريون, STBIW_UCHAR(s2));
+      stbiw__sbpush(ٻاهريون, STBIW_UCHAR(s1 >> 8));
+      stbiw__sbpush(ٻاهريون, STBIW_UCHAR(s1));
    }
-   *out_len = stbiw__sbn(out);
+   *ٻاهريون_len = stbiw__sbn(ٻاهريون);
    // make returned pointer freeable
-   STBIW_MEMMOVE(stbiw__sbraw(out), out, *out_len);
-   return (unsigned char *) stbiw__sbraw(out);
-#endif // STBIW_ZLIB_COMPRESS
+   STBIW_MEMMOVE(stbiw__sbraw(ٻاهريون), ٻاهريون, *ٻاهريون_len);
+   أرجع (بنانشان حرف *) stbiw__sbraw(ٻاهريون);
+#جيڪڏهن_پورو // STBIW_ZLIB_COMPRESS
 }
 
-static unsigned int stbiw__crc32(unsigned char *buffer, int len)
+ساكن بنانشان صحيح stbiw_چڪري_جاچ_32(بنانشان حرف *بفر, صحيح len)
 {
-   static unsigned int crc_table[256] =
+   ساكن بنانشان صحيح چڪري_جاچ_جدول[256] =
    {
       0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
       0x0eDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -959,123 +959,123 @@ static unsigned int stbiw__crc32(unsigned char *buffer, int len)
       0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
    };
 
-   unsigned int crc = ~0u;
-   int i;
-   for (i=0; i < len; ++i)
-      crc = (crc >> 8) ^ crc_table[buffer[i] ^ (crc & 0xff)];
-   return ~crc;
+   بنانشان صحيح چڪري_جاچ = ~0u;
+   صحيح i;
+   لكل (i=0; i < len; ++i)
+      چڪري_جاچ = (چڪري_جاچ >> 8) ^ چڪري_جاچ_جدول[بفر[i] ^ (چڪري_جاچ & 0xff)];
+   أرجع ~چڪري_جاچ;
 }
 
-#define stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
-#define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
-#define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
+#وصف_ڪريو stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
+#وصف_ڪريو stbiw__wp32(معلومات,v) stbiw__wpng4(معلومات, (v)>>24,(v)>>16,(v)>>8,(v));
+#وصف_ڪريو stbiw__wptag(معلومات,s) stbiw__wpng4(معلومات, s[0],s[1],s[2],s[3])
 
-static void stbiw__wpcrc(unsigned char **data, int len)
+ساكن فراغ stbiw__wpcrc(بنانشان حرف **معلومات, صحيح len)
 {
-   unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
-   stbiw__wp32(*data, crc);
+   بنانشان صحيح چڪري_جاچ = stbiw_چڪري_جاچ_32(*معلومات - len - 4, len+4);
+   stbiw__wp32(*معلومات, چڪري_جاچ);
 }
 
-static unsigned char stbiw__paeth(int a, int b, int c)
+ساكن بنانشان حرف stbiw__paeth(صحيح a, صحيح b, صحيح c)
 {
-   int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
-   if (pa <= pb && pa <= pc) return STBIW_UCHAR(a);
-   if (pb <= pc) return STBIW_UCHAR(b);
-   return STBIW_UCHAR(c);
+   صحيح p = a + b - c, pa = مطلق_قدر(p-a), pb = مطلق_قدر(p-b), pc = مطلق_قدر(p-c);
+   إذا (pa <= pb && pa <= pc) أرجع STBIW_UCHAR(a);
+   إذا (pb <= pc) أرجع STBIW_UCHAR(b);
+   أرجع STBIW_UCHAR(c);
 }
 
 // @OPTIMIZE: provide an option that always forces left-predict or paeth predict
-static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
+ساكن فراغ stbiw_encode_png_سٽ(بنانشان حرف *pixels, صحيح stride_بائيٽون, صحيح ويڪر, صحيح اوچائي, صحيح y, صحيح n, صحيح filter_type, نشانوارو حرف *سٽ_بفر)
 {
-   static int mapping[] = { 0,1,2,3,4 };
-   static int firstmap[] = { 0,1,0,5,6 };
-   int *mymap = (y != 0) ? mapping : firstmap;
-   int i;
-   int type = mymap[filter_type];
-   unsigned char *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
-   int signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
-   for (i = 0; i < n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - (z[i-signed_stride]>>1); break;
-         case 4: line_buffer[i] = (signed char) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); break;
-         case 5: line_buffer[i] = z[i]; break;
-         case 6: line_buffer[i] = z[i]; break;
+   ساكن صحيح mapping[] = { 0,1,2,3,4 };
+   ساكن صحيح firstmap[] = { 0,1,0,5,6 };
+   صحيح *mymap = (y != 0) ? mapping : firstmap;
+   صحيح i;
+   صحيح type = mymap[filter_type];
+   بنانشان حرف *z = pixels + stride_بائيٽون * (stbi__flip_vertically_on_write ? اوچائي-1-y : y);
+   صحيح signed_stride = stbi__flip_vertically_on_write ? -stride_بائيٽون : stride_بائيٽون;
+   لكل (i = 0; i < n; ++i) {
+      بدل (type) {
+         حالة 0: سٽ_بفر[i] = z[i]; اكسر;
+         حالة 1: سٽ_بفر[i] = z[i]; اكسر;
+         حالة 2: سٽ_بفر[i] = z[i] - z[i-signed_stride]; اكسر;
+         حالة 3: سٽ_بفر[i] = z[i] - (z[i-signed_stride]>>1); اكسر;
+         حالة 4: سٽ_بفر[i] = (نشانوارو حرف) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); اكسر;
+         حالة 5: سٽ_بفر[i] = z[i]; اكسر;
+         حالة 6: سٽ_بفر[i] = z[i]; اكسر;
       }
    }
-   for (i=n; i < width*n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i] - z[i-n]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); break;
-         case 4: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); break;
-         case 5: line_buffer[i] = z[i] - (z[i-n]>>1); break;
-         case 6: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], 0,0); break;
+   لكل (i=n; i < ويڪر*n; ++i) {
+      بدل (type) {
+         حالة 0: سٽ_بفر[i] = z[i]; اكسر;
+         حالة 1: سٽ_بفر[i] = z[i] - z[i-n]; اكسر;
+         حالة 2: سٽ_بفر[i] = z[i] - z[i-signed_stride]; اكسر;
+         حالة 3: سٽ_بفر[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); اكسر;
+         حالة 4: سٽ_بفر[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); اكسر;
+         حالة 5: سٽ_بفر[i] = z[i] - (z[i-n]>>1); اكسر;
+         حالة 6: سٽ_بفر[i] = z[i] - stbiw__paeth(z[i-n], 0,0); اكسر;
       }
    }
 }
 
-unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+بنانشان حرف *stbi_write_png_منزل_mem(بنانشان حرف *pixels, صحيح stride_بائيٽون, صحيح x, صحيح y, صحيح n, صحيح *ٻاهريون_len)
 {
-   int force_filter = stbi_write_force_png_filter;
-   int ctype[5] = { -1, 0, 4, 2, 6 };
-   unsigned char sig[8] = { 137,80,78,71,13,10,26,10 };
-   unsigned char *out,*o, *filt, *zlib;
-   signed char *line_buffer;
-   int j,zlen;
+   صحيح force_filter = stbi_write_force_png_filter;
+   صحيح ctype[5] = { -1, 0, 4, 2, 6 };
+   بنانشان حرف sig[8] = { 137,80,78,71,13,10,26,10 };
+   بنانشان حرف *ٻاهريون,*o, *filt, *zlib;
+   نشانوارو حرف *سٽ_بفر;
+   صحيح j,zlen;
 
-   if (stride_bytes == 0)
-      stride_bytes = x * n;
+   إذا (stride_بائيٽون == 0)
+      stride_بائيٽون = x * n;
 
-   if (force_filter >= 5) {
+   إذا (force_filter >= 5) {
       force_filter = -1;
    }
 
-   filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); if (!filt) return 0;
-   line_buffer = (signed char *) STBIW_MALLOC(x * n); if (!line_buffer) { STBIW_FREE(filt); return 0; }
-   for (j=0; j < y; ++j) {
-      int filter_type;
-      if (force_filter > -1) {
+   filt = (بنانشان حرف *) STBIW_MALLOC((x*n+1) * y); إذا (!filt) أرجع 0;
+   سٽ_بفر = (نشانوارو حرف *) STBIW_MALLOC(x * n); إذا (!سٽ_بفر) { STBIW_FREE(filt); أرجع 0; }
+   لكل (j=0; j < y; ++j) {
+      صحيح filter_type;
+      إذا (force_filter > -1) {
          filter_type = force_filter;
-         stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, force_filter, line_buffer);
-      } else { // Estimate the best filter by running through all of them:
-         int best_filter = 0, best_filter_val = 0x7fffffff, est, i;
-         for (filter_type = 0; filter_type < 5; filter_type++) {
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, filter_type, line_buffer);
+         stbiw_encode_png_سٽ(pixels, stride_بائيٽون, x, y, j, n, force_filter, سٽ_بفر);
+      } وإلا { // Estimate the best filter by running through all of them:
+         صحيح بهترين_filter = 0, بهترين_filter_val = 0x7fffffff, est, i;
+         لكل (filter_type = 0; filter_type < 5; filter_type++) {
+            stbiw_encode_png_سٽ(pixels, stride_بائيٽون, x, y, j, n, filter_type, سٽ_بفر);
 
             // Estimate the entropy of the line using this filter; the less, the better.
             est = 0;
-            for (i = 0; i < x*n; ++i) {
-               est += abs((signed char) line_buffer[i]);
+            لكل (i = 0; i < x*n; ++i) {
+               est += مطلق_قدر((نشانوارو حرف) سٽ_بفر[i]);
             }
-            if (est < best_filter_val) {
-               best_filter_val = est;
-               best_filter = filter_type;
+            إذا (est < بهترين_filter_val) {
+               بهترين_filter_val = est;
+               بهترين_filter = filter_type;
             }
          }
-         if (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, best_filter, line_buffer);
-            filter_type = best_filter;
+         إذا (filter_type != بهترين_filter) {  // If the last iteration already got us the best filter, don't redo it
+            stbiw_encode_png_سٽ(pixels, stride_بائيٽون, x, y, j, n, بهترين_filter, سٽ_بفر);
+            filter_type = بهترين_filter;
          }
       }
       // when we get here, filter_type contains the filter type, and line_buffer contains the data
-      filt[j*(x*n+1)] = (unsigned char) filter_type;
-      STBIW_MEMMOVE(filt+j*(x*n+1)+1, line_buffer, x*n);
+      filt[j*(x*n+1)] = (بنانشان حرف) filter_type;
+      STBIW_MEMMOVE(filt+j*(x*n+1)+1, سٽ_بفر, x*n);
    }
-   STBIW_FREE(line_buffer);
+   STBIW_FREE(سٽ_بفر);
    zlib = stbi_zlib_compress(filt, y*( x*n+1), &zlen, stbi_write_png_compression_level);
    STBIW_FREE(filt);
-   if (!zlib) return 0;
+   إذا (!zlib) أرجع 0;
 
    // each tag requires 12 bytes of overhead
-   out = (unsigned char *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
-   if (!out) return 0;
-   *out_len = 8 + 12+13 + 12+zlen + 12;
+   ٻاهريون = (بنانشان حرف *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
+   إذا (!ٻاهريون) أرجع 0;
+   *ٻاهريون_len = 8 + 12+13 + 12+zlen + 12;
 
-   o=out;
+   o=ٻاهريون;
    STBIW_MEMMOVE(o,sig,8); o+= 8;
    stbiw__wp32(o, 13); // header length
    stbiw__wptag(o, "IHDR");
@@ -1099,40 +1099,40 @@ unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, in
    stbiw__wptag(o, "IEND");
    stbiw__wpcrc(&o,0);
 
-   STBIW_ASSERT(o == out + *out_len);
+   STBIW_ASSERT(o == ٻاهريون + *ٻاهريون_len);
 
-   return out;
+   أرجع ٻاهريون;
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+STBIWDEF صحيح stbi_write_png(حرف ثابت *filename, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات, صحيح stride_بائيٽون)
 {
    FILE *f;
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
-#ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+   صحيح len;
+   بنانشان حرف *png = stbi_write_png_منزل_mem((بنانشان حرف *) معلومات, stride_بائيٽون, x, y, comp, &len);
+   إذا (png == عدم) أرجع 0;
+#جيڪڏهن_وصف_ٿيل STBI_MSC_SECURE_CRT
+   إذا (fopen_s(&f, filename, "wb"))
+      f = عدم;
+#وإلا
    f = fopen(filename, "wb");
-#endif
-   if (!f) { STBIW_FREE(png); return 0; }
+#جيڪڏهن_پورو
+   إذا (!f) { STBIW_FREE(png); أرجع 0; }
    fwrite(png, 1, len, f);
    fclose(f);
    STBIW_FREE(png);
-   return 1;
+   أرجع 1;
 }
-#endif
+#جيڪڏهن_پورو
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF صحيح stbi_write_png_منزل_func(stbi_write_func *func, فراغ *context, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات, صحيح stride_بائيٽون)
 {
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   صحيح len;
+   بنانشان حرف *png = stbi_write_png_منزل_mem((بنانشان حرف *) معلومات, stride_بائيٽون, x, y, comp, &len);
+   إذا (png == عدم) أرجع 0;
    func(context, png, len);
    STBIW_FREE(png);
-   return 1;
+   أرجع 1;
 }
 
 
@@ -1144,44 +1144,44 @@ STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x,
  * public domain Simple, Minimalistic JPEG writer - http://www.jonolick.com/code.html
  */
 
-static const unsigned char stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
+ساكن ثابت بنانشان حرف stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
       24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
 
-static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitCntP, const unsigned short *bs) {
-   int bitBuf = *bitBufP, bitCnt = *bitCntP;
-   bitCnt += bs[1];
-   bitBuf |= bs[0] << (24 - bitCnt);
-   while(bitCnt >= 8) {
-      unsigned char c = (bitBuf >> 16) & 255;
+ساكن فراغ stbiw_jpg_write_بٽ(stbi__write_context *s, صحيح *ٻٽو_انگ_Buf_P, صحيح *ٻٽو_انگ_Cnt_P, ثابت بنانشان ننڍو *bs) {
+   صحيح ٻٽو_انگ_Buf = *ٻٽو_انگ_Buf_P, ٻٽو_انگ_Cnt = *ٻٽو_انگ_Cnt_P;
+   ٻٽو_انگ_Cnt += bs[1];
+   ٻٽو_انگ_Buf |= bs[0] << (24 - ٻٽو_انگ_Cnt);
+   طالما(ٻٽو_انگ_Cnt >= 8) {
+      بنانشان حرف c = (ٻٽو_انگ_Buf >> 16) & 255;
       stbiw__putc(s, c);
-      if(c == 255) {
+      إذا(c == 255) {
          stbiw__putc(s, 0);
       }
-      bitBuf <<= 8;
-      bitCnt -= 8;
+      ٻٽو_انگ_Buf <<= 8;
+      ٻٽو_انگ_Cnt -= 8;
    }
-   *bitBufP = bitBuf;
-   *bitCntP = bitCnt;
+   *ٻٽو_انگ_Buf_P = ٻٽو_انگ_Buf;
+   *ٻٽو_انگ_Cnt_P = ٻٽو_انگ_Cnt;
 }
 
-static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float *d4p, float *d5p, float *d6p, float *d7p) {
-   float d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
-   float z1, z2, z3, z4, z5, z11, z13;
+ساكن فراغ stbiw__jpg_DCT(عائم *d0p, عائم *d1p, عائم *d2p, عائم *d3p, عائم *d4p, عائم *d5p, عائم *d6p, عائم *d7p) {
+   عائم d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
+   عائم z1, z2, z3, z4, z5, z11, z13;
 
-   float tmp0 = d0 + d7;
-   float tmp7 = d0 - d7;
-   float tmp1 = d1 + d6;
-   float tmp6 = d1 - d6;
-   float tmp2 = d2 + d5;
-   float tmp5 = d2 - d5;
-   float tmp3 = d3 + d4;
-   float tmp4 = d3 - d4;
+   عائم tmp0 = d0 + d7;
+   عائم tmp7 = d0 - d7;
+   عائم tmp1 = d1 + d6;
+   عائم tmp6 = d1 - d6;
+   عائم tmp2 = d2 + d5;
+   عائم tmp5 = d2 - d5;
+   عائم tmp3 = d3 + d4;
+   عائم tmp4 = d3 - d4;
 
    // Even part
-   float tmp10 = tmp0 + tmp3;   // phase 2
-   float tmp13 = tmp0 - tmp3;
-   float tmp11 = tmp1 + tmp2;
-   float tmp12 = tmp1 - tmp2;
+   عائم tmp10 = tmp0 + tmp3;   // phase 2
+   عائم tmp13 = tmp0 - tmp3;
+   عائم tmp11 = tmp1 + tmp2;
+   عائم tmp12 = tmp1 - tmp2;
 
    d0 = tmp10 + tmp11;       // phase 3
    d4 = tmp10 - tmp11;
@@ -1212,87 +1212,87 @@ static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float
    *d0p = d0;  *d2p = d2;  *d4p = d4;  *d6p = d6;
 }
 
-static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
-   int tmp1 = val < 0 ? -val : val;
+ساكن فراغ stbiw_jpg_calc_بٽ(صحيح val, بنانشان ننڍو بٽ[2]) {
+   صحيح tmp1 = val < 0 ? -val : val;
    val = val < 0 ? val-1 : val;
-   bits[1] = 1;
-   while(tmp1 >>= 1) {
-      ++bits[1];
+   بٽ[1] = 1;
+   طالما(tmp1 >>= 1) {
+      ++بٽ[1];
    }
-   bits[0] = val & ((1<<bits[1])-1);
+   بٽ[0] = val & ((1<<بٽ[1])-1);
 }
 
-static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt, float *CDU, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
-   const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
-   const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
-   int dataOff, i, diff, end0pos;
-   int DU[64];
+ساكن صحيح stbiw__jpg_processDU(stbi__write_context *s, صحيح *ٻٽو_انگ_Buf, صحيح *ٻٽو_انگ_Cnt, عائم *CDU, عائم *fdtbl, صحيح DC, ثابت بنانشان ننڍو HTDC[256][2], ثابت بنانشان ننڍو HTAC[256][2]) {
+   ثابت بنانشان ننڍو EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
+   ثابت بنانشان ننڍو M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
+   صحيح معلومات_Off, i, diff, end0pos;
+   صحيح DU[64];
 
    // DCT rows
-   for(dataOff=0; dataOff<64; dataOff+=8) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+1], &CDU[dataOff+2], &CDU[dataOff+3], &CDU[dataOff+4], &CDU[dataOff+5], &CDU[dataOff+6], &CDU[dataOff+7]);
+   لكل(معلومات_Off=0; معلومات_Off<64; معلومات_Off+=8) {
+      stbiw__jpg_DCT(&CDU[معلومات_Off], &CDU[معلومات_Off+1], &CDU[معلومات_Off+2], &CDU[معلومات_Off+3], &CDU[معلومات_Off+4], &CDU[معلومات_Off+5], &CDU[معلومات_Off+6], &CDU[معلومات_Off+7]);
    }
    // DCT columns
-   for(dataOff=0; dataOff<8; ++dataOff) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+8], &CDU[dataOff+16], &CDU[dataOff+24], &CDU[dataOff+32], &CDU[dataOff+40], &CDU[dataOff+48], &CDU[dataOff+56]);
+   لكل(معلومات_Off=0; معلومات_Off<8; ++معلومات_Off) {
+      stbiw__jpg_DCT(&CDU[معلومات_Off], &CDU[معلومات_Off+8], &CDU[معلومات_Off+16], &CDU[معلومات_Off+24], &CDU[معلومات_Off+32], &CDU[معلومات_Off+40], &CDU[معلومات_Off+48], &CDU[معلومات_Off+56]);
    }
    // Quantize/descale/zigzag the coefficients
-   for(i=0; i<64; ++i) {
-      float v = CDU[i]*fdtbl[i];
+   لكل(i=0; i<64; ++i) {
+      عائم v = CDU[i]*fdtbl[i];
       // DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? ceilf(v - 0.5f) : floorf(v + 0.5f));
       // ceilf() and floorf() are C99, not C89, but I /think/ they're not needed here anyway?
-      DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? v - 0.5f : v + 0.5f);
+      DU[stbiw__jpg_ZigZag[i]] = (صحيح)(v < 0 ? v - 0.5f : v + 0.5f);
    }
 
    // Encode DC
    diff = DU[0] - DC;
-   if (diff == 0) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[0]);
-   } else {
-      unsigned short bits[2];
-      stbiw__jpg_calcBits(diff, bits);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[bits[1]]);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
+   إذا (diff == 0) {
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, HTDC[0]);
+   } وإلا {
+      بنانشان ننڍو بٽ[2];
+      stbiw_jpg_calc_بٽ(diff, بٽ);
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, HTDC[بٽ[1]]);
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, بٽ);
    }
    // Encode ACs
    end0pos = 63;
-   for(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
+   لكل(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
    }
    // end0pos = first element in reverse order !=0
-   if(end0pos == 0) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
-      return DU[0];
+   إذا(end0pos == 0) {
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, EOB);
+      أرجع DU[0];
    }
-   for(i = 1; i <= end0pos; ++i) {
-      int startpos = i;
-      int nrzeroes;
-      unsigned short bits[2];
-      for (; DU[i]==0 && i<=end0pos; ++i) {
+   لكل(i = 1; i <= end0pos; ++i) {
+      صحيح startpos = i;
+      صحيح nrzeroes;
+      بنانشان ننڍو بٽ[2];
+      لكل (; DU[i]==0 && i<=end0pos; ++i) {
       }
       nrzeroes = i-startpos;
-      if ( nrzeroes >= 16 ) {
-         int lng = nrzeroes>>4;
-         int nrmarker;
-         for (nrmarker=1; nrmarker <= lng; ++nrmarker)
-            stbiw__jpg_writeBits(s, bitBuf, bitCnt, M16zeroes);
+      إذا ( nrzeroes >= 16 ) {
+         صحيح lng = nrzeroes>>4;
+         صحيح nrmarker;
+         لكل (nrmarker=1; nrmarker <= lng; ++nrmarker)
+            stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, M16zeroes);
          nrzeroes &= 15;
       }
-      stbiw__jpg_calcBits(DU[i], bits);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTAC[(nrzeroes<<4)+bits[1]]);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
+      stbiw_jpg_calc_بٽ(DU[i], بٽ);
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, HTAC[(nrzeroes<<4)+بٽ[1]]);
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, بٽ);
    }
-   if(end0pos != 63) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
+   إذا(end0pos != 63) {
+      stbiw_jpg_write_بٽ(s, ٻٽو_انگ_Buf, ٻٽو_انگ_Cnt, EOB);
    }
-   return DU[0];
+   أرجع DU[0];
 }
 
-static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, int comp, const void* data, int quality) {
+ساكن صحيح stbi_write_jpg_core(stbi__write_context *s, صحيح ويڪر, صحيح اوچائي, صحيح comp, ثابت فراغ* معلومات, صحيح quality) {
    // Constants that don't pollute global namespace
-   static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
-   static const unsigned char std_dc_luminance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
-   static const unsigned char std_ac_luminance_values[] = {
+   ساكن ثابت بنانشان حرف std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
+   ساكن ثابت بنانشان حرف std_dc_luminance_قدرون[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   ساكن ثابت بنانشان حرف std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
+   ساكن ثابت بنانشان حرف std_ac_luminance_قدرون[] = {
       0x01,0x02,0x03,0x00,0x04,0x11,0x05,0x12,0x21,0x31,0x41,0x06,0x13,0x51,0x61,0x07,0x22,0x71,0x14,0x32,0x81,0x91,0xa1,0x08,
       0x23,0x42,0xb1,0xc1,0x15,0x52,0xd1,0xf0,0x24,0x33,0x62,0x72,0x82,0x09,0x0a,0x16,0x17,0x18,0x19,0x1a,0x25,0x26,0x27,0x28,
       0x29,0x2a,0x34,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,0x59,
@@ -1301,10 +1301,10 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xb7,0xb8,0xb9,0xba,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xe1,0xe2,
       0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
-   static const unsigned char std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
-   static const unsigned char std_dc_chrominance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
-   static const unsigned char std_ac_chrominance_values[] = {
+   ساكن ثابت بنانشان حرف std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
+   ساكن ثابت بنانشان حرف std_dc_chrominance_قدرون[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   ساكن ثابت بنانشان حرف std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
+   ساكن ثابت بنانشان حرف std_ac_chrominance_قدرون[] = {
       0x00,0x01,0x02,0x03,0x11,0x04,0x05,0x21,0x31,0x06,0x12,0x41,0x51,0x07,0x61,0x71,0x13,0x22,0x32,0x81,0x08,0x14,0x42,0x91,
       0xa1,0xb1,0xc1,0x09,0x23,0x33,0x52,0xf0,0x15,0x62,0x72,0xd1,0x0a,0x16,0x24,0x34,0xe1,0x25,0xf1,0x17,0x18,0x19,0x1a,0x26,
       0x27,0x28,0x29,0x2a,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,
@@ -1314,9 +1314,9 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
    // Huffman tables
-   static const unsigned short YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
-   static const unsigned short UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
-   static const unsigned short YAC_HT[256][2] = {
+   ساكن ثابت بنانشان ننڍو YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
+   ساكن ثابت بنانشان ننڍو UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
+   ساكن ثابت بنانشان ننڍو YAC_HT[256][2] = {
       {10,4},{0,2},{1,2},{4,3},{11,4},{26,5},{120,7},{248,8},{1014,10},{65410,16},{65411,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {12,4},{27,5},{121,7},{502,9},{2038,11},{65412,16},{65413,16},{65414,16},{65415,16},{65416,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {28,5},{249,8},{1015,10},{4084,12},{65417,16},{65418,16},{65419,16},{65420,16},{65421,16},{65422,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1334,7 +1334,7 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {65515,16},{65516,16},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {2041,11},{65525,16},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const unsigned short UVAC_HT[256][2] = {
+   ساكن ثابت بنانشان ننڍو UVAC_HT[256][2] = {
       {0,2},{1,2},{4,3},{10,4},{24,5},{25,5},{56,6},{120,7},{500,9},{1014,10},{4084,12},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {11,4},{57,6},{246,8},{501,9},{2038,11},{4085,12},{65416,16},{65417,16},{65418,16},{65419,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {26,5},{247,8},{1015,10},{4086,12},{32706,15},{65420,16},{65421,16},{65422,16},{65423,16},{65424,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1352,135 +1352,135 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {16352,14},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{65525,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {1018,10},{32707,15},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const int YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
+   ساكن ثابت صحيح YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
                              37,56,68,109,103,77,24,35,55,64,81,104,113,92,49,64,78,87,103,121,120,101,72,92,95,98,112,100,103,99};
-   static const int UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
+   ساكن ثابت صحيح UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
                               99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
-   static const float aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
+   ساكن ثابت عائم aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
                                  1.0f * 2.828427125f, 0.785694958f * 2.828427125f, 0.541196100f * 2.828427125f, 0.275899379f * 2.828427125f };
 
-   int row, col, i, k;
-   float fdtbl_Y[64], fdtbl_UV[64];
-   unsigned char YTable[64], UVTable[64];
+   صحيح صف, کانو, i, k;
+   عائم fdtbl_Y[64], fdtbl_UV[64];
+   بنانشان حرف YTable[64], UVTable[64];
 
-   if(!data || !width || !height || comp > 4 || comp < 1) {
-      return 0;
+   إذا(!معلومات || !ويڪر || !اوچائي || comp > 4 || comp < 1) {
+      أرجع 0;
    }
 
    quality = quality ? quality : 90;
    quality = quality < 1 ? 1 : quality > 100 ? 100 : quality;
    quality = quality < 50 ? 5000 / quality : 200 - quality * 2;
 
-   for(i = 0; i < 64; ++i) {
-      int uvti, yti = (YQT[i]*quality+50)/100;
-      YTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
+   لكل(i = 0; i < 64; ++i) {
+      صحيح uvti, yti = (YQT[i]*quality+50)/100;
+      YTable[stbiw__jpg_ZigZag[i]] = (بنانشان حرف) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
       uvti = (UVQT[i]*quality+50)/100;
-      UVTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
+      UVTable[stbiw__jpg_ZigZag[i]] = (بنانشان حرف) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
    }
 
-   for(row = 0, k = 0; row < 8; ++row) {
-      for(col = 0; col < 8; ++col, ++k) {
-         fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
-         fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
+   لكل(صف = 0, k = 0; صف < 8; ++صف) {
+      لكل(کانو = 0; کانو < 8; ++کانو, ++k) {
+         fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[صف] * aasf[کانو]);
+         fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[صف] * aasf[کانو]);
       }
    }
 
    // Write Headers
    {
-      static const unsigned char head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
-      static const unsigned char head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
-      const unsigned char head1[] = { 0xFF,0xC0,0,0x11,8,(unsigned char)(height>>8),STBIW_UCHAR(height),(unsigned char)(width>>8),STBIW_UCHAR(width),
+      ساكن ثابت بنانشان حرف head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
+      ساكن ثابت بنانشان حرف head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
+      ثابت بنانشان حرف head1[] = { 0xFF,0xC0,0,0x11,8,(بنانشان حرف)(اوچائي>>8),STBIW_UCHAR(اوچائي),(بنانشان حرف)(ويڪر>>8),STBIW_UCHAR(ويڪر),
                                       3,1,0x11,0,2,0x11,1,3,0x11,1,0xFF,0xC4,0x01,0xA2,0 };
-      s->func(s->context, (void*)head0, sizeof(head0));
-      s->func(s->context, (void*)YTable, sizeof(YTable));
+      s->func(s->context, (فراغ*)head0, حجم(head0));
+      s->func(s->context, (فراغ*)YTable, حجم(YTable));
       stbiw__putc(s, 1);
-      s->func(s->context, UVTable, sizeof(UVTable));
-      s->func(s->context, (void*)head1, sizeof(head1));
-      s->func(s->context, (void*)(std_dc_luminance_nrcodes+1), sizeof(std_dc_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_luminance_values, sizeof(std_dc_luminance_values));
+      s->func(s->context, UVTable, حجم(UVTable));
+      s->func(s->context, (فراغ*)head1, حجم(head1));
+      s->func(s->context, (فراغ*)(std_dc_luminance_nrcodes+1), حجم(std_dc_luminance_nrcodes)-1);
+      s->func(s->context, (فراغ*)std_dc_luminance_قدرون, حجم(std_dc_luminance_قدرون));
       stbiw__putc(s, 0x10); // HTYACinfo
-      s->func(s->context, (void*)(std_ac_luminance_nrcodes+1), sizeof(std_ac_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_luminance_values, sizeof(std_ac_luminance_values));
+      s->func(s->context, (فراغ*)(std_ac_luminance_nrcodes+1), حجم(std_ac_luminance_nrcodes)-1);
+      s->func(s->context, (فراغ*)std_ac_luminance_قدرون, حجم(std_ac_luminance_قدرون));
       stbiw__putc(s, 1); // HTUDCinfo
-      s->func(s->context, (void*)(std_dc_chrominance_nrcodes+1), sizeof(std_dc_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_chrominance_values, sizeof(std_dc_chrominance_values));
+      s->func(s->context, (فراغ*)(std_dc_chrominance_nrcodes+1), حجم(std_dc_chrominance_nrcodes)-1);
+      s->func(s->context, (فراغ*)std_dc_chrominance_قدرون, حجم(std_dc_chrominance_قدرون));
       stbiw__putc(s, 0x11); // HTUACinfo
-      s->func(s->context, (void*)(std_ac_chrominance_nrcodes+1), sizeof(std_ac_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_chrominance_values, sizeof(std_ac_chrominance_values));
-      s->func(s->context, (void*)head2, sizeof(head2));
+      s->func(s->context, (فراغ*)(std_ac_chrominance_nrcodes+1), حجم(std_ac_chrominance_nrcodes)-1);
+      s->func(s->context, (فراغ*)std_ac_chrominance_قدرون, حجم(std_ac_chrominance_قدرون));
+      s->func(s->context, (فراغ*)head2, حجم(head2));
    }
 
    // Encode 8x8 macroblocks
    {
-      static const unsigned short fillBits[] = {0x7F, 7};
-      const unsigned char *imageData = (const unsigned char *)data;
-      int DCY=0, DCU=0, DCV=0;
-      int bitBuf=0, bitCnt=0;
+      ساكن ثابت بنانشان ننڍو fill_بٽ[] = {0x7F, 7};
+      ثابت بنانشان حرف *image_معلومات = (ثابت بنانشان حرف *)معلومات;
+      صحيح DCY=0, DCU=0, DCV=0;
+      صحيح ٻٽو_انگ_Buf=0, ٻٽو_انگ_Cnt=0;
       // comp == 2 is grey+alpha (alpha is ignored)
-      int ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
-      int x, y, pos;
-      for(y = 0; y < height; y += 8) {
-         for(x = 0; x < width; x += 8) {
-            float YDU[64], UDU[64], VDU[64];
-            for(row = y, pos = 0; row < y+8; ++row) {
-               for(col = x; col < x+8; ++col, ++pos) {
-                  int p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
-                  float r, g, b;
-                  if(row >= height) {
-                     p -= width*comp*(row+1 - height);
+      صحيح ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
+      صحيح x, y, pos;
+      لكل(y = 0; y < اوچائي; y += 8) {
+         لكل(x = 0; x < ويڪر; x += 8) {
+            عائم YDU[64], UDU[64], VDU[64];
+            لكل(صف = y, pos = 0; صف < y+8; ++صف) {
+               لكل(کانو = x; کانو < x+8; ++کانو, ++pos) {
+                  صحيح p = (stbi__flip_vertically_on_write ? اوچائي-1-صف : صف)*ويڪر*comp + کانو*comp;
+                  عائم r, g, b;
+                  إذا(صف >= اوچائي) {
+                     p -= ويڪر*comp*(صف+1 - اوچائي);
                   }
-                  if(col >= width) {
-                     p -= comp*(col+1 - width);
+                  إذا(کانو >= ويڪر) {
+                     p -= comp*(کانو+1 - ويڪر);
                   }
 
-                  r = imageData[p+0];
-                  g = imageData[p+ofsG];
-                  b = imageData[p+ofsB];
+                  r = image_معلومات[p+0];
+                  g = image_معلومات[p+ofsG];
+                  b = image_معلومات[p+ofsB];
                   YDU[pos]=+0.29900f*r+0.58700f*g+0.11400f*b-128;
                   UDU[pos]=-0.16874f*r-0.33126f*g+0.50000f*b;
                   VDU[pos]=+0.50000f*r-0.41869f*g-0.08131f*b;
                }
             }
 
-            DCY = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
-            DCU = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
-            DCV = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
+            DCY = stbiw__jpg_processDU(s, &ٻٽو_انگ_Buf, &ٻٽو_انگ_Cnt, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+            DCU = stbiw__jpg_processDU(s, &ٻٽو_انگ_Buf, &ٻٽو_انگ_Cnt, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
+            DCV = stbiw__jpg_processDU(s, &ٻٽو_انگ_Buf, &ٻٽو_انگ_Cnt, VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
          }
       }
 
       // Do the bit alignment of the EOI marker
-      stbiw__jpg_writeBits(s, &bitBuf, &bitCnt, fillBits);
+      stbiw_jpg_write_بٽ(s, &ٻٽو_انگ_Buf, &ٻٽو_انگ_Cnt, fill_بٽ);
    }
 
    // EOI
    stbiw__putc(s, 0xFF);
    stbiw__putc(s, 0xD9);
 
-   return 1;
+   أرجع 1;
 }
 
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)
+STBIWDEF صحيح stbi_write_jpg_منزل_func(stbi_write_func *func, فراغ *context, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات, صحيح quality)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_jpg_core(&s, x, y, comp, (void *) data, quality);
+   stbi_شروعات_write_callbacks(&s, func, context);
+   أرجع stbi_write_jpg_core(&s, x, y, comp, (فراغ *) معلومات, quality);
 }
 
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void *data, int quality)
+#جيڪڏهن_وصف_نه_ٿيل STBI_WRITE_NO_STDIO
+STBIWDEF صحيح stbi_write_jpg(حرف ثابت *filename, صحيح x, صحيح y, صحيح comp, ثابت فراغ *معلومات, صحيح quality)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_jpg_core(&s, x, y, comp, data, quality);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   إذا (stbi_شروعات_write_file(&s,filename)) {
+      صحيح r = stbi_write_jpg_core(&s, x, y, comp, معلومات, quality);
+      stbi_پڇاڙي_write_file(&s);
+      أرجع r;
+   } وإلا
+      أرجع 0;
 }
-#endif
+#جيڪڏهن_پورو
 
-#endif // STB_IMAGE_WRITE_IMPLEMENTATION
+#جيڪڏهن_پورو // STB_IMAGE_WRITE_IMPLEMENTATION
 
 /* Revision history
       1.09  (2018-02-11)

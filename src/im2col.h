@@ -1,15 +1,15 @@
-#ifndef IM2COL_H
-#define IM2COL_H
+#جيڪڏهن_وصف_نه_ٿيل IM2_کانو_H
+#وصف_ڪريو IM2_کانو_H
 
-void im2col_cpu(float* data_im,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_col);
+فراغ im2col_cpu(عائم* معلومات_im,
+        صحيح channels, صحيح اوچائي, صحيح ويڪر,
+        صحيح ksize, صحيح stride, صحيح pad, عائم* معلومات_کانو);
 
-#ifdef GPU
+#جيڪڏهن_وصف_ٿيل GPU
 
-void im2col_gpu(float *im,
-         int channels, int height, int width,
-         int ksize, int stride, int pad,float *data_col);
+فراغ im2col_gpu(عائم *im,
+         صحيح channels, صحيح اوچائي, صحيح ويڪر,
+         صحيح ksize, صحيح stride, صحيح pad,عائم *معلومات_کانو);
 
-#endif
-#endif
+#جيڪڏهن_پورو
+#جيڪڏهن_پورو

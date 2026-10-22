@@ -1,29 +1,29 @@
 // Oh boy, why am I about to do this....
-#ifndef NETWORK_H
-#define NETWORK_H
-#include "darknet.h"
+#جيڪڏهن_وصف_نه_ٿيل ڄار_H
+#وصف_ڪريو ڄار_H
+#ضمن "darknet.h"
 
-#include "image.h"
-#include "layer.h"
-#include "data.h"
-#include "tree.h"
-
-
-#ifdef GPU
-void pull_network_output(network *net);
-#endif
-
-void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
-
-network *make_network(int n);
+#ضمن "image.h"
+#ضمن "layer.h"
+#ضمن "data.h"
+#ضمن "tree.h"
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
-void print_network(network *net);
-int resize_network(network *net, int w, int h);
-void calc_network_cost(network *net);
+#جيڪڏهن_وصف_ٿيل GPU
+فراغ pull_ڄار_output(ڄار *net);
+#جيڪڏهن_پورو
 
-#endif
+فراغ compare_networks(ڄار *n1, ڄار *n2, معلومات d);
+حرف *get_layer_string(LAYER_TYPE a);
+
+ڄار *make_ڄار(صحيح n);
+
+
+عائم ڄار_accuracy_multi(ڄار *net, معلومات d, صحيح n);
+صحيح get_predicted_class_ڄار(ڄار *net);
+فراغ print_ڄار(ڄار *net);
+صحيح resize_ڄار(ڄار *net, صحيح w, صحيح h);
+فراغ calc_ڄار_لاڳت(ڄار *net);
+
+#جيڪڏهن_پورو
 

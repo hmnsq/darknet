@@ -1,196 +1,196 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#ضمن "matrix.h"
+#ضمن "utils.h"
+#ضمن "blas.h"
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن <string.h>
+#ضمن <assert.h>
+#ضمن <math.h>
 
-void free_matrix(matrix m)
+فراغ free_ميٽرڪس(ميٽرڪس m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    صحيح i;
+    لكل(i = 0; i < m.صفون; ++i) حرر(m.vals[i]);
+    حرر(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+عائم ميٽرڪس_topk_accuracy(ميٽرڪس truth, ميٽرڪس guess, صحيح k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    صحيح *indexes = صفر_يادگيري_ڏيو(k, حجم(صحيح));
+    صحيح n = truth.کانن_ڳڻپ;
+    صحيح i,j;
+    صحيح correct = 0;
+    لكل(i = 0; i < truth.صفون; ++i){
+        چوٽي_k(guess.vals[i], n, k, indexes);
+        لكل(j = 0; j < k; ++j){
+            صحيح class = indexes[j];
+            إذا(truth.vals[i][class]){
                 ++correct;
-                break;
+                اكسر;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    حرر(indexes);
+    أرجع (عائم)correct/truth.صفون;
 }
 
-void scale_matrix(matrix m, float scale)
+فراغ scale_ميٽرڪس(ميٽرڪس m, عائم scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    صحيح i,j;
+    لكل(i = 0; i < m.صفون; ++i){
+        لكل(j = 0; j < m.کانن_ڳڻپ; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+ميٽرڪس resize_ميٽرڪس(ميٽرڪس m, صحيح سائيز)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    صحيح i;
+    إذا (m.صفون == سائيز) أرجع m;
+    إذا (m.صفون < سائيز) {
+        m.vals = realloc(m.vals, سائيز*حجم(عائم*));
+        لكل (i = m.صفون; i < سائيز; ++i) {
+            m.vals[i] = صفر_يادگيري_ڏيو(m.کانن_ڳڻپ, حجم(عائم));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } وإلا إذا (m.صفون > سائيز) {
+        لكل (i = سائيز; i < m.صفون; ++i) {
+            حرر(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, سائيز*حجم(عائم*));
     }
-    m.rows = size;
-    return m;
+    m.صفون = سائيز;
+    أرجع m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+فراغ ميٽرڪس_جوڙيو_ميٽرڪس(ميٽرڪس from, ميٽرڪس منزل)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
-            to.vals[i][j] += from.vals[i][j];
+    أكد(from.صفون == منزل.صفون && from.کانن_ڳڻپ == منزل.کانن_ڳڻپ);
+    صحيح i,j;
+    لكل(i = 0; i < from.صفون; ++i){
+        لكل(j = 0; j < from.کانن_ڳڻپ; ++j){
+            منزل.vals[i][j] += from.vals[i][j];
         }
     }
 }
 
-matrix copy_matrix(matrix m)
+ميٽرڪس copy_ميٽرڪس(ميٽرڪس m)
 {
-    matrix c = {0};
-    c.rows = m.rows;
-    c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
-        copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
+    ميٽرڪس c = {0};
+    c.صفون = m.صفون;
+    c.کانن_ڳڻپ = m.کانن_ڳڻپ;
+    c.vals = صفر_يادگيري_ڏيو(c.صفون, حجم(عائم *));
+    صحيح i;
+    لكل(i = 0; i < c.صفون; ++i){
+        c.vals[i] = صفر_يادگيري_ڏيو(c.کانن_ڳڻپ, حجم(عائم));
+        copy_cpu(c.کانن_ڳڻپ, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    أرجع c;
 }
 
-matrix make_matrix(int rows, int cols)
+ميٽرڪس make_ميٽرڪس(صحيح صفون, صحيح کانن_ڳڻپ)
 {
-    int i;
-    matrix m;
-    m.rows = rows;
-    m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    صحيح i;
+    ميٽرڪس m;
+    m.صفون = صفون;
+    m.کانن_ڳڻپ = کانن_ڳڻپ;
+    m.vals = صفر_يادگيري_ڏيو(m.صفون, حجم(عائم *));
+    لكل(i = 0; i < m.صفون; ++i){
+        m.vals[i] = صفر_يادگيري_ڏيو(m.کانن_ڳڻپ, حجم(عائم));
     }
-    return m;
+    أرجع m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+ميٽرڪس hold_ٻاهريون_ميٽرڪس(ميٽرڪس *m, صحيح n)
 {
-    int i;
-    matrix h;
-    h.rows = n;
-    h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
-        h.vals[i] = m->vals[index];
-        m->vals[index] = m->vals[--(m->rows)];
+    صحيح i;
+    ميٽرڪس h;
+    h.صفون = n;
+    h.کانن_ڳڻپ = m->کانن_ڳڻپ;
+    h.vals = صفر_يادگيري_ڏيو(h.صفون, حجم(عائم *));
+    لكل(i = 0; i < n; ++i){
+        صحيح اشاريو = rand()%m->صفون;
+        h.vals[i] = m->vals[اشاريو];
+        m->vals[اشاريو] = m->vals[--(m->صفون)];
     }
-    return h;
+    أرجع h;
 }
 
-float *pop_column(matrix *m, int c)
+عائم *ڪڍو_ڪالم(ميٽرڪس *m, صحيح c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
-        col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+    عائم *کانو = صفر_يادگيري_ڏيو(m->صفون, حجم(عائم));
+    صحيح i, j;
+    لكل(i = 0; i < m->صفون; ++i){
+        کانو[i] = m->vals[i][c];
+        لكل(j = c; j < m->کانن_ڳڻپ-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
-    --m->cols;
-    return col;
+    --m->کانن_ڳڻپ;
+    أرجع کانو;
 }
 
-matrix csv_to_matrix(char *filename)
+ميٽرڪس csv_منزل_ميٽرڪس(حرف *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    إذا(!fp) file_error(filename);
 
-    matrix m;
-    m.cols = -1;
+    ميٽرڪس m;
+    m.کانن_ڳڻپ = -1;
 
-    char *line;
+    حرف *سٽ;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
-            size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+    صحيح n = 0;
+    صحيح سائيز = 1024;
+    m.vals = صفر_يادگيري_ڏيو(سائيز, حجم(عائم*));
+    طالما((سٽ = fgetl(fp))){
+        إذا(m.کانن_ڳڻپ == -1) m.کانن_ڳڻپ = ڳڻپ_fields(سٽ);
+        إذا(n == سائيز){
+            سائيز *= 2;
+            m.vals = realloc(m.vals, سائيز*حجم(عائم*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(سٽ, m.کانن_ڳڻپ);
+        حرر(سٽ);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
-    m.rows = n;
-    return m;
+    m.vals = realloc(m.vals, n*حجم(عائم*));
+    m.صفون = n;
+    أرجع m;
 }
 
-void matrix_to_csv(matrix m)
+فراغ ميٽرڪس_منزل_csv(ميٽرڪس m)
 {
-    int i, j;
+    صحيح i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
-            printf("%.17g", m.vals[i][j]);
+    لكل(i = 0; i < m.صفون; ++i){
+        لكل(j = 0; j < m.کانن_ڳڻپ; ++j){
+            إذا(j > 0) لکو(",");
+            لکو("%.17g", m.vals[i][j]);
         }
-        printf("\n");
+        لکو("\n");
     }
 }
 
-void print_matrix(matrix m)
+فراغ print_ميٽرڪس(ميٽرڪس m)
 {
-    int i, j;
-    printf("%d X %d Matrix:\n",m.rows, m.cols);
-    printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__ \n");
+    صحيح i, j;
+    لکو("%d X %d Matrix:\n",m.صفون, m.کانن_ڳڻپ);
+    لکو(" __");
+    لكل(j = 0; j < 16*m.کانن_ڳڻپ-1; ++j) لکو(" ");
+    لکو("__ \n");
 
-    printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("  |\n");
+    لکو("|  ");
+    لكل(j = 0; j < 16*m.کانن_ڳڻپ-1; ++j) لکو(" ");
+    لکو("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
-        printf("|  ");
-        for(j = 0; j < m.cols; ++j){
-            printf("%15.7f ", m.vals[i][j]);
+    لكل(i = 0; i < m.صفون; ++i){
+        لکو("|  ");
+        لكل(j = 0; j < m.کانن_ڳڻپ; ++j){
+            لکو("%15.7f ", m.vals[i][j]);
         }
-        printf(" |\n");
+        لکو(" |\n");
     }
-    printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__|\n");
+    لکو("|__");
+    لكل(j = 0; j < 16*m.کانن_ڳڻپ-1; ++j) لکو(" ");
+    لکو("__|\n");
 }

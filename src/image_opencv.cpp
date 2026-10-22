@@ -1,135 +1,135 @@
-#ifdef OPENCV
+#جيڪڏهن_وصف_ٿيل OPENCV
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "opencv2/opencv.hpp"
-#include "image.h"
+#ضمن "stdio.h"
+#ضمن "stdlib.h"
+#ضمن "opencv2/opencv.hpp"
+#ضمن "image.h"
 
-using namespace cv;
+استعمال نطاق cv;
 
-extern "C" {
+خارجي "C" {
 
-IplImage *image_to_ipl(image im)
+IplImage *image_منزل_ipl(image im)
 {
-    int x,y,c;
-    IplImage *disp = cvCreateImage(cvSize(im.w,im.h), IPL_DEPTH_8U, im.c);
-    int step = disp->widthStep;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            for(c= 0; c < im.c; ++c){
-                float val = im.data[c*im.h*im.w + y*im.w + x];
-                disp->imageData[y*step + x*im.c + c] = (unsigned char)(val*255);
+    صحيح x,y,c;
+    IplImage *disp = cvCreateImage(cv_سائيز(im.w,im.h), IPL_اونهائي_8_U, im.c);
+    صحيح قدم = disp->ويڪر_قدم;
+    لكل(y = 0; y < im.h; ++y){
+        لكل(x = 0; x < im.w; ++x){
+            لكل(c= 0; c < im.c; ++c){
+                عائم val = im.معلومات[c*im.h*im.w + y*im.w + x];
+                disp->image_معلومات[y*قدم + x*im.c + c] = (بنانشان حرف)(val*255);
             }
         }
     }
-    return disp;
+    أرجع disp;
 }
 
-image ipl_to_image(IplImage* src)
+image ipl_منزل_image(IplImage* src)
 {
-    int h = src->height;
-    int w = src->width;
-    int c = src->nChannels;
+    صحيح h = src->اوچائي;
+    صحيح w = src->ويڪر;
+    صحيح c = src->nChannels;
     image im = make_image(w, h, c);
-    unsigned char *data = (unsigned char *)src->imageData;
-    int step = src->widthStep;
-    int i, j, k;
+    بنانشان حرف *معلومات = (بنانشان حرف *)src->image_معلومات;
+    صحيح قدم = src->ويڪر_قدم;
+    صحيح i, j, k;
 
-    for(i = 0; i < h; ++i){
-        for(k= 0; k < c; ++k){
-            for(j = 0; j < w; ++j){
-                im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
+    لكل(i = 0; i < h; ++i){
+        لكل(k= 0; k < c; ++k){
+            لكل(j = 0; j < w; ++j){
+                im.معلومات[k*w*h + i*w + j] = معلومات[i*قدم + j*c + k]/255.;
             }
         }
     }
-    return im;
+    أرجع im;
 }
 
-Mat image_to_mat(image im)
+Mat image_منزل_mat(image im)
 {
     image copy = copy_image(im);
     constrain_image(copy);
-    if(im.c == 3) rgbgr_image(copy);
+    إذا(im.c == 3) rgbgr_image(copy);
 
-    IplImage *ipl = image_to_ipl(copy);
-    Mat m = cvarrToMat(ipl, true);
+    IplImage *ipl = image_منزل_ipl(copy);
+    Mat m = cvarr_منزل_Mat(ipl, سچ);
     cvReleaseImage(&ipl);
     free_image(copy);
-    return m;
+    أرجع m;
 }
 
-image mat_to_image(Mat m)
+image mat_منزل_image(Mat m)
 {
     IplImage ipl = m;
-    image im = ipl_to_image(&ipl);
+    image im = ipl_منزل_image(&ipl);
     rgbgr_image(im);
-    return im;
+    أرجع im;
 }
 
-void *open_video_stream(const char *f, int c, int w, int h, int fps)
+فراغ *open_video_وهڪرو(ثابت حرف *f, صحيح c, صحيح w, صحيح h, صحيح fps)
 {
     VideoCapture *cap;
-    if(f) cap = new VideoCapture(f);
-    else cap = new VideoCapture(c);
-    if(!cap->isOpened()) return 0;
-    if(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
-    if(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
-    if(fps) cap->set(CV_CAP_PROP_FPS, w);
-    return (void *) cap;
+    إذا(f) cap = جديد VideoCapture(f);
+    وإلا cap = جديد VideoCapture(c);
+    إذا(!cap->isOpened()) أرجع 0;
+    إذا(w) cap->سيٽ(CV_CAP_PROP_چوکٺو_ويڪر, w);
+    إذا(h) cap->سيٽ(CV_CAP_PROP_چوکٺو_اوچائي, w);
+    إذا(fps) cap->سيٽ(CV_CAP_PROP_FPS, w);
+    أرجع (فراغ *) cap;
 }
 
-image get_image_from_stream(void *p)
+image get_image_from_وهڪرو(فراغ *p)
 {
     VideoCapture *cap = (VideoCapture *)p;
     Mat m;
     *cap >> m;
-    if(m.empty()) return make_empty_image(0,0,0);
-    return mat_to_image(m);
+    إذا(m.خالي_جايون()) أرجع make_خالي_جايون_image(0,0,0);
+    أرجع mat_منزل_image(m);
 }
 
-image load_image_cv(char *filename, int channels)
+image ڀريو_image_cv(حرف *filename, صحيح channels)
 {
-    int flag = -1;
-    if (channels == 0) flag = -1;
-    else if (channels == 1) flag = 0;
-    else if (channels == 3) flag = 1;
-    else {
+    صحيح flag = -1;
+    إذا (channels == 0) flag = -1;
+    وإلا إذا (channels == 1) flag = 0;
+    وإلا إذا (channels == 3) flag = 1;
+    وإلا {
         fprintf(stderr, "OpenCV can't force load with %d channels\n", channels);
     }
     Mat m;
     m = imread(filename, flag);
-    if(!m.data){
+    إذا(!m.معلومات){
         fprintf(stderr, "Cannot load image \"%s\"\n", filename);
-        char buff[256];
+        حرف buff[256];
         sprintf(buff, "echo %s >> bad.list", filename);
         system(buff);
-        return make_image(10,10,3);
+        أرجع make_image(10,10,3);
         //exit(0);
     }
-    image im = mat_to_image(m);
-    return im;
+    image im = mat_منزل_image(m);
+    أرجع im;
 }
 
-int show_image_cv(image im, const char* name, int ms)
+صحيح show_image_cv(image im, ثابت حرف* name, صحيح ms)
 {
-    Mat m = image_to_mat(im);
+    Mat m = image_منزل_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
-    if (c != -1) c = c%256;
-    return c;
+    صحيح c = wait_ڪنجي(ms);
+    إذا (c != -1) c = c%256;
+    أرجع c;
 }
 
-void make_window(char *name, int w, int h, int fullscreen)
+فراغ make_دري(حرف *name, صحيح w, صحيح h, صحيح fullscreen)
 {
-    namedWindow(name, WINDOW_NORMAL); 
-    if (fullscreen) {
-        setWindowProperty(name, CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
-    } else {
-        resizeWindow(name, w, h);
-        if(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
+    named_دري(name, دري_عام); 
+    إذا (fullscreen) {
+        سيٽ_دري_Property(name, CV_WND_PROP_FULLSCREEN, CV_دري_FULLSCREEN);
+    } وإلا {
+        resize_دري(name, w, h);
+        إذا(strcmp(name, "Demo") == 0) move_دري(name, 0, 0);
     }
 }
 
 }
 
-#endif
+#جيڪڏهن_پورو

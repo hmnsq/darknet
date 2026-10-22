@@ -1,37 +1,37 @@
-#include <stdio.h>
-#include <math.h>
-void col2im_add_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad, float val)
+#ضمن <stdio.h>
+#ضمن <math.h>
+فراغ col2im_جوڙيو_pixel(عائم *im, صحيح اوچائي, صحيح ويڪر, صحيح channels,
+                        صحيح صف, صحيح کانو, صحيح channel, صحيح pad, عائم val)
 {
-    row -= pad;
-    col -= pad;
+    صف -= pad;
+    کانو -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return;
-    im[col + width*(row + height*channel)] += val;
+    إذا (صف < 0 || کانو < 0 ||
+        صف >= اوچائي || کانو >= ويڪر) أرجع;
+    im[کانو + ويڪر*(صف + اوچائي*channel)] += val;
 }
 //This one might be too, can't remember.
-void col2im_cpu(float* data_col,
-         int channels,  int height,  int width,
-         int ksize,  int stride, int pad, float* data_im) 
+فراغ col2im_cpu(عائم* معلومات_کانو,
+         صحيح channels,  صحيح اوچائي,  صحيح ويڪر,
+         صحيح ksize,  صحيح stride, صحيح pad, عائم* معلومات_im) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    صحيح c,h,w;
+    صحيح اوچائي_کانو = (اوچائي + 2*pad - ksize) / stride + 1;
+    صحيح ويڪر_کانو = (ويڪر + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                double val = data_col[col_index];
-                col2im_add_pixel(data_im, height, width, channels,
-                        im_row, im_col, c_im, pad, val);
+    صحيح channels_کانو = channels * ksize * ksize;
+    لكل (c = 0; c < channels_کانو; ++c) {
+        صحيح w_وٿي = c % ksize;
+        صحيح h_وٿي = (c / ksize) % ksize;
+        صحيح c_im = c / ksize / ksize;
+        لكل (h = 0; h < اوچائي_کانو; ++h) {
+            لكل (w = 0; w < ويڪر_کانو; ++w) {
+                صحيح im_صف = h_وٿي + h * stride;
+                صحيح im_کانو = w_وٿي + w * stride;
+                صحيح کانو_اشاريو = (c * اوچائي_کانو + h) * ويڪر_کانو + w;
+                مزدوج val = معلومات_کانو[کانو_اشاريو];
+                col2im_جوڙيو_pixel(معلومات_im, اوچائي, ويڪر, channels,
+                        im_صف, im_کانو, c_im, pad, val);
             }
         }
     }

@@ -1,15 +1,15 @@
-#ifndef L2NORM_LAYER_H
-#define L2NORM_LAYER_H
-#include "layer.h"
-#include "network.h"
+#جيڪڏهن_وصف_نه_ٿيل L2NORM_LAYER_H
+#وصف_ڪريو L2NORM_LAYER_H
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_l2norm_layer(int batch, int inputs);
-void forward_l2norm_layer(const layer l, network net);
-void backward_l2norm_layer(const layer l, network net);
+layer make_l2norm_layer(صحيح batch, صحيح inputs);
+فراغ forward_l2norm_layer(ثابت layer l, ڄار net);
+فراغ backward_l2norm_layer(ثابت layer l, ڄار net);
 
-#ifdef GPU
-void forward_l2norm_layer_gpu(const layer l, network net);
-void backward_l2norm_layer_gpu(const layer l, network net);
-#endif
+#جيڪڏهن_وصف_ٿيل GPU
+فراغ forward_l2norm_layer_gpu(ثابت layer l, ڄار net);
+فراغ backward_l2norm_layer_gpu(ثابت layer l, ڄار net);
+#جيڪڏهن_پورو
 
-#endif
+#جيڪڏهن_پورو

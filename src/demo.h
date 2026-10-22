@@ -1,6 +1,6 @@
-#ifndef DEMO_H
-#define DEMO_H
+#جيڪڏهن_وصف_نه_ٿيل DEMO_H
+#وصف_ڪريو DEMO_H
 
-#include "image.h"
+#ضمن "image.h"
 
-#endif
+#جيڪڏهن_پورو
