@@ -1,30 +1,30 @@
-#include "deconvolutional_layer.h"
-#include "convolutional_layer.h"
-#include "batchnorm_layer.h"
-#include "utils.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
+#অন্তর্ভাৱ "deconvolutional_layer.h"
+#অন্তর্ভাৱ "convolutional_layer.h"
+#অন্তর্ভাৱ "batchnorm_layer.h"
+#অন্তর্ভাৱ "utils.h"
+#অন্তর্ভাৱ "im2col.h"
+#অন্তর্ভাৱ "col2im.h"
+#অন্তর্ভাৱ "blas.h"
+#অন্তর্ভাৱ "gemm.h"
 
-#include <stdio.h>
-#include <time.h>
+#অন্তর্ভাৱ <stdio.h>
+#অন্তর্ভাৱ <time.h>
 
 
-static size_t get_workspace_size(layer l){
-    return (size_t)l.h*l.w*l.size*l.size*l.n*sizeof(float);
+স্থির size_t get_workspace_size(layer l){
+    ঘূৰাই (size_t)l.h*l.w*l.size*l.size*l.n*পরিমাণ(ভিন্ন);
 }
 
-void bilinear_init(layer l)
+শূন্য bilinear_init(layer l)
 {
-    int i,j,f;
-    float center = (l.size-1) / 2.;
-    for(f = 0; f < l.n; ++f){
-        for(j = 0; j < l.size; ++j){
-            for(i = 0; i < l.size; ++i){
-                float val = (1 - fabs(i - center)) * (1 - fabs(j - center));
-                int c = f%l.c;
-                int ind = f*l.size*l.size*l.c + c*l.size*l.size + j*l.size + i;
+    পূর্ণাঙ্ক i,j,f;
+    ভিন্ন center = (l.size-1) / 2.;
+    বাবে(f = 0; f < l.n; ++f){
+        বাবে(j = 0; j < l.size; ++j){
+            বাবে(i = 0; i < l.size; ++i){
+                ভিন্ন val = (1 - fabs(i - center)) * (1 - fabs(j - center));
+                পূর্ণাঙ্ক c = f%l.c;
+                পূর্ণাঙ্ক ind = f*l.size*l.size*l.c + c*l.size*l.size + j*l.size + i;
                 l.weights[ind] = val;
             }
         }
@@ -32,9 +32,9 @@ void bilinear_init(layer l)
 }
 
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam)
+layer make_deconvolutional_layer(পূর্ণাঙ্ক batch, পূর্ণাঙ্ক h, পূর্ণাঙ্ক w, পূর্ণাঙ্ক c, পূর্ণাঙ্ক n, পূর্ণাঙ্ক size, পূর্ণাঙ্ক stride, পূর্ণাঙ্ক padding, ACTIVATION activation, পূর্ণাঙ্ক batch_normalize, পূর্ণাঙ্ক adam)
 {
-    int i;
+    পূর্ণাঙ্ক i;
     layer l = {0};
     l.type = DECONVOLUTIONAL;
 
@@ -49,17 +49,17 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.nweights = c*n*size*size;
     l.nbiases = n;
 
-    l.weights = calloc(c*n*size*size, sizeof(float));
-    l.weight_updates = calloc(c*n*size*size, sizeof(float));
+    l.weights = calloc(c*n*size*size, পরিমাণ(ভিন্ন));
+    l.weight_updates = calloc(c*n*size*size, পরিমাণ(ভিন্ন));
 
-    l.biases = calloc(n, sizeof(float));
-    l.bias_updates = calloc(n, sizeof(float));
+    l.biases = calloc(n, পরিমাণ(ভিন্ন));
+    l.bias_updates = calloc(n, পরিমাণ(ভিন্ন));
     //float scale = n/(size*size*c);
     //printf("scale: %f\n", scale);
-    float scale = .02;
-    for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_normal();
+    ভিন্ন scale = .02;
+    বাবে(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_normal();
     //bilinear_init(l);
-    for(i = 0; i < n; ++i){
+    বাবে(i = 0; i < n; ++i){
         l.biases[i] = 0;
     }
     l.pad = padding;
@@ -70,10 +70,10 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.outputs = l.out_w * l.out_h * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    scal_cpu(l.nweights, (float)l.out_w*l.out_h/(l.w*l.h), l.weights, 1);
+    scal_cpu(l.nweights, (ভিন্ন)l.out_w*l.out_h/(l.w*l.h), l.weights, 1);
 
-    l.output = calloc(l.batch*l.outputs, sizeof(float));
-    l.delta  = calloc(l.batch*l.outputs, sizeof(float));
+    l.output = calloc(l.batch*l.outputs, পরিমাণ(ভিন্ন));
+    l.delta  = calloc(l.batch*l.outputs, পরিমাণ(ভিন্ন));
 
     l.forward = forward_deconvolutional_layer;
     l.backward = backward_deconvolutional_layer;
@@ -81,31 +81,31 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
 
     l.batch_normalize = batch_normalize;
 
-    if(batch_normalize){
-        l.scales = calloc(n, sizeof(float));
-        l.scale_updates = calloc(n, sizeof(float));
-        for(i = 0; i < n; ++i){
+    যদি(batch_normalize){
+        l.scales = calloc(n, পরিমাণ(ভিন্ন));
+        l.scale_updates = calloc(n, পরিমাণ(ভিন্ন));
+        বাবে(i = 0; i < n; ++i){
             l.scales[i] = 1;
         }
 
-        l.mean = calloc(n, sizeof(float));
-        l.variance = calloc(n, sizeof(float));
+        l.mean = calloc(n, পরিমাণ(ভিন্ন));
+        l.variance = calloc(n, পরিমাণ(ভিন্ন));
 
-        l.mean_delta = calloc(n, sizeof(float));
-        l.variance_delta = calloc(n, sizeof(float));
+        l.mean_delta = calloc(n, পরিমাণ(ভিন্ন));
+        l.variance_delta = calloc(n, পরিমাণ(ভিন্ন));
 
-        l.rolling_mean = calloc(n, sizeof(float));
-        l.rolling_variance = calloc(n, sizeof(float));
-        l.x = calloc(l.batch*l.outputs, sizeof(float));
-        l.x_norm = calloc(l.batch*l.outputs, sizeof(float));
+        l.rolling_mean = calloc(n, পরিমাণ(ভিন্ন));
+        l.rolling_variance = calloc(n, পরিমাণ(ভিন্ন));
+        l.x = calloc(l.batch*l.outputs, পরিমাণ(ভিন্ন));
+        l.x_norm = calloc(l.batch*l.outputs, পরিমাণ(ভিন্ন));
     }
-    if(adam){
-        l.m = calloc(c*n*size*size, sizeof(float));
-        l.v = calloc(c*n*size*size, sizeof(float));
-        l.bias_m = calloc(n, sizeof(float));
-        l.scale_m = calloc(n, sizeof(float));
-        l.bias_v = calloc(n, sizeof(float));
-        l.scale_v = calloc(n, sizeof(float));
+    যদি(adam){
+        l.m = calloc(c*n*size*size, পরিমাণ(ভিন্ন));
+        l.v = calloc(c*n*size*size, পরিমাণ(ভিন্ন));
+        l.bias_m = calloc(n, পরিমাণ(ভিন্ন));
+        l.scale_m = calloc(n, পরিমাণ(ভিন্ন));
+        l.bias_v = calloc(n, পরিমাণ(ভিন্ন));
+        l.scale_v = calloc(n, পরিমাণ(ভিন্ন));
     }
 
 #ifdef GPU
@@ -113,9 +113,9 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.backward_gpu = backward_deconvolutional_layer_gpu;
     l.update_gpu = update_deconvolutional_layer_gpu;
 
-    if(gpu_index >= 0){
+    যদি(gpu_index >= 0){
 
-        if (adam) {
+        যদি (adam) {
             l.m_gpu = cuda_make_array(l.m, c*n*size*size);
             l.v_gpu = cuda_make_array(l.v, c*n*size*size);
             l.bias_m_gpu = cuda_make_array(l.bias_m, n);
@@ -132,7 +132,7 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
         l.delta_gpu = cuda_make_array(l.delta, l.batch*l.out_h*l.out_w*n);
         l.output_gpu = cuda_make_array(l.output, l.batch*l.out_h*l.out_w*n);
 
-        if(batch_normalize){
+        যদি(batch_normalize){
             l.mean_gpu = cuda_make_array(0, n);
             l.variance_gpu = cuda_make_array(0, n);
 
@@ -162,15 +162,15 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
 
     fprintf(stderr, "deconv%5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
 
-    return l;
+    ঘূৰাই l;
 }
 
-void denormalize_deconvolutional_layer(layer l)
+শূন্য denormalize_deconvolutional_layer(layer l)
 {
-    int i, j;
-    for(i = 0; i < l.n; ++i){
-        float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
-        for(j = 0; j < l.c*l.size*l.size; ++j){
+    পূর্ণাঙ্ক i, j;
+    বাবে(i = 0; i < l.n; ++i){
+        ভিন্ন scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
+        বাবে(j = 0; j < l.c*l.size*l.size; ++j){
             l.weights[i*l.c*l.size*l.size + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
@@ -180,7 +180,7 @@ void denormalize_deconvolutional_layer(layer l)
     }
 }
 
-void resize_deconvolutional_layer(layer *l, int h, int w)
+শূন্য resize_deconvolutional_layer(layer *l, পূর্ণাঙ্ক h, পূর্ণাঙ্ক w)
 {
     l->h = h;
     l->w = w;
@@ -190,11 +190,11 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->w * l->h * l->c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta  = realloc(l->delta,  l->batch*l->outputs*sizeof(float));
-    if(l->batch_normalize){
-        l->x = realloc(l->x, l->batch*l->outputs*sizeof(float));
-        l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*পরিমাণ(ভিন্ন));
+    l->delta  = realloc(l->delta,  l->batch*l->outputs*পরিমাণ(ভিন্ন));
+    যদি(l->batch_normalize){
+        l->x = realloc(l->x, l->batch*l->outputs*পরিমাণ(ভিন্ন));
+        l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*পরিমাণ(ভিন্ন));
     }
 
 #ifdef GPU
@@ -204,7 +204,7 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->delta_gpu =  cuda_make_array(l->delta,  l->batch*l->outputs);
     l->output_gpu = cuda_make_array(l->output, l->batch*l->outputs);
 
-    if(l->batch_normalize){
+    যদি(l->batch_normalize){
         cuda_free(l->x_gpu);
         cuda_free(l->x_norm_gpu);
 
@@ -219,86 +219,86 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->workspace_size = get_workspace_size(*l);
 }
 
-void forward_deconvolutional_layer(const layer l, network net)
+শূন্য forward_deconvolutional_layer(ধ্রুৱ layer l, network net)
 {
-    int i;
+    পূর্ণাঙ্ক i;
 
-    int m = l.size*l.size*l.n;
-    int n = l.h*l.w;
-    int k = l.c;
+    পূর্ণাঙ্ক m = l.size*l.size*l.n;
+    পূর্ণাঙ্ক n = l.h*l.w;
+    পূর্ণাঙ্ক k = l.c;
 
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
 
-    for(i = 0; i < l.batch; ++i){
-        float *a = l.weights;
-        float *b = net.input + i*l.c*l.h*l.w;
-        float *c = net.workspace;
+    বাবে(i = 0; i < l.batch; ++i){
+        ভিন্ন *a = l.weights;
+        ভিন্ন *b = net.প্ৰবেশ + i*l.c*l.h*l.w;
+        ভিন্ন *c = net.workspace;
 
         gemm_cpu(1,0,m,n,k,1,a,m,b,n,0,c,n);
 
         col2im_cpu(net.workspace, l.out_c, l.out_h, l.out_w, l.size, l.stride, l.pad, l.output+i*l.outputs);
     }
-    if (l.batch_normalize) {
+    যদি (l.batch_normalize) {
         forward_batchnorm_layer(l, net);
-    } else {
+    } অন্যথা {
         add_bias(l.output, l.biases, l.batch, l.n, l.out_w*l.out_h);
     }
     activate_array(l.output, l.batch*l.n*l.out_w*l.out_h, l.activation);
 }
 
-void backward_deconvolutional_layer(layer l, network net)
+শূন্য backward_deconvolutional_layer(layer l, network net)
 {
-    int i;
+    পূর্ণাঙ্ক i;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    যদি(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } অন্যথা {
         backward_bias(l.bias_updates, l.delta, l.batch, l.n, l.out_w*l.out_h);
     }
 
     //if(net.delta) memset(net.delta, 0, l.batch*l.h*l.w*l.c*sizeof(float));
 
-    for(i = 0; i < l.batch; ++i){
-        int m = l.c;
-        int n = l.size*l.size*l.n;
-        int k = l.h*l.w;
+    বাবে(i = 0; i < l.batch; ++i){
+        পূর্ণাঙ্ক m = l.c;
+        পূর্ণাঙ্ক n = l.size*l.size*l.n;
+        পূর্ণাঙ্ক k = l.h*l.w;
 
-        float *a = net.input + i*m*k;
-        float *b = net.workspace;
-        float *c = l.weight_updates;
+        ভিন্ন *a = net.প্ৰবেশ + i*m*k;
+        ভিন্ন *b = net.workspace;
+        ভিন্ন *c = l.weight_updates;
 
         im2col_cpu(l.delta + i*l.outputs, l.out_c, l.out_h, l.out_w, 
                 l.size, l.stride, l.pad, b);
         gemm_cpu(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-        if(net.delta){
-            int m = l.c;
-            int n = l.h*l.w;
-            int k = l.size*l.size*l.n;
+        যদি(net.delta){
+            পূর্ণাঙ্ক m = l.c;
+            পূর্ণাঙ্ক n = l.h*l.w;
+            পূর্ণাঙ্ক k = l.size*l.size*l.n;
 
-            float *a = l.weights;
-            float *b = net.workspace;
-            float *c = net.delta + i*n*m;
+            ভিন্ন *a = l.weights;
+            ভিন্ন *b = net.workspace;
+            ভিন্ন *c = net.delta + i*n*m;
 
             gemm_cpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
         }
     }
 }
 
-void update_deconvolutional_layer(layer l, update_args a)
+শূন্য update_deconvolutional_layer(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    ভিন্ন learning_rate = a.learning_rate*l.learning_rate_scale;
+    ভিন্ন momentum = a.momentum;
+    ভিন্ন decay = a.decay;
+    পূর্ণাঙ্ক batch = a.batch;
 
-    int size = l.size*l.size*l.c*l.n;
+    পূর্ণাঙ্ক size = l.size*l.size*l.c*l.n;
     axpy_cpu(l.n, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.n, momentum, l.bias_updates, 1);
 
-    if(l.scales){
+    যদি(l.scales){
         axpy_cpu(l.n, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.n, momentum, l.scale_updates, 1);
     }

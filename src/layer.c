@@ -1,97 +1,97 @@
-#include "layer.h"
-#include "cuda.h"
+#অন্তর্ভাৱ "layer.h"
+#অন্তর্ভাৱ "cuda.h"
 
-#include <stdlib.h>
+#অন্তর্ভাৱ <stdlib.h>
 
-void free_layer(layer l)
+শূন্য free_layer(layer l)
 {
-    if(l.type == DROPOUT){
-        if(l.rand)           free(l.rand);
+    যদি(l.type == DROPOUT){
+        যদি(l.rand)           মুক্ত(l.rand);
 #ifdef GPU
-        if(l.rand_gpu)             cuda_free(l.rand_gpu);
+        যদি(l.rand_gpu)             cuda_free(l.rand_gpu);
 #endif
-        return;
+        ঘূৰাই;
     }
-    if(l.cweights)           free(l.cweights);
-    if(l.indexes)            free(l.indexes);
-    if(l.input_layers)       free(l.input_layers);
-    if(l.input_sizes)        free(l.input_sizes);
-    if(l.map)                free(l.map);
-    if(l.rand)               free(l.rand);
-    if(l.cost)               free(l.cost);
-    if(l.state)              free(l.state);
-    if(l.prev_state)         free(l.prev_state);
-    if(l.forgot_state)       free(l.forgot_state);
-    if(l.forgot_delta)       free(l.forgot_delta);
-    if(l.state_delta)        free(l.state_delta);
-    if(l.concat)             free(l.concat);
-    if(l.concat_delta)       free(l.concat_delta);
-    if(l.binary_weights)     free(l.binary_weights);
-    if(l.biases)             free(l.biases);
-    if(l.bias_updates)       free(l.bias_updates);
-    if(l.scales)             free(l.scales);
-    if(l.scale_updates)      free(l.scale_updates);
-    if(l.weights)            free(l.weights);
-    if(l.weight_updates)     free(l.weight_updates);
-    if(l.delta)              free(l.delta);
-    if(l.output)             free(l.output);
-    if(l.squared)            free(l.squared);
-    if(l.norms)              free(l.norms);
-    if(l.spatial_mean)       free(l.spatial_mean);
-    if(l.mean)               free(l.mean);
-    if(l.variance)           free(l.variance);
-    if(l.mean_delta)         free(l.mean_delta);
-    if(l.variance_delta)     free(l.variance_delta);
-    if(l.rolling_mean)       free(l.rolling_mean);
-    if(l.rolling_variance)   free(l.rolling_variance);
-    if(l.x)                  free(l.x);
-    if(l.x_norm)             free(l.x_norm);
-    if(l.m)                  free(l.m);
-    if(l.v)                  free(l.v);
-    if(l.z_cpu)              free(l.z_cpu);
-    if(l.r_cpu)              free(l.r_cpu);
-    if(l.h_cpu)              free(l.h_cpu);
-    if(l.binary_input)       free(l.binary_input);
+    যদি(l.cweights)           মুক্ত(l.cweights);
+    যদি(l.indexes)            মুক্ত(l.indexes);
+    যদি(l.প্ৰবেশ_layers)       মুক্ত(l.প্ৰবেশ_layers);
+    যদি(l.প্ৰবেশ_sizes)        মুক্ত(l.প্ৰবেশ_sizes);
+    যদি(l.map)                মুক্ত(l.map);
+    যদি(l.rand)               মুক্ত(l.rand);
+    যদি(l.cost)               মুক্ত(l.cost);
+    যদি(l.state)              মুক্ত(l.state);
+    যদি(l.prev_state)         মুক্ত(l.prev_state);
+    যদি(l.forgot_state)       মুক্ত(l.forgot_state);
+    যদি(l.forgot_delta)       মুক্ত(l.forgot_delta);
+    যদি(l.state_delta)        মুক্ত(l.state_delta);
+    যদি(l.concat)             মুক্ত(l.concat);
+    যদি(l.concat_delta)       মুক্ত(l.concat_delta);
+    যদি(l.দ্বিমিক_weights)     মুক্ত(l.দ্বিমিক_weights);
+    যদি(l.biases)             মুক্ত(l.biases);
+    যদি(l.bias_updates)       মুক্ত(l.bias_updates);
+    যদি(l.scales)             মুক্ত(l.scales);
+    যদি(l.scale_updates)      মুক্ত(l.scale_updates);
+    যদি(l.weights)            মুক্ত(l.weights);
+    যদি(l.weight_updates)     মুক্ত(l.weight_updates);
+    যদি(l.delta)              মুক্ত(l.delta);
+    যদি(l.output)             মুক্ত(l.output);
+    যদি(l.squared)            মুক্ত(l.squared);
+    যদি(l.norms)              মুক্ত(l.norms);
+    যদি(l.spatial_mean)       মুক্ত(l.spatial_mean);
+    যদি(l.mean)               মুক্ত(l.mean);
+    যদি(l.variance)           মুক্ত(l.variance);
+    যদি(l.mean_delta)         মুক্ত(l.mean_delta);
+    যদি(l.variance_delta)     মুক্ত(l.variance_delta);
+    যদি(l.rolling_mean)       মুক্ত(l.rolling_mean);
+    যদি(l.rolling_variance)   মুক্ত(l.rolling_variance);
+    যদি(l.x)                  মুক্ত(l.x);
+    যদি(l.x_norm)             মুক্ত(l.x_norm);
+    যদি(l.m)                  মুক্ত(l.m);
+    যদি(l.v)                  মুক্ত(l.v);
+    যদি(l.z_cpu)              মুক্ত(l.z_cpu);
+    যদি(l.r_cpu)              মুক্ত(l.r_cpu);
+    যদি(l.h_cpu)              মুক্ত(l.h_cpu);
+    যদি(l.দ্বিমিক_প্ৰবেশ)       মুক্ত(l.দ্বিমিক_প্ৰবেশ);
 
 #ifdef GPU
-    if(l.indexes_gpu)           cuda_free((float *)l.indexes_gpu);
+    যদি(l.indexes_gpu)           cuda_free((ভিন্ন *)l.indexes_gpu);
 
-    if(l.z_gpu)                   cuda_free(l.z_gpu);
-    if(l.r_gpu)                   cuda_free(l.r_gpu);
-    if(l.h_gpu)                   cuda_free(l.h_gpu);
-    if(l.m_gpu)                   cuda_free(l.m_gpu);
-    if(l.v_gpu)                   cuda_free(l.v_gpu);
-    if(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
-    if(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
-    if(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
-    if(l.state_gpu)               cuda_free(l.state_gpu);
-    if(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
-    if(l.gate_gpu)                cuda_free(l.gate_gpu);
-    if(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
-    if(l.save_gpu)                cuda_free(l.save_gpu);
-    if(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
-    if(l.concat_gpu)              cuda_free(l.concat_gpu);
-    if(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
-    if(l.binary_input_gpu)        cuda_free(l.binary_input_gpu);
-    if(l.binary_weights_gpu)      cuda_free(l.binary_weights_gpu);
-    if(l.mean_gpu)                cuda_free(l.mean_gpu);
-    if(l.variance_gpu)            cuda_free(l.variance_gpu);
-    if(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
-    if(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
-    if(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
-    if(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
-    if(l.x_gpu)                   cuda_free(l.x_gpu);
-    if(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
-    if(l.weights_gpu)             cuda_free(l.weights_gpu);
-    if(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
-    if(l.biases_gpu)              cuda_free(l.biases_gpu);
-    if(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
-    if(l.scales_gpu)              cuda_free(l.scales_gpu);
-    if(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
-    if(l.output_gpu)              cuda_free(l.output_gpu);
-    if(l.delta_gpu)               cuda_free(l.delta_gpu);
-    if(l.rand_gpu)                cuda_free(l.rand_gpu);
-    if(l.squared_gpu)             cuda_free(l.squared_gpu);
-    if(l.norms_gpu)               cuda_free(l.norms_gpu);
+    যদি(l.z_gpu)                   cuda_free(l.z_gpu);
+    যদি(l.r_gpu)                   cuda_free(l.r_gpu);
+    যদি(l.h_gpu)                   cuda_free(l.h_gpu);
+    যদি(l.m_gpu)                   cuda_free(l.m_gpu);
+    যদি(l.v_gpu)                   cuda_free(l.v_gpu);
+    যদি(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
+    যদি(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
+    যদি(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
+    যদি(l.state_gpu)               cuda_free(l.state_gpu);
+    যদি(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
+    যদি(l.gate_gpu)                cuda_free(l.gate_gpu);
+    যদি(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
+    যদি(l.save_gpu)                cuda_free(l.save_gpu);
+    যদি(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
+    যদি(l.concat_gpu)              cuda_free(l.concat_gpu);
+    যদি(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
+    যদি(l.দ্বিমিক_প্ৰবেশ_gpu)        cuda_free(l.দ্বিমিক_প্ৰবেশ_gpu);
+    যদি(l.দ্বিমিক_weights_gpu)      cuda_free(l.দ্বিমিক_weights_gpu);
+    যদি(l.mean_gpu)                cuda_free(l.mean_gpu);
+    যদি(l.variance_gpu)            cuda_free(l.variance_gpu);
+    যদি(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
+    যদি(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
+    যদি(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
+    যদি(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
+    যদি(l.x_gpu)                   cuda_free(l.x_gpu);
+    যদি(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
+    যদি(l.weights_gpu)             cuda_free(l.weights_gpu);
+    যদি(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
+    যদি(l.biases_gpu)              cuda_free(l.biases_gpu);
+    যদি(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
+    যদি(l.scales_gpu)              cuda_free(l.scales_gpu);
+    যদি(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
+    যদি(l.output_gpu)              cuda_free(l.output_gpu);
+    যদি(l.delta_gpu)               cuda_free(l.delta_gpu);
+    যদি(l.rand_gpu)                cuda_free(l.rand_gpu);
+    যদি(l.squared_gpu)             cuda_free(l.squared_gpu);
+    যদি(l.norms_gpu)               cuda_free(l.norms_gpu);
 #endif
 }

@@ -1,31 +1,31 @@
 #ifndef LOCAL_LAYER_H
 #define LOCAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#অন্তর্ভাৱ "cuda.h"
+#অন্তর্ভাৱ "image.h"
+#অন্তর্ভাৱ "activations.h"
+#অন্তর্ভাৱ "layer.h"
+#অন্তর্ভাৱ "network.h"
 
-typedef layer local_layer;
+প্রকারনির্দেশ layer local_layer;
 
 #ifdef GPU
-void forward_local_layer_gpu(local_layer layer, network net);
-void backward_local_layer_gpu(local_layer layer, network net);
-void update_local_layer_gpu(local_layer layer, update_args a);
+শূন্য forward_local_layer_gpu(local_layer layer, network net);
+শূন্য backward_local_layer_gpu(local_layer layer, network net);
+শূন্য update_local_layer_gpu(local_layer layer, update_args a);
 
-void push_local_layer(local_layer layer);
-void pull_local_layer(local_layer layer);
+শূন্য ঠেলো_local_layer(local_layer layer);
+শূন্য pull_local_layer(local_layer layer);
 #endif
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation);
+local_layer make_local_layer(পূর্ণাঙ্ক batch, পূর্ণাঙ্ক h, পূর্ণাঙ্ক w, পূর্ণাঙ্ক c, পূর্ণাঙ্ক n, পূর্ণাঙ্ক size, পূর্ণাঙ্ক stride, পূর্ণাঙ্ক pad, ACTIVATION activation);
 
-void forward_local_layer(const local_layer layer, network net);
-void backward_local_layer(local_layer layer, network net);
-void update_local_layer(local_layer layer, update_args a);
+শূন্য forward_local_layer(ধ্রুৱ local_layer layer, network net);
+শূন্য backward_local_layer(local_layer layer, network net);
+শূন্য update_local_layer(local_layer layer, update_args a);
 
-void bias_output(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+শূন্য bias_output(ভিন্ন *output, ভিন্ন *biases, পূর্ণাঙ্ক batch, পূর্ণাঙ্ক n, পূর্ণাঙ্ক size);
+শূন্য backward_bias(ভিন্ন *bias_updates, ভিন্ন *delta, পূর্ণাঙ্ক batch, পূর্ণাঙ্ক n, পূর্ণাঙ্ক size);
 
 #endif
 

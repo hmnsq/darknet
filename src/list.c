@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#অন্তর্ভাৱ <stdlib.h>
+#অন্তর্ভাৱ <string.h>
+#অন্তর্ভাৱ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(পরিমাণ(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	ঘূৰাই l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+শূন্য *list_বেৰ_কৰো(list *l){
+    যদি(!l->back) ঘূৰাই 0;
+    গ্ৰন্থি *b = l->back;
+    শূন্য *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    যদি(l->back) l->back->next = 0;
+    মুক্ত(b);
     --l->size;
     
-    return val;
+    ঘূৰাই val;
 }
 
-void list_insert(list *l, void *val)
+শূন্য list_ঢোকাও(list *l, শূন্য *val)
 {
-	node *new = malloc(sizeof(node));
+	গ্ৰন্থি *new = malloc(পরিমাণ(গ্ৰন্থি));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	যদি(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}অন্যথা{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+শূন্য free_গ্ৰন্থি(গ্ৰন্থি *n)
 {
-	node *next;
-	while(n) {
+	গ্ৰন্থি *next;
+	যেতিয়ালৈ(n) {
 		next = n->next;
-		free(n);
+		মুক্ত(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+শূন্য free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_গ্ৰন্থি(l->front);
+	মুক্ত(l);
 }
 
-void free_list_contents(list *l)
+শূন্য free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	গ্ৰন্থি *n = l->front;
+	যেতিয়ালৈ(n){
+		মুক্ত(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+শূন্য **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    শূন্য **a = calloc(l->size, পরিমাণ(শূন্য*));
+    পূর্ণাঙ্ক গুনতি = 0;
+    গ্ৰন্থি *n = l->front;
+    যেতিয়ালৈ(n){
+        a[গুনতি++] = n->val;
         n = n->next;
     }
-    return a;
+    ঘূৰাই a;
 }

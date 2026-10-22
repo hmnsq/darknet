@@ -1,16 +1,16 @@
-#include "region_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#অন্তর্ভাৱ "region_layer.h"
+#অন্তর্ভাৱ "activations.h"
+#অন্তর্ভাৱ "blas.h"
+#অন্তর্ভাৱ "box.h"
+#অন্তর্ভাৱ "cuda.h"
+#অন্তর্ভাৱ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#অন্তর্ভাৱ <stdio.h>
+#অন্তর্ভাৱ <assert.h>
+#অন্তর্ভাৱ <string.h>
+#অন্তর্ভাৱ <stdlib.h>
 
-layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
+layer make_region_layer(পূর্ণাঙ্ক batch, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h, পূর্ণাঙ্ক n, পূর্ণাঙ্ক classes, পূর্ণাঙ্ক coords)
 {
     layer l = {0};
     l.type = REGION;
@@ -25,16 +25,16 @@ layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
     l.out_c = l.c;
     l.classes = classes;
     l.coords = coords;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(n*2, sizeof(float));
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.cost = calloc(1, পরিমাণ(ভিন্ন));
+    l.biases = calloc(n*2, পরিমাণ(ভিন্ন));
+    l.bias_updates = calloc(n*2, পরিমাণ(ভিন্ন));
     l.outputs = h*w*n*(classes + coords + 1);
     l.inputs = l.outputs;
     l.truths = 30*(l.coords + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    int i;
-    for(i = 0; i < n*2; ++i){
+    l.delta = calloc(batch*l.outputs, পরিমাণ(ভিন্ন));
+    l.output = calloc(batch*l.outputs, পরিমাণ(ভিন্ন));
+    পূর্ণাঙ্ক i;
+    বাবে(i = 0; i < n*2; ++i){
         l.biases[i] = .5;
     }
 
@@ -50,10 +50,10 @@ layer make_region_layer(int batch, int w, int h, int n, int classes, int coords)
     fprintf(stderr, "detection\n");
     srand(0);
 
-    return l;
+    ঘূৰাই l;
 }
 
-void resize_region_layer(layer *l, int w, int h)
+শূন্য resize_region_layer(layer *l, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h)
 {
     l->w = w;
     l->h = h;
@@ -61,8 +61,8 @@ void resize_region_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + l->coords + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*পরিমাণ(ভিন্ন));
+    l->delta = realloc(l->delta, l->batch*l->outputs*পরিমাণ(ভিন্ন));
 
 #ifdef GPU
     cuda_free(l->delta_gpu);
@@ -73,52 +73,52 @@ void resize_region_layer(layer *l, int w, int h)
 #endif
 }
 
-box get_region_box(float *x, float *biases, int n, int index, int i, int j, int w, int h, int stride)
+box get_region_box(ভিন্ন *x, ভিন্ন *biases, পূর্ণাঙ্ক n, পূর্ণাঙ্ক index, পূর্ণাঙ্ক i, পূর্ণাঙ্ক j, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h, পূর্ণাঙ্ক stride)
 {
     box b;
     b.x = (i + x[index + 0*stride]) / w;
     b.y = (j + x[index + 1*stride]) / h;
     b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
     b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    ঘূৰাই b;
 }
 
-float delta_region_box(box truth, float *x, float *biases, int n, int index, int i, int j, int w, int h, float *delta, float scale, int stride)
+ভিন্ন delta_region_box(box truth, ভিন্ন *x, ভিন্ন *biases, পূর্ণাঙ্ক n, পূর্ণাঙ্ক index, পূর্ণাঙ্ক i, পূর্ণাঙ্ক j, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h, ভিন্ন *delta, ভিন্ন scale, পূর্ণাঙ্ক stride)
 {
     box pred = get_region_box(x, biases, n, index, i, j, w, h, stride);
-    float iou = box_iou(pred, truth);
+    ভিন্ন iou = box_iou(pred, truth);
 
-    float tx = (truth.x*w - i);
-    float ty = (truth.y*h - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    ভিন্ন tx = (truth.x*w - i);
+    ভিন্ন ty = (truth.y*h - j);
+    ভিন্ন tw = log(truth.w*w / biases[2*n]);
+    ভিন্ন th = log(truth.h*h / biases[2*n + 1]);
 
     delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
     delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
     delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
     delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    ঘূৰাই iou;
 }
 
-void delta_region_mask(float *truth, float *x, int n, int index, float *delta, int stride, int scale)
+শূন্য delta_region_mask(ভিন্ন *truth, ভিন্ন *x, পূর্ণাঙ্ক n, পূর্ণাঙ্ক index, ভিন্ন *delta, পূর্ণাঙ্ক stride, পূর্ণাঙ্ক scale)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    পূর্ণাঙ্ক i;
+    বাবে(i = 0; i < n; ++i){
         delta[index + i*stride] = scale*(truth[i] - x[index + i*stride]);
     }
 }
 
 
-void delta_region_class(float *output, float *delta, int index, int class, int classes, tree *hier, float scale, int stride, float *avg_cat, int tag)
+শূন্য delta_region_class(ভিন্ন *output, ভিন্ন *delta, পূর্ণাঙ্ক index, পূর্ণাঙ্ক class, পূর্ণাঙ্ক classes, বৃক্ষ *hier, ভিন্ন scale, পূর্ণাঙ্ক stride, ভিন্ন *avg_cat, পূর্ণাঙ্ক tag)
 {
-    int i, n;
-    if(hier){
-        float pred = 1;
-        while(class >= 0){
+    পূর্ণাঙ্ক i, n;
+    যদি(hier){
+        ভিন্ন pred = 1;
+        যেতিয়ালৈ(class >= 0){
             pred *= output[index + stride*class];
-            int g = hier->group[class];
-            int offset = hier->group_offset[g];
-            for(i = 0; i < hier->group_size[g]; ++i){
+            পূর্ণাঙ্ক g = hier->group[class];
+            পূর্ণাঙ্ক offset = hier->group_offset[g];
+            বাবে(i = 0; i < hier->group_size[g]; ++i){
                 delta[index + stride*(offset + i)] = scale * (0 - output[index + stride*(offset + i)]);
             }
             delta[index + stride*class] = scale * (1 - output[index + stride*class]);
@@ -126,132 +126,132 @@ void delta_region_class(float *output, float *delta, int index, int class, int c
             class = hier->parent[class];
         }
         *avg_cat += pred;
-    } else {
-        if (delta[index] && tag){
+    } অন্যথা {
+        যদি (delta[index] && tag){
             delta[index + stride*class] = scale * (1 - output[index + stride*class]);
-            return;
+            ঘূৰাই;
         }
-        for(n = 0; n < classes; ++n){
+        বাবে(n = 0; n < classes; ++n){
             delta[index + stride*n] = scale * (((n == class)?1 : 0) - output[index + stride*n]);
-            if(n == class) *avg_cat += output[index + stride*n];
+            যদি(n == class) *avg_cat += output[index + stride*n];
         }
     }
 }
 
-float logit(float x)
+ভিন্ন logit(ভিন্ন x)
 {
-    return log(x/(1.-x));
+    ঘূৰাই log(x/(1.-x));
 }
 
-float tisnan(float x)
+ভিন্ন tisnan(ভিন্ন x)
 {
-    return (x != x);
+    ঘূৰাই (x != x);
 }
 
-int entry_index(layer l, int batch, int location, int entry)
+পূর্ণাঙ্ক entry_index(layer l, পূর্ণাঙ্ক batch, পূর্ণাঙ্ক location, পূর্ণাঙ্ক entry)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(l.coords+l.classes+1) + entry*l.w*l.h + loc;
+    পূর্ণাঙ্ক n =   location / (l.w*l.h);
+    পূর্ণাঙ্ক loc = location % (l.w*l.h);
+    ঘূৰাই batch*l.outputs + n*l.w*l.h*(l.coords+l.classes+1) + entry*l.w*l.h + loc;
 }
 
-void forward_region_layer(const layer l, network net)
+শূন্য forward_region_layer(ধ্রুৱ layer l, network net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    পূর্ণাঙ্ক i,j,b,t,n;
+    memcpy(l.output, net.প্ৰবেশ, l.outputs*l.batch*পরিমাণ(ভিন্ন));
 
 #ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    বাবে (b = 0; b < l.batch; ++b){
+        বাবে(n = 0; n < l.n; ++n){
+            পূর্ণাঙ্ক index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) activate_array(l.output + index,   l.w*l.h, LOGISTIC);
+            যদি(!l.background) activate_array(l.output + index,   l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
+            যদি(!l.softmax && !l.softmax_বৃক্ষ) activate_array(l.output + index, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
-        int i;
-        int count = l.coords + 1;
-        for (i = 0; i < l.softmax_tree->groups; ++i) {
-            int group_size = l.softmax_tree->group_size[i];
-            softmax_cpu(net.input + count, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + count);
-            count += group_size;
+    যদি (l.softmax_বৃক্ষ){
+        পূর্ণাঙ্ক i;
+        পূর্ণাঙ্ক গুনতি = l.coords + 1;
+        বাবে (i = 0; i < l.softmax_বৃক্ষ->groups; ++i) {
+            পূর্ণাঙ্ক group_size = l.softmax_বৃক্ষ->group_size[i];
+            softmax_cpu(net.প্ৰবেশ + গুনতি, group_size, l.batch, l.inputs, l.n*l.w*l.h, 1, l.n*l.w*l.h, l.temperature, l.output + গুনতি);
+            গুনতি += group_size;
         }
-    } else if (l.softmax){
-        int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_cpu(net.input + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
+    } অন্যথা যদি (l.softmax){
+        পূর্ণাঙ্ক index = entry_index(l, 0, 0, l.coords + !l.background);
+        softmax_cpu(net.প্ৰবেশ + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output + index);
     }
 #endif
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
+    memset(l.delta, 0, l.outputs * l.batch * পরিমাণ(ভিন্ন));
+    যদি(!net.train) ঘূৰাই;
+    ভিন্ন avg_iou = 0;
+    ভিন্ন recall = 0;
+    ভিন্ন avg_cat = 0;
+    ভিন্ন avg_obj = 0;
+    ভিন্ন avg_anyobj = 0;
+    পূর্ণাঙ্ক গুনতি = 0;
+    পূর্ণাঙ্ক class_গুনতি = 0;
     *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        if(l.softmax_tree){
-            int onlyclass = 0;
-            for(t = 0; t < 30; ++t){
+    বাবে (b = 0; b < l.batch; ++b) {
+        যদি(l.softmax_বৃক্ষ){
+            পূর্ণাঙ্ক onlyclass = 0;
+            বাবে(t = 0; t < 30; ++t){
                 box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
-                if(!truth.x) break;
-                int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
-                float maxp = 0;
-                int maxi = 0;
-                if(truth.x > 100000 && truth.y > 100000){
-                    for(n = 0; n < l.n*l.w*l.h; ++n){
-                        int class_index = entry_index(l, b, n, l.coords + 1);
-                        int obj_index = entry_index(l, b, n, l.coords);
-                        float scale =  l.output[obj_index];
+                যদি(!truth.x) ভঙ্গ;
+                পূর্ণাঙ্ক class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
+                ভিন্ন maxp = 0;
+                পূর্ণাঙ্ক maxi = 0;
+                যদি(truth.x > 100000 && truth.y > 100000){
+                    বাবে(n = 0; n < l.n*l.w*l.h; ++n){
+                        পূর্ণাঙ্ক class_index = entry_index(l, b, n, l.coords + 1);
+                        পূর্ণাঙ্ক obj_index = entry_index(l, b, n, l.coords);
+                        ভিন্ন scale =  l.output[obj_index];
                         l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                        float p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_tree, class, l.w*l.h);
-                        if(p > maxp){
+                        ভিন্ন p = scale*get_hierarchy_probability(l.output + class_index, l.softmax_বৃক্ষ, class, l.w*l.h);
+                        যদি(p > maxp){
                             maxp = p;
                             maxi = n;
                         }
                     }
-                    int class_index = entry_index(l, b, maxi, l.coords + 1);
-                    int obj_index = entry_index(l, b, maxi, l.coords);
-                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-                    if(l.output[obj_index] < .3) l.delta[obj_index] = l.object_scale * (.3 - l.output[obj_index]);
-                    else  l.delta[obj_index] = 0;
+                    পূর্ণাঙ্ক class_index = entry_index(l, b, maxi, l.coords + 1);
+                    পূর্ণাঙ্ক obj_index = entry_index(l, b, maxi, l.coords);
+                    delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_বৃক্ষ, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+                    যদি(l.output[obj_index] < .3) l.delta[obj_index] = l.object_scale * (.3 - l.output[obj_index]);
+                    অন্যথা  l.delta[obj_index] = 0;
                     l.delta[obj_index] = 0;
-                    ++class_count;
+                    ++class_গুনতি;
                     onlyclass = 1;
-                    break;
+                    ভঙ্গ;
                 }
             }
-            if(onlyclass) continue;
+            যদি(onlyclass) অনুৱর্ত;
         }
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+        বাবে (j = 0; j < l.h; ++j) {
+            বাবে (i = 0; i < l.w; ++i) {
+                বাবে (n = 0; n < l.n; ++n) {
+                    পূর্ণাঙ্ক box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                     box pred = get_region_box(l.output, l.biases, n, box_index, i, j, l.w, l.h, l.w*l.h);
-                    float best_iou = 0;
-                    for(t = 0; t < 30; ++t){
+                    ভিন্ন best_iou = 0;
+                    বাবে(t = 0; t < 30; ++t){
                         box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
+                        যদি(!truth.x) ভঙ্গ;
+                        ভিন্ন iou = box_iou(pred, truth);
+                        যদি (iou > best_iou) {
                             best_iou = iou;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, l.coords);
+                    পূর্ণাঙ্ক obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, l.coords);
                     avg_anyobj += l.output[obj_index];
                     l.delta[obj_index] = l.noobject_scale * (0 - l.output[obj_index]);
-                    if(l.background) l.delta[obj_index] = l.noobject_scale * (1 - l.output[obj_index]);
-                    if (best_iou > l.thresh) {
+                    যদি(l.background) l.delta[obj_index] = l.noobject_scale * (1 - l.output[obj_index]);
+                    যদি (best_iou > l.thresh) {
                         l.delta[obj_index] = 0;
                     }
 
-                    if(*(net.seen) < 12800){
+                    যদি(*(net.seen) < 12800){
                         box truth = {0};
                         truth.x = (i + .5)/l.w;
                         truth.y = (j + .5)/l.h;
@@ -262,65 +262,65 @@ void forward_region_layer(const layer l, network net)
                 }
             }
         }
-        for(t = 0; t < 30; ++t){
+        বাবে(t = 0; t < 30; ++t){
             box truth = float_to_box(net.truth + t*(l.coords + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            যদি(!truth.x) ভঙ্গ;
+            ভিন্ন best_iou = 0;
+            পূর্ণাঙ্ক best_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
             box truth_shift = truth;
             truth_shift.x = 0;
             truth_shift.y = 0;
-            for(n = 0; n < l.n; ++n){
-                int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
+            বাবে(n = 0; n < l.n; ++n){
+                পূর্ণাঙ্ক box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
                 box pred = get_region_box(l.output, l.biases, n, box_index, i, j, l.w, l.h, l.w*l.h);
-                if(l.bias_match){
+                যদি(l.bias_match){
                     pred.w = l.biases[2*n]/l.w;
                     pred.h = l.biases[2*n+1]/l.h;
                 }
                 pred.x = 0;
                 pred.y = 0;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
+                ভিন্ন iou = box_iou(pred, truth_shift);
+                যদি (iou > best_iou){
                     best_iou = iou;
                     best_n = n;
                 }
             }
 
-            int box_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 0);
-            float iou = delta_region_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, l.delta, l.coord_scale *  (2 - truth.w*truth.h), l.w*l.h);
-            if(l.coords > 4){
-                int mask_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 4);
+            পূর্ণাঙ্ক box_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 0);
+            ভিন্ন iou = delta_region_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, l.delta, l.coord_scale *  (2 - truth.w*truth.h), l.w*l.h);
+            যদি(l.coords > 4){
+                পূর্ণাঙ্ক mask_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, 4);
                 delta_region_mask(net.truth + t*(l.coords + 1) + b*l.truths + 5, l.output, l.coords - 4, mask_index, l.delta, l.w*l.h, l.mask_scale);
             }
-            if(iou > .5) recall += 1;
+            যদি(iou > .5) recall += 1;
             avg_iou += iou;
 
-            int obj_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords);
+            পূর্ণাঙ্ক obj_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords);
             avg_obj += l.output[obj_index];
             l.delta[obj_index] = l.object_scale * (1 - l.output[obj_index]);
-            if (l.rescore) {
+            যদি (l.rescore) {
                 l.delta[obj_index] = l.object_scale * (iou - l.output[obj_index]);
             }
-            if(l.background){
+            যদি(l.background){
                 l.delta[obj_index] = l.object_scale * (0 - l.output[obj_index]);
             }
 
-            int class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
-            if (l.map) class = l.map[class];
-            int class_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords + 1);
-            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_tree, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
-            ++count;
-            ++class_count;
+            পূর্ণাঙ্ক class = net.truth[t*(l.coords + 1) + b*l.truths + l.coords];
+            যদি (l.map) class = l.map[class];
+            পূর্ণাঙ্ক class_index = entry_index(l, b, best_n*l.w*l.h + j*l.w + i, l.coords + 1);
+            delta_region_class(l.output, l.delta, class_index, class, l.classes, l.softmax_বৃক্ষ, l.class_scale, l.w*l.h, &avg_cat, !l.softmax);
+            ++গুনতি;
+            ++class_গুনতি;
         }
     }
     *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, count);
+    printf("Region Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, Avg Recall: %f,  count: %d\n", avg_iou/গুনতি, avg_cat/class_গুনতি, avg_obj/গুনতি, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/গুনতি, গুনতি);
 }
 
-void backward_region_layer(const layer l, network net)
+শূন্য backward_region_layer(ধ্রুৱ layer l, network net)
 {
     /*
        int b;
@@ -333,25 +333,25 @@ void backward_region_layer(const layer l, network net)
      */
 }
 
-void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+শূন্য correct_region_boxes(detection *dets, পূর্ণাঙ্ক n, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h, পূর্ণাঙ্ক netw, পূর্ণাঙ্ক neth, পূর্ণাঙ্ক relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    পূর্ণাঙ্ক i;
+    পূর্ণাঙ্ক new_w=0;
+    পূর্ণাঙ্ক new_h=0;
+    যদি (((ভিন্ন)netw/w) < ((ভিন্ন)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } অন্যথা {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    বাবে (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((ভিন্ন)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((ভিন্ন)new_h/neth); 
+        b.w *= (ভিন্ন)netw/new_w;
+        b.h *= (ভিন্ন)neth/new_h;
+        যদি(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -361,22 +361,22 @@ void correct_region_boxes(detection *dets, int n, int w, int h, int netw, int ne
     }
 }
 
-void get_region_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, float tree_thresh, int relative, detection *dets)
+শূন্য get_region_detections(layer l, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h, পূর্ণাঙ্ক netw, পূর্ণাঙ্ক neth, ভিন্ন thresh, পূর্ণাঙ্ক *map, ভিন্ন বৃক্ষ_thresh, পূর্ণাঙ্ক relative, detection *dets)
 {
-    int i,j,n,z;
-    float *predictions = l.output;
-    if (l.batch == 2) {
-        float *flip = l.output + l.outputs;
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w/2; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    for(z = 0; z < l.classes + l.coords + 1; ++z){
-                        int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                        int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                        float swap = flip[i1];
+    পূর্ণাঙ্ক i,j,n,z;
+    ভিন্ন *predictions = l.output;
+    যদি (l.batch == 2) {
+        ভিন্ন *flip = l.output + l.outputs;
+        বাবে (j = 0; j < l.h; ++j) {
+            বাবে (i = 0; i < l.w/2; ++i) {
+                বাবে (n = 0; n < l.n; ++n) {
+                    বাবে(z = 0; z < l.classes + l.coords + 1; ++z){
+                        পূর্ণাঙ্ক i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                        পূর্ণাঙ্ক i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                        ভিন্ন swap = flip[i1];
                         flip[i1] = flip[i2];
                         flip[i2] = swap;
-                        if(z == 0){
+                        যদি(z == 0){
                             flip[i1] = -flip[i1];
                             flip[i2] = -flip[i2];
                         }
@@ -384,49 +384,49 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
                 }
             }
         }
-        for(i = 0; i < l.outputs; ++i){
+        বাবে(i = 0; i < l.outputs; ++i){
             l.output[i] = (l.output[i] + flip[i])/2.;
         }
     }
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int index = n*l.w*l.h + i;
-            for(j = 0; j < l.classes; ++j){
+    বাবে (i = 0; i < l.w*l.h; ++i){
+        পূর্ণাঙ্ক row = i / l.w;
+        পূর্ণাঙ্ক col = i % l.w;
+        বাবে(n = 0; n < l.n; ++n){
+            পূর্ণাঙ্ক index = n*l.w*l.h + i;
+            বাবে(j = 0; j < l.classes; ++j){
                 dets[index].prob[j] = 0;
             }
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, l.coords);
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            int mask_index = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float scale = l.background ? 1 : predictions[obj_index];
+            পূর্ণাঙ্ক obj_index  = entry_index(l, 0, n*l.w*l.h + i, l.coords);
+            পূর্ণাঙ্ক box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
+            পূর্ণাঙ্ক mask_index = entry_index(l, 0, n*l.w*l.h + i, 4);
+            ভিন্ন scale = l.background ? 1 : predictions[obj_index];
             dets[index].bbox = get_region_box(predictions, l.biases, n, box_index, col, row, l.w, l.h, l.w*l.h);
             dets[index].objectness = scale > thresh ? scale : 0;
-            if(dets[index].mask){
-                for(j = 0; j < l.coords - 4; ++j){
+            যদি(dets[index].mask){
+                বাবে(j = 0; j < l.coords - 4; ++j){
                     dets[index].mask[j] = l.output[mask_index + j*l.w*l.h];
                 }
             }
 
-            int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + !l.background);
-            if(l.softmax_tree){
+            পূর্ণাঙ্ক class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + !l.background);
+            যদি(l.softmax_বৃক্ষ){
 
-                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_tree, 0, l.w*l.h);
-                if(map){
-                    for(j = 0; j < 200; ++j){
-                        int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
-                        float prob = scale*predictions[class_index];
+                hierarchy_predictions(predictions + class_index, l.classes, l.softmax_বৃক্ষ, 0, l.w*l.h);
+                যদি(map){
+                    বাবে(j = 0; j < 200; ++j){
+                        পূর্ণাঙ্ক class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + map[j]);
+                        ভিন্ন prob = scale*predictions[class_index];
                         dets[index].prob[j] = (prob > thresh) ? prob : 0;
                     }
-                } else {
-                    int j =  hierarchy_top_prediction(predictions + class_index, l.softmax_tree, tree_thresh, l.w*l.h);
+                } অন্যথা {
+                    পূর্ণাঙ্ক j =  hierarchy_শীৰ্ষ_prediction(predictions + class_index, l.softmax_বৃক্ষ, বৃক্ষ_thresh, l.w*l.h);
                     dets[index].prob[j] = (scale > thresh) ? scale : 0;
                 }
-            } else {
-                if(dets[index].objectness){
-                    for(j = 0; j < l.classes; ++j){
-                        int class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + j);
-                        float prob = scale*predictions[class_index];
+            } অন্যথা {
+                যদি(dets[index].objectness){
+                    বাবে(j = 0; j < l.classes; ++j){
+                        পূর্ণাঙ্ক class_index = entry_index(l, 0, n*l.w*l.h + i, l.coords + 1 + j);
+                        ভিন্ন prob = scale*predictions[class_index];
                         dets[index].prob[j] = (prob > thresh) ? prob : 0;
                     }
                 }
@@ -438,68 +438,68 @@ void get_region_detections(layer l, int w, int h, int netw, int neth, float thre
 
 #ifdef GPU
 
-void forward_region_layer_gpu(const layer l, network net)
+শূন্য forward_region_layer_gpu(ধ্রুৱ layer l, network net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    copy_gpu(l.batch*l.inputs, net.প্ৰবেশ_gpu, 1, l.output_gpu, 1);
+    পূর্ণাঙ্ক b, n;
+    বাবে (b = 0; b < l.batch; ++b){
+        বাবে(n = 0; n < l.n; ++n){
+            পূর্ণাঙ্ক index = entry_index(l, b, n*l.w*l.h, 0);
             activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
-            if(l.coords > 4){
+            যদি(l.coords > 4){
                 index = entry_index(l, b, n*l.w*l.h, 4);
                 activate_array_gpu(l.output_gpu + index, (l.coords - 4)*l.w*l.h, LOGISTIC);
             }
             index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) activate_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC);
+            যদি(!l.background) activate_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC);
             index = entry_index(l, b, n*l.w*l.h, l.coords + 1);
-            if(!l.softmax && !l.softmax_tree) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
+            যদি(!l.softmax && !l.softmax_বৃক্ষ) activate_array_gpu(l.output_gpu + index, l.classes*l.w*l.h, LOGISTIC);
         }
     }
-    if (l.softmax_tree){
-        int index = entry_index(l, 0, 0, l.coords + 1);
-        softmax_tree(net.input_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_tree);
-    } else if (l.softmax) {
-        int index = entry_index(l, 0, 0, l.coords + !l.background);
-        softmax_gpu(net.input_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
+    যদি (l.softmax_বৃক্ষ){
+        পূর্ণাঙ্ক index = entry_index(l, 0, 0, l.coords + 1);
+        softmax_বৃক্ষ(net.প্ৰবেশ_gpu + index, l.w*l.h, l.batch*l.n, l.inputs/l.n, 1, l.output_gpu + index, *l.softmax_বৃক্ষ);
+    } অন্যথা যদি (l.softmax) {
+        পূর্ণাঙ্ক index = entry_index(l, 0, 0, l.coords + !l.background);
+        softmax_gpu(net.প্ৰবেশ_gpu + index, l.classes + l.background, l.batch*l.n, l.inputs/l.n, l.w*l.h, 1, l.w*l.h, 1, l.output_gpu + index);
     }
-    if(!net.train || l.onlyforward){
+    যদি(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        ঘূৰাই;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.প্ৰবেশ, l.batch*l.inputs);
     forward_region_layer(l, net);
     //cuda_push_array(l.output_gpu, l.output, l.batch*l.outputs);
-    if(!net.train) return;
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    যদি(!net.train) ঘূৰাই;
+    cuda_ঠেলো_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_region_layer_gpu(const layer l, network net)
+শূন্য backward_region_layer_gpu(ধ্রুৱ layer l, network net)
 {
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
+    পূর্ণাঙ্ক b, n;
+    বাবে (b = 0; b < l.batch; ++b){
+        বাবে(n = 0; n < l.n; ++n){
+            পূর্ণাঙ্ক index = entry_index(l, b, n*l.w*l.h, 0);
             gradient_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC, l.delta_gpu + index);
-            if(l.coords > 4){
+            যদি(l.coords > 4){
                 index = entry_index(l, b, n*l.w*l.h, 4);
                 gradient_array_gpu(l.output_gpu + index, (l.coords - 4)*l.w*l.h, LOGISTIC, l.delta_gpu + index);
             }
             index = entry_index(l, b, n*l.w*l.h, l.coords);
-            if(!l.background) gradient_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC, l.delta_gpu + index);
+            যদি(!l.background) gradient_array_gpu(l.output_gpu + index,   l.w*l.h, LOGISTIC, l.delta_gpu + index);
         }
     }
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
 #endif
 
-void zero_objectness(layer l)
+শূন্য zero_objectness(layer l)
 {
-    int i, n;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index = entry_index(l, 0, n*l.w*l.h + i, l.coords);
+    পূর্ণাঙ্ক i, n;
+    বাবে (i = 0; i < l.w*l.h; ++i){
+        বাবে(n = 0; n < l.n; ++n){
+            পূর্ণাঙ্ক obj_index = entry_index(l, 0, n*l.w*l.h + i, l.coords);
             l.output[obj_index] = 0;
         }
     }
