@@ -14,15 +14,15 @@ void pull_network_output(network *net);
 #endif
 
 void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
+var_na *get_layer_string(LAYER_TYPE a);
 
-network *make_network(int n);
+network *make_network(ចំនួនគត់ n);
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
+float network_accuracy_multi(network *net, data d, ចំនួនគត់ n);
+ចំនួនគត់ get_predicted_class_network(network *net);
 void print_network(network *net);
-int resize_network(network *net, int w, int h);
+ចំនួនគត់ resize_network(network *net, ចំនួនគត់ w, ចំនួនគត់ h);
 void calc_network_cost(network *net);
 
 #endif

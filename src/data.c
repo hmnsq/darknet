@@ -9,17 +9,17 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-list *get_paths(char *filename)
+list *get_paths(var_na *filename)
 {
-    char *path;
+    var_na *path;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
+    ប្រសិនបើ(!file) file_error(filename);
     list *lines = make_list();
-    while((path=fgetl(file))){
+    ខណៈពេល((path=fgetl(file))){
         list_insert(lines, path);
     }
     fclose(file);
-    return lines;
+    ត្រឡប់ lines;
 }
 
 /*
@@ -39,41 +39,41 @@ char **get_random_paths_indexes(char **paths, int n, int m, int *indexes)
 }
 */
 
-char **get_random_paths(char **paths, int n, int m)
+var_na **get_random_paths(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m)
 {
-    char **random_paths = calloc(n, sizeof(char*));
-    int i;
+    var_na **random_paths = calloc(n, parimaa_na(var_na*));
+    ចំនួនគត់ i;
     pthread_mutex_lock(&mutex);
-    for(i = 0; i < n; ++i){
-        int index = rand()%m;
+    សម្រាប់(i = 0; i < n; ++i){
+        ចំនួនគត់ index = rand()%m;
         random_paths[i] = paths[index];
         //if(i == 0) printf("%s\n", paths[index]);
     }
     pthread_mutex_unlock(&mutex);
-    return random_paths;
+    ត្រឡប់ random_paths;
 }
 
-char **find_replace_paths(char **paths, int n, char *find, char *replace)
+var_na **find_replace_paths(var_na **paths, ចំនួនគត់ n, var_na *find, var_na *replace)
 {
-    char **replace_paths = calloc(n, sizeof(char*));
-    int i;
-    for(i = 0; i < n; ++i){
-        char replaced[4096];
+    var_na **replace_paths = calloc(n, parimaa_na(var_na*));
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n; ++i){
+        var_na replaced[4096];
         find_replace(paths[i], find, replace, replaced);
         replace_paths[i] = copy_string(replaced);
     }
-    return replace_paths;
+    ត្រឡប់ replace_paths;
 }
 
-matrix load_image_paths_gray(char **paths, int n, int w, int h)
+matrix load_image_paths_gray(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ w, ចំនួនគត់ h)
 {
-    int i;
+    ចំនួនគត់ i;
     matrix X;
     X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
+    X.vals = calloc(X.rows, parimaa_na(float*));
     X.cols = 0;
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image im = load_image(paths[i], w, h, 3);
 
         image gray = grayscale_image(im);
@@ -83,43 +83,43 @@ matrix load_image_paths_gray(char **paths, int n, int w, int h)
         X.vals[i] = im.data;
         X.cols = im.h*im.w*im.c;
     }
-    return X;
+    ត្រឡប់ X;
 }
 
-matrix load_image_paths(char **paths, int n, int w, int h)
+matrix load_image_paths(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ w, ចំនួនគត់ h)
 {
-    int i;
+    ចំនួនគត់ i;
     matrix X;
     X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
+    X.vals = calloc(X.rows, parimaa_na(float*));
     X.cols = 0;
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image im = load_image_color(paths[i], w, h);
         X.vals[i] = im.data;
         X.cols = im.h*im.w*im.c;
     }
-    return X;
+    ត្រឡប់ X;
 }
 
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+matrix load_image_augment_paths(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ min, ចំនួនគត់ max, ចំនួនគត់ size, float angle, float aspect, float hue, float saturation, float exposure, ចំនួនគត់ center)
 {
-    int i;
+    ចំនួនគត់ i;
     matrix X;
     X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
+    X.vals = calloc(X.rows, parimaa_na(float*));
     X.cols = 0;
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image im = load_image_color(paths[i], 0, 0);
         image crop;
-        if(center){
+        ប្រសិនបើ(center){
             crop = center_crop_image(im, size, size);
-        } else {
+        } បើមិនដូច្នេះ {
             crop = random_augment_image(im, angle, aspect, min, max, size, size);
         }
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        ចំនួនគត់ flip = rand()%2;
+        ប្រសិនបើ (flip) flip_image(crop);
         random_distort_image(crop, hue, saturation, exposure);
 
         /*
@@ -132,23 +132,23 @@ matrix load_image_augment_paths(char **paths, int n, int min, int max, int size,
         X.vals[i] = crop.data;
         X.cols = crop.h*crop.w*crop.c;
     }
-    return X;
+    ត្រឡប់ X;
 }
 
 
-box_label *read_boxes(char *filename, int *n)
+box_label *read_boxes(var_na *filename, ចំនួនគត់ *n)
 {
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
+    ប្រសិនបើ(!file) file_error(filename);
     float x, y, h, w;
-    int id;
-    int count = 0;
-    int size = 64;
-    box_label *boxes = calloc(size, sizeof(box_label));
-    while(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
-        if(count == size) {
+    ចំនួនគត់ id;
+    ចំនួនគត់ count = 0;
+    ចំនួនគត់ size = 64;
+    box_label *boxes = calloc(size, parimaa_na(box_label));
+    ខណៈពេល(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
+        ប្រសិនបើ(count == size) {
             size = size * 2;
-            boxes = realloc(boxes, size*sizeof(box_label));
+            boxes = realloc(boxes, size*parimaa_na(box_label));
         }
         boxes[count].id = id;
         boxes[count].x = x;
@@ -163,25 +163,25 @@ box_label *read_boxes(char *filename, int *n)
     }
     fclose(file);
     *n = count;
-    return boxes;
+    ត្រឡប់ boxes;
 }
 
-void randomize_boxes(box_label *b, int n)
+void randomize_boxes(box_label *b, ចំនួនគត់ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n; ++i){
         box_label swap = b[i];
-        int index = rand()%n;
+        ចំនួនគត់ index = rand()%n;
         b[i] = b[index];
         b[index] = swap;
     }
 }
 
-void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float sy, int flip)
+void correct_boxes(box_label *boxes, ចំនួនគត់ n, float dx, float dy, float sx, float sy, ចំនួនគត់ flip)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(boxes[i].x == 0 && boxes[i].y == 0) {
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n; ++i){
+        ប្រសិនបើ(boxes[i].x == 0 && boxes[i].y == 0) {
             boxes[i].x = 999999;
             boxes[i].y = 999999;
             boxes[i].w = 999999;
@@ -193,7 +193,7 @@ void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float 
         boxes[i].top    = boxes[i].top   * sy - dy;
         boxes[i].bottom = boxes[i].bottom* sy - dy;
 
-        if(flip){
+        ប្រសិនបើ(flip){
             float swap = boxes[i].left;
             boxes[i].left = 1. - boxes[i].right;
             boxes[i].right = 1. - swap;
@@ -214,47 +214,47 @@ void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float 
     }
 }
 
-void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+void fill_truth_swag(var_na *path, float *truth, ចំនួនគត់ classes, ចំនួនគត់ flip, float dx, float dy, float sx, float sy)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
     find_replace(labelpath, "JPEGImages", "labels", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-    int count = 0;
+    ចំនួនគត់ count = 0;
     box_label *boxes = read_boxes(labelpath, &count);
     randomize_boxes(boxes, count);
     correct_boxes(boxes, count, dx, dy, sx, sy, flip);
     float x,y,w,h;
-    int id;
-    int i;
+    ចំនួនគត់ id;
+    ចំនួនគត់ i;
 
-    for (i = 0; i < count && i < 90; ++i) {
+    សម្រាប់ (i = 0; i < count && i < 90; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .0 || h < .0) continue;
+        ប្រសិនបើ (w < .0 || h < .0) continue;
 
-        int index = (4+classes) * i;
+        ចំនួនគត់ index = (4+classes) * i;
 
         truth[index++] = x;
         truth[index++] = y;
         truth[index++] = w;
         truth[index++] = h;
 
-        if (id < classes) truth[index+id] = 1;
+        ប្រសិនបើ (id < classes) truth[index+id] = 1;
     }
     free(boxes);
 }
 
-void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
+void fill_truth_region(var_na *path, float *truth, ចំនួនគត់ classes, ចំនួនគត់ num_boxes, ចំនួនគត់ flip, float dx, float dy, float sx, float sy)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
     find_replace(labelpath, "JPEGImages", "labels", labelpath);
 
@@ -262,34 +262,34 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
     find_replace(labelpath, ".png", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
+    ចំនួនគត់ count = 0;
     box_label *boxes = read_boxes(labelpath, &count);
     randomize_boxes(boxes, count);
     correct_boxes(boxes, count, dx, dy, sx, sy, flip);
     float x,y,w,h;
-    int id;
-    int i;
+    ចំនួនគត់ id;
+    ចំនួនគត់ i;
 
-    for (i = 0; i < count; ++i) {
+    សម្រាប់ (i = 0; i < count; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .005 || h < .005) continue;
+        ប្រសិនបើ (w < .005 || h < .005) continue;
 
-        int col = (int)(x*num_boxes);
-        int row = (int)(y*num_boxes);
+        ចំនួនគត់ col = (ចំនួនគត់)(x*num_boxes);
+        ចំនួនគត់ row = (ចំនួនគត់)(y*num_boxes);
 
         x = x*num_boxes - col;
         y = y*num_boxes - row;
 
-        int index = (col+row*num_boxes)*(5+classes);
-        if (truth[index]) continue;
+        ចំនួនគត់ index = (col+row*num_boxes)*(5+classes);
+        ប្រសិនបើ (truth[index]) continue;
         truth[index++] = 1;
 
-        if (id < classes) truth[index+id] = 1;
+        ប្រសិនបើ (id < classes) truth[index+id] = 1;
         index += classes;
 
         truth[index++] = x;
@@ -300,38 +300,38 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
     free(boxes);
 }
 
-void load_rle(image im, int *rle, int n)
+void load_rle(image im, ចំនួនគត់ *rle, ចំនួនគត់ n)
 {
-    int count = 0;
-    int curr = 0;
-    int i,j;
-    for(i = 0; i < n; ++i){
-        for(j = 0; j < rle[i]; ++j){
+    ចំនួនគត់ count = 0;
+    ចំនួនគត់ curr = 0;
+    ចំនួនគត់ i,j;
+    សម្រាប់(i = 0; i < n; ++i){
+        សម្រាប់(j = 0; j < rle[i]; ++j){
             im.data[count++] = curr;
         }
         curr = 1 - curr;
     }
-    for(; count < im.h*im.w*im.c; ++count){
+    សម្រាប់(; count < im.h*im.w*im.c; ++count){
         im.data[count] = curr;
     }
 }
 
-void or_image(image src, image dest, int c)
+void or_image(image src, image dest, ចំនួនគត់ c)
 {
-    int i;
-    for(i = 0; i < src.w*src.h; ++i){
-        if(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < src.w*src.h; ++i){
+        ប្រសិនបើ(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
     }
 }
 
 void exclusive_image(image src)
 {
-    int k, j, i;
-    int s = src.w*src.h;
-    for(k = 0; k < src.c-1; ++k){
-        for(i = 0; i < s; ++i){
-            if (src.data[k*s + i]){
-                for(j = k+1; j < src.c; ++j){
+    ចំនួនគត់ k, j, i;
+    ចំនួនគត់ s = src.w*src.h;
+    សម្រាប់(k = 0; k < src.c-1; ++k){
+        សម្រាប់(i = 0; i < s; ++i){
+            ប្រសិនបើ (src.data[k*s + i]){
+                សម្រាប់(j = k+1; j < src.c; ++j){
                     src.data[j*s + i] = 0;
                 }
             }
@@ -341,14 +341,14 @@ void exclusive_image(image src)
 
 box bound_image(image im)
 {
-    int x,y;
-    int minx = im.w;
-    int miny = im.h;
-    int maxx = 0;
-    int maxy = 0;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            if(im.data[y*im.w + x]){
+    ចំនួនគត់ x,y;
+    ចំនួនគត់ minx = im.w;
+    ចំនួនគត់ miny = im.h;
+    ចំនួនគត់ maxx = 0;
+    ចំនួនគត់ maxy = 0;
+    សម្រាប់(y = 0; y < im.h; ++y){
+        សម្រាប់(x = 0; x < im.w; ++x){
+            ប្រសិនបើ(im.data[y*im.w + x]){
                 minx = (x < minx) ? x : minx;
                 miny = (y < miny) ? y : miny;
                 maxx = (x > maxx) ? x : maxx;
@@ -358,34 +358,34 @@ box bound_image(image im)
     }
     box b = {minx, miny, maxx-minx + 1, maxy-miny + 1};
     //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
-    return b;
+    ត្រឡប់ b;
 }
 
-void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+void fill_truth_iseg(var_na *path, ចំនួនគត់ num_boxes, float *truth, ចំនួនគត់ classes, ចំនួនគត់ w, ចំនួនគត់ h, augment_args aug, ចំនួនគត់ flip, ចំនួនគត់ mw, ចំនួនគត់ mh)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
-    int j;
+    ប្រសិនបើ(!file) file_error(labelpath);
+    var_na buff[32788];
+    ចំនួនគត់ id;
+    ចំនួនគត់ i = 0;
+    ចំនួនគត់ j;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ខណៈពេល((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
+        ចំនួនគត់ n = 0;
+        ចំនួនគត់ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        ប្រសិនបើ(flip) flip_image(sized);
 
         image mask = resize_image(sized, mw, mh);
         truth[i*(mw*mh+1)] = id;
-        for(j = 0; j < mw*mh; ++j){
+        សម្រាប់(j = 0; j < mw*mh; ++j){
             truth[i*(mw*mh + 1) + 1 + j] = mask.data[j];
         }
         ++i;
@@ -394,41 +394,41 @@ void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w
         free_image(sized);
         free(rle);
     }
-    if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
+    ប្រសិនបើ(i < num_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
     free_image(part);
 }
 
-void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+void fill_truth_mask(var_na *path, ចំនួនគត់ num_boxes, float *truth, ចំនួនគត់ classes, ចំនួនគត់ w, ចំនួនគត់ h, augment_args aug, ចំនួនគត់ flip, ចំនួនគត់ mw, ចំនួនគត់ mh)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
+    ប្រសិនបើ(!file) file_error(labelpath);
+    var_na buff[32788];
+    ចំនួនគត់ id;
+    ចំនួនគត់ i = 0;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ខណៈពេល((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
+        ចំនួនគត់ n = 0;
+        ចំនួនគត់ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        ប្រសិនបើ(flip) flip_image(sized);
         box b = bound_image(sized);
-        if(b.w > 0){
+        ប្រសិនបើ(b.w > 0){
             image crop = crop_image(sized, b.x, b.y, b.w, b.h);
             image mask = resize_image(crop, mw, mh);
             truth[i*(4 + mw*mh + 1) + 0] = (b.x + b.w/2.)/sized.w;
             truth[i*(4 + mw*mh + 1) + 1] = (b.y + b.h/2.)/sized.h;
             truth[i*(4 + mw*mh + 1) + 2] = b.w/sized.w;
             truth[i*(4 + mw*mh + 1) + 3] = b.h/sized.h;
-            int j;
-            for(j = 0; j < mw*mh; ++j){
+            ចំនួនគត់ j;
+            សម្រាប់(j = 0; j < mw*mh; ++j){
                 truth[i*(4 + mw*mh + 1) + 4 + j] = mask.data[j];
             }
             truth[i*(4 + mw*mh + 1) + 4 + mw*mh] = id;
@@ -444,9 +444,9 @@ void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w
 }
 
 
-void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+void fill_truth_detection(var_na *path, ចំនួនគត់ num_boxes, float *truth, ចំនួនគត់ classes, ចំនួនគត់ flip, float dx, float dy, float sx, float sy)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
     find_replace(labelpath, "JPEGImages", "labels", labelpath);
 
@@ -455,24 +455,24 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
     find_replace(labelpath, ".png", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
+    ចំនួនគត់ count = 0;
     box_label *boxes = read_boxes(labelpath, &count);
     randomize_boxes(boxes, count);
     correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    if(count > num_boxes) count = num_boxes;
+    ប្រសិនបើ(count > num_boxes) count = num_boxes;
     float x,y,w,h;
-    int id;
-    int i;
-    int sub = 0;
+    ចំនួនគត់ id;
+    ចំនួនគត់ i;
+    ចំនួនគត់ sub = 0;
 
-    for (i = 0; i < count; ++i) {
+    សម្រាប់ (i = 0; i < count; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if ((w < .001 || h < .001)) {
+        ប្រសិនបើ ((w < .001 || h < .001)) {
             ++sub;
             continue;
         }
@@ -488,98 +488,98 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
 
 #define NUMCHARS 37
 
-void print_letters(float *pred, int n)
+void print_letters(float *pred, ចំនួនគត់ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        int index = max_index(pred+i*NUMCHARS, NUMCHARS);
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n; ++i){
+        ចំនួនគត់ index = max_index(pred+i*NUMCHARS, NUMCHARS);
         printf("%c", int_to_alphanum(index));
     }
     printf("\n");
 }
 
-void fill_truth_captcha(char *path, int n, float *truth)
+void fill_truth_captcha(var_na *path, ចំនួនគត់ n, float *truth)
 {
-    char *begin = strrchr(path, '/');
+    var_na *begin = strrchr(path, '/');
     ++begin;
-    int i;
-    for(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
-        int index = alphanum_to_int(begin[i]);
-        if(index > 35) printf("Bad %c\n", begin[i]);
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
+        ចំនួនគត់ index = alphanum_to_int(begin[i]);
+        ប្រសិនបើ(index > 35) printf("Bad %c\n", begin[i]);
         truth[i*NUMCHARS+index] = 1;
     }
-    for(;i < n; ++i){
+    សម្រាប់(;i < n; ++i){
         truth[i*NUMCHARS + NUMCHARS-1] = 1;
     }
 }
 
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
+data load_data_captcha(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, ចំនួនគត់ k, ចំនួនគត់ w, ចំនួនគត់ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = make_matrix(n, k*NUMCHARS);
-    int i;
-    for(i = 0; i < n; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n; ++i){
         fill_truth_captcha(paths[i], k, d.y.vals[i]);
     }
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
+data load_data_captcha_encode(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.X.cols = 17100;
     d.y = d.X;
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
-void fill_truth(char *path, char **labels, int k, float *truth)
+void fill_truth(var_na *path, var_na **labels, ចំនួនគត់ k, float *truth)
 {
-    int i;
-    memset(truth, 0, k*sizeof(float));
-    int count = 0;
-    for(i = 0; i < k; ++i){
-        if(strstr(path, labels[i])){
+    ចំនួនគត់ i;
+    memset(truth, 0, k*parimaa_na(float));
+    ចំនួនគត់ count = 0;
+    សម្រាប់(i = 0; i < k; ++i){
+        ប្រសិនបើ(strstr(path, labels[i])){
             truth[i] = 1;
             ++count;
             //printf("%s %s %d\n", path, labels[i], i);
         }
     }
-    if(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
+    ប្រសិនបើ(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
 }
 
-void fill_hierarchy(float *truth, int k, tree *hierarchy)
+void fill_hierarchy(float *truth, ចំនួនគត់ k, tree *hierarchy)
 {
-    int j;
-    for(j = 0; j < k; ++j){
-        if(truth[j]){
-            int parent = hierarchy->parent[j];
-            while(parent >= 0){
+    ចំនួនគត់ j;
+    សម្រាប់(j = 0; j < k; ++j){
+        ប្រសិនបើ(truth[j]){
+            ចំនួនគត់ parent = hierarchy->parent[j];
+            ខណៈពេល(parent >= 0){
                 truth[parent] = 1;
                 parent = hierarchy->parent[parent];
             }
         }
     }
-    int i;
-    int count = 0;
-    for(j = 0; j < hierarchy->groups; ++j){
+    ចំនួនគត់ i;
+    ចំនួនគត់ count = 0;
+    សម្រាប់(j = 0; j < hierarchy->groups; ++j){
         //printf("%d\n", count);
-        int mask = 1;
-        for(i = 0; i < hierarchy->group_size[j]; ++i){
-            if(truth[count + i]){
+        ចំនួនគត់ mask = 1;
+        សម្រាប់(i = 0; i < hierarchy->group_size[j]; ++i){
+            ប្រសិនបើ(truth[count + i]){
                 mask = 0;
-                break;
+                bha_nga;
             }
         }
-        if (mask) {
-            for(i = 0; i < hierarchy->group_size[j]; ++i){
+        ប្រសិនបើ (mask) {
+            សម្រាប់(i = 0; i < hierarchy->group_size[j]; ++i){
                 truth[count + i] = SECRET_NUM;
             }
         }
@@ -587,12 +587,12 @@ void fill_hierarchy(float *truth, int k, tree *hierarchy)
     }
 }
 
-matrix load_regression_labels_paths(char **paths, int n, int k)
+matrix load_regression_labels_paths(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ k)
 {
     matrix y = make_matrix(n, k);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        char labelpath[4096];
+    ចំនួនគត់ i,j;
+    សម្រាប់(i = 0; i < n; ++i){
+        var_na labelpath[4096];
         find_replace(paths[i], "images", "labels", labelpath);
         find_replace(labelpath, "JPEGImages", "labels", labelpath);
         find_replace(labelpath, ".BMP", ".txt", labelpath);
@@ -609,73 +609,73 @@ matrix load_regression_labels_paths(char **paths, int n, int k)
         find_replace(labelpath, ".tif", ".txt", labelpath);
 
         FILE *file = fopen(labelpath, "r");
-        for(j = 0; j < k; ++j){
+        សម្រាប់(j = 0; j < k; ++j){
             fscanf(file, "%f", &(y.vals[i][j]));
         }
         fclose(file);
     }
-    return y;
+    ត្រឡប់ y;
 }
 
-matrix load_labels_paths(char **paths, int n, char **labels, int k, tree *hierarchy)
+matrix load_labels_paths(var_na **paths, ចំនួនគត់ n, var_na **labels, ចំនួនគត់ k, tree *hierarchy)
 {
     matrix y = make_matrix(n, k);
-    int i;
-    for(i = 0; i < n && labels; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n && labels; ++i){
         fill_truth(paths[i], labels, k, y.vals[i]);
-        if(hierarchy){
+        ប្រសិនបើ(hierarchy){
             fill_hierarchy(y.vals[i], k, hierarchy);
         }
     }
-    return y;
+    ត្រឡប់ y;
 }
 
-matrix load_tags_paths(char **paths, int n, int k)
+matrix load_tags_paths(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ k)
 {
     matrix y = make_matrix(n, k);
-    int i;
+    ចំនួនគត់ i;
     //int count = 0;
-    for(i = 0; i < n; ++i){
-        char label[4096];
+    សម្រាប់(i = 0; i < n; ++i){
+        var_na label[4096];
         find_replace(paths[i], "images", "labels", label);
         find_replace(label, ".jpg", ".txt", label);
         FILE *file = fopen(label, "r");
-        if (!file) continue;
+        ប្រសិនបើ (!file) continue;
         //++count;
-        int tag;
-        while(fscanf(file, "%d", &tag) == 1){
-            if(tag < k){
+        ចំនួនគត់ tag;
+        ខណៈពេល(fscanf(file, "%d", &tag) == 1){
+            ប្រសិនបើ(tag < k){
                 y.vals[i][tag] = 1;
             }
         }
         fclose(file);
     }
     //printf("%d/%d\n", count, n);
-    return y;
+    ត្រឡប់ y;
 }
 
-char **get_labels(char *filename)
+var_na **get_labels(var_na *filename)
 {
     list *plist = get_paths(filename);
-    char **labels = (char **)list_to_array(plist);
+    var_na **labels = (var_na **)list_to_array(plist);
     free_list(plist);
-    return labels;
+    ត្រឡប់ labels;
 }
 
 void free_data(data d)
 {
-    if(!d.shallow){
+    ប្រសិនបើ(!d.shallow){
         free_matrix(d.X);
         free_matrix(d.y);
-    }else{
+    }បើមិនដូច្នេះ{
         free(d.X.vals);
         free(d.y.vals);
     }
 }
 
-image get_segmentation_image(char *path, int w, int h, int classes)
+image get_segmentation_image(var_na *path, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ classes)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
@@ -683,13 +683,13 @@ image get_segmentation_image(char *path, int w, int h, int classes)
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     image mask = make_image(w, h, classes);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    ប្រសិនបើ(!file) file_error(labelpath);
+    var_na buff[32788];
+    ចំនួនគត់ id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ខណៈពេល(fscanf(file, "%d %s", &id, buff) == 2){
+        ចំនួនគត់ n = 0;
+        ចំនួនគត់ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         or_image(part, mask, id);
         free(rle);
@@ -697,66 +697,66 @@ image get_segmentation_image(char *path, int w, int h, int classes)
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    ត្រឡប់ mask;
 }
 
-image get_segmentation_image2(char *path, int w, int h, int classes)
+image get_segmentation_image2(var_na *path, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ classes)
 {
-    char labelpath[4096];
+    var_na labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     image mask = make_image(w, h, classes+1);
-    int i;
-    for(i = 0; i < w*h; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < w*h; ++i){
         mask.data[w*h*classes + i] = 1;
     }
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    ប្រសិនបើ(!file) file_error(labelpath);
+    var_na buff[32788];
+    ចំនួនគត់ id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ខណៈពេល(fscanf(file, "%d %s", &id, buff) == 2){
+        ចំនួនគត់ n = 0;
+        ចំនួនគត់ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         or_image(part, mask, id);
-        for(i = 0; i < w*h; ++i){
-            if(part.data[i]) mask.data[w*h*classes + i] = 0;
+        សម្រាប់(i = 0; i < w*h; ++i){
+            ប្រសិនបើ(part.data[i]) mask.data[w*h*classes + i] = 0;
         }
         free(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    ត្រឡប់ mask;
 }
 
-data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure, int div)
+data load_data_seg(ចំនួនគត់ n, var_na **paths, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ classes, ចំនួនគត់ min, ចំនួនគត់ max, float angle, float aspect, float hue, float saturation, float exposure, ចំនួនគត់ div)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    var_na **random_paths = get_random_paths(paths, n, m);
+    ចំនួនគត់ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*3;
 
 
     d.y.rows = n;
     d.y.cols = h*w*classes/div/div;
-    d.y.vals = calloc(d.X.rows, sizeof(float*));
+    d.y.vals = calloc(d.X.rows, parimaa_na(float*));
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ចំនួនគត់ flip = rand()%2;
+        ប្រសិនបើ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
 
@@ -764,7 +764,7 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
         //image mask = make_image(orig.w, orig.h, classes+1);
         image sized_m = rotate_crop_image(mask, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
 
-        if(flip) flip_image(sized_m);
+        ប្រសិនបើ(flip) flip_image(sized_m);
         d.y.vals[i] = sized_m.data;
 
         free_image(orig);
@@ -779,29 +779,29 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
          */
     }
     free(random_paths);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int boxes, int div, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_iseg(ចំនួនគត់ n, var_na **paths, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ classes, ចំនួនគត់ boxes, ចំនួនគត់ div, ចំនួនគត់ min, ចំនួនគត់ max, float angle, float aspect, float hue, float saturation, float exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    var_na **random_paths = get_random_paths(paths, n, m);
+    ចំនួនគត់ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*3;
 
     d.y = make_matrix(n, (((w/div)*(h/div))+1)*boxes);
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ចំនួនគត់ flip = rand()%2;
+        ប្រសិនបើ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
         //show_image(sized, "image");
@@ -819,29 +819,29 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
          */
     }
     free(random_paths);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int boxes, int coords, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_mask(ចំនួនគត់ n, var_na **paths, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ classes, ចំនួនគត់ boxes, ចំនួនគត់ coords, ចំនួនគត់ min, ចំនួនគត់ max, float angle, float aspect, float hue, float saturation, float exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    var_na **random_paths = get_random_paths(paths, n, m);
+    ចំនួនគត់ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*3;
 
     d.y = make_matrix(n, (coords+1)*boxes);
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ចំនួនគត់ flip = rand()%2;
+        ប្រសិនបើ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
         //show_image(sized, "image");
@@ -859,51 +859,51 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
          */
     }
     free(random_paths);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure)
+data load_data_region(ចំនួនគត់ n, var_na **paths, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ size, ចំនួនគត់ classes, float jitter, float hue, float saturation, float exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    var_na **random_paths = get_random_paths(paths, n, m);
+    ចំនួនគត់ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*3;
 
 
-    int k = size*size*(5+classes);
+    ចំនួនគត់ k = size*size*(5+classes);
     d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
 
-        int oh = orig.h;
-        int ow = orig.w;
+        ចំនួនគត់ oh = orig.h;
+        ចំនួនគត់ ow = orig.w;
 
-        int dw = (ow*jitter);
-        int dh = (oh*jitter);
+        ចំនួនគត់ dw = (ow*jitter);
+        ចំនួនគត់ dh = (oh*jitter);
 
-        int pleft  = rand_uniform(-dw, dw);
-        int pright = rand_uniform(-dw, dw);
-        int ptop   = rand_uniform(-dh, dh);
-        int pbot   = rand_uniform(-dh, dh);
+        ចំនួនគត់ pleft  = rand_uniform(-dw, dw);
+        ចំនួនគត់ pright = rand_uniform(-dw, dw);
+        ចំនួនគត់ ptop   = rand_uniform(-dh, dh);
+        ចំនួនគត់ pbot   = rand_uniform(-dh, dh);
 
-        int swidth =  ow - pleft - pright;
-        int sheight = oh - ptop - pbot;
+        ចំនួនគត់ swidth =  ow - pleft - pright;
+        ចំនួនគត់ sheight = oh - ptop - pbot;
 
         float sx = (float)swidth  / ow;
         float sy = (float)sheight / oh;
 
-        int flip = rand()%2;
+        ចំនួនគត់ flip = rand()%2;
         image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
         float dx = ((float)pleft/ow)/sx;
         float dy = ((float)ptop /oh)/sy;
 
         image sized = resize_image(cropped, w, h);
-        if(flip) flip_image(sized);
+        ប្រសិនបើ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
 
@@ -913,59 +913,59 @@ data load_data_region(int n, char **paths, int m, int w, int h, int size, int cl
         free_image(cropped);
     }
     free(random_paths);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
+data load_data_compare(ចំនួនគត់ n, var_na **paths, ចំនួនគត់ m, ចំនួនគត់ classes, ចំនួនគត់ w, ចំនួនគត់ h)
 {
-    if(m) paths = get_random_paths(paths, 2*n, m);
-    int i,j;
+    ប្រសិនបើ(m) paths = get_random_paths(paths, 2*n, m);
+    ចំនួនគត់ i,j;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*6;
 
-    int k = 2*(classes);
+    ចំនួនគត់ k = 2*(classes);
     d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image im1 = load_image_color(paths[i*2],   w, h);
         image im2 = load_image_color(paths[i*2+1], w, h);
 
-        d.X.vals[i] = calloc(d.X.cols, sizeof(float));
-        memcpy(d.X.vals[i],         im1.data, h*w*3*sizeof(float));
-        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*sizeof(float));
+        d.X.vals[i] = calloc(d.X.cols, parimaa_na(float));
+        memcpy(d.X.vals[i],         im1.data, h*w*3*parimaa_na(float));
+        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*parimaa_na(float));
 
-        int id;
+        ចំនួនគត់ id;
         float iou;
 
-        char imlabel1[4096];
-        char imlabel2[4096];
+        var_na imlabel1[4096];
+        var_na imlabel2[4096];
         find_replace(paths[i*2],   "imgs", "labels", imlabel1);
         find_replace(imlabel1, "jpg", "txt", imlabel1);
         FILE *fp1 = fopen(imlabel1, "r");
 
-        while(fscanf(fp1, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
+        ខណៈពេល(fscanf(fp1, "%d %f", &id, &iou) == 2){
+            ប្រសិនបើ (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
         }
 
         find_replace(paths[i*2+1], "imgs", "labels", imlabel2);
         find_replace(imlabel2, "jpg", "txt", imlabel2);
         FILE *fp2 = fopen(imlabel2, "r");
 
-        while(fscanf(fp2, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
+        ខណៈពេល(fscanf(fp2, "%d %f", &id, &iou) == 2){
+            ប្រសិនបើ (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
         }
 
-        for (j = 0; j < classes; ++j){
-            if (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
+        សម្រាប់ (j = 0; j < classes; ++j){
+            ប្រសិនបើ (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
                 d.y.vals[i][2*j] = 1;
                 d.y.vals[i][2*j+1] = 0;
-            } else if (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
+            } បើមិនដូច្នេះ ប្រសិនបើ (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
                 d.y.vals[i][2*j] = 0;
                 d.y.vals[i][2*j+1] = 1;
-            } else {
+            } បើមិនដូច្នេះ {
                 d.y.vals[i][2*j]   = SECRET_NUM;
                 d.y.vals[i][2*j+1] = SECRET_NUM;
             }
@@ -976,18 +976,18 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
         free_image(im1);
         free_image(im2);
     }
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
-data load_data_swag(char **paths, int n, int classes, float jitter)
+data load_data_swag(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ classes, float jitter)
 {
-    int index = rand()%n;
-    char *random_path = paths[index];
+    ចំនួនគត់ index = rand()%n;
+    var_na *random_path = paths[index];
 
     image orig = load_image_color(random_path, 0, 0);
-    int h = orig.h;
-    int w = orig.w;
+    ចំនួនគត់ h = orig.h;
+    ចំនួនគត់ w = orig.w;
 
     data d = {0};
     d.shallow = 0;
@@ -995,34 +995,34 @@ data load_data_swag(char **paths, int n, int classes, float jitter)
     d.h = h;
 
     d.X.rows = 1;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*3;
 
-    int k = (4+classes)*90;
+    ចំនួនគត់ k = (4+classes)*90;
     d.y = make_matrix(1, k);
 
-    int dw = w*jitter;
-    int dh = h*jitter;
+    ចំនួនគត់ dw = w*jitter;
+    ចំនួនគត់ dh = h*jitter;
 
-    int pleft  = rand_uniform(-dw, dw);
-    int pright = rand_uniform(-dw, dw);
-    int ptop   = rand_uniform(-dh, dh);
-    int pbot   = rand_uniform(-dh, dh);
+    ចំនួនគត់ pleft  = rand_uniform(-dw, dw);
+    ចំនួនគត់ pright = rand_uniform(-dw, dw);
+    ចំនួនគត់ ptop   = rand_uniform(-dh, dh);
+    ចំនួនគត់ pbot   = rand_uniform(-dh, dh);
 
-    int swidth =  w - pleft - pright;
-    int sheight = h - ptop - pbot;
+    ចំនួនគត់ swidth =  w - pleft - pright;
+    ចំនួនគត់ sheight = h - ptop - pbot;
 
     float sx = (float)swidth  / w;
     float sy = (float)sheight / h;
 
-    int flip = rand()%2;
+    ចំនួនគត់ flip = rand()%2;
     image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
     float dx = ((float)pleft/w)/sx;
     float dy = ((float)ptop /h)/sy;
 
     image sized = resize_image(cropped, w, h);
-    if(flip) flip_image(sized);
+    ប្រសិនបើ(flip) flip_image(sized);
     d.X.vals[0] = sized.data;
 
     fill_truth_swag(random_path, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
@@ -1030,22 +1030,22 @@ data load_data_swag(char **paths, int n, int classes, float jitter)
     free_image(orig);
     free_image(cropped);
 
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure)
+data load_data_detection(ចំនួនគត់ n, var_na **paths, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ boxes, ចំនួនគត់ classes, float jitter, float hue, float saturation, float exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    var_na **random_paths = get_random_paths(paths, n, m);
+    ចំនួនគត់ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
     d.X.cols = h*w*3;
 
     d.y = make_matrix(n, 5*boxes);
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         image sized = make_image(w, h, orig.c);
         fill_image(sized, .5);
@@ -1059,10 +1059,10 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
 
         float nw, nh;
 
-        if(new_ar < 1){
+        ប្រសិនបើ(new_ar < 1){
             nh = scale * h;
             nw = nh * new_ar;
-        } else {
+        } បើមិនដូច្នេះ {
             nw = scale * w;
             nh = nw / new_ar;
         }
@@ -1074,8 +1074,8 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
 
         random_distort_image(sized, hue, saturation, exposure);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        ចំនួនគត់ flip = rand()%2;
+        ប្រសិនបើ(flip) flip_image(sized);
         d.X.vals[i] = sized.data;
 
 
@@ -1084,95 +1084,95 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
         free_image(orig);
     }
     free(random_paths);
-    return d;
+    ត្រឡប់ d;
 }
 
 void *load_thread(void *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
-    if(a.exposure == 0) a.exposure = 1;
-    if(a.saturation == 0) a.saturation = 1;
-    if(a.aspect == 0) a.aspect = 1;
+    load_args a = *(sa_nracanaa load_args*)ptr;
+    ប្រសិនបើ(a.exposure == 0) a.exposure = 1;
+    ប្រសិនបើ(a.saturation == 0) a.saturation = 1;
+    ប្រសិនបើ(a.aspect == 0) a.aspect = 1;
 
-    if (a.type == OLD_CLASSIFICATION_DATA){
+    ប្រសិនបើ (a.type == OLD_CLASSIFICATION_DATA){
         *a.d = load_data_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
-    } else if (a.type == REGRESSION_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == REGRESSION_DATA){
         *a.d = load_data_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == CLASSIFICATION_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == CLASSIFICATION_DATA){
         *a.d = load_data_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
-    } else if (a.type == SUPER_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == SUPER_DATA){
         *a.d = load_data_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
-    } else if (a.type == WRITING_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == WRITING_DATA){
         *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
-    } else if (a.type == ISEG_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == ISEG_DATA){
         *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == INSTANCE_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == INSTANCE_DATA){
         *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SEGMENTATION_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == SEGMENTATION_DATA){
         *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
-    } else if (a.type == REGION_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == REGION_DATA){
         *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == DETECTION_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == DETECTION_DATA){
         *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SWAG_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == SWAG_DATA){
         *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
-    } else if (a.type == COMPARE_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == COMPARE_DATA){
         *a.d = load_data_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
-    } else if (a.type == IMAGE_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == IMAGE_DATA){
         *(a.im) = load_image_color(a.path, 0, 0);
         *(a.resized) = resize_image(*(a.im), a.w, a.h);
-    } else if (a.type == LETTERBOX_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == LETTERBOX_DATA){
         *(a.im) = load_image_color(a.path, 0, 0);
         *(a.resized) = letterbox_image(*(a.im), a.w, a.h);
-    } else if (a.type == TAG_DATA){
+    } បើមិនដូច្នេះ ប្រសិនបើ (a.type == TAG_DATA){
         *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     }
     free(ptr);
-    return 0;
+    ត្រឡប់ 0;
 }
 
 pthread_t load_data_in_thread(load_args args)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    sa_nracanaa load_args *ptr = calloc(1, parimaa_na(sa_nracanaa load_args));
     *ptr = args;
-    if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
-    return thread;
+    ប្រសិនបើ(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
+    ត្រឡប់ thread;
 }
 
 void *load_threads(void *ptr)
 {
-    int i;
+    ចំនួនគត់ i;
     load_args args = *(load_args *)ptr;
-    if (args.threads == 0) args.threads = 1;
+    ប្រសិនបើ (args.threads == 0) args.threads = 1;
     data *out = args.d;
-    int total = args.n;
+    ចំនួនគត់ total = args.n;
     free(ptr);
-    data *buffers = calloc(args.threads, sizeof(data));
-    pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
-    for(i = 0; i < args.threads; ++i){
+    data *buffers = calloc(args.threads, parimaa_na(data));
+    pthread_t *threads = calloc(args.threads, parimaa_na(pthread_t));
+    សម្រាប់(i = 0; i < args.threads; ++i){
         args.d = buffers + i;
         args.n = (i+1) * total/args.threads - i * total/args.threads;
         threads[i] = load_data_in_thread(args);
     }
-    for(i = 0; i < args.threads; ++i){
+    សម្រាប់(i = 0; i < args.threads; ++i){
         pthread_join(threads[i], 0);
     }
     *out = concat_datas(buffers, args.threads);
     out->shallow = 0;
-    for(i = 0; i < args.threads; ++i){
+    សម្រាប់(i = 0; i < args.threads; ++i){
         buffers[i].shallow = 1;
         free_data(buffers[i]);
     }
     free(buffers);
     free(threads);
-    return 0;
+    ត្រឡប់ 0;
 }
 
 void load_data_blocking(load_args args)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    sa_nracanaa load_args *ptr = calloc(1, parimaa_na(sa_nracanaa load_args));
     *ptr = args;
     load_thread(ptr);
 }
@@ -1180,36 +1180,36 @@ void load_data_blocking(load_args args)
 pthread_t load_data(load_args args)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    sa_nracanaa load_args *ptr = calloc(1, parimaa_na(sa_nracanaa load_args));
     *ptr = args;
-    if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
-    return thread;
+    ប្រសិនបើ(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
+    ត្រឡប់ thread;
 }
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h)
+data load_data_writing(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ out_w, ចំនួនគត់ out_h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    char **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
+    var_na **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = load_image_paths_gray(replace_paths, n, out_w, out_h);
-    if(m) free(paths);
-    int i;
-    for(i = 0; i < n; ++i) free(replace_paths[i]);
+    ប្រសិនបើ(m) free(paths);
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < n; ++i) free(replace_paths[i]);
     free(replace_paths);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int h)
+data load_data_old(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, var_na **labels, ចំនួនគត់ k, ចំនួនគត់ w, ចំនួនគត់ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = load_labels_paths(paths, n, labels, k, 0);
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
 /*
@@ -1226,48 +1226,48 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    }
  */
 
-data load_data_super(char **paths, int n, int m, int w, int h, int scale)
+data load_data_super(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, ចំនួនគត់ w, ចំនួនគត់ h, ចំនួនគត់ scale)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
 
-    int i;
+    ចំនួនគត់ i;
     d.X.rows = n;
-    d.X.vals = calloc(n, sizeof(float*));
+    d.X.vals = calloc(n, parimaa_na(float*));
     d.X.cols = w*h*3;
 
     d.y.rows = n;
-    d.y.vals = calloc(n, sizeof(float*));
+    d.y.vals = calloc(n, parimaa_na(float*));
     d.y.cols = w*scale * h*scale * 3;
 
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         image im = load_image_color(paths[i], 0, 0);
         image crop = random_crop_image(im, w*scale, h*scale);
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        ចំនួនគត់ flip = rand()%2;
+        ប្រសិនបើ (flip) flip_image(crop);
         image resize = resize_image(crop, w, h);
         d.X.vals[i] = resize.data;
         d.y.vals[i] = crop.data;
         free_image(im);
     }
 
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
-data load_data_regression(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_regression(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, ចំនួនគត់ k, ចំនួនគត់ min, ចំនួនគត់ max, ចំនួនគត់ size, float angle, float aspect, float hue, float saturation, float exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
     d.y = load_regression_labels_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
-data select_data(data *orig, int *inds)
+data select_data(data *orig, ចំនួនគត់ *inds)
 {
     data d = {0};
     d.shallow = 1;
@@ -1280,103 +1280,103 @@ data select_data(data *orig, int *inds)
     d.X.cols = orig[0].X.cols;
     d.y.cols = orig[0].y.cols;
 
-    d.X.vals = calloc(orig[0].X.rows, sizeof(float *));
-    d.y.vals = calloc(orig[0].y.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    d.X.vals = calloc(orig[0].X.rows, parimaa_na(float *));
+    d.y.vals = calloc(orig[0].y.rows, parimaa_na(float *));
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < d.X.rows; ++i){
         d.X.vals[i] = orig[inds[i]].X.vals[i];
         d.y.vals[i] = orig[inds[i]].y.vals[i];
     }
-    return d;
+    ត្រឡប់ d;
 }
 
-data *tile_data(data orig, int divs, int size)
+data *tile_data(data orig, ចំនួនគត់ divs, ចំនួនគត់ size)
 {
-    data *ds = calloc(divs*divs, sizeof(data));
-    int i, j;
-#pragma omp parallel for
-    for(i = 0; i < divs*divs; ++i){
+    data *ds = calloc(divs*divs, parimaa_na(data));
+    ចំនួនគត់ i, j;
+#pragma omp parallel សម្រាប់
+    សម្រាប់(i = 0; i < divs*divs; ++i){
         data d;
         d.shallow = 0;
         d.w = orig.w/divs * size;
         d.h = orig.h/divs * size;
         d.X.rows = orig.X.rows;
         d.X.cols = d.w*d.h*3;
-        d.X.vals = calloc(d.X.rows, sizeof(float*));
+        d.X.vals = calloc(d.X.rows, parimaa_na(float*));
 
         d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-        for(j = 0; j < orig.X.rows; ++j){
-            int x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
-            int y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
+#pragma omp parallel សម្រាប់
+        សម្រាប់(j = 0; j < orig.X.rows; ++j){
+            ចំនួនគត់ x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
+            ចំនួនគត់ y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
             image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[j]);
             d.X.vals[j] = crop_image(im, x, y, d.w, d.h).data;
         }
         ds[i] = d;
     }
-    return ds;
+    ត្រឡប់ ds;
 }
 
-data resize_data(data orig, int w, int h)
+data resize_data(data orig, ចំនួនគត់ w, ចំនួនគត់ h)
 {
     data d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
-    int i;
+    ចំនួនគត់ i;
     d.X.rows = orig.X.rows;
     d.X.cols = w*h*3;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, parimaa_na(float*));
 
     d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-    for(i = 0; i < orig.X.rows; ++i){
+#pragma omp parallel សម្រាប់
+    សម្រាប់(i = 0; i < orig.X.rows; ++i){
         image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[i]);
         d.X.vals[i] = resize_image(im, w, h).data;
     }
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+data load_data_augment(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, var_na **labels, ចំនួនគត់ k, tree *hierarchy, ចំនួនគត់ min, ចំនួនគត់ max, ចំនួនគត់ size, float angle, float aspect, float hue, float saturation, float exposure, ចំនួនគត់ center)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.w=size;
     d.h=size;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, center);
     d.y = load_labels_paths(paths, n, labels, k, hierarchy);
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_tag(var_na **paths, ចំនួនគត់ n, ចំនួនគត់ m, ចំនួនគត់ k, ចំនួនគត់ min, ចំនួនគត់ max, ចំនួនគត់ size, float angle, float aspect, float hue, float saturation, float exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    ប្រសិនបើ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.w = size;
     d.h = size;
     d.shallow = 0;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
     d.y = load_tags_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    ប្រសិនបើ(m) free(paths);
+    ត្រឡប់ d;
 }
 
 matrix concat_matrix(matrix m1, matrix m2)
 {
-    int i, count = 0;
+    ចំនួនគត់ i, count = 0;
     matrix m;
     m.cols = m1.cols;
     m.rows = m1.rows+m2.rows;
-    m.vals = calloc(m1.rows + m2.rows, sizeof(float*));
-    for(i = 0; i < m1.rows; ++i){
+    m.vals = calloc(m1.rows + m2.rows, parimaa_na(float*));
+    សម្រាប់(i = 0; i < m1.rows; ++i){
         m.vals[count++] = m1.vals[i];
     }
-    for(i = 0; i < m2.rows; ++i){
+    សម្រាប់(i = 0; i < m2.rows; ++i){
         m.vals[count++] = m2.vals[i];
     }
-    return m;
+    ត្រឡប់ m;
 }
 
 data concat_data(data d1, data d2)
@@ -1387,22 +1387,22 @@ data concat_data(data d1, data d2)
     d.y = concat_matrix(d1.y, d2.y);
     d.w = d1.w;
     d.h = d1.h;
-    return d;
+    ត្រឡប់ d;
 }
 
-data concat_datas(data *d, int n)
+data concat_datas(data *d, ចំនួនគត់ n)
 {
-    int i;
+    ចំនួនគត់ i;
     data out = {0};
-    for(i = 0; i < n; ++i){
+    សម្រាប់(i = 0; i < n; ++i){
         data new = concat_data(d[i], out);
         free_data(out);
         out = new;
     }
-    return out;
+    ត្រឡប់ out;
 }
 
-data load_categorical_data_csv(char *filename, int target, int k)
+data load_categorical_data_csv(var_na *filename, ចំនួនគត់ target, ចំនួនគត់ k)
 {
     data d = {0};
     d.shallow = 0;
@@ -1416,10 +1416,10 @@ data load_categorical_data_csv(char *filename, int target, int k)
     d.X = X;
     d.y = y;
     free(truth_1d);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_cifar10_data(char *filename)
+data load_cifar10_data(var_na *filename)
 {
     data d = {0};
     d.shallow = 0;
@@ -1430,49 +1430,49 @@ data load_cifar10_data(char *filename)
     d.y = y;
 
     FILE *fp = fopen(filename, "rb");
-    if(!fp) file_error(filename);
-    for(i = 0; i < 10000; ++i){
-        unsigned char bytes[3073];
+    ប្រសិនបើ(!fp) file_error(filename);
+    សម្រាប់(i = 0; i < 10000; ++i){
+        unsigned var_na bytes[3073];
         fread(bytes, 1, 3073, fp);
-        int class = bytes[0];
+        ចំនួនគត់ class = bytes[0];
         y.vals[i][class] = 1;
-        for(j = 0; j < X.cols; ++j){
-            X.vals[i][j] = (double)bytes[j+1];
+        សម្រាប់(j = 0; j < X.cols; ++j){
+            X.vals[i][j] = (dviguu_na)bytes[j+1];
         }
     }
     scale_data_rows(d, 1./255);
     //normalize_data_rows(d);
     fclose(fp);
-    return d;
+    ត្រឡប់ d;
 }
 
-void get_random_batch(data d, int n, float *X, float *y)
+void get_random_batch(data d, ចំនួនគត់ n, float *X, float *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = rand()%d.X.rows;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    ចំនួនគត់ j;
+    សម្រាប់(j = 0; j < n; ++j){
+        ចំនួនគត់ index = rand()%d.X.rows;
+        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*parimaa_na(float));
+        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*parimaa_na(float));
     }
 }
 
-void get_next_batch(data d, int n, int offset, float *X, float *y)
+void get_next_batch(data d, ចំនួនគត់ n, ចំនួនគត់ offset, float *X, float *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = offset + j;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        if(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    ចំនួនគត់ j;
+    សម្រាប់(j = 0; j < n; ++j){
+        ចំនួនគត់ index = offset + j;
+        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*parimaa_na(float));
+        ប្រសិនបើ(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*parimaa_na(float));
     }
 }
 
 void smooth_data(data d)
 {
-    int i, j;
+    ចំនួនគត់ i, j;
     float scale = 1. / d.y.cols;
     float eps = .1;
-    for(i = 0; i < d.y.rows; ++i){
-        for(j = 0; j < d.y.cols; ++j){
+    សម្រាប់(i = 0; i < d.y.rows; ++i){
+        សម្រាប់(j = 0; j < d.y.cols; ++j){
             d.y.vals[i][j] = eps * scale + (1-eps) * d.y.vals[i][j];
         }
     }
@@ -1482,25 +1482,25 @@ data load_all_cifar10()
 {
     data d = {0};
     d.shallow = 0;
-    int i,j,b;
+    ចំនួនគត់ i,j,b;
     matrix X = make_matrix(50000, 3072);
     matrix y = make_matrix(50000, 10);
     d.X = X;
     d.y = y;
 
 
-    for(b = 0; b < 5; ++b){
-        char buff[256];
+    សម្រាប់(b = 0; b < 5; ++b){
+        var_na buff[256];
         sprintf(buff, "data/cifar/cifar-10-batches-bin/data_batch_%d.bin", b+1);
         FILE *fp = fopen(buff, "rb");
-        if(!fp) file_error(buff);
-        for(i = 0; i < 10000; ++i){
-            unsigned char bytes[3073];
+        ប្រសិនបើ(!fp) file_error(buff);
+        សម្រាប់(i = 0; i < 10000; ++i){
+            unsigned var_na bytes[3073];
             fread(bytes, 1, 3073, fp);
-            int class = bytes[0];
+            ចំនួនគត់ class = bytes[0];
             y.vals[i+b*10000][class] = 1;
-            for(j = 0; j < X.cols; ++j){
-                X.vals[i+b*10000][j] = (double)bytes[j+1];
+            សម្រាប់(j = 0; j < X.cols; ++j){
+                X.vals[i+b*10000][j] = (dviguu_na)bytes[j+1];
             }
         }
         fclose(fp);
@@ -1508,35 +1508,35 @@ data load_all_cifar10()
     //normalize_data_rows(d);
     scale_data_rows(d, 1./255);
     smooth_data(d);
-    return d;
+    ត្រឡប់ d;
 }
 
-data load_go(char *filename)
+data load_go(var_na *filename)
 {
     FILE *fp = fopen(filename, "rb");
     matrix X = make_matrix(3363059, 361);
     matrix y = make_matrix(3363059, 361);
-    int row, col;
+    ចំនួនគត់ row, col;
 
-    if(!fp) file_error(filename);
-    char *label;
-    int count = 0;
-    while((label = fgetl(fp))){
-        int i;
-        if(count == X.rows){
+    ប្រសិនបើ(!fp) file_error(filename);
+    var_na *label;
+    ចំនួនគត់ count = 0;
+    ខណៈពេល((label = fgetl(fp))){
+        ចំនួនគត់ i;
+        ប្រសិនបើ(count == X.rows){
             X = resize_matrix(X, count*2);
             y = resize_matrix(y, count*2);
         }
         sscanf(label, "%d %d", &row, &col);
-        char *board = fgetl(fp);
+        var_na *board = fgetl(fp);
 
-        int index = row*19 + col;
+        ចំនួនគត់ index = row*19 + col;
         y.vals[count][index] = 1;
 
-        for(i = 0; i < 19*19; ++i){
+        សម្រាប់(i = 0; i < 19*19; ++i){
             float val = 0;
-            if(board[i] == '1') val = 1;
-            else if(board[i] == '2') val = -1;
+            ប្រសិនបើ(board[i] == '1') val = 1;
+            បើមិនដូច្នេះ ប្រសិនបើ(board[i] == '2') val = -1;
             X.vals[count][i] = val;
         }
         ++count;
@@ -1554,15 +1554,15 @@ data load_go(char *filename)
 
     fclose(fp);
 
-    return d;
+    ត្រឡប់ d;
 }
 
 
 void randomize_data(data d)
 {
-    int i;
-    for(i = d.X.rows-1; i > 0; --i){
-        int index = rand()%i;
+    ចំនួនគត់ i;
+    សម្រាប់(i = d.X.rows-1; i > 0; --i){
+        ចំនួនគត់ index = rand()%i;
         float *swap = d.X.vals[index];
         d.X.vals[index] = d.X.vals[i];
         d.X.vals[i] = swap;
@@ -1575,16 +1575,16 @@ void randomize_data(data d)
 
 void scale_data_rows(data d, float s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < d.X.rows; ++i){
         scale_array(d.X.vals[i], d.X.cols, s);
     }
 }
 
 void translate_data_rows(data d, float s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < d.X.rows; ++i){
         translate_array(d.X.vals[i], d.X.cols, s);
     }
 }
@@ -1599,18 +1599,18 @@ data copy_data(data d)
     c.boxes = d.boxes;
     c.X = copy_matrix(d.X);
     c.y = copy_matrix(d.y);
-    return c;
+    ត្រឡប់ c;
 }
 
 void normalize_data_rows(data d)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < d.X.rows; ++i){
         normalize_array(d.X.vals[i], d.X.cols);
     }
 }
 
-data get_data_part(data d, int part, int total)
+data get_data_part(data d, ចំនួនគត់ part, ចំនួនគត់ total)
 {
     data p = {0};
     p.shallow = 1;
@@ -1620,10 +1620,10 @@ data get_data_part(data d, int part, int total)
     p.y.cols = d.y.cols;
     p.X.vals = d.X.vals + d.X.rows * part / total;
     p.y.vals = d.y.vals + d.y.rows * part / total;
-    return p;
+    ត្រឡប់ p;
 }
 
-data get_random_data(data d, int num)
+data get_random_data(data d, ចំនួនគត់ num)
 {
     data r = {0};
     r.shallow = 1;
@@ -1634,24 +1634,24 @@ data get_random_data(data d, int num)
     r.X.cols = d.X.cols;
     r.y.cols = d.y.cols;
 
-    r.X.vals = calloc(num, sizeof(float *));
-    r.y.vals = calloc(num, sizeof(float *));
+    r.X.vals = calloc(num, parimaa_na(float *));
+    r.y.vals = calloc(num, parimaa_na(float *));
 
-    int i;
-    for(i = 0; i < num; ++i){
-        int index = rand()%d.X.rows;
+    ចំនួនគត់ i;
+    សម្រាប់(i = 0; i < num; ++i){
+        ចំនួនគត់ index = rand()%d.X.rows;
         r.X.vals[i] = d.X.vals[index];
         r.y.vals[i] = d.y.vals[index];
     }
-    return r;
+    ត្រឡប់ r;
 }
 
-data *split_data(data d, int part, int total)
+data *split_data(data d, ចំនួនគត់ part, ចំនួនគត់ total)
 {
-    data *split = calloc(2, sizeof(data));
-    int i;
-    int start = part*d.X.rows/total;
-    int end = (part+1)*d.X.rows/total;
+    data *split = calloc(2, parimaa_na(data));
+    ចំនួនគត់ i;
+    ចំនួនគត់ start = part*d.X.rows/total;
+    ចំនួនគត់ end = (part+1)*d.X.rows/total;
     data train;
     data test;
     train.shallow = test.shallow = 1;
@@ -1661,25 +1661,25 @@ data *split_data(data d, int part, int total)
     train.X.cols = test.X.cols = d.X.cols;
     train.y.cols = test.y.cols = d.y.cols;
 
-    train.X.vals = calloc(train.X.rows, sizeof(float*));
-    test.X.vals = calloc(test.X.rows, sizeof(float*));
-    train.y.vals = calloc(train.y.rows, sizeof(float*));
-    test.y.vals = calloc(test.y.rows, sizeof(float*));
+    train.X.vals = calloc(train.X.rows, parimaa_na(float*));
+    test.X.vals = calloc(test.X.rows, parimaa_na(float*));
+    train.y.vals = calloc(train.y.rows, parimaa_na(float*));
+    test.y.vals = calloc(test.y.rows, parimaa_na(float*));
 
-    for(i = 0; i < start; ++i){
+    សម្រាប់(i = 0; i < start; ++i){
         train.X.vals[i] = d.X.vals[i];
         train.y.vals[i] = d.y.vals[i];
     }
-    for(i = start; i < end; ++i){
+    សម្រាប់(i = start; i < end; ++i){
         test.X.vals[i-start] = d.X.vals[i];
         test.y.vals[i-start] = d.y.vals[i];
     }
-    for(i = end; i < d.X.rows; ++i){
+    សម្រាប់(i = end; i < d.X.rows; ++i){
         train.X.vals[i-(end-start)] = d.X.vals[i];
         train.y.vals[i-(end-start)] = d.y.vals[i];
     }
     split[0] = train;
     split[1] = test;
-    return split;
+    ត្រឡប់ split;
 }
 

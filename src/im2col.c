@@ -1,36 +1,36 @@
 #include "im2col.h"
 #include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+float im2col_get_pixel(float *im, ចំនួនគត់ height, ចំនួនគត់ width, ចំនួនគត់ channels,
+                        ចំនួនគត់ row, ចំនួនគត់ col, ចំនួនគត់ channel, ចំនួនគត់ pad)
 {
     row -= pad;
     col -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    ប្រសិនបើ (row < 0 || col < 0 ||
+        row >= height || col >= width) ត្រឡប់ 0;
+    ត្រឡប់ im[col + width*(row + height*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
 void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+     ចំនួនគត់ channels,  ចំនួនគត់ height,  ចំនួនគត់ width,
+     ចំនួនគត់ ksize,  ចំនួនគត់ stride, ចំនួនគត់ pad, float* data_col) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    ចំនួនគត់ c,h,w;
+    ចំនួនគត់ height_col = (height + 2*pad - ksize) / stride + 1;
+    ចំនួនគត់ width_col = (width + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
+    ចំនួនគត់ channels_col = channels * ksize * ksize;
+    សម្រាប់ (c = 0; c < channels_col; ++c) {
+        ចំនួនគត់ w_offset = c % ksize;
+        ចំនួនគត់ h_offset = (c / ksize) % ksize;
+        ចំនួនគត់ c_im = c / ksize / ksize;
+        សម្រាប់ (h = 0; h < height_col; ++h) {
+            សម្រាប់ (w = 0; w < width_col; ++w) {
+                ចំនួនគត់ im_row = h_offset + h * stride;
+                ចំនួនគត់ im_col = w_offset + w * stride;
+                ចំនួនគត់ col_index = (c * height_col + h) * width_col + w;
                 data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
                         im_row, im_col, c_im, pad);
             }
