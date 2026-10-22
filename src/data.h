@@ -8,43 +8,43 @@
 #include "image.h"
 #include "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+static anta_hstha float distance_from_edge(puur_naa_nka x, puur_naa_nka max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    puur_naa_nka dx = (max/2) - x;
+    ᤀᤡ᤺ (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
     float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    ᤀᤡ᤺ (dist > 1) dist = 1;
+    ᤀᤡᤴ dist;
 }
 void load_data_blocking(load_args args);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+void print_letters(float *pred, puur_naa_nka n);
+data load_data_captcha(var_na **paths, puur_naa_nka n, puur_naa_nka m, puur_naa_nka k, puur_naa_nka w, puur_naa_nka h);
+data load_data_captcha_encode(var_na **paths, puur_naa_nka n, puur_naa_nka m, puur_naa_nka w, puur_naa_nka h);
+data load_data_detection(puur_naa_nka n, var_na **paths, puur_naa_nka m, puur_naa_nka w, puur_naa_nka h, puur_naa_nka boxes, puur_naa_nka classes, float jitter, float hue, float saturation, float exposure);
+data load_data_tag(var_na **paths, puur_naa_nka n, puur_naa_nka m, puur_naa_nka k, puur_naa_nka min, puur_naa_nka max, puur_naa_nka size, float angle, float aspect, float hue, float saturation, float exposure);
+matrix load_image_augment_paths(var_na **paths, puur_naa_nka n, puur_naa_nka min, puur_naa_nka max, puur_naa_nka size, float angle, float aspect, float hue, float saturation, float exposure, puur_naa_nka center);
+data load_data_super(var_na **paths, puur_naa_nka n, puur_naa_nka m, puur_naa_nka w, puur_naa_nka h, puur_naa_nka scale);
+data load_data_augment(var_na **paths, puur_naa_nka n, puur_naa_nka m, var_na **labels, puur_naa_nka k, tree *hierarchy, puur_naa_nka min, puur_naa_nka max, puur_naa_nka size, float angle, float aspect, float hue, float saturation, float exposure, puur_naa_nka center);
+data load_data_regression(var_na **paths, puur_naa_nka n, puur_naa_nka m, puur_naa_nka classes, puur_naa_nka min, puur_naa_nka max, puur_naa_nka size, float angle, float aspect, float hue, float saturation, float exposure);
+data load_go(var_na *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+data load_data_writing(var_na **paths, puur_naa_nka n, puur_naa_nka m, puur_naa_nka w, puur_naa_nka h, puur_naa_nka out_w, puur_naa_nka out_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
+void get_random_batch(data d, puur_naa_nka n, float *X, float *y);
+data get_data_part(data d, puur_naa_nka part, puur_naa_nka total);
+data get_random_data(data d, puur_naa_nka num);
+data load_categorical_data_csv(var_na *filename, puur_naa_nka target, puur_naa_nka k);
 void normalize_data_rows(data d);
 void scale_data_rows(data d, float s);
 void translate_data_rows(data d, float s);
 void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+data *split_data(data d, puur_naa_nka part, puur_naa_nka total);
+data concat_datas(data *d, puur_naa_nka n);
+void fill_truth(var_na *path, var_na **labels, puur_naa_nka k, float *truth);
 
 #endif
