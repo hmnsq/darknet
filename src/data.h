@@ -1,50 +1,50 @@
-#ifndef DATA_H
-#define DATA_H
-#include <pthread.h>
+#اگر_غیر_تعریف_شدہ ڈیٹا_H
+#تعریف_کرو ڈیٹا_H
+#شامل <pthread.h>
 
-#include "darknet.h"
-#include "matrix.h"
-#include "list.h"
-#include "image.h"
-#include "tree.h"
+#شامل "darknet.h"
+#شامل "matrix.h"
+#شامل "list.h"
+#شامل "image.h"
+#شامل "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+ساکن اندرونی اعشاری فاصلہ_from_کنارہ(صحیح x, صحیح max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    صحیح dx = (max/2) - x;
+    اگر (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
-    float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    اعشاری dist = (اعشاری)dx/max;
+    اگر (dist > 1) dist = 1;
+    واپس dist;
 }
-void load_data_blocking(load_args args);
+خالی بھرو_ڈیٹا_blocking(بھرو_دلائل دلائل);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+خالی print_letters(اعشاری *pred, صحیح n);
+ڈیٹا بھرو_ڈیٹا_captcha(حرف **paths, صحیح n, صحیح m, صحیح k, صحیح w, صحیح h);
+ڈیٹا بھرو_ڈیٹا_captcha_encode(حرف **paths, صحیح n, صحیح m, صحیح w, صحیح h);
+ڈیٹا بھرو_ڈیٹا_detection(صحیح n, حرف **paths, صحیح m, صحیح w, صحیح h, صحیح boxes, صحیح classes, اعشاری jitter, اعشاری hue, اعشاری saturation, اعشاری exposure);
+ڈیٹا بھرو_ڈیٹا_لیبل(حرف **paths, صحیح n, صحیح m, صحیح k, صحیح min, صحیح max, صحیح سائز, اعشاری angle, اعشاری aspect, اعشاری hue, اعشاری saturation, اعشاری exposure);
+میٹرکس بھرو_image_augment_paths(حرف **paths, صحیح n, صحیح min, صحیح max, صحیح سائز, اعشاری angle, اعشاری aspect, اعشاری hue, اعشاری saturation, اعشاری exposure, صحیح center);
+ڈیٹا بھرو_ڈیٹا_super(حرف **paths, صحیح n, صحیح m, صحیح w, صحیح h, صحیح scale);
+ڈیٹا بھرو_ڈیٹا_augment(حرف **paths, صحیح n, صحیح m, حرف **labels, صحیح k, درخت *hierarchy, صحیح min, صحیح max, صحیح سائز, اعشاری angle, اعشاری aspect, اعشاری hue, اعشاری saturation, اعشاری exposure, صحیح center);
+ڈیٹا بھرو_ڈیٹا_regression(حرف **paths, صحیح n, صحیح m, صحیح classes, صحیح min, صحیح max, صحیح سائز, اعشاری angle, اعشاری aspect, اعشاری hue, اعشاری saturation, اعشاری exposure);
+ڈیٹا بھرو_go(حرف *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+ڈیٹا بھرو_ڈیٹا_writing(حرف **paths, صحیح n, صحیح m, صحیح w, صحیح h, صحیح برآمد_w, صحیح برآمد_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
-void normalize_data_rows(data d);
-void scale_data_rows(data d, float s);
-void translate_data_rows(data d, float s);
-void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+خالی get_random_batch(ڈیٹا d, صحیح n, اعشاری *X, اعشاری *y);
+ڈیٹا get_ڈیٹا_part(ڈیٹا d, صحیح part, صحیح کل);
+ڈیٹا get_random_ڈیٹا(ڈیٹا d, صحیح عدد);
+ڈیٹا بھرو_categorical_ڈیٹا_csv(حرف *filename, صحیح ہدف, صحیح k);
+خالی normalize_ڈیٹا_صفیں(ڈیٹا d);
+خالی scale_ڈیٹا_صفیں(ڈیٹا d, اعشاری s);
+خالی translate_ڈیٹا_صفیں(ڈیٹا d, اعشاری s);
+خالی randomize_ڈیٹا(ڈیٹا d);
+ڈیٹا *بانٹو_ڈیٹا(ڈیٹا d, صحیح part, صحیح کل);
+ڈیٹا concat_datas(ڈیٹا *d, صحیح n);
+خالی fill_truth(حرف *راستہ, حرف **labels, صحیح k, اعشاری *truth);
 
-#endif
+#اگر_ختم

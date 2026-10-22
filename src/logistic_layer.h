@@ -1,15 +1,15 @@
-#ifndef LOGISTIC_LAYER_H
-#define LOGISTIC_LAYER_H
-#include "layer.h"
-#include "network.h"
+#اگر_غیر_تعریف_شدہ LOGISTIC_LAYER_H
+#تعریف_کرو LOGISTIC_LAYER_H
+#شامل "layer.h"
+#شامل "network.h"
 
-layer make_logistic_layer(int batch, int inputs);
-void forward_logistic_layer(const layer l, network net);
-void backward_logistic_layer(const layer l, network net);
+layer make_logistic_layer(صحیح batch, صحیح inputs);
+خالی forward_logistic_layer(ثابت layer l, جال net);
+خالی backward_logistic_layer(ثابت layer l, جال net);
 
-#ifdef GPU
-void forward_logistic_layer_gpu(const layer l, network net);
-void backward_logistic_layer_gpu(const layer l, network net);
-#endif
+#اگر_تعریف_شدہ GPU
+خالی forward_logistic_layer_gpu(ثابت layer l, جال net);
+خالی backward_logistic_layer_gpu(ثابت layer l, جال net);
+#اگر_ختم
 
-#endif
+#اگر_ختم

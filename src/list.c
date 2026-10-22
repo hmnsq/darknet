@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#شامل <stdlib.h>
+#شامل <string.h>
+#شامل "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = حافظہ_دو(حجم(list));
+	l->سائز = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->عقب = 0;
+	واپس l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+خالی *list_نکالو(list *l){
+    اگر(!l->عقب) واپس 0;
+    گرہ *b = l->عقب;
+    خالی *val = b->val;
+    l->عقب = b->پچھلا;
+    اگر(l->عقب) l->عقب->اگلا = 0;
+    آزاد(b);
+    --l->سائز;
     
-    return val;
+    واپس val;
 }
 
-void list_insert(list *l, void *val)
+خالی list_داخل_کرو(list *l, خالی *val)
 {
-	node *new = malloc(sizeof(node));
+	گرہ *new = حافظہ_دو(حجم(گرہ));
 	new->val = val;
-	new->next = 0;
+	new->اگلا = 0;
 
-	if(!l->back){
+	اگر(!l->عقب){
 		l->front = new;
-		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+		new->پچھلا = 0;
+	}ورنہ{
+		l->عقب->اگلا = new;
+		new->پچھلا = l->عقب;
 	}
-	l->back = new;
-	++l->size;
+	l->عقب = new;
+	++l->سائز;
 }
 
-void free_node(node *n)
+خالی free_گرہ(گرہ *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	گرہ *اگلا;
+	جب(n) {
+		اگلا = n->اگلا;
+		آزاد(n);
+		n = اگلا;
 	}
 }
 
-void **list_to_array(list *l)
+خالی free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_گرہ(l->front);
+	آزاد(l);
+}
+
+خالی free_list_contents(list *l)
+{
+	گرہ *n = l->front;
+	جب(n){
+		آزاد(n->val);
+		n = n->اگلا;
+	}
+}
+
+خالی **list_مقصد_array(list *l)
+{
+    خالی **a = صفر_حافظہ_دو(l->سائز, حجم(خالی*));
+    صحیح گنتی = 0;
+    گرہ *n = l->front;
+    جب(n){
+        a[گنتی++] = n->val;
+        n = n->اگلا;
     }
-    return a;
+    واپس a;
 }

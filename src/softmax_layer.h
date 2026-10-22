@@ -1,19 +1,19 @@
-#ifndef SOFTMAX_LAYER_H
-#define SOFTMAX_LAYER_H
-#include "layer.h"
-#include "network.h"
+#اگر_غیر_تعریف_شدہ SOFTMAX_LAYER_H
+#تعریف_کرو SOFTMAX_LAYER_H
+#شامل "layer.h"
+#شامل "network.h"
 
-typedef layer softmax_layer;
+قسمتعریف layer softmax_layer;
 
-void softmax_array(float *input, int n, float temp, float *output);
-softmax_layer make_softmax_layer(int batch, int inputs, int groups);
-void forward_softmax_layer(const softmax_layer l, network net);
-void backward_softmax_layer(const softmax_layer l, network net);
+خالی softmax_array(اعشاری *داخلہ, صحیح n, اعشاری عارضی, اعشاری *output);
+softmax_layer make_softmax_layer(صحیح batch, صحیح inputs, صحیح groups);
+خالی forward_softmax_layer(ثابت softmax_layer l, جال net);
+خالی backward_softmax_layer(ثابت softmax_layer l, جال net);
 
-#ifdef GPU
-void pull_softmax_layer_output(const softmax_layer l);
-void forward_softmax_layer_gpu(const softmax_layer l, network net);
-void backward_softmax_layer_gpu(const softmax_layer l, network net);
-#endif
+#اگر_تعریف_شدہ GPU
+خالی pull_softmax_layer_output(ثابت softmax_layer l);
+خالی forward_softmax_layer_gpu(ثابت softmax_layer l, جال net);
+خالی backward_softmax_layer_gpu(ثابت softmax_layer l, جال net);
+#اگر_ختم
 
-#endif
+#اگر_ختم

@@ -1,13 +1,13 @@
-#ifndef LIST_H
-#define LIST_H
-#include "darknet.h"
+#اگر_غیر_تعریف_شدہ LIST_H
+#تعریف_کرو LIST_H
+#شامل "darknet.h"
 
 list *make_list();
-int list_find(list *l, void *val);
+صحیح list_ڈھونڈو(list *l, خالی *val);
 
-void list_insert(list *, void *);
+خالی list_داخل_کرو(list *, خالی *);
 
 
-void free_list_contents(list *l);
+خالی free_list_contents(list *l);
 
-#endif
+#اگر_ختم

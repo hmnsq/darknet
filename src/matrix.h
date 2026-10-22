@@ -1,13 +1,13 @@
-#ifndef MATRIX_H
-#define MATRIX_H
-#include "darknet.h"
+#اگر_غیر_تعریف_شدہ میٹرکس_H
+#تعریف_کرو میٹرکس_H
+#شامل "darknet.h"
 
-matrix copy_matrix(matrix m);
-void print_matrix(matrix m);
+میٹرکس copy_میٹرکس(میٹرکس m);
+خالی print_میٹرکس(میٹرکس m);
 
-matrix hold_out_matrix(matrix *m, int n);
-matrix resize_matrix(matrix m, int size);
+میٹرکس hold_برآمد_میٹرکس(میٹرکس *m, صحیح n);
+میٹرکس resize_میٹرکس(میٹرکس m, صحیح سائز);
 
-float *pop_column(matrix *m, int c);
+اعشاری *نکالو_عمود(میٹرکس *m, صحیح c);
 
-#endif
+#اگر_ختم

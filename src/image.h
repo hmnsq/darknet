@@ -1,69 +1,69 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#اگر_غیر_تعریف_شدہ IMAGE_H
+#تعریف_کرو IMAGE_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
-#include <string.h>
-#include <math.h>
-#include "box.h"
-#include "darknet.h"
+#شامل <stdlib.h>
+#شامل <stdio.h>
+#شامل <float.h>
+#شامل <string.h>
+#شامل <math.h>
+#شامل "box.h"
+#شامل "darknet.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#اگر_تعریف_شدہ __cplusplus
+خارجی "C" {
+#اگر_ختم
 
-#ifdef OPENCV
-void *open_video_stream(const char *f, int c, int w, int h, int fps);
-image get_image_from_stream(void *p);
-image load_image_cv(char *filename, int channels);
-int show_image_cv(image im, const char* name, int ms);
-#endif
+#اگر_تعریف_شدہ OPENCV
+خالی *open_video_دھارا(ثابت حرف *f, صحیح c, صحیح w, صحیح h, صحیح fps);
+image get_image_from_دھارا(خالی *p);
+image بھرو_image_cv(حرف *filename, صحیح channels);
+صحیح show_image_cv(image im, ثابت حرف* name, صحیح ms);
+#اگر_ختم
 
-float get_color(int c, int x, int max);
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b);
-void draw_bbox(image a, box bbox, int w, float r, float g, float b);
-void write_label(image a, int r, int c, image *characters, char *string, float *rgb);
-image image_distance(image a, image b);
-void scale_image(image m, float s);
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect);
-image random_crop_image(image im, int w, int h);
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h);
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h);
-void letterbox_image_into(image im, int w, int h, image boxed);
-image resize_max(image im, int max);
-void translate_image(image m, float s);
-void embed_image(image source, image dest, int dx, int dy);
-void place_image(image im, int w, int h, int dx, int dy, image canvas);
-void saturate_image(image im, float sat);
-void exposure_image(image im, float sat);
-void distort_image(image im, float hue, float sat, float val);
-void saturate_exposure_image(image im, float sat, float exposure);
-void rgb_to_hsv(image im);
-void hsv_to_rgb(image im);
-void yuv_to_rgb(image im);
-void rgb_to_yuv(image im);
+اعشاری get_color(صحیح c, صحیح x, صحیح max);
+خالی draw_box(image a, صحیح x1, صحیح y1, صحیح x2, صحیح y2, اعشاری r, اعشاری g, اعشاری b);
+خالی draw_bbox(image a, box bbox, صحیح w, اعشاری r, اعشاری g, اعشاری b);
+خالی write_label(image a, صحیح r, صحیح c, image *characters, حرف *string, اعشاری *rgb);
+image image_فاصلہ(image a, image b);
+خالی scale_image(image m, اعشاری s);
+image rotate_crop_image(image im, اعشاری rad, اعشاری s, صحیح w, صحیح h, اعشاری dx, اعشاری dy, اعشاری aspect);
+image random_crop_image(image im, صحیح w, صحیح h);
+image random_augment_image(image im, اعشاری angle, اعشاری aspect, صحیح کم, صحیح بلند, صحیح w, صحیح h);
+augment_دلائل random_augment_دلائل(image im, اعشاری angle, اعشاری aspect, صحیح کم, صحیح بلند, صحیح w, صحیح h);
+خالی letterbox_image_into(image im, صحیح w, صحیح h, image boxed);
+image resize_max(image im, صحیح max);
+خالی translate_image(image m, اعشاری s);
+خالی embed_image(image ماخذ, image dest, صحیح dx, صحیح dy);
+خالی رکھو_image(image im, صحیح w, صحیح h, صحیح dx, صحیح dy, image canvas);
+خالی saturate_image(image im, اعشاری sat);
+خالی exposure_image(image im, اعشاری sat);
+خالی distort_image(image im, اعشاری hue, اعشاری sat, اعشاری val);
+خالی saturate_exposure_image(image im, اعشاری sat, اعشاری exposure);
+خالی rgb_مقصد_hsv(image im);
+خالی hsv_مقصد_rgb(image im);
+خالی yuv_مقصد_rgb(image im);
+خالی rgb_مقصد_yuv(image im);
 
 
-image collapse_image_layers(image source, int border);
-image collapse_images_horz(image *ims, int n);
-image collapse_images_vert(image *ims, int n);
+image collapse_image_layers(image ماخذ, صحیح border);
+image collapse_images_horz(image *ims, صحیح n);
+image collapse_images_vert(image *ims, صحیح n);
 
-void show_image_normalized(image im, const char *name);
-void show_images(image *ims, int n, char *window);
-void show_image_layers(image p, char *name);
-void show_image_collapsed(image p, char *name);
+خالی show_image_normalized(image im, ثابت حرف *name);
+خالی show_images(image *ims, صحیح n, حرف *کھڑکی);
+خالی show_image_layers(image p, حرف *name);
+خالی show_image_collapsed(image p, حرف *name);
 
-void print_image(image m);
+خالی print_image(image m);
 
-image make_empty_image(int w, int h, int c);
-void copy_image_into(image src, image dest);
+image make_خالی_خانے_image(صحیح w, صحیح h, صحیح c);
+خالی copy_image_into(image src, image dest);
 
-image get_image_layer(image m, int l);
+image get_image_layer(image m, صحیح l);
 
-#ifdef __cplusplus
+#اگر_تعریف_شدہ __cplusplus
 }
-#endif
+#اگر_ختم
 
-#endif
+#اگر_ختم
 

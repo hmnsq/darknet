@@ -1,11 +1,11 @@
-#include "reorg_layer.h"
-#include "cuda.h"
-#include "blas.h"
+#شامل "reorg_layer.h"
+#شامل "cuda.h"
+#شامل "blas.h"
 
-#include <stdio.h>
+#شامل <stdio.h>
 
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra)
+layer make_reorg_layer(صحیح batch, صحیح w, صحیح h, صحیح c, صحیح stride, صحیح الٹ, صحیح flatten, صحیح extra)
 {
     layer l = {0};
     l.type = REORG;
@@ -16,158 +16,158 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.w = w;
     l.c = c;
     l.flatten = flatten;
-    if(reverse){
-        l.out_w = w*stride;
-        l.out_h = h*stride;
-        l.out_c = c/(stride*stride);
-    }else{
-        l.out_w = w/stride;
-        l.out_h = h/stride;
-        l.out_c = c*(stride*stride);
+    اگر(الٹ){
+        l.برآمد_w = w*stride;
+        l.برآمد_h = h*stride;
+        l.برآمد_c = c/(stride*stride);
+    }ورنہ{
+        l.برآمد_w = w/stride;
+        l.برآمد_h = h/stride;
+        l.برآمد_c = c*(stride*stride);
     }
-    l.reverse = reverse;
+    l.الٹ = الٹ;
 
-    l.outputs = l.out_h * l.out_w * l.out_c;
+    l.outputs = l.برآمد_h * l.برآمد_w * l.برآمد_c;
     l.inputs = h*w*c;
-    if(l.extra){
-        l.out_w = l.out_h = l.out_c = 0;
+    اگر(l.extra){
+        l.برآمد_w = l.برآمد_h = l.برآمد_c = 0;
         l.outputs = l.inputs + l.extra;
     }
 
-    if(extra){
+    اگر(extra){
         fprintf(stderr, "reorg              %4d   ->  %4d\n",  l.inputs, l.outputs);
-    } else {
-        fprintf(stderr, "reorg              /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n",  stride, w, h, c, l.out_w, l.out_h, l.out_c);
+    } ورنہ {
+        fprintf(stderr, "reorg              /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n",  stride, w, h, c, l.برآمد_w, l.برآمد_h, l.برآمد_c);
     }
-    int output_size = l.outputs * batch;
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    صحیح output_سائز = l.outputs * batch;
+    l.output =  صفر_حافظہ_دو(output_سائز, حجم(اعشاری));
+    l.delta =   صفر_حافظہ_دو(output_سائز, حجم(اعشاری));
 
     l.forward = forward_reorg_layer;
     l.backward = backward_reorg_layer;
-#ifdef GPU
+#اگر_تعریف_شدہ GPU
     l.forward_gpu = forward_reorg_layer_gpu;
     l.backward_gpu = backward_reorg_layer_gpu;
 
-    l.output_gpu  = cuda_make_array(l.output, output_size);
-    l.delta_gpu   = cuda_make_array(l.delta, output_size);
-#endif
-    return l;
+    l.output_gpu  = cuda_make_array(l.output, output_سائز);
+    l.delta_gpu   = cuda_make_array(l.delta, output_سائز);
+#اگر_ختم
+    واپس l;
 }
 
-void resize_reorg_layer(layer *l, int w, int h)
+خالی resize_reorg_layer(layer *l, صحیح w, صحیح h)
 {
-    int stride = l->stride;
-    int c = l->c;
+    صحیح stride = l->stride;
+    صحیح c = l->c;
 
     l->h = h;
     l->w = w;
 
-    if(l->reverse){
-        l->out_w = w*stride;
-        l->out_h = h*stride;
-        l->out_c = c/(stride*stride);
-    }else{
-        l->out_w = w/stride;
-        l->out_h = h/stride;
-        l->out_c = c*(stride*stride);
+    اگر(l->الٹ){
+        l->برآمد_w = w*stride;
+        l->برآمد_h = h*stride;
+        l->برآمد_c = c/(stride*stride);
+    }ورنہ{
+        l->برآمد_w = w/stride;
+        l->برآمد_h = h/stride;
+        l->برآمد_c = c*(stride*stride);
     }
 
-    l->outputs = l->out_h * l->out_w * l->out_c;
+    l->outputs = l->برآمد_h * l->برآمد_w * l->برآمد_c;
     l->inputs = l->outputs;
-    int output_size = l->outputs * l->batch;
+    صحیح output_سائز = l->outputs * l->batch;
 
-    l->output = realloc(l->output, output_size * sizeof(float));
-    l->delta = realloc(l->delta, output_size * sizeof(float));
+    l->output = realloc(l->output, output_سائز * حجم(اعشاری));
+    l->delta = realloc(l->delta, output_سائز * حجم(اعشاری));
 
-#ifdef GPU
+#اگر_تعریف_شدہ GPU
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
-    l->output_gpu  = cuda_make_array(l->output, output_size);
-    l->delta_gpu   = cuda_make_array(l->delta,  output_size);
-#endif
+    l->output_gpu  = cuda_make_array(l->output, output_سائز);
+    l->delta_gpu   = cuda_make_array(l->delta,  output_سائز);
+#اگر_ختم
 }
 
-void forward_reorg_layer(const layer l, network net)
+خالی forward_reorg_layer(ثابت layer l, جال net)
 {
-    int i;
-    if(l.flatten){
-        memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+    صحیح i;
+    اگر(l.flatten){
+        حافظہ_نقل(l.output, net.داخلہ, l.outputs*l.batch*حجم(اعشاری));
+        اگر(l.الٹ){
             flatten(l.output, l.w*l.h, l.c, l.batch, 0);
-        }else{
+        }ورنہ{
             flatten(l.output, l.w*l.h, l.c, l.batch, 1);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
-            copy_cpu(l.inputs, net.input + i*l.inputs, 1, l.output + i*l.outputs, 1);
+    } ورنہ اگر (l.extra) {
+        برائے(i = 0; i < l.batch; ++i){
+            copy_cpu(l.inputs, net.داخلہ + i*l.inputs, 1, l.output + i*l.outputs, 1);
         }
-    } else if (l.reverse){
-        reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
-    } else {
-        reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
+    } ورنہ اگر (l.الٹ){
+        reorg_cpu(net.داخلہ, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
+    } ورنہ {
+        reorg_cpu(net.داخلہ, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
     }
 }
 
-void backward_reorg_layer(const layer l, network net)
+خالی backward_reorg_layer(ثابت layer l, جال net)
 {
-    int i;
-    if(l.flatten){
-        memcpy(net.delta, l.delta, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+    صحیح i;
+    اگر(l.flatten){
+        حافظہ_نقل(net.delta, l.delta, l.outputs*l.batch*حجم(اعشاری));
+        اگر(l.الٹ){
             flatten(net.delta, l.w*l.h, l.c, l.batch, 1);
-        }else{
+        }ورنہ{
             flatten(net.delta, l.w*l.h, l.c, l.batch, 0);
         }
-    } else if(l.reverse){
+    } ورنہ اگر(l.الٹ){
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta);
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } ورنہ اگر (l.extra) {
+        برائے(i = 0; i < l.batch; ++i){
             copy_cpu(l.inputs, l.delta + i*l.outputs, 1, net.delta + i*l.inputs, 1);
         }
-    }else{
+    }ورنہ{
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta);
     }
 }
 
-#ifdef GPU
-void forward_reorg_layer_gpu(layer l, network net)
+#اگر_تعریف_شدہ GPU
+خالی forward_reorg_layer_gpu(layer l, جال net)
 {
-    int i;
-    if(l.flatten){
-        if(l.reverse){
-            flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
-        }else{
-            flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
+    صحیح i;
+    اگر(l.flatten){
+        اگر(l.الٹ){
+            flatten_gpu(net.داخلہ_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
+        }ورنہ{
+            flatten_gpu(net.داخلہ_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
-            copy_gpu(l.inputs, net.input_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
+    } ورنہ اگر (l.extra) {
+        برائے(i = 0; i < l.batch; ++i){
+            copy_gpu(l.inputs, net.داخلہ_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
         }
-    } else if (l.reverse) {
-        reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
-    }else {
-        reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
+    } ورنہ اگر (l.الٹ) {
+        reorg_gpu(net.داخلہ_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
+    }ورنہ {
+        reorg_gpu(net.داخلہ_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
     }
 }
 
-void backward_reorg_layer_gpu(layer l, network net)
+خالی backward_reorg_layer_gpu(layer l, جال net)
 {
-    if(l.flatten){
-        if(l.reverse){
+    اگر(l.flatten){
+        اگر(l.الٹ){
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 1, net.delta_gpu);
-        }else{
+        }ورنہ{
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 0, net.delta_gpu);
         }
-    } else if (l.extra) {
-        int i;
-        for(i = 0; i < l.batch; ++i){
+    } ورنہ اگر (l.extra) {
+        صحیح i;
+        برائے(i = 0; i < l.batch; ++i){
             copy_gpu(l.inputs, l.delta_gpu + i*l.outputs, 1, net.delta_gpu + i*l.inputs, 1);
         }
-    } else if(l.reverse){
+    } ورنہ اگر(l.الٹ){
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta_gpu);
-    } else {
+    } ورنہ {
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta_gpu);
     }
 }
-#endif
+#اگر_ختم

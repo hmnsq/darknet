@@ -1,15 +1,15 @@
-#ifndef UPSAMPLE_LAYER_H
-#define UPSAMPLE_LAYER_H
-#include "darknet.h"
+#اگر_غیر_تعریف_شدہ UPSAMPLE_LAYER_H
+#تعریف_کرو UPSAMPLE_LAYER_H
+#شامل "darknet.h"
 
-layer make_upsample_layer(int batch, int w, int h, int c, int stride);
-void forward_upsample_layer(const layer l, network net);
-void backward_upsample_layer(const layer l, network net);
-void resize_upsample_layer(layer *l, int w, int h);
+layer make_upsample_layer(صحیح batch, صحیح w, صحیح h, صحیح c, صحیح stride);
+خالی forward_upsample_layer(ثابت layer l, جال net);
+خالی backward_upsample_layer(ثابت layer l, جال net);
+خالی resize_upsample_layer(layer *l, صحیح w, صحیح h);
 
-#ifdef GPU
-void forward_upsample_layer_gpu(const layer l, network net);
-void backward_upsample_layer_gpu(const layer l, network net);
-#endif
+#اگر_تعریف_شدہ GPU
+خالی forward_upsample_layer_gpu(ثابت layer l, جال net);
+خالی backward_upsample_layer_gpu(ثابت layer l, جال net);
+#اگر_ختم
 
-#endif
+#اگر_ختم

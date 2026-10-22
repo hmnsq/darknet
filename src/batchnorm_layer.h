@@ -1,19 +1,19 @@
-#ifndef BATCHNORM_LAYER_H
-#define BATCHNORM_LAYER_H
+#اگر_غیر_تعریف_شدہ BATCHNORM_LAYER_H
+#تعریف_کرو BATCHNORM_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#شامل "image.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-layer make_batchnorm_layer(int batch, int w, int h, int c);
-void forward_batchnorm_layer(layer l, network net);
-void backward_batchnorm_layer(layer l, network net);
+layer make_batchnorm_layer(صحیح batch, صحیح w, صحیح h, صحیح c);
+خالی forward_batchnorm_layer(layer l, جال net);
+خالی backward_batchnorm_layer(layer l, جال net);
 
-#ifdef GPU
-void forward_batchnorm_layer_gpu(layer l, network net);
-void backward_batchnorm_layer_gpu(layer l, network net);
-void pull_batchnorm_layer(layer l);
-void push_batchnorm_layer(layer l);
-#endif
+#اگر_تعریف_شدہ GPU
+خالی forward_batchnorm_layer_gpu(layer l, جال net);
+خالی backward_batchnorm_layer_gpu(layer l, جال net);
+خالی pull_batchnorm_layer(layer l);
+خالی ڈالو_batchnorm_layer(layer l);
+#اگر_ختم
 
-#endif
+#اگر_ختم

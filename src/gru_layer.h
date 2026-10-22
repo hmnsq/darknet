@@ -1,24 +1,24 @@
 
-#ifndef GRU_LAYER_H
-#define GRU_LAYER_H
+#اگر_غیر_تعریف_شدہ GRU_LAYER_H
+#تعریف_کرو GRU_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#شامل "activations.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-layer make_gru_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_gru_layer(صحیح batch, صحیح inputs, صحیح outputs, صحیح اقدام, صحیح batch_normalize, صحیح adam);
 
-void forward_gru_layer(layer l, network state);
-void backward_gru_layer(layer l, network state);
-void update_gru_layer(layer l, update_args a);
+خالی forward_gru_layer(layer l, جال state);
+خالی backward_gru_layer(layer l, جال state);
+خالی update_gru_layer(layer l, update_دلائل a);
 
-#ifdef GPU
-void forward_gru_layer_gpu(layer l, network state);
-void backward_gru_layer_gpu(layer l, network state);
-void update_gru_layer_gpu(layer l, update_args a);
-void push_gru_layer(layer l);
-void pull_gru_layer(layer l);
-#endif
+#اگر_تعریف_شدہ GPU
+خالی forward_gru_layer_gpu(layer l, جال state);
+خالی backward_gru_layer_gpu(layer l, جال state);
+خالی update_gru_layer_gpu(layer l, update_دلائل a);
+خالی ڈالو_gru_layer(layer l);
+خالی pull_gru_layer(layer l);
+#اگر_ختم
 
-#endif
+#اگر_ختم
 

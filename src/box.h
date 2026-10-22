@@ -1,14 +1,14 @@
-#ifndef BOX_H
-#define BOX_H
-#include "darknet.h"
+#اگر_غیر_تعریف_شدہ BOX_H
+#تعریف_کرو BOX_H
+#شامل "darknet.h"
 
-typedef struct{
-    float dx, dy, dw, dh;
+قسمتعریف ساخت{
+    اعشاری dx, dy, dw, dh;
 } dbox;
 
-float box_rmse(box a, box b);
+اعشاری box_rmse(box a, box b);
 dbox diou(box a, box b);
 box decode_box(box b, box anchor);
 box encode_box(box b, box anchor);
 
-#endif
+#اگر_ختم

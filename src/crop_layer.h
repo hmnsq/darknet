@@ -1,20 +1,20 @@
-#ifndef CROP_LAYER_H
-#define CROP_LAYER_H
+#اگر_غیر_تعریف_شدہ CROP_LAYER_H
+#تعریف_کرو CROP_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#شامل "image.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-typedef layer crop_layer;
+قسمتعریف layer crop_layer;
 
 image get_crop_image(crop_layer l);
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure);
-void forward_crop_layer(const crop_layer l, network net);
-void resize_crop_layer(layer *l, int w, int h);
+crop_layer make_crop_layer(صحیح batch, صحیح h, صحیح w, صحیح c, صحیح crop_اونچائی, صحیح crop_چوڑائی, صحیح flip, اعشاری angle, اعشاری saturation, اعشاری exposure);
+خالی forward_crop_layer(ثابت crop_layer l, جال net);
+خالی resize_crop_layer(layer *l, صحیح w, صحیح h);
 
-#ifdef GPU
-void forward_crop_layer_gpu(crop_layer l, network net);
-#endif
+#اگر_تعریف_شدہ GPU
+خالی forward_crop_layer_gpu(crop_layer l, جال net);
+#اگر_ختم
 
-#endif
+#اگر_ختم
 

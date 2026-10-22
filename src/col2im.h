@@ -1,13 +1,13 @@
-#ifndef COL2IM_H
-#define COL2IM_H
+#اگر_غیر_تعریف_شدہ COL2IM_H
+#تعریف_کرو COL2IM_H
 
-void col2im_cpu(float* data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_im);
+خالی col2im_cpu(اعشاری* ڈیٹا_ستون,
+        صحیح channels, صحیح اونچائی, صحیح چوڑائی,
+        صحیح ksize, صحیح stride, صحیح pad, اعشاری* ڈیٹا_im);
 
-#ifdef GPU
-void col2im_gpu(float *data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float *data_im);
-#endif
-#endif
+#اگر_تعریف_شدہ GPU
+خالی col2im_gpu(اعشاری *ڈیٹا_ستون,
+        صحیح channels, صحیح اونچائی, صحیح چوڑائی,
+        صحیح ksize, صحیح stride, صحیح pad, اعشاری *ڈیٹا_im);
+#اگر_ختم
+#اگر_ختم

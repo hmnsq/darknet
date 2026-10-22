@@ -1,50 +1,50 @@
-#ifndef CONVOLUTIONAL_LAYER_H
-#define CONVOLUTIONAL_LAYER_H
+#اگر_غیر_تعریف_شدہ CONVOLUTIONAL_LAYER_H
+#تعریف_کرو CONVOLUTIONAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#شامل "cuda.h"
+#شامل "image.h"
+#شامل "activations.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-typedef layer convolutional_layer;
+قسمتعریف layer convolutional_layer;
 
-#ifdef GPU
-void forward_convolutional_layer_gpu(convolutional_layer layer, network net);
-void backward_convolutional_layer_gpu(convolutional_layer layer, network net);
-void update_convolutional_layer_gpu(convolutional_layer layer, update_args a);
+#اگر_تعریف_شدہ GPU
+خالی forward_convolutional_layer_gpu(convolutional_layer layer, جال net);
+خالی backward_convolutional_layer_gpu(convolutional_layer layer, جال net);
+خالی update_convolutional_layer_gpu(convolutional_layer layer, update_دلائل a);
 
-void push_convolutional_layer(convolutional_layer layer);
-void pull_convolutional_layer(convolutional_layer layer);
+خالی ڈالو_convolutional_layer(convolutional_layer layer);
+خالی pull_convolutional_layer(convolutional_layer layer);
 
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-#ifdef CUDNN
-void cudnn_convolutional_setup(layer *l);
-#endif
-#endif
+خالی جوڑو_bias_gpu(اعشاری *output, اعشاری *biases, صحیح batch, صحیح n, صحیح سائز);
+خالی backward_bias_gpu(اعشاری *bias_updates, اعشاری *delta, صحیح batch, صحیح n, صحیح سائز);
+خالی adam_update_gpu(اعشاری *w, اعشاری *d, اعشاری *m, اعشاری *v, اعشاری B1, اعشاری B2, اعشاری eps, اعشاری decay, اعشاری شرح, صحیح n, صحیح batch, صحیح t);
+#اگر_تعریف_شدہ CUDNN
+خالی cudnn_convolutional_تیاری(layer *l);
+#اگر_ختم
+#اگر_ختم
 
-convolutional_layer make_convolutional_layer(int batch, int h, int w, int c, int n, int groups, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int binary, int xnor, int adam);
-void resize_convolutional_layer(convolutional_layer *layer, int w, int h);
-void forward_convolutional_layer(const convolutional_layer layer, network net);
-void update_convolutional_layer(convolutional_layer layer, update_args a);
-image *visualize_convolutional_layer(convolutional_layer layer, char *window, image *prev_weights);
-void binarize_weights(float *weights, int n, int size, float *binary);
-void swap_binary(convolutional_layer *l);
-void binarize_weights2(float *weights, int n, int size, char *binary, float *scales);
+convolutional_layer make_convolutional_layer(صحیح batch, صحیح h, صحیح w, صحیح c, صحیح n, صحیح groups, صحیح سائز, صحیح stride, صحیح padding, ACTIVATION activation, صحیح batch_normalize, صحیح ثنائی, صحیح xnor, صحیح adam);
+خالی resize_convolutional_layer(convolutional_layer *layer, صحیح w, صحیح h);
+خالی forward_convolutional_layer(ثابت convolutional_layer layer, جال net);
+خالی update_convolutional_layer(convolutional_layer layer, update_دلائل a);
+image *visualize_convolutional_layer(convolutional_layer layer, حرف *کھڑکی, image *پچھلا_weights);
+خالی binarize_weights(اعشاری *weights, صحیح n, صحیح سائز, اعشاری *ثنائی);
+خالی تبادلہ_ثنائی(convolutional_layer *l);
+خالی binarize_weights2(اعشاری *weights, صحیح n, صحیح سائز, حرف *ثنائی, اعشاری *scales);
 
-void backward_convolutional_layer(convolutional_layer layer, network net);
+خالی backward_convolutional_layer(convolutional_layer layer, جال net);
 
-void add_bias(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+خالی جوڑو_bias(اعشاری *output, اعشاری *biases, صحیح batch, صحیح n, صحیح سائز);
+خالی backward_bias(اعشاری *bias_updates, اعشاری *delta, صحیح batch, صحیح n, صحیح سائز);
 
 image get_convolutional_image(convolutional_layer layer);
 image get_convolutional_delta(convolutional_layer layer);
-image get_convolutional_weight(convolutional_layer layer, int i);
+image get_convolutional_وزن(convolutional_layer layer, صحیح i);
 
-int convolutional_out_height(convolutional_layer layer);
-int convolutional_out_width(convolutional_layer layer);
+صحیح convolutional_برآمد_اونچائی(convolutional_layer layer);
+صحیح convolutional_برآمد_چوڑائی(convolutional_layer layer);
 
-#endif
+#اگر_ختم
 

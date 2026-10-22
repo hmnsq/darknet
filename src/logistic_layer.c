@@ -1,15 +1,15 @@
-#include "logistic_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "cuda.h"
+#شامل "logistic_layer.h"
+#شامل "activations.h"
+#شامل "blas.h"
+#شامل "cuda.h"
 
-#include <float.h>
-#include <math.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <assert.h>
+#شامل <float.h>
+#شامل <math.h>
+#شامل <stdlib.h>
+#شامل <stdio.h>
+#شامل <assert.h>
 
-layer make_logistic_layer(int batch, int inputs)
+layer make_logistic_layer(صحیح batch, صحیح inputs)
 {
     fprintf(stderr, "logistic x entropy                             %4d\n",  inputs);
     layer l = {0};
@@ -17,55 +17,55 @@ layer make_logistic_layer(int batch, int inputs)
     l.batch = batch;
     l.inputs = inputs;
     l.outputs = inputs;
-    l.loss = calloc(inputs*batch, sizeof(float));
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.delta = calloc(inputs*batch, sizeof(float));
-    l.cost = calloc(1, sizeof(float));
+    l.loss = صفر_حافظہ_دو(inputs*batch, حجم(اعشاری));
+    l.output = صفر_حافظہ_دو(inputs*batch, حجم(اعشاری));
+    l.delta = صفر_حافظہ_دو(inputs*batch, حجم(اعشاری));
+    l.لاگت_2 = صفر_حافظہ_دو(1, حجم(اعشاری));
 
     l.forward = forward_logistic_layer;
     l.backward = backward_logistic_layer;
-    #ifdef GPU
+    #اگر_تعریف_شدہ GPU
     l.forward_gpu = forward_logistic_layer_gpu;
     l.backward_gpu = backward_logistic_layer_gpu;
 
     l.output_gpu = cuda_make_array(l.output, inputs*batch); 
     l.loss_gpu = cuda_make_array(l.loss, inputs*batch); 
     l.delta_gpu = cuda_make_array(l.delta, inputs*batch); 
-    #endif
-    return l;
+    #اگر_ختم
+    واپس l;
 }
 
-void forward_logistic_layer(const layer l, network net)
+خالی forward_logistic_layer(ثابت layer l, جال net)
 {
-    copy_cpu(l.outputs*l.batch, net.input, 1, l.output, 1);
+    copy_cpu(l.outputs*l.batch, net.داخلہ, 1, l.output, 1);
     activate_array(l.output, l.outputs*l.batch, LOGISTIC);
-    if(net.truth){
+    اگر(net.truth){
         logistic_x_ent_cpu(l.batch*l.inputs, l.output, net.truth, l.delta, l.loss);
-        l.cost[0] = sum_array(l.loss, l.batch*l.inputs);
+        l.لاگت_2[0] = مجموع_array(l.loss, l.batch*l.inputs);
     }
 }
 
-void backward_logistic_layer(const layer l, network net)
+خالی backward_logistic_layer(ثابت layer l, جال net)
 {
     axpy_cpu(l.inputs*l.batch, 1, l.delta, 1, net.delta, 1);
 }
 
-#ifdef GPU
+#اگر_تعریف_شدہ GPU
 
-void forward_logistic_layer_gpu(const layer l, network net)
+خالی forward_logistic_layer_gpu(ثابت layer l, جال net)
 {
-    copy_gpu(l.outputs*l.batch, net.input_gpu, 1, l.output_gpu, 1);
+    copy_gpu(l.outputs*l.batch, net.داخلہ_gpu, 1, l.output_gpu, 1);
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, LOGISTIC);
-    if(net.truth){
+    اگر(net.truth){
         logistic_x_ent_gpu(l.batch*l.inputs, l.output_gpu, net.truth_gpu, l.delta_gpu, l.loss_gpu);
         cuda_pull_array(l.loss_gpu, l.loss, l.batch*l.inputs);
-        l.cost[0] = sum_array(l.loss, l.batch*l.inputs);
+        l.لاگت_2[0] = مجموع_array(l.loss, l.batch*l.inputs);
     }
 }
 
-void backward_logistic_layer_gpu(const layer l, network net)
+خالی backward_logistic_layer_gpu(ثابت layer l, جال net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
 
-#endif
+#اگر_ختم

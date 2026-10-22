@@ -1,100 +1,100 @@
-#include "crop_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#شامل "crop_layer.h"
+#شامل "cuda.h"
+#شامل <stdio.h>
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    صحیح h = l.برآمد_h;
+    صحیح w = l.برآمد_w;
+    صحیح c = l.برآمد_c;
+    واپس float_مقصد_image(w,h,c,l.output);
 }
 
-void backward_crop_layer(const crop_layer l, network net){}
-void backward_crop_layer_gpu(const crop_layer l, network net){}
+خالی backward_crop_layer(ثابت crop_layer l, جال net){}
+خالی backward_crop_layer_gpu(ثابت crop_layer l, جال net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(صحیح batch, صحیح h, صحیح w, صحیح c, صحیح crop_اونچائی, صحیح crop_چوڑائی, صحیح flip, اعشاری angle, اعشاری saturation, اعشاری exposure)
 {
-    fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
+    fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_اونچائی,crop_چوڑائی,c);
     crop_layer l = {0};
     l.type = CROP;
     l.batch = batch;
     l.h = h;
     l.w = w;
     l.c = c;
-    l.scale = (float)crop_height / h;
+    l.scale = (اعشاری)crop_اونچائی / h;
     l.flip = flip;
     l.angle = angle;
     l.saturation = saturation;
     l.exposure = exposure;
-    l.out_w = crop_width;
-    l.out_h = crop_height;
-    l.out_c = c;
+    l.برآمد_w = crop_چوڑائی;
+    l.برآمد_h = crop_اونچائی;
+    l.برآمد_c = c;
     l.inputs = l.w * l.h * l.c;
-    l.outputs = l.out_w * l.out_h * l.out_c;
-    l.output = calloc(l.outputs*batch, sizeof(float));
+    l.outputs = l.برآمد_w * l.برآمد_h * l.برآمد_c;
+    l.output = صفر_حافظہ_دو(l.outputs*batch, حجم(اعشاری));
     l.forward = forward_crop_layer;
     l.backward = backward_crop_layer;
 
-    #ifdef GPU
+    #اگر_تعریف_شدہ GPU
     l.forward_gpu = forward_crop_layer_gpu;
     l.backward_gpu = backward_crop_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
-    #endif
-    return l;
+    #اگر_ختم
+    واپس l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+خالی resize_crop_layer(layer *l, صحیح w, صحیح h)
 {
     l->w = w;
     l->h = h;
 
-    l->out_w =  l->scale*w;
-    l->out_h =  l->scale*h;
+    l->برآمد_w =  l->scale*w;
+    l->برآمد_h =  l->scale*h;
 
     l->inputs = l->w * l->h * l->c;
-    l->outputs = l->out_h * l->out_w * l->out_c;
+    l->outputs = l->برآمد_h * l->برآمد_w * l->برآمد_c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    #ifdef GPU
+    l->output = realloc(l->output, l->batch*l->outputs*حجم(اعشاری));
+    #اگر_تعریف_شدہ GPU
     cuda_free(l->output_gpu);
     l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
-    #endif
+    #اگر_ختم
 }
 
 
-void forward_crop_layer(const crop_layer l, network net)
+خالی forward_crop_layer(ثابت crop_layer l, جال net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
-    float scale = 2;
-    float trans = -1;
-    if(l.noadjust){
+    صحیح i,j,c,b,صف,ستون;
+    صحیح اشاریہ;
+    صحیح گنتی = 0;
+    صحیح flip = (l.flip && rand()%2);
+    صحیح dh = rand()%(l.h - l.برآمد_h + 1);
+    صحیح dw = rand()%(l.w - l.برآمد_w + 1);
+    اعشاری scale = 2;
+    اعشاری trans = -1;
+    اگر(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    اگر(!net.train){
         flip = 0;
-        dh = (l.h - l.out_h)/2;
-        dw = (l.w - l.out_w)/2;
+        dh = (l.h - l.برآمد_h)/2;
+        dw = (l.w - l.برآمد_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
-                        col = l.w - dw - j - 1;    
-                    }else{
-                        col = j + dw;
+    برائے(b = 0; b < l.batch; ++b){
+        برائے(c = 0; c < l.c; ++c){
+            برائے(i = 0; i < l.برآمد_h; ++i){
+                برائے(j = 0; j < l.برآمد_w; ++j){
+                    اگر(flip){
+                        ستون = l.w - dw - j - 1;    
+                    }ورنہ{
+                        ستون = j + dw;
                     }
-                    row = i + dh;
-                    index = col+l.w*(row+l.h*(c + l.c*b)); 
-                    l.output[count++] = net.input[index]*scale + trans;
+                    صف = i + dh;
+                    اشاریہ = ستون+l.w*(صف+l.h*(c + l.c*b)); 
+                    l.output[گنتی++] = net.داخلہ[اشاریہ]*scale + trans;
                 }
             }
         }

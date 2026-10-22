@@ -1,24 +1,24 @@
-#include "maxpool_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#شامل "maxpool_layer.h"
+#شامل "cuda.h"
+#شامل <stdio.h>
 
 image get_maxpool_image(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.output);
+    صحیح h = l.برآمد_h;
+    صحیح w = l.برآمد_w;
+    صحیح c = l.c;
+    واپس float_مقصد_image(w,h,c,l.output);
 }
 
 image get_maxpool_delta(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.delta);
+    صحیح h = l.برآمد_h;
+    صحیح w = l.برآمد_w;
+    صحیح c = l.c;
+    واپس float_مقصد_image(w,h,c,l.delta);
 }
 
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding)
+maxpool_layer make_maxpool_layer(صحیح batch, صحیح h, صحیح w, صحیح c, صحیح سائز, صحیح stride, صحیح padding)
 {
     maxpool_layer l = {0};
     l.type = MAXPOOL;
@@ -27,101 +27,101 @@ maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int s
     l.w = w;
     l.c = c;
     l.pad = padding;
-    l.out_w = (w + padding - size)/stride + 1;
-    l.out_h = (h + padding - size)/stride + 1;
-    l.out_c = c;
-    l.outputs = l.out_h * l.out_w * l.out_c;
+    l.برآمد_w = (w + padding - سائز)/stride + 1;
+    l.برآمد_h = (h + padding - سائز)/stride + 1;
+    l.برآمد_c = c;
+    l.outputs = l.برآمد_h * l.برآمد_w * l.برآمد_c;
     l.inputs = h*w*c;
-    l.size = size;
+    l.سائز = سائز;
     l.stride = stride;
-    int output_size = l.out_h * l.out_w * l.out_c * batch;
-    l.indexes = calloc(output_size, sizeof(int));
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    صحیح output_سائز = l.برآمد_h * l.برآمد_w * l.برآمد_c * batch;
+    l.indexes = صفر_حافظہ_دو(output_سائز, حجم(صحیح));
+    l.output =  صفر_حافظہ_دو(output_سائز, حجم(اعشاری));
+    l.delta =   صفر_حافظہ_دو(output_سائز, حجم(اعشاری));
     l.forward = forward_maxpool_layer;
     l.backward = backward_maxpool_layer;
-    #ifdef GPU
+    #اگر_تعریف_شدہ GPU
     l.forward_gpu = forward_maxpool_layer_gpu;
     l.backward_gpu = backward_maxpool_layer_gpu;
-    l.indexes_gpu = cuda_make_int_array(0, output_size);
-    l.output_gpu  = cuda_make_array(l.output, output_size);
-    l.delta_gpu   = cuda_make_array(l.delta, output_size);
-    #endif
-    fprintf(stderr, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    return l;
+    l.indexes_gpu = cuda_make_int_array(0, output_سائز);
+    l.output_gpu  = cuda_make_array(l.output, output_سائز);
+    l.delta_gpu   = cuda_make_array(l.delta, output_سائز);
+    #اگر_ختم
+    fprintf(stderr, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", سائز, سائز, stride, w, h, c, l.برآمد_w, l.برآمد_h, l.برآمد_c);
+    واپس l;
 }
 
-void resize_maxpool_layer(maxpool_layer *l, int w, int h)
+خالی resize_maxpool_layer(maxpool_layer *l, صحیح w, صحیح h)
 {
     l->h = h;
     l->w = w;
     l->inputs = h*w*l->c;
 
-    l->out_w = (w + l->pad - l->size)/l->stride + 1;
-    l->out_h = (h + l->pad - l->size)/l->stride + 1;
-    l->outputs = l->out_w * l->out_h * l->c;
-    int output_size = l->outputs * l->batch;
+    l->برآمد_w = (w + l->pad - l->سائز)/l->stride + 1;
+    l->برآمد_h = (h + l->pad - l->سائز)/l->stride + 1;
+    l->outputs = l->برآمد_w * l->برآمد_h * l->c;
+    صحیح output_سائز = l->outputs * l->batch;
 
-    l->indexes = realloc(l->indexes, output_size * sizeof(int));
-    l->output = realloc(l->output, output_size * sizeof(float));
-    l->delta = realloc(l->delta, output_size * sizeof(float));
+    l->indexes = realloc(l->indexes, output_سائز * حجم(صحیح));
+    l->output = realloc(l->output, output_سائز * حجم(اعشاری));
+    l->delta = realloc(l->delta, output_سائز * حجم(اعشاری));
 
-    #ifdef GPU
-    cuda_free((float *)l->indexes_gpu);
+    #اگر_تعریف_شدہ GPU
+    cuda_free((اعشاری *)l->indexes_gpu);
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
-    l->indexes_gpu = cuda_make_int_array(0, output_size);
-    l->output_gpu  = cuda_make_array(l->output, output_size);
-    l->delta_gpu   = cuda_make_array(l->delta,  output_size);
-    #endif
+    l->indexes_gpu = cuda_make_int_array(0, output_سائز);
+    l->output_gpu  = cuda_make_array(l->output, output_سائز);
+    l->delta_gpu   = cuda_make_array(l->delta,  output_سائز);
+    #اگر_ختم
 }
 
-void forward_maxpool_layer(const maxpool_layer l, network net)
+خالی forward_maxpool_layer(ثابت maxpool_layer l, جال net)
 {
-    int b,i,j,k,m,n;
-    int w_offset = -l.pad/2;
-    int h_offset = -l.pad/2;
+    صحیح b,i,j,k,m,n;
+    صحیح w_انحراف = -l.pad/2;
+    صحیح h_انحراف = -l.pad/2;
 
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
+    صحیح h = l.برآمد_h;
+    صحیح w = l.برآمد_w;
+    صحیح c = l.c;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(i = 0; i < h; ++i){
-                for(j = 0; j < w; ++j){
-                    int out_index = j + w*(i + h*(k + c*b));
-                    float max = -FLT_MAX;
-                    int max_i = -1;
-                    for(n = 0; n < l.size; ++n){
-                        for(m = 0; m < l.size; ++m){
-                            int cur_h = h_offset + i*l.stride + n;
-                            int cur_w = w_offset + j*l.stride + m;
-                            int index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
-                            int valid = (cur_h >= 0 && cur_h < l.h &&
+    برائے(b = 0; b < l.batch; ++b){
+        برائے(k = 0; k < c; ++k){
+            برائے(i = 0; i < h; ++i){
+                برائے(j = 0; j < w; ++j){
+                    صحیح برآمد_اشاریہ = j + w*(i + h*(k + c*b));
+                    اعشاری max = -FLT_MAX;
+                    صحیح max_i = -1;
+                    برائے(n = 0; n < l.سائز; ++n){
+                        برائے(m = 0; m < l.سائز; ++m){
+                            صحیح cur_h = h_انحراف + i*l.stride + n;
+                            صحیح cur_w = w_انحراف + j*l.stride + m;
+                            صحیح اشاریہ = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
+                            صحیح valid = (cur_h >= 0 && cur_h < l.h &&
                                          cur_w >= 0 && cur_w < l.w);
-                            float val = (valid != 0) ? net.input[index] : -FLT_MAX;
-                            max_i = (val > max) ? index : max_i;
+                            اعشاری val = (valid != 0) ? net.داخلہ[اشاریہ] : -FLT_MAX;
+                            max_i = (val > max) ? اشاریہ : max_i;
                             max   = (val > max) ? val   : max;
                         }
                     }
-                    l.output[out_index] = max;
-                    l.indexes[out_index] = max_i;
+                    l.output[برآمد_اشاریہ] = max;
+                    l.indexes[برآمد_اشاریہ] = max_i;
                 }
             }
         }
     }
 }
 
-void backward_maxpool_layer(const maxpool_layer l, network net)
+خالی backward_maxpool_layer(ثابت maxpool_layer l, جال net)
 {
-    int i;
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    for(i = 0; i < h*w*c*l.batch; ++i){
-        int index = l.indexes[i];
-        net.delta[index] += l.delta[i];
+    صحیح i;
+    صحیح h = l.برآمد_h;
+    صحیح w = l.برآمد_w;
+    صحیح c = l.c;
+    برائے(i = 0; i < h*w*c*l.batch; ++i){
+        صحیح اشاریہ = l.indexes[i];
+        net.delta[اشاریہ] += l.delta[i];
     }
 }
 

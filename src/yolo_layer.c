@@ -1,66 +1,66 @@
-#include "yolo_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#شامل "yolo_layer.h"
+#شامل "activations.h"
+#شامل "blas.h"
+#شامل "box.h"
+#شامل "cuda.h"
+#شامل "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#شامل <stdio.h>
+#شامل <assert.h>
+#شامل <string.h>
+#شامل <stdlib.h>
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes)
+layer make_yolo_layer(صحیح batch, صحیح w, صحیح h, صحیح n, صحیح کل, صحیح *نقاب, صحیح classes)
 {
-    int i;
+    صحیح i;
     layer l = {0};
     l.type = YOLO;
 
     l.n = n;
-    l.total = total;
+    l.کل = کل;
     l.batch = batch;
     l.h = h;
     l.w = w;
     l.c = n*(classes + 4 + 1);
-    l.out_w = l.w;
-    l.out_h = l.h;
-    l.out_c = l.c;
+    l.برآمد_w = l.w;
+    l.برآمد_h = l.h;
+    l.برآمد_c = l.c;
     l.classes = classes;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(total*2, sizeof(float));
-    if(mask) l.mask = mask;
-    else{
-        l.mask = calloc(n, sizeof(int));
-        for(i = 0; i < n; ++i){
-            l.mask[i] = i;
+    l.لاگت_2 = صفر_حافظہ_دو(1, حجم(اعشاری));
+    l.biases = صفر_حافظہ_دو(کل*2, حجم(اعشاری));
+    اگر(نقاب) l.نقاب = نقاب;
+    ورنہ{
+        l.نقاب = صفر_حافظہ_دو(n, حجم(صحیح));
+        برائے(i = 0; i < n; ++i){
+            l.نقاب[i] = i;
         }
     }
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.bias_updates = صفر_حافظہ_دو(n*2, حجم(اعشاری));
     l.outputs = h*w*n*(classes + 4 + 1);
     l.inputs = l.outputs;
     l.truths = 90*(4 + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    for(i = 0; i < total*2; ++i){
+    l.delta = صفر_حافظہ_دو(batch*l.outputs, حجم(اعشاری));
+    l.output = صفر_حافظہ_دو(batch*l.outputs, حجم(اعشاری));
+    برائے(i = 0; i < کل*2; ++i){
         l.biases[i] = .5;
     }
 
     l.forward = forward_yolo_layer;
     l.backward = backward_yolo_layer;
-#ifdef GPU
+#اگر_تعریف_شدہ GPU
     l.forward_gpu = forward_yolo_layer_gpu;
     l.backward_gpu = backward_yolo_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
     l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
-#endif
+#اگر_ختم
 
     fprintf(stderr, "yolo\n");
     srand(0);
 
-    return l;
+    واپس l;
 }
 
-void resize_yolo_layer(layer *l, int w, int h)
+خالی resize_yolo_layer(layer *l, صحیح w, صحیح h)
 {
     l->w = w;
     l->h = h;
@@ -68,201 +68,201 @@ void resize_yolo_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + 4 + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*حجم(اعشاری));
+    l->delta = realloc(l->delta, l->batch*l->outputs*حجم(اعشاری));
 
-#ifdef GPU
+#اگر_تعریف_شدہ GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
 
     l->delta_gpu =     cuda_make_array(l->delta, l->batch*l->outputs);
     l->output_gpu =    cuda_make_array(l->output, l->batch*l->outputs);
-#endif
+#اگر_ختم
 }
 
-box get_yolo_box(float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, int stride)
+box get_yolo_box(اعشاری *x, اعشاری *biases, صحیح n, صحیح اشاریہ, صحیح i, صحیح j, صحیح lw, صحیح lh, صحیح w, صحیح h, صحیح stride)
 {
     box b;
-    b.x = (i + x[index + 0*stride]) / lw;
-    b.y = (j + x[index + 1*stride]) / lh;
-    b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
-    b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    b.x = (i + x[اشاریہ + 0*stride]) / lw;
+    b.y = (j + x[اشاریہ + 1*stride]) / lh;
+    b.w = قوت_نما(x[اشاریہ + 2*stride]) * biases[2*n]   / w;
+    b.h = قوت_نما(x[اشاریہ + 3*stride]) * biases[2*n+1] / h;
+    واپس b;
 }
 
-float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, float *delta, float scale, int stride)
+اعشاری delta_yolo_box(box truth, اعشاری *x, اعشاری *biases, صحیح n, صحیح اشاریہ, صحیح i, صحیح j, صحیح lw, صحیح lh, صحیح w, صحیح h, اعشاری *delta, اعشاری scale, صحیح stride)
 {
-    box pred = get_yolo_box(x, biases, n, index, i, j, lw, lh, w, h, stride);
-    float iou = box_iou(pred, truth);
+    box pred = get_yolo_box(x, biases, n, اشاریہ, i, j, lw, lh, w, h, stride);
+    اعشاری iou = box_iou(pred, truth);
 
-    float tx = (truth.x*lw - i);
-    float ty = (truth.y*lh - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    اعشاری tx = (truth.x*lw - i);
+    اعشاری ty = (truth.y*lh - j);
+    اعشاری tw = لوگارتھم(truth.w*w / biases[2*n]);
+    اعشاری th = لوگارتھم(truth.h*h / biases[2*n + 1]);
 
-    delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
-    delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
-    delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
-    delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    delta[اشاریہ + 0*stride] = scale * (tx - x[اشاریہ + 0*stride]);
+    delta[اشاریہ + 1*stride] = scale * (ty - x[اشاریہ + 1*stride]);
+    delta[اشاریہ + 2*stride] = scale * (tw - x[اشاریہ + 2*stride]);
+    delta[اشاریہ + 3*stride] = scale * (th - x[اشاریہ + 3*stride]);
+    واپس iou;
 }
 
 
-void delta_yolo_class(float *output, float *delta, int index, int class, int classes, int stride, float *avg_cat)
+خالی delta_yolo_class(اعشاری *output, اعشاری *delta, صحیح اشاریہ, صحیح class, صحیح classes, صحیح stride, اعشاری *avg_cat)
 {
-    int n;
-    if (delta[index]){
-        delta[index + stride*class] = 1 - output[index + stride*class];
-        if(avg_cat) *avg_cat += output[index + stride*class];
-        return;
+    صحیح n;
+    اگر (delta[اشاریہ]){
+        delta[اشاریہ + stride*class] = 1 - output[اشاریہ + stride*class];
+        اگر(avg_cat) *avg_cat += output[اشاریہ + stride*class];
+        واپس;
     }
-    for(n = 0; n < classes; ++n){
-        delta[index + stride*n] = ((n == class)?1 : 0) - output[index + stride*n];
-        if(n == class && avg_cat) *avg_cat += output[index + stride*n];
+    برائے(n = 0; n < classes; ++n){
+        delta[اشاریہ + stride*n] = ((n == class)?1 : 0) - output[اشاریہ + stride*n];
+        اگر(n == class && avg_cat) *avg_cat += output[اشاریہ + stride*n];
     }
 }
 
-static int entry_index(layer l, int batch, int location, int entry)
+ساکن صحیح اندراج_اشاریہ(layer l, صحیح batch, صحیح location, صحیح اندراج_2)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
+    صحیح n =   location / (l.w*l.h);
+    صحیح loc = location % (l.w*l.h);
+    واپس batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + اندراج_2*l.w*l.h + loc;
 }
 
-void forward_yolo_layer(const layer l, network net)
+خالی forward_yolo_layer(ثابت layer l, جال net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    صحیح i,j,b,t,n;
+    حافظہ_نقل(l.output, net.داخلہ, l.outputs*l.batch*حجم(اعشاری));
 
-#ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, 4);
-            activate_array(l.output + index, (1+l.classes)*l.w*l.h, LOGISTIC);
+#اگر_غیر_تعریف_شدہ GPU
+    برائے (b = 0; b < l.batch; ++b){
+        برائے(n = 0; n < l.n; ++n){
+            صحیح اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h, 0);
+            activate_array(l.output + اشاریہ, 2*l.w*l.h, LOGISTIC);
+            اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h, 4);
+            activate_array(l.output + اشاریہ, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-#endif
+#اگر_ختم
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float recall75 = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
-    *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
-                    box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
-                    float best_iou = 0;
-                    int best_t = 0;
-                    for(t = 0; t < l.max_boxes; ++t){
-                        box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
-                            best_iou = iou;
-                            best_t = t;
+    memset(l.delta, 0, l.outputs * l.batch * حجم(اعشاری));
+    اگر(!net.train) واپس;
+    اعشاری avg_iou = 0;
+    اعشاری recall = 0;
+    اعشاری recall75 = 0;
+    اعشاری avg_cat = 0;
+    اعشاری avg_obj = 0;
+    اعشاری avg_anyobj = 0;
+    صحیح گنتی = 0;
+    صحیح class_گنتی = 0;
+    *(l.لاگت_2) = 0;
+    برائے (b = 0; b < l.batch; ++b) {
+        برائے (j = 0; j < l.h; ++j) {
+            برائے (i = 0; i < l.w; ++i) {
+                برائے (n = 0; n < l.n; ++n) {
+                    صحیح box_اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h + j*l.w + i, 0);
+                    box pred = get_yolo_box(l.output, l.biases, l.نقاب[n], box_اشاریہ, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
+                    اعشاری بہترین_iou = 0;
+                    صحیح بہترین_t = 0;
+                    برائے(t = 0; t < l.max_boxes; ++t){
+                        box truth = float_مقصد_box(net.truth + t*(4 + 1) + b*l.truths, 1);
+                        اگر(!truth.x) توڑو;
+                        اعشاری iou = box_iou(pred, truth);
+                        اگر (iou > بہترین_iou) {
+                            بہترین_iou = iou;
+                            بہترین_t = t;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
-                    avg_anyobj += l.output[obj_index];
-                    l.delta[obj_index] = 0 - l.output[obj_index];
-                    if (best_iou > l.ignore_thresh) {
-                        l.delta[obj_index] = 0;
+                    صحیح obj_اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h + j*l.w + i, 4);
+                    avg_anyobj += l.output[obj_اشاریہ];
+                    l.delta[obj_اشاریہ] = 0 - l.output[obj_اشاریہ];
+                    اگر (بہترین_iou > l.ignore_thresh) {
+                        l.delta[obj_اشاریہ] = 0;
                     }
-                    if (best_iou > l.truth_thresh) {
-                        l.delta[obj_index] = 1 - l.output[obj_index];
+                    اگر (بہترین_iou > l.truth_thresh) {
+                        l.delta[obj_اشاریہ] = 1 - l.output[obj_اشاریہ];
 
-                        int class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
-                        if (l.map) class = l.map[class];
-                        int class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
-                        delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, 0);
-                        box truth = float_to_box(net.truth + best_t*(4 + 1) + b*l.truths, 1);
-                        delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+                        صحیح class = net.truth[بہترین_t*(4 + 1) + b*l.truths + 4];
+                        اگر (l.map) class = l.map[class];
+                        صحیح class_اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
+                        delta_yolo_class(l.output, l.delta, class_اشاریہ, class, l.classes, l.w*l.h, 0);
+                        box truth = float_مقصد_box(net.truth + بہترین_t*(4 + 1) + b*l.truths, 1);
+                        delta_yolo_box(truth, l.output, l.biases, l.نقاب[n], box_اشاریہ, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
                     }
                 }
             }
         }
-        for(t = 0; t < l.max_boxes; ++t){
-            box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
+        برائے(t = 0; t < l.max_boxes; ++t){
+            box truth = float_مقصد_box(net.truth + t*(4 + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            اگر(!truth.x) توڑو;
+            اعشاری بہترین_iou = 0;
+            صحیح بہترین_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
-            box truth_shift = truth;
-            truth_shift.x = truth_shift.y = 0;
-            for(n = 0; n < l.total; ++n){
+            box truth_سرکاؤ = truth;
+            truth_سرکاؤ.x = truth_سرکاؤ.y = 0;
+            برائے(n = 0; n < l.کل; ++n){
                 box pred = {0};
                 pred.w = l.biases[2*n]/net.w;
                 pred.h = l.biases[2*n+1]/net.h;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
-                    best_iou = iou;
-                    best_n = n;
+                اعشاری iou = box_iou(pred, truth_سرکاؤ);
+                اگر (iou > بہترین_iou){
+                    بہترین_iou = iou;
+                    بہترین_n = n;
                 }
             }
 
-            int mask_n = int_index(l.mask, best_n, l.n);
-            if(mask_n >= 0){
-                int box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
-                float iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+            صحیح نقاب_n = int_اشاریہ(l.نقاب, بہترین_n, l.n);
+            اگر(نقاب_n >= 0){
+                صحیح box_اشاریہ = اندراج_اشاریہ(l, b, نقاب_n*l.w*l.h + j*l.w + i, 0);
+                اعشاری iou = delta_yolo_box(truth, l.output, l.biases, بہترین_n, box_اشاریہ, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
 
-                int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
-                avg_obj += l.output[obj_index];
-                l.delta[obj_index] = 1 - l.output[obj_index];
+                صحیح obj_اشاریہ = اندراج_اشاریہ(l, b, نقاب_n*l.w*l.h + j*l.w + i, 4);
+                avg_obj += l.output[obj_اشاریہ];
+                l.delta[obj_اشاریہ] = 1 - l.output[obj_اشاریہ];
 
-                int class = net.truth[t*(4 + 1) + b*l.truths + 4];
-                if (l.map) class = l.map[class];
-                int class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
-                delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, &avg_cat);
+                صحیح class = net.truth[t*(4 + 1) + b*l.truths + 4];
+                اگر (l.map) class = l.map[class];
+                صحیح class_اشاریہ = اندراج_اشاریہ(l, b, نقاب_n*l.w*l.h + j*l.w + i, 4 + 1);
+                delta_yolo_class(l.output, l.delta, class_اشاریہ, class, l.classes, l.w*l.h, &avg_cat);
 
-                ++count;
-                ++class_count;
-                if(iou > .5) recall += 1;
-                if(iou > .75) recall75 += 1;
+                ++گنتی;
+                ++class_گنتی;
+                اگر(iou > .5) recall += 1;
+                اگر(iou > .75) recall75 += 1;
                 avg_iou += iou;
             }
         }
     }
-    *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    *(l.لاگت_2) = قوت(mag_array(l.delta, l.outputs * l.batch), 2);
+    لکھو("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.اشاریہ, avg_iou/گنتی, avg_cat/class_گنتی, avg_obj/گنتی, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/گنتی, recall75/گنتی, گنتی);
 }
 
-void backward_yolo_layer(const layer l, network net)
+خالی backward_yolo_layer(ثابت layer l, جال net)
 {
    axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+خالی correct_yolo_boxes(detection *dets, صحیح n, صحیح w, صحیح h, صحیح netw, صحیح neth, صحیح relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    صحیح i;
+    صحیح new_w=0;
+    صحیح new_h=0;
+    اگر (((اعشاری)netw/w) < ((اعشاری)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } ورنہ {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    برائے (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((اعشاری)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((اعشاری)new_h/neth); 
+        b.w *= (اعشاری)netw/new_w;
+        b.h *= (اعشاری)neth/new_h;
+        اگر(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -272,35 +272,35 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
     }
 }
 
-int yolo_num_detections(layer l, float thresh)
+صحیح yolo_عدد_detections(layer l, اعشاری thresh)
 {
-    int i, n;
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            if(l.output[obj_index] > thresh){
-                ++count;
+    صحیح i, n;
+    صحیح گنتی = 0;
+    برائے (i = 0; i < l.w*l.h; ++i){
+        برائے(n = 0; n < l.n; ++n){
+            صحیح obj_اشاریہ  = اندراج_اشاریہ(l, 0, n*l.w*l.h + i, 4);
+            اگر(l.output[obj_اشاریہ] > thresh){
+                ++گنتی;
             }
         }
     }
-    return count;
+    واپس گنتی;
 }
 
-void avg_flipped_yolo(layer l)
+خالی avg_flipped_yolo(layer l)
 {
-    int i,j,n,z;
-    float *flip = l.output + l.outputs;
-    for (j = 0; j < l.h; ++j) {
-        for (i = 0; i < l.w/2; ++i) {
-            for (n = 0; n < l.n; ++n) {
-                for(z = 0; z < l.classes + 4 + 1; ++z){
-                    int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                    int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                    float swap = flip[i1];
+    صحیح i,j,n,z;
+    اعشاری *flip = l.output + l.outputs;
+    برائے (j = 0; j < l.h; ++j) {
+        برائے (i = 0; i < l.w/2; ++i) {
+            برائے (n = 0; n < l.n; ++n) {
+                برائے(z = 0; z < l.classes + 4 + 1; ++z){
+                    صحیح i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                    صحیح i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                    اعشاری تبادلہ = flip[i1];
                     flip[i1] = flip[i2];
-                    flip[i2] = swap;
-                    if(z == 0){
+                    flip[i2] = تبادلہ;
+                    اگر(z == 0){
                         flip[i1] = -flip[i1];
                         flip[i2] = -flip[i2];
                     }
@@ -308,67 +308,67 @@ void avg_flipped_yolo(layer l)
             }
         }
     }
-    for(i = 0; i < l.outputs; ++i){
+    برائے(i = 0; i < l.outputs; ++i){
         l.output[i] = (l.output[i] + flip[i])/2.;
     }
 }
 
-int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets)
+صحیح get_yolo_detections(layer l, صحیح w, صحیح h, صحیح netw, صحیح neth, اعشاری thresh, صحیح *map, صحیح relative, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
-    if (l.batch == 2) avg_flipped_yolo(l);
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float objectness = predictions[obj_index];
-            if(objectness <= thresh) continue;
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            dets[count].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
-            dets[count].objectness = objectness;
-            dets[count].classes = l.classes;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
-                float prob = objectness*predictions[class_index];
-                dets[count].prob[j] = (prob > thresh) ? prob : 0;
+    صحیح i,j,n;
+    اعشاری *predictions = l.output;
+    اگر (l.batch == 2) avg_flipped_yolo(l);
+    صحیح گنتی = 0;
+    برائے (i = 0; i < l.w*l.h; ++i){
+        صحیح صف = i / l.w;
+        صحیح ستون = i % l.w;
+        برائے(n = 0; n < l.n; ++n){
+            صحیح obj_اشاریہ  = اندراج_اشاریہ(l, 0, n*l.w*l.h + i, 4);
+            اعشاری objectness = predictions[obj_اشاریہ];
+            اگر(objectness <= thresh) جاری;
+            صحیح box_اشاریہ  = اندراج_اشاریہ(l, 0, n*l.w*l.h + i, 0);
+            dets[گنتی].bbox = get_yolo_box(predictions, l.biases, l.نقاب[n], box_اشاریہ, ستون, صف, l.w, l.h, netw, neth, l.w*l.h);
+            dets[گنتی].objectness = objectness;
+            dets[گنتی].classes = l.classes;
+            برائے(j = 0; j < l.classes; ++j){
+                صحیح class_اشاریہ = اندراج_اشاریہ(l, 0, n*l.w*l.h + i, 4 + 1 + j);
+                اعشاری prob = objectness*predictions[class_اشاریہ];
+                dets[گنتی].prob[j] = (prob > thresh) ? prob : 0;
             }
-            ++count;
+            ++گنتی;
         }
     }
-    correct_yolo_boxes(dets, count, w, h, netw, neth, relative);
-    return count;
+    correct_yolo_boxes(dets, گنتی, w, h, netw, neth, relative);
+    واپس گنتی;
 }
 
-#ifdef GPU
+#اگر_تعریف_شدہ GPU
 
-void forward_yolo_layer_gpu(const layer l, network net)
+خالی forward_yolo_layer_gpu(ثابت layer l, جال net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, 4);
-            activate_array_gpu(l.output_gpu + index, (1+l.classes)*l.w*l.h, LOGISTIC);
+    copy_gpu(l.batch*l.inputs, net.داخلہ_gpu, 1, l.output_gpu, 1);
+    صحیح b, n;
+    برائے (b = 0; b < l.batch; ++b){
+        برائے(n = 0; n < l.n; ++n){
+            صحیح اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h, 0);
+            activate_array_gpu(l.output_gpu + اشاریہ, 2*l.w*l.h, LOGISTIC);
+            اشاریہ = اندراج_اشاریہ(l, b, n*l.w*l.h, 4);
+            activate_array_gpu(l.output_gpu + اشاریہ, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-    if(!net.train || l.onlyforward){
+    اگر(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        واپس;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.داخلہ, l.batch*l.inputs);
     forward_yolo_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_ڈالو_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_yolo_layer_gpu(const layer l, network net)
+خالی backward_yolo_layer_gpu(ثابت layer l, جال net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#اگر_ختم
 

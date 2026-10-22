@@ -1,87 +1,87 @@
-#ifndef ACTIVATIONS_H
-#define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#اگر_غیر_تعریف_شدہ ACTIVATIONS_H
+#تعریف_کرو ACTIVATIONS_H
+#شامل "darknet.h"
+#شامل "cuda.h"
+#شامل "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(حرف *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
-#ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
-#endif
+حرف *get_activation_string(ACTIVATION a);
+اعشاری activate(اعشاری x, ACTIVATION a);
+اعشاری gradient(اعشاری x, ACTIVATION a);
+خالی gradient_array(ثابت اعشاری *x, ثابت صحیح n, ثابت ACTIVATION a, اعشاری *delta);
+خالی activate_array(اعشاری *x, ثابت صحیح n, ثابت ACTIVATION a);
+#اگر_تعریف_شدہ GPU
+خالی activate_array_gpu(اعشاری *x, صحیح n, ACTIVATION a);
+خالی gradient_array_gpu(اعشاری *x, صحیح n, ACTIVATION a, اعشاری *delta);
+#اگر_ختم
 
-static inline float stair_activate(float x)
+ساکن اندرونی اعشاری stair_activate(اعشاری x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    صحیح n = floor(x);
+    اگر (n%2 == 0) واپس floor(x/2.);
+    ورنہ واپس (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+ساکن اندرونی اعشاری hardtan_activate(اعشاری x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    اگر (x < -1) واپس -1;
+    اگر (x > 1) واپس 1;
+    واپس x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+ساکن اندرونی اعشاری خطی_activate(اعشاری x){واپس x;}
+ساکن اندرونی اعشاری logistic_activate(اعشاری x){واپس 1./(1. + قوت_نما(-x));}
+ساکن اندرونی اعشاری loggy_activate(اعشاری x){واپس 2./(1. + قوت_نما(-x)) - 1;}
+ساکن اندرونی اعشاری relu_activate(اعشاری x){واپس x*(x>0);}
+ساکن اندرونی اعشاری elu_activate(اعشاری x){واپس (x >= 0)*x + (x < 0)*(قوت_نما(x)-1);}
+ساکن اندرونی اعشاری selu_activate(اعشاری x){واپس (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(قوت_نما(x)-1);}
+ساکن اندرونی اعشاری relie_activate(اعشاری x){واپس (x>0) ? x : .01*x;}
+ساکن اندرونی اعشاری ramp_activate(اعشاری x){واپس x*(x>0)+.1*x;}
+ساکن اندرونی اعشاری leaky_activate(اعشاری x){واپس (x>0) ? x : .1*x;}
+ساکن اندرونی اعشاری tanh_activate(اعشاری x){واپس (قوت_نما(2*x)-1)/(قوت_نما(2*x)+1);}
+ساکن اندرونی اعشاری plse_activate(اعشاری x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    اگر(x < -4) واپس .01 * (x + 4);
+    اگر(x > 4)  واپس .01 * (x - 4) + 1;
+    واپس .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+ساکن اندرونی اعشاری lhtan_activate(اعشاری x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    اگر(x < 0) واپس .001*x;
+    اگر(x > 1) واپس .001*(x-1) + 1;
+    واپس x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+ساکن اندرونی اعشاری lhtan_gradient(اعشاری x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    اگر(x > 0 && x < 1) واپس 1;
+    واپس .001;
 }
-static inline float stair_gradient(float x)
-{
-    if (floor(x) == x) return 0;
-    return 1;
-}
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
 
-#endif
+ساکن اندرونی اعشاری hardtan_gradient(اعشاری x)
+{
+    اگر (x > -1 && x < 1) واپس 1;
+    واپس 0;
+}
+ساکن اندرونی اعشاری خطی_gradient(اعشاری x){واپس 1;}
+ساکن اندرونی اعشاری logistic_gradient(اعشاری x){واپس (1-x)*x;}
+ساکن اندرونی اعشاری loggy_gradient(اعشاری x)
+{
+    اعشاری y = (x+1.)/2.;
+    واپس 2*(1-y)*y;
+}
+ساکن اندرونی اعشاری stair_gradient(اعشاری x)
+{
+    اگر (floor(x) == x) واپس 0;
+    واپس 1;
+}
+ساکن اندرونی اعشاری relu_gradient(اعشاری x){واپس (x>0);}
+ساکن اندرونی اعشاری elu_gradient(اعشاری x){واپس (x >= 0) + (x < 0)*(x + 1);}
+ساکن اندرونی اعشاری selu_gradient(اعشاری x){واپس (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+ساکن اندرونی اعشاری relie_gradient(اعشاری x){واپس (x>0) ? 1 : .01;}
+ساکن اندرونی اعشاری ramp_gradient(اعشاری x){واپس (x>0)+.1;}
+ساکن اندرونی اعشاری leaky_gradient(اعشاری x){واپس (x>0) ? 1 : .1;}
+ساکن اندرونی اعشاری tanh_gradient(اعشاری x){واپس 1-x*x;}
+ساکن اندرونی اعشاری plse_gradient(اعشاری x){واپس (x < 0 || x > 1) ? .01 : .125;}
+
+#اگر_ختم
 

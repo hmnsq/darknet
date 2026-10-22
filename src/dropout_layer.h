@@ -1,20 +1,20 @@
-#ifndef DROPOUT_LAYER_H
-#define DROPOUT_LAYER_H
+#اگر_غیر_تعریف_شدہ DROPOUT_LAYER_H
+#تعریف_کرو DROPOUT_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#شامل "layer.h"
+#شامل "network.h"
 
-typedef layer dropout_layer;
+قسمتعریف layer dropout_layer;
 
-dropout_layer make_dropout_layer(int batch, int inputs, float probability);
+dropout_layer make_dropout_layer(صحیح batch, صحیح inputs, اعشاری probability);
 
-void forward_dropout_layer(dropout_layer l, network net);
-void backward_dropout_layer(dropout_layer l, network net);
-void resize_dropout_layer(dropout_layer *l, int inputs);
+خالی forward_dropout_layer(dropout_layer l, جال net);
+خالی backward_dropout_layer(dropout_layer l, جال net);
+خالی resize_dropout_layer(dropout_layer *l, صحیح inputs);
 
-#ifdef GPU
-void forward_dropout_layer_gpu(dropout_layer l, network net);
-void backward_dropout_layer_gpu(dropout_layer l, network net);
+#اگر_تعریف_شدہ GPU
+خالی forward_dropout_layer_gpu(dropout_layer l, جال net);
+خالی backward_dropout_layer_gpu(dropout_layer l, جال net);
 
-#endif
-#endif
+#اگر_ختم
+#اگر_ختم
