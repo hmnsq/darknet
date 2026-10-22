@@ -1,34 +1,34 @@
-#ifndef GEMM_H
-#define GEMM_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ GEMM_H
+#ವ್ಯಾಖ್ಯಾನಿಸು GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+ಶೂನ್ಯ gemm_bin(ಪೂರ್ಣಾಂಕ M, ಪೂರ್ಣಾಂಕ N, ಪೂರ್ಣಾಂಕ K, ದಶಮಾಂಶ ALPHA, 
+        ಅಕ್ಷರ  *A, ಪೂರ್ಣಾಂಕ lda, 
+        ದಶಮಾಂಶ *B, ಪೂರ್ಣಾಂಕ ldb,
+        ದಶಮಾಂಶ *C, ಪೂರ್ಣಾಂಕ ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+ಶೂನ್ಯ gemm(ಪೂರ್ಣಾಂಕ TA, ಪೂರ್ಣಾಂಕ TB, ಪೂರ್ಣಾಂಕ M, ಪೂರ್ಣಾಂಕ N, ಪೂರ್ಣಾಂಕ K, ದಶಮಾಂಶ ALPHA, 
+                    ದಶಮಾಂಶ *A, ಪೂರ್ಣಾಂಕ lda, 
+                    ದಶಮಾಂಶ *B, ಪೂರ್ಣಾಂಕ ldb,
+                    ದಶಮಾಂಶ BETA,
+                    ದಶಮಾಂಶ *C, ಪೂರ್ಣಾಂಕ ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ಶೂನ್ಯ gemm_cpu(ಪೂರ್ಣಾಂಕ TA, ಪೂರ್ಣಾಂಕ TB, ಪೂರ್ಣಾಂಕ M, ಪೂರ್ಣಾಂಕ N, ಪೂರ್ಣಾಂಕ K, ದಶಮಾಂಶ ALPHA, 
+        ದಶಮಾಂಶ *A, ಪೂರ್ಣಾಂಕ lda, 
+        ದಶಮಾಂಶ *B, ಪೂರ್ಣಾಂಕ ldb,
+        ದಶಮಾಂಶ BETA,
+        ದಶಮಾಂಶ *C, ಪೂರ್ಣಾಂಕ ldc);
 
-#ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ gemm_gpu(ಪೂರ್ಣಾಂಕ TA, ಪೂರ್ಣಾಂಕ TB, ಪೂರ್ಣಾಂಕ M, ಪೂರ್ಣಾಂಕ N, ಪೂರ್ಣಾಂಕ K, ದಶಮಾಂಶ ALPHA, 
+        ದಶಮಾಂಶ *A_gpu, ಪೂರ್ಣಾಂಕ lda, 
+        ದಶಮಾಂಶ *B_gpu, ಪೂರ್ಣಾಂಕ ldb,
+        ದಶಮಾಂಶ BETA,
+        ದಶಮಾಂಶ *C_gpu, ಪೂರ್ಣಾಂಕ ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
-#endif
-#endif
+ಶೂನ್ಯ gemm_gpu(ಪೂರ್ಣಾಂಕ TA, ಪೂರ್ಣಾಂಕ TB, ಪೂರ್ಣಾಂಕ M, ಪೂರ್ಣಾಂಕ N, ಪೂರ್ಣಾಂಕ K, ದಶಮಾಂಶ ALPHA, 
+        ದಶಮಾಂಶ *A, ಪೂರ್ಣಾಂಕ lda, 
+        ದಶಮಾಂಶ *B, ಪೂರ್ಣಾಂಕ ldb,
+        ದಶಮಾಂಶ BETA,
+        ದಶಮಾಂಶ *C, ಪೂರ್ಣಾಂಕ ldc);
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ

@@ -1,14 +1,14 @@
-#ifndef BOX_H
-#define BOX_H
-#include "darknet.h"
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ BOX_H
+#ವ್ಯಾಖ್ಯಾನಿಸು BOX_H
+#ಅನ್ತರ್ಭಾವ "darknet.h"
 
-typedef struct{
-    float dx, dy, dw, dh;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ{
+    ದಶಮಾಂಶ dx, dy, dw, dh;
 } dbox;
 
-float box_rmse(box a, box b);
+ದಶಮಾಂಶ box_rmse(box a, box b);
 dbox diou(box a, box b);
 box decode_box(box b, box anchor);
 box encode_box(box b, box anchor);
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

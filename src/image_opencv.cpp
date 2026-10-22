@@ -1,135 +1,135 @@
-#ifdef OPENCV
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ OPENCV
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "opencv2/opencv.hpp"
-#include "image.h"
+#ಅನ್ತರ್ಭಾವ "stdio.h"
+#ಅನ್ತರ್ಭಾವ "stdlib.h"
+#ಅನ್ತರ್ಭಾವ "opencv2/opencv.hpp"
+#ಅನ್ತರ್ಭಾವ "image.h"
 
-using namespace cv;
+ಬಳಸಿ ನಾಮಾಕಾಶ cv;
 
-extern "C" {
+ಬಾಹ್ಯ "C" {
 
-IplImage *image_to_ipl(image im)
+IplImage *image_ಗಮ್ಯ_ipl(image im)
 {
-    int x,y,c;
-    IplImage *disp = cvCreateImage(cvSize(im.w,im.h), IPL_DEPTH_8U, im.c);
-    int step = disp->widthStep;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            for(c= 0; c < im.c; ++c){
-                float val = im.data[c*im.h*im.w + y*im.w + x];
-                disp->imageData[y*step + x*im.c + c] = (unsigned char)(val*255);
+    ಪೂರ್ಣಾಂಕ x,y,c;
+    IplImage *disp = cvCreateImage(cv_ಗಾತ್ರ(im.w,im.h), IPL_ಆಳ_8_U, im.c);
+    ಪೂರ್ಣಾಂಕ ಹೆಜ್ಜೆ = disp->ಅಗಲ_ಹೆಜ್ಜೆ;
+    ಗಾಗಿ(y = 0; y < im.h; ++y){
+        ಗಾಗಿ(x = 0; x < im.w; ++x){
+            ಗಾಗಿ(c= 0; c < im.c; ++c){
+                ದಶಮಾಂಶ val = im.ದತ್ತಾಂಶ[c*im.h*im.w + y*im.w + x];
+                disp->image_ದತ್ತಾಂಶ[y*ಹೆಜ್ಜೆ + x*im.c + c] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(val*255);
             }
         }
     }
-    return disp;
+    ಹಿಂತಿರುಗಿ disp;
 }
 
-image ipl_to_image(IplImage* src)
+image ipl_ಗಮ್ಯ_image(IplImage* src)
 {
-    int h = src->height;
-    int w = src->width;
-    int c = src->nChannels;
+    ಪೂರ್ಣಾಂಕ h = src->ಎತ್ತರ;
+    ಪೂರ್ಣಾಂಕ w = src->ಅಗಲ;
+    ಪೂರ್ಣಾಂಕ c = src->nChannels;
     image im = make_image(w, h, c);
-    unsigned char *data = (unsigned char *)src->imageData;
-    int step = src->widthStep;
-    int i, j, k;
+    ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ದತ್ತಾಂಶ = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *)src->image_ದತ್ತಾಂಶ;
+    ಪೂರ್ಣಾಂಕ ಹೆಜ್ಜೆ = src->ಅಗಲ_ಹೆಜ್ಜೆ;
+    ಪೂರ್ಣಾಂಕ i, j, k;
 
-    for(i = 0; i < h; ++i){
-        for(k= 0; k < c; ++k){
-            for(j = 0; j < w; ++j){
-                im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
+    ಗಾಗಿ(i = 0; i < h; ++i){
+        ಗಾಗಿ(k= 0; k < c; ++k){
+            ಗಾಗಿ(j = 0; j < w; ++j){
+                im.ದತ್ತಾಂಶ[k*w*h + i*w + j] = ದತ್ತಾಂಶ[i*ಹೆಜ್ಜೆ + j*c + k]/255.;
             }
         }
     }
-    return im;
+    ಹಿಂತಿರುಗಿ im;
 }
 
-Mat image_to_mat(image im)
+Mat image_ಗಮ್ಯ_mat(image im)
 {
     image copy = copy_image(im);
     constrain_image(copy);
-    if(im.c == 3) rgbgr_image(copy);
+    ಆದರೆ(im.c == 3) rgbgr_image(copy);
 
-    IplImage *ipl = image_to_ipl(copy);
-    Mat m = cvarrToMat(ipl, true);
+    IplImage *ipl = image_ಗಮ್ಯ_ipl(copy);
+    Mat m = cvarr_ಗಮ್ಯ_Mat(ipl, ನಿಜ);
     cvReleaseImage(&ipl);
     free_image(copy);
-    return m;
+    ಹಿಂತಿರುಗಿ m;
 }
 
-image mat_to_image(Mat m)
+image mat_ಗಮ್ಯ_image(Mat m)
 {
     IplImage ipl = m;
-    image im = ipl_to_image(&ipl);
+    image im = ipl_ಗಮ್ಯ_image(&ipl);
     rgbgr_image(im);
-    return im;
+    ಹಿಂತಿರುಗಿ im;
 }
 
-void *open_video_stream(const char *f, int c, int w, int h, int fps)
+ಶೂನ್ಯ *open_video_ಹರಿವು(ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *f, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ fps)
 {
     VideoCapture *cap;
-    if(f) cap = new VideoCapture(f);
-    else cap = new VideoCapture(c);
-    if(!cap->isOpened()) return 0;
-    if(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
-    if(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
-    if(fps) cap->set(CV_CAP_PROP_FPS, w);
-    return (void *) cap;
+    ಆದರೆ(f) cap = ಹೊಸ VideoCapture(f);
+    ಇಲ್ಲದಿದ್ದರೆ cap = ಹೊಸ VideoCapture(c);
+    ಆದರೆ(!cap->isOpened()) ಹಿಂತಿರುಗಿ 0;
+    ಆದರೆ(w) cap->ಗಣ(CV_CAP_PROP_ಚೌಕಟ್ಟು_ಅಗಲ, w);
+    ಆದರೆ(h) cap->ಗಣ(CV_CAP_PROP_ಚೌಕಟ್ಟು_ಎತ್ತರ, w);
+    ಆದರೆ(fps) cap->ಗಣ(CV_CAP_PROP_FPS, w);
+    ಹಿಂತಿರುಗಿ (ಶೂನ್ಯ *) cap;
 }
 
-image get_image_from_stream(void *p)
+image get_image_from_ಹರಿವು(ಶೂನ್ಯ *p)
 {
     VideoCapture *cap = (VideoCapture *)p;
     Mat m;
     *cap >> m;
-    if(m.empty()) return make_empty_image(0,0,0);
-    return mat_to_image(m);
+    ಆದರೆ(m.ಖಾಲಿಗಳು()) ಹಿಂತಿರುಗಿ make_ಖಾಲಿಗಳು_image(0,0,0);
+    ಹಿಂತಿರುಗಿ mat_ಗಮ್ಯ_image(m);
 }
 
-image load_image_cv(char *filename, int channels)
+image ತುಂಬು_image_cv(ಅಕ್ಷರ *filename, ಪೂರ್ಣಾಂಕ channels)
 {
-    int flag = -1;
-    if (channels == 0) flag = -1;
-    else if (channels == 1) flag = 0;
-    else if (channels == 3) flag = 1;
-    else {
+    ಪೂರ್ಣಾಂಕ flag = -1;
+    ಆದರೆ (channels == 0) flag = -1;
+    ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (channels == 1) flag = 0;
+    ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (channels == 3) flag = 1;
+    ಇಲ್ಲದಿದ್ದರೆ {
         fprintf(stderr, "OpenCV can't force load with %d channels\n", channels);
     }
     Mat m;
     m = imread(filename, flag);
-    if(!m.data){
+    ಆದರೆ(!m.ದತ್ತಾಂಶ){
         fprintf(stderr, "Cannot load image \"%s\"\n", filename);
-        char buff[256];
+        ಅಕ್ಷರ buff[256];
         sprintf(buff, "echo %s >> bad.list", filename);
         system(buff);
-        return make_image(10,10,3);
+        ಹಿಂತಿರುಗಿ make_image(10,10,3);
         //exit(0);
     }
-    image im = mat_to_image(m);
-    return im;
+    image im = mat_ಗಮ್ಯ_image(m);
+    ಹಿಂತಿರುಗಿ im;
 }
 
-int show_image_cv(image im, const char* name, int ms)
+ಪೂರ್ಣಾಂಕ show_image_cv(image im, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ* name, ಪೂರ್ಣಾಂಕ ms)
 {
-    Mat m = image_to_mat(im);
+    Mat m = image_ಗಮ್ಯ_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
-    if (c != -1) c = c%256;
-    return c;
+    ಪೂರ್ಣಾಂಕ c = wait_ಕೀಲಿ(ms);
+    ಆದರೆ (c != -1) c = c%256;
+    ಹಿಂತಿರುಗಿ c;
 }
 
-void make_window(char *name, int w, int h, int fullscreen)
+ಶೂನ್ಯ make_ಕಿಟಕಿ(ಅಕ್ಷರ *name, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ fullscreen)
 {
-    namedWindow(name, WINDOW_NORMAL); 
-    if (fullscreen) {
-        setWindowProperty(name, CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
-    } else {
-        resizeWindow(name, w, h);
-        if(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
+    named_ಕಿಟಕಿ(name, ಕಿಟಕಿ_ಸಾಮಾನ್ಯ); 
+    ಆದರೆ (fullscreen) {
+        ಗಣ_ಕಿಟಕಿ_Property(name, CV_WND_PROP_FULLSCREEN, CV_ಕಿಟಕಿ_FULLSCREEN);
+    } ಇಲ್ಲದಿದ್ದರೆ {
+        resize_ಕಿಟಕಿ(name, w, h);
+        ಆದರೆ(strcmp(name, "Demo") == 0) move_ಕಿಟಕಿ(name, 0, 0);
     }
 }
 
 }
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

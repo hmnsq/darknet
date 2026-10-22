@@ -1,19 +1,19 @@
-#ifndef NORMALIZATION_LAYER_H
-#define NORMALIZATION_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ NORMALIZATION_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿಸು NORMALIZATION_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#ಅನ್ತರ್ಭಾವ "image.h"
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
 
-layer make_normalization_layer(int batch, int w, int h, int c, int size, float alpha, float beta, float kappa);
-void resize_normalization_layer(layer *layer, int h, int w);
-void forward_normalization_layer(const layer layer, network net);
-void backward_normalization_layer(const layer layer, network net);
-void visualize_normalization_layer(layer layer, char *window);
+layer make_normalization_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ದಶಮಾಂಶ alpha, ದಶಮಾಂಶ beta, ದಶಮಾಂಶ kappa);
+ಶೂನ್ಯ resize_normalization_layer(layer *layer, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ w);
+ಶೂನ್ಯ forward_normalization_layer(ಸ್ಥಿರಾಂಕ layer layer, ಜಾಲ net);
+ಶೂನ್ಯ backward_normalization_layer(ಸ್ಥಿರಾಂಕ layer layer, ಜಾಲ net);
+ಶೂನ್ಯ visualize_normalization_layer(layer layer, ಅಕ್ಷರ *ಕಿಟಕಿ);
 
-#ifdef GPU
-void forward_normalization_layer_gpu(const layer layer, network net);
-void backward_normalization_layer_gpu(const layer layer, network net);
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ forward_normalization_layer_gpu(ಸ್ಥಿರಾಂಕ layer layer, ಜಾಲ net);
+ಶೂನ್ಯ backward_normalization_layer_gpu(ಸ್ಥಿರಾಂಕ layer layer, ಜಾಲ net);
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

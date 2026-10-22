@@ -1,87 +1,87 @@
-#ifndef ACTIVATIONS_H
-#define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ ACTIVATIONS_H
+#ವ್ಯಾಖ್ಯಾನಿಸು ACTIVATIONS_H
+#ಅನ್ತರ್ಭಾವ "darknet.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(ಅಕ್ಷರ *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
-#ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
-#endif
+ಅಕ್ಷರ *get_activation_string(ACTIVATION a);
+ದಶಮಾಂಶ activate(ದಶಮಾಂಶ x, ACTIVATION a);
+ದಶಮಾಂಶ gradient(ದಶಮಾಂಶ x, ACTIVATION a);
+ಶೂನ್ಯ gradient_array(ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ *x, ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ n, ಸ್ಥಿರಾಂಕ ACTIVATION a, ದಶಮಾಂಶ *delta);
+ಶೂನ್ಯ activate_array(ದಶಮಾಂಶ *x, ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ n, ಸ್ಥಿರಾಂಕ ACTIVATION a);
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ activate_array_gpu(ದಶಮಾಂಶ *x, ಪೂರ್ಣಾಂಕ n, ACTIVATION a);
+ಶೂನ್ಯ gradient_array_gpu(ದಶಮಾಂಶ *x, ಪೂರ್ಣಾಂಕ n, ACTIVATION a, ದಶಮಾಂಶ *delta);
+#ಆದರೆ_ಅಂತ್ಯ
 
-static inline float stair_activate(float x)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ stair_activate(ದಶಮಾಂಶ x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    ಪೂರ್ಣಾಂಕ n = floor(x);
+    ಆದರೆ (n%2 == 0) ಹಿಂತಿರುಗಿ floor(x/2.);
+    ಇಲ್ಲದಿದ್ದರೆ ಹಿಂತಿರುಗಿ (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ hardtan_activate(ದಶಮಾಂಶ x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    ಆದರೆ (x < -1) ಹಿಂತಿರುಗಿ -1;
+    ಆದರೆ (x > 1) ಹಿಂತಿರುಗಿ 1;
+    ಹಿಂತಿರುಗಿ x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ ರೇಖೀಯ_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ x;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ logistic_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ 1./(1. + ಘಾತಾಂಕ(-x));}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ loggy_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ 2./(1. + ಘಾತಾಂಕ(-x)) - 1;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ relu_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ x*(x>0);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ elu_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x >= 0)*x + (x < 0)*(ಘಾತಾಂಕ(x)-1);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ selu_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(ಘಾತಾಂಕ(x)-1);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ relie_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x>0) ? x : .01*x;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ ramp_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ x*(x>0)+.1*x;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ leaky_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x>0) ? x : .1*x;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ tanh_activate(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (ಘಾತಾಂಕ(2*x)-1)/(ಘಾತಾಂಕ(2*x)+1);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ plse_activate(ದಶಮಾಂಶ x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    ಆದರೆ(x < -4) ಹಿಂತಿರುಗಿ .01 * (x + 4);
+    ಆದರೆ(x > 4)  ಹಿಂತಿರುಗಿ .01 * (x - 4) + 1;
+    ಹಿಂತಿರುಗಿ .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ lhtan_activate(ದಶಮಾಂಶ x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    ಆದರೆ(x < 0) ಹಿಂತಿರುಗಿ .001*x;
+    ಆದರೆ(x > 1) ಹಿಂತಿರುಗಿ .001*(x-1) + 1;
+    ಹಿಂತಿರುಗಿ x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ lhtan_gradient(ದಶಮಾಂಶ x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    ಆದರೆ(x > 0 && x < 1) ಹಿಂತಿರುಗಿ 1;
+    ಹಿಂತಿರುಗಿ .001;
 }
-static inline float stair_gradient(float x)
-{
-    if (floor(x) == x) return 0;
-    return 1;
-}
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
 
-#endif
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ hardtan_gradient(ದಶಮಾಂಶ x)
+{
+    ಆದರೆ (x > -1 && x < 1) ಹಿಂತಿರುಗಿ 1;
+    ಹಿಂತಿರುಗಿ 0;
+}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ ರೇಖೀಯ_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ 1;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ logistic_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (1-x)*x;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ loggy_gradient(ದಶಮಾಂಶ x)
+{
+    ದಶಮಾಂಶ y = (x+1.)/2.;
+    ಹಿಂತಿರುಗಿ 2*(1-y)*y;
+}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ stair_gradient(ದಶಮಾಂಶ x)
+{
+    ಆದರೆ (floor(x) == x) ಹಿಂತಿರುಗಿ 0;
+    ಹಿಂತಿರುಗಿ 1;
+}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ relu_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x>0);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ elu_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x >= 0) + (x < 0)*(x + 1);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ selu_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ relie_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x>0) ? 1 : .01;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ ramp_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x>0)+.1;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ leaky_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x>0) ? 1 : .1;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ tanh_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ 1-x*x;}
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ plse_gradient(ದಶಮಾಂಶ x){ಹಿಂತಿರುಗಿ (x < 0 || x > 1) ? .01 : .125;}
+
+#ಆದರೆ_ಅಂತ್ಯ
 

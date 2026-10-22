@@ -1,50 +1,50 @@
-#ifndef DATA_H
-#define DATA_H
-#include <pthread.h>
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ ದತ್ತಾಂಶ_H
+#ವ್ಯಾಖ್ಯಾನಿಸು ದತ್ತಾಂಶ_H
+#ಅನ್ತರ್ಭಾವ <pthread.h>
 
-#include "darknet.h"
-#include "matrix.h"
-#include "list.h"
-#include "image.h"
-#include "tree.h"
+#ಅನ್ತರ್ಭಾವ "darknet.h"
+#ಅನ್ತರ್ಭಾವ "matrix.h"
+#ಅನ್ತರ್ಭಾವ "list.h"
+#ಅನ್ತರ್ಭಾವ "image.h"
+#ಅನ್ತರ್ಭಾವ "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+ಸ್ಥಿರ ಸಾಲೊಳಗೆ ದಶಮಾಂಶ ದೂರ_from_ಅಂಚು(ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    ಪೂರ್ಣಾಂಕ dx = (max/2) - x;
+    ಆದರೆ (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
-    float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    ದಶಮಾಂಶ dist = (ದಶಮಾಂಶ)dx/max;
+    ಆದರೆ (dist > 1) dist = 1;
+    ಹಿಂತಿರುಗಿ dist;
 }
-void load_data_blocking(load_args args);
+ಶೂನ್ಯ ತುಂಬು_ದತ್ತಾಂಶ_blocking(ತುಂಬು_ವಾದಗಳು ವಾದಗಳು);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+ಶೂನ್ಯ print_letters(ದಶಮಾಂಶ *pred, ಪೂರ್ಣಾಂಕ n);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_captcha(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ k, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_captcha_encode(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_detection(ಪೂರ್ಣಾಂಕ n, ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ boxes, ಪೂರ್ಣಾಂಕ classes, ದಶಮಾಂಶ jitter, ದಶಮಾಂಶ hue, ದಶಮಾಂಶ saturation, ದಶಮಾಂಶ exposure);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_ಟ್ಯಾಗ್(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ k, ಪೂರ್ಣಾಂಕ min, ಪೂರ್ಣಾಂಕ max, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ದಶಮಾಂಶ angle, ದಶಮಾಂಶ aspect, ದಶಮಾಂಶ hue, ದಶಮಾಂಶ saturation, ದಶಮಾಂಶ exposure);
+ಮಾತೃಕೆ ತುಂಬು_image_augment_paths(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ min, ಪೂರ್ಣಾಂಕ max, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ದಶಮಾಂಶ angle, ದಶಮಾಂಶ aspect, ದಶಮಾಂಶ hue, ದಶಮಾಂಶ saturation, ದಶಮಾಂಶ exposure, ಪೂರ್ಣಾಂಕ center);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_super(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ scale);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_augment(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಅಕ್ಷರ **labels, ಪೂರ್ಣಾಂಕ k, ವೃಕ್ಷ *hierarchy, ಪೂರ್ಣಾಂಕ min, ಪೂರ್ಣಾಂಕ max, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ದಶಮಾಂಶ angle, ದಶಮಾಂಶ aspect, ದಶಮಾಂಶ hue, ದಶಮಾಂಶ saturation, ದಶಮಾಂಶ exposure, ಪೂರ್ಣಾಂಕ center);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_regression(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ classes, ಪೂರ್ಣಾಂಕ min, ಪೂರ್ಣಾಂಕ max, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ದಶಮಾಂಶ angle, ದಶಮಾಂಶ aspect, ದಶಮಾಂಶ hue, ದಶಮಾಂಶ saturation, ದಶಮಾಂಶ exposure);
+ದತ್ತಾಂಶ ತುಂಬು_go(ಅಕ್ಷರ *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+ದತ್ತಾಂಶ ತುಂಬು_ದತ್ತಾಂಶ_writing(ಅಕ್ಷರ **paths, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ m, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ ಹೊರಹೋಗು_w, ಪೂರ್ಣಾಂಕ ಹೊರಹೋಗು_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
-void normalize_data_rows(data d);
-void scale_data_rows(data d, float s);
-void translate_data_rows(data d, float s);
-void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+ಶೂನ್ಯ get_random_batch(ದತ್ತಾಂಶ d, ಪೂರ್ಣಾಂಕ n, ದಶಮಾಂಶ *X, ದಶಮಾಂಶ *y);
+ದತ್ತಾಂಶ get_ದತ್ತಾಂಶ_part(ದತ್ತಾಂಶ d, ಪೂರ್ಣಾಂಕ part, ಪೂರ್ಣಾಂಕ ಒಟ್ಟು);
+ದತ್ತಾಂಶ get_random_ದತ್ತಾಂಶ(ದತ್ತಾಂಶ d, ಪೂರ್ಣಾಂಕ ಅಂಕೆ);
+ದತ್ತಾಂಶ ತುಂಬು_categorical_ದತ್ತಾಂಶ_csv(ಅಕ್ಷರ *filename, ಪೂರ್ಣಾಂಕ ಗುರಿ, ಪೂರ್ಣಾಂಕ k);
+ಶೂನ್ಯ normalize_ದತ್ತಾಂಶ_ಅಡ್ಡಸಾಲುಗಳು(ದತ್ತಾಂಶ d);
+ಶೂನ್ಯ scale_ದತ್ತಾಂಶ_ಅಡ್ಡಸಾಲುಗಳು(ದತ್ತಾಂಶ d, ದಶಮಾಂಶ s);
+ಶೂನ್ಯ translate_ದತ್ತಾಂಶ_ಅಡ್ಡಸಾಲುಗಳು(ದತ್ತಾಂಶ d, ದಶಮಾಂಶ s);
+ಶೂನ್ಯ randomize_ದತ್ತಾಂಶ(ದತ್ತಾಂಶ d);
+ದತ್ತಾಂಶ *ವಿಭಜಿಸು_ದತ್ತಾಂಶ(ದತ್ತಾಂಶ d, ಪೂರ್ಣಾಂಕ part, ಪೂರ್ಣಾಂಕ ಒಟ್ಟು);
+ದತ್ತಾಂಶ concat_datas(ದತ್ತಾಂಶ *d, ಪೂರ್ಣಾಂಕ n);
+ಶೂನ್ಯ fill_truth(ಅಕ್ಷರ *ಮಾರ್ಗ, ಅಕ್ಷರ **labels, ಪೂರ್ಣಾಂಕ k, ದಶಮಾಂಶ *truth);
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

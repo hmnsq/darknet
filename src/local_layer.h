@@ -1,31 +1,31 @@
-#ifndef LOCAL_LAYER_H
-#define LOCAL_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ LOCAL_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿಸು LOCAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "image.h"
+#ಅನ್ತರ್ಭಾವ "activations.h"
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
 
-typedef layer local_layer;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ layer local_layer;
 
-#ifdef GPU
-void forward_local_layer_gpu(local_layer layer, network net);
-void backward_local_layer_gpu(local_layer layer, network net);
-void update_local_layer_gpu(local_layer layer, update_args a);
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ forward_local_layer_gpu(local_layer layer, ಜಾಲ net);
+ಶೂನ್ಯ backward_local_layer_gpu(local_layer layer, ಜಾಲ net);
+ಶೂನ್ಯ update_local_layer_gpu(local_layer layer, update_ವಾದಗಳು a);
 
-void push_local_layer(local_layer layer);
-void pull_local_layer(local_layer layer);
-#endif
+ಶೂನ್ಯ ತಳ್ಳು_local_layer(local_layer layer);
+ಶೂನ್ಯ pull_local_layer(local_layer layer);
+#ಆದರೆ_ಅಂತ್ಯ
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation);
+local_layer make_local_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ಪೂರ್ಣಾಂಕ stride, ಪೂರ್ಣಾಂಕ pad, ACTIVATION activation);
 
-void forward_local_layer(const local_layer layer, network net);
-void backward_local_layer(local_layer layer, network net);
-void update_local_layer(local_layer layer, update_args a);
+ಶೂನ್ಯ forward_local_layer(ಸ್ಥಿರಾಂಕ local_layer layer, ಜಾಲ net);
+ಶೂನ್ಯ backward_local_layer(local_layer layer, ಜಾಲ net);
+ಶೂನ್ಯ update_local_layer(local_layer layer, update_ವಾದಗಳು a);
 
-void bias_output(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+ಶೂನ್ಯ bias_output(ದಶಮಾಂಶ *output, ದಶಮಾಂಶ *biases, ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2);
+ಶೂನ್ಯ backward_bias(ದಶಮಾಂಶ *bias_updates, ದಶಮಾಂಶ *delta, ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2);
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 

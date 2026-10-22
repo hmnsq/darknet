@@ -1,196 +1,196 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#ಅನ್ತರ್ಭಾವ "matrix.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <assert.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
 
-void free_matrix(matrix m)
+ಶೂನ್ಯ free_ಮಾತೃಕೆ(ಮಾತೃಕೆ m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    ಪೂರ್ಣಾಂಕ i;
+    ಗಾಗಿ(i = 0; i < m.ಅಡ್ಡಸಾಲುಗಳು; ++i) ಬಿಡುಗಡೆ(m.vals[i]);
+    ಬಿಡುಗಡೆ(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+ದಶಮಾಂಶ ಮಾತೃಕೆ_topk_accuracy(ಮಾತೃಕೆ truth, ಮಾತೃಕೆ guess, ಪೂರ್ಣಾಂಕ k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    ಪೂರ್ಣಾಂಕ *indexes = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(k, ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+    ಪೂರ್ಣಾಂಕ n = truth.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ;
+    ಪೂರ್ಣಾಂಕ i,j;
+    ಪೂರ್ಣಾಂಕ correct = 0;
+    ಗಾಗಿ(i = 0; i < truth.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        ತುದಿ_k(guess.vals[i], n, k, indexes);
+        ಗಾಗಿ(j = 0; j < k; ++j){
+            ಪೂರ್ಣಾಂಕ class = indexes[j];
+            ಆದರೆ(truth.vals[i][class]){
                 ++correct;
-                break;
+                ನಿಲ್ಲಿಸು;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    ಬಿಡುಗಡೆ(indexes);
+    ಹಿಂತಿರುಗಿ (ದಶಮಾಂಶ)correct/truth.ಅಡ್ಡಸಾಲುಗಳು;
 }
 
-void scale_matrix(matrix m, float scale)
+ಶೂನ್ಯ scale_ಮಾತೃಕೆ(ಮಾತೃಕೆ m, ದಶಮಾಂಶ scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    ಪೂರ್ಣಾಂಕ i,j;
+    ಗಾಗಿ(i = 0; i < m.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        ಗಾಗಿ(j = 0; j < m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+ಮಾತೃಕೆ resize_ಮಾತೃಕೆ(ಮಾತೃಕೆ m, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    ಪೂರ್ಣಾಂಕ i;
+    ಆದರೆ (m.ಅಡ್ಡಸಾಲುಗಳು == ಗಾತ್ರ_2) ಹಿಂತಿರುಗಿ m;
+    ಆದರೆ (m.ಅಡ್ಡಸಾಲುಗಳು < ಗಾತ್ರ_2) {
+        m.vals = realloc(m.vals, ಗಾತ್ರ_2*ಗಾತ್ರ(ದಶಮಾಂಶ*));
+        ಗಾಗಿ (i = m.ಅಡ್ಡಸಾಲುಗಳು; i < ಗಾತ್ರ_2; ++i) {
+            m.vals[i] = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ, ಗಾತ್ರ(ದಶಮಾಂಶ));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (m.ಅಡ್ಡಸಾಲುಗಳು > ಗಾತ್ರ_2) {
+        ಗಾಗಿ (i = ಗಾತ್ರ_2; i < m.ಅಡ್ಡಸಾಲುಗಳು; ++i) {
+            ಬಿಡುಗಡೆ(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, ಗಾತ್ರ_2*ಗಾತ್ರ(ದಶಮಾಂಶ*));
     }
-    m.rows = size;
-    return m;
+    m.ಅಡ್ಡಸಾಲುಗಳು = ಗಾತ್ರ_2;
+    ಹಿಂತಿರುಗಿ m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+ಶೂನ್ಯ ಮಾತೃಕೆ_ಕೂಡಿಸು_ಮಾತೃಕೆ(ಮಾತೃಕೆ from, ಮಾತೃಕೆ ಗಮ್ಯ)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
-            to.vals[i][j] += from.vals[i][j];
+    ಪ್ರತಿಜ್ಞಾ(from.ಅಡ್ಡಸಾಲುಗಳು == ಗಮ್ಯ.ಅಡ್ಡಸಾಲುಗಳು && from.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ == ಗಮ್ಯ.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ);
+    ಪೂರ್ಣಾಂಕ i,j;
+    ಗಾಗಿ(i = 0; i < from.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        ಗಾಗಿ(j = 0; j < from.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ; ++j){
+            ಗಮ್ಯ.vals[i][j] += from.vals[i][j];
         }
     }
 }
 
-matrix copy_matrix(matrix m)
+ಮಾತೃಕೆ copy_ಮಾತೃಕೆ(ಮಾತೃಕೆ m)
 {
-    matrix c = {0};
-    c.rows = m.rows;
-    c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
-        copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
+    ಮಾತೃಕೆ c = {0};
+    c.ಅಡ್ಡಸಾಲುಗಳು = m.ಅಡ್ಡಸಾಲುಗಳು;
+    c.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ = m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ;
+    c.vals = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(c.ಅಡ್ಡಸಾಲುಗಳು, ಗಾತ್ರ(ದಶಮಾಂಶ *));
+    ಪೂರ್ಣಾಂಕ i;
+    ಗಾಗಿ(i = 0; i < c.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        c.vals[i] = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(c.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ, ಗಾತ್ರ(ದಶಮಾಂಶ));
+        copy_cpu(c.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    ಹಿಂತಿರುಗಿ c;
 }
 
-matrix make_matrix(int rows, int cols)
+ಮಾತೃಕೆ make_ಮಾತೃಕೆ(ಪೂರ್ಣಾಂಕ ಅಡ್ಡಸಾಲುಗಳು, ಪೂರ್ಣಾಂಕ ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ)
 {
-    int i;
-    matrix m;
-    m.rows = rows;
-    m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    ಪೂರ್ಣಾಂಕ i;
+    ಮಾತೃಕೆ m;
+    m.ಅಡ್ಡಸಾಲುಗಳು = ಅಡ್ಡಸಾಲುಗಳು;
+    m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ = ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ;
+    m.vals = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(m.ಅಡ್ಡಸಾಲುಗಳು, ಗಾತ್ರ(ದಶಮಾಂಶ *));
+    ಗಾಗಿ(i = 0; i < m.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        m.vals[i] = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ, ಗಾತ್ರ(ದಶಮಾಂಶ));
     }
-    return m;
+    ಹಿಂತಿರುಗಿ m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+ಮಾತೃಕೆ hold_ಹೊರಹೋಗು_ಮಾತೃಕೆ(ಮಾತೃಕೆ *m, ಪೂರ್ಣಾಂಕ n)
 {
-    int i;
-    matrix h;
-    h.rows = n;
-    h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
-        h.vals[i] = m->vals[index];
-        m->vals[index] = m->vals[--(m->rows)];
+    ಪೂರ್ಣಾಂಕ i;
+    ಮಾತೃಕೆ h;
+    h.ಅಡ್ಡಸಾಲುಗಳು = n;
+    h.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ = m->ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ;
+    h.vals = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(h.ಅಡ್ಡಸಾಲುಗಳು, ಗಾತ್ರ(ದಶಮಾಂಶ *));
+    ಗಾಗಿ(i = 0; i < n; ++i){
+        ಪೂರ್ಣಾಂಕ ಸೂಚ್ಯಂಕ = rand()%m->ಅಡ್ಡಸಾಲುಗಳು;
+        h.vals[i] = m->vals[ಸೂಚ್ಯಂಕ];
+        m->vals[ಸೂಚ್ಯಂಕ] = m->vals[--(m->ಅಡ್ಡಸಾಲುಗಳು)];
     }
-    return h;
+    ಹಿಂತಿರುಗಿ h;
 }
 
-float *pop_column(matrix *m, int c)
+ದಶಮಾಂಶ *ತೆಗೆ_ಸ್ತಂಭ(ಮಾತೃಕೆ *m, ಪೂರ್ಣಾಂಕ c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
-        col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+    ದಶಮಾಂಶ *ಲಂಬಸಾಲು = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(m->ಅಡ್ಡಸಾಲುಗಳು, ಗಾತ್ರ(ದಶಮಾಂಶ));
+    ಪೂರ್ಣಾಂಕ i, j;
+    ಗಾಗಿ(i = 0; i < m->ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        ಲಂಬಸಾಲು[i] = m->vals[i][c];
+        ಗಾಗಿ(j = c; j < m->ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
-    --m->cols;
-    return col;
+    --m->ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ;
+    ಹಿಂತಿರುಗಿ ಲಂಬಸಾಲು;
 }
 
-matrix csv_to_matrix(char *filename)
+ಮಾತೃಕೆ csv_ಗಮ್ಯ_ಮಾತೃಕೆ(ಅಕ್ಷರ *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    ಆದರೆ(!fp) file_error(filename);
 
-    matrix m;
-    m.cols = -1;
+    ಮಾತೃಕೆ m;
+    m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ = -1;
 
-    char *line;
+    ಅಕ್ಷರ *ಸಾಲು;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
-            size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+    ಪೂರ್ಣಾಂಕ n = 0;
+    ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2 = 1024;
+    m.vals = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(ಗಾತ್ರ_2, ಗಾತ್ರ(ದಶಮಾಂಶ*));
+    ಆಗ((ಸಾಲು = fgetl(fp))){
+        ಆದರೆ(m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ == -1) m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ = ಎಣಿಕೆ_fields(ಸಾಲು);
+        ಆದರೆ(n == ಗಾತ್ರ_2){
+            ಗಾತ್ರ_2 *= 2;
+            m.vals = realloc(m.vals, ಗಾತ್ರ_2*ಗಾತ್ರ(ದಶಮಾಂಶ*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(ಸಾಲು, m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ);
+        ಬಿಡುಗಡೆ(ಸಾಲು);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
-    m.rows = n;
-    return m;
+    m.vals = realloc(m.vals, n*ಗಾತ್ರ(ದಶಮಾಂಶ*));
+    m.ಅಡ್ಡಸಾಲುಗಳು = n;
+    ಹಿಂತಿರುಗಿ m;
 }
 
-void matrix_to_csv(matrix m)
+ಶೂನ್ಯ ಮಾತೃಕೆ_ಗಮ್ಯ_csv(ಮಾತೃಕೆ m)
 {
-    int i, j;
+    ಪೂರ್ಣಾಂಕ i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
-            printf("%.17g", m.vals[i][j]);
+    ಗಾಗಿ(i = 0; i < m.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        ಗಾಗಿ(j = 0; j < m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ; ++j){
+            ಆದರೆ(j > 0) ಬರೆ(",");
+            ಬರೆ("%.17g", m.vals[i][j]);
         }
-        printf("\n");
+        ಬರೆ("\n");
     }
 }
 
-void print_matrix(matrix m)
+ಶೂನ್ಯ print_ಮಾತೃಕೆ(ಮಾತೃಕೆ m)
 {
-    int i, j;
-    printf("%d X %d Matrix:\n",m.rows, m.cols);
-    printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__ \n");
+    ಪೂರ್ಣಾಂಕ i, j;
+    ಬರೆ("%d X %d Matrix:\n",m.ಅಡ್ಡಸಾಲುಗಳು, m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ);
+    ಬರೆ(" __");
+    ಗಾಗಿ(j = 0; j < 16*m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ-1; ++j) ಬರೆ(" ");
+    ಬರೆ("__ \n");
 
-    printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("  |\n");
+    ಬರೆ("|  ");
+    ಗಾಗಿ(j = 0; j < 16*m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ-1; ++j) ಬರೆ(" ");
+    ಬರೆ("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
-        printf("|  ");
-        for(j = 0; j < m.cols; ++j){
-            printf("%15.7f ", m.vals[i][j]);
+    ಗಾಗಿ(i = 0; i < m.ಅಡ್ಡಸಾಲುಗಳು; ++i){
+        ಬರೆ("|  ");
+        ಗಾಗಿ(j = 0; j < m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ; ++j){
+            ಬರೆ("%15.7f ", m.vals[i][j]);
         }
-        printf(" |\n");
+        ಬರೆ(" |\n");
     }
-    printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__|\n");
+    ಬರೆ("|__");
+    ಗಾಗಿ(j = 0; j < 16*m.ಲಂಬಸಾಲು_ಸಂಖ್ಯೆ-1; ++j) ಬರೆ(" ");
+    ಬರೆ("__|\n");
 }

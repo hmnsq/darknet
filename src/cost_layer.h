@@ -1,20 +1,20 @@
-#ifndef COST_LAYER_H
-#define COST_LAYER_H
-#include "layer.h"
-#include "network.h"
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ ವೆಚ್ಚ_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿಸು ವೆಚ್ಚ_LAYER_H
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
 
-typedef layer cost_layer;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ layer ವೆಚ್ಚ_layer;
 
-COST_TYPE get_cost_type(char *s);
-char *get_cost_string(COST_TYPE a);
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE type, float scale);
-void forward_cost_layer(const cost_layer l, network net);
-void backward_cost_layer(const cost_layer l, network net);
-void resize_cost_layer(cost_layer *l, int inputs);
+ವೆಚ್ಚ_TYPE get_ವೆಚ್ಚ_type(ಅಕ್ಷರ *s);
+ಅಕ್ಷರ *get_ವೆಚ್ಚ_string(ವೆಚ್ಚ_TYPE a);
+ವೆಚ್ಚ_layer make_ವೆಚ್ಚ_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ inputs, ವೆಚ್ಚ_TYPE type, ದಶಮಾಂಶ scale);
+ಶೂನ್ಯ forward_ವೆಚ್ಚ_layer(ಸ್ಥಿರಾಂಕ ವೆಚ್ಚ_layer l, ಜಾಲ net);
+ಶೂನ್ಯ backward_ವೆಚ್ಚ_layer(ಸ್ಥಿರಾಂಕ ವೆಚ್ಚ_layer l, ಜಾಲ net);
+ಶೂನ್ಯ resize_ವೆಚ್ಚ_layer(ವೆಚ್ಚ_layer *l, ಪೂರ್ಣಾಂಕ inputs);
 
-#ifdef GPU
-void forward_cost_layer_gpu(cost_layer l, network net);
-void backward_cost_layer_gpu(const cost_layer l, network net);
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ forward_ವೆಚ್ಚ_layer_gpu(ವೆಚ್ಚ_layer l, ಜಾಲ net);
+ಶೂನ್ಯ backward_ವೆಚ್ಚ_layer_gpu(ಸ್ಥಿರಾಂಕ ವೆಚ್ಚ_layer l, ಜಾಲ net);
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

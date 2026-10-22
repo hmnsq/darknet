@@ -1,10 +1,10 @@
-#include "upsample_layer.h"
-#include "cuda.h"
-#include "blas.h"
+#ಅನ್ತರ್ಭಾವ "upsample_layer.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ "blas.h"
 
-#include <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
 
-layer make_upsample_layer(int batch, int w, int h, int c, int stride)
+layer make_upsample_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ stride)
 {
     layer l = {0};
     l.type = UPSAMPLE;
@@ -12,95 +12,95 @@ layer make_upsample_layer(int batch, int w, int h, int c, int stride)
     l.w = w;
     l.h = h;
     l.c = c;
-    l.out_w = w*stride;
-    l.out_h = h*stride;
-    l.out_c = c;
-    if(stride < 0){
+    l.ಹೊರಹೋಗು_w = w*stride;
+    l.ಹೊರಹೋಗು_h = h*stride;
+    l.ಹೊರಹೋಗು_c = c;
+    ಆದರೆ(stride < 0){
         stride = -stride;
-        l.reverse=1;
-        l.out_w = w/stride;
-        l.out_h = h/stride;
+        l.ಹಿಮ್ಮುಖ=1;
+        l.ಹೊರಹೋಗು_w = w/stride;
+        l.ಹೊರಹೋಗು_h = h/stride;
     }
     l.stride = stride;
-    l.outputs = l.out_w*l.out_h*l.out_c;
+    l.outputs = l.ಹೊರಹೋಗು_w*l.ಹೊರಹೋಗು_h*l.ಹೊರಹೋಗು_c;
     l.inputs = l.w*l.h*l.c;
-    l.delta =  calloc(l.outputs*batch, sizeof(float));
-    l.output = calloc(l.outputs*batch, sizeof(float));;
+    l.delta =  ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(l.outputs*batch, ಗಾತ್ರ(ದಶಮಾಂಶ));
+    l.output = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(l.outputs*batch, ಗಾತ್ರ(ದಶಮಾಂಶ));;
 
     l.forward = forward_upsample_layer;
     l.backward = backward_upsample_layer;
-    #ifdef GPU
+    #ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
     l.forward_gpu = forward_upsample_layer_gpu;
     l.backward_gpu = backward_upsample_layer_gpu;
 
     l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
-    #endif
-    if(l.reverse) fprintf(stderr, "downsample         %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    else fprintf(stderr, "upsample           %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    return l;
+    #ಆದರೆ_ಅಂತ್ಯ
+    ಆದರೆ(l.ಹಿಮ್ಮುಖ) fprintf(stderr, "downsample         %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.ಹೊರಹೋಗು_c);
+    ಇಲ್ಲದಿದ್ದರೆ fprintf(stderr, "upsample           %2dx  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", stride, w, h, c, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.ಹೊರಹೋಗು_c);
+    ಹಿಂತಿರುಗಿ l;
 }
 
-void resize_upsample_layer(layer *l, int w, int h)
+ಶೂನ್ಯ resize_upsample_layer(layer *l, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h)
 {
     l->w = w;
     l->h = h;
-    l->out_w = w*l->stride;
-    l->out_h = h*l->stride;
-    if(l->reverse){
-        l->out_w = w/l->stride;
-        l->out_h = h/l->stride;
+    l->ಹೊರಹೋಗು_w = w*l->stride;
+    l->ಹೊರಹೋಗು_h = h*l->stride;
+    ಆದರೆ(l->ಹಿಮ್ಮುಖ){
+        l->ಹೊರಹೋಗು_w = w/l->stride;
+        l->ಹೊರಹೋಗು_h = h/l->stride;
     }
-    l->outputs = l->out_w*l->out_h*l->out_c;
+    l->outputs = l->ಹೊರಹೋಗು_w*l->ಹೊರಹೋಗು_h*l->ಹೊರಹೋಗು_c;
     l->inputs = l->h*l->w*l->c;
-    l->delta =  realloc(l->delta, l->outputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, l->outputs*l->batch*sizeof(float));
+    l->delta =  realloc(l->delta, l->outputs*l->batch*ಗಾತ್ರ(ದಶಮಾಂಶ));
+    l->output = realloc(l->output, l->outputs*l->batch*ಗಾತ್ರ(ದಶಮಾಂಶ));
 
-#ifdef GPU
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
     l->output_gpu  = cuda_make_array(l->output, l->outputs*l->batch);
     l->delta_gpu   = cuda_make_array(l->delta,  l->outputs*l->batch);
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
     
 }
 
-void forward_upsample_layer(const layer l, network net)
+ಶೂನ್ಯ forward_upsample_layer(ಸ್ಥಿರಾಂಕ layer l, ಜಾಲ net)
 {
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
-    if(l.reverse){
-        upsample_cpu(l.output, l.out_w, l.out_h, l.c, l.batch, l.stride, 0, l.scale, net.input);
-    }else{
-        upsample_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.scale, l.output);
+    ಆದರೆ(l.ಹಿಮ್ಮುಖ){
+        upsample_cpu(l.output, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.c, l.batch, l.stride, 0, l.scale, net.ಒಳಹರಿವು);
+    }ಇಲ್ಲದಿದ್ದರೆ{
+        upsample_cpu(net.ಒಳಹರಿವು, l.w, l.h, l.c, l.batch, l.stride, 1, l.scale, l.output);
     }
 }
 
-void backward_upsample_layer(const layer l, network net)
+ಶೂನ್ಯ backward_upsample_layer(ಸ್ಥಿರಾಂಕ layer l, ಜಾಲ net)
 {
-    if(l.reverse){
-        upsample_cpu(l.delta, l.out_w, l.out_h, l.c, l.batch, l.stride, 1, l.scale, net.delta);
-    }else{
+    ಆದರೆ(l.ಹಿಮ್ಮುಖ){
+        upsample_cpu(l.delta, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.c, l.batch, l.stride, 1, l.scale, net.delta);
+    }ಇಲ್ಲದಿದ್ದರೆ{
         upsample_cpu(net.delta, l.w, l.h, l.c, l.batch, l.stride, 0, l.scale, l.delta);
     }
 }
 
-#ifdef GPU
-void forward_upsample_layer_gpu(const layer l, network net)
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ forward_upsample_layer_gpu(ಸ್ಥಿರಾಂಕ layer l, ಜಾಲ net)
 {
     fill_gpu(l.outputs*l.batch, 0, l.output_gpu, 1);
-    if(l.reverse){
-        upsample_gpu(l.output_gpu, l.out_w, l.out_h, l.c, l.batch, l.stride, 0, l.scale, net.input_gpu);
-    }else{
-        upsample_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.scale, l.output_gpu);
+    ಆದರೆ(l.ಹಿಮ್ಮುಖ){
+        upsample_gpu(l.output_gpu, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.c, l.batch, l.stride, 0, l.scale, net.ಒಳಹರಿವು_gpu);
+    }ಇಲ್ಲದಿದ್ದರೆ{
+        upsample_gpu(net.ಒಳಹರಿವು_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.scale, l.output_gpu);
     }
 }
 
-void backward_upsample_layer_gpu(const layer l, network net)
+ಶೂನ್ಯ backward_upsample_layer_gpu(ಸ್ಥಿರಾಂಕ layer l, ಜಾಲ net)
 {
-    if(l.reverse){
-        upsample_gpu(l.delta_gpu, l.out_w, l.out_h, l.c, l.batch, l.stride, 1, l.scale, net.delta_gpu);
-    }else{
+    ಆದರೆ(l.ಹಿಮ್ಮುಖ){
+        upsample_gpu(l.delta_gpu, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.c, l.batch, l.stride, 1, l.scale, net.delta_gpu);
+    }ಇಲ್ಲದಿದ್ದರೆ{
         upsample_gpu(net.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.scale, l.delta_gpu);
     }
 }
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

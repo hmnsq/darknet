@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ "tree.h"
+#ಅನ್ತರ್ಭಾವ "utils.h"
+#ಅನ್ತರ್ಭಾವ "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+ಶೂನ್ಯ change_leaves(ವೃಕ್ಷ *t, ಅಕ್ಷರ *ಎಲೆ_list)
 {
-    list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
-        t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
-                t->leaf[i] = 1;
-                ++found;
-                break;
+    list *llist = get_paths(ಎಲೆ_list);
+    ಅಕ್ಷರ **leaves = (ಅಕ್ಷರ **)list_ಗಮ್ಯ_array(llist);
+    ಪೂರ್ಣಾಂಕ n = llist->ಗಾತ್ರ_2;
+    ಪೂರ್ಣಾಂಕ i,j;
+    ಪೂರ್ಣಾಂಕ ಸಿಕ್ಕಿತು = 0;
+    ಗಾಗಿ(i = 0; i < t->n; ++i){
+        t->ಎಲೆ[i] = 0;
+        ಗಾಗಿ(j = 0; j < n; ++j){
+            ಆದರೆ (0==strcmp(t->name[i], leaves[j])){
+                t->ಎಲೆ[i] = 1;
+                ++ಸಿಕ್ಕಿತು;
+                ನಿಲ್ಲಿಸು;
             }
         }
     }
-    fprintf(stderr, "Found %d leaves.\n", found);
+    fprintf(stderr, "Found %d leaves.\n", ಸಿಕ್ಕಿತು);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+ದಶಮಾಂಶ get_hierarchy_probability(ದಶಮಾಂಶ *x, ವೃಕ್ಷ *hier, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ stride)
 {
-    float p = 1;
-    while(c >= 0){
+    ದಶಮಾಂಶ p = 1;
+    ಆಗ(c >= 0){
         p = p * x[c*stride];
-        c = hier->parent[c];
+        c = hier->ಪೋಷಕ[c];
     }
-    return p;
+    ಹಿಂತಿರುಗಿ p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+ಶೂನ್ಯ hierarchy_predictions(ದಶಮಾಂಶ *predictions, ಪೂರ್ಣಾಂಕ n, ವೃಕ್ಷ *hier, ಪೂರ್ಣಾಂಕ only_leaves, ಪೂರ್ಣಾಂಕ stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
-            predictions[j*stride] *= predictions[parent*stride]; 
+    ಪೂರ್ಣಾಂಕ j;
+    ಗಾಗಿ(j = 0; j < n; ++j){
+        ಪೂರ್ಣಾಂಕ ಪೋಷಕ = hier->ಪೋಷಕ[j];
+        ಆದರೆ(ಪೋಷಕ >= 0){
+            predictions[j*stride] *= predictions[ಪೋಷಕ*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    ಆದರೆ(only_leaves){
+        ಗಾಗಿ(j = 0; j < n; ++j){
+            ಆದರೆ(!hier->ಎಲೆ[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+ಪೂರ್ಣಾಂಕ hierarchy_ತುದಿ_prediction(ದಶಮಾಂಶ *predictions, ವೃಕ್ಷ *hier, ದಶಮಾಂಶ thresh, ಪೂರ್ಣಾಂಕ stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    ದಶಮಾಂಶ p = 1;
+    ಪೂರ್ಣಾಂಕ ಗುಂಪು = 0;
+    ಪೂರ್ಣಾಂಕ i;
+    ಆಗ(1){
+        ದಶಮಾಂಶ max = 0;
+        ಪೂರ್ಣಾಂಕ max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
-                max_i = index;
+        ಗಾಗಿ(i = 0; i < hier->ಗುಂಪು_ಗಾತ್ರ[ಗುಂಪು]; ++i){
+            ಪೂರ್ಣಾಂಕ ಸೂಚ್ಯಂಕ = i + hier->ಗುಂಪು_ಸ್ಥಾನಾಂತರ[ಗುಂಪು];
+            ದಶಮಾಂಶ val = predictions[(i + hier->ಗುಂಪು_ಸ್ಥಾನಾಂತರ[ಗುಂಪು])*stride];
+            ಆದರೆ(val > max){
+                max_i = ಸೂಚ್ಯಂಕ;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        ಆದರೆ(p*max > thresh){
             p = p*max;
-            group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            ಗುಂಪು = hier->ಮಗು[max_i];
+            ಆದರೆ(hier->ಮಗು[max_i] < 0) ಹಿಂತಿರುಗಿ max_i;
+        } ಇಲ್ಲದಿದ್ದರೆ ಆದರೆ (ಗುಂಪು == 0){
+            ಹಿಂತಿರುಗಿ max_i;
+        } ಇಲ್ಲದಿದ್ದರೆ {
+            ಹಿಂತಿರುಗಿ hier->ಪೋಷಕ[hier->ಗುಂಪು_ಸ್ಥಾನಾಂತರ[ಗುಂಪು]];
         }
     }
-    return 0;
+    ಹಿಂತಿರುಗಿ 0;
 }
 
-tree *read_tree(char *filename)
+ವೃಕ್ಷ *read_ವೃಕ್ಷ(ಅಕ್ಷರ *filename)
 {
-    tree t = {0};
+    ವೃಕ್ಷ t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
-        t.parent[n] = parent;
+    ಅಕ್ಷರ *ಸಾಲು;
+    ಪೂರ್ಣಾಂಕ ಕೊನೆಯ_ಪೋಷಕ = -1;
+    ಪೂರ್ಣಾಂಕ ಗುಂಪು_ಗಾತ್ರ = 0;
+    ಪೂರ್ಣಾಂಕ groups = 0;
+    ಪೂರ್ಣಾಂಕ n = 0;
+    ಆಗ((ಸಾಲು=fgetl(fp)) != 0){
+        ಅಕ್ಷರ *id = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(256, ಗಾತ್ರ(ಅಕ್ಷರ));
+        ಪೂರ್ಣಾಂಕ ಪೋಷಕ = -1;
+        ಅಕ್ಷರಸರಣಿ_ಓದು(ಸಾಲು, "%s %d", id, &ಪೋಷಕ);
+        t.ಪೋಷಕ = realloc(t.ಪೋಷಕ, (n+1)*ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+        t.ಪೋಷಕ[n] = ಪೋಷಕ;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
-        t.child[n] = -1;
+        t.ಮಗು = realloc(t.ಮಗು, (n+1)*ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+        t.ಮಗು[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*ಗಾತ್ರ(ಅಕ್ಷರ *));
         t.name[n] = id;
-        if(parent != last_parent){
+        ಆದರೆ(ಪೋಷಕ != ಕೊನೆಯ_ಪೋಷಕ){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-            t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
-            t.group_size[groups - 1] = group_size;
-            group_size = 0;
-            last_parent = parent;
+            t.ಗುಂಪು_ಸ್ಥಾನಾಂತರ = realloc(t.ಗುಂಪು_ಸ್ಥಾನಾಂತರ, groups * ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+            t.ಗುಂಪು_ಸ್ಥಾನಾಂತರ[groups - 1] = n - ಗುಂಪು_ಗಾತ್ರ;
+            t.ಗುಂಪು_ಗಾತ್ರ = realloc(t.ಗುಂಪು_ಗಾತ್ರ, groups * ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+            t.ಗುಂಪು_ಗಾತ್ರ[groups - 1] = ಗುಂಪು_ಗಾತ್ರ;
+            ಗುಂಪು_ಗಾತ್ರ = 0;
+            ಕೊನೆಯ_ಪೋಷಕ = ಪೋಷಕ;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
-        t.group[n] = groups;
-        if (parent >= 0) {
-            t.child[parent] = groups;
+        t.ಗುಂಪು = realloc(t.ಗುಂಪು, (n+1)*ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+        t.ಗುಂಪು[n] = groups;
+        ಆದರೆ (ಪೋಷಕ >= 0) {
+            t.ಮಗು[ಪೋಷಕ] = groups;
         }
         ++n;
-        ++group_size;
+        ++ಗುಂಪು_ಗಾತ್ರ;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-    t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
-    t.group_size[groups - 1] = group_size;
+    t.ಗುಂಪು_ಸ್ಥಾನಾಂತರ = realloc(t.ಗುಂಪು_ಸ್ಥಾನಾಂತರ, groups * ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+    t.ಗುಂಪು_ಸ್ಥಾನಾಂತರ[groups - 1] = n - ಗುಂಪು_ಗಾತ್ರ;
+    t.ಗುಂಪು_ಗಾತ್ರ = realloc(t.ಗುಂಪು_ಗಾತ್ರ, groups * ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+    t.ಗುಂಪು_ಗಾತ್ರ[groups - 1] = ಗುಂಪು_ಗಾತ್ರ;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.ಎಲೆ = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(n, ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+    ಪೂರ್ಣಾಂಕ i;
+    ಗಾಗಿ(i = 0; i < n; ++i) t.ಎಲೆ[i] = 1;
+    ಗಾಗಿ(i = 0; i < n; ++i) ಆದರೆ(t.ಪೋಷಕ[i] >= 0) t.ಎಲೆ[t.ಪೋಷಕ[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    ವೃಕ್ಷ *ವೃಕ್ಷ_ptr = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(1, ಗಾತ್ರ(ವೃಕ್ಷ));
+    *ವೃಕ್ಷ_ptr = t;
     //error(0);
-    return tree_ptr;
+    ಹಿಂತಿರುಗಿ ವೃಕ್ಷ_ptr;
 }

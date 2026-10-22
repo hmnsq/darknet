@@ -1,38 +1,38 @@
-#include "im2col.h"
-#include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+#ಅನ್ತರ್ಭಾವ "im2col.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+ದಶಮಾಂಶ im2col_get_pixel(ದಶಮಾಂಶ *im, ಪೂರ್ಣಾಂಕ ಎತ್ತರ, ಪೂರ್ಣಾಂಕ ಅಗಲ, ಪೂರ್ಣಾಂಕ channels,
+                        ಪೂರ್ಣಾಂಕ ಅಡ್ಡಸಾಲು, ಪೂರ್ಣಾಂಕ ಲಂಬಸಾಲು, ಪೂರ್ಣಾಂಕ channel, ಪೂರ್ಣಾಂಕ pad)
 {
-    row -= pad;
-    col -= pad;
+    ಅಡ್ಡಸಾಲು -= pad;
+    ಲಂಬಸಾಲು -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    ಆದರೆ (ಅಡ್ಡಸಾಲು < 0 || ಲಂಬಸಾಲು < 0 ||
+        ಅಡ್ಡಸಾಲು >= ಎತ್ತರ || ಲಂಬಸಾಲು >= ಅಗಲ) ಹಿಂತಿರುಗಿ 0;
+    ಹಿಂತಿರುಗಿ im[ಲಂಬಸಾಲು + ಅಗಲ*(ಅಡ್ಡಸಾಲು + ಎತ್ತರ*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
-void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+ಶೂನ್ಯ im2col_cpu(ದಶಮಾಂಶ* ದತ್ತಾಂಶ_im,
+     ಪೂರ್ಣಾಂಕ channels,  ಪೂರ್ಣಾಂಕ ಎತ್ತರ,  ಪೂರ್ಣಾಂಕ ಅಗಲ,
+     ಪೂರ್ಣಾಂಕ ksize,  ಪೂರ್ಣಾಂಕ stride, ಪೂರ್ಣಾಂಕ pad, ದಶಮಾಂಶ* ದತ್ತಾಂಶ_ಲಂಬಸಾಲು) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    ಪೂರ್ಣಾಂಕ c,h,w;
+    ಪೂರ್ಣಾಂಕ ಎತ್ತರ_ಲಂಬಸಾಲು = (ಎತ್ತರ + 2*pad - ksize) / stride + 1;
+    ಪೂರ್ಣಾಂಕ ಅಗಲ_ಲಂಬಸಾಲು = (ಅಗಲ + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
-                        im_row, im_col, c_im, pad);
+    ಪೂರ್ಣಾಂಕ channels_ಲಂಬಸಾಲು = channels * ksize * ksize;
+    ಗಾಗಿ (c = 0; c < channels_ಲಂಬಸಾಲು; ++c) {
+        ಪೂರ್ಣಾಂಕ w_ಸ್ಥಾನಾಂತರ = c % ksize;
+        ಪೂರ್ಣಾಂಕ h_ಸ್ಥಾನಾಂತರ = (c / ksize) % ksize;
+        ಪೂರ್ಣಾಂಕ c_im = c / ksize / ksize;
+        ಗಾಗಿ (h = 0; h < ಎತ್ತರ_ಲಂಬಸಾಲು; ++h) {
+            ಗಾಗಿ (w = 0; w < ಅಗಲ_ಲಂಬಸಾಲು; ++w) {
+                ಪೂರ್ಣಾಂಕ im_ಅಡ್ಡಸಾಲು = h_ಸ್ಥಾನಾಂತರ + h * stride;
+                ಪೂರ್ಣಾಂಕ im_ಲಂಬಸಾಲು = w_ಸ್ಥಾನಾಂತರ + w * stride;
+                ಪೂರ್ಣಾಂಕ ಲಂಬಸಾಲು_ಸೂಚ್ಯಂಕ = (c * ಎತ್ತರ_ಲಂಬಸಾಲು + h) * ಅಗಲ_ಲಂಬಸಾಲು + w;
+                ದತ್ತಾಂಶ_ಲಂಬಸಾಲು[ಲಂಬಸಾಲು_ಸೂಚ್ಯಂಕ] = im2col_get_pixel(ದತ್ತಾಂಶ_im, ಎತ್ತರ, ಅಗಲ, channels,
+                        im_ಅಡ್ಡಸಾಲು, im_ಲಂಬಸಾಲು, c_im, pad);
             }
         }
     }

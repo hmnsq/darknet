@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = ಸ್ಮರಣೆ_ಕೊಡು(ಗಾತ್ರ(list));
+	l->ಗಾತ್ರ_2 = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->ಹಿಂಭಾಗ = 0;
+	ಹಿಂತಿರುಗಿ l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+ಶೂನ್ಯ *list_ತೆಗೆ(list *l){
+    ಆದರೆ(!l->ಹಿಂಭಾಗ) ಹಿಂತಿರುಗಿ 0;
+    ಗಂಟು *b = l->ಹಿಂಭಾಗ;
+    ಶೂನ್ಯ *val = b->val;
+    l->ಹಿಂಭಾಗ = b->prev;
+    ಆದರೆ(l->ಹಿಂಭಾಗ) l->ಹಿಂಭಾಗ->ಮುಂದಿನ = 0;
+    ಬಿಡುಗಡೆ(b);
+    --l->ಗಾತ್ರ_2;
     
-    return val;
+    ಹಿಂತಿರುಗಿ val;
 }
 
-void list_insert(list *l, void *val)
+ಶೂನ್ಯ list_ಸೇರಿಸು(list *l, ಶೂನ್ಯ *val)
 {
-	node *new = malloc(sizeof(node));
+	ಗಂಟು *new = ಸ್ಮರಣೆ_ಕೊಡು(ಗಾತ್ರ(ಗಂಟು));
 	new->val = val;
-	new->next = 0;
+	new->ಮುಂದಿನ = 0;
 
-	if(!l->back){
+	ಆದರೆ(!l->ಹಿಂಭಾಗ){
 		l->front = new;
 		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+	}ಇಲ್ಲದಿದ್ದರೆ{
+		l->ಹಿಂಭಾಗ->ಮುಂದಿನ = new;
+		new->prev = l->ಹಿಂಭಾಗ;
 	}
-	l->back = new;
-	++l->size;
+	l->ಹಿಂಭಾಗ = new;
+	++l->ಗಾತ್ರ_2;
 }
 
-void free_node(node *n)
+ಶೂನ್ಯ free_ಗಂಟು(ಗಂಟು *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	ಗಂಟು *ಮುಂದಿನ;
+	ಆಗ(n) {
+		ಮುಂದಿನ = n->ಮುಂದಿನ;
+		ಬಿಡುಗಡೆ(n);
+		n = ಮುಂದಿನ;
 	}
 }
 
-void **list_to_array(list *l)
+ಶೂನ್ಯ free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_ಗಂಟು(l->front);
+	ಬಿಡುಗಡೆ(l);
+}
+
+ಶೂನ್ಯ free_list_contents(list *l)
+{
+	ಗಂಟು *n = l->front;
+	ಆಗ(n){
+		ಬಿಡುಗಡೆ(n->val);
+		n = n->ಮುಂದಿನ;
+	}
+}
+
+ಶೂನ್ಯ **list_ಗಮ್ಯ_array(list *l)
+{
+    ಶೂನ್ಯ **a = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(l->ಗಾತ್ರ_2, ಗಾತ್ರ(ಶೂನ್ಯ*));
+    ಪೂರ್ಣಾಂಕ ಎಣಿಕೆ_2 = 0;
+    ಗಂಟು *n = l->front;
+    ಆಗ(n){
+        a[ಎಣಿಕೆ_2++] = n->val;
+        n = n->ಮುಂದಿನ;
     }
-    return a;
+    ಹಿಂತಿರುಗಿ a;
 }

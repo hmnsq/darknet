@@ -1,19 +1,19 @@
-#ifndef OPTION_LIST_H
-#define OPTION_LIST_H
-#include "list.h"
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ OPTION_LIST_H
+#ವ್ಯಾಖ್ಯಾನಿಸು OPTION_LIST_H
+#ಅನ್ತರ್ಭಾವ "list.h"
 
-typedef struct{
-    char *key;
-    char *val;
-    int used;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ{
+    ಅಕ್ಷರ *ಕೀಲಿ;
+    ಅಕ್ಷರ *val;
+    ಪೂರ್ಣಾಂಕ ಬಳಸಿದ;
 } kvp;
 
 
-int read_option(char *s, list *options);
-void option_insert(list *l, char *key, char *val);
-char *option_find(list *l, char *key);
-float option_find_float(list *l, char *key, float def);
-float option_find_float_quiet(list *l, char *key, float def);
-void option_unused(list *l);
+ಪೂರ್ಣಾಂಕ read_option(ಅಕ್ಷರ *s, list *options);
+ಶೂನ್ಯ option_ಸೇರಿಸು(list *l, ಅಕ್ಷರ *ಕೀಲಿ, ಅಕ್ಷರ *val);
+ಅಕ್ಷರ *option_ಕಂಡುಹಿಡಿ(list *l, ಅಕ್ಷರ *ಕೀಲಿ);
+ದಶಮಾಂಶ option_ಕಂಡುಹಿಡಿ_float(list *l, ಅಕ್ಷರ *ಕೀಲಿ, ದಶಮಾಂಶ def);
+ದಶಮಾಂಶ option_ಕಂಡುಹಿಡಿ_float_quiet(list *l, ಅಕ್ಷರ *ಕೀಲಿ, ದಶಮಾಂಶ def);
+ಶೂನ್ಯ option_ಬಳಸದ(list *l);
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

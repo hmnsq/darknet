@@ -1,25 +1,25 @@
 
-#ifndef RNN_LAYER_H
-#define RNN_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ RNN_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿಸು RNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
-#define USET
+#ಅನ್ತರ್ಭಾವ "activations.h"
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
+#ವ್ಯಾಖ್ಯಾನಿಸು USET
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam);
+layer make_rnn_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ inputs, ಪೂರ್ಣಾಂಕ outputs, ಪೂರ್ಣಾಂಕ ಹೆಜ್ಜೆಗಳು, ACTIVATION activation, ಪೂರ್ಣಾಂಕ batch_normalize, ಪೂರ್ಣಾಂಕ adam);
 
-void forward_rnn_layer(layer l, network net);
-void backward_rnn_layer(layer l, network net);
-void update_rnn_layer(layer l, update_args a);
+ಶೂನ್ಯ forward_rnn_layer(layer l, ಜಾಲ net);
+ಶೂನ್ಯ backward_rnn_layer(layer l, ಜಾಲ net);
+ಶೂನ್ಯ update_rnn_layer(layer l, update_ವಾದಗಳು a);
 
-#ifdef GPU
-void forward_rnn_layer_gpu(layer l, network net);
-void backward_rnn_layer_gpu(layer l, network net);
-void update_rnn_layer_gpu(layer l, update_args a);
-void push_rnn_layer(layer l);
-void pull_rnn_layer(layer l);
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ forward_rnn_layer_gpu(layer l, ಜಾಲ net);
+ಶೂನ್ಯ backward_rnn_layer_gpu(layer l, ಜಾಲ net);
+ಶೂನ್ಯ update_rnn_layer_gpu(layer l, update_ವಾದಗಳು a);
+ಶೂನ್ಯ ತಳ್ಳು_rnn_layer(layer l);
+ಶೂನ್ಯ pull_rnn_layer(layer l);
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 

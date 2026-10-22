@@ -1,149 +1,149 @@
-#include "activations.h"
+#ಅನ್ತರ್ಭಾವ "activations.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
 
-char *get_activation_string(ACTIVATION a)
+ಅಕ್ಷರ *get_activation_string(ACTIVATION a)
 {
-    switch(a){
-        case LOGISTIC:
-            return "logistic";
-        case LOGGY:
-            return "loggy";
-        case RELU:
-            return "relu";
-        case ELU:
-            return "elu";
-        case SELU:
-            return "selu";
-        case RELIE:
-            return "relie";
-        case RAMP:
-            return "ramp";
-        case LINEAR:
-            return "linear";
-        case TANH:
-            return "tanh";
-        case PLSE:
-            return "plse";
-        case LEAKY:
-            return "leaky";
-        case STAIR:
-            return "stair";
-        case HARDTAN:
-            return "hardtan";
-        case LHTAN:
-            return "lhtan";
-        default:
-            break;
+    ಆಯ್ಕೆ(a){
+        ಸ್ಥಿತಿ LOGISTIC:
+            ಹಿಂತಿರುಗಿ "logistic";
+        ಸ್ಥಿತಿ LOGGY:
+            ಹಿಂತಿರುಗಿ "loggy";
+        ಸ್ಥಿತಿ RELU:
+            ಹಿಂತಿರುಗಿ "relu";
+        ಸ್ಥಿತಿ ELU:
+            ಹಿಂತಿರುಗಿ "elu";
+        ಸ್ಥಿತಿ SELU:
+            ಹಿಂತಿರುಗಿ "selu";
+        ಸ್ಥಿತಿ RELIE:
+            ಹಿಂತಿರುಗಿ "relie";
+        ಸ್ಥಿತಿ RAMP:
+            ಹಿಂತಿರುಗಿ "ramp";
+        ಸ್ಥಿತಿ ರೇಖೀಯ:
+            ಹಿಂತಿರುಗಿ "linear";
+        ಸ್ಥಿತಿ TANH:
+            ಹಿಂತಿರುಗಿ "tanh";
+        ಸ್ಥಿತಿ PLSE:
+            ಹಿಂತಿರುಗಿ "plse";
+        ಸ್ಥಿತಿ LEAKY:
+            ಹಿಂತಿರುಗಿ "leaky";
+        ಸ್ಥಿತಿ STAIR:
+            ಹಿಂತಿರುಗಿ "stair";
+        ಸ್ಥಿತಿ HARDTAN:
+            ಹಿಂತಿರುಗಿ "hardtan";
+        ಸ್ಥಿತಿ LHTAN:
+            ಹಿಂತಿರುಗಿ "lhtan";
+        ಪೂರ್ವನಿಯೋಜಿತ:
+            ನಿಲ್ಲಿಸು;
     }
-    return "relu";
+    ಹಿಂತಿರುಗಿ "relu";
 }
 
-ACTIVATION get_activation(char *s)
+ACTIVATION get_activation(ಅಕ್ಷರ *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    ಆದರೆ (strcmp(s, "logistic")==0) ಹಿಂತಿರುಗಿ LOGISTIC;
+    ಆದರೆ (strcmp(s, "loggy")==0) ಹಿಂತಿರುಗಿ LOGGY;
+    ಆದರೆ (strcmp(s, "relu")==0) ಹಿಂತಿರುಗಿ RELU;
+    ಆದರೆ (strcmp(s, "elu")==0) ಹಿಂತಿರುಗಿ ELU;
+    ಆದರೆ (strcmp(s, "selu")==0) ಹಿಂತಿರುಗಿ SELU;
+    ಆದರೆ (strcmp(s, "relie")==0) ಹಿಂತಿರುಗಿ RELIE;
+    ಆದರೆ (strcmp(s, "plse")==0) ಹಿಂತಿರುಗಿ PLSE;
+    ಆದರೆ (strcmp(s, "hardtan")==0) ಹಿಂತಿರುಗಿ HARDTAN;
+    ಆದರೆ (strcmp(s, "lhtan")==0) ಹಿಂತಿರುಗಿ LHTAN;
+    ಆದರೆ (strcmp(s, "linear")==0) ಹಿಂತಿರುಗಿ ರೇಖೀಯ;
+    ಆದರೆ (strcmp(s, "ramp")==0) ಹಿಂತಿರುಗಿ RAMP;
+    ಆದರೆ (strcmp(s, "leaky")==0) ಹಿಂತಿರುಗಿ LEAKY;
+    ಆದರೆ (strcmp(s, "tanh")==0) ಹಿಂತಿರುಗಿ TANH;
+    ಆದರೆ (strcmp(s, "stair")==0) ಹಿಂತಿರುಗಿ STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    ಹಿಂತಿರುಗಿ RELU;
 }
 
-float activate(float x, ACTIVATION a)
+ದಶಮಾಂಶ activate(ದಶಮಾಂಶ x, ACTIVATION a)
 {
-    switch(a){
-        case LINEAR:
-            return linear_activate(x);
-        case LOGISTIC:
-            return logistic_activate(x);
-        case LOGGY:
-            return loggy_activate(x);
-        case RELU:
-            return relu_activate(x);
-        case ELU:
-            return elu_activate(x);
-        case SELU:
-            return selu_activate(x);
-        case RELIE:
-            return relie_activate(x);
-        case RAMP:
-            return ramp_activate(x);
-        case LEAKY:
-            return leaky_activate(x);
-        case TANH:
-            return tanh_activate(x);
-        case PLSE:
-            return plse_activate(x);
-        case STAIR:
-            return stair_activate(x);
-        case HARDTAN:
-            return hardtan_activate(x);
-        case LHTAN:
-            return lhtan_activate(x);
+    ಆಯ್ಕೆ(a){
+        ಸ್ಥಿತಿ ರೇಖೀಯ:
+            ಹಿಂತಿರುಗಿ ರೇಖೀಯ_activate(x);
+        ಸ್ಥಿತಿ LOGISTIC:
+            ಹಿಂತಿರುಗಿ logistic_activate(x);
+        ಸ್ಥಿತಿ LOGGY:
+            ಹಿಂತಿರುಗಿ loggy_activate(x);
+        ಸ್ಥಿತಿ RELU:
+            ಹಿಂತಿರುಗಿ relu_activate(x);
+        ಸ್ಥಿತಿ ELU:
+            ಹಿಂತಿರುಗಿ elu_activate(x);
+        ಸ್ಥಿತಿ SELU:
+            ಹಿಂತಿರುಗಿ selu_activate(x);
+        ಸ್ಥಿತಿ RELIE:
+            ಹಿಂತಿರುಗಿ relie_activate(x);
+        ಸ್ಥಿತಿ RAMP:
+            ಹಿಂತಿರುಗಿ ramp_activate(x);
+        ಸ್ಥಿತಿ LEAKY:
+            ಹಿಂತಿರುಗಿ leaky_activate(x);
+        ಸ್ಥಿತಿ TANH:
+            ಹಿಂತಿರುಗಿ tanh_activate(x);
+        ಸ್ಥಿತಿ PLSE:
+            ಹಿಂತಿರುಗಿ plse_activate(x);
+        ಸ್ಥಿತಿ STAIR:
+            ಹಿಂತಿರುಗಿ stair_activate(x);
+        ಸ್ಥಿತಿ HARDTAN:
+            ಹಿಂತಿರುಗಿ hardtan_activate(x);
+        ಸ್ಥಿತಿ LHTAN:
+            ಹಿಂತಿರುಗಿ lhtan_activate(x);
     }
-    return 0;
+    ಹಿಂತಿರುಗಿ 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+ಶೂನ್ಯ activate_array(ದಶಮಾಂಶ *x, ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ n, ಸ್ಥಿರಾಂಕ ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ಪೂರ್ಣಾಂಕ i;
+    ಗಾಗಿ(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
 }
 
-float gradient(float x, ACTIVATION a)
+ದಶಮಾಂಶ gradient(ದಶಮಾಂಶ x, ACTIVATION a)
 {
-    switch(a){
-        case LINEAR:
-            return linear_gradient(x);
-        case LOGISTIC:
-            return logistic_gradient(x);
-        case LOGGY:
-            return loggy_gradient(x);
-        case RELU:
-            return relu_gradient(x);
-        case ELU:
-            return elu_gradient(x);
-        case SELU:
-            return selu_gradient(x);
-        case RELIE:
-            return relie_gradient(x);
-        case RAMP:
-            return ramp_gradient(x);
-        case LEAKY:
-            return leaky_gradient(x);
-        case TANH:
-            return tanh_gradient(x);
-        case PLSE:
-            return plse_gradient(x);
-        case STAIR:
-            return stair_gradient(x);
-        case HARDTAN:
-            return hardtan_gradient(x);
-        case LHTAN:
-            return lhtan_gradient(x);
+    ಆಯ್ಕೆ(a){
+        ಸ್ಥಿತಿ ರೇಖೀಯ:
+            ಹಿಂತಿರುಗಿ ರೇಖೀಯ_gradient(x);
+        ಸ್ಥಿತಿ LOGISTIC:
+            ಹಿಂತಿರುಗಿ logistic_gradient(x);
+        ಸ್ಥಿತಿ LOGGY:
+            ಹಿಂತಿರುಗಿ loggy_gradient(x);
+        ಸ್ಥಿತಿ RELU:
+            ಹಿಂತಿರುಗಿ relu_gradient(x);
+        ಸ್ಥಿತಿ ELU:
+            ಹಿಂತಿರುಗಿ elu_gradient(x);
+        ಸ್ಥಿತಿ SELU:
+            ಹಿಂತಿರುಗಿ selu_gradient(x);
+        ಸ್ಥಿತಿ RELIE:
+            ಹಿಂತಿರುಗಿ relie_gradient(x);
+        ಸ್ಥಿತಿ RAMP:
+            ಹಿಂತಿರುಗಿ ramp_gradient(x);
+        ಸ್ಥಿತಿ LEAKY:
+            ಹಿಂತಿರುಗಿ leaky_gradient(x);
+        ಸ್ಥಿತಿ TANH:
+            ಹಿಂತಿರುಗಿ tanh_gradient(x);
+        ಸ್ಥಿತಿ PLSE:
+            ಹಿಂತಿರುಗಿ plse_gradient(x);
+        ಸ್ಥಿತಿ STAIR:
+            ಹಿಂತಿರುಗಿ stair_gradient(x);
+        ಸ್ಥಿತಿ HARDTAN:
+            ಹಿಂತಿರುಗಿ hardtan_gradient(x);
+        ಸ್ಥಿತಿ LHTAN:
+            ಹಿಂತಿರುಗಿ lhtan_gradient(x);
     }
-    return 0;
+    ಹಿಂತಿರುಗಿ 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+ಶೂನ್ಯ gradient_array(ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ *x, ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ n, ಸ್ಥಿರಾಂಕ ACTIVATION a, ದಶಮಾಂಶ *delta)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    ಪೂರ್ಣಾಂಕ i;
+    ಗಾಗಿ(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }
 } 

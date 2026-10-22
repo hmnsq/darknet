@@ -145,189 +145,189 @@ LICENSE
 
 */
 
-#ifndef INCLUDE_STB_IMAGE_WRITE_H
-#define INCLUDE_STB_IMAGE_WRITE_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ INCLUDE_STB_IMAGE_WRITE_H
+#ವ್ಯಾಖ್ಯಾನಿಸು INCLUDE_STB_IMAGE_WRITE_H
 
 // if STB_IMAGE_WRITE_STATIC causes problems, try defining STBIWDEF to 'inline' or 'static inline'
-#ifndef STBIWDEF
-#ifdef STB_IMAGE_WRITE_STATIC
-#define STBIWDEF  static
-#else
-#ifdef __cplusplus
-#define STBIWDEF  extern "C"
-#else
-#define STBIWDEF  extern
-#endif
-#endif
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBIWDEF
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STB_IMAGE_WRITE_STATIC
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIWDEF  ಸ್ಥಿರ
+#ಇಲ್ಲದಿದ್ದರೆ
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ __cplusplus
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIWDEF  ಬಾಹ್ಯ "C"
+#ಇಲ್ಲದಿದ್ದರೆ
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIWDEF  ಬಾಹ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
-extern int stbi_write_tga_with_rle;
-extern int stbi_write_png_compression_level;
-extern int stbi_write_force_png_filter;
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ stbi_write_tga_with_rle;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ stbi_write_png_compression_level;
+ಬಾಹ್ಯ ಪೂರ್ಣಾಂಕ stbi_write_force_png_filter;
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void  *data, int quality);
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_png(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ stride_ಒಳ_ಬೈಟುಗಳು);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_bmp(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_tga(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_hdr(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ *ದತ್ತಾಂಶ);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_jpg(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ quality);
+#ಆದರೆ_ಅಂತ್ಯ
 
-typedef void stbi_write_func(void *context, void *data, int size);
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಶೂನ್ಯ stbi_write_func(ಶೂನ್ಯ *context, ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2);
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_png_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ stride_ಒಳ_ಬೈಟುಗಳು);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_bmp_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_tga_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_hdr_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ *ದತ್ತಾಂಶ);
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_jpg_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ  *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ quality);
 
-STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
+STBIWDEF ಶೂನ್ಯ stbi_flip_vertically_on_write(ಪೂರ್ಣಾಂಕ flip_boolean);
 
-#endif//INCLUDE_STB_IMAGE_WRITE_H
+#ಆದರೆ_ಅಂತ್ಯ//INCLUDE_STB_IMAGE_WRITE_H
 
-#ifdef STB_IMAGE_WRITE_IMPLEMENTATION
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STB_IMAGE_WRITE_IMPLEMENTATION
 
-#ifdef _WIN32
-   #ifndef _CRT_SECURE_NO_WARNINGS
-   #define _CRT_SECURE_NO_WARNINGS
-   #endif
-   #ifndef _CRT_NONSTDC_NO_DEPRECATE
-   #define _CRT_NONSTDC_NO_DEPRECATE
-   #endif
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ _WIN32
+   #ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ _CRT_SECURE_NO_WARNINGS
+   #ವ್ಯಾಖ್ಯಾನಿಸು _CRT_SECURE_NO_WARNINGS
+   #ಆದರೆ_ಅಂತ್ಯ
+   #ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ _CRT_NONSTDC_NO_DEPRECATE
+   #ವ್ಯಾಖ್ಯಾನಿಸು _CRT_NONSTDC_NO_DEPRECATE
+   #ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef STBI_WRITE_NO_STDIO
-#include <stdio.h>
-#endif // STBI_WRITE_NO_STDIO
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+#ಅನ್ತರ್ಭಾವ <stdio.h>
+#ಆದರೆ_ಅಂತ್ಯ // STBI_WRITE_NO_STDIO
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#ಅನ್ತರ್ಭಾವ <stdarg.h>
+#ಅನ್ತರ್ಭಾವ <stdlib.h>
+#ಅನ್ತರ್ಭಾವ <string.h>
+#ಅನ್ತರ್ಭಾವ <math.h>
 
-#if defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
+#ಆದರೆ defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
 // ok
-#elif !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
+#ಅಥವಾಆದರೆ !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
 // ok
-#else
-#error "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
-#endif
+#ಇಲ್ಲದಿದ್ದರೆ
+#ದೋಷ "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef STBIW_MALLOC
-#define STBIW_MALLOC(sz)        malloc(sz)
-#define STBIW_REALLOC(p,newsz)  realloc(p,newsz)
-#define STBIW_FREE(p)           free(p)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBIW_MALLOC
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_MALLOC(sz)        ಸ್ಮರಣೆ_ಕೊಡು(sz)
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_REALLOC(p,newsz)  realloc(p,newsz)
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_FREE(p)           ಬಿಡುಗಡೆ(p)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#ifndef STBIW_REALLOC_SIZED
-#define STBIW_REALLOC_SIZED(p,oldsz,newsz) STBIW_REALLOC(p,newsz)
-#endif
-
-
-#ifndef STBIW_MEMMOVE
-#define STBIW_MEMMOVE(a,b,sz) memmove(a,b,sz)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBIW_REALLOC_SIZED
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_REALLOC_SIZED(p,oldsz,newsz) STBIW_REALLOC(p,newsz)
+#ಆದರೆ_ಅಂತ್ಯ
 
 
-#ifndef STBIW_ASSERT
-#include <assert.h>
-#define STBIW_ASSERT(x) assert(x)
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBIW_MEMMOVE
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_MEMMOVE(a,b,sz) memmove(a,b,sz)
+#ಆದರೆ_ಅಂತ್ಯ
 
-#define STBIW_UCHAR(x) (unsigned char) ((x) & 0xff)
 
-#ifdef STB_IMAGE_WRITE_STATIC
-static int stbi__flip_vertically_on_write=0;
-static int stbi_write_png_compression_level = 8;
-static int stbi_write_tga_with_rle = 1;
-static int stbi_write_force_png_filter = -1;
-#else
-int stbi_write_png_compression_level = 8;
-int stbi__flip_vertically_on_write=0;
-int stbi_write_tga_with_rle = 1;
-int stbi_write_force_png_filter = -1;
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBIW_ASSERT
+#ಅನ್ತರ್ಭಾವ <assert.h>
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_ASSERT(x) ಪ್ರತಿಜ್ಞಾ(x)
+#ಆದರೆ_ಅಂತ್ಯ
 
-STBIWDEF void stbi_flip_vertically_on_write(int flag)
+#ವ್ಯಾಖ್ಯಾನಿಸು STBIW_UCHAR(x) (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ) ((x) & 0xff)
+
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STB_IMAGE_WRITE_STATIC
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi__flip_vertically_on_write=0;
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_png_compression_level = 8;
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_tga_with_rle = 1;
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_force_png_filter = -1;
+#ಇಲ್ಲದಿದ್ದರೆ
+ಪೂರ್ಣಾಂಕ stbi_write_png_compression_level = 8;
+ಪೂರ್ಣಾಂಕ stbi__flip_vertically_on_write=0;
+ಪೂರ್ಣಾಂಕ stbi_write_tga_with_rle = 1;
+ಪೂರ್ಣಾಂಕ stbi_write_force_png_filter = -1;
+#ಆದರೆ_ಅಂತ್ಯ
+
+STBIWDEF ಶೂನ್ಯ stbi_flip_vertically_on_write(ಪೂರ್ಣಾಂಕ flag)
 {
    stbi__flip_vertically_on_write = flag;
 }
 
-typedef struct
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ರಚನೆ
 {
    stbi_write_func *func;
-   void *context;
+   ಶೂನ್ಯ *context;
 } stbi__write_context;
 
 // initialize a callback-based context
-static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func *c, void *context)
+ಸ್ಥಿರ ಶೂನ್ಯ stbi_ಆರಂಭ_write_callbacks(stbi__write_context *s, stbi_write_func *c, ಶೂನ್ಯ *context)
 {
    s->func    = c;
    s->context = context;
 }
 
-#ifndef STBI_WRITE_NO_STDIO
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
 
-static void stbi__stdio_write(void *context, void *data, int size)
+ಸ್ಥಿರ ಶೂನ್ಯ stbi__stdio_write(ಶೂನ್ಯ *context, ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2)
 {
-   fwrite(data,1,size,(FILE*) context);
+   fwrite(ದತ್ತಾಂಶ,1,ಗಾತ್ರ_2,(FILE*) context);
 }
 
-static int stbi__start_write_file(stbi__write_context *s, const char *filename)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_ಆರಂಭ_write_file(stbi__write_context *s, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *filename)
 {
    FILE *f;
-#ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STBI_MSC_SECURE_CRT
+   ಆದರೆ (fopen_s(&f, filename, "wb"))
+      f = ಖಾಲಿ;
+#ಇಲ್ಲದಿದ್ದರೆ
    f = fopen(filename, "wb");
-#endif
-   stbi__start_write_callbacks(s, stbi__stdio_write, (void *) f);
-   return f != NULL;
+#ಆದರೆ_ಅಂತ್ಯ
+   stbi_ಆರಂಭ_write_callbacks(s, stbi__stdio_write, (ಶೂನ್ಯ *) f);
+   ಹಿಂತಿರುಗಿ f != ಖಾಲಿ;
 }
 
-static void stbi__end_write_file(stbi__write_context *s)
+ಸ್ಥಿರ ಶೂನ್ಯ stbi_ಕೊನೆ_write_file(stbi__write_context *s)
 {
    fclose((FILE *)s->context);
 }
 
-#endif // !STBI_WRITE_NO_STDIO
+#ಆದರೆ_ಅಂತ್ಯ // !STBI_WRITE_NO_STDIO
 
-typedef unsigned int stbiw_uint32;
-typedef int stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ stbiw_uint32;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ ಪೂರ್ಣಾಂಕ stb_image_write_test[ಗಾತ್ರ(stbiw_uint32)==4 ? 1 : -1];
 
-static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__writefv(stbi__write_context *s, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *fmt, va_list v)
 {
-   while (*fmt) {
-      switch (*fmt++) {
-         case ' ': break;
-         case '1': { unsigned char x = STBIW_UCHAR(va_arg(v, int));
+   ಆಗ (*fmt) {
+      ಆಯ್ಕೆ (*fmt++) {
+         ಸ್ಥಿತಿ ' ': ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ '1': { ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ x = STBIW_UCHAR(va_arg(v, ಪೂರ್ಣಾಂಕ));
                      s->func(s->context,&x,1);
-                     break; }
-         case '2': { int x = va_arg(v,int);
-                     unsigned char b[2];
+                     ನಿಲ್ಲಿಸು; }
+         ಸ್ಥಿತಿ '2': { ಪೂರ್ಣಾಂಕ x = va_arg(v,ಪೂರ್ಣಾಂಕ);
+                     ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ b[2];
                      b[0] = STBIW_UCHAR(x);
                      b[1] = STBIW_UCHAR(x>>8);
                      s->func(s->context,b,2);
-                     break; }
-         case '4': { stbiw_uint32 x = va_arg(v,int);
-                     unsigned char b[4];
+                     ನಿಲ್ಲಿಸು; }
+         ಸ್ಥಿತಿ '4': { stbiw_uint32 x = va_arg(v,ಪೂರ್ಣಾಂಕ);
+                     ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ b[4];
                      b[0]=STBIW_UCHAR(x);
                      b[1]=STBIW_UCHAR(x>>8);
                      b[2]=STBIW_UCHAR(x>>16);
                      b[3]=STBIW_UCHAR(x>>24);
                      s->func(s->context,b,4);
-                     break; }
-         default:
+                     ನಿಲ್ಲಿಸು; }
+         ಪೂರ್ವನಿಯೋಜಿತ:
             STBIW_ASSERT(0);
-            return;
+            ಹಿಂತಿರುಗಿ;
       }
    }
 }
 
-static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__writef(stbi__write_context *s, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *fmt, ...)
 {
    va_list v;
    va_start(v, fmt);
@@ -335,337 +335,337 @@ static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
    va_end(v);
 }
 
-static void stbiw__putc(stbi__write_context *s, unsigned char c)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__putc(stbi__write_context *s, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ c)
 {
    s->func(s->context, &c, 1);
 }
 
-static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char b, unsigned char c)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__write3(stbi__write_context *s, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ a, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ b, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ c)
 {
-   unsigned char arr[3];
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ arr[3];
    arr[0] = a, arr[1] = b, arr[2] = c;
    s->func(s->context, arr, 3);
 }
 
-static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, int write_alpha, int expand_mono, unsigned char *d)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__write_pixel(stbi__write_context *s, ಪೂರ್ಣಾಂಕ rgb_dir, ಪೂರ್ಣಾಂಕ comp, ಪೂರ್ಣಾಂಕ write_alpha, ಪೂರ್ಣಾಂಕ expand_mono, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *d)
 {
-   unsigned char bg[3] = { 255, 0, 255}, px[3];
-   int k;
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ bg[3] = { 255, 0, 255}, px[3];
+   ಪೂರ್ಣಾಂಕ k;
 
-   if (write_alpha < 0)
+   ಆದರೆ (write_alpha < 0)
       s->func(s->context, &d[comp - 1], 1);
 
-   switch (comp) {
-      case 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
-      case 1:
-         if (expand_mono)
+   ಆಯ್ಕೆ (comp) {
+      ಸ್ಥಿತಿ 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
+      ಸ್ಥಿತಿ 1:
+         ಆದರೆ (expand_mono)
             stbiw__write3(s, d[0], d[0], d[0]); // monochrome bmp
-         else
+         ಇಲ್ಲದಿದ್ದರೆ
             s->func(s->context, d, 1);  // monochrome TGA
-         break;
-      case 4:
-         if (!write_alpha) {
+         ನಿಲ್ಲಿಸು;
+      ಸ್ಥಿತಿ 4:
+         ಆದರೆ (!write_alpha) {
             // composite against pink background
-            for (k = 0; k < 3; ++k)
+            ಗಾಗಿ (k = 0; k < 3; ++k)
                px[k] = bg[k] + ((d[k] - bg[k]) * d[3]) / 255;
             stbiw__write3(s, px[1 - rgb_dir], px[1], px[1 + rgb_dir]);
-            break;
+            ನಿಲ್ಲಿಸು;
          }
          /* FALLTHROUGH */
-      case 3:
+      ಸ್ಥಿತಿ 3:
          stbiw__write3(s, d[1 - rgb_dir], d[1], d[1 + rgb_dir]);
-         break;
+         ನಿಲ್ಲಿಸು;
    }
-   if (write_alpha > 0)
+   ಆದರೆ (write_alpha > 0)
       s->func(s->context, &d[comp - 1], 1);
 }
 
-static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, void *data, int write_alpha, int scanline_pad, int expand_mono)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__write_pixels(stbi__write_context *s, ಪೂರ್ಣಾಂಕ rgb_dir, ಪೂರ್ಣಾಂಕ vdir, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ write_alpha, ಪೂರ್ಣಾಂಕ scanline_pad, ಪೂರ್ಣಾಂಕ expand_mono)
 {
    stbiw_uint32 zero = 0;
-   int i,j, j_end;
+   ಪೂರ್ಣಾಂಕ i,j, j_ಕೊನೆ;
 
-   if (y <= 0)
-      return;
+   ಆದರೆ (y <= 0)
+      ಹಿಂತಿರುಗಿ;
 
-   if (stbi__flip_vertically_on_write)
+   ಆದರೆ (stbi__flip_vertically_on_write)
       vdir *= -1;
 
-   if (vdir < 0)
-      j_end = -1, j = y-1;
-   else
-      j_end =  y, j = 0;
+   ಆದರೆ (vdir < 0)
+      j_ಕೊನೆ = -1, j = y-1;
+   ಇಲ್ಲದಿದ್ದರೆ
+      j_ಕೊನೆ =  y, j = 0;
 
-   for (; j != j_end; j += vdir) {
-      for (i=0; i < x; ++i) {
-         unsigned char *d = (unsigned char *) data + (j*x+i)*comp;
+   ಗಾಗಿ (; j != j_ಕೊನೆ; j += vdir) {
+      ಗಾಗಿ (i=0; i < x; ++i) {
+         ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *d = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) ದತ್ತಾಂಶ + (j*x+i)*comp;
          stbiw__write_pixel(s, rgb_dir, comp, write_alpha, expand_mono, d);
       }
       s->func(s->context, &zero, scanline_pad);
    }
 }
 
-static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, int expand_mono, void *data, int alpha, int pad, const char *fmt, ...)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbiw__outfile(stbi__write_context *s, ಪೂರ್ಣಾಂಕ rgb_dir, ಪೂರ್ಣಾಂಕ vdir, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಪೂರ್ಣಾಂಕ expand_mono, ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ alpha, ಪೂರ್ಣಾಂಕ pad, ಸ್ಥಿರಾಂಕ ಅಕ್ಷರ *fmt, ...)
 {
-   if (y < 0 || x < 0) {
-      return 0;
-   } else {
+   ಆದರೆ (y < 0 || x < 0) {
+      ಹಿಂತಿರುಗಿ 0;
+   } ಇಲ್ಲದಿದ್ದರೆ {
       va_list v;
       va_start(v, fmt);
       stbiw__writefv(s, fmt, v);
       va_end(v);
-      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,data,alpha,pad, expand_mono);
-      return 1;
+      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,ದತ್ತಾಂಶ,alpha,pad, expand_mono);
+      ಹಿಂತಿರುಗಿ 1;
    }
 }
 
-static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, const void *data)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_bmp_core(stbi__write_context *s, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ)
 {
-   int pad = (-x*3) & 3;
-   return stbiw__outfile(s,-1,-1,x,y,comp,1,(void *) data,0,pad,
+   ಪೂರ್ಣಾಂಕ pad = (-x*3) & 3;
+   ಹಿಂತಿರುಗಿ stbiw__outfile(s,-1,-1,x,y,comp,1,(ಶೂನ್ಯ *) ದತ್ತಾಂಶ,0,pad,
            "11 4 22 4" "4 44 22 444444",
            'B', 'M', 14+40+(x*3+pad)*y, 0,0, 14+40,  // file header
             40, x,y, 1,24, 0,0,0,0,0,0);             // bitmap header
 }
 
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_bmp_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_bmp_core(&s, x, y, comp, data);
+   stbi_ಆರಂಭ_write_callbacks(&s, func, context);
+   ಹಿಂತಿರುಗಿ stbi_write_bmp_core(&s, x, y, comp, ದತ್ತಾಂಶ);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *data)
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_bmp(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_bmp_core(&s, x, y, comp, data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ಆದರೆ (stbi_ಆರಂಭ_write_file(&s,filename)) {
+      ಪೂರ್ಣಾಂಕ r = stbi_write_bmp_core(&s, x, y, comp, ದತ್ತಾಂಶ);
+      stbi_ಕೊನೆ_write_file(&s);
+      ಹಿಂತಿರುಗಿ r;
+   } ಇಲ್ಲದಿದ್ದರೆ
+      ಹಿಂತಿರುಗಿ 0;
 }
-#endif //!STBI_WRITE_NO_STDIO
+#ಆದರೆ_ಅಂತ್ಯ //!STBI_WRITE_NO_STDIO
 
-static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, void *data)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_tga_core(stbi__write_context *s, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಶೂನ್ಯ *ದತ್ತಾಂಶ)
 {
-   int has_alpha = (comp == 2 || comp == 4);
-   int colorbytes = has_alpha ? comp-1 : comp;
-   int format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
+   ಪೂರ್ಣಾಂಕ has_alpha = (comp == 2 || comp == 4);
+   ಪೂರ್ಣಾಂಕ colorbytes = has_alpha ? comp-1 : comp;
+   ಪೂರ್ಣಾಂಕ format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
 
-   if (y < 0 || x < 0)
-      return 0;
+   ಆದರೆ (y < 0 || x < 0)
+      ಹಿಂತಿರುಗಿ 0;
 
-   if (!stbi_write_tga_with_rle) {
-      return stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *) data, has_alpha, 0,
+   ಆದರೆ (!stbi_write_tga_with_rle) {
+      ಹಿಂತಿರುಗಿ stbiw__outfile(s, -1, -1, x, y, comp, 0, (ಶೂನ್ಯ *) ದತ್ತಾಂಶ, has_alpha, 0,
          "111 221 2222 11", 0, 0, format, 0, 0, 0, 0, 0, x, y, (colorbytes + has_alpha) * 8, has_alpha * 8);
-   } else {
-      int i,j,k;
-      int jend, jdir;
+   } ಇಲ್ಲದಿದ್ದರೆ {
+      ಪೂರ್ಣಾಂಕ i,j,k;
+      ಪೂರ್ಣಾಂಕ jend, jdir;
 
       stbiw__writef(s, "111 221 2222 11", 0,0,format+8, 0,0,0, 0,0,x,y, (colorbytes + has_alpha) * 8, has_alpha * 8);
 
-      if (stbi__flip_vertically_on_write) {
+      ಆದರೆ (stbi__flip_vertically_on_write) {
          j = 0;
          jend = y;
          jdir = 1;
-      } else {
+      } ಇಲ್ಲದಿದ್ದರೆ {
          j = y-1;
          jend = -1;
          jdir = -1;
       }
-      for (; j != jend; j += jdir) {
-         unsigned char *row = (unsigned char *) data + j * x * comp;
-         int len;
+      ಗಾಗಿ (; j != jend; j += jdir) {
+         ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ಅಡ್ಡಸಾಲು = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) ದತ್ತಾಂಶ + j * x * comp;
+         ಪೂರ್ಣಾಂಕ len;
 
-         for (i = 0; i < x; i += len) {
-            unsigned char *begin = row + i * comp;
-            int diff = 1;
+         ಗಾಗಿ (i = 0; i < x; i += len) {
+            ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *begin = ಅಡ್ಡಸಾಲು + i * comp;
+            ಪೂರ್ಣಾಂಕ diff = 1;
             len = 1;
 
-            if (i < x - 1) {
+            ಆದರೆ (i < x - 1) {
                ++len;
-               diff = memcmp(begin, row + (i + 1) * comp, comp);
-               if (diff) {
-                  const unsigned char *prev = begin;
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (memcmp(prev, row + k * comp, comp)) {
+               diff = memcmp(begin, ಅಡ್ಡಸಾಲು + (i + 1) * comp, comp);
+               ಆದರೆ (diff) {
+                  ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *prev = begin;
+                  ಗಾಗಿ (k = i + 2; k < x && len < 128; ++k) {
+                     ಆದರೆ (memcmp(prev, ಅಡ್ಡಸಾಲು + k * comp, comp)) {
                         prev += comp;
                         ++len;
-                     } else {
+                     } ಇಲ್ಲದಿದ್ದರೆ {
                         --len;
-                        break;
+                        ನಿಲ್ಲಿಸು;
                      }
                   }
-               } else {
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (!memcmp(begin, row + k * comp, comp)) {
+               } ಇಲ್ಲದಿದ್ದರೆ {
+                  ಗಾಗಿ (k = i + 2; k < x && len < 128; ++k) {
+                     ಆದರೆ (!memcmp(begin, ಅಡ್ಡಸಾಲು + k * comp, comp)) {
                         ++len;
-                     } else {
-                        break;
+                     } ಇಲ್ಲದಿದ್ದರೆ {
+                        ನಿಲ್ಲಿಸು;
                      }
                   }
                }
             }
 
-            if (diff) {
-               unsigned char header = STBIW_UCHAR(len - 1);
-               s->func(s->context, &header, 1);
-               for (k = 0; k < len; ++k) {
+            ಆದರೆ (diff) {
+               ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ಶೀರ್ಷಿಕೆ = STBIW_UCHAR(len - 1);
+               s->func(s->context, &ಶೀರ್ಷಿಕೆ, 1);
+               ಗಾಗಿ (k = 0; k < len; ++k) {
                   stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin + k * comp);
                }
-            } else {
-               unsigned char header = STBIW_UCHAR(len - 129);
-               s->func(s->context, &header, 1);
+            } ಇಲ್ಲದಿದ್ದರೆ {
+               ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ಶೀರ್ಷಿಕೆ = STBIW_UCHAR(len - 129);
+               s->func(s->context, &ಶೀರ್ಷಿಕೆ, 1);
                stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin);
             }
          }
       }
    }
-   return 1;
+   ಹಿಂತಿರುಗಿ 1;
 }
 
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_tga_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   stbi_ಆರಂಭ_write_callbacks(&s, func, context);
+   ಹಿಂತಿರುಗಿ stbi_write_tga_core(&s, x, y, comp, (ಶೂನ್ಯ *) ದತ್ತಾಂಶ);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_tga(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_tga_core(&s, x, y, comp, (void *) data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ಆದರೆ (stbi_ಆರಂಭ_write_file(&s,filename)) {
+      ಪೂರ್ಣಾಂಕ r = stbi_write_tga_core(&s, x, y, comp, (ಶೂನ್ಯ *) ದತ್ತಾಂಶ);
+      stbi_ಕೊನೆ_write_file(&s);
+      ಹಿಂತಿರುಗಿ r;
+   } ಇಲ್ಲದಿದ್ದರೆ
+      ಹಿಂತಿರುಗಿ 0;
 }
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 
 // *************************************************************************************************
 // Radiance RGBE HDR writer
 // by Baldur Karlsson
 
-#define stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
 
-void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
+ಶೂನ್ಯ stbiw_ರೇಖೀಯ_ಗಮ್ಯ_rgbe(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *rgbe, ದಶಮಾಂಶ *ರೇಖೀಯ_2)
 {
-   int exponent;
-   float maxcomp = stbiw__max(linear[0], stbiw__max(linear[1], linear[2]));
+   ಪೂರ್ಣಾಂಕ exponent;
+   ದಶಮಾಂಶ maxcomp = stbiw__max(ರೇಖೀಯ_2[0], stbiw__max(ರೇಖೀಯ_2[1], ರೇಖೀಯ_2[2]));
 
-   if (maxcomp < 1e-32f) {
+   ಆದರೆ (maxcomp < 1e-32f) {
       rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
-   } else {
-      float normalize = (float) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
+   } ಇಲ್ಲದಿದ್ದರೆ {
+      ದಶಮಾಂಶ normalize = (ದಶಮಾಂಶ) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
 
-      rgbe[0] = (unsigned char)(linear[0] * normalize);
-      rgbe[1] = (unsigned char)(linear[1] * normalize);
-      rgbe[2] = (unsigned char)(linear[2] * normalize);
-      rgbe[3] = (unsigned char)(exponent + 128);
+      rgbe[0] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(ರೇಖೀಯ_2[0] * normalize);
+      rgbe[1] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(ರೇಖೀಯ_2[1] * normalize);
+      rgbe[2] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(ರೇಖೀಯ_2[2] * normalize);
+      rgbe[3] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(exponent + 128);
    }
 }
 
-void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char databyte)
+ಶೂನ್ಯ stbiw_write_ಸತತ_ದತ್ತಾಂಶ(stbi__write_context *s, ಪೂರ್ಣಾಂಕ ಉದ್ದಳತೆ, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ databyte)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length+128);
-   STBIW_ASSERT(length+128 <= 255);
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ lengthbyte = STBIW_UCHAR(ಉದ್ದಳತೆ+128);
+   STBIW_ASSERT(ಉದ್ದಳತೆ+128 <= 255);
    s->func(s->context, &lengthbyte, 1);
    s->func(s->context, &databyte, 1);
 }
 
-void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *data)
+ಶೂನ್ಯ stbiw_write_dump_ದತ್ತಾಂಶ(stbi__write_context *s, ಪೂರ್ಣಾಂಕ ಉದ್ದಳತೆ, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ದತ್ತಾಂಶ)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length);
-   STBIW_ASSERT(length <= 128); // inconsistent with spec but consistent with official code
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ lengthbyte = STBIW_UCHAR(ಉದ್ದಳತೆ);
+   STBIW_ASSERT(ಉದ್ದಳತೆ <= 128); // inconsistent with spec but consistent with official code
    s->func(s->context, &lengthbyte, 1);
-   s->func(s->context, data, length);
+   s->func(s->context, ದತ್ತಾಂಶ, ಉದ್ದಳತೆ);
 }
 
-void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, unsigned char *scratch, float *scanline)
+ಶೂನ್ಯ stbiw__write_hdr_scanline(stbi__write_context *s, ಪೂರ್ಣಾಂಕ ಅಗಲ, ಪೂರ್ಣಾಂಕ ncomp, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *scratch, ದಶಮಾಂಶ *scanline)
 {
-   unsigned char scanlineheader[4] = { 2, 2, 0, 0 };
-   unsigned char rgbe[4];
-   float linear[3];
-   int x;
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ scanlineheader[4] = { 2, 2, 0, 0 };
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ rgbe[4];
+   ದಶಮಾಂಶ ರೇಖೀಯ_2[3];
+   ಪೂರ್ಣಾಂಕ x;
 
-   scanlineheader[2] = (width&0xff00)>>8;
-   scanlineheader[3] = (width&0x00ff);
+   scanlineheader[2] = (ಅಗಲ&0xff00)>>8;
+   scanlineheader[3] = (ಅಗಲ&0x00ff);
 
    /* skip RLE for images too small or large */
-   if (width < 8 || width >= 32768) {
-      for (x=0; x < width; x++) {
-         switch (ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
-                    linear[1] = scanline[x*ncomp + 1];
-                    linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
-                    linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+   ಆದರೆ (ಅಗಲ < 8 || ಅಗಲ >= 32768) {
+      ಗಾಗಿ (x=0; x < ಅಗಲ; x++) {
+         ಆಯ್ಕೆ (ncomp) {
+            ಸ್ಥಿತಿ 4: /* fallthrough */
+            ಸ್ಥಿತಿ 3: ರೇಖೀಯ_2[2] = scanline[x*ncomp + 2];
+                    ರೇಖೀಯ_2[1] = scanline[x*ncomp + 1];
+                    ರೇಖೀಯ_2[0] = scanline[x*ncomp + 0];
+                    ನಿಲ್ಲಿಸು;
+            ಪೂರ್ವನಿಯೋಜಿತ:
+                    ರೇಖೀಯ_2[0] = ರೇಖೀಯ_2[1] = ರೇಖೀಯ_2[2] = scanline[x*ncomp + 0];
+                    ನಿಲ್ಲಿಸು;
          }
-         stbiw__linear_to_rgbe(rgbe, linear);
+         stbiw_ರೇಖೀಯ_ಗಮ್ಯ_rgbe(rgbe, ರೇಖೀಯ_2);
          s->func(s->context, rgbe, 4);
       }
-   } else {
-      int c,r;
+   } ಇಲ್ಲದಿದ್ದರೆ {
+      ಪೂರ್ಣಾಂಕ c,r;
       /* encode into scratch buffer */
-      for (x=0; x < width; x++) {
-         switch(ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
-                    linear[1] = scanline[x*ncomp + 1];
-                    linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
-                    linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+      ಗಾಗಿ (x=0; x < ಅಗಲ; x++) {
+         ಆಯ್ಕೆ(ncomp) {
+            ಸ್ಥಿತಿ 4: /* fallthrough */
+            ಸ್ಥಿತಿ 3: ರೇಖೀಯ_2[2] = scanline[x*ncomp + 2];
+                    ರೇಖೀಯ_2[1] = scanline[x*ncomp + 1];
+                    ರೇಖೀಯ_2[0] = scanline[x*ncomp + 0];
+                    ನಿಲ್ಲಿಸು;
+            ಪೂರ್ವನಿಯೋಜಿತ:
+                    ರೇಖೀಯ_2[0] = ರೇಖೀಯ_2[1] = ರೇಖೀಯ_2[2] = scanline[x*ncomp + 0];
+                    ನಿಲ್ಲಿಸು;
          }
-         stbiw__linear_to_rgbe(rgbe, linear);
-         scratch[x + width*0] = rgbe[0];
-         scratch[x + width*1] = rgbe[1];
-         scratch[x + width*2] = rgbe[2];
-         scratch[x + width*3] = rgbe[3];
+         stbiw_ರೇಖೀಯ_ಗಮ್ಯ_rgbe(rgbe, ರೇಖೀಯ_2);
+         scratch[x + ಅಗಲ*0] = rgbe[0];
+         scratch[x + ಅಗಲ*1] = rgbe[1];
+         scratch[x + ಅಗಲ*2] = rgbe[2];
+         scratch[x + ಅಗಲ*3] = rgbe[3];
       }
 
       s->func(s->context, scanlineheader, 4);
 
       /* RLE each component separately */
-      for (c=0; c < 4; c++) {
-         unsigned char *comp = &scratch[width*c];
+      ಗಾಗಿ (c=0; c < 4; c++) {
+         ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *comp = &scratch[ಅಗಲ*c];
 
          x = 0;
-         while (x < width) {
+         ಆಗ (x < ಅಗಲ) {
             // find first run
             r = x;
-            while (r+2 < width) {
-               if (comp[r] == comp[r+1] && comp[r] == comp[r+2])
-                  break;
+            ಆಗ (r+2 < ಅಗಲ) {
+               ಆದರೆ (comp[r] == comp[r+1] && comp[r] == comp[r+2])
+                  ನಿಲ್ಲಿಸು;
                ++r;
             }
-            if (r+2 >= width)
-               r = width;
+            ಆದರೆ (r+2 >= ಅಗಲ)
+               r = ಅಗಲ;
             // dump up to first run
-            while (x < r) {
-               int len = r-x;
-               if (len > 128) len = 128;
-               stbiw__write_dump_data(s, len, &comp[x]);
+            ಆಗ (x < r) {
+               ಪೂರ್ಣಾಂಕ len = r-x;
+               ಆದರೆ (len > 128) len = 128;
+               stbiw_write_dump_ದತ್ತಾಂಶ(s, len, &comp[x]);
                x += len;
             }
             // if there's a run, output it
-            if (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
+            ಆದರೆ (r+2 < ಅಗಲ) { // same test as what we break out of in search loop, so only true if we break'd
                // find next byte after run
-               while (r < width && comp[r] == comp[x])
+               ಆಗ (r < ಅಗಲ && comp[r] == comp[x])
                   ++r;
                // output run up to r
-               while (x < r) {
-                  int len = r-x;
-                  if (len > 127) len = 127;
-                  stbiw__write_run_data(s, len, comp[x]);
+               ಆಗ (x < r) {
+                  ಪೂರ್ಣಾಂಕ len = r-x;
+                  ಆದರೆ (len > 127) len = 127;
+                  stbiw_write_ಸತತ_ದತ್ತಾಂಶ(s, len, comp[x]);
                   x += len;
                }
             }
@@ -674,51 +674,51 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
    }
 }
 
-static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, float *data)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_hdr_core(stbi__write_context *s, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ದಶಮಾಂಶ *ದತ್ತಾಂಶ)
 {
-   if (y <= 0 || x <= 0 || data == NULL)
-      return 0;
-   else {
+   ಆದರೆ (y <= 0 || x <= 0 || ದತ್ತಾಂಶ == ಖಾಲಿ)
+      ಹಿಂತಿರುಗಿ 0;
+   ಇಲ್ಲದಿದ್ದರೆ {
       // Each component is stored separately. Allocate scratch space for full output scanline.
-      unsigned char *scratch = (unsigned char *) STBIW_MALLOC(x*4);
-      int i, len;
-      char buffer[128];
-      char header[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
-      s->func(s->context, header, sizeof(header)-1);
+      ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *scratch = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) STBIW_MALLOC(x*4);
+      ಪೂರ್ಣಾಂಕ i, len;
+      ಅಕ್ಷರ ಬಫರ್[128];
+      ಅಕ್ಷರ ಶೀರ್ಷಿಕೆ[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
+      s->func(s->context, ಶೀರ್ಷಿಕೆ, ಗಾತ್ರ(ಶೀರ್ಷಿಕೆ)-1);
 
-#ifdef STBI_MSC_SECURE_CRT
-      len = sprintf_s(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#else
-      len = sprintf(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#endif
-      s->func(s->context, buffer, len);
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STBI_MSC_SECURE_CRT
+      len = sprintf_s(ಬಫರ್, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#ಇಲ್ಲದಿದ್ದರೆ
+      len = sprintf(ಬಫರ್, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#ಆದರೆ_ಅಂತ್ಯ
+      s->func(s->context, ಬಫರ್, len);
 
-      for(i=0; i < y; i++)
-         stbiw__write_hdr_scanline(s, x, comp, scratch, data + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
+      ಗಾಗಿ(i=0; i < y; i++)
+         stbiw__write_hdr_scanline(s, x, comp, scratch, ದತ್ತಾಂಶ + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
       STBIW_FREE(scratch);
-      return 1;
+      ಹಿಂತಿರುಗಿ 1;
    }
 }
 
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const float *data)
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_hdr_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ *ದತ್ತಾಂಶ)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   stbi_ಆರಂಭ_write_callbacks(&s, func, context);
+   ಹಿಂತಿರುಗಿ stbi_write_hdr_core(&s, x, y, comp, (ದಶಮಾಂಶ *) ದತ್ತಾಂಶ);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const float *data)
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_hdr(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ *ದತ್ತಾಂಶ)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_hdr_core(&s, x, y, comp, (float *) data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ಆದರೆ (stbi_ಆರಂಭ_write_file(&s,filename)) {
+      ಪೂರ್ಣಾಂಕ r = stbi_write_hdr_core(&s, x, y, comp, (ದಶಮಾಂಶ *) ದತ್ತಾಂಶ);
+      stbi_ಕೊನೆ_write_file(&s);
+      ಹಿಂತಿರುಗಿ r;
+   } ಇಲ್ಲದಿದ್ದರೆ
+      ಹಿಂತಿರುಗಿ 0;
 }
-#endif // STBI_WRITE_NO_STDIO
+#ಆದರೆ_ಅಂತ್ಯ // STBI_WRITE_NO_STDIO
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -726,204 +726,204 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 // PNG writer
 //
 
-#ifndef STBIW_ZLIB_COMPRESS
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBIW_ZLIB_COMPRESS
 // stretchy buffer; stbiw__sbpush() == vector<>::push_back() -- stbiw__sbcount() == vector<>::size()
-#define stbiw__sbraw(a) ((int *) (a) - 2)
-#define stbiw__sbm(a)   stbiw__sbraw(a)[0]
-#define stbiw__sbn(a)   stbiw__sbraw(a)[1]
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbraw(a) ((ಪೂರ್ಣಾಂಕ *) (a) - 2)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbm(a)   stbiw__sbraw(a)[0]
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbn(a)   stbiw__sbraw(a)[1]
 
-#define stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
-#define stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
-#define stbiw__sbgrow(a,n)  stbiw__sbgrowf((void **) &(a), (n), sizeof(*(a)))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbgrow(a,n)  stbiw__sbgrowf((ಶೂನ್ಯ **) &(a), (n), ಗಾತ್ರ(*(a)))
 
-#define stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
-#define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
-#define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
 
-static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
+ಸ್ಥಿರ ಶೂನ್ಯ *stbiw__sbgrowf(ಶೂನ್ಯ **arr, ಪೂರ್ಣಾಂಕ increment, ಪೂರ್ಣಾಂಕ itemsize)
 {
-   int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
-   void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(int)*2) : 0, itemsize * m + sizeof(int)*2);
+   ಪೂರ್ಣಾಂಕ m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
+   ಶೂನ್ಯ *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ)*2) : 0, itemsize * m + ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ)*2);
    STBIW_ASSERT(p);
-   if (p) {
-      if (!*arr) ((int *) p)[1] = 0;
-      *arr = (void *) ((int *) p + 2);
+   ಆದರೆ (p) {
+      ಆದರೆ (!*arr) ((ಪೂರ್ಣಾಂಕ *) p)[1] = 0;
+      *arr = (ಶೂನ್ಯ *) ((ಪೂರ್ಣಾಂಕ *) p + 2);
       stbiw__sbm(*arr) = m;
    }
-   return *arr;
+   ಹಿಂತಿರುಗಿ *arr;
 }
 
-static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
+ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *stbiw__zlib_flushf(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ದತ್ತಾಂಶ, ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ *bitbuffer, ಪೂರ್ಣಾಂಕ *bitcount)
 {
-   while (*bitcount >= 8) {
-      stbiw__sbpush(data, STBIW_UCHAR(*bitbuffer));
+   ಆಗ (*bitcount >= 8) {
+      stbiw__sbpush(ದತ್ತಾಂಶ, STBIW_UCHAR(*bitbuffer));
       *bitbuffer >>= 8;
       *bitcount -= 8;
    }
-   return data;
+   ಹಿಂತಿರುಗಿ ದತ್ತಾಂಶ;
 }
 
-static int stbiw__zlib_bitrev(int code, int codebits)
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbiw__zlib_bitrev(ಪೂರ್ಣಾಂಕ ಸಂಕೇತ_2, ಪೂರ್ಣಾಂಕ codebits)
 {
-   int res=0;
-   while (codebits--) {
-      res = (res << 1) | (code & 1);
-      code >>= 1;
+   ಪೂರ್ಣಾಂಕ res=0;
+   ಆಗ (codebits--) {
+      res = (res << 1) | (ಸಂಕೇತ_2 & 1);
+      ಸಂಕೇತ_2 >>= 1;
    }
-   return res;
+   ಹಿಂತಿರುಗಿ res;
 }
 
-static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
+ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ stbiw__zlib_countm(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *a, ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *b, ಪೂರ್ಣಾಂಕ ಎಲ್ಲೆ)
 {
-   int i;
-   for (i=0; i < limit && i < 258; ++i)
-      if (a[i] != b[i]) break;
-   return i;
+   ಪೂರ್ಣಾಂಕ i;
+   ಗಾಗಿ (i=0; i < ಎಲ್ಲೆ && i < 258; ++i)
+      ಆದರೆ (a[i] != b[i]) ನಿಲ್ಲಿಸು;
+   ಹಿಂತಿರುಗಿ i;
 }
 
-static unsigned int stbiw__zhash(unsigned char *data)
+ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ stbiw__zhash(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ದತ್ತಾಂಶ)
 {
-   stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
+   stbiw_uint32 hash = ದತ್ತಾಂಶ[0] + (ದತ್ತಾಂಶ[1] << 8) + (ದತ್ತಾಂಶ[2] << 16);
    hash ^= hash << 3;
    hash += hash >> 5;
    hash ^= hash << 4;
    hash += hash >> 17;
    hash ^= hash << 25;
    hash += hash >> 6;
-   return hash;
+   ಹಿಂತಿರುಗಿ hash;
 }
 
-#define stbiw__zlib_flush() (out = stbiw__zlib_flushf(out, &bitbuf, &bitcount))
-#define stbiw__zlib_add(code,codebits) \
-      (bitbuf |= (code) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
-#define stbiw__zlib_huffa(b,c)  stbiw__zlib_add(stbiw__zlib_bitrev(b,c),c)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_flush() (ಹೊರಹೋಗು = stbiw__zlib_flushf(ಹೊರಹೋಗು, &bitbuf, &bitcount))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw_zlib_ಕೂಡಿಸು(ಸಂಕೇತ_2,codebits) \
+      (bitbuf |= (ಸಂಕೇತ_2) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huffa(b,c)  stbiw_zlib_ಕೂಡಿಸು(stbiw__zlib_bitrev(b,c),c)
 // default huffman tables
-#define stbiw__zlib_huff1(n)  stbiw__zlib_huffa(0x30 + (n), 8)
-#define stbiw__zlib_huff2(n)  stbiw__zlib_huffa(0x190 + (n)-144, 9)
-#define stbiw__zlib_huff3(n)  stbiw__zlib_huffa(0 + (n)-256,7)
-#define stbiw__zlib_huff4(n)  stbiw__zlib_huffa(0xc0 + (n)-280,8)
-#define stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
-#define stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huff1(n)  stbiw__zlib_huffa(0x30 + (n), 8)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huff2(n)  stbiw__zlib_huffa(0x190 + (n)-144, 9)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huff3(n)  stbiw__zlib_huffa(0 + (n)-256,7)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huff4(n)  stbiw__zlib_huffa(0xc0 + (n)-280,8)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
 
-#define stbiw__ZHASH   16384
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__ZHASH   16384
 
-#endif // STBIW_ZLIB_COMPRESS
+#ಆದರೆ_ಅಂತ್ಯ // STBIW_ZLIB_COMPRESS
 
-unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
+ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ * stbi_zlib_compress(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ ದತ್ತಾಂಶ_len, ಪೂರ್ಣಾಂಕ *ಹೊರಹೋಗು_len, ಪೂರ್ಣಾಂಕ quality)
 {
-#ifdef STBIW_ZLIB_COMPRESS
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STBIW_ZLIB_COMPRESS
    // user provided a zlib compress implementation, use that
-   return STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
-#else // use builtin
-   static unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
-   static unsigned char  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
-   static unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
-   static unsigned char  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
-   unsigned int bitbuf=0;
-   int i,j, bitcount=0;
-   unsigned char *out = NULL;
-   unsigned char ***hash_table = (unsigned char***) STBIW_MALLOC(stbiw__ZHASH * sizeof(char**));
-   if (hash_table == NULL)
-      return NULL;
-   if (quality < 5) quality = 5;
+   ಹಿಂತಿರುಗಿ STBIW_ZLIB_COMPRESS(ದತ್ತಾಂಶ, ದತ್ತಾಂಶ_len, ಹೊರಹೋಗು_len, quality);
+#ಇಲ್ಲದಿದ್ದರೆ // use builtin
+   ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
+   ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
+   ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
+   ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
+   ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ bitbuf=0;
+   ಪೂರ್ಣಾಂಕ i,j, bitcount=0;
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ಹೊರಹೋಗು = ಖಾಲಿ;
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ ***hash_ಕೋಷ್ಟಕ = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ***) STBIW_MALLOC(stbiw__ZHASH * ಗಾತ್ರ(ಅಕ್ಷರ**));
+   ಆದರೆ (hash_ಕೋಷ್ಟಕ == ಖಾಲಿ)
+      ಹಿಂತಿರುಗಿ ಖಾಲಿ;
+   ಆದರೆ (quality < 5) quality = 5;
 
-   stbiw__sbpush(out, 0x78);   // DEFLATE 32K window
-   stbiw__sbpush(out, 0x5e);   // FLEVEL = 1
-   stbiw__zlib_add(1,1);  // BFINAL = 1
-   stbiw__zlib_add(1,2);  // BTYPE = 1 -- fixed huffman
+   stbiw__sbpush(ಹೊರಹೋಗು, 0x78);   // DEFLATE 32K window
+   stbiw__sbpush(ಹೊರಹೋಗು, 0x5e);   // FLEVEL = 1
+   stbiw_zlib_ಕೂಡಿಸು(1,1);  // BFINAL = 1
+   stbiw_zlib_ಕೂಡಿಸು(1,2);  // BTYPE = 1 -- fixed huffman
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      hash_table[i] = NULL;
+   ಗಾಗಿ (i=0; i < stbiw__ZHASH; ++i)
+      hash_ಕೋಷ್ಟಕ[i] = ಖಾಲಿ;
 
    i=0;
-   while (i < data_len-3) {
+   ಆಗ (i < ದತ್ತಾಂಶ_len-3) {
       // hash next 3 bytes of data to be compressed
-      int h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
-      unsigned char *bestloc = 0;
-      unsigned char **hlist = hash_table[h];
-      int n = stbiw__sbcount(hlist);
-      for (j=0; j < n; ++j) {
-         if (hlist[j]-data > i-32768) { // if entry lies within window
-            int d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
-            if (d >= best) best=d,bestloc=hlist[j];
+      ಪೂರ್ಣಾಂಕ h = stbiw__zhash(ದತ್ತಾಂಶ+i)&(stbiw__ZHASH-1), ಉತ್ತಮ=3;
+      ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *bestloc = 0;
+      ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ **hlist = hash_ಕೋಷ್ಟಕ[h];
+      ಪೂರ್ಣಾಂಕ n = stbiw__sbcount(hlist);
+      ಗಾಗಿ (j=0; j < n; ++j) {
+         ಆದರೆ (hlist[j]-ದತ್ತಾಂಶ > i-32768) { // if entry lies within window
+            ಪೂರ್ಣಾಂಕ d = stbiw__zlib_countm(hlist[j], ದತ್ತಾಂಶ+i, ದತ್ತಾಂಶ_len-i);
+            ಆದರೆ (d >= ಉತ್ತಮ) ಉತ್ತಮ=d,bestloc=hlist[j];
          }
       }
       // when hash table entry is too long, delete half the entries
-      if (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
-         STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, sizeof(hash_table[h][0])*quality);
-         stbiw__sbn(hash_table[h]) = quality;
+      ಆದರೆ (hash_ಕೋಷ್ಟಕ[h] && stbiw__sbn(hash_ಕೋಷ್ಟಕ[h]) == 2*quality) {
+         STBIW_MEMMOVE(hash_ಕೋಷ್ಟಕ[h], hash_ಕೋಷ್ಟಕ[h]+quality, ಗಾತ್ರ(hash_ಕೋಷ್ಟಕ[h][0])*quality);
+         stbiw__sbn(hash_ಕೋಷ್ಟಕ[h]) = quality;
       }
-      stbiw__sbpush(hash_table[h],data+i);
+      stbiw__sbpush(hash_ಕೋಷ್ಟಕ[h],ದತ್ತಾಂಶ+i);
 
-      if (bestloc) {
+      ಆದರೆ (bestloc) {
          // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
-         h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
-         hlist = hash_table[h];
+         h = stbiw__zhash(ದತ್ತಾಂಶ+i+1)&(stbiw__ZHASH-1);
+         hlist = hash_ಕೋಷ್ಟಕ[h];
          n = stbiw__sbcount(hlist);
-         for (j=0; j < n; ++j) {
-            if (hlist[j]-data > i-32767) {
-               int e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
-               if (e > best) { // if next match is better, bail on current match
-                  bestloc = NULL;
-                  break;
+         ಗಾಗಿ (j=0; j < n; ++j) {
+            ಆದರೆ (hlist[j]-ದತ್ತಾಂಶ > i-32767) {
+               ಪೂರ್ಣಾಂಕ e = stbiw__zlib_countm(hlist[j], ದತ್ತಾಂಶ+i+1, ದತ್ತಾಂಶ_len-i-1);
+               ಆದರೆ (e > ಉತ್ತಮ) { // if next match is better, bail on current match
+                  bestloc = ಖಾಲಿ;
+                  ನಿಲ್ಲಿಸು;
                }
             }
          }
       }
 
-      if (bestloc) {
-         int d = (int) (data+i - bestloc); // distance back
-         STBIW_ASSERT(d <= 32767 && best <= 258);
-         for (j=0; best > lengthc[j+1]-1; ++j);
+      ಆದರೆ (bestloc) {
+         ಪೂರ್ಣಾಂಕ d = (ಪೂರ್ಣಾಂಕ) (ದತ್ತಾಂಶ+i - bestloc); // distance back
+         STBIW_ASSERT(d <= 32767 && ಉತ್ತಮ <= 258);
+         ಗಾಗಿ (j=0; ಉತ್ತಮ > lengthc[j+1]-1; ++j);
          stbiw__zlib_huff(j+257);
-         if (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
-         for (j=0; d > distc[j+1]-1; ++j);
-         stbiw__zlib_add(stbiw__zlib_bitrev(j,5),5);
-         if (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
-         i += best;
-      } else {
-         stbiw__zlib_huffb(data[i]);
+         ಆದರೆ (lengtheb[j]) stbiw_zlib_ಕೂಡಿಸು(ಉತ್ತಮ - lengthc[j], lengtheb[j]);
+         ಗಾಗಿ (j=0; d > distc[j+1]-1; ++j);
+         stbiw_zlib_ಕೂಡಿಸು(stbiw__zlib_bitrev(j,5),5);
+         ಆದರೆ (disteb[j]) stbiw_zlib_ಕೂಡಿಸು(d - distc[j], disteb[j]);
+         i += ಉತ್ತಮ;
+      } ಇಲ್ಲದಿದ್ದರೆ {
+         stbiw__zlib_huffb(ದತ್ತಾಂಶ[i]);
          ++i;
       }
    }
    // write out final bytes
-   for (;i < data_len; ++i)
-      stbiw__zlib_huffb(data[i]);
+   ಗಾಗಿ (;i < ದತ್ತಾಂಶ_len; ++i)
+      stbiw__zlib_huffb(ದತ್ತಾಂಶ[i]);
    stbiw__zlib_huff(256); // end of block
    // pad with 0 bits to byte boundary
-   while (bitcount)
-      stbiw__zlib_add(0,1);
+   ಆಗ (bitcount)
+      stbiw_zlib_ಕೂಡಿಸು(0,1);
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      (void) stbiw__sbfree(hash_table[i]);
-   STBIW_FREE(hash_table);
+   ಗಾಗಿ (i=0; i < stbiw__ZHASH; ++i)
+      (ಶೂನ್ಯ) stbiw__sbfree(hash_ಕೋಷ್ಟಕ[i]);
+   STBIW_FREE(hash_ಕೋಷ್ಟಕ);
 
    {
       // compute adler32 on input
-      unsigned int s1=1, s2=0;
-      int blocklen = (int) (data_len % 5552);
+      ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ s1=1, s2=0;
+      ಪೂರ್ಣಾಂಕ blocklen = (ಪೂರ್ಣಾಂಕ) (ದತ್ತಾಂಶ_len % 5552);
       j=0;
-      while (j < data_len) {
-         for (i=0; i < blocklen; ++i) s1 += data[j+i], s2 += s1;
+      ಆಗ (j < ದತ್ತಾಂಶ_len) {
+         ಗಾಗಿ (i=0; i < blocklen; ++i) s1 += ದತ್ತಾಂಶ[j+i], s2 += s1;
          s1 %= 65521, s2 %= 65521;
          j += blocklen;
          blocklen = 5552;
       }
-      stbiw__sbpush(out, STBIW_UCHAR(s2 >> 8));
-      stbiw__sbpush(out, STBIW_UCHAR(s2));
-      stbiw__sbpush(out, STBIW_UCHAR(s1 >> 8));
-      stbiw__sbpush(out, STBIW_UCHAR(s1));
+      stbiw__sbpush(ಹೊರಹೋಗು, STBIW_UCHAR(s2 >> 8));
+      stbiw__sbpush(ಹೊರಹೋಗು, STBIW_UCHAR(s2));
+      stbiw__sbpush(ಹೊರಹೋಗು, STBIW_UCHAR(s1 >> 8));
+      stbiw__sbpush(ಹೊರಹೋಗು, STBIW_UCHAR(s1));
    }
-   *out_len = stbiw__sbn(out);
+   *ಹೊರಹೋಗು_len = stbiw__sbn(ಹೊರಹೋಗು);
    // make returned pointer freeable
-   STBIW_MEMMOVE(stbiw__sbraw(out), out, *out_len);
-   return (unsigned char *) stbiw__sbraw(out);
-#endif // STBIW_ZLIB_COMPRESS
+   STBIW_MEMMOVE(stbiw__sbraw(ಹೊರಹೋಗು), ಹೊರಹೋಗು, *ಹೊರಹೋಗು_len);
+   ಹಿಂತಿರುಗಿ (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) stbiw__sbraw(ಹೊರಹೋಗು);
+#ಆದರೆ_ಅಂತ್ಯ // STBIW_ZLIB_COMPRESS
 }
 
-static unsigned int stbiw__crc32(unsigned char *buffer, int len)
+ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ stbiw_ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ_32(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ಬಫರ್, ಪೂರ್ಣಾಂಕ len)
 {
-   static unsigned int crc_table[256] =
+   ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ_ಕೋಷ್ಟಕ[256] =
    {
       0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
       0x0eDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -959,123 +959,123 @@ static unsigned int stbiw__crc32(unsigned char *buffer, int len)
       0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
    };
 
-   unsigned int crc = ~0u;
-   int i;
-   for (i=0; i < len; ++i)
-      crc = (crc >> 8) ^ crc_table[buffer[i] ^ (crc & 0xff)];
-   return ~crc;
+   ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ = ~0u;
+   ಪೂರ್ಣಾಂಕ i;
+   ಗಾಗಿ (i=0; i < len; ++i)
+      ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ = (ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ >> 8) ^ ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ_ಕೋಷ್ಟಕ[ಬಫರ್[i] ^ (ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ & 0xff)];
+   ಹಿಂತಿರುಗಿ ~ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ;
 }
 
-#define stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
-#define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
-#define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__wp32(ದತ್ತಾಂಶ,v) stbiw__wpng4(ದತ್ತಾಂಶ, (v)>>24,(v)>>16,(v)>>8,(v));
+#ವ್ಯಾಖ್ಯಾನಿಸು stbiw__wptag(ದತ್ತಾಂಶ,s) stbiw__wpng4(ದತ್ತಾಂಶ, s[0],s[1],s[2],s[3])
 
-static void stbiw__wpcrc(unsigned char **data, int len)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__wpcrc(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ **ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ len)
 {
-   unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
-   stbiw__wp32(*data, crc);
+   ಚಿಹ್ನೆರಹಿತ ಪೂರ್ಣಾಂಕ ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ = stbiw_ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ_32(*ದತ್ತಾಂಶ - len - 4, len+4);
+   stbiw__wp32(*ದತ್ತಾಂಶ, ಚಕ್ರೀಯ_ಪರೀಕ್ಷೆ);
 }
 
-static unsigned char stbiw__paeth(int a, int b, int c)
+ಸ್ಥಿರ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ stbiw__paeth(ಪೂರ್ಣಾಂಕ a, ಪೂರ್ಣಾಂಕ b, ಪೂರ್ಣಾಂಕ c)
 {
-   int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
-   if (pa <= pb && pa <= pc) return STBIW_UCHAR(a);
-   if (pb <= pc) return STBIW_UCHAR(b);
-   return STBIW_UCHAR(c);
+   ಪೂರ್ಣಾಂಕ p = a + b - c, pa = ನಿರಪೇಕ್ಷ(p-a), pb = ನಿರಪೇಕ್ಷ(p-b), pc = ನಿರಪೇಕ್ಷ(p-c);
+   ಆದರೆ (pa <= pb && pa <= pc) ಹಿಂತಿರುಗಿ STBIW_UCHAR(a);
+   ಆದರೆ (pb <= pc) ಹಿಂತಿರುಗಿ STBIW_UCHAR(b);
+   ಹಿಂತಿರುಗಿ STBIW_UCHAR(c);
 }
 
 // @OPTIMIZE: provide an option that always forces left-predict or paeth predict
-static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw_encode_png_ಸಾಲು(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *pixels, ಪೂರ್ಣಾಂಕ stride_ಬೈಟುಗಳು, ಪೂರ್ಣಾಂಕ ಅಗಲ, ಪೂರ್ಣಾಂಕ ಎತ್ತರ, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ filter_type, ಚಿಹ್ನೆಯುಳ್ಳ ಅಕ್ಷರ *ಸಾಲು_ಬಫರ್)
 {
-   static int mapping[] = { 0,1,2,3,4 };
-   static int firstmap[] = { 0,1,0,5,6 };
-   int *mymap = (y != 0) ? mapping : firstmap;
-   int i;
-   int type = mymap[filter_type];
-   unsigned char *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
-   int signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
-   for (i = 0; i < n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - (z[i-signed_stride]>>1); break;
-         case 4: line_buffer[i] = (signed char) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); break;
-         case 5: line_buffer[i] = z[i]; break;
-         case 6: line_buffer[i] = z[i]; break;
+   ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ mapping[] = { 0,1,2,3,4 };
+   ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ firstmap[] = { 0,1,0,5,6 };
+   ಪೂರ್ಣಾಂಕ *mymap = (y != 0) ? mapping : firstmap;
+   ಪೂರ್ಣಾಂಕ i;
+   ಪೂರ್ಣಾಂಕ type = mymap[filter_type];
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *z = pixels + stride_ಬೈಟುಗಳು * (stbi__flip_vertically_on_write ? ಎತ್ತರ-1-y : y);
+   ಪೂರ್ಣಾಂಕ signed_stride = stbi__flip_vertically_on_write ? -stride_ಬೈಟುಗಳು : stride_ಬೈಟುಗಳು;
+   ಗಾಗಿ (i = 0; i < n; ++i) {
+      ಆಯ್ಕೆ (type) {
+         ಸ್ಥಿತಿ 0: ಸಾಲು_ಬಫರ್[i] = z[i]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 1: ಸಾಲು_ಬಫರ್[i] = z[i]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 2: ಸಾಲು_ಬಫರ್[i] = z[i] - z[i-signed_stride]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 3: ಸಾಲು_ಬಫರ್[i] = z[i] - (z[i-signed_stride]>>1); ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 4: ಸಾಲು_ಬಫರ್[i] = (ಚಿಹ್ನೆಯುಳ್ಳ ಅಕ್ಷರ) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 5: ಸಾಲು_ಬಫರ್[i] = z[i]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 6: ಸಾಲು_ಬಫರ್[i] = z[i]; ನಿಲ್ಲಿಸು;
       }
    }
-   for (i=n; i < width*n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i] - z[i-n]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); break;
-         case 4: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); break;
-         case 5: line_buffer[i] = z[i] - (z[i-n]>>1); break;
-         case 6: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], 0,0); break;
+   ಗಾಗಿ (i=n; i < ಅಗಲ*n; ++i) {
+      ಆಯ್ಕೆ (type) {
+         ಸ್ಥಿತಿ 0: ಸಾಲು_ಬಫರ್[i] = z[i]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 1: ಸಾಲು_ಬಫರ್[i] = z[i] - z[i-n]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 2: ಸಾಲು_ಬಫರ್[i] = z[i] - z[i-signed_stride]; ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 3: ಸಾಲು_ಬಫರ್[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 4: ಸಾಲು_ಬಫರ್[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 5: ಸಾಲು_ಬಫರ್[i] = z[i] - (z[i-n]>>1); ನಿಲ್ಲಿಸು;
+         ಸ್ಥಿತಿ 6: ಸಾಲು_ಬಫರ್[i] = z[i] - stbiw__paeth(z[i-n], 0,0); ನಿಲ್ಲಿಸು;
       }
    }
 }
 
-unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *stbi_write_png_ಗಮ್ಯ_mem(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *pixels, ಪೂರ್ಣಾಂಕ stride_ಬೈಟುಗಳು, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ n, ಪೂರ್ಣಾಂಕ *ಹೊರಹೋಗು_len)
 {
-   int force_filter = stbi_write_force_png_filter;
-   int ctype[5] = { -1, 0, 4, 2, 6 };
-   unsigned char sig[8] = { 137,80,78,71,13,10,26,10 };
-   unsigned char *out,*o, *filt, *zlib;
-   signed char *line_buffer;
-   int j,zlen;
+   ಪೂರ್ಣಾಂಕ force_filter = stbi_write_force_png_filter;
+   ಪೂರ್ಣಾಂಕ ctype[5] = { -1, 0, 4, 2, 6 };
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ sig[8] = { 137,80,78,71,13,10,26,10 };
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *ಹೊರಹೋಗು,*o, *filt, *zlib;
+   ಚಿಹ್ನೆಯುಳ್ಳ ಅಕ್ಷರ *ಸಾಲು_ಬಫರ್;
+   ಪೂರ್ಣಾಂಕ j,zlen;
 
-   if (stride_bytes == 0)
-      stride_bytes = x * n;
+   ಆದರೆ (stride_ಬೈಟುಗಳು == 0)
+      stride_ಬೈಟುಗಳು = x * n;
 
-   if (force_filter >= 5) {
+   ಆದರೆ (force_filter >= 5) {
       force_filter = -1;
    }
 
-   filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); if (!filt) return 0;
-   line_buffer = (signed char *) STBIW_MALLOC(x * n); if (!line_buffer) { STBIW_FREE(filt); return 0; }
-   for (j=0; j < y; ++j) {
-      int filter_type;
-      if (force_filter > -1) {
+   filt = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) STBIW_MALLOC((x*n+1) * y); ಆದರೆ (!filt) ಹಿಂತಿರುಗಿ 0;
+   ಸಾಲು_ಬಫರ್ = (ಚಿಹ್ನೆಯುಳ್ಳ ಅಕ್ಷರ *) STBIW_MALLOC(x * n); ಆದರೆ (!ಸಾಲು_ಬಫರ್) { STBIW_FREE(filt); ಹಿಂತಿರುಗಿ 0; }
+   ಗಾಗಿ (j=0; j < y; ++j) {
+      ಪೂರ್ಣಾಂಕ filter_type;
+      ಆದರೆ (force_filter > -1) {
          filter_type = force_filter;
-         stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, force_filter, line_buffer);
-      } else { // Estimate the best filter by running through all of them:
-         int best_filter = 0, best_filter_val = 0x7fffffff, est, i;
-         for (filter_type = 0; filter_type < 5; filter_type++) {
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, filter_type, line_buffer);
+         stbiw_encode_png_ಸಾಲು(pixels, stride_ಬೈಟುಗಳು, x, y, j, n, force_filter, ಸಾಲು_ಬಫರ್);
+      } ಇಲ್ಲದಿದ್ದರೆ { // Estimate the best filter by running through all of them:
+         ಪೂರ್ಣಾಂಕ ಉತ್ತಮ_filter = 0, ಉತ್ತಮ_filter_val = 0x7fffffff, est, i;
+         ಗಾಗಿ (filter_type = 0; filter_type < 5; filter_type++) {
+            stbiw_encode_png_ಸಾಲು(pixels, stride_ಬೈಟುಗಳು, x, y, j, n, filter_type, ಸಾಲು_ಬಫರ್);
 
             // Estimate the entropy of the line using this filter; the less, the better.
             est = 0;
-            for (i = 0; i < x*n; ++i) {
-               est += abs((signed char) line_buffer[i]);
+            ಗಾಗಿ (i = 0; i < x*n; ++i) {
+               est += ನಿರಪೇಕ್ಷ((ಚಿಹ್ನೆಯುಳ್ಳ ಅಕ್ಷರ) ಸಾಲು_ಬಫರ್[i]);
             }
-            if (est < best_filter_val) {
-               best_filter_val = est;
-               best_filter = filter_type;
+            ಆದರೆ (est < ಉತ್ತಮ_filter_val) {
+               ಉತ್ತಮ_filter_val = est;
+               ಉತ್ತಮ_filter = filter_type;
             }
          }
-         if (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, best_filter, line_buffer);
-            filter_type = best_filter;
+         ಆದರೆ (filter_type != ಉತ್ತಮ_filter) {  // If the last iteration already got us the best filter, don't redo it
+            stbiw_encode_png_ಸಾಲು(pixels, stride_ಬೈಟುಗಳು, x, y, j, n, ಉತ್ತಮ_filter, ಸಾಲು_ಬಫರ್);
+            filter_type = ಉತ್ತಮ_filter;
          }
       }
       // when we get here, filter_type contains the filter type, and line_buffer contains the data
-      filt[j*(x*n+1)] = (unsigned char) filter_type;
-      STBIW_MEMMOVE(filt+j*(x*n+1)+1, line_buffer, x*n);
+      filt[j*(x*n+1)] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ) filter_type;
+      STBIW_MEMMOVE(filt+j*(x*n+1)+1, ಸಾಲು_ಬಫರ್, x*n);
    }
-   STBIW_FREE(line_buffer);
+   STBIW_FREE(ಸಾಲು_ಬಫರ್);
    zlib = stbi_zlib_compress(filt, y*( x*n+1), &zlen, stbi_write_png_compression_level);
    STBIW_FREE(filt);
-   if (!zlib) return 0;
+   ಆದರೆ (!zlib) ಹಿಂತಿರುಗಿ 0;
 
    // each tag requires 12 bytes of overhead
-   out = (unsigned char *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
-   if (!out) return 0;
-   *out_len = 8 + 12+13 + 12+zlen + 12;
+   ಹೊರಹೋಗು = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
+   ಆದರೆ (!ಹೊರಹೋಗು) ಹಿಂತಿರುಗಿ 0;
+   *ಹೊರಹೋಗು_len = 8 + 12+13 + 12+zlen + 12;
 
-   o=out;
+   o=ಹೊರಹೋಗು;
    STBIW_MEMMOVE(o,sig,8); o+= 8;
    stbiw__wp32(o, 13); // header length
    stbiw__wptag(o, "IHDR");
@@ -1099,40 +1099,40 @@ unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, in
    stbiw__wptag(o, "IEND");
    stbiw__wpcrc(&o,0);
 
-   STBIW_ASSERT(o == out + *out_len);
+   STBIW_ASSERT(o == ಹೊರಹೋಗು + *ಹೊರಹೋಗು_len);
 
-   return out;
+   ಹಿಂತಿರುಗಿ ಹೊರಹೋಗು;
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_png(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ stride_ಬೈಟುಗಳು)
 {
    FILE *f;
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
-#ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+   ಪೂರ್ಣಾಂಕ len;
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *png = stbi_write_png_ಗಮ್ಯ_mem((ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) ದತ್ತಾಂಶ, stride_ಬೈಟುಗಳು, x, y, comp, &len);
+   ಆದರೆ (png == ಖಾಲಿ) ಹಿಂತಿರುಗಿ 0;
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ STBI_MSC_SECURE_CRT
+   ಆದರೆ (fopen_s(&f, filename, "wb"))
+      f = ಖಾಲಿ;
+#ಇಲ್ಲದಿದ್ದರೆ
    f = fopen(filename, "wb");
-#endif
-   if (!f) { STBIW_FREE(png); return 0; }
+#ಆದರೆ_ಅಂತ್ಯ
+   ಆದರೆ (!f) { STBIW_FREE(png); ಹಿಂತಿರುಗಿ 0; }
    fwrite(png, 1, len, f);
    fclose(f);
    STBIW_FREE(png);
-   return 1;
+   ಹಿಂತಿರುಗಿ 1;
 }
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_png_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ stride_ಬೈಟುಗಳು)
 {
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   ಪೂರ್ಣಾಂಕ len;
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *png = stbi_write_png_ಗಮ್ಯ_mem((ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *) ದತ್ತಾಂಶ, stride_ಬೈಟುಗಳು, x, y, comp, &len);
+   ಆದರೆ (png == ಖಾಲಿ) ಹಿಂತಿರುಗಿ 0;
    func(context, png, len);
    STBIW_FREE(png);
-   return 1;
+   ಹಿಂತಿರುಗಿ 1;
 }
 
 
@@ -1144,44 +1144,44 @@ STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x,
  * public domain Simple, Minimalistic JPEG writer - http://www.jonolick.com/code.html
  */
 
-static const unsigned char stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
+ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
       24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
 
-static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitCntP, const unsigned short *bs) {
-   int bitBuf = *bitBufP, bitCnt = *bitCntP;
-   bitCnt += bs[1];
-   bitBuf |= bs[0] << (24 - bitCnt);
-   while(bitCnt >= 8) {
-      unsigned char c = (bitBuf >> 16) & 255;
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(stbi__write_context *s, ಪೂರ್ಣಾಂಕ *ಬಿಟ್_Buf_P, ಪೂರ್ಣಾಂಕ *ಬಿಟ್_Cnt_P, ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ *bs) {
+   ಪೂರ್ಣಾಂಕ ಬಿಟ್_Buf = *ಬಿಟ್_Buf_P, ಬಿಟ್_Cnt = *ಬಿಟ್_Cnt_P;
+   ಬಿಟ್_Cnt += bs[1];
+   ಬಿಟ್_Buf |= bs[0] << (24 - ಬಿಟ್_Cnt);
+   ಆಗ(ಬಿಟ್_Cnt >= 8) {
+      ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ c = (ಬಿಟ್_Buf >> 16) & 255;
       stbiw__putc(s, c);
-      if(c == 255) {
+      ಆದರೆ(c == 255) {
          stbiw__putc(s, 0);
       }
-      bitBuf <<= 8;
-      bitCnt -= 8;
+      ಬಿಟ್_Buf <<= 8;
+      ಬಿಟ್_Cnt -= 8;
    }
-   *bitBufP = bitBuf;
-   *bitCntP = bitCnt;
+   *ಬಿಟ್_Buf_P = ಬಿಟ್_Buf;
+   *ಬಿಟ್_Cnt_P = ಬಿಟ್_Cnt;
 }
 
-static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float *d4p, float *d5p, float *d6p, float *d7p) {
-   float d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
-   float z1, z2, z3, z4, z5, z11, z13;
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw__jpg_DCT(ದಶಮಾಂಶ *d0p, ದಶಮಾಂಶ *d1p, ದಶಮಾಂಶ *d2p, ದಶಮಾಂಶ *d3p, ದಶಮಾಂಶ *d4p, ದಶಮಾಂಶ *d5p, ದಶಮಾಂಶ *d6p, ದಶಮಾಂಶ *d7p) {
+   ದಶಮಾಂಶ d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
+   ದಶಮಾಂಶ z1, z2, z3, z4, z5, z11, z13;
 
-   float tmp0 = d0 + d7;
-   float tmp7 = d0 - d7;
-   float tmp1 = d1 + d6;
-   float tmp6 = d1 - d6;
-   float tmp2 = d2 + d5;
-   float tmp5 = d2 - d5;
-   float tmp3 = d3 + d4;
-   float tmp4 = d3 - d4;
+   ದಶಮಾಂಶ tmp0 = d0 + d7;
+   ದಶಮಾಂಶ tmp7 = d0 - d7;
+   ದಶಮಾಂಶ tmp1 = d1 + d6;
+   ದಶಮಾಂಶ tmp6 = d1 - d6;
+   ದಶಮಾಂಶ tmp2 = d2 + d5;
+   ದಶಮಾಂಶ tmp5 = d2 - d5;
+   ದಶಮಾಂಶ tmp3 = d3 + d4;
+   ದಶಮಾಂಶ tmp4 = d3 - d4;
 
    // Even part
-   float tmp10 = tmp0 + tmp3;   // phase 2
-   float tmp13 = tmp0 - tmp3;
-   float tmp11 = tmp1 + tmp2;
-   float tmp12 = tmp1 - tmp2;
+   ದಶಮಾಂಶ tmp10 = tmp0 + tmp3;   // phase 2
+   ದಶಮಾಂಶ tmp13 = tmp0 - tmp3;
+   ದಶಮಾಂಶ tmp11 = tmp1 + tmp2;
+   ದಶಮಾಂಶ tmp12 = tmp1 - tmp2;
 
    d0 = tmp10 + tmp11;       // phase 3
    d4 = tmp10 - tmp11;
@@ -1212,87 +1212,87 @@ static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float
    *d0p = d0;  *d2p = d2;  *d4p = d4;  *d6p = d6;
 }
 
-static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
-   int tmp1 = val < 0 ? -val : val;
+ಸ್ಥಿರ ಶೂನ್ಯ stbiw_jpg_calc_ಬಿಟ್ಟುಗಳು(ಪೂರ್ಣಾಂಕ val, ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ ಬಿಟ್ಟುಗಳು[2]) {
+   ಪೂರ್ಣಾಂಕ tmp1 = val < 0 ? -val : val;
    val = val < 0 ? val-1 : val;
-   bits[1] = 1;
-   while(tmp1 >>= 1) {
-      ++bits[1];
+   ಬಿಟ್ಟುಗಳು[1] = 1;
+   ಆಗ(tmp1 >>= 1) {
+      ++ಬಿಟ್ಟುಗಳು[1];
    }
-   bits[0] = val & ((1<<bits[1])-1);
+   ಬಿಟ್ಟುಗಳು[0] = val & ((1<<ಬಿಟ್ಟುಗಳು[1])-1);
 }
 
-static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt, float *CDU, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
-   const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
-   const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
-   int dataOff, i, diff, end0pos;
-   int DU[64];
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbiw__jpg_processDU(stbi__write_context *s, ಪೂರ್ಣಾಂಕ *ಬಿಟ್_Buf, ಪೂರ್ಣಾಂಕ *ಬಿಟ್_Cnt, ದಶಮಾಂಶ *CDU, ದಶಮಾಂಶ *fdtbl, ಪೂರ್ಣಾಂಕ DC, ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ HTDC[256][2], ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ HTAC[256][2]) {
+   ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
+   ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
+   ಪೂರ್ಣಾಂಕ ದತ್ತಾಂಶ_Off, i, diff, end0pos;
+   ಪೂರ್ಣಾಂಕ DU[64];
 
    // DCT rows
-   for(dataOff=0; dataOff<64; dataOff+=8) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+1], &CDU[dataOff+2], &CDU[dataOff+3], &CDU[dataOff+4], &CDU[dataOff+5], &CDU[dataOff+6], &CDU[dataOff+7]);
+   ಗಾಗಿ(ದತ್ತಾಂಶ_Off=0; ದತ್ತಾಂಶ_Off<64; ದತ್ತಾಂಶ_Off+=8) {
+      stbiw__jpg_DCT(&CDU[ದತ್ತಾಂಶ_Off], &CDU[ದತ್ತಾಂಶ_Off+1], &CDU[ದತ್ತಾಂಶ_Off+2], &CDU[ದತ್ತಾಂಶ_Off+3], &CDU[ದತ್ತಾಂಶ_Off+4], &CDU[ದತ್ತಾಂಶ_Off+5], &CDU[ದತ್ತಾಂಶ_Off+6], &CDU[ದತ್ತಾಂಶ_Off+7]);
    }
    // DCT columns
-   for(dataOff=0; dataOff<8; ++dataOff) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+8], &CDU[dataOff+16], &CDU[dataOff+24], &CDU[dataOff+32], &CDU[dataOff+40], &CDU[dataOff+48], &CDU[dataOff+56]);
+   ಗಾಗಿ(ದತ್ತಾಂಶ_Off=0; ದತ್ತಾಂಶ_Off<8; ++ದತ್ತಾಂಶ_Off) {
+      stbiw__jpg_DCT(&CDU[ದತ್ತಾಂಶ_Off], &CDU[ದತ್ತಾಂಶ_Off+8], &CDU[ದತ್ತಾಂಶ_Off+16], &CDU[ದತ್ತಾಂಶ_Off+24], &CDU[ದತ್ತಾಂಶ_Off+32], &CDU[ದತ್ತಾಂಶ_Off+40], &CDU[ದತ್ತಾಂಶ_Off+48], &CDU[ದತ್ತಾಂಶ_Off+56]);
    }
    // Quantize/descale/zigzag the coefficients
-   for(i=0; i<64; ++i) {
-      float v = CDU[i]*fdtbl[i];
+   ಗಾಗಿ(i=0; i<64; ++i) {
+      ದಶಮಾಂಶ v = CDU[i]*fdtbl[i];
       // DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? ceilf(v - 0.5f) : floorf(v + 0.5f));
       // ceilf() and floorf() are C99, not C89, but I /think/ they're not needed here anyway?
-      DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? v - 0.5f : v + 0.5f);
+      DU[stbiw__jpg_ZigZag[i]] = (ಪೂರ್ಣಾಂಕ)(v < 0 ? v - 0.5f : v + 0.5f);
    }
 
    // Encode DC
    diff = DU[0] - DC;
-   if (diff == 0) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[0]);
-   } else {
-      unsigned short bits[2];
-      stbiw__jpg_calcBits(diff, bits);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[bits[1]]);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
+   ಆದರೆ (diff == 0) {
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, HTDC[0]);
+   } ಇಲ್ಲದಿದ್ದರೆ {
+      ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ ಬಿಟ್ಟುಗಳು[2];
+      stbiw_jpg_calc_ಬಿಟ್ಟುಗಳು(diff, ಬಿಟ್ಟುಗಳು);
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, HTDC[ಬಿಟ್ಟುಗಳು[1]]);
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, ಬಿಟ್ಟುಗಳು);
    }
    // Encode ACs
    end0pos = 63;
-   for(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
+   ಗಾಗಿ(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
    }
    // end0pos = first element in reverse order !=0
-   if(end0pos == 0) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
-      return DU[0];
+   ಆದರೆ(end0pos == 0) {
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, EOB);
+      ಹಿಂತಿರುಗಿ DU[0];
    }
-   for(i = 1; i <= end0pos; ++i) {
-      int startpos = i;
-      int nrzeroes;
-      unsigned short bits[2];
-      for (; DU[i]==0 && i<=end0pos; ++i) {
+   ಗಾಗಿ(i = 1; i <= end0pos; ++i) {
+      ಪೂರ್ಣಾಂಕ startpos = i;
+      ಪೂರ್ಣಾಂಕ nrzeroes;
+      ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ ಬಿಟ್ಟುಗಳು[2];
+      ಗಾಗಿ (; DU[i]==0 && i<=end0pos; ++i) {
       }
       nrzeroes = i-startpos;
-      if ( nrzeroes >= 16 ) {
-         int lng = nrzeroes>>4;
-         int nrmarker;
-         for (nrmarker=1; nrmarker <= lng; ++nrmarker)
-            stbiw__jpg_writeBits(s, bitBuf, bitCnt, M16zeroes);
+      ಆದರೆ ( nrzeroes >= 16 ) {
+         ಪೂರ್ಣಾಂಕ lng = nrzeroes>>4;
+         ಪೂರ್ಣಾಂಕ nrmarker;
+         ಗಾಗಿ (nrmarker=1; nrmarker <= lng; ++nrmarker)
+            stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, M16zeroes);
          nrzeroes &= 15;
       }
-      stbiw__jpg_calcBits(DU[i], bits);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTAC[(nrzeroes<<4)+bits[1]]);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
+      stbiw_jpg_calc_ಬಿಟ್ಟುಗಳು(DU[i], ಬಿಟ್ಟುಗಳು);
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, HTAC[(nrzeroes<<4)+ಬಿಟ್ಟುಗಳು[1]]);
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, ಬಿಟ್ಟುಗಳು);
    }
-   if(end0pos != 63) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
+   ಆದರೆ(end0pos != 63) {
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, ಬಿಟ್_Buf, ಬಿಟ್_Cnt, EOB);
    }
-   return DU[0];
+   ಹಿಂತಿರುಗಿ DU[0];
 }
 
-static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, int comp, const void* data, int quality) {
+ಸ್ಥಿರ ಪೂರ್ಣಾಂಕ stbi_write_jpg_core(stbi__write_context *s, ಪೂರ್ಣಾಂಕ ಅಗಲ, ಪೂರ್ಣಾಂಕ ಎತ್ತರ, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ* ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ quality) {
    // Constants that don't pollute global namespace
-   static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
-   static const unsigned char std_dc_luminance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
-   static const unsigned char std_ac_luminance_values[] = {
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_dc_luminance_ಮೌಲ್ಯಗಳು[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_ac_luminance_ಮೌಲ್ಯಗಳು[] = {
       0x01,0x02,0x03,0x00,0x04,0x11,0x05,0x12,0x21,0x31,0x41,0x06,0x13,0x51,0x61,0x07,0x22,0x71,0x14,0x32,0x81,0x91,0xa1,0x08,
       0x23,0x42,0xb1,0xc1,0x15,0x52,0xd1,0xf0,0x24,0x33,0x62,0x72,0x82,0x09,0x0a,0x16,0x17,0x18,0x19,0x1a,0x25,0x26,0x27,0x28,
       0x29,0x2a,0x34,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,0x59,
@@ -1301,10 +1301,10 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xb7,0xb8,0xb9,0xba,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xe1,0xe2,
       0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
-   static const unsigned char std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
-   static const unsigned char std_dc_chrominance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
-   static const unsigned char std_ac_chrominance_values[] = {
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_dc_chrominance_ಮೌಲ್ಯಗಳು[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ std_ac_chrominance_ಮೌಲ್ಯಗಳು[] = {
       0x00,0x01,0x02,0x03,0x11,0x04,0x05,0x21,0x31,0x06,0x12,0x41,0x51,0x07,0x61,0x71,0x13,0x22,0x32,0x81,0x08,0x14,0x42,0x91,
       0xa1,0xb1,0xc1,0x09,0x23,0x33,0x52,0xf0,0x15,0x62,0x72,0xd1,0x0a,0x16,0x24,0x34,0xe1,0x25,0xf1,0x17,0x18,0x19,0x1a,0x26,
       0x27,0x28,0x29,0x2a,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,
@@ -1314,9 +1314,9 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
    // Huffman tables
-   static const unsigned short YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
-   static const unsigned short UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
-   static const unsigned short YAC_HT[256][2] = {
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ YAC_HT[256][2] = {
       {10,4},{0,2},{1,2},{4,3},{11,4},{26,5},{120,7},{248,8},{1014,10},{65410,16},{65411,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {12,4},{27,5},{121,7},{502,9},{2038,11},{65412,16},{65413,16},{65414,16},{65415,16},{65416,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {28,5},{249,8},{1015,10},{4084,12},{65417,16},{65418,16},{65419,16},{65420,16},{65421,16},{65422,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1334,7 +1334,7 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {65515,16},{65516,16},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {2041,11},{65525,16},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const unsigned short UVAC_HT[256][2] = {
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ UVAC_HT[256][2] = {
       {0,2},{1,2},{4,3},{10,4},{24,5},{25,5},{56,6},{120,7},{500,9},{1014,10},{4084,12},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {11,4},{57,6},{246,8},{501,9},{2038,11},{4085,12},{65416,16},{65417,16},{65418,16},{65419,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {26,5},{247,8},{1015,10},{4086,12},{32706,15},{65420,16},{65421,16},{65422,16},{65423,16},{65424,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1352,135 +1352,135 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {16352,14},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{65525,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {1018,10},{32707,15},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const int YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
                              37,56,68,109,103,77,24,35,55,64,81,104,113,92,49,64,78,87,103,121,120,101,72,92,95,98,112,100,103,99};
-   static const int UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಪೂರ್ಣಾಂಕ UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
                               99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
-   static const float aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
+   ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ದಶಮಾಂಶ aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
                                  1.0f * 2.828427125f, 0.785694958f * 2.828427125f, 0.541196100f * 2.828427125f, 0.275899379f * 2.828427125f };
 
-   int row, col, i, k;
-   float fdtbl_Y[64], fdtbl_UV[64];
-   unsigned char YTable[64], UVTable[64];
+   ಪೂರ್ಣಾಂಕ ಅಡ್ಡಸಾಲು, ಲಂಬಸಾಲು, i, k;
+   ದಶಮಾಂಶ fdtbl_Y[64], fdtbl_UV[64];
+   ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ YTable[64], UVTable[64];
 
-   if(!data || !width || !height || comp > 4 || comp < 1) {
-      return 0;
+   ಆದರೆ(!ದತ್ತಾಂಶ || !ಅಗಲ || !ಎತ್ತರ || comp > 4 || comp < 1) {
+      ಹಿಂತಿರುಗಿ 0;
    }
 
    quality = quality ? quality : 90;
    quality = quality < 1 ? 1 : quality > 100 ? 100 : quality;
    quality = quality < 50 ? 5000 / quality : 200 - quality * 2;
 
-   for(i = 0; i < 64; ++i) {
-      int uvti, yti = (YQT[i]*quality+50)/100;
-      YTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
+   ಗಾಗಿ(i = 0; i < 64; ++i) {
+      ಪೂರ್ಣಾಂಕ uvti, yti = (YQT[i]*quality+50)/100;
+      YTable[stbiw__jpg_ZigZag[i]] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
       uvti = (UVQT[i]*quality+50)/100;
-      UVTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
+      UVTable[stbiw__jpg_ZigZag[i]] = (ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
    }
 
-   for(row = 0, k = 0; row < 8; ++row) {
-      for(col = 0; col < 8; ++col, ++k) {
-         fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
-         fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
+   ಗಾಗಿ(ಅಡ್ಡಸಾಲು = 0, k = 0; ಅಡ್ಡಸಾಲು < 8; ++ಅಡ್ಡಸಾಲು) {
+      ಗಾಗಿ(ಲಂಬಸಾಲು = 0; ಲಂಬಸಾಲು < 8; ++ಲಂಬಸಾಲು, ++k) {
+         fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[ಅಡ್ಡಸಾಲು] * aasf[ಲಂಬಸಾಲು]);
+         fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[ಅಡ್ಡಸಾಲು] * aasf[ಲಂಬಸಾಲು]);
       }
    }
 
    // Write Headers
    {
-      static const unsigned char head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
-      static const unsigned char head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
-      const unsigned char head1[] = { 0xFF,0xC0,0,0x11,8,(unsigned char)(height>>8),STBIW_UCHAR(height),(unsigned char)(width>>8),STBIW_UCHAR(width),
+      ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
+      ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ head1[] = { 0xFF,0xC0,0,0x11,8,(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(ಎತ್ತರ>>8),STBIW_UCHAR(ಎತ್ತರ),(ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ)(ಅಗಲ>>8),STBIW_UCHAR(ಅಗಲ),
                                       3,1,0x11,0,2,0x11,1,3,0x11,1,0xFF,0xC4,0x01,0xA2,0 };
-      s->func(s->context, (void*)head0, sizeof(head0));
-      s->func(s->context, (void*)YTable, sizeof(YTable));
+      s->func(s->context, (ಶೂನ್ಯ*)head0, ಗಾತ್ರ(head0));
+      s->func(s->context, (ಶೂನ್ಯ*)YTable, ಗಾತ್ರ(YTable));
       stbiw__putc(s, 1);
-      s->func(s->context, UVTable, sizeof(UVTable));
-      s->func(s->context, (void*)head1, sizeof(head1));
-      s->func(s->context, (void*)(std_dc_luminance_nrcodes+1), sizeof(std_dc_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_luminance_values, sizeof(std_dc_luminance_values));
+      s->func(s->context, UVTable, ಗಾತ್ರ(UVTable));
+      s->func(s->context, (ಶೂನ್ಯ*)head1, ಗಾತ್ರ(head1));
+      s->func(s->context, (ಶೂನ್ಯ*)(std_dc_luminance_nrcodes+1), ಗಾತ್ರ(std_dc_luminance_nrcodes)-1);
+      s->func(s->context, (ಶೂನ್ಯ*)std_dc_luminance_ಮೌಲ್ಯಗಳು, ಗಾತ್ರ(std_dc_luminance_ಮೌಲ್ಯಗಳು));
       stbiw__putc(s, 0x10); // HTYACinfo
-      s->func(s->context, (void*)(std_ac_luminance_nrcodes+1), sizeof(std_ac_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_luminance_values, sizeof(std_ac_luminance_values));
+      s->func(s->context, (ಶೂನ್ಯ*)(std_ac_luminance_nrcodes+1), ಗಾತ್ರ(std_ac_luminance_nrcodes)-1);
+      s->func(s->context, (ಶೂನ್ಯ*)std_ac_luminance_ಮೌಲ್ಯಗಳು, ಗಾತ್ರ(std_ac_luminance_ಮೌಲ್ಯಗಳು));
       stbiw__putc(s, 1); // HTUDCinfo
-      s->func(s->context, (void*)(std_dc_chrominance_nrcodes+1), sizeof(std_dc_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_chrominance_values, sizeof(std_dc_chrominance_values));
+      s->func(s->context, (ಶೂನ್ಯ*)(std_dc_chrominance_nrcodes+1), ಗಾತ್ರ(std_dc_chrominance_nrcodes)-1);
+      s->func(s->context, (ಶೂನ್ಯ*)std_dc_chrominance_ಮೌಲ್ಯಗಳು, ಗಾತ್ರ(std_dc_chrominance_ಮೌಲ್ಯಗಳು));
       stbiw__putc(s, 0x11); // HTUACinfo
-      s->func(s->context, (void*)(std_ac_chrominance_nrcodes+1), sizeof(std_ac_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_chrominance_values, sizeof(std_ac_chrominance_values));
-      s->func(s->context, (void*)head2, sizeof(head2));
+      s->func(s->context, (ಶೂನ್ಯ*)(std_ac_chrominance_nrcodes+1), ಗಾತ್ರ(std_ac_chrominance_nrcodes)-1);
+      s->func(s->context, (ಶೂನ್ಯ*)std_ac_chrominance_ಮೌಲ್ಯಗಳು, ಗಾತ್ರ(std_ac_chrominance_ಮೌಲ್ಯಗಳು));
+      s->func(s->context, (ಶೂನ್ಯ*)head2, ಗಾತ್ರ(head2));
    }
 
    // Encode 8x8 macroblocks
    {
-      static const unsigned short fillBits[] = {0x7F, 7};
-      const unsigned char *imageData = (const unsigned char *)data;
-      int DCY=0, DCU=0, DCV=0;
-      int bitBuf=0, bitCnt=0;
+      ಸ್ಥಿರ ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಗಿಡ್ಡ fill_ಬಿಟ್ಟುಗಳು[] = {0x7F, 7};
+      ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *image_ದತ್ತಾಂಶ = (ಸ್ಥಿರಾಂಕ ಚಿಹ್ನೆರಹಿತ ಅಕ್ಷರ *)ದತ್ತಾಂಶ;
+      ಪೂರ್ಣಾಂಕ DCY=0, DCU=0, DCV=0;
+      ಪೂರ್ಣಾಂಕ ಬಿಟ್_Buf=0, ಬಿಟ್_Cnt=0;
       // comp == 2 is grey+alpha (alpha is ignored)
-      int ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
-      int x, y, pos;
-      for(y = 0; y < height; y += 8) {
-         for(x = 0; x < width; x += 8) {
-            float YDU[64], UDU[64], VDU[64];
-            for(row = y, pos = 0; row < y+8; ++row) {
-               for(col = x; col < x+8; ++col, ++pos) {
-                  int p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
-                  float r, g, b;
-                  if(row >= height) {
-                     p -= width*comp*(row+1 - height);
+      ಪೂರ್ಣಾಂಕ ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
+      ಪೂರ್ಣಾಂಕ x, y, pos;
+      ಗಾಗಿ(y = 0; y < ಎತ್ತರ; y += 8) {
+         ಗಾಗಿ(x = 0; x < ಅಗಲ; x += 8) {
+            ದಶಮಾಂಶ YDU[64], UDU[64], VDU[64];
+            ಗಾಗಿ(ಅಡ್ಡಸಾಲು = y, pos = 0; ಅಡ್ಡಸಾಲು < y+8; ++ಅಡ್ಡಸಾಲು) {
+               ಗಾಗಿ(ಲಂಬಸಾಲು = x; ಲಂಬಸಾಲು < x+8; ++ಲಂಬಸಾಲು, ++pos) {
+                  ಪೂರ್ಣಾಂಕ p = (stbi__flip_vertically_on_write ? ಎತ್ತರ-1-ಅಡ್ಡಸಾಲು : ಅಡ್ಡಸಾಲು)*ಅಗಲ*comp + ಲಂಬಸಾಲು*comp;
+                  ದಶಮಾಂಶ r, g, b;
+                  ಆದರೆ(ಅಡ್ಡಸಾಲು >= ಎತ್ತರ) {
+                     p -= ಅಗಲ*comp*(ಅಡ್ಡಸಾಲು+1 - ಎತ್ತರ);
                   }
-                  if(col >= width) {
-                     p -= comp*(col+1 - width);
+                  ಆದರೆ(ಲಂಬಸಾಲು >= ಅಗಲ) {
+                     p -= comp*(ಲಂಬಸಾಲು+1 - ಅಗಲ);
                   }
 
-                  r = imageData[p+0];
-                  g = imageData[p+ofsG];
-                  b = imageData[p+ofsB];
+                  r = image_ದತ್ತಾಂಶ[p+0];
+                  g = image_ದತ್ತಾಂಶ[p+ofsG];
+                  b = image_ದತ್ತಾಂಶ[p+ofsB];
                   YDU[pos]=+0.29900f*r+0.58700f*g+0.11400f*b-128;
                   UDU[pos]=-0.16874f*r-0.33126f*g+0.50000f*b;
                   VDU[pos]=+0.50000f*r-0.41869f*g-0.08131f*b;
                }
             }
 
-            DCY = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
-            DCU = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
-            DCV = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
+            DCY = stbiw__jpg_processDU(s, &ಬಿಟ್_Buf, &ಬಿಟ್_Cnt, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+            DCU = stbiw__jpg_processDU(s, &ಬಿಟ್_Buf, &ಬಿಟ್_Cnt, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
+            DCV = stbiw__jpg_processDU(s, &ಬಿಟ್_Buf, &ಬಿಟ್_Cnt, VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
          }
       }
 
       // Do the bit alignment of the EOI marker
-      stbiw__jpg_writeBits(s, &bitBuf, &bitCnt, fillBits);
+      stbiw_jpg_write_ಬಿಟ್ಟುಗಳು(s, &ಬಿಟ್_Buf, &ಬಿಟ್_Cnt, fill_ಬಿಟ್ಟುಗಳು);
    }
 
    // EOI
    stbiw__putc(s, 0xFF);
    stbiw__putc(s, 0xD9);
 
-   return 1;
+   ಹಿಂತಿರುಗಿ 1;
 }
 
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_jpg_ಗಮ್ಯ_func(stbi_write_func *func, ಶೂನ್ಯ *context, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ quality)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_jpg_core(&s, x, y, comp, (void *) data, quality);
+   stbi_ಆರಂಭ_write_callbacks(&s, func, context);
+   ಹಿಂತಿರುಗಿ stbi_write_jpg_core(&s, x, y, comp, (ಶೂನ್ಯ *) ದತ್ತಾಂಶ, quality);
 }
 
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void *data, int quality)
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ STBI_WRITE_NO_STDIO
+STBIWDEF ಪೂರ್ಣಾಂಕ stbi_write_jpg(ಅಕ್ಷರ ಸ್ಥಿರಾಂಕ *filename, ಪೂರ್ಣಾಂಕ x, ಪೂರ್ಣಾಂಕ y, ಪೂರ್ಣಾಂಕ comp, ಸ್ಥಿರಾಂಕ ಶೂನ್ಯ *ದತ್ತಾಂಶ, ಪೂರ್ಣಾಂಕ quality)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_jpg_core(&s, x, y, comp, data, quality);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ಆದರೆ (stbi_ಆರಂಭ_write_file(&s,filename)) {
+      ಪೂರ್ಣಾಂಕ r = stbi_write_jpg_core(&s, x, y, comp, ದತ್ತಾಂಶ, quality);
+      stbi_ಕೊನೆ_write_file(&s);
+      ಹಿಂತಿರುಗಿ r;
+   } ಇಲ್ಲದಿದ್ದರೆ
+      ಹಿಂತಿರುಗಿ 0;
 }
-#endif
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif // STB_IMAGE_WRITE_IMPLEMENTATION
+#ಆದರೆ_ಅಂತ್ಯ // STB_IMAGE_WRITE_IMPLEMENTATION
 
 /* Revision history
       1.09  (2018-02-11)

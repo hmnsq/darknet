@@ -1,100 +1,100 @@
-#include "crop_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#ಅನ್ತರ್ಭಾವ "crop_layer.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    ಪೂರ್ಣಾಂಕ h = l.ಹೊರಹೋಗು_h;
+    ಪೂರ್ಣಾಂಕ w = l.ಹೊರಹೋಗು_w;
+    ಪೂರ್ಣಾಂಕ c = l.ಹೊರಹೋಗು_c;
+    ಹಿಂತಿರುಗಿ float_ಗಮ್ಯ_image(w,h,c,l.output);
 }
 
-void backward_crop_layer(const crop_layer l, network net){}
-void backward_crop_layer_gpu(const crop_layer l, network net){}
+ಶೂನ್ಯ backward_crop_layer(ಸ್ಥಿರಾಂಕ crop_layer l, ಜಾಲ net){}
+ಶೂನ್ಯ backward_crop_layer_gpu(ಸ್ಥಿರಾಂಕ crop_layer l, ಜಾಲ net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ crop_ಎತ್ತರ, ಪೂರ್ಣಾಂಕ crop_ಅಗಲ, ಪೂರ್ಣಾಂಕ flip, ದಶಮಾಂಶ angle, ದಶಮಾಂಶ saturation, ದಶಮಾಂಶ exposure)
 {
-    fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
+    fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_ಎತ್ತರ,crop_ಅಗಲ,c);
     crop_layer l = {0};
     l.type = CROP;
     l.batch = batch;
     l.h = h;
     l.w = w;
     l.c = c;
-    l.scale = (float)crop_height / h;
+    l.scale = (ದಶಮಾಂಶ)crop_ಎತ್ತರ / h;
     l.flip = flip;
     l.angle = angle;
     l.saturation = saturation;
     l.exposure = exposure;
-    l.out_w = crop_width;
-    l.out_h = crop_height;
-    l.out_c = c;
+    l.ಹೊರಹೋಗು_w = crop_ಅಗಲ;
+    l.ಹೊರಹೋಗು_h = crop_ಎತ್ತರ;
+    l.ಹೊರಹೋಗು_c = c;
     l.inputs = l.w * l.h * l.c;
-    l.outputs = l.out_w * l.out_h * l.out_c;
-    l.output = calloc(l.outputs*batch, sizeof(float));
+    l.outputs = l.ಹೊರಹೋಗು_w * l.ಹೊರಹೋಗು_h * l.ಹೊರಹೋಗು_c;
+    l.output = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(l.outputs*batch, ಗಾತ್ರ(ದಶಮಾಂಶ));
     l.forward = forward_crop_layer;
     l.backward = backward_crop_layer;
 
-    #ifdef GPU
+    #ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
     l.forward_gpu = forward_crop_layer_gpu;
     l.backward_gpu = backward_crop_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
-    #endif
-    return l;
+    #ಆದರೆ_ಅಂತ್ಯ
+    ಹಿಂತಿರುಗಿ l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+ಶೂನ್ಯ resize_crop_layer(layer *l, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h)
 {
     l->w = w;
     l->h = h;
 
-    l->out_w =  l->scale*w;
-    l->out_h =  l->scale*h;
+    l->ಹೊರಹೋಗು_w =  l->scale*w;
+    l->ಹೊರಹೋಗು_h =  l->scale*h;
 
     l->inputs = l->w * l->h * l->c;
-    l->outputs = l->out_h * l->out_w * l->out_c;
+    l->outputs = l->ಹೊರಹೋಗು_h * l->ಹೊರಹೋಗು_w * l->ಹೊರಹೋಗು_c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    #ifdef GPU
+    l->output = realloc(l->output, l->batch*l->outputs*ಗಾತ್ರ(ದಶಮಾಂಶ));
+    #ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
     cuda_free(l->output_gpu);
     l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
-    #endif
+    #ಆದರೆ_ಅಂತ್ಯ
 }
 
 
-void forward_crop_layer(const crop_layer l, network net)
+ಶೂನ್ಯ forward_crop_layer(ಸ್ಥಿರಾಂಕ crop_layer l, ಜಾಲ net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
-    float scale = 2;
-    float trans = -1;
-    if(l.noadjust){
+    ಪೂರ್ಣಾಂಕ i,j,c,b,ಅಡ್ಡಸಾಲು,ಲಂಬಸಾಲು;
+    ಪೂರ್ಣಾಂಕ ಸೂಚ್ಯಂಕ;
+    ಪೂರ್ಣಾಂಕ ಎಣಿಕೆ_2 = 0;
+    ಪೂರ್ಣಾಂಕ flip = (l.flip && rand()%2);
+    ಪೂರ್ಣಾಂಕ dh = rand()%(l.h - l.ಹೊರಹೋಗು_h + 1);
+    ಪೂರ್ಣಾಂಕ dw = rand()%(l.w - l.ಹೊರಹೋಗು_w + 1);
+    ದಶಮಾಂಶ scale = 2;
+    ದಶಮಾಂಶ trans = -1;
+    ಆದರೆ(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    ಆದರೆ(!net.train){
         flip = 0;
-        dh = (l.h - l.out_h)/2;
-        dw = (l.w - l.out_w)/2;
+        dh = (l.h - l.ಹೊರಹೋಗು_h)/2;
+        dw = (l.w - l.ಹೊರಹೋಗು_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
-                        col = l.w - dw - j - 1;    
-                    }else{
-                        col = j + dw;
+    ಗಾಗಿ(b = 0; b < l.batch; ++b){
+        ಗಾಗಿ(c = 0; c < l.c; ++c){
+            ಗಾಗಿ(i = 0; i < l.ಹೊರಹೋಗು_h; ++i){
+                ಗಾಗಿ(j = 0; j < l.ಹೊರಹೋಗು_w; ++j){
+                    ಆದರೆ(flip){
+                        ಲಂಬಸಾಲು = l.w - dw - j - 1;    
+                    }ಇಲ್ಲದಿದ್ದರೆ{
+                        ಲಂಬಸಾಲು = j + dw;
                     }
-                    row = i + dh;
-                    index = col+l.w*(row+l.h*(c + l.c*b)); 
-                    l.output[count++] = net.input[index]*scale + trans;
+                    ಅಡ್ಡಸಾಲು = i + dh;
+                    ಸೂಚ್ಯಂಕ = ಲಂಬಸಾಲು+l.w*(ಅಡ್ಡಸಾಲು+l.h*(c + l.c*b)); 
+                    l.output[ಎಣಿಕೆ_2++] = net.ಒಳಹರಿವು[ಸೂಚ್ಯಂಕ]*scale + trans;
                 }
             }
         }

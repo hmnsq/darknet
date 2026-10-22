@@ -1,6 +1,6 @@
-#ifndef DEMO_H
-#define DEMO_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ DEMO_H
+#ವ್ಯಾಖ್ಯಾನಿಸು DEMO_H
 
-#include "image.h"
+#ಅನ್ತರ್ಭಾವ "image.h"
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

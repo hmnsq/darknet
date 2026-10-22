@@ -1,19 +1,19 @@
-#ifndef SOFTMAX_LAYER_H
-#define SOFTMAX_LAYER_H
-#include "layer.h"
-#include "network.h"
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ SOFTMAX_LAYER_H
+#ವ್ಯಾಖ್ಯಾನಿಸು SOFTMAX_LAYER_H
+#ಅನ್ತರ್ಭಾವ "layer.h"
+#ಅನ್ತರ್ಭಾವ "network.h"
 
-typedef layer softmax_layer;
+ಪ್ರಕಾರವ್ಯಾಖ್ಯೆ layer softmax_layer;
 
-void softmax_array(float *input, int n, float temp, float *output);
-softmax_layer make_softmax_layer(int batch, int inputs, int groups);
-void forward_softmax_layer(const softmax_layer l, network net);
-void backward_softmax_layer(const softmax_layer l, network net);
+ಶೂನ್ಯ softmax_array(ದಶಮಾಂಶ *ಒಳಹರಿವು, ಪೂರ್ಣಾಂಕ n, ದಶಮಾಂಶ ತಾತ್ಕಾಲಿಕ, ದಶಮಾಂಶ *output);
+softmax_layer make_softmax_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ inputs, ಪೂರ್ಣಾಂಕ groups);
+ಶೂನ್ಯ forward_softmax_layer(ಸ್ಥಿರಾಂಕ softmax_layer l, ಜಾಲ net);
+ಶೂನ್ಯ backward_softmax_layer(ಸ್ಥಿರಾಂಕ softmax_layer l, ಜಾಲ net);
 
-#ifdef GPU
-void pull_softmax_layer_output(const softmax_layer l);
-void forward_softmax_layer_gpu(const softmax_layer l, network net);
-void backward_softmax_layer_gpu(const softmax_layer l, network net);
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ pull_softmax_layer_output(ಸ್ಥಿರಾಂಕ softmax_layer l);
+ಶೂನ್ಯ forward_softmax_layer_gpu(ಸ್ಥಿರಾಂಕ softmax_layer l, ಜಾಲ net);
+ಶೂನ್ಯ backward_softmax_layer_gpu(ಸ್ಥಿರಾಂಕ softmax_layer l, ಜಾಲ net);
+#ಆದರೆ_ಅಂತ್ಯ
 
-#endif
+#ಆದರೆ_ಅಂತ್ಯ

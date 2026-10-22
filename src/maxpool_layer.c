@@ -1,24 +1,24 @@
-#include "maxpool_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#ಅನ್ತರ್ಭಾವ "maxpool_layer.h"
+#ಅನ್ತರ್ಭಾವ "cuda.h"
+#ಅನ್ತರ್ಭಾವ <stdio.h>
 
 image get_maxpool_image(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.output);
+    ಪೂರ್ಣಾಂಕ h = l.ಹೊರಹೋಗು_h;
+    ಪೂರ್ಣಾಂಕ w = l.ಹೊರಹೋಗು_w;
+    ಪೂರ್ಣಾಂಕ c = l.c;
+    ಹಿಂತಿರುಗಿ float_ಗಮ್ಯ_image(w,h,c,l.output);
 }
 
 image get_maxpool_delta(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.delta);
+    ಪೂರ್ಣಾಂಕ h = l.ಹೊರಹೋಗು_h;
+    ಪೂರ್ಣಾಂಕ w = l.ಹೊರಹೋಗು_w;
+    ಪೂರ್ಣಾಂಕ c = l.c;
+    ಹಿಂತಿರುಗಿ float_ಗಮ್ಯ_image(w,h,c,l.delta);
 }
 
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding)
+maxpool_layer make_maxpool_layer(ಪೂರ್ಣಾಂಕ batch, ಪೂರ್ಣಾಂಕ h, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ c, ಪೂರ್ಣಾಂಕ ಗಾತ್ರ_2, ಪೂರ್ಣಾಂಕ stride, ಪೂರ್ಣಾಂಕ padding)
 {
     maxpool_layer l = {0};
     l.type = MAXPOOL;
@@ -27,101 +27,101 @@ maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int s
     l.w = w;
     l.c = c;
     l.pad = padding;
-    l.out_w = (w + padding - size)/stride + 1;
-    l.out_h = (h + padding - size)/stride + 1;
-    l.out_c = c;
-    l.outputs = l.out_h * l.out_w * l.out_c;
+    l.ಹೊರಹೋಗು_w = (w + padding - ಗಾತ್ರ_2)/stride + 1;
+    l.ಹೊರಹೋಗು_h = (h + padding - ಗಾತ್ರ_2)/stride + 1;
+    l.ಹೊರಹೋಗು_c = c;
+    l.outputs = l.ಹೊರಹೋಗು_h * l.ಹೊರಹೋಗು_w * l.ಹೊರಹೋಗು_c;
     l.inputs = h*w*c;
-    l.size = size;
+    l.ಗಾತ್ರ_2 = ಗಾತ್ರ_2;
     l.stride = stride;
-    int output_size = l.out_h * l.out_w * l.out_c * batch;
-    l.indexes = calloc(output_size, sizeof(int));
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    ಪೂರ್ಣಾಂಕ output_ಗಾತ್ರ = l.ಹೊರಹೋಗು_h * l.ಹೊರಹೋಗು_w * l.ಹೊರಹೋಗು_c * batch;
+    l.indexes = ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(output_ಗಾತ್ರ, ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+    l.output =  ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(output_ಗಾತ್ರ, ಗಾತ್ರ(ದಶಮಾಂಶ));
+    l.delta =   ಸೊನ್ನೆ_ಸ್ಮರಣೆ_ಕೊಡು(output_ಗಾತ್ರ, ಗಾತ್ರ(ದಶಮಾಂಶ));
     l.forward = forward_maxpool_layer;
     l.backward = backward_maxpool_layer;
-    #ifdef GPU
+    #ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
     l.forward_gpu = forward_maxpool_layer_gpu;
     l.backward_gpu = backward_maxpool_layer_gpu;
-    l.indexes_gpu = cuda_make_int_array(0, output_size);
-    l.output_gpu  = cuda_make_array(l.output, output_size);
-    l.delta_gpu   = cuda_make_array(l.delta, output_size);
-    #endif
-    fprintf(stderr, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    return l;
+    l.indexes_gpu = cuda_make_int_array(0, output_ಗಾತ್ರ);
+    l.output_gpu  = cuda_make_array(l.output, output_ಗಾತ್ರ);
+    l.delta_gpu   = cuda_make_array(l.delta, output_ಗಾತ್ರ);
+    #ಆದರೆ_ಅಂತ್ಯ
+    fprintf(stderr, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", ಗಾತ್ರ_2, ಗಾತ್ರ_2, stride, w, h, c, l.ಹೊರಹೋಗು_w, l.ಹೊರಹೋಗು_h, l.ಹೊರಹೋಗು_c);
+    ಹಿಂತಿರುಗಿ l;
 }
 
-void resize_maxpool_layer(maxpool_layer *l, int w, int h)
+ಶೂನ್ಯ resize_maxpool_layer(maxpool_layer *l, ಪೂರ್ಣಾಂಕ w, ಪೂರ್ಣಾಂಕ h)
 {
     l->h = h;
     l->w = w;
     l->inputs = h*w*l->c;
 
-    l->out_w = (w + l->pad - l->size)/l->stride + 1;
-    l->out_h = (h + l->pad - l->size)/l->stride + 1;
-    l->outputs = l->out_w * l->out_h * l->c;
-    int output_size = l->outputs * l->batch;
+    l->ಹೊರಹೋಗು_w = (w + l->pad - l->ಗಾತ್ರ_2)/l->stride + 1;
+    l->ಹೊರಹೋಗು_h = (h + l->pad - l->ಗಾತ್ರ_2)/l->stride + 1;
+    l->outputs = l->ಹೊರಹೋಗು_w * l->ಹೊರಹೋಗು_h * l->c;
+    ಪೂರ್ಣಾಂಕ output_ಗಾತ್ರ = l->outputs * l->batch;
 
-    l->indexes = realloc(l->indexes, output_size * sizeof(int));
-    l->output = realloc(l->output, output_size * sizeof(float));
-    l->delta = realloc(l->delta, output_size * sizeof(float));
+    l->indexes = realloc(l->indexes, output_ಗಾತ್ರ * ಗಾತ್ರ(ಪೂರ್ಣಾಂಕ));
+    l->output = realloc(l->output, output_ಗಾತ್ರ * ಗಾತ್ರ(ದಶಮಾಂಶ));
+    l->delta = realloc(l->delta, output_ಗಾತ್ರ * ಗಾತ್ರ(ದಶಮಾಂಶ));
 
-    #ifdef GPU
-    cuda_free((float *)l->indexes_gpu);
+    #ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+    cuda_free((ದಶಮಾಂಶ *)l->indexes_gpu);
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
-    l->indexes_gpu = cuda_make_int_array(0, output_size);
-    l->output_gpu  = cuda_make_array(l->output, output_size);
-    l->delta_gpu   = cuda_make_array(l->delta,  output_size);
-    #endif
+    l->indexes_gpu = cuda_make_int_array(0, output_ಗಾತ್ರ);
+    l->output_gpu  = cuda_make_array(l->output, output_ಗಾತ್ರ);
+    l->delta_gpu   = cuda_make_array(l->delta,  output_ಗಾತ್ರ);
+    #ಆದರೆ_ಅಂತ್ಯ
 }
 
-void forward_maxpool_layer(const maxpool_layer l, network net)
+ಶೂನ್ಯ forward_maxpool_layer(ಸ್ಥಿರಾಂಕ maxpool_layer l, ಜಾಲ net)
 {
-    int b,i,j,k,m,n;
-    int w_offset = -l.pad/2;
-    int h_offset = -l.pad/2;
+    ಪೂರ್ಣಾಂಕ b,i,j,k,m,n;
+    ಪೂರ್ಣಾಂಕ w_ಸ್ಥಾನಾಂತರ = -l.pad/2;
+    ಪೂರ್ಣಾಂಕ h_ಸ್ಥಾನಾಂತರ = -l.pad/2;
 
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
+    ಪೂರ್ಣಾಂಕ h = l.ಹೊರಹೋಗು_h;
+    ಪೂರ್ಣಾಂಕ w = l.ಹೊರಹೋಗು_w;
+    ಪೂರ್ಣಾಂಕ c = l.c;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(i = 0; i < h; ++i){
-                for(j = 0; j < w; ++j){
-                    int out_index = j + w*(i + h*(k + c*b));
-                    float max = -FLT_MAX;
-                    int max_i = -1;
-                    for(n = 0; n < l.size; ++n){
-                        for(m = 0; m < l.size; ++m){
-                            int cur_h = h_offset + i*l.stride + n;
-                            int cur_w = w_offset + j*l.stride + m;
-                            int index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
-                            int valid = (cur_h >= 0 && cur_h < l.h &&
+    ಗಾಗಿ(b = 0; b < l.batch; ++b){
+        ಗಾಗಿ(k = 0; k < c; ++k){
+            ಗಾಗಿ(i = 0; i < h; ++i){
+                ಗಾಗಿ(j = 0; j < w; ++j){
+                    ಪೂರ್ಣಾಂಕ ಹೊರಹೋಗು_ಸೂಚ್ಯಂಕ = j + w*(i + h*(k + c*b));
+                    ದಶಮಾಂಶ max = -FLT_MAX;
+                    ಪೂರ್ಣಾಂಕ max_i = -1;
+                    ಗಾಗಿ(n = 0; n < l.ಗಾತ್ರ_2; ++n){
+                        ಗಾಗಿ(m = 0; m < l.ಗಾತ್ರ_2; ++m){
+                            ಪೂರ್ಣಾಂಕ cur_h = h_ಸ್ಥಾನಾಂತರ + i*l.stride + n;
+                            ಪೂರ್ಣಾಂಕ cur_w = w_ಸ್ಥಾನಾಂತರ + j*l.stride + m;
+                            ಪೂರ್ಣಾಂಕ ಸೂಚ್ಯಂಕ = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
+                            ಪೂರ್ಣಾಂಕ valid = (cur_h >= 0 && cur_h < l.h &&
                                          cur_w >= 0 && cur_w < l.w);
-                            float val = (valid != 0) ? net.input[index] : -FLT_MAX;
-                            max_i = (val > max) ? index : max_i;
+                            ದಶಮಾಂಶ val = (valid != 0) ? net.ಒಳಹರಿವು[ಸೂಚ್ಯಂಕ] : -FLT_MAX;
+                            max_i = (val > max) ? ಸೂಚ್ಯಂಕ : max_i;
                             max   = (val > max) ? val   : max;
                         }
                     }
-                    l.output[out_index] = max;
-                    l.indexes[out_index] = max_i;
+                    l.output[ಹೊರಹೋಗು_ಸೂಚ್ಯಂಕ] = max;
+                    l.indexes[ಹೊರಹೋಗು_ಸೂಚ್ಯಂಕ] = max_i;
                 }
             }
         }
     }
 }
 
-void backward_maxpool_layer(const maxpool_layer l, network net)
+ಶೂನ್ಯ backward_maxpool_layer(ಸ್ಥಿರಾಂಕ maxpool_layer l, ಜಾಲ net)
 {
-    int i;
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    for(i = 0; i < h*w*c*l.batch; ++i){
-        int index = l.indexes[i];
-        net.delta[index] += l.delta[i];
+    ಪೂರ್ಣಾಂಕ i;
+    ಪೂರ್ಣಾಂಕ h = l.ಹೊರಹೋಗು_h;
+    ಪೂರ್ಣಾಂಕ w = l.ಹೊರಹೋಗು_w;
+    ಪೂರ್ಣಾಂಕ c = l.c;
+    ಗಾಗಿ(i = 0; i < h*w*c*l.batch; ++i){
+        ಪೂರ್ಣಾಂಕ ಸೂಚ್ಯಂಕ = l.indexes[i];
+        net.delta[ಸೂಚ್ಯಂಕ] += l.delta[i];
     }
 }
 

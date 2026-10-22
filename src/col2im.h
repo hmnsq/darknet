@@ -1,13 +1,13 @@
-#ifndef COL2IM_H
-#define COL2IM_H
+#ವ್ಯಾಖ್ಯಾನಿತವಾಗದಿದ್ದರೆ COL2IM_H
+#ವ್ಯಾಖ್ಯಾನಿಸು COL2IM_H
 
-void col2im_cpu(float* data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_im);
+ಶೂನ್ಯ col2im_cpu(ದಶಮಾಂಶ* ದತ್ತಾಂಶ_ಲಂಬಸಾಲು,
+        ಪೂರ್ಣಾಂಕ channels, ಪೂರ್ಣಾಂಕ ಎತ್ತರ, ಪೂರ್ಣಾಂಕ ಅಗಲ,
+        ಪೂರ್ಣಾಂಕ ksize, ಪೂರ್ಣಾಂಕ stride, ಪೂರ್ಣಾಂಕ pad, ದಶಮಾಂಶ* ದತ್ತಾಂಶ_im);
 
-#ifdef GPU
-void col2im_gpu(float *data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float *data_im);
-#endif
-#endif
+#ವ್ಯಾಖ್ಯಾನಿತವಾದರೆ GPU
+ಶೂನ್ಯ col2im_gpu(ದಶಮಾಂಶ *ದತ್ತಾಂಶ_ಲಂಬಸಾಲು,
+        ಪೂರ್ಣಾಂಕ channels, ಪೂರ್ಣಾಂಕ ಎತ್ತರ, ಪೂರ್ಣಾಂಕ ಅಗಲ,
+        ಪೂರ್ಣಾಂಕ ksize, ಪೂರ್ಣಾಂಕ stride, ಪೂರ್ಣಾಂಕ pad, ದಶಮಾಂಶ *ದತ್ತಾಂಶ_im);
+#ಆದರೆ_ಅಂತ್ಯ
+#ಆದರೆ_ಅಂತ್ಯ
