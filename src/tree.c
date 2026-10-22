@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#ضمن <stdio.h>
+#ضمن <stdlib.h>
+#ضمن "tree.h"
+#ضمن "utils.h"
+#ضمن "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+فراغ change_leaves(دەرەخ *t, حرف *leaf_list)
 {
     list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
+    حرف **leaves = (حرف **)list_to_array(llist);
+    صحيح n = llist->size;
+    صحيح i,j;
+    صحيح found = 0;
+    لكل(i = 0; i < t->n; ++i){
         t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
+        لكل(j = 0; j < n; ++j){
+            إذا (0==strcmp(t->name[i], leaves[j])){
                 t->leaf[i] = 1;
                 ++found;
-                break;
+                اكسر;
             }
         }
     }
     fprintf(stderr, "Found %d leaves.\n", found);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+عائم get_hierarchy_probability(عائم *x, دەرەخ *hier, صحيح c, صحيح stride)
 {
-    float p = 1;
-    while(c >= 0){
+    عائم p = 1;
+    طالما(c >= 0){
         p = p * x[c*stride];
         c = hier->parent[c];
     }
-    return p;
+    أرجع p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+فراغ hierarchy_predictions(عائم *predictions, صحيح n, دەرەخ *hier, صحيح only_leaves, صحيح stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
+    صحيح j;
+    لكل(j = 0; j < n; ++j){
+        صحيح parent = hier->parent[j];
+        إذا(parent >= 0){
             predictions[j*stride] *= predictions[parent*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    إذا(only_leaves){
+        لكل(j = 0; j < n; ++j){
+            إذا(!hier->leaf[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+صحيح hierarchy_چوققا_prediction(عائم *predictions, دەرەخ *hier, عائم thresh, صحيح stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    عائم p = 1;
+    صحيح group = 0;
+    صحيح i;
+    طالما(1){
+        عائم max = 0;
+        صحيح max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
+        لكل(i = 0; i < hier->group_size[group]; ++i){
+            صحيح index = i + hier->group_offset[group];
+            عائم val = predictions[(i + hier->group_offset[group])*stride];
+            إذا(val > max){
                 max_i = index;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        إذا(p*max > thresh){
             p = p*max;
             group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            إذا(hier->child[max_i] < 0) أرجع max_i;
+        } وإلا إذا (group == 0){
+            أرجع max_i;
+        } وإلا {
+            أرجع hier->parent[hier->group_offset[group]];
         }
     }
-    return 0;
+    أرجع 0;
 }
 
-tree *read_tree(char *filename)
+دەرەخ *read_دەرەخ(حرف *filename)
 {
-    tree t = {0};
+    دەرەخ t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
+    حرف *قۇر;
+    صحيح last_parent = -1;
+    صحيح group_size = 0;
+    صحيح groups = 0;
+    صحيح n = 0;
+    طالما((قۇر=fgetl(fp)) != 0){
+        حرف *id = calloc(256, حجم(حرف));
+        صحيح parent = -1;
+        sscanf(قۇر, "%s %d", id, &parent);
+        t.parent = realloc(t.parent, (n+1)*حجم(صحيح));
         t.parent[n] = parent;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
+        t.child = realloc(t.child, (n+1)*حجم(صحيح));
         t.child[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*حجم(حرف *));
         t.name[n] = id;
-        if(parent != last_parent){
+        إذا(parent != last_parent){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
+            t.group_offset = realloc(t.group_offset, groups * حجم(صحيح));
             t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
+            t.group_size = realloc(t.group_size, groups * حجم(صحيح));
             t.group_size[groups - 1] = group_size;
             group_size = 0;
             last_parent = parent;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
+        t.group = realloc(t.group, (n+1)*حجم(صحيح));
         t.group[n] = groups;
-        if (parent >= 0) {
+        إذا (parent >= 0) {
             t.child[parent] = groups;
         }
         ++n;
         ++group_size;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
+    t.group_offset = realloc(t.group_offset, groups * حجم(صحيح));
     t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
+    t.group_size = realloc(t.group_size, groups * حجم(صحيح));
     t.group_size[groups - 1] = group_size;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.leaf = calloc(n, حجم(صحيح));
+    صحيح i;
+    لكل(i = 0; i < n; ++i) t.leaf[i] = 1;
+    لكل(i = 0; i < n; ++i) إذا(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    دەرەخ *دەرەخ_ptr = calloc(1, حجم(دەرەخ));
+    *دەرەخ_ptr = t;
     //error(0);
-    return tree_ptr;
+    أرجع دەرەخ_ptr;
 }

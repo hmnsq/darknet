@@ -1,44 +1,44 @@
-#include "cost_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include <math.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#ضمن "cost_layer.h"
+#ضمن "utils.h"
+#ضمن "cuda.h"
+#ضمن "blas.h"
+#ضمن <math.h>
+#ضمن <string.h>
+#ضمن <stdlib.h>
+#ضمن <stdio.h>
 
-COST_TYPE get_cost_type(char *s)
+COST_TYPE get_cost_type(حرف *s)
 {
-    if (strcmp(s, "seg")==0) return SEG;
-    if (strcmp(s, "sse")==0) return SSE;
-    if (strcmp(s, "masked")==0) return MASKED;
-    if (strcmp(s, "smooth")==0) return SMOOTH;
-    if (strcmp(s, "L1")==0) return L1;
-    if (strcmp(s, "wgan")==0) return WGAN;
+    إذا (strcmp(s, "seg")==0) أرجع SEG;
+    إذا (strcmp(s, "sse")==0) أرجع SSE;
+    إذا (strcmp(s, "masked")==0) أرجع MASKED;
+    إذا (strcmp(s, "smooth")==0) أرجع SMOOTH;
+    إذا (strcmp(s, "L1")==0) أرجع L1;
+    إذا (strcmp(s, "wgan")==0) أرجع WGAN;
     fprintf(stderr, "Couldn't find cost type %s, going with SSE\n", s);
-    return SSE;
+    أرجع SSE;
 }
 
-char *get_cost_string(COST_TYPE a)
+حرف *get_cost_string(COST_TYPE a)
 {
-    switch(a){
-        case SEG:
-            return "seg";
-        case SSE:
-            return "sse";
-        case MASKED:
-            return "masked";
-        case SMOOTH:
-            return "smooth";
-        case L1:
-            return "L1";
-        case WGAN:
-            return "wgan";
+    بدل(a){
+        حالة SEG:
+            أرجع "seg";
+        حالة SSE:
+            أرجع "sse";
+        حالة MASKED:
+            أرجع "masked";
+        حالة SMOOTH:
+            أرجع "smooth";
+        حالة L1:
+            أرجع "L1";
+        حالة WGAN:
+            أرجع "wgan";
     }
-    return "sse";
+    أرجع "sse";
 }
 
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float scale)
+cost_layer make_cost_layer(صحيح batch, صحيح inputs, COST_TYPE cost_type, عائم scale)
 {
     fprintf(stderr, "cost                                           %4d\n",  inputs);
     cost_layer l = {0};
@@ -49,9 +49,9 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.inputs = inputs;
     l.outputs = inputs;
     l.cost_type = cost_type;
-    l.delta = calloc(inputs*batch, sizeof(float));
-    l.output = calloc(inputs*batch, sizeof(float));
-    l.cost = calloc(1, sizeof(float));
+    l.delta = calloc(inputs*batch, حجم(عائم));
+    l.output = calloc(inputs*batch, حجم(عائم));
+    l.cost = calloc(1, حجم(عائم));
 
     l.forward = forward_cost_layer;
     l.backward = backward_cost_layer;
@@ -62,15 +62,15 @@ cost_layer make_cost_layer(int batch, int inputs, COST_TYPE cost_type, float sca
     l.delta_gpu = cuda_make_array(l.output, inputs*batch);
     l.output_gpu = cuda_make_array(l.delta, inputs*batch);
     #endif
-    return l;
+    أرجع l;
 }
 
-void resize_cost_layer(cost_layer *l, int inputs)
+فراغ resize_cost_layer(cost_layer *l, صحيح inputs)
 {
     l->inputs = inputs;
     l->outputs = inputs;
-    l->delta = realloc(l->delta, inputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, inputs*l->batch*sizeof(float));
+    l->delta = realloc(l->delta, inputs*l->batch*حجم(عائم));
+    l->output = realloc(l->output, inputs*l->batch*حجم(عائم));
 #ifdef GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
@@ -79,88 +79,88 @@ void resize_cost_layer(cost_layer *l, int inputs)
 #endif
 }
 
-void forward_cost_layer(cost_layer l, network net)
+فراغ forward_cost_layer(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.cost_type == MASKED){
-        int i;
-        for(i = 0; i < l.batch*l.inputs; ++i){
-            if(net.truth[i] == SECRET_NUM) net.input[i] = SECRET_NUM;
+    إذا (!net.truth) أرجع;
+    إذا(l.cost_type == MASKED){
+        صحيح i;
+        لكل(i = 0; i < l.batch*l.inputs; ++i){
+            إذا(net.truth[i] == SECRET_رەقەم) net.كىرگۈزۈش[i] = SECRET_رەقەم;
         }
     }
-    if(l.cost_type == SMOOTH){
-        smooth_l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    }else if(l.cost_type == L1){
-        l1_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
-    } else {
-        l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
+    إذا(l.cost_type == SMOOTH){
+        smooth_l1_cpu(l.batch*l.inputs, net.كىرگۈزۈش, net.truth, l.delta, l.output);
+    }وإلا إذا(l.cost_type == L1){
+        l1_cpu(l.batch*l.inputs, net.كىرگۈزۈش, net.truth, l.delta, l.output);
+    } وإلا {
+        l2_cpu(l.batch*l.inputs, net.كىرگۈزۈش, net.truth, l.delta, l.output);
     }
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
 }
 
-void backward_cost_layer(const cost_layer l, network net)
+فراغ backward_cost_layer(ثابت cost_layer l, network net)
 {
     axpy_cpu(l.batch*l.inputs, l.scale, l.delta, 1, net.delta, 1);
 }
 
 #ifdef GPU
 
-void pull_cost_layer(cost_layer l)
+فراغ pull_cost_layer(cost_layer l)
 {
     cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-void push_cost_layer(cost_layer l)
+فراغ ئىتتىرىش_cost_layer(cost_layer l)
 {
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
+    cuda_ئىتتىرىش_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-int float_abs_compare (const void * a, const void * b)
+صحيح float_abs_compare (ثابت فراغ * a, ثابت فراغ * b)
 {
-    float fa = *(const float*) a;
-    if(fa < 0) fa = -fa;
-    float fb = *(const float*) b;
-    if(fb < 0) fb = -fb;
-    return (fa > fb) - (fa < fb);
+    عائم fa = *(ثابت عائم*) a;
+    إذا(fa < 0) fa = -fa;
+    عائم fb = *(ثابت عائم*) b;
+    إذا(fb < 0) fb = -fb;
+    أرجع (fa > fb) - (fa < fb);
 }
 
-void forward_cost_layer_gpu(cost_layer l, network net)
+فراغ forward_cost_layer_gpu(cost_layer l, network net)
 {
-    if (!net.truth) return;
-    if(l.smooth){
+    إذا (!net.truth) أرجع;
+    إذا(l.smooth){
         scal_gpu(l.batch*l.inputs, (1-l.smooth), net.truth_gpu, 1);
         add_gpu(l.batch*l.inputs, l.smooth * 1./l.inputs, net.truth_gpu, 1);
     }
 
-    if(l.cost_type == SMOOTH){
-        smooth_l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == L1){
-        l1_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else if (l.cost_type == WGAN){
-        wgan_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
-    } else {
-        l2_gpu(l.batch*l.inputs, net.input_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    إذا(l.cost_type == SMOOTH){
+        smooth_l1_gpu(l.batch*l.inputs, net.كىرگۈزۈش_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    } وإلا إذا (l.cost_type == L1){
+        l1_gpu(l.batch*l.inputs, net.كىرگۈزۈش_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    } وإلا إذا (l.cost_type == WGAN){
+        wgan_gpu(l.batch*l.inputs, net.كىرگۈزۈش_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
+    } وإلا {
+        l2_gpu(l.batch*l.inputs, net.كىرگۈزۈش_gpu, net.truth_gpu, l.delta_gpu, l.output_gpu);
     }
 
-    if (l.cost_type == SEG && l.noobject_scale != 1) {
+    إذا (l.cost_type == SEG && l.noobject_scale != 1) {
         scale_mask_gpu(l.batch*l.inputs, l.delta_gpu, 0, net.truth_gpu, l.noobject_scale);
         scale_mask_gpu(l.batch*l.inputs, l.output_gpu, 0, net.truth_gpu, l.noobject_scale);
     }
-    if (l.cost_type == MASKED) {
-        mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_NUM, net.truth_gpu, 0);
+    إذا (l.cost_type == MASKED) {
+        mask_gpu(l.batch*l.inputs, net.delta_gpu, SECRET_رەقەم, net.truth_gpu, 0);
     }
 
-    if(l.ratio){
+    إذا(l.ratio){
         cuda_pull_array(l.delta_gpu, l.delta, l.batch*l.inputs);
-        qsort(l.delta, l.batch*l.inputs, sizeof(float), float_abs_compare);
-        int n = (1-l.ratio) * l.batch*l.inputs;
-        float thresh = l.delta[n];
+        qsort(l.delta, l.batch*l.inputs, حجم(عائم), float_abs_compare);
+        صحيح n = (1-l.ratio) * l.batch*l.inputs;
+        عائم thresh = l.delta[n];
         thresh = 0;
         printf("%f\n", thresh);
         supp_gpu(l.batch*l.inputs, thresh, l.delta_gpu, 1);
     }
 
-    if(l.thresh){
+    إذا(l.thresh){
         supp_gpu(l.batch*l.inputs, l.thresh*1./l.inputs, l.delta_gpu, 1);
     }
 
@@ -168,7 +168,7 @@ void forward_cost_layer_gpu(cost_layer l, network net)
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
 }
 
-void backward_cost_layer_gpu(const cost_layer l, network net)
+فراغ backward_cost_layer_gpu(ثابت cost_layer l, network net)
 {
     axpy_gpu(l.batch*l.inputs, l.scale, l.delta_gpu, 1, net.delta_gpu, 1);
 }
