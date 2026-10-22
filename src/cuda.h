@@ -1,20 +1,20 @@
-#ifndef CUDA_H
-#define CUDA_H
+#جے_بنا_تعریف CUDA_H
+#تعریف_کرو CUDA_H
 
-#include "darknet.h"
+#ضمن "darknet.h"
 
-#ifdef GPU
+#جے_تعریف_شدہ GPU
 
-void check_error(cudaError_t status);
+فراغ check_error(cudaError_t حالت);
 cublasHandle_t blas_handle();
-int *cuda_make_int_array(int *x, size_t n);
-void cuda_random(float *x_gpu, size_t n);
-float cuda_compare(float *x_gpu, float *x, size_t n, char *s);
+صحيح *cuda_make_int_array(صحيح *x, size_t n);
+فراغ cuda_random(عائم *x_gpu, size_t n);
+عائم cuda_compare(عائم *x_gpu, عائم *x, size_t n, حرف *s);
 dim3 cuda_gridsize(size_t n);
 
-#ifdef CUDNN
+#جے_تعریف_شدہ CUDNN
 cudnnHandle_t cudnn_handle();
-#endif
+#جے_انت
 
-#endif
-#endif
+#جے_انت
+#جے_انت

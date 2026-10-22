@@ -1,25 +1,25 @@
-#ifndef DECONVOLUTIONAL_LAYER_H
-#define DECONVOLUTIONAL_LAYER_H
+#جے_بنا_تعریف DECONVOLUTIONAL_LAYER_H
+#تعریف_کرو DECONVOLUTIONAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "cuda.h"
+#ضمن "image.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-#ifdef GPU
-void forward_deconvolutional_layer_gpu(layer l, network net);
-void backward_deconvolutional_layer_gpu(layer l, network net);
-void update_deconvolutional_layer_gpu(layer l, update_args a);
-void push_deconvolutional_layer(layer l);
-void pull_deconvolutional_layer(layer l);
-#endif
+#جے_تعریف_شدہ GPU
+فراغ forward_deconvolutional_layer_gpu(layer l, جال net);
+فراغ backward_deconvolutional_layer_gpu(layer l, جال net);
+فراغ update_deconvolutional_layer_gpu(layer l, update_دلیلاں a);
+فراغ ڈالو_deconvolutional_layer(layer l);
+فراغ pull_deconvolutional_layer(layer l);
+#جے_انت
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam);
-void resize_deconvolutional_layer(layer *l, int h, int w);
-void forward_deconvolutional_layer(const layer l, network net);
-void update_deconvolutional_layer(layer l, update_args a);
-void backward_deconvolutional_layer(layer l, network net);
+layer make_deconvolutional_layer(صحيح batch, صحيح h, صحيح w, صحيح c, صحيح n, صحيح ناپ, صحيح stride, صحيح padding, ACTIVATION activation, صحيح batch_normalize, صحيح adam);
+فراغ resize_deconvolutional_layer(layer *l, صحيح h, صحيح w);
+فراغ forward_deconvolutional_layer(ثابت layer l, جال net);
+فراغ update_deconvolutional_layer(layer l, update_دلیلاں a);
+فراغ backward_deconvolutional_layer(layer l, جال net);
 
-#endif
+#جے_انت
 

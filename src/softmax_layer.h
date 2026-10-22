@@ -1,19 +1,19 @@
-#ifndef SOFTMAX_LAYER_H
-#define SOFTMAX_LAYER_H
-#include "layer.h"
-#include "network.h"
+#جے_بنا_تعریف SOFTMAX_LAYER_H
+#تعریف_کرو SOFTMAX_LAYER_H
+#ضمن "layer.h"
+#ضمن "network.h"
 
-typedef layer softmax_layer;
+تعريفنوع layer softmax_layer;
 
-void softmax_array(float *input, int n, float temp, float *output);
-softmax_layer make_softmax_layer(int batch, int inputs, int groups);
-void forward_softmax_layer(const softmax_layer l, network net);
-void backward_softmax_layer(const softmax_layer l, network net);
+فراغ softmax_array(عائم *داخلہ, صحيح n, عائم عارضی, عائم *output);
+softmax_layer make_softmax_layer(صحيح batch, صحيح inputs, صحيح groups);
+فراغ forward_softmax_layer(ثابت softmax_layer l, جال net);
+فراغ backward_softmax_layer(ثابت softmax_layer l, جال net);
 
-#ifdef GPU
-void pull_softmax_layer_output(const softmax_layer l);
-void forward_softmax_layer_gpu(const softmax_layer l, network net);
-void backward_softmax_layer_gpu(const softmax_layer l, network net);
-#endif
+#جے_تعریف_شدہ GPU
+فراغ pull_softmax_layer_output(ثابت softmax_layer l);
+فراغ forward_softmax_layer_gpu(ثابت softmax_layer l, جال net);
+فراغ backward_softmax_layer_gpu(ثابت softmax_layer l, جال net);
+#جے_انت
 
-#endif
+#جے_انت

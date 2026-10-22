@@ -1,19 +1,19 @@
-#ifndef OPTION_LIST_H
-#define OPTION_LIST_H
-#include "list.h"
+#جے_بنا_تعریف OPTION_LIST_H
+#تعریف_کرو OPTION_LIST_H
+#ضمن "list.h"
 
-typedef struct{
-    char *key;
-    char *val;
-    int used;
+تعريفنوع بنية{
+    حرف *کلید;
+    حرف *val;
+    صحيح ورتیا;
 } kvp;
 
 
-int read_option(char *s, list *options);
-void option_insert(list *l, char *key, char *val);
-char *option_find(list *l, char *key);
-float option_find_float(list *l, char *key, float def);
-float option_find_float_quiet(list *l, char *key, float def);
-void option_unused(list *l);
+صحيح read_option(حرف *s, list *options);
+فراغ option_داخل_کرو(list *l, حرف *کلید, حرف *val);
+حرف *option_لبھو(list *l, حرف *کلید);
+عائم option_لبھو_float(list *l, حرف *کلید, عائم def);
+عائم option_لبھو_float_quiet(list *l, حرف *کلید, عائم def);
+فراغ option_بن_ورتیا(list *l);
 
-#endif
+#جے_انت

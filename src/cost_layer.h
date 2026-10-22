@@ -1,20 +1,20 @@
-#ifndef COST_LAYER_H
-#define COST_LAYER_H
-#include "layer.h"
-#include "network.h"
+#جے_بنا_تعریف لاگت_LAYER_H
+#تعریف_کرو لاگت_LAYER_H
+#ضمن "layer.h"
+#ضمن "network.h"
 
-typedef layer cost_layer;
+تعريفنوع layer لاگت_layer;
 
-COST_TYPE get_cost_type(char *s);
-char *get_cost_string(COST_TYPE a);
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE type, float scale);
-void forward_cost_layer(const cost_layer l, network net);
-void backward_cost_layer(const cost_layer l, network net);
-void resize_cost_layer(cost_layer *l, int inputs);
+لاگت_TYPE get_لاگت_type(حرف *s);
+حرف *get_لاگت_string(لاگت_TYPE a);
+لاگت_layer make_لاگت_layer(صحيح batch, صحيح inputs, لاگت_TYPE type, عائم scale);
+فراغ forward_لاگت_layer(ثابت لاگت_layer l, جال net);
+فراغ backward_لاگت_layer(ثابت لاگت_layer l, جال net);
+فراغ resize_لاگت_layer(لاگت_layer *l, صحيح inputs);
 
-#ifdef GPU
-void forward_cost_layer_gpu(cost_layer l, network net);
-void backward_cost_layer_gpu(const cost_layer l, network net);
-#endif
+#جے_تعریف_شدہ GPU
+فراغ forward_لاگت_layer_gpu(لاگت_layer l, جال net);
+فراغ backward_لاگت_layer_gpu(ثابت لاگت_layer l, جال net);
+#جے_انت
 
-#endif
+#جے_انت

@@ -1,24 +1,24 @@
 
-#ifndef CRNN_LAYER_H
-#define CRNN_LAYER_H
+#جے_بنا_تعریف CRNN_LAYER_H
+#تعریف_کرو CRNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize);
+layer make_crnn_layer(صحيح batch, صحيح h, صحيح w, صحيح c, صحيح hidden_filters, صحيح output_filters, صحيح قدماں, ACTIVATION activation, صحيح batch_normalize);
 
-void forward_crnn_layer(layer l, network net);
-void backward_crnn_layer(layer l, network net);
-void update_crnn_layer(layer l, update_args a);
+فراغ forward_crnn_layer(layer l, جال net);
+فراغ backward_crnn_layer(layer l, جال net);
+فراغ update_crnn_layer(layer l, update_دلیلاں a);
 
-#ifdef GPU
-void forward_crnn_layer_gpu(layer l, network net);
-void backward_crnn_layer_gpu(layer l, network net);
-void update_crnn_layer_gpu(layer l, update_args a);
-void push_crnn_layer(layer l);
-void pull_crnn_layer(layer l);
-#endif
+#جے_تعریف_شدہ GPU
+فراغ forward_crnn_layer_gpu(layer l, جال net);
+فراغ backward_crnn_layer_gpu(layer l, جال net);
+فراغ update_crnn_layer_gpu(layer l, update_دلیلاں a);
+فراغ ڈالو_crnn_layer(layer l);
+فراغ pull_crnn_layer(layer l);
+#جے_انت
 
-#endif
+#جے_انت
 

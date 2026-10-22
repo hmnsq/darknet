@@ -1,18 +1,18 @@
-#ifndef REGION_LAYER_H
-#define REGION_LAYER_H
+#جے_بنا_تعریف REGION_LAYER_H
+#تعریف_کرو REGION_LAYER_H
 
-#include "darknet.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "darknet.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_region_layer(int batch, int w, int h, int n, int classes, int coords);
-void forward_region_layer(const layer l, network net);
-void backward_region_layer(const layer l, network net);
-void resize_region_layer(layer *l, int w, int h);
+layer make_region_layer(صحيح batch, صحيح w, صحيح h, صحيح n, صحيح classes, صحيح coords);
+فراغ forward_region_layer(ثابت layer l, جال net);
+فراغ backward_region_layer(ثابت layer l, جال net);
+فراغ resize_region_layer(layer *l, صحيح w, صحيح h);
 
-#ifdef GPU
-void forward_region_layer_gpu(const layer l, network net);
-void backward_region_layer_gpu(layer l, network net);
-#endif
+#جے_تعریف_شدہ GPU
+فراغ forward_region_layer_gpu(ثابت layer l, جال net);
+فراغ backward_region_layer_gpu(layer l, جال net);
+#جے_انت
 
-#endif
+#جے_انت

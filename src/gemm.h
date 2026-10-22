@@ -1,34 +1,34 @@
-#ifndef GEMM_H
-#define GEMM_H
+#جے_بنا_تعریف GEMM_H
+#تعریف_کرو GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+فراغ gemm_bin(صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        حرف  *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم *C, صحيح ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+فراغ gemm(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+                    عائم *A, صحيح lda, 
+                    عائم *B, صحيح ldb,
+                    عائم BETA,
+                    عائم *C, صحيح ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+فراغ gemm_cpu(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم BETA,
+        عائم *C, صحيح ldc);
 
-#ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+#جے_تعریف_شدہ GPU
+فراغ gemm_gpu(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A_gpu, صحيح lda, 
+        عائم *B_gpu, صحيح ldb,
+        عائم BETA,
+        عائم *C_gpu, صحيح ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
-#endif
-#endif
+فراغ gemm_gpu(صحيح TA, صحيح TB, صحيح M, صحيح N, صحيح K, عائم ALPHA, 
+        عائم *A, صحيح lda, 
+        عائم *B, صحيح ldb,
+        عائم BETA,
+        عائم *C, صحيح ldc);
+#جے_انت
+#جے_انت

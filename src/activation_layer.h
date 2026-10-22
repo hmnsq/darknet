@@ -1,19 +1,19 @@
-#ifndef ACTIVATION_LAYER_H
-#define ACTIVATION_LAYER_H
+#جے_بنا_تعریف ACTIVATION_LAYER_H
+#تعریف_کرو ACTIVATION_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-layer make_activation_layer(int batch, int inputs, ACTIVATION activation);
+layer make_activation_layer(صحيح batch, صحيح inputs, ACTIVATION activation);
 
-void forward_activation_layer(layer l, network net);
-void backward_activation_layer(layer l, network net);
+فراغ forward_activation_layer(layer l, جال net);
+فراغ backward_activation_layer(layer l, جال net);
 
-#ifdef GPU
-void forward_activation_layer_gpu(layer l, network net);
-void backward_activation_layer_gpu(layer l, network net);
-#endif
+#جے_تعریف_شدہ GPU
+فراغ forward_activation_layer_gpu(layer l, جال net);
+فراغ backward_activation_layer_gpu(layer l, جال net);
+#جے_انت
 
-#endif
+#جے_انت
 

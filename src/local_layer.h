@@ -1,31 +1,31 @@
-#ifndef LOCAL_LAYER_H
-#define LOCAL_LAYER_H
+#جے_بنا_تعریف LOCAL_LAYER_H
+#تعریف_کرو LOCAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "cuda.h"
+#ضمن "image.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 
-typedef layer local_layer;
+تعريفنوع layer local_layer;
 
-#ifdef GPU
-void forward_local_layer_gpu(local_layer layer, network net);
-void backward_local_layer_gpu(local_layer layer, network net);
-void update_local_layer_gpu(local_layer layer, update_args a);
+#جے_تعریف_شدہ GPU
+فراغ forward_local_layer_gpu(local_layer layer, جال net);
+فراغ backward_local_layer_gpu(local_layer layer, جال net);
+فراغ update_local_layer_gpu(local_layer layer, update_دلیلاں a);
 
-void push_local_layer(local_layer layer);
-void pull_local_layer(local_layer layer);
-#endif
+فراغ ڈالو_local_layer(local_layer layer);
+فراغ pull_local_layer(local_layer layer);
+#جے_انت
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation);
+local_layer make_local_layer(صحيح batch, صحيح h, صحيح w, صحيح c, صحيح n, صحيح ناپ, صحيح stride, صحيح pad, ACTIVATION activation);
 
-void forward_local_layer(const local_layer layer, network net);
-void backward_local_layer(local_layer layer, network net);
-void update_local_layer(local_layer layer, update_args a);
+فراغ forward_local_layer(ثابت local_layer layer, جال net);
+فراغ backward_local_layer(local_layer layer, جال net);
+فراغ update_local_layer(local_layer layer, update_دلیلاں a);
 
-void bias_output(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+فراغ bias_output(عائم *output, عائم *biases, صحيح batch, صحيح n, صحيح ناپ);
+فراغ backward_bias(عائم *bias_updates, عائم *delta, صحيح batch, صحيح n, صحيح ناپ);
 
-#endif
+#جے_انت
 

@@ -1,37 +1,37 @@
-#include <stdio.h>
-#include <math.h>
-void col2im_add_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad, float val)
+#ضمن <stdio.h>
+#ضمن <math.h>
+فراغ col2im_جوڑو_pixel(عائم *im, صحيح اچائی, صحيح چوڑائی, صحيح channels,
+                        صحيح صف, صحيح خانہ, صحيح channel, صحيح pad, عائم val)
 {
-    row -= pad;
-    col -= pad;
+    صف -= pad;
+    خانہ -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return;
-    im[col + width*(row + height*channel)] += val;
+    إذا (صف < 0 || خانہ < 0 ||
+        صف >= اچائی || خانہ >= چوڑائی) أرجع;
+    im[خانہ + چوڑائی*(صف + اچائی*channel)] += val;
 }
 //This one might be too, can't remember.
-void col2im_cpu(float* data_col,
-         int channels,  int height,  int width,
-         int ksize,  int stride, int pad, float* data_im) 
+فراغ col2im_cpu(عائم* انکڑے_خانہ,
+         صحيح channels,  صحيح اچائی,  صحيح چوڑائی,
+         صحيح ksize,  صحيح stride, صحيح pad, عائم* انکڑے_im) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    صحيح c,h,w;
+    صحيح اچائی_خانہ = (اچائی + 2*pad - ksize) / stride + 1;
+    صحيح چوڑائی_خانہ = (چوڑائی + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                double val = data_col[col_index];
-                col2im_add_pixel(data_im, height, width, channels,
-                        im_row, im_col, c_im, pad, val);
+    صحيح channels_خانہ = channels * ksize * ksize;
+    لكل (c = 0; c < channels_خانہ; ++c) {
+        صحيح w_وتھ = c % ksize;
+        صحيح h_وتھ = (c / ksize) % ksize;
+        صحيح c_im = c / ksize / ksize;
+        لكل (h = 0; h < اچائی_خانہ; ++h) {
+            لكل (w = 0; w < چوڑائی_خانہ; ++w) {
+                صحيح im_صف = h_وتھ + h * stride;
+                صحيح im_خانہ = w_وتھ + w * stride;
+                صحيح خانہ_اشاریہ = (c * اچائی_خانہ + h) * چوڑائی_خانہ + w;
+                مزدوج val = انکڑے_خانہ[خانہ_اشاریہ];
+                col2im_جوڑو_pixel(انکڑے_im, اچائی, چوڑائی, channels,
+                        im_صف, im_خانہ, c_im, pad, val);
             }
         }
     }

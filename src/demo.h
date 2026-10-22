@@ -1,6 +1,6 @@
-#ifndef DEMO_H
-#define DEMO_H
+#جے_بنا_تعریف DEMO_H
+#تعریف_کرو DEMO_H
 
-#include "image.h"
+#ضمن "image.h"
 
-#endif
+#جے_انت
