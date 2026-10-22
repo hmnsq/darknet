@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <string.h>
+#अन्तर्भाव "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = दो_स्मृति(परिमाण(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	प्रत्यागम l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+शून्य *list_निकालो(list *l){
+    यदि(!l->back) प्रत्यागम 0;
+    गाँठ *b = l->back;
+    शून्य *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    यदि(l->back) l->back->next = 0;
+    मुक्त(b);
     --l->size;
     
-    return val;
+    प्रत्यागम val;
 }
 
-void list_insert(list *l, void *val)
+शून्य list_जोड़ो(list *l, शून्य *val)
 {
-	node *new = malloc(sizeof(node));
+	गाँठ *new = दो_स्मृति(परिमाण(गाँठ));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	यदि(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}अन्यथा{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+शून्य free_गाँठ(गाँठ *n)
 {
-	node *next;
-	while(n) {
+	गाँठ *next;
+	यावत्(n) {
 		next = n->next;
-		free(n);
+		मुक्त(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+शून्य free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_गाँठ(l->front);
+	मुक्त(l);
 }
 
-void free_list_contents(list *l)
+शून्य free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	गाँठ *n = l->front;
+	यावत्(n){
+		मुक्त(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+शून्य **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    शून्य **a = सुस्मृति(l->size, परिमाण(शून्य*));
+    पूर्णाङ्क गिनती = 0;
+    गाँठ *n = l->front;
+    यावत्(n){
+        a[गिनती++] = n->val;
         n = n->next;
     }
-    return a;
+    प्रत्यागम a;
 }
