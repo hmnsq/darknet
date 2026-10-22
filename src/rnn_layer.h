@@ -2,23 +2,23 @@
 #ifndef RNN_LAYER_H
 #define RNN_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#ضمن "activations.h"
+#ضمن "layer.h"
+#ضمن "network.h"
 #define USET
 
-layer make_rnn_layer(int batch, int inputs, int outputs, int steps, ACTIVATION activation, int batch_normalize, int adam);
+layer make_rnn_layer(صحيح batch, صحيح inputs, صحيح outputs, صحيح steps, ACTIVATION activation, صحيح batch_normalize, صحيح adam);
 
-void forward_rnn_layer(layer l, network net);
-void backward_rnn_layer(layer l, network net);
-void update_rnn_layer(layer l, update_args a);
+فراغ forward_rnn_layer(layer l, network net);
+فراغ backward_rnn_layer(layer l, network net);
+فراغ update_rnn_layer(layer l, update_وسائط a);
 
 #ifdef GPU
-void forward_rnn_layer_gpu(layer l, network net);
-void backward_rnn_layer_gpu(layer l, network net);
-void update_rnn_layer_gpu(layer l, update_args a);
-void push_rnn_layer(layer l);
-void pull_rnn_layer(layer l);
+فراغ forward_rnn_layer_gpu(layer l, network net);
+فراغ backward_rnn_layer_gpu(layer l, network net);
+فراغ update_rnn_layer_gpu(layer l, update_وسائط a);
+فراغ ادفع_rnn_layer(layer l);
+فراغ pull_rnn_layer(layer l);
 #endif
 
 #endif
