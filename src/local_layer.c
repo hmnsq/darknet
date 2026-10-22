@@ -1,31 +1,31 @@
-#include "local_layer.h"
-#include "utils.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
-#include <stdio.h>
-#include <time.h>
+#அந்தர்பாவ "local_layer.h"
+#அந்தர்பாவ "utils.h"
+#அந்தர்பாவ "im2col.h"
+#அந்தர்பாவ "col2im.h"
+#அந்தர்பாவ "blas.h"
+#அந்தர்பாவ "gemm.h"
+#அந்தர்பாவ <stdio.h>
+#அந்தர்பாவ <time.h>
 
-int local_out_height(local_layer l)
+முழு local_out_height(local_layer l)
 {
-    int h = l.h;
-    if (!l.pad) h -= l.size;
-    else h -= 1;
-    return h/l.stride + 1;
+    முழு h = l.h;
+    எனில் (!l.pad) h -= l.size;
+    இல்லையெனில் h -= 1;
+    திரும்பு h/l.stride + 1;
 }
 
-int local_out_width(local_layer l)
+முழு local_out_width(local_layer l)
 {
-    int w = l.w;
-    if (!l.pad) w -= l.size;
-    else w -= 1;
-    return w/l.stride + 1;
+    முழு w = l.w;
+    எனில் (!l.pad) w -= l.size;
+    இல்லையெனில் w -= 1;
+    திரும்பு w/l.stride + 1;
 }
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation)
+local_layer make_local_layer(முழு batch, முழு h, முழு w, முழு c, முழு n, முழு size, முழு stride, முழு pad, ACTIVATION activation)
 {
-    int i;
+    முழு i;
     local_layer l = {0};
     l.type = LOCAL;
 
@@ -38,27 +38,27 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
     l.size = size;
     l.pad = pad;
 
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int locations = out_h*out_w;
+    முழு out_h = local_out_height(l);
+    முழு out_w = local_out_width(l);
+    முழு locations = out_h*out_w;
     l.out_h = out_h;
     l.out_w = out_w;
     l.out_c = n;
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    l.weights = calloc(c*n*size*size*locations, sizeof(float));
-    l.weight_updates = calloc(c*n*size*size*locations, sizeof(float));
+    l.weights = calloc(c*n*size*size*locations, அளவு(தசம));
+    l.weight_updates = calloc(c*n*size*size*locations, அளவு(தசம));
 
-    l.biases = calloc(l.outputs, sizeof(float));
-    l.bias_updates = calloc(l.outputs, sizeof(float));
+    l.biases = calloc(l.outputs, அளவு(தசம));
+    l.bias_updates = calloc(l.outputs, அளவு(தசம));
 
     // float scale = 1./sqrt(size*size*c);
-    float scale = sqrt(2./(size*size*c));
-    for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1,1);
+    தசம scale = sqrt(2./(size*size*c));
+    க்கு(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_uniform(-1,1);
 
-    l.output = calloc(l.batch*out_h * out_w * n, sizeof(float));
-    l.delta  = calloc(l.batch*out_h * out_w * n, sizeof(float));
+    l.output = calloc(l.batch*out_h * out_w * n, அளவு(தசம));
+    l.delta  = calloc(l.batch*out_h * out_w * n, அளவு(தசம));
 
     l.workspace_size = out_h*out_w*size*size*c;
     
@@ -85,33 +85,33 @@ local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, in
 
     fprintf(stderr, "Local Layer: %d x %d x %d image, %d filters -> %d x %d x %d image\n", h,w,c,n, out_h, out_w, n);
 
-    return l;
+    திரும்பு l;
 }
 
-void forward_local_layer(const local_layer l, network net)
+வெறுமை forward_local_layer(மாறிலி local_layer l, network net)
 {
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int i, j;
-    int locations = out_h * out_w;
+    முழு out_h = local_out_height(l);
+    முழு out_w = local_out_width(l);
+    முழு i, j;
+    முழு locations = out_h * out_w;
 
-    for(i = 0; i < l.batch; ++i){
+    க்கு(i = 0; i < l.batch; ++i){
         copy_cpu(l.outputs, l.biases, 1, l.output + i*l.outputs, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
-        im2col_cpu(input, l.c, l.h, l.w, 
+    க்கு(i = 0; i < l.batch; ++i){
+        தசம *உள்ளீடு = net.உள்ளீடு + i*l.w*l.h*l.c;
+        im2col_cpu(உள்ளீடு, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
-        float *output = l.output + i*l.outputs;
-        for(j = 0; j < locations; ++j){
-            float *a = l.weights + j*l.size*l.size*l.c*l.n;
-            float *b = net.workspace + j;
-            float *c = output + j;
+        தசம *output = l.output + i*l.outputs;
+        க்கு(j = 0; j < locations; ++j){
+            தசம *a = l.weights + j*l.size*l.size*l.c*l.n;
+            தசம *b = net.workspace + j;
+            தசம *c = output + j;
 
-            int m = l.n;
-            int n = 1;
-            int k = l.size*l.size*l.c;
+            முழு m = l.n;
+            முழு n = 1;
+            முழு k = l.size*l.size*l.c;
 
             gemm(0,0,m,n,k,1,a,k,b,locations,1,c,locations);
         }
@@ -119,42 +119,42 @@ void forward_local_layer(const local_layer l, network net)
     activate_array(l.output, l.outputs*l.batch, l.activation);
 }
 
-void backward_local_layer(local_layer l, network net)
+வெறுமை backward_local_layer(local_layer l, network net)
 {
-    int i, j;
-    int locations = l.out_w*l.out_h;
+    முழு i, j;
+    முழு locations = l.out_w*l.out_h;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    for(i = 0; i < l.batch; ++i){
+    க்கு(i = 0; i < l.batch; ++i){
         axpy_cpu(l.outputs, 1, l.delta + i*l.outputs, 1, l.bias_updates, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input + i*l.w*l.h*l.c;
-        im2col_cpu(input, l.c, l.h, l.w, 
+    க்கு(i = 0; i < l.batch; ++i){
+        தசம *உள்ளீடு = net.உள்ளீடு + i*l.w*l.h*l.c;
+        im2col_cpu(உள்ளீடு, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
 
-        for(j = 0; j < locations; ++j){ 
-            float *a = l.delta + i*l.outputs + j;
-            float *b = net.workspace + j;
-            float *c = l.weight_updates + j*l.size*l.size*l.c*l.n;
-            int m = l.n;
-            int n = l.size*l.size*l.c;
-            int k = 1;
+        க்கு(j = 0; j < locations; ++j){ 
+            தசம *a = l.delta + i*l.outputs + j;
+            தசம *b = net.workspace + j;
+            தசம *c = l.weight_updates + j*l.size*l.size*l.c*l.n;
+            முழு m = l.n;
+            முழு n = l.size*l.size*l.c;
+            முழு k = 1;
 
             gemm(0,1,m,n,k,1,a,locations,b,locations,1,c,n);
         }
 
-        if(net.delta){
-            for(j = 0; j < locations; ++j){ 
-                float *a = l.weights + j*l.size*l.size*l.c*l.n;
-                float *b = l.delta + i*l.outputs + j;
-                float *c = net.workspace + j;
+        எனில்(net.delta){
+            க்கு(j = 0; j < locations; ++j){ 
+                தசம *a = l.weights + j*l.size*l.size*l.c*l.n;
+                தசம *b = l.delta + i*l.outputs + j;
+                தசம *c = net.workspace + j;
 
-                int m = l.size*l.size*l.c;
-                int n = 1;
-                int k = l.n;
+                முழு m = l.size*l.size*l.c;
+                முழு n = 1;
+                முழு k = l.n;
 
                 gemm(1,0,m,n,k,1,a,m,b,locations,0,c,locations);
             }
@@ -164,15 +164,15 @@ void backward_local_layer(local_layer l, network net)
     }
 }
 
-void update_local_layer(local_layer l, update_args a)
+வெறுமை update_local_layer(local_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    தசம learning_rate = a.learning_rate*l.learning_rate_scale;
+    தசம momentum = a.momentum;
+    தசம decay = a.decay;
+    முழு batch = a.batch;
 
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    முழு locations = l.out_w*l.out_h;
+    முழு size = l.size*l.size*l.c*l.n*locations;
     axpy_cpu(l.outputs, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.outputs, momentum, l.bias_updates, 1);
 
@@ -183,30 +183,30 @@ void update_local_layer(local_layer l, update_args a)
 
 #ifdef GPU
 
-void forward_local_layer_gpu(const local_layer l, network net)
+வெறுமை forward_local_layer_gpu(மாறிலி local_layer l, network net)
 {
-    int out_h = local_out_height(l);
-    int out_w = local_out_width(l);
-    int i, j;
-    int locations = out_h * out_w;
+    முழு out_h = local_out_height(l);
+    முழு out_w = local_out_width(l);
+    முழு i, j;
+    முழு locations = out_h * out_w;
 
-    for(i = 0; i < l.batch; ++i){
+    க்கு(i = 0; i < l.batch; ++i){
         copy_gpu(l.outputs, l.biases_gpu, 1, l.output_gpu + i*l.outputs, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
-        im2col_gpu(input, l.c, l.h, l.w, 
+    க்கு(i = 0; i < l.batch; ++i){
+        தசம *உள்ளீடு = net.உள்ளீடு_gpu + i*l.w*l.h*l.c;
+        im2col_gpu(உள்ளீடு, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
-        float *output = l.output_gpu + i*l.outputs;
-        for(j = 0; j < locations; ++j){
-            float *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
-            float *b = net.workspace + j;
-            float *c = output + j;
+        தசம *output = l.output_gpu + i*l.outputs;
+        க்கு(j = 0; j < locations; ++j){
+            தசம *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
+            தசம *b = net.workspace + j;
+            தசம *c = output + j;
 
-            int m = l.n;
-            int n = 1;
-            int k = l.size*l.size*l.c;
+            முழு m = l.n;
+            முழு n = 1;
+            முழு k = l.size*l.size*l.c;
 
             gemm_gpu(0,0,m,n,k,1,a,k,b,locations,1,c,locations);
         }
@@ -214,41 +214,41 @@ void forward_local_layer_gpu(const local_layer l, network net)
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
 }
 
-void backward_local_layer_gpu(local_layer l, network net)
+வெறுமை backward_local_layer_gpu(local_layer l, network net)
 {
-    int i, j;
-    int locations = l.out_w*l.out_h;
+    முழு i, j;
+    முழு locations = l.out_w*l.out_h;
 
     gradient_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation, l.delta_gpu);
-    for(i = 0; i < l.batch; ++i){
+    க்கு(i = 0; i < l.batch; ++i){
         axpy_gpu(l.outputs, 1, l.delta_gpu + i*l.outputs, 1, l.bias_updates_gpu, 1);
     }
 
-    for(i = 0; i < l.batch; ++i){
-        float *input = net.input_gpu + i*l.w*l.h*l.c;
-        im2col_gpu(input, l.c, l.h, l.w, 
+    க்கு(i = 0; i < l.batch; ++i){
+        தசம *உள்ளீடு = net.உள்ளீடு_gpu + i*l.w*l.h*l.c;
+        im2col_gpu(உள்ளீடு, l.c, l.h, l.w, 
                 l.size, l.stride, l.pad, net.workspace);
 
-        for(j = 0; j < locations; ++j){ 
-            float *a = l.delta_gpu + i*l.outputs + j;
-            float *b = net.workspace + j;
-            float *c = l.weight_updates_gpu + j*l.size*l.size*l.c*l.n;
-            int m = l.n;
-            int n = l.size*l.size*l.c;
-            int k = 1;
+        க்கு(j = 0; j < locations; ++j){ 
+            தசம *a = l.delta_gpu + i*l.outputs + j;
+            தசம *b = net.workspace + j;
+            தசம *c = l.weight_updates_gpu + j*l.size*l.size*l.c*l.n;
+            முழு m = l.n;
+            முழு n = l.size*l.size*l.c;
+            முழு k = 1;
 
             gemm_gpu(0,1,m,n,k,1,a,locations,b,locations,1,c,n);
         }
 
-        if(net.delta_gpu){
-            for(j = 0; j < locations; ++j){ 
-                float *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
-                float *b = l.delta_gpu + i*l.outputs + j;
-                float *c = net.workspace + j;
+        எனில்(net.delta_gpu){
+            க்கு(j = 0; j < locations; ++j){ 
+                தசம *a = l.weights_gpu + j*l.size*l.size*l.c*l.n;
+                தசம *b = l.delta_gpu + i*l.outputs + j;
+                தசம *c = net.workspace + j;
 
-                int m = l.size*l.size*l.c;
-                int n = 1;
-                int k = l.n;
+                முழு m = l.size*l.size*l.c;
+                முழு n = 1;
+                முழு k = l.n;
 
                 gemm_gpu(1,0,m,n,k,1,a,m,b,locations,0,c,locations);
             }
@@ -258,15 +258,15 @@ void backward_local_layer_gpu(local_layer l, network net)
     }
 }
 
-void update_local_layer_gpu(local_layer l, update_args a)
+வெறுமை update_local_layer_gpu(local_layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    தசம learning_rate = a.learning_rate*l.learning_rate_scale;
+    தசம momentum = a.momentum;
+    தசம decay = a.decay;
+    முழு batch = a.batch;
 
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    முழு locations = l.out_w*l.out_h;
+    முழு size = l.size*l.size*l.c*l.n*locations;
     axpy_gpu(l.outputs, learning_rate/batch, l.bias_updates_gpu, 1, l.biases_gpu, 1);
     scal_gpu(l.outputs, momentum, l.bias_updates_gpu, 1);
 
@@ -275,19 +275,19 @@ void update_local_layer_gpu(local_layer l, update_args a)
     scal_gpu(size, momentum, l.weight_updates_gpu, 1);
 }
 
-void pull_local_layer(local_layer l)
+வெறுமை pull_local_layer(local_layer l)
 {
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
+    முழு locations = l.out_w*l.out_h;
+    முழு size = l.size*l.size*l.c*l.n*locations;
     cuda_pull_array(l.weights_gpu, l.weights, size);
     cuda_pull_array(l.biases_gpu, l.biases, l.outputs);
 }
 
-void push_local_layer(local_layer l)
+வெறுமை தள்ளு_local_layer(local_layer l)
 {
-    int locations = l.out_w*l.out_h;
-    int size = l.size*l.size*l.c*l.n*locations;
-    cuda_push_array(l.weights_gpu, l.weights, size);
-    cuda_push_array(l.biases_gpu, l.biases, l.outputs);
+    முழு locations = l.out_w*l.out_h;
+    முழு size = l.size*l.size*l.c*l.n*locations;
+    cuda_தள்ளு_array(l.weights_gpu, l.weights, size);
+    cuda_தள்ளு_array(l.biases_gpu, l.biases, l.outputs);
 }
 #endif

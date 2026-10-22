@@ -1,13 +1,13 @@
 #ifndef LIST_H
 #define LIST_H
-#include "darknet.h"
+#அந்தர்பாவ "darknet.h"
 
 list *make_list();
-int list_find(list *l, void *val);
+முழு list_find(list *l, வெறுமை *val);
 
-void list_insert(list *, void *);
+வெறுமை list_செருகு(list *, வெறுமை *);
 
 
-void free_list_contents(list *l);
+வெறுமை free_list_contents(list *l);
 
 #endif

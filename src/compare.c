@@ -1,28 +1,28 @@
-#include <stdio.h>
+#அந்தர்பாவ <stdio.h>
 
-#include "network.h"
-#include "detection_layer.h"
-#include "cost_layer.h"
-#include "utils.h"
-#include "parser.h"
-#include "box.h"
+#அந்தர்பாவ "network.h"
+#அந்தர்பாவ "detection_layer.h"
+#அந்தர்பாவ "cost_layer.h"
+#அந்தர்பாவ "utils.h"
+#அந்தர்பாவ "parser.h"
+#அந்தர்பாவ "box.h"
 
-void train_compare(char *cfgfile, char *weightfile)
+வெறுமை train_compare(எழுத்து *cfgfile, எழுத்து *weightfile)
 {
     srand(time(0));
-    float avg_loss = -1;
-    char *base = basecfg(cfgfile);
-    char *backup_directory = "/home/pjreddie/backup/";
+    தசம avg_loss = -1;
+    எழுத்து *base = basecfg(cfgfile);
+    எழுத்து *backup_directory = "/home/pjreddie/backup/";
     printf("%s\n", base);
     network net = parse_network_cfg(cfgfile);
-    if(weightfile){
+    எனில்(weightfile){
         load_weights(&net, weightfile);
     }
     printf("Learning Rate: %g, Momentum: %g, Decay: %g\n", net.learning_rate, net.momentum, net.decay);
-    int imgs = 1024;
+    முழு imgs = 1024;
     list *plist = get_paths("data/compare.train.list");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size;
+    எழுத்து **paths = (எழுத்து **)list_to_array(plist);
+    முழு N = plist->size;
     printf("%d\n", N);
     clock_t time;
     pthread_t load_thread;
@@ -40,9 +40,9 @@ void train_compare(char *cfgfile, char *weightfile)
     args.type = COMPARE_DATA;
 
     load_thread = load_data_in_thread(args);
-    int epoch = *net.seen/N;
-    int i = 0;
-    while(1){
+    முழு epoch = *net.seen/N;
+    முழு i = 0;
+    போது(1){
         ++i;
         time=clock();
         pthread_join(load_thread, 0);
@@ -51,53 +51,53 @@ void train_compare(char *cfgfile, char *weightfile)
         load_thread = load_data_in_thread(args);
         printf("Loaded: %lf seconds\n", sec(clock()-time));
         time=clock();
-        float loss = train_network(net, train);
-        if(avg_loss == -1) avg_loss = loss;
+        தசம loss = train_network(net, train);
+        எனில்(avg_loss == -1) avg_loss = loss;
         avg_loss = avg_loss*.9 + loss*.1;
-        printf("%.3f: %f, %f avg, %lf seconds, %ld images\n", (float)*net.seen/N, loss, avg_loss, sec(clock()-time), *net.seen);
+        printf("%.3f: %f, %f avg, %lf seconds, %ld images\n", (தசம)*net.seen/N, loss, avg_loss, sec(clock()-time), *net.seen);
         free_data(train);
-        if(i%100 == 0){
-            char buff[256];
+        எனில்(i%100 == 0){
+            எழுத்து buff[256];
             sprintf(buff, "%s/%s_%d_minor_%d.weights",backup_directory,base, epoch, i);
             save_weights(net, buff);
         }
-        if(*net.seen/N > epoch){
+        எனில்(*net.seen/N > epoch){
             epoch = *net.seen/N;
             i = 0;
-            char buff[256];
+            எழுத்து buff[256];
             sprintf(buff, "%s/%s_%d.weights",backup_directory,base, epoch);
             save_weights(net, buff);
-            if(epoch%22 == 0) net.learning_rate *= .1;
+            எனில்(epoch%22 == 0) net.learning_rate *= .1;
         }
     }
     pthread_join(load_thread, 0);
     free_data(buffer);
     free_network(net);
-    free_ptrs((void**)paths, plist->size);
+    free_ptrs((வெறுமை**)paths, plist->size);
     free_list(plist);
-    free(base);
+    விடுவி(base);
 }
 
-void validate_compare(char *filename, char *weightfile)
+வெறுமை validate_compare(எழுத்து *filename, எழுத்து *weightfile)
 {
-    int i = 0;
+    முழு i = 0;
     network net = parse_network_cfg(filename);
-    if(weightfile){
+    எனில்(weightfile){
         load_weights(&net, weightfile);
     }
     srand(time(0));
 
     list *plist = get_paths("data/compare.val.list");
     //list *plist = get_paths("data/compare.val.old");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size/2;
+    எழுத்து **paths = (எழுத்து **)list_to_array(plist);
+    முழு N = plist->size/2;
     free_list(plist);
 
     clock_t time;
-    int correct = 0;
-    int total = 0;
-    int splits = 10;
-    int num = (i+1)*N/splits - i*N/splits;
+    முழு correct = 0;
+    முழு total = 0;
+    முழு splits = 10;
+    முழு இலக்கம் = (i+1)*N/splits - i*N/splits;
 
     data val, buffer;
 
@@ -106,21 +106,21 @@ void validate_compare(char *filename, char *weightfile)
     args.h = net.h;
     args.paths = paths;
     args.classes = 20;
-    args.n = num;
+    args.n = இலக்கம்;
     args.m = 0;
     args.d = &buffer;
     args.type = COMPARE_DATA;
 
     pthread_t load_thread = load_data_in_thread(args);
-    for(i = 1; i <= splits; ++i){
+    க்கு(i = 1; i <= splits; ++i){
         time=clock();
 
         pthread_join(load_thread, 0);
         val = buffer;
 
-        num = (i+1)*N/splits - i*N/splits;
-        char **part = paths+(i*N/splits);
-        if(i != splits){
+        இலக்கம் = (i+1)*N/splits - i*N/splits;
+        எழுத்து **part = paths+(i*N/splits);
+        எனில்(i != splits){
             args.paths = part;
             load_thread = load_data_in_thread(args);
         }
@@ -128,107 +128,107 @@ void validate_compare(char *filename, char *weightfile)
 
         time=clock();
         matrix pred = network_predict_data(net, val);
-        int j,k;
-        for(j = 0; j < val.y.rows; ++j){
-            for(k = 0; k < 20; ++k){
-                if(val.y.vals[j][k*2] != val.y.vals[j][k*2+1]){
+        முழு j,k;
+        க்கு(j = 0; j < val.y.rows; ++j){
+            க்கு(k = 0; k < 20; ++k){
+                எனில்(val.y.vals[j][k*2] != val.y.vals[j][k*2+1]){
                     ++total;
-                    if((val.y.vals[j][k*2] < val.y.vals[j][k*2+1]) == (pred.vals[j][k*2] < pred.vals[j][k*2+1])){
+                    எனில்((val.y.vals[j][k*2] < val.y.vals[j][k*2+1]) == (pred.vals[j][k*2] < pred.vals[j][k*2+1])){
                         ++correct;
                     }
                 }
             }
         }
         free_matrix(pred);
-        printf("%d: Acc: %f, %lf seconds, %d images\n", i, (float)correct/total, sec(clock()-time), val.X.rows);
+        printf("%d: Acc: %f, %lf seconds, %d images\n", i, (தசம)correct/total, sec(clock()-time), val.X.rows);
         free_data(val);
     }
 }
 
-typedef struct {
+வகைவரை கட்டமைப்பு {
     network net;
-    char *filename;
-    int class;
-    int classes;
-    float elo;
-    float *elos;
+    எழுத்து *filename;
+    முழு class;
+    முழு classes;
+    தசம elo;
+    தசம *elos;
 } sortable_bbox;
 
-int total_compares = 0;
-int current_class = 0;
+முழு total_compares = 0;
+முழு current_class = 0;
 
-int elo_comparator(const void*a, const void *b)
+முழு elo_comparator(மாறிலி வெறுமை*a, மாறிலி வெறுமை *b)
 {
     sortable_bbox box1 = *(sortable_bbox*)a;
     sortable_bbox box2 = *(sortable_bbox*)b;
-    if(box1.elos[current_class] == box2.elos[current_class]) return 0;
-    if(box1.elos[current_class] >  box2.elos[current_class]) return -1;
-    return 1;
+    எனில்(box1.elos[current_class] == box2.elos[current_class]) திரும்பு 0;
+    எனில்(box1.elos[current_class] >  box2.elos[current_class]) திரும்பு -1;
+    திரும்பு 1;
 }
 
-int bbox_comparator(const void *a, const void *b)
+முழு bbox_comparator(மாறிலி வெறுமை *a, மாறிலி வெறுமை *b)
 {
     ++total_compares;
     sortable_bbox box1 = *(sortable_bbox*)a;
     sortable_bbox box2 = *(sortable_bbox*)b;
     network net = box1.net;
-    int class   = box1.class;
+    முழு class   = box1.class;
 
     image im1 = load_image_color(box1.filename, net.w, net.h);
     image im2 = load_image_color(box2.filename, net.w, net.h);
-    float *X  = calloc(net.w*net.h*net.c, sizeof(float));
-    memcpy(X,                   im1.data, im1.w*im1.h*im1.c*sizeof(float));
-    memcpy(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*sizeof(float));
-    float *predictions = network_predict(net, X);
+    தசம *X  = calloc(net.w*net.h*net.c, அளவு(தசம));
+    memcpy(X,                   im1.data, im1.w*im1.h*im1.c*அளவு(தசம));
+    memcpy(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*அளவு(தசம));
+    தசம *predictions = network_predict(net, X);
     
     free_image(im1);
     free_image(im2);
-    free(X);
-    if (predictions[class*2] > predictions[class*2+1]){
-        return 1;
+    விடுவி(X);
+    எனில் (predictions[class*2] > predictions[class*2+1]){
+        திரும்பு 1;
     }
-    return -1;
+    திரும்பு -1;
 }
 
-void bbox_update(sortable_bbox *a, sortable_bbox *b, int class, int result)
+வெறுமை bbox_update(sortable_bbox *a, sortable_bbox *b, முழு class, முழு result)
 {
-    int k = 32;
-    float EA = 1./(1+pow(10, (b->elos[class] - a->elos[class])/400.));
-    float EB = 1./(1+pow(10, (a->elos[class] - b->elos[class])/400.));
-    float SA = result ? 1 : 0;
-    float SB = result ? 0 : 1;
+    முழு k = 32;
+    தசம EA = 1./(1+pow(10, (b->elos[class] - a->elos[class])/400.));
+    தசம EB = 1./(1+pow(10, (a->elos[class] - b->elos[class])/400.));
+    தசம SA = result ? 1 : 0;
+    தசம SB = result ? 0 : 1;
     a->elos[class] += k*(SA - EA);
     b->elos[class] += k*(SB - EB);
 }
 
-void bbox_fight(network net, sortable_bbox *a, sortable_bbox *b, int classes, int class)
+வெறுமை bbox_fight(network net, sortable_bbox *a, sortable_bbox *b, முழு classes, முழு class)
 {
     image im1 = load_image_color(a->filename, net.w, net.h);
     image im2 = load_image_color(b->filename, net.w, net.h);
-    float *X  = calloc(net.w*net.h*net.c, sizeof(float));
-    memcpy(X,                   im1.data, im1.w*im1.h*im1.c*sizeof(float));
-    memcpy(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*sizeof(float));
-    float *predictions = network_predict(net, X);
+    தசம *X  = calloc(net.w*net.h*net.c, அளவு(தசம));
+    memcpy(X,                   im1.data, im1.w*im1.h*im1.c*அளவு(தசம));
+    memcpy(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*அளவு(தசம));
+    தசம *predictions = network_predict(net, X);
     ++total_compares;
 
-    int i;
-    for(i = 0; i < classes; ++i){
-        if(class < 0 || class == i){
-            int result = predictions[i*2] > predictions[i*2+1];
+    முழு i;
+    க்கு(i = 0; i < classes; ++i){
+        எனில்(class < 0 || class == i){
+            முழு result = predictions[i*2] > predictions[i*2+1];
             bbox_update(a, b, i, result);
         }
     }
     
     free_image(im1);
     free_image(im2);
-    free(X);
+    விடுவி(X);
 }
 
-void SortMaster3000(char *filename, char *weightfile)
+வெறுமை SortMaster3000(எழுத்து *filename, எழுத்து *weightfile)
 {
-    int i = 0;
+    முழு i = 0;
     network net = parse_network_cfg(filename);
-    if(weightfile){
+    எனில்(weightfile){
         load_weights(&net, weightfile);
     }
     srand(time(0));
@@ -236,31 +236,31 @@ void SortMaster3000(char *filename, char *weightfile)
 
     list *plist = get_paths("data/compare.sort.list");
     //list *plist = get_paths("data/compare.val.old");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size;
+    எழுத்து **paths = (எழுத்து **)list_to_array(plist);
+    முழு N = plist->size;
     free_list(plist);
-    sortable_bbox *boxes = calloc(N, sizeof(sortable_bbox));
+    sortable_bbox *boxes = calloc(N, அளவு(sortable_bbox));
     printf("Sorting %d boxes...\n", N);
-    for(i = 0; i < N; ++i){
+    க்கு(i = 0; i < N; ++i){
         boxes[i].filename = paths[i];
         boxes[i].net = net;
         boxes[i].class = 7;
         boxes[i].elo = 1500;
     }
     clock_t time=clock();
-    qsort(boxes, N, sizeof(sortable_bbox), bbox_comparator);
-    for(i = 0; i < N; ++i){
+    qsort(boxes, N, அளவு(sortable_bbox), bbox_comparator);
+    க்கு(i = 0; i < N; ++i){
         printf("%s\n", boxes[i].filename);
     }
     printf("Sorted in %d compares, %f secs\n", total_compares, sec(clock()-time));
 }
 
-void BattleRoyaleWithCheese(char *filename, char *weightfile)
+வெறுமை BattleRoyaleWithCheese(எழுத்து *filename, எழுத்து *weightfile)
 {
-    int classes = 20;
-    int i,j;
+    முழு classes = 20;
+    முழு i,j;
     network net = parse_network_cfg(filename);
-    if(weightfile){
+    எனில்(weightfile){
         load_weights(&net, weightfile);
     }
     srand(time(0));
@@ -270,59 +270,59 @@ void BattleRoyaleWithCheese(char *filename, char *weightfile)
     //list *plist = get_paths("data/compare.small.list");
     //list *plist = get_paths("data/compare.cat.list");
     //list *plist = get_paths("data/compare.val.old");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size;
-    int total = N;
+    எழுத்து **paths = (எழுத்து **)list_to_array(plist);
+    முழு N = plist->size;
+    முழு total = N;
     free_list(plist);
-    sortable_bbox *boxes = calloc(N, sizeof(sortable_bbox));
+    sortable_bbox *boxes = calloc(N, அளவு(sortable_bbox));
     printf("Battling %d boxes...\n", N);
-    for(i = 0; i < N; ++i){
+    க்கு(i = 0; i < N; ++i){
         boxes[i].filename = paths[i];
         boxes[i].net = net;
         boxes[i].classes = classes;
-        boxes[i].elos = calloc(classes, sizeof(float));;
-        for(j = 0; j < classes; ++j){
+        boxes[i].elos = calloc(classes, அளவு(தசம));;
+        க்கு(j = 0; j < classes; ++j){
             boxes[i].elos[j] = 1500;
         }
     }
-    int round;
+    முழு round;
     clock_t time=clock();
-    for(round = 1; round <= 4; ++round){
+    க்கு(round = 1; round <= 4; ++round){
         clock_t round_time=clock();
         printf("Round: %d\n", round);
-        shuffle(boxes, N, sizeof(sortable_bbox));
-        for(i = 0; i < N/2; ++i){
+        shuffle(boxes, N, அளவு(sortable_bbox));
+        க்கு(i = 0; i < N/2; ++i){
             bbox_fight(net, boxes+i*2, boxes+i*2+1, classes, -1);
         }
         printf("Round: %f secs, %d remaining\n", sec(clock()-round_time), N);
     }
 
-    int class;
+    முழு class;
 
-    for (class = 0; class < classes; ++class){
+    க்கு (class = 0; class < classes; ++class){
 
         N = total;
         current_class = class;
-        qsort(boxes, N, sizeof(sortable_bbox), elo_comparator);
+        qsort(boxes, N, அளவு(sortable_bbox), elo_comparator);
         N /= 2;
 
-        for(round = 1; round <= 100; ++round){
+        க்கு(round = 1; round <= 100; ++round){
             clock_t round_time=clock();
             printf("Round: %d\n", round);
 
-            sorta_shuffle(boxes, N, sizeof(sortable_bbox), 10);
-            for(i = 0; i < N/2; ++i){
+            sorta_shuffle(boxes, N, அளவு(sortable_bbox), 10);
+            க்கு(i = 0; i < N/2; ++i){
                 bbox_fight(net, boxes+i*2, boxes+i*2+1, classes, class);
             }
-            qsort(boxes, N, sizeof(sortable_bbox), elo_comparator);
-            if(round <= 20) N = (N*9/10)/2*2;
+            qsort(boxes, N, அளவு(sortable_bbox), elo_comparator);
+            எனில்(round <= 20) N = (N*9/10)/2*2;
 
             printf("Round: %f secs, %d remaining\n", sec(clock()-round_time), N);
         }
-        char buff[256];
+        எழுத்து buff[256];
         sprintf(buff, "results/battle_%d.log", class);
         FILE *outfp = fopen(buff, "w");
-        for(i = 0; i < N; ++i){
+        க்கு(i = 0; i < N; ++i){
             fprintf(outfp, "%s %f\n", boxes[i].filename, boxes[i].elos[class]);
         }
         fclose(outfp);
@@ -330,20 +330,20 @@ void BattleRoyaleWithCheese(char *filename, char *weightfile)
     printf("Tournament in %d compares, %f secs\n", total_compares, sec(clock()-time));
 }
 
-void run_compare(int argc, char **argv)
+வெறுமை run_compare(முழு argc, எழுத்து **argv)
 {
-    if(argc < 4){
+    எனில்(argc < 4){
         fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
-        return;
+        திரும்பு;
     }
 
-    char *cfg = argv[3];
-    char *weights = (argc > 4) ? argv[4] : 0;
+    எழுத்து *cfg = argv[3];
+    எழுத்து *weights = (argc > 4) ? argv[4] : 0;
     //char *filename = (argc > 5) ? argv[5]: 0;
-    if(0==strcmp(argv[2], "train")) train_compare(cfg, weights);
-    else if(0==strcmp(argv[2], "valid")) validate_compare(cfg, weights);
-    else if(0==strcmp(argv[2], "sort")) SortMaster3000(cfg, weights);
-    else if(0==strcmp(argv[2], "battle")) BattleRoyaleWithCheese(cfg, weights);
+    எனில்(0==strcmp(argv[2], "train")) train_compare(cfg, weights);
+    இல்லையெனில் எனில்(0==strcmp(argv[2], "valid")) validate_compare(cfg, weights);
+    இல்லையெனில் எனில்(0==strcmp(argv[2], "sort")) SortMaster3000(cfg, weights);
+    இல்லையெனில் எனில்(0==strcmp(argv[2], "battle")) BattleRoyaleWithCheese(cfg, weights);
     /*
        else if(0==strcmp(argv[2], "train")) train_coco(cfg, weights);
        else if(0==strcmp(argv[2], "extract")) extract_boxes(cfg, weights);

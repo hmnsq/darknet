@@ -1,13 +1,13 @@
 #ifndef COL2IM_H
 #define COL2IM_H
 
-void col2im_cpu(float* data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_im);
+வெறுமை col2im_cpu(தசம* data_col,
+        முழு channels, முழு height, முழு width,
+        முழு ksize, முழு stride, முழு pad, தசம* data_im);
 
 #ifdef GPU
-void col2im_gpu(float *data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float *data_im);
+வெறுமை col2im_gpu(தசம *data_col,
+        முழு channels, முழு height, முழு width,
+        முழு ksize, முழு stride, முழு pad, தசம *data_im);
 #endif
 #endif

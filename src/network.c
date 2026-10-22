@@ -1,36 +1,36 @@
-#include <stdio.h>
-#include <time.h>
-#include <assert.h>
-#include "network.h"
-#include "image.h"
-#include "data.h"
-#include "utils.h"
-#include "blas.h"
+#அந்தர்பாவ <stdio.h>
+#அந்தர்பாவ <time.h>
+#அந்தர்பாவ <assert.h>
+#அந்தர்பாவ "network.h"
+#அந்தர்பாவ "image.h"
+#அந்தர்பாவ "data.h"
+#அந்தர்பாவ "utils.h"
+#அந்தர்பாவ "blas.h"
 
-#include "crop_layer.h"
-#include "connected_layer.h"
-#include "gru_layer.h"
-#include "rnn_layer.h"
-#include "crnn_layer.h"
-#include "local_layer.h"
-#include "convolutional_layer.h"
-#include "activation_layer.h"
-#include "detection_layer.h"
-#include "region_layer.h"
-#include "yolo_layer.h"
-#include "normalization_layer.h"
-#include "batchnorm_layer.h"
-#include "maxpool_layer.h"
-#include "reorg_layer.h"
-#include "avgpool_layer.h"
-#include "cost_layer.h"
-#include "softmax_layer.h"
-#include "dropout_layer.h"
-#include "route_layer.h"
-#include "upsample_layer.h"
-#include "shortcut_layer.h"
-#include "parser.h"
-#include "data.h"
+#அந்தர்பாவ "crop_layer.h"
+#அந்தர்பாவ "connected_layer.h"
+#அந்தர்பாவ "gru_layer.h"
+#அந்தர்பாவ "rnn_layer.h"
+#அந்தர்பாவ "crnn_layer.h"
+#அந்தர்பாவ "local_layer.h"
+#அந்தர்பாவ "convolutional_layer.h"
+#அந்தர்பாவ "activation_layer.h"
+#அந்தர்பாவ "detection_layer.h"
+#அந்தர்பாவ "region_layer.h"
+#அந்தர்பாவ "yolo_layer.h"
+#அந்தர்பாவ "normalization_layer.h"
+#அந்தர்பாவ "batchnorm_layer.h"
+#அந்தர்பாவ "maxpool_layer.h"
+#அந்தர்பாவ "reorg_layer.h"
+#அந்தர்பாவ "avgpool_layer.h"
+#அந்தர்பாவ "cost_layer.h"
+#அந்தர்பாவ "softmax_layer.h"
+#அந்தர்பாவ "dropout_layer.h"
+#அந்தர்பாவ "route_layer.h"
+#அந்தர்பாவ "upsample_layer.h"
+#அந்தர்பாவ "shortcut_layer.h"
+#அந்தர்பாவ "parser.h"
+#அந்தர்பாவ "data.h"
 
 load_args get_base_args(network *net)
 {
@@ -47,179 +47,179 @@ load_args get_base_args(network *net)
     args.center = net->center;
     args.saturation = net->saturation;
     args.hue = net->hue;
-    return args;
+    திரும்பு args;
 }
 
-network *load_network(char *cfg, char *weights, int clear)
+network *load_network(எழுத்து *cfg, எழுத்து *weights, முழு clear)
 {
     network *net = parse_network_cfg(cfg);
-    if(weights && weights[0] != 0){
+    எனில்(weights && weights[0] != 0){
         load_weights(net, weights);
     }
-    if(clear) (*net->seen) = 0;
-    return net;
+    எனில்(clear) (*net->seen) = 0;
+    திரும்பு net;
 }
 
 size_t get_current_batch(network *net)
 {
-    size_t batch_num = (*net->seen)/(net->batch*net->subdivisions);
-    return batch_num;
+    size_t batch_இலக்கம் = (*net->seen)/(net->batch*net->subdivisions);
+    திரும்பு batch_இலக்கம்;
 }
 
-void reset_network_state(network *net, int b)
+வெறுமை reset_network_state(network *net, முழு b)
 {
-    int i;
-    for (i = 0; i < net->n; ++i) {
+    முழு i;
+    க்கு (i = 0; i < net->n; ++i) {
         #ifdef GPU
         layer l = net->layers[i];
-        if(l.state_gpu){
+        எனில்(l.state_gpu){
             fill_gpu(l.outputs, 0, l.state_gpu + l.outputs*b, 1);
         }
-        if(l.h_gpu){
+        எனில்(l.h_gpu){
             fill_gpu(l.outputs, 0, l.h_gpu + l.outputs*b, 1);
         }
         #endif
     }
 }
 
-void reset_rnn(network *net)
+வெறுமை reset_rnn(network *net)
 {
     reset_network_state(net, 0);
 }
 
-float get_current_rate(network *net)
+தசம get_current_rate(network *net)
 {
-    size_t batch_num = get_current_batch(net);
-    int i;
-    float rate;
-    if (batch_num < net->burn_in) return net->learning_rate * pow((float)batch_num / net->burn_in, net->power);
-    switch (net->policy) {
-        case CONSTANT:
-            return net->learning_rate;
-        case STEP:
-            return net->learning_rate * pow(net->scale, batch_num/net->step);
-        case STEPS:
+    size_t batch_இலக்கம் = get_current_batch(net);
+    முழு i;
+    தசம rate;
+    எனில் (batch_இலக்கம் < net->burn_in) திரும்பு net->learning_rate * pow((தசம)batch_இலக்கம் / net->burn_in, net->power);
+    தேர்வு (net->policy) {
+        நிலை CONSTANT:
+            திரும்பு net->learning_rate;
+        நிலை STEP:
+            திரும்பு net->learning_rate * pow(net->scale, batch_இலக்கம்/net->step);
+        நிலை STEPS:
             rate = net->learning_rate;
-            for(i = 0; i < net->num_steps; ++i){
-                if(net->steps[i] > batch_num) return rate;
+            க்கு(i = 0; i < net->இலக்கம்_steps; ++i){
+                எனில்(net->steps[i] > batch_இலக்கம்) திரும்பு rate;
                 rate *= net->scales[i];
             }
-            return rate;
-        case EXP:
-            return net->learning_rate * pow(net->gamma, batch_num);
-        case POLY:
-            return net->learning_rate * pow(1 - (float)batch_num / net->max_batches, net->power);
-        case RANDOM:
-            return net->learning_rate * pow(rand_uniform(0,1), net->power);
-        case SIG:
-            return net->learning_rate * (1./(1.+exp(net->gamma*(batch_num - net->step))));
-        default:
+            திரும்பு rate;
+        நிலை EXP:
+            திரும்பு net->learning_rate * pow(net->gamma, batch_இலக்கம்);
+        நிலை POLY:
+            திரும்பு net->learning_rate * pow(1 - (தசம)batch_இலக்கம் / net->max_batches, net->power);
+        நிலை RANDOM:
+            திரும்பு net->learning_rate * pow(rand_uniform(0,1), net->power);
+        நிலை SIG:
+            திரும்பு net->learning_rate * (1./(1.+exp(net->gamma*(batch_இலக்கம் - net->step))));
+        இயல்பு:
             fprintf(stderr, "Policy is weird!\n");
-            return net->learning_rate;
+            திரும்பு net->learning_rate;
     }
 }
 
-char *get_layer_string(LAYER_TYPE a)
+எழுத்து *get_layer_string(LAYER_TYPE a)
 {
-    switch(a){
-        case CONVOLUTIONAL:
-            return "convolutional";
-        case ACTIVE:
-            return "activation";
-        case LOCAL:
-            return "local";
-        case DECONVOLUTIONAL:
-            return "deconvolutional";
-        case CONNECTED:
-            return "connected";
-        case RNN:
-            return "rnn";
-        case GRU:
-            return "gru";
-        case LSTM:
-	    return "lstm";
-        case CRNN:
-            return "crnn";
-        case MAXPOOL:
-            return "maxpool";
-        case REORG:
-            return "reorg";
-        case AVGPOOL:
-            return "avgpool";
-        case SOFTMAX:
-            return "softmax";
-        case DETECTION:
-            return "detection";
-        case REGION:
-            return "region";
-        case YOLO:
-            return "yolo";
-        case DROPOUT:
-            return "dropout";
-        case CROP:
-            return "crop";
-        case COST:
-            return "cost";
-        case ROUTE:
-            return "route";
-        case SHORTCUT:
-            return "shortcut";
-        case NORMALIZATION:
-            return "normalization";
-        case BATCHNORM:
-            return "batchnorm";
-        default:
-            break;
+    தேர்வு(a){
+        நிலை CONVOLUTIONAL:
+            திரும்பு "convolutional";
+        நிலை ACTIVE:
+            திரும்பு "activation";
+        நிலை LOCAL:
+            திரும்பு "local";
+        நிலை DECONVOLUTIONAL:
+            திரும்பு "deconvolutional";
+        நிலை CONNECTED:
+            திரும்பு "connected";
+        நிலை RNN:
+            திரும்பு "rnn";
+        நிலை GRU:
+            திரும்பு "gru";
+        நிலை LSTM:
+	    திரும்பு "lstm";
+        நிலை CRNN:
+            திரும்பு "crnn";
+        நிலை MAXPOOL:
+            திரும்பு "maxpool";
+        நிலை REORG:
+            திரும்பு "reorg";
+        நிலை AVGPOOL:
+            திரும்பு "avgpool";
+        நிலை SOFTMAX:
+            திரும்பு "softmax";
+        நிலை DETECTION:
+            திரும்பு "detection";
+        நிலை REGION:
+            திரும்பு "region";
+        நிலை YOLO:
+            திரும்பு "yolo";
+        நிலை DROPOUT:
+            திரும்பு "dropout";
+        நிலை CROP:
+            திரும்பு "crop";
+        நிலை COST:
+            திரும்பு "cost";
+        நிலை ROUTE:
+            திரும்பு "route";
+        நிலை SHORTCUT:
+            திரும்பு "shortcut";
+        நிலை NORMALIZATION:
+            திரும்பு "normalization";
+        நிலை BATCHNORM:
+            திரும்பு "batchnorm";
+        இயல்பு:
+            நிறுத்து;
     }
-    return "none";
+    திரும்பு "none";
 }
 
-network *make_network(int n)
+network *make_network(முழு n)
 {
-    network *net = calloc(1, sizeof(network));
+    network *net = calloc(1, அளவு(network));
     net->n = n;
-    net->layers = calloc(net->n, sizeof(layer));
-    net->seen = calloc(1, sizeof(size_t));
-    net->t    = calloc(1, sizeof(int));
-    net->cost = calloc(1, sizeof(float));
-    return net;
+    net->layers = calloc(net->n, அளவு(layer));
+    net->seen = calloc(1, அளவு(size_t));
+    net->t    = calloc(1, அளவு(முழு));
+    net->cost = calloc(1, அளவு(தசம));
+    திரும்பு net;
 }
 
-void forward_network(network *netp)
+வெறுமை forward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    எனில்(netp->gpu_index >= 0){
         forward_network_gpu(netp);   
-        return;
+        திரும்பு;
     }
 #endif
     network net = *netp;
-    int i;
-    for(i = 0; i < net.n; ++i){
+    முழு i;
+    க்கு(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta){
+        எனில்(l.delta){
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
         l.forward(l, net);
-        net.input = l.output;
-        if(l.truth) {
+        net.உள்ளீடு = l.output;
+        எனில்(l.truth) {
             net.truth = l.output;
         }
     }
     calc_network_cost(netp);
 }
 
-void update_network(network *netp)
+வெறுமை update_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    எனில்(netp->gpu_index >= 0){
         update_network_gpu(netp);   
-        return;
+        திரும்பு;
     }
 #endif
     network net = *netp;
-    int i;
+    முழு i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -232,53 +232,53 @@ void update_network(network *netp)
     ++*net.t;
     a.t = *net.t;
 
-    for(i = 0; i < net.n; ++i){
+    க்கு(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update){
+        எனில்(l.update){
             l.update(l, a);
         }
     }
 }
 
-void calc_network_cost(network *netp)
+வெறுமை calc_network_cost(network *netp)
 {
     network net = *netp;
-    int i;
-    float sum = 0;
-    int count = 0;
-    for(i = 0; i < net.n; ++i){
-        if(net.layers[i].cost){
+    முழு i;
+    தசம sum = 0;
+    முழு மொத்தம் = 0;
+    க்கு(i = 0; i < net.n; ++i){
+        எனில்(net.layers[i].cost){
             sum += net.layers[i].cost[0];
-            ++count;
+            ++மொத்தம்;
         }
     }
-    *net.cost = sum/count;
+    *net.cost = sum/மொத்தம்;
 }
 
-int get_predicted_class_network(network *net)
+முழு get_predicted_class_network(network *net)
 {
-    return max_index(net->output, net->outputs);
+    திரும்பு max_index(net->output, net->outputs);
 }
 
-void backward_network(network *netp)
+வெறுமை backward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    எனில்(netp->gpu_index >= 0){
         backward_network_gpu(netp);   
-        return;
+        திரும்பு;
     }
 #endif
     network net = *netp;
-    int i;
+    முழு i;
     network orig = net;
-    for(i = net.n-1; i >= 0; --i){
+    க்கு(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        எனில்(l.stopbackward) நிறுத்து;
+        எனில்(i == 0){
             net = orig;
-        }else{
+        }இல்லையெனில்{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.உள்ளீடு = prev.output;
             net.delta = prev.delta;
         }
         net.index = i;
@@ -286,67 +286,67 @@ void backward_network(network *netp)
     }
 }
 
-float train_network_datum(network *net)
+தசம train_network_datum(network *net)
 {
     *net->seen += net->batch;
     net->train = 1;
     forward_network(net);
     backward_network(net);
-    float error = *net->cost;
-    if(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
-    return error;
+    தசம error = *net->cost;
+    எனில்(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
+    திரும்பு error;
 }
 
-float train_network_sgd(network *net, data d, int n)
+தசம train_network_sgd(network *net, data d, முழு n)
 {
-    int batch = net->batch;
+    முழு batch = net->batch;
 
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        get_random_batch(d, batch, net->input, net->truth);
-        float err = train_network_datum(net);
+    முழு i;
+    தசம sum = 0;
+    க்கு(i = 0; i < n; ++i){
+        get_random_batch(d, batch, net->உள்ளீடு, net->truth);
+        தசம err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    திரும்பு (தசம)sum/(n*batch);
 }
 
-float train_network(network *net, data d)
+தசம train_network(network *net, data d)
 {
-    assert(d.X.rows % net->batch == 0);
-    int batch = net->batch;
-    int n = d.X.rows / batch;
+    ப்ரதிஜ்ஞா(d.X.rows % net->batch == 0);
+    முழு batch = net->batch;
+    முழு n = d.X.rows / batch;
 
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        get_next_batch(d, batch, i*batch, net->input, net->truth);
-        float err = train_network_datum(net);
+    முழு i;
+    தசம sum = 0;
+    க்கு(i = 0; i < n; ++i){
+        get_next_batch(d, batch, i*batch, net->உள்ளீடு, net->truth);
+        தசம err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    திரும்பு (தசம)sum/(n*batch);
 }
 
-void set_temp_network(network *net, float t)
+வெறுமை set_temp_network(network *net, தசம t)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    முழு i;
+    க்கு(i = 0; i < net->n; ++i){
         net->layers[i].temperature = t;
     }
 }
 
 
-void set_batch_network(network *net, int b)
+வெறுமை set_batch_network(network *net, முழு b)
 {
     net->batch = b;
-    int i;
-    for(i = 0; i < net->n; ++i){
+    முழு i;
+    க்கு(i = 0; i < net->n; ++i){
         net->layers[i].batch = b;
 #ifdef CUDNN
-        if(net->layers[i].type == CONVOLUTIONAL){
+        எனில்(net->layers[i].type == CONVOLUTIONAL){
             cudnn_convolutional_setup(net->layers + i);
         }
-        if(net->layers[i].type == DECONVOLUTIONAL){
+        எனில்(net->layers[i].type == DECONVOLUTIONAL){
             layer *l = net->layers + i;
             cudnnSetTensor4dDescriptor(l->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, l->out_h, l->out_w);
             cudnnSetTensor4dDescriptor(l->normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, 1, 1); 
@@ -355,378 +355,378 @@ void set_batch_network(network *net, int b)
     }
 }
 
-int resize_network(network *net, int w, int h)
+முழு resize_network(network *net, முழு w, முழு h)
 {
 #ifdef GPU
     cuda_set_device(net->gpu_index);
     cuda_free(net->workspace);
 #endif
-    int i;
+    முழு i;
     //if(w == net->w && h == net->h) return 0;
     net->w = w;
     net->h = h;
-    int inputs = 0;
+    முழு inputs = 0;
     size_t workspace_size = 0;
     //fprintf(stderr, "Resizing to %d x %d...\n", w, h);
     //fflush(stderr);
-    for (i = 0; i < net->n; ++i){
+    க்கு (i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        எனில்(l.type == CONVOLUTIONAL){
             resize_convolutional_layer(&l, w, h);
-        }else if(l.type == CROP){
+        }இல்லையெனில் எனில்(l.type == CROP){
             resize_crop_layer(&l, w, h);
-        }else if(l.type == MAXPOOL){
+        }இல்லையெனில் எனில்(l.type == MAXPOOL){
             resize_maxpool_layer(&l, w, h);
-        }else if(l.type == REGION){
+        }இல்லையெனில் எனில்(l.type == REGION){
             resize_region_layer(&l, w, h);
-        }else if(l.type == YOLO){
+        }இல்லையெனில் எனில்(l.type == YOLO){
             resize_yolo_layer(&l, w, h);
-        }else if(l.type == ROUTE){
+        }இல்லையெனில் எனில்(l.type == ROUTE){
             resize_route_layer(&l, net);
-        }else if(l.type == SHORTCUT){
+        }இல்லையெனில் எனில்(l.type == SHORTCUT){
             resize_shortcut_layer(&l, w, h);
-        }else if(l.type == UPSAMPLE){
+        }இல்லையெனில் எனில்(l.type == UPSAMPLE){
             resize_upsample_layer(&l, w, h);
-        }else if(l.type == REORG){
+        }இல்லையெனில் எனில்(l.type == REORG){
             resize_reorg_layer(&l, w, h);
-        }else if(l.type == AVGPOOL){
+        }இல்லையெனில் எனில்(l.type == AVGPOOL){
             resize_avgpool_layer(&l, w, h);
-        }else if(l.type == NORMALIZATION){
+        }இல்லையெனில் எனில்(l.type == NORMALIZATION){
             resize_normalization_layer(&l, w, h);
-        }else if(l.type == COST){
+        }இல்லையெனில் எனில்(l.type == COST){
             resize_cost_layer(&l, inputs);
-        }else{
+        }இல்லையெனில்{
             error("Cannot resize this type of layer");
         }
-        if(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
-        if(l.workspace_size > 2000000000) assert(0);
+        எனில்(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
+        எனில்(l.workspace_size > 2000000000) ப்ரதிஜ்ஞா(0);
         inputs = l.outputs;
         net->layers[i] = l;
         w = l.out_w;
         h = l.out_h;
-        if(l.type == AVGPOOL) break;
+        எனில்(l.type == AVGPOOL) நிறுத்து;
     }
     layer out = get_network_output_layer(net);
     net->inputs = net->layers[0].inputs;
     net->outputs = out.outputs;
     net->truths = out.outputs;
-    if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
+    எனில்(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
     net->output = out.output;
-    free(net->input);
-    free(net->truth);
-    net->input = calloc(net->inputs*net->batch, sizeof(float));
-    net->truth = calloc(net->truths*net->batch, sizeof(float));
+    விடுவி(net->உள்ளீடு);
+    விடுவி(net->truth);
+    net->உள்ளீடு = calloc(net->inputs*net->batch, அளவு(தசம));
+    net->truth = calloc(net->truths*net->batch, அளவு(தசம));
 #ifdef GPU
-    if(gpu_index >= 0){
-        cuda_free(net->input_gpu);
+    எனில்(gpu_index >= 0){
+        cuda_free(net->உள்ளீடு_gpu);
         cuda_free(net->truth_gpu);
-        net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
+        net->உள்ளீடு_gpu = cuda_make_array(net->உள்ளீடு, net->inputs*net->batch);
         net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
-        if(workspace_size){
-            net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
+        எனில்(workspace_size){
+            net->workspace = cuda_make_array(0, (workspace_size-1)/அளவு(தசம)+1);
         }
-    }else {
-        free(net->workspace);
+    }இல்லையெனில் {
+        விடுவி(net->workspace);
         net->workspace = calloc(1, workspace_size);
     }
-#else
-    free(net->workspace);
+#இல்லையெனில்
+    விடுவி(net->workspace);
     net->workspace = calloc(1, workspace_size);
 #endif
     //fprintf(stderr, " Done!\n");
-    return 0;
+    திரும்பு 0;
 }
 
 layer get_network_detection_layer(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
-        if(net->layers[i].type == DETECTION){
-            return net->layers[i];
+    முழு i;
+    க்கு(i = 0; i < net->n; ++i){
+        எனில்(net->layers[i].type == DETECTION){
+            திரும்பு net->layers[i];
         }
     }
     fprintf(stderr, "Detection layer not found!!\n");
     layer l = {0};
-    return l;
+    திரும்பு l;
 }
 
-image get_network_image_layer(network *net, int i)
+image get_network_image_layer(network *net, முழு i)
 {
     layer l = net->layers[i];
 #ifdef GPU
     //cuda_pull_array(l.output_gpu, l.output, l.outputs);
 #endif
-    if (l.out_w && l.out_h && l.out_c){
-        return float_to_image(l.out_w, l.out_h, l.out_c, l.output);
+    எனில் (l.out_w && l.out_h && l.out_c){
+        திரும்பு float_to_image(l.out_w, l.out_h, l.out_c, l.output);
     }
     image def = {0};
-    return def;
+    திரும்பு def;
 }
 
 image get_network_image(network *net)
 {
-    int i;
-    for(i = net->n-1; i >= 0; --i){
+    முழு i;
+    க்கு(i = net->n-1; i >= 0; --i){
         image m = get_network_image_layer(net, i);
-        if(m.h != 0) return m;
+        எனில்(m.h != 0) திரும்பு m;
     }
     image def = {0};
-    return def;
+    திரும்பு def;
 }
 
-void visualize_network(network *net)
+வெறுமை visualize_network(network *net)
 {
     image *prev = 0;
-    int i;
-    char buff[256];
-    for(i = 0; i < net->n; ++i){
+    முழு i;
+    எழுத்து buff[256];
+    க்கு(i = 0; i < net->n; ++i){
         sprintf(buff, "Layer %d", i);
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        எனில்(l.type == CONVOLUTIONAL){
             prev = visualize_convolutional_layer(l, buff, prev);
         }
     } 
 }
 
-void top_predictions(network *net, int k, int *index)
+வெறுமை உச்சி_predictions(network *net, முழு k, முழு *index)
 {
-    top_k(net->output, net->outputs, k, index);
+    உச்சி_k(net->output, net->outputs, k, index);
 }
 
 
-float *network_predict(network *net, float *input)
+தசம *network_predict(network *net, தசம *உள்ளீடு)
 {
     network orig = *net;
-    net->input = input;
+    net->உள்ளீடு = உள்ளீடு;
     net->truth = 0;
     net->train = 0;
     net->delta = 0;
     forward_network(net);
-    float *out = net->output;
+    தசம *out = net->output;
     *net = orig;
-    return out;
+    திரும்பு out;
 }
 
-int num_detections(network *net, float thresh)
+முழு இலக்கம்_detections(network *net, தசம thresh)
 {
-    int i;
-    int s = 0;
-    for(i = 0; i < net->n; ++i){
+    முழு i;
+    முழு s = 0;
+    க்கு(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO){
-            s += yolo_num_detections(l, thresh);
+        எனில்(l.type == YOLO){
+            s += yolo_இலக்கம்_detections(l, thresh);
         }
-        if(l.type == DETECTION || l.type == REGION){
+        எனில்(l.type == DETECTION || l.type == REGION){
             s += l.w*l.h*l.n;
         }
     }
-    return s;
+    திரும்பு s;
 }
 
-detection *make_network_boxes(network *net, float thresh, int *num)
+detection *make_network_boxes(network *net, தசம thresh, முழு *இலக்கம்)
 {
     layer l = net->layers[net->n - 1];
-    int i;
-    int nboxes = num_detections(net, thresh);
-    if(num) *num = nboxes;
-    detection *dets = calloc(nboxes, sizeof(detection));
-    for(i = 0; i < nboxes; ++i){
-        dets[i].prob = calloc(l.classes, sizeof(float));
-        if(l.coords > 4){
-            dets[i].mask = calloc(l.coords-4, sizeof(float));
+    முழு i;
+    முழு nboxes = இலக்கம்_detections(net, thresh);
+    எனில்(இலக்கம்) *இலக்கம் = nboxes;
+    detection *dets = calloc(nboxes, அளவு(detection));
+    க்கு(i = 0; i < nboxes; ++i){
+        dets[i].prob = calloc(l.classes, அளவு(தசம));
+        எனில்(l.coords > 4){
+            dets[i].mask = calloc(l.coords-4, அளவு(தசம));
         }
     }
-    return dets;
+    திரும்பு dets;
 }
 
-void fill_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, detection *dets)
+வெறுமை fill_network_boxes(network *net, முழு w, முழு h, தசம thresh, தசம hier, முழு *map, முழு relative, detection *dets)
 {
-    int j;
-    for(j = 0; j < net->n; ++j){
+    முழு j;
+    க்கு(j = 0; j < net->n; ++j){
         layer l = net->layers[j];
-        if(l.type == YOLO){
-            int count = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
-            dets += count;
+        எனில்(l.type == YOLO){
+            முழு மொத்தம் = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
+            dets += மொத்தம்;
         }
-        if(l.type == REGION){
+        எனில்(l.type == REGION){
             get_region_detections(l, w, h, net->w, net->h, thresh, map, hier, relative, dets);
             dets += l.w*l.h*l.n;
         }
-        if(l.type == DETECTION){
+        எனில்(l.type == DETECTION){
             get_detection_detections(l, w, h, thresh, dets);
             dets += l.w*l.h*l.n;
         }
     }
 }
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+detection *get_network_boxes(network *net, முழு w, முழு h, தசம thresh, தசம hier, முழு *map, முழு relative, முழு *இலக்கம்)
 {
-    detection *dets = make_network_boxes(net, thresh, num);
+    detection *dets = make_network_boxes(net, thresh, இலக்கம்);
     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
-    return dets;
+    திரும்பு dets;
 }
 
-void free_detections(detection *dets, int n)
+வெறுமை free_detections(detection *dets, முழு n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        free(dets[i].prob);
-        if(dets[i].mask) free(dets[i].mask);
+    முழு i;
+    க்கு(i = 0; i < n; ++i){
+        விடுவி(dets[i].prob);
+        எனில்(dets[i].mask) விடுவி(dets[i].mask);
     }
-    free(dets);
+    விடுவி(dets);
 }
 
-float *network_predict_image(network *net, image im)
+தசம *network_predict_image(network *net, image im)
 {
     image imr = letterbox_image(im, net->w, net->h);
     set_batch_network(net, 1);
-    float *p = network_predict(net, imr.data);
+    தசம *p = network_predict(net, imr.data);
     free_image(imr);
-    return p;
+    திரும்பு p;
 }
 
-int network_width(network *net){return net->w;}
-int network_height(network *net){return net->h;}
+முழு network_width(network *net){திரும்பு net->w;}
+முழு network_height(network *net){திரும்பு net->h;}
 
-matrix network_predict_data_multi(network *net, data test, int n)
+matrix network_predict_data_multi(network *net, data test, முழு n)
 {
-    int i,j,b,m;
-    int k = net->outputs;
+    முழு i,j,b,m;
+    முழு k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.rows, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    தசம *X = calloc(net->batch*test.X.rows, அளவு(தசம));
+    க்கு(i = 0; i < test.X.rows; i += net->batch){
+        க்கு(b = 0; b < net->batch; ++b){
+            எனில்(i+b == test.X.rows) நிறுத்து;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*அளவு(தசம));
         }
-        for(m = 0; m < n; ++m){
-            float *out = network_predict(net, X);
-            for(b = 0; b < net->batch; ++b){
-                if(i+b == test.X.rows) break;
-                for(j = 0; j < k; ++j){
+        க்கு(m = 0; m < n; ++m){
+            தசம *out = network_predict(net, X);
+            க்கு(b = 0; b < net->batch; ++b){
+                எனில்(i+b == test.X.rows) நிறுத்து;
+                க்கு(j = 0; j < k; ++j){
                     pred.vals[i+b][j] += out[j+b*k]/n;
                 }
             }
         }
     }
-    free(X);
-    return pred;   
+    விடுவி(X);
+    திரும்பு pred;   
 }
 
 matrix network_predict_data(network *net, data test)
 {
-    int i,j,b;
-    int k = net->outputs;
+    முழு i,j,b;
+    முழு k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.cols, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    தசம *X = calloc(net->batch*test.X.cols, அளவு(தசம));
+    க்கு(i = 0; i < test.X.rows; i += net->batch){
+        க்கு(b = 0; b < net->batch; ++b){
+            எனில்(i+b == test.X.rows) நிறுத்து;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*அளவு(தசம));
         }
-        float *out = network_predict(net, X);
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            for(j = 0; j < k; ++j){
+        தசம *out = network_predict(net, X);
+        க்கு(b = 0; b < net->batch; ++b){
+            எனில்(i+b == test.X.rows) நிறுத்து;
+            க்கு(j = 0; j < k; ++j){
                 pred.vals[i+b][j] = out[j+b*k];
             }
         }
     }
-    free(X);
-    return pred;   
+    விடுவி(X);
+    திரும்பு pred;   
 }
 
-void print_network(network *net)
+வெறுமை print_network(network *net)
 {
-    int i,j;
-    for(i = 0; i < net->n; ++i){
+    முழு i,j;
+    க்கு(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        float *output = l.output;
-        int n = l.outputs;
-        float mean = mean_array(output, n);
-        float vari = variance_array(output, n);
+        தசம *output = l.output;
+        முழு n = l.outputs;
+        தசம mean = mean_array(output, n);
+        தசம vari = variance_array(output, n);
         fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
-        if(n > 100) n = 100;
-        for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
-        if(n == 100)fprintf(stderr,".....\n");
+        எனில்(n > 100) n = 100;
+        க்கு(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
+        எனில்(n == 100)fprintf(stderr,".....\n");
         fprintf(stderr, "\n");
     }
 }
 
-void compare_networks(network *n1, network *n2, data test)
+வெறுமை compare_networks(network *n1, network *n2, data test)
 {
     matrix g1 = network_predict_data(n1, test);
     matrix g2 = network_predict_data(n2, test);
-    int i;
-    int a,b,c,d;
+    முழு i;
+    முழு a,b,c,d;
     a = b = c = d = 0;
-    for(i = 0; i < g1.rows; ++i){
-        int truth = max_index(test.y.vals[i], test.y.cols);
-        int p1 = max_index(g1.vals[i], g1.cols);
-        int p2 = max_index(g2.vals[i], g2.cols);
-        if(p1 == truth){
-            if(p2 == truth) ++d;
-            else ++c;
-        }else{
-            if(p2 == truth) ++b;
-            else ++a;
+    க்கு(i = 0; i < g1.rows; ++i){
+        முழு truth = max_index(test.y.vals[i], test.y.cols);
+        முழு p1 = max_index(g1.vals[i], g1.cols);
+        முழு p2 = max_index(g2.vals[i], g2.cols);
+        எனில்(p1 == truth){
+            எனில்(p2 == truth) ++d;
+            இல்லையெனில் ++c;
+        }இல்லையெனில்{
+            எனில்(p2 == truth) ++b;
+            இல்லையெனில் ++a;
         }
     }
     printf("%5d %5d\n%5d %5d\n", a, b, c, d);
-    float num = pow((abs(b - c) - 1.), 2.);
-    float den = b + c;
-    printf("%f\n", num/den); 
+    தசம இலக்கம் = pow((abs(b - c) - 1.), 2.);
+    தசம den = b + c;
+    printf("%f\n", இலக்கம்/den); 
 }
 
-float network_accuracy(network *net, data d)
+தசம network_accuracy(network *net, data d)
 {
     matrix guess = network_predict_data(net, d);
-    float acc = matrix_topk_accuracy(d.y, guess,1);
+    தசம acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    திரும்பு acc;
 }
 
-float *network_accuracies(network *net, data d, int n)
+தசம *network_accuracies(network *net, data d, முழு n)
 {
-    static float acc[2];
+    நிலையான தசம acc[2];
     matrix guess = network_predict_data(net, d);
     acc[0] = matrix_topk_accuracy(d.y, guess, 1);
     acc[1] = matrix_topk_accuracy(d.y, guess, n);
     free_matrix(guess);
-    return acc;
+    திரும்பு acc;
 }
 
 layer get_network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    முழு i;
+    க்கு(i = net->n - 1; i >= 0; --i){
+        எனில்(net->layers[i].type != COST) நிறுத்து;
     }
-    return net->layers[i];
+    திரும்பு net->layers[i];
 }
 
-float network_accuracy_multi(network *net, data d, int n)
+தசம network_accuracy_multi(network *net, data d, முழு n)
 {
     matrix guess = network_predict_data_multi(net, d, n);
-    float acc = matrix_topk_accuracy(d.y, guess,1);
+    தசம acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    திரும்பு acc;
 }
 
-void free_network(network *net)
+வெறுமை free_network(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    முழு i;
+    க்கு(i = 0; i < net->n; ++i){
         free_layer(net->layers[i]);
     }
-    free(net->layers);
-    if(net->input) free(net->input);
-    if(net->truth) free(net->truth);
+    விடுவி(net->layers);
+    எனில்(net->உள்ளீடு) விடுவி(net->உள்ளீடு);
+    எனில்(net->truth) விடுவி(net->truth);
 #ifdef GPU
-    if(net->input_gpu) cuda_free(net->input_gpu);
-    if(net->truth_gpu) cuda_free(net->truth_gpu);
+    எனில்(net->உள்ளீடு_gpu) cuda_free(net->உள்ளீடு_gpu);
+    எனில்(net->truth_gpu) cuda_free(net->truth_gpu);
 #endif
-    free(net);
+    விடுவி(net);
 }
 
 // Some day...
@@ -735,50 +735,50 @@ void free_network(network *net)
 
 layer network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    முழு i;
+    க்கு(i = net->n - 1; i >= 0; --i){
+        எனில்(net->layers[i].type != COST) நிறுத்து;
     }
-    return net->layers[i];
+    திரும்பு net->layers[i];
 }
 
-int network_inputs(network *net)
+முழு network_inputs(network *net)
 {
-    return net->layers[0].inputs;
+    திரும்பு net->layers[0].inputs;
 }
 
-int network_outputs(network *net)
+முழு network_outputs(network *net)
 {
-    return network_output_layer(net).outputs;
+    திரும்பு network_output_layer(net).outputs;
 }
 
-float *network_output(network *net)
+தசம *network_output(network *net)
 {
-    return network_output_layer(net).output;
+    திரும்பு network_output_layer(net).output;
 }
 
 #ifdef GPU
 
-void forward_network_gpu(network *netp)
+வெறுமை forward_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    cuda_push_array(net.input_gpu, net.input, net.inputs*net.batch);
-    if(net.truth){
-        cuda_push_array(net.truth_gpu, net.truth, net.truths*net.batch);
+    cuda_தள்ளு_array(net.உள்ளீடு_gpu, net.உள்ளீடு, net.inputs*net.batch);
+    எனில்(net.truth){
+        cuda_தள்ளு_array(net.truth_gpu, net.truth, net.truths*net.batch);
     }
 
-    int i;
-    for(i = 0; i < net.n; ++i){
+    முழு i;
+    க்கு(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta_gpu){
+        எனில்(l.delta_gpu){
             fill_gpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
         }
         l.forward_gpu(l, net);
-        net.input_gpu = l.output_gpu;
-        net.input = l.output;
-        if(l.truth) {
+        net.உள்ளீடு_gpu = l.output_gpu;
+        net.உள்ளீடு = l.output;
+        எனில்(l.truth) {
             net.truth_gpu = l.output_gpu;
             net.truth = l.output;
         }
@@ -787,22 +787,22 @@ void forward_network_gpu(network *netp)
     calc_network_cost(netp);
 }
 
-void backward_network_gpu(network *netp)
+வெறுமை backward_network_gpu(network *netp)
 {
-    int i;
+    முழு i;
     network net = *netp;
     network orig = net;
     cuda_set_device(net.gpu_index);
-    for(i = net.n-1; i >= 0; --i){
+    க்கு(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        எனில்(l.stopbackward) நிறுத்து;
+        எனில்(i == 0){
             net = orig;
-        }else{
+        }இல்லையெனில்{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.உள்ளீடு = prev.output;
             net.delta = prev.delta;
-            net.input_gpu = prev.output_gpu;
+            net.உள்ளீடு_gpu = prev.output_gpu;
             net.delta_gpu = prev.delta_gpu;
         }
         net.index = i;
@@ -810,11 +810,11 @@ void backward_network_gpu(network *netp)
     }
 }
 
-void update_network_gpu(network *netp)
+வெறுமை update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
+    முழு i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -827,115 +827,115 @@ void update_network_gpu(network *netp)
     ++*net.t;
     a.t = (*net.t);
 
-    for(i = 0; i < net.n; ++i){
+    க்கு(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update_gpu){
+        எனில்(l.update_gpu){
             l.update_gpu(l, a);
         }
     }
 }
 
-void harmless_update_network_gpu(network *netp)
+வெறுமை harmless_update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
-    for(i = 0; i < net.n; ++i){
+    முழு i;
+    க்கு(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
-        if(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
-        if(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
+        எனில்(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
+        எனில்(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
+        எனில்(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
     }
 }
 
-typedef struct {
+வகைவரை கட்டமைப்பு {
     network *net;
     data d;
-    float *err;
+    தசம *err;
 } train_args;
 
-void *train_thread(void *ptr)
+வெறுமை *train_thread(வெறுமை *ptr)
 {
     train_args args = *(train_args*)ptr;
-    free(ptr);
+    விடுவி(ptr);
     cuda_set_device(args.net->gpu_index);
     *args.err = train_network(args.net, args.d);
-    return 0;
+    திரும்பு 0;
 }
 
-pthread_t train_network_in_thread(network *net, data d, float *err)
+pthread_t train_network_in_thread(network *net, data d, தசம *err)
 {
     pthread_t thread;
-    train_args *ptr = (train_args *)calloc(1, sizeof(train_args));
+    train_args *ptr = (train_args *)calloc(1, அளவு(train_args));
     ptr->net = net;
     ptr->d = d;
     ptr->err = err;
-    if(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
-    return thread;
+    எனில்(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
+    திரும்பு thread;
 }
 
-void merge_weights(layer l, layer base)
+வெறுமை merge_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL) {
+    எனில் (l.type == CONVOLUTIONAL) {
         axpy_cpu(l.n, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.nweights, 1, l.weight_updates, 1, base.weights, 1);
-        if (l.scales) {
+        எனில் (l.scales) {
             axpy_cpu(l.n, 1, l.scale_updates, 1, base.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } இல்லையெனில் எனில்(l.type == CONNECTED) {
         axpy_cpu(l.outputs, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.outputs*l.inputs, 1, l.weight_updates, 1, base.weights, 1);
     }
 }
 
-void scale_weights(layer l, float s)
+வெறுமை scale_weights(layer l, தசம s)
 {
-    if (l.type == CONVOLUTIONAL) {
+    எனில் (l.type == CONVOLUTIONAL) {
         scal_cpu(l.n, s, l.biases, 1);
         scal_cpu(l.nweights, s, l.weights, 1);
-        if (l.scales) {
+        எனில் (l.scales) {
             scal_cpu(l.n, s, l.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } இல்லையெனில் எனில்(l.type == CONNECTED) {
         scal_cpu(l.outputs, s, l.biases, 1);
         scal_cpu(l.outputs*l.inputs, s, l.weights, 1);
     }
 }
 
 
-void pull_weights(layer l)
+வெறுமை pull_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+    எனில்(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.n);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.nweights);
-        if(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
-    } else if(l.type == CONNECTED){
+        எனில்(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
+    } இல்லையெனில் எனில்(l.type == CONNECTED){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.outputs);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.outputs*l.inputs);
     }
 }
 
-void push_weights(layer l)
+வெறுமை தள்ளு_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
-        cuda_push_array(l.biases_gpu, l.biases, l.n);
-        cuda_push_array(l.weights_gpu, l.weights, l.nweights);
-        if(l.scales) cuda_push_array(l.scales_gpu, l.scales, l.n);
-    } else if(l.type == CONNECTED){
-        cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
+    எனில்(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+        cuda_தள்ளு_array(l.biases_gpu, l.biases, l.n);
+        cuda_தள்ளு_array(l.weights_gpu, l.weights, l.nweights);
+        எனில்(l.scales) cuda_தள்ளு_array(l.scales_gpu, l.scales, l.n);
+    } இல்லையெனில் எனில்(l.type == CONNECTED){
+        cuda_தள்ளு_array(l.biases_gpu, l.biases, l.outputs);
+        cuda_தள்ளு_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
     }
 }
 
-void distribute_weights(layer l, layer base)
+வெறுமை distribute_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
-        cuda_push_array(l.biases_gpu, base.biases, l.n);
-        cuda_push_array(l.weights_gpu, base.weights, l.nweights);
-        if (base.scales) cuda_push_array(l.scales_gpu, base.scales, l.n);
-    } else if (l.type == CONNECTED) {
-        cuda_push_array(l.biases_gpu, base.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
+    எனில் (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
+        cuda_தள்ளு_array(l.biases_gpu, base.biases, l.n);
+        cuda_தள்ளு_array(l.weights_gpu, base.weights, l.nweights);
+        எனில் (base.scales) cuda_தள்ளு_array(l.scales_gpu, base.scales, l.n);
+    } இல்லையெனில் எனில் (l.type == CONNECTED) {
+        cuda_தள்ளு_array(l.biases_gpu, base.biases, l.outputs);
+        cuda_தள்ளு_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
     }
 }
 
@@ -1024,103 +1024,103 @@ void distribute_weights(layer l, layer base)
    }
  */
 
-void sync_layer(network **nets, int n, int j)
+வெறுமை sync_layer(network **nets, முழு n, முழு j)
 {
-    int i;
+    முழு i;
     network *net = nets[0];
     layer base = net->layers[j];
     scale_weights(base, 0);
-    for (i = 0; i < n; ++i) {
+    க்கு (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         pull_weights(l);
         merge_weights(l, base);
     }
     scale_weights(base, 1./n);
-    for (i = 0; i < n; ++i) {
+    க்கு (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         distribute_weights(l, base);
     }
 }
 
-typedef struct{
+வகைவரை கட்டமைப்பு{
     network **nets;
-    int n;
-    int j;
+    முழு n;
+    முழு j;
 } sync_args;
 
-void *sync_layer_thread(void *ptr)
+வெறுமை *sync_layer_thread(வெறுமை *ptr)
 {
     sync_args args = *(sync_args*)ptr;
     sync_layer(args.nets, args.n, args.j);
-    free(ptr);
-    return 0;
+    விடுவி(ptr);
+    திரும்பு 0;
 }
 
-pthread_t sync_layer_in_thread(network **nets, int n, int j)
+pthread_t sync_layer_in_thread(network **nets, முழு n, முழு j)
 {
     pthread_t thread;
-    sync_args *ptr = (sync_args *)calloc(1, sizeof(sync_args));
+    sync_args *ptr = (sync_args *)calloc(1, அளவு(sync_args));
     ptr->nets = nets;
     ptr->n = n;
     ptr->j = j;
-    if(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
-    return thread;
+    எனில்(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
+    திரும்பு thread;
 }
 
-void sync_nets(network **nets, int n, int interval)
+வெறுமை sync_nets(network **nets, முழு n, முழு interval)
 {
-    int j;
-    int layers = nets[0]->n;
-    pthread_t *threads = (pthread_t *) calloc(layers, sizeof(pthread_t));
+    முழு j;
+    முழு layers = nets[0]->n;
+    pthread_t *threads = (pthread_t *) calloc(layers, அளவு(pthread_t));
 
     *(nets[0]->seen) += interval * (n-1) * nets[0]->batch * nets[0]->subdivisions;
-    for (j = 0; j < n; ++j){
+    க்கு (j = 0; j < n; ++j){
         *(nets[j]->seen) = *(nets[0]->seen);
     }
-    for (j = 0; j < layers; ++j) {
+    க்கு (j = 0; j < layers; ++j) {
         threads[j] = sync_layer_in_thread(nets, n, j);
     }
-    for (j = 0; j < layers; ++j) {
+    க்கு (j = 0; j < layers; ++j) {
         pthread_join(threads[j], 0);
     }
-    free(threads);
+    விடுவி(threads);
 }
 
-float train_networks(network **nets, int n, data d, int interval)
+தசம train_networks(network **nets, முழு n, data d, முழு interval)
 {
-    int i;
-    int batch = nets[0]->batch;
-    int subdivisions = nets[0]->subdivisions;
-    assert(batch * subdivisions * n == d.X.rows);
-    pthread_t *threads = (pthread_t *) calloc(n, sizeof(pthread_t));
-    float *errors = (float *) calloc(n, sizeof(float));
+    முழு i;
+    முழு batch = nets[0]->batch;
+    முழு subdivisions = nets[0]->subdivisions;
+    ப்ரதிஜ்ஞா(batch * subdivisions * n == d.X.rows);
+    pthread_t *threads = (pthread_t *) calloc(n, அளவு(pthread_t));
+    தசம *errors = (தசம *) calloc(n, அளவு(தசம));
 
-    float sum = 0;
-    for(i = 0; i < n; ++i){
+    தசம sum = 0;
+    க்கு(i = 0; i < n; ++i){
         data p = get_data_part(d, i, n);
         threads[i] = train_network_in_thread(nets[i], p, errors + i);
     }
-    for(i = 0; i < n; ++i){
+    க்கு(i = 0; i < n; ++i){
         pthread_join(threads[i], 0);
         //printf("%f\n", errors[i]);
         sum += errors[i];
     }
     //cudaDeviceSynchronize();
-    if (get_current_batch(nets[0]) % interval == 0) {
+    எனில் (get_current_batch(nets[0]) % interval == 0) {
         printf("Syncing... ");
         fflush(stdout);
         sync_nets(nets, n, interval);
         printf("Done!\n");
     }
     //cudaDeviceSynchronize();
-    free(threads);
-    free(errors);
-    return (float)sum/(n);
+    விடுவி(threads);
+    விடுவி(errors);
+    திரும்பு (தசம)sum/(n);
 }
 
-void pull_network_output(network *net)
+வெறுமை pull_network_output(network *net)
 {
     layer l = get_network_output_layer(net);
     cuda_pull_array(l.output_gpu, l.output, l.outputs*l.batch);

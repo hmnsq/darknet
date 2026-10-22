@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+வெறுமை gemm_bin(முழு M, முழு N, முழு K, தசம ALPHA, 
+        எழுத்து  *A, முழு lda, 
+        தசம *B, முழு ldb,
+        தசம *C, முழு ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+வெறுமை gemm(முழு TA, முழு TB, முழு M, முழு N, முழு K, தசம ALPHA, 
+                    தசம *A, முழு lda, 
+                    தசம *B, முழு ldb,
+                    தசம BETA,
+                    தசம *C, முழு ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+வெறுமை gemm_cpu(முழு TA, முழு TB, முழு M, முழு N, முழு K, தசம ALPHA, 
+        தசம *A, முழு lda, 
+        தசம *B, முழு ldb,
+        தசம BETA,
+        தசம *C, முழு ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+வெறுமை gemm_gpu(முழு TA, முழு TB, முழு M, முழு N, முழு K, தசம ALPHA, 
+        தசம *A_gpu, முழு lda, 
+        தசம *B_gpu, முழு ldb,
+        தசம BETA,
+        தசம *C_gpu, முழு ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+வெறுமை gemm_gpu(முழு TA, முழு TB, முழு M, முழு N, முழு K, தசம ALPHA, 
+        தசம *A, முழு lda, 
+        தசம *B, முழு ldb,
+        தசம BETA,
+        தசம *C, முழு ldc);
 #endif
 #endif

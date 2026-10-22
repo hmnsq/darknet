@@ -1,32 +1,32 @@
-#include "lstm_layer.h"
-#include "connected_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#அந்தர்பாவ "lstm_layer.h"
+#அந்தர்பாவ "connected_layer.h"
+#அந்தர்பாவ "utils.h"
+#அந்தர்பாவ "cuda.h"
+#அந்தர்பாவ "blas.h"
+#அந்தர்பாவ "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#அந்தர்பாவ <math.h>
+#அந்தர்பாவ <stdio.h>
+#அந்தர்பாவ <stdlib.h>
+#அந்தர்பாவ <string.h>
 
-static void increment_layer(layer *l, int steps)
+நிலையான வெறுமை increment_layer(layer *l, முழு steps)
 {
-    int num = l->outputs*l->batch*steps;
-    l->output += num;
-    l->delta += num;
-    l->x += num;
-    l->x_norm += num;
+    முழு இலக்கம் = l->outputs*l->batch*steps;
+    l->output += இலக்கம்;
+    l->delta += இலக்கம்;
+    l->x += இலக்கம்;
+    l->x_norm += இலக்கம்;
 
 #ifdef GPU
-    l->output_gpu += num;
-    l->delta_gpu += num;
-    l->x_gpu += num;
-    l->x_norm_gpu += num;
+    l->output_gpu += இலக்கம்;
+    l->delta_gpu += இலக்கம்;
+    l->x_gpu += இலக்கம்;
+    l->x_norm_gpu += இலக்கம்;
 #endif
 }
 
-layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam)
+layer make_lstm_layer(முழு batch, முழு inputs, முழு outputs, முழு steps, முழு batch_normalize, முழு adam)
 {
     fprintf(stderr, "LSTM Layer: %d inputs, %d outputs\n", inputs, outputs);
     batch = batch / steps;
@@ -36,42 +36,42 @@ layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_n
     l.steps = steps;
     l.inputs = inputs;
 
-    l.uf = malloc(sizeof(layer));
+    l.uf = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.uf) = make_connected_layer(batch*steps, inputs, outputs, LINEAR, batch_normalize, adam);
     l.uf->batch = batch;
 
-    l.ui = malloc(sizeof(layer));
+    l.ui = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.ui) = make_connected_layer(batch*steps, inputs, outputs, LINEAR, batch_normalize, adam);
     l.ui->batch = batch;
 
-    l.ug = malloc(sizeof(layer));
+    l.ug = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.ug) = make_connected_layer(batch*steps, inputs, outputs, LINEAR, batch_normalize, adam);
     l.ug->batch = batch;
 
-    l.uo = malloc(sizeof(layer));
+    l.uo = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.uo) = make_connected_layer(batch*steps, inputs, outputs, LINEAR, batch_normalize, adam);
     l.uo->batch = batch;
 
-    l.wf = malloc(sizeof(layer));
+    l.wf = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.wf) = make_connected_layer(batch*steps, outputs, outputs, LINEAR, batch_normalize, adam);
     l.wf->batch = batch;
 
-    l.wi = malloc(sizeof(layer));
+    l.wi = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.wi) = make_connected_layer(batch*steps, outputs, outputs, LINEAR, batch_normalize, adam);
     l.wi->batch = batch;
 
-    l.wg = malloc(sizeof(layer));
+    l.wg = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.wg) = make_connected_layer(batch*steps, outputs, outputs, LINEAR, batch_normalize, adam);
     l.wg->batch = batch;
 
-    l.wo = malloc(sizeof(layer));
+    l.wo = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.wo) = make_connected_layer(batch*steps, outputs, outputs, LINEAR, batch_normalize, adam);
     l.wo->batch = batch;
@@ -79,27 +79,27 @@ layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_n
     l.batch_normalize = batch_normalize;
     l.outputs = outputs;
 
-    l.output = calloc(outputs*batch*steps, sizeof(float));
-    l.state = calloc(outputs*batch, sizeof(float));
+    l.output = calloc(outputs*batch*steps, அளவு(தசம));
+    l.state = calloc(outputs*batch, அளவு(தசம));
 
     l.forward = forward_lstm_layer;
     l.update = update_lstm_layer;
 
-    l.prev_state_cpu =  calloc(batch*outputs, sizeof(float));
-    l.prev_cell_cpu =   calloc(batch*outputs, sizeof(float));
-    l.cell_cpu =        calloc(batch*outputs*steps, sizeof(float));
+    l.prev_state_cpu =  calloc(batch*outputs, அளவு(தசம));
+    l.prev_cell_cpu =   calloc(batch*outputs, அளவு(தசம));
+    l.cell_cpu =        calloc(batch*outputs*steps, அளவு(தசம));
 
-    l.f_cpu =           calloc(batch*outputs, sizeof(float));
-    l.i_cpu =           calloc(batch*outputs, sizeof(float));
-    l.g_cpu =           calloc(batch*outputs, sizeof(float));
-    l.o_cpu =           calloc(batch*outputs, sizeof(float));
-    l.c_cpu =           calloc(batch*outputs, sizeof(float));
-    l.h_cpu =           calloc(batch*outputs, sizeof(float));
-    l.temp_cpu =        calloc(batch*outputs, sizeof(float));
-    l.temp2_cpu =       calloc(batch*outputs, sizeof(float));
-    l.temp3_cpu =       calloc(batch*outputs, sizeof(float));
-    l.dc_cpu =          calloc(batch*outputs, sizeof(float));
-    l.dh_cpu =          calloc(batch*outputs, sizeof(float));
+    l.f_cpu =           calloc(batch*outputs, அளவு(தசம));
+    l.i_cpu =           calloc(batch*outputs, அளவு(தசம));
+    l.g_cpu =           calloc(batch*outputs, அளவு(தசம));
+    l.o_cpu =           calloc(batch*outputs, அளவு(தசம));
+    l.c_cpu =           calloc(batch*outputs, அளவு(தசம));
+    l.h_cpu =           calloc(batch*outputs, அளவு(தசம));
+    l.temp_cpu =        calloc(batch*outputs, அளவு(தசம));
+    l.temp2_cpu =       calloc(batch*outputs, அளவு(தசம));
+    l.temp3_cpu =       calloc(batch*outputs, அளவு(தசம));
+    l.dc_cpu =          calloc(batch*outputs, அளவு(தசம));
+    l.dh_cpu =          calloc(batch*outputs, அளவு(தசம));
 
 #ifdef GPU
     l.forward_gpu = forward_lstm_layer_gpu;
@@ -138,10 +138,10 @@ layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_n
 
 #endif
 
-    return l;
+    திரும்பு l;
 }
 
-void update_lstm_layer(layer l, update_args a)
+வெறுமை update_lstm_layer(layer l, update_args a)
 {
     update_connected_layer(*(l.wf), a);
     update_connected_layer(*(l.wi), a);
@@ -153,11 +153,11 @@ void update_lstm_layer(layer l, update_args a)
     update_connected_layer(*(l.uo), a);
 }
 
-void forward_lstm_layer(layer l, network state)
+வெறுமை forward_lstm_layer(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    முழு i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -177,18 +177,18 @@ void forward_lstm_layer(layer l, network state)
     fill_cpu(l.outputs * l.batch * l.steps, 0, ui.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, ug.delta, 1);
     fill_cpu(l.outputs * l.batch * l.steps, 0, uo.delta, 1);
-    if (state.train) {
+    எனில் (state.train) {
         fill_cpu(l.outputs * l.batch * l.steps, 0, l.delta, 1);
     }
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input = l.h_cpu;
+    க்கு (i = 0; i < l.steps; ++i) {
+        s.உள்ளீடு = l.h_cpu;
         forward_connected_layer(wf, s);							
         forward_connected_layer(wi, s);							
         forward_connected_layer(wg, s);							
         forward_connected_layer(wo, s);							
 
-        s.input = state.input;
+        s.உள்ளீடு = state.உள்ளீடு;
         forward_connected_layer(uf, s);							
         forward_connected_layer(ui, s);							
         forward_connected_layer(ug, s);							
@@ -223,7 +223,7 @@ void forward_lstm_layer(layer l, network state)
         copy_cpu(l.outputs*l.batch, l.c_cpu, 1, l.cell_cpu, 1);		
         copy_cpu(l.outputs*l.batch, l.h_cpu, 1, l.output, 1);
 
-        state.input += l.inputs*l.batch;
+        state.உள்ளீடு += l.inputs*l.batch;
         l.output    += l.outputs*l.batch;
         l.cell_cpu      += l.outputs*l.batch;
 
@@ -239,11 +239,11 @@ void forward_lstm_layer(layer l, network state)
     }
 }
 
-void backward_lstm_layer(layer l, network state)
+வெறுமை backward_lstm_layer(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    முழு i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -264,17 +264,17 @@ void backward_lstm_layer(layer l, network state)
     increment_layer(&ug, l.steps - 1);
     increment_layer(&uo, l.steps - 1);
 
-    state.input += l.inputs*l.batch*(l.steps - 1);
-    if (state.delta) state.delta += l.inputs*l.batch*(l.steps - 1);
+    state.உள்ளீடு += l.inputs*l.batch*(l.steps - 1);
+    எனில் (state.delta) state.delta += l.inputs*l.batch*(l.steps - 1);
 
     l.output += l.outputs*l.batch*(l.steps - 1);
     l.cell_cpu += l.outputs*l.batch*(l.steps - 1);
     l.delta += l.outputs*l.batch*(l.steps - 1);
 
-    for (i = l.steps - 1; i >= 0; --i) {
-        if (i != 0) copy_cpu(l.outputs*l.batch, l.cell_cpu - l.outputs*l.batch, 1, l.prev_cell_cpu, 1);
+    க்கு (i = l.steps - 1; i >= 0; --i) {
+        எனில் (i != 0) copy_cpu(l.outputs*l.batch, l.cell_cpu - l.outputs*l.batch, 1, l.prev_cell_cpu, 1);
         copy_cpu(l.outputs*l.batch, l.cell_cpu, 1, l.c_cpu, 1);
-        if (i != 0) copy_cpu(l.outputs*l.batch, l.output - l.outputs*l.batch, 1, l.prev_state_cpu, 1);
+        எனில் (i != 0) copy_cpu(l.outputs*l.batch, l.output - l.outputs*l.batch, 1, l.prev_state_cpu, 1);
         copy_cpu(l.outputs*l.batch, l.output, 1, l.h_cpu, 1);
 
         l.dh_cpu = (i == 0) ? 0 : l.delta - l.outputs*l.batch;
@@ -312,12 +312,12 @@ void backward_lstm_layer(layer l, network state)
         mul_cpu(l.outputs*l.batch, l.temp3_cpu, 1, l.temp_cpu, 1);		
         gradient_array(l.o_cpu, l.outputs*l.batch, LOGISTIC, l.temp_cpu);
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, wo.delta, 1);
-        s.input = l.prev_state_cpu;
+        s.உள்ளீடு = l.prev_state_cpu;
         s.delta = l.dh_cpu;															
         backward_connected_layer(wo, s);	
 
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, uo.delta, 1);
-        s.input = state.input;
+        s.உள்ளீடு = state.உள்ளீடு;
         s.delta = state.delta;
         backward_connected_layer(uo, s);									
 
@@ -325,12 +325,12 @@ void backward_lstm_layer(layer l, network state)
         mul_cpu(l.outputs*l.batch, l.i_cpu, 1, l.temp_cpu, 1);				
         gradient_array(l.g_cpu, l.outputs*l.batch, TANH, l.temp_cpu);		
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, wg.delta, 1);
-        s.input = l.prev_state_cpu;
+        s.உள்ளீடு = l.prev_state_cpu;
         s.delta = l.dh_cpu;														
         backward_connected_layer(wg, s);	
 
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, ug.delta, 1);
-        s.input = state.input;
+        s.உள்ளீடு = state.உள்ளீடு;
         s.delta = state.delta;
         backward_connected_layer(ug, s);																
 
@@ -338,12 +338,12 @@ void backward_lstm_layer(layer l, network state)
         mul_cpu(l.outputs*l.batch, l.g_cpu, 1, l.temp_cpu, 1);				
         gradient_array(l.i_cpu, l.outputs*l.batch, LOGISTIC, l.temp_cpu);	
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, wi.delta, 1);
-        s.input = l.prev_state_cpu;
+        s.உள்ளீடு = l.prev_state_cpu;
         s.delta = l.dh_cpu;
         backward_connected_layer(wi, s);						
 
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, ui.delta, 1);
-        s.input = state.input;
+        s.உள்ளீடு = state.உள்ளீடு;
         s.delta = state.delta;
         backward_connected_layer(ui, s);									
 
@@ -351,12 +351,12 @@ void backward_lstm_layer(layer l, network state)
         mul_cpu(l.outputs*l.batch, l.prev_cell_cpu, 1, l.temp_cpu, 1);
         gradient_array(l.f_cpu, l.outputs*l.batch, LOGISTIC, l.temp_cpu);
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, wf.delta, 1);
-        s.input = l.prev_state_cpu;
+        s.உள்ளீடு = l.prev_state_cpu;
         s.delta = l.dh_cpu;
         backward_connected_layer(wf, s);						
 
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, uf.delta, 1);
-        s.input = state.input;
+        s.உள்ளீடு = state.உள்ளீடு;
         s.delta = state.delta;
         backward_connected_layer(uf, s);									
 
@@ -364,8 +364,8 @@ void backward_lstm_layer(layer l, network state)
         mul_cpu(l.outputs*l.batch, l.f_cpu, 1, l.temp_cpu, 1);				
         copy_cpu(l.outputs*l.batch, l.temp_cpu, 1, l.dc_cpu, 1);				
 
-        state.input -= l.inputs*l.batch;
-        if (state.delta) state.delta -= l.inputs*l.batch;
+        state.உள்ளீடு -= l.inputs*l.batch;
+        எனில் (state.delta) state.delta -= l.inputs*l.batch;
         l.output -= l.outputs*l.batch;
         l.cell_cpu -= l.outputs*l.batch;
         l.delta -= l.outputs*l.batch;
@@ -383,7 +383,7 @@ void backward_lstm_layer(layer l, network state)
 }
 
 #ifdef GPU
-void update_lstm_layer_gpu(layer l, update_args a)
+வெறுமை update_lstm_layer_gpu(layer l, update_args a)
 {
     update_connected_layer_gpu(*(l.wf), a);
     update_connected_layer_gpu(*(l.wi), a);
@@ -395,11 +395,11 @@ void update_lstm_layer_gpu(layer l, update_args a)
     update_connected_layer_gpu(*(l.uo), a);
 }
 
-void forward_lstm_layer_gpu(layer l, network state)
+வெறுமை forward_lstm_layer_gpu(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    முழு i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -419,18 +419,18 @@ void forward_lstm_layer_gpu(layer l, network state)
     fill_gpu(l.outputs * l.batch * l.steps, 0, ui.delta_gpu, 1);
     fill_gpu(l.outputs * l.batch * l.steps, 0, ug.delta_gpu, 1);
     fill_gpu(l.outputs * l.batch * l.steps, 0, uo.delta_gpu, 1);
-    if (state.train) {
+    எனில் (state.train) {
         fill_gpu(l.outputs * l.batch * l.steps, 0, l.delta_gpu, 1);
     }
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input_gpu = l.h_gpu;
+    க்கு (i = 0; i < l.steps; ++i) {
+        s.உள்ளீடு_gpu = l.h_gpu;
         forward_connected_layer_gpu(wf, s);							
         forward_connected_layer_gpu(wi, s);							
         forward_connected_layer_gpu(wg, s);							
         forward_connected_layer_gpu(wo, s);							
 
-        s.input_gpu = state.input_gpu;
+        s.உள்ளீடு_gpu = state.உள்ளீடு_gpu;
         forward_connected_layer_gpu(uf, s);							
         forward_connected_layer_gpu(ui, s);							
         forward_connected_layer_gpu(ug, s);							
@@ -465,7 +465,7 @@ void forward_lstm_layer_gpu(layer l, network state)
         copy_gpu(l.outputs*l.batch, l.c_gpu, 1, l.cell_gpu, 1);		
         copy_gpu(l.outputs*l.batch, l.h_gpu, 1, l.output_gpu, 1);
 
-        state.input_gpu += l.inputs*l.batch;
+        state.உள்ளீடு_gpu += l.inputs*l.batch;
         l.output_gpu    += l.outputs*l.batch;
         l.cell_gpu      += l.outputs*l.batch;
 
@@ -481,11 +481,11 @@ void forward_lstm_layer_gpu(layer l, network state)
     }
 }
 
-void backward_lstm_layer_gpu(layer l, network state)
+வெறுமை backward_lstm_layer_gpu(layer l, network state)
 {
     network s = { 0 };
     s.train = state.train;
-    int i;
+    முழு i;
     layer wf = *(l.wf);
     layer wi = *(l.wi);
     layer wg = *(l.wg);
@@ -506,17 +506,17 @@ void backward_lstm_layer_gpu(layer l, network state)
     increment_layer(&ug, l.steps - 1);
     increment_layer(&uo, l.steps - 1);
 
-    state.input_gpu += l.inputs*l.batch*(l.steps - 1);
-    if (state.delta_gpu) state.delta_gpu += l.inputs*l.batch*(l.steps - 1);
+    state.உள்ளீடு_gpu += l.inputs*l.batch*(l.steps - 1);
+    எனில் (state.delta_gpu) state.delta_gpu += l.inputs*l.batch*(l.steps - 1);
 
     l.output_gpu += l.outputs*l.batch*(l.steps - 1);
     l.cell_gpu += l.outputs*l.batch*(l.steps - 1);
     l.delta_gpu += l.outputs*l.batch*(l.steps - 1);
 
-    for (i = l.steps - 1; i >= 0; --i) {
-        if (i != 0) copy_gpu(l.outputs*l.batch, l.cell_gpu - l.outputs*l.batch, 1, l.prev_cell_gpu, 1);
+    க்கு (i = l.steps - 1; i >= 0; --i) {
+        எனில் (i != 0) copy_gpu(l.outputs*l.batch, l.cell_gpu - l.outputs*l.batch, 1, l.prev_cell_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.cell_gpu, 1, l.c_gpu, 1);
-        if (i != 0) copy_gpu(l.outputs*l.batch, l.output_gpu - l.outputs*l.batch, 1, l.prev_state_gpu, 1);
+        எனில் (i != 0) copy_gpu(l.outputs*l.batch, l.output_gpu - l.outputs*l.batch, 1, l.prev_state_gpu, 1);
         copy_gpu(l.outputs*l.batch, l.output_gpu, 1, l.h_gpu, 1);
 
         l.dh_gpu = (i == 0) ? 0 : l.delta_gpu - l.outputs*l.batch;
@@ -554,12 +554,12 @@ void backward_lstm_layer_gpu(layer l, network state)
         mul_gpu(l.outputs*l.batch, l.temp3_gpu, 1, l.temp_gpu, 1);		
         gradient_array_gpu(l.o_gpu, l.outputs*l.batch, LOGISTIC, l.temp_gpu);
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, wo.delta_gpu, 1);
-        s.input_gpu = l.prev_state_gpu;
+        s.உள்ளீடு_gpu = l.prev_state_gpu;
         s.delta_gpu = l.dh_gpu;															
         backward_connected_layer_gpu(wo, s);	
 
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, uo.delta_gpu, 1);
-        s.input_gpu = state.input_gpu;
+        s.உள்ளீடு_gpu = state.உள்ளீடு_gpu;
         s.delta_gpu = state.delta_gpu;
         backward_connected_layer_gpu(uo, s);									
 
@@ -567,12 +567,12 @@ void backward_lstm_layer_gpu(layer l, network state)
         mul_gpu(l.outputs*l.batch, l.i_gpu, 1, l.temp_gpu, 1);				
         gradient_array_gpu(l.g_gpu, l.outputs*l.batch, TANH, l.temp_gpu);		
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, wg.delta_gpu, 1);
-        s.input_gpu = l.prev_state_gpu;
+        s.உள்ளீடு_gpu = l.prev_state_gpu;
         s.delta_gpu = l.dh_gpu;														
         backward_connected_layer_gpu(wg, s);	
 
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, ug.delta_gpu, 1);
-        s.input_gpu = state.input_gpu;
+        s.உள்ளீடு_gpu = state.உள்ளீடு_gpu;
         s.delta_gpu = state.delta_gpu;
         backward_connected_layer_gpu(ug, s);																
 
@@ -580,12 +580,12 @@ void backward_lstm_layer_gpu(layer l, network state)
         mul_gpu(l.outputs*l.batch, l.g_gpu, 1, l.temp_gpu, 1);				
         gradient_array_gpu(l.i_gpu, l.outputs*l.batch, LOGISTIC, l.temp_gpu);	
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, wi.delta_gpu, 1);
-        s.input_gpu = l.prev_state_gpu;
+        s.உள்ளீடு_gpu = l.prev_state_gpu;
         s.delta_gpu = l.dh_gpu;
         backward_connected_layer_gpu(wi, s);						
 
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, ui.delta_gpu, 1);
-        s.input_gpu = state.input_gpu;
+        s.உள்ளீடு_gpu = state.உள்ளீடு_gpu;
         s.delta_gpu = state.delta_gpu;
         backward_connected_layer_gpu(ui, s);									
 
@@ -593,12 +593,12 @@ void backward_lstm_layer_gpu(layer l, network state)
         mul_gpu(l.outputs*l.batch, l.prev_cell_gpu, 1, l.temp_gpu, 1);
         gradient_array_gpu(l.f_gpu, l.outputs*l.batch, LOGISTIC, l.temp_gpu);
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, wf.delta_gpu, 1);
-        s.input_gpu = l.prev_state_gpu;
+        s.உள்ளீடு_gpu = l.prev_state_gpu;
         s.delta_gpu = l.dh_gpu;
         backward_connected_layer_gpu(wf, s);						
 
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, uf.delta_gpu, 1);
-        s.input_gpu = state.input_gpu;
+        s.உள்ளீடு_gpu = state.உள்ளீடு_gpu;
         s.delta_gpu = state.delta_gpu;
         backward_connected_layer_gpu(uf, s);									
 
@@ -606,8 +606,8 @@ void backward_lstm_layer_gpu(layer l, network state)
         mul_gpu(l.outputs*l.batch, l.f_gpu, 1, l.temp_gpu, 1);				
         copy_gpu(l.outputs*l.batch, l.temp_gpu, 1, l.dc_gpu, 1);				
 
-        state.input_gpu -= l.inputs*l.batch;
-        if (state.delta_gpu) state.delta_gpu -= l.inputs*l.batch;
+        state.உள்ளீடு_gpu -= l.inputs*l.batch;
+        எனில் (state.delta_gpu) state.delta_gpu -= l.inputs*l.batch;
         l.output_gpu -= l.outputs*l.batch;
         l.cell_gpu -= l.outputs*l.batch;
         l.delta_gpu -= l.outputs*l.batch;

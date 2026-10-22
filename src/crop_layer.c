@@ -1,19 +1,19 @@
-#include "crop_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#அந்தர்பாவ "crop_layer.h"
+#அந்தர்பாவ "cuda.h"
+#அந்தர்பாவ <stdio.h>
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    முழு h = l.out_h;
+    முழு w = l.out_w;
+    முழு c = l.out_c;
+    திரும்பு float_to_image(w,h,c,l.output);
 }
 
-void backward_crop_layer(const crop_layer l, network net){}
-void backward_crop_layer_gpu(const crop_layer l, network net){}
+வெறுமை backward_crop_layer(மாறிலி crop_layer l, network net){}
+வெறுமை backward_crop_layer_gpu(மாறிலி crop_layer l, network net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(முழு batch, முழு h, முழு w, முழு c, முழு crop_height, முழு crop_width, முழு flip, தசம angle, தசம saturation, தசம exposure)
 {
     fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
     crop_layer l = {0};
@@ -22,7 +22,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.h = h;
     l.w = w;
     l.c = c;
-    l.scale = (float)crop_height / h;
+    l.scale = (தசம)crop_height / h;
     l.flip = flip;
     l.angle = angle;
     l.saturation = saturation;
@@ -32,7 +32,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.out_c = c;
     l.inputs = l.w * l.h * l.c;
     l.outputs = l.out_w * l.out_h * l.out_c;
-    l.output = calloc(l.outputs*batch, sizeof(float));
+    l.output = calloc(l.outputs*batch, அளவு(தசம));
     l.forward = forward_crop_layer;
     l.backward = backward_crop_layer;
 
@@ -42,10 +42,10 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
     #endif
-    return l;
+    திரும்பு l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+வெறுமை resize_crop_layer(layer *l, முழு w, முழு h)
 {
     l->w = w;
     l->h = h;
@@ -56,7 +56,7 @@ void resize_crop_layer(layer *l, int w, int h)
     l->inputs = l->w * l->h * l->c;
     l->outputs = l->out_h * l->out_w * l->out_c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*அளவு(தசம));
     #ifdef GPU
     cuda_free(l->output_gpu);
     l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
@@ -64,37 +64,37 @@ void resize_crop_layer(layer *l, int w, int h)
 }
 
 
-void forward_crop_layer(const crop_layer l, network net)
+வெறுமை forward_crop_layer(மாறிலி crop_layer l, network net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
-    float scale = 2;
-    float trans = -1;
-    if(l.noadjust){
+    முழு i,j,c,b,row,col;
+    முழு index;
+    முழு மொத்தம் = 0;
+    முழு flip = (l.flip && rand()%2);
+    முழு dh = rand()%(l.h - l.out_h + 1);
+    முழு dw = rand()%(l.w - l.out_w + 1);
+    தசம scale = 2;
+    தசம trans = -1;
+    எனில்(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    எனில்(!net.train){
         flip = 0;
         dh = (l.h - l.out_h)/2;
         dw = (l.w - l.out_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
+    க்கு(b = 0; b < l.batch; ++b){
+        க்கு(c = 0; c < l.c; ++c){
+            க்கு(i = 0; i < l.out_h; ++i){
+                க்கு(j = 0; j < l.out_w; ++j){
+                    எனில்(flip){
                         col = l.w - dw - j - 1;    
-                    }else{
+                    }இல்லையெனில்{
                         col = j + dw;
                     }
                     row = i + dh;
                     index = col+l.w*(row+l.h*(c + l.c*b)); 
-                    l.output[count++] = net.input[index]*scale + trans;
+                    l.output[மொத்தம்++] = net.உள்ளீடு[index]*scale + trans;
                 }
             }
         }

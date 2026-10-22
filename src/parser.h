@@ -1,9 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include "darknet.h"
-#include "network.h"
+#அந்தர்பாவ "darknet.h"
+#அந்தர்பாவ "network.h"
 
-void save_network(network net, char *filename);
-void save_weights_double(network net, char *filename);
+வெறுமை save_network(network net, எழுத்து *filename);
+வெறுமை save_weights_double(network net, எழுத்து *filename);
 
 #endif

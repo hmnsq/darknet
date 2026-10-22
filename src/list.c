@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#அந்தர்பாவ <stdlib.h>
+#அந்தர்பாவ <string.h>
+#அந்தர்பாவ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(அளவு(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	திரும்பு l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+வெறுமை *list_எடு(list *l){
+    எனில்(!l->back) திரும்பு 0;
+    முனை *b = l->back;
+    வெறுமை *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    எனில்(l->back) l->back->next = 0;
+    விடுவி(b);
     --l->size;
     
-    return val;
+    திரும்பு val;
 }
 
-void list_insert(list *l, void *val)
+வெறுமை list_செருகு(list *l, வெறுமை *val)
 {
-	node *new = malloc(sizeof(node));
+	முனை *new = malloc(அளவு(முனை));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	எனில்(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}இல்லையெனில்{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+வெறுமை free_முனை(முனை *n)
 {
-	node *next;
-	while(n) {
+	முனை *next;
+	போது(n) {
 		next = n->next;
-		free(n);
+		விடுவி(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+வெறுமை free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_முனை(l->front);
+	விடுவி(l);
 }
 
-void free_list_contents(list *l)
+வெறுமை free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	முனை *n = l->front;
+	போது(n){
+		விடுவி(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+வெறுமை **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    வெறுமை **a = calloc(l->size, அளவு(வெறுமை*));
+    முழு மொத்தம் = 0;
+    முனை *n = l->front;
+    போது(n){
+        a[மொத்தம்++] = n->val;
         n = n->next;
     }
-    return a;
+    திரும்பு a;
 }

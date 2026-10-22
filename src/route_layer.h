@@ -1,18 +1,18 @@
 #ifndef ROUTE_LAYER_H
 #define ROUTE_LAYER_H
-#include "network.h"
-#include "layer.h"
+#அந்தர்பாவ "network.h"
+#அந்தர்பாவ "layer.h"
 
-typedef layer route_layer;
+வகைவரை layer route_layer;
 
-route_layer make_route_layer(int batch, int n, int *input_layers, int *input_size);
-void forward_route_layer(const route_layer l, network net);
-void backward_route_layer(const route_layer l, network net);
-void resize_route_layer(route_layer *l, network *net);
+route_layer make_route_layer(முழு batch, முழு n, முழு *உள்ளீடு_layers, முழு *உள்ளீடு_size);
+வெறுமை forward_route_layer(மாறிலி route_layer l, network net);
+வெறுமை backward_route_layer(மாறிலி route_layer l, network net);
+வெறுமை resize_route_layer(route_layer *l, network *net);
 
 #ifdef GPU
-void forward_route_layer_gpu(const route_layer l, network net);
-void backward_route_layer_gpu(const route_layer l, network net);
+வெறுமை forward_route_layer_gpu(மாறிலி route_layer l, network net);
+வெறுமை backward_route_layer_gpu(மாறிலி route_layer l, network net);
 #endif
 
 #endif

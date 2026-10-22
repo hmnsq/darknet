@@ -1,105 +1,105 @@
 #ifndef BLAS_H
 #define BLAS_H
-#include "darknet.h"
+#அந்தர்பாவ "darknet.h"
 
-void flatten(float *x, int size, int layers, int batch, int forward);
-void pm(int M, int N, float *A);
-float *random_matrix(int rows, int cols);
-void time_random_matrix(int TA, int TB, int m, int k, int n);
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+வெறுமை flatten(தசம *x, முழு size, முழு layers, முழு batch, முழு forward);
+வெறுமை pm(முழு M, முழு N, தசம *A);
+தசம *random_matrix(முழு rows, முழு cols);
+வெறுமை time_random_matrix(முழு TA, முழு TB, முழு m, முழு k, முழு n);
+வெறுமை reorg_cpu(தசம *x, முழு w, முழு h, முழு c, முழு batch, முழு stride, முழு forward, தசம *out);
 
-void test_blas();
+வெறுமை test_blas();
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z);
+வெறுமை inter_cpu(முழு NX, தசம *X, முழு NY, தசம *Y, முழு B, தசம *OUT);
+வெறுமை deinter_cpu(முழு NX, தசம *X, முழு NY, தசம *Y, முழு B, தசம *OUT);
+வெறுமை mult_add_into_cpu(முழு N, தசம *X, தசம *Y, தசம *Z);
 
-void const_cpu(int N, float ALPHA, float *X, int INCX);
-void constrain_gpu(int N, float ALPHA, float * X, int INCX);
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY);
+வெறுமை const_cpu(முழு N, தசம ALPHA, தசம *X, முழு INCX);
+வெறுமை constrain_gpu(முழு N, தசம ALPHA, தசம * X, முழு INCX);
+வெறுமை pow_cpu(முழு N, தசம ALPHA, தசம *X, முழு INCX, தசம *Y, முழு INCY);
+வெறுமை mul_cpu(முழு N, தசம *X, முழு INCX, தசம *Y, முழு INCY);
 
-int test_gpu_blas();
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
+முழு test_gpu_blas();
+வெறுமை shortcut_cpu(முழு batch, முழு w1, முழு h1, முழு c1, தசம *add, முழு w2, முழு h2, முழு c2, தசம s1, தசம s2, தசம *out);
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
+வெறுமை mean_cpu(தசம *x, முழு batch, முழு filters, முழு spatial, தசம *mean);
+வெறுமை variance_cpu(தசம *x, தசம *mean, முழு batch, முழு filters, முழு spatial, தசம *variance);
 
-void scale_bias(float *output, float *scales, int batch, int n, int size);
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial);
+வெறுமை scale_bias(தசம *output, தசம *scales, முழு batch, முழு n, முழு size);
+வெறுமை backward_scale_cpu(தசம *x_norm, தசம *delta, முழு batch, முழு n, முழு size, தசம *scale_updates);
+வெறுமை mean_delta_cpu(தசம *delta, தசம *variance, முழு batch, முழு filters, முழு spatial, தசம *mean_delta);
+வெறுமை  variance_delta_cpu(தசம *x, தசம *delta, தசம *mean, தசம *variance, முழு batch, முழு filters, முழு spatial, தசம *variance_delta);
+வெறுமை normalize_delta_cpu(தசம *x, தசம *mean, தசம *variance, தசம *mean_delta, தசம *variance_delta, முழு batch, முழு filters, முழு spatial, தசம *delta);
+வெறுமை l2normalize_cpu(தசம *x, தசம *dx, முழு batch, முழு filters, முழு spatial);
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_sum_cpu(float *a, float *b, float *s, int num, float *c);
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc);
+வெறுமை smooth_l1_cpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை l2_cpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை l1_cpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை logistic_x_ent_cpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை softmax_x_ent_cpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை weighted_sum_cpu(தசம *a, தசம *b, தசம *s, முழு இலக்கம், தசம *c);
+வெறுமை weighted_delta_cpu(தசம *a, தசம *b, தசம *s, தசம *da, தசம *db, தசம *ds, முழு n, தசம *dc);
 
-void softmax(float *input, int n, float temp, int stride, float *output);
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+வெறுமை softmax(தசம *உள்ளீடு, முழு n, தசம temp, முழு stride, தசம *output);
+வெறுமை softmax_cpu(தசம *உள்ளீடு, முழு n, முழு batch, முழு batch_offset, முழு groups, முழு group_offset, முழு stride, தசம temp, தசம *output);
+வெறுமை upsample_cpu(தசம *in, முழு w, முழு h, முழு c, முழு batch, முழு stride, முழு forward, தசம scale, தசம *out);
 
 #ifdef GPU
-#include "cuda.h"
-#include "tree.h"
+#அந்தர்பாவ "cuda.h"
+#அந்தர்பாவ "tree.h"
 
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void axpy_gpu_offset(int N, float ALPHA, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
-void copy_gpu_offset(int N, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void add_gpu(int N, float ALPHA, float * X, int INCX);
-void supp_gpu(int N, float ALPHA, float * X, int INCX);
-void mask_gpu(int N, float * X, float mask_num, float * mask, float val);
-void scale_mask_gpu(int N, float * X, float mask_num, float * mask, float scale);
-void const_gpu(int N, float ALPHA, float *X, int INCX);
-void pow_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_gpu(int N, float *X, int INCX, float *Y, int INCY);
+வெறுமை axpy_gpu(முழு N, தசம ALPHA, தசம * X, முழு INCX, தசம * Y, முழு INCY);
+வெறுமை axpy_gpu_offset(முழு N, தசம ALPHA, தசம * X, முழு OFFX, முழு INCX, தசம * Y, முழு OFFY, முழு INCY);
+வெறுமை copy_gpu(முழு N, தசம * X, முழு INCX, தசம * Y, முழு INCY);
+வெறுமை copy_gpu_offset(முழு N, தசம * X, முழு OFFX, முழு INCX, தசம * Y, முழு OFFY, முழு INCY);
+வெறுமை add_gpu(முழு N, தசம ALPHA, தசம * X, முழு INCX);
+வெறுமை supp_gpu(முழு N, தசம ALPHA, தசம * X, முழு INCX);
+வெறுமை mask_gpu(முழு N, தசம * X, தசம mask_இலக்கம், தசம * mask, தசம val);
+வெறுமை scale_mask_gpu(முழு N, தசம * X, தசம mask_இலக்கம், தசம * mask, தசம scale);
+வெறுமை const_gpu(முழு N, தசம ALPHA, தசம *X, முழு INCX);
+வெறுமை pow_gpu(முழு N, தசம ALPHA, தசம *X, முழு INCX, தசம *Y, முழு INCY);
+வெறுமை mul_gpu(முழு N, தசம *X, முழு INCX, தசம *Y, முழு INCY);
 
-void mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void normalize_gpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
-void l2normalize_gpu(float *x, float *dx, int batch, int filters, int spatial);
+வெறுமை mean_gpu(தசம *x, முழு batch, முழு filters, முழு spatial, தசம *mean);
+வெறுமை variance_gpu(தசம *x, தசம *mean, முழு batch, முழு filters, முழு spatial, தசம *variance);
+வெறுமை normalize_gpu(தசம *x, தசம *mean, தசம *variance, முழு batch, முழு filters, முழு spatial);
+வெறுமை l2normalize_gpu(தசம *x, தசம *dx, முழு batch, முழு filters, முழு spatial);
 
-void normalize_delta_gpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
+வெறுமை normalize_delta_gpu(தசம *x, தசம *mean, தசம *variance, தசம *mean_delta, தசம *variance_delta, முழு batch, முழு filters, முழு spatial, தசம *delta);
 
-void fast_mean_delta_gpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void fast_variance_delta_gpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
+வெறுமை fast_mean_delta_gpu(தசம *delta, தசம *variance, முழு batch, முழு filters, முழு spatial, தசம *mean_delta);
+வெறுமை fast_variance_delta_gpu(தசம *x, தசம *delta, தசம *mean, தசம *variance, முழு batch, முழு filters, முழு spatial, தசம *variance_delta);
 
-void fast_variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void fast_mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void shortcut_gpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_scale_gpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
+வெறுமை fast_variance_gpu(தசம *x, தசம *mean, முழு batch, முழு filters, முழு spatial, தசம *variance);
+வெறுமை fast_mean_gpu(தசம *x, முழு batch, முழு filters, முழு spatial, தசம *mean);
+வெறுமை shortcut_gpu(முழு batch, முழு w1, முழு h1, முழு c1, தசம *add, முழு w2, முழு h2, முழு c2, தசம s1, தசம s2, தசம *out);
+வெறுமை scale_bias_gpu(தசம *output, தசம *biases, முழு batch, முழு n, முழு size);
+வெறுமை backward_scale_gpu(தசம *x_norm, தசம *delta, முழு batch, முழு n, முழு size, தசம *scale_updates);
+வெறுமை scale_bias_gpu(தசம *output, தசம *biases, முழு batch, முழு n, முழு size);
+வெறுமை add_bias_gpu(தசம *output, தசம *biases, முழு batch, முழு n, முழு size);
+வெறுமை backward_bias_gpu(தசம *bias_updates, தசம *delta, முழு batch, முழு n, முழு size);
 
-void logistic_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void smooth_l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void wgan_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_delta_gpu(float *a, float *b, float *s, float *da, float *db, float *ds, int num, float *dc);
-void weighted_sum_gpu(float *a, float *b, float *s, int num, float *c);
-void mult_add_into_gpu(int num, float *a, float *b, float *c);
-void inter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
+வெறுமை logistic_x_ent_gpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை softmax_x_ent_gpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை smooth_l1_gpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை l2_gpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை l1_gpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை wgan_gpu(முழு n, தசம *pred, தசம *truth, தசம *delta, தசம *error);
+வெறுமை weighted_delta_gpu(தசம *a, தசம *b, தசம *s, தசம *da, தசம *db, தசம *ds, முழு இலக்கம், தசம *dc);
+வெறுமை weighted_sum_gpu(தசம *a, தசம *b, தசம *s, முழு இலக்கம், தசம *c);
+வெறுமை mult_add_into_gpu(முழு இலக்கம், தசம *a, தசம *b, தசம *c);
+வெறுமை inter_gpu(முழு NX, தசம *X, முழு NY, தசம *Y, முழு B, தசம *OUT);
+வெறுமை deinter_gpu(முழு NX, தசம *X, முழு NY, தசம *Y, முழு B, தசம *OUT);
 
-void reorg_gpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+வெறுமை reorg_gpu(தசம *x, முழு w, முழு h, முழு c, முழு batch, முழு stride, முழு forward, தசம *out);
 
-void softmax_gpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-void adam_gpu(int n, float *x, float *m, float *v, float B1, float B2, float rate, float eps, int t);
+வெறுமை softmax_gpu(தசம *உள்ளீடு, முழு n, முழு batch, முழு batch_offset, முழு groups, முழு group_offset, முழு stride, தசம temp, தசம *output);
+வெறுமை adam_update_gpu(தசம *w, தசம *d, தசம *m, தசம *v, தசம B1, தசம B2, தசம eps, தசம decay, தசம rate, முழு n, முழு batch, முழு t);
+வெறுமை adam_gpu(முழு n, தசம *x, தசம *m, தசம *v, தசம B1, தசம B2, தசம rate, தசம eps, முழு t);
 
-void flatten_gpu(float *x, int spatial, int layers, int batch, int forward, float *out);
-void softmax_tree(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
-void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+வெறுமை flatten_gpu(தசம *x, முழு spatial, முழு layers, முழு batch, முழு forward, தசம *out);
+வெறுமை softmax_மரம்(தசம *உள்ளீடு, முழு spatial, முழு batch, முழு stride, தசம temp, தசம *output, மரம் hier);
+வெறுமை upsample_gpu(தசம *in, முழு w, முழு h, முழு c, முழு batch, முழு stride, முழு forward, தசம scale, தசம *out);
 
 #endif
 #endif

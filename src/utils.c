@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#அந்தர்பாவ <stdio.h>
+#அந்தர்பாவ <stdlib.h>
+#அந்தர்பாவ <string.h>
+#அந்தர்பாவ <math.h>
+#அந்தர்பாவ <assert.h>
+#அந்தர்பாவ <unistd.h>
+#அந்தர்பாவ <float.h>
+#அந்தர்பாவ <limits.h>
+#அந்தர்பாவ <time.h>
+#அந்தர்பாவ <sys/time.h>
 
-#include "utils.h"
+#அந்தர்பாவ "utils.h"
 
 
 /*
@@ -24,69 +24,69 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+இரட்டை what_time_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    கட்டமைப்பு timeval time;
+    எனில் (gettimeofday(&time,வெற்று)){
+        திரும்பு 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    திரும்பு (இரட்டை)time.tv_sec + (இரட்டை)time.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+முழு *read_intlist(எழுத்து *gpu_list, முழு *ngpus, முழு d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    முழு *gpus = 0;
+    எனில்(gpu_list){
+        முழு len = strlen(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        முழு i;
+        க்கு(i = 0; i < len; ++i){
+            எனில் (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = calloc(*ngpus, அளவு(முழு));
+        க்கு(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } இல்லையெனில் {
+        gpus = calloc(1, அளவு(தசம));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    திரும்பு gpus;
 }
 
-int *read_map(char *filename)
+முழு *read_map(எழுத்து *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    முழு n = 0;
+    முழு *map = 0;
+    எழுத்து *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    எனில்(!file) file_error(filename);
+    போது((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*அளவு(முழு));
         map[n-1] = atoi(str);
     }
-    return map;
+    திரும்பு map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+வெறுமை sorta_shuffle(வெறுமை *arr, size_t n, size_t size, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
+    க்கு(i = 0; i < sections; ++i){
         size_t start = n*i/sections;
         size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+        size_t இலக்கம் = end-start;
+        shuffle(arr+(start*size), இலக்கம், size);
     }
 }
 
-void shuffle(void *arr, size_t n, size_t size)
+வெறுமை shuffle(வெறுமை *arr, size_t n, size_t size)
 {
     size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    வெறுமை *swp = calloc(1, size);
+    க்கு(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
         memcpy(swp,          arr+(j*size), size);
         memcpy(arr+(j*size), arr+(i*size), size);
@@ -94,118 +94,118 @@ void shuffle(void *arr, size_t n, size_t size)
     }
 }
 
-int *random_index_order(int min, int max)
+முழு *random_index_order(முழு min, முழு max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    முழு *inds = calloc(max-min, அளவு(முழு));
+    முழு i;
+    க்கு(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
+    க்கு(i = min; i < max-1; ++i){
+        முழு swap = inds[i];
+        முழு index = i + rand()%(max-i);
         inds[i] = inds[index];
         inds[index] = swap;
     }
-    return inds;
+    திரும்பு inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+வெறுமை del_arg(முழு argc, எழுத்து **argv, முழு index)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    முழு i;
+    க்கு(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+முழு find_arg(முழு argc, எழுத்து* argv[], எழுத்து *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    முழு i;
+    க்கு(i = 0; i < argc; ++i) {
+        எனில்(!argv[i]) தொடர்;
+        எனில்(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            திரும்பு 1;
         }
     }
-    return 0;
+    திரும்பு 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+முழு find_int_arg(முழு argc, எழுத்து **argv, எழுத்து *arg, முழு def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    முழு i;
+    க்கு(i = 0; i < argc-1; ++i){
+        எனில்(!argv[i]) தொடர்;
+        எனில்(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            நிறுத்து;
         }
     }
-    return def;
+    திரும்பு def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+தசம find_float_arg(முழு argc, எழுத்து **argv, எழுத்து *arg, தசம def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    முழு i;
+    க்கு(i = 0; i < argc-1; ++i){
+        எனில்(!argv[i]) தொடர்;
+        எனில்(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            நிறுத்து;
         }
     }
-    return def;
+    திரும்பு def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+எழுத்து *find_char_arg(முழு argc, எழுத்து **argv, எழுத்து *arg, எழுத்து *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    முழு i;
+    க்கு(i = 0; i < argc-1; ++i){
+        எனில்(!argv[i]) தொடர்;
+        எனில்(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            நிறுத்து;
         }
     }
-    return def;
+    திரும்பு def;
 }
 
 
-char *basecfg(char *cfgfile)
+எழுத்து *basecfg(எழுத்து *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    எழுத்து *c = cfgfile;
+    எழுத்து *next;
+    போது((next = strchr(c, '/')))
     {
         c = next+1;
     }
     c = copy_string(c);
     next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    எனில் (next) *next = 0;
+    திரும்பு c;
 }
 
-int alphanum_to_int(char c)
+முழு alphanum_to_int(எழுத்து c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    திரும்பு (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+எழுத்து int_to_alphanum(முழு i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    எனில் (i == 36) திரும்பு '.';
+    திரும்பு (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+வெறுமை pm(முழு M, முழு N, தசம *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
+    முழு i,j;
+    க்கு(i =0 ; i < M; ++i){
         printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
+        க்கு(j = 0; j < N; ++j){
             printf("%2.4f, ", A[i*N+j]);
         }
         printf("\n");
@@ -213,15 +213,15 @@ void pm(int M, int N, float *A)
     printf("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+வெறுமை find_replace(எழுத்து *str, எழுத்து *orig, எழுத்து *rep, எழுத்து *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    எழுத்து buffer[4096] = {0};
+    எழுத்து *p;
 
     sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    எனில்(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        திரும்பு;
     }
 
     *p = '\0';
@@ -229,20 +229,20 @@ void find_replace(char *str, char *orig, char *rep, char *output)
     sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
 }
 
-float sec(clock_t clocks)
+தசம sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    திரும்பு (தசம)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+வெறுமை உச்சி_k(தசம *a, முழு n, முழு k, முழு *index)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
+    முழு i,j;
+    க்கு(j = 0; j < k; ++j) index[j] = -1;
+    க்கு(i = 0; i < n; ++i){
+        முழு curr = i;
+        க்கு(j = 0; j < k; ++j){
+            எனில்((index[j] < 0) || a[curr] > a[index[j]]){
+                முழு swap = curr;
                 curr = index[j];
                 index[j] = swap;
             }
@@ -250,14 +250,14 @@ void top_k(float *a, int n, int k, int *index)
     }
 }
 
-void error(const char *s)
+வெறுமை error(மாறிலி எழுத்து *s)
 {
     perror(s);
-    assert(0);
+    ப்ரதிஜ்ஞா(0);
     exit(-1);
 }
 
-unsigned char *read_file(char *filename)
+unsigned எழுத்து *read_file(எழுத்து *filename)
 {
     FILE *fp = fopen(filename, "rb");
     size_t size;
@@ -266,410 +266,410 @@ unsigned char *read_file(char *filename)
     size = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
+    unsigned எழுத்து *text = calloc(size+1, அளவு(எழுத்து));
     fread(text, 1, size, fp);
     fclose(fp);
-    return text;
+    திரும்பு text;
 }
 
-void malloc_error()
+வெறுமை malloc_error()
 {
     fprintf(stderr, "Malloc error\n");
     exit(-1);
 }
 
-void file_error(char *s)
+வெறுமை file_error(எழுத்து *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
     exit(0);
 }
 
-list *split_str(char *s, char delim)
+list *split_str(எழுத்து *s, எழுத்து delim)
 {
     size_t i;
     size_t len = strlen(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_செருகு(l, s);
+    க்கு(i = 0; i < len; ++i){
+        எனில்(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_செருகு(l, &(s[i+1]));
         }
     }
-    return l;
+    திரும்பு l;
 }
 
-void strip(char *s)
+வெறுமை strip(எழுத்து *s)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    க்கு(i = 0; i < len; ++i){
+        எழுத்து c = s[i];
+        எனில்(c==' '||c=='\t'||c=='\n') ++offset;
+        இல்லையெனில் s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void strip_char(char *s, char bad)
+வெறுமை strip_char(எழுத்து *s, எழுத்து bad)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    க்கு(i = 0; i < len; ++i){
+        எழுத்து c = s[i];
+        எனில்(c==bad) ++offset;
+        இல்லையெனில் s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+வெறுமை free_ptrs(வெறுமை **ptrs, முழு n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    முழு i;
+    க்கு(i = 0; i < n; ++i) விடுவி(ptrs[i]);
+    விடுவி(ptrs);
 }
 
-char *fgetl(FILE *fp)
+எழுத்து *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
+    எனில்(feof(fp)) திரும்பு 0;
     size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    எழுத்து *வரி = malloc(size*அளவு(எழுத்து));
+    எனில்(!fgets(வரி, size, fp)){
+        விடுவி(வரி);
+        திரும்பு 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = strlen(வரி);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
+    போது((வரி[curr-1] != '\n') && !feof(fp)){
+        எனில்(curr == size-1){
             size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
+            வரி = realloc(வரி, size*அளவு(எழுத்து));
+            எனில்(!வரி) {
                 printf("%ld\n", size);
                 malloc_error();
             }
         }
         size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        எனில்(readsize > INT_MAX) readsize = INT_MAX-1;
+        fgets(&வரி[curr], readsize, fp);
+        curr = strlen(வரி);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    எனில்(வரி[curr-1] == '\n') வரி[curr-1] = '\0';
 
-    return line;
+    திரும்பு வரி;
 }
 
-int read_int(int fd)
+முழு read_int(முழு fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    முழு n = 0;
+    முழு next = பட(fd, &n, அளவு(முழு));
+    எனில்(next <= 0) திரும்பு -1;
+    திரும்பு n;
 }
 
-void write_int(int fd, int n)
+வெறுமை write_int(முழு fd, முழு n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    முழு next = லிக(fd, &n, அளவு(முழு));
+    எனில்(next <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+முழு read_all_fail(முழு fd, எழுத்து *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    போது(n < bytes){
+        முழு next = பட(fd, buffer + n, bytes-n);
+        எனில்(next <= 0) திரும்பு 1;
         n += next;
     }
-    return 0;
+    திரும்பு 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+முழு write_all_fail(முழு fd, எழுத்து *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    போது(n < bytes){
+        size_t next = லிக(fd, buffer + n, bytes-n);
+        எனில்(next <= 0) திரும்பு 1;
         n += next;
     }
-    return 0;
+    திரும்பு 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+வெறுமை read_all(முழு fd, எழுத்து *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
-    }
-}
-
-void write_all(int fd, char *buffer, size_t bytes)
-{
-    size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
+    போது(n < bytes){
+        முழு next = பட(fd, buffer + n, bytes-n);
+        எனில்(next <= 0) error("read failed");
         n += next;
     }
 }
 
-
-char *copy_string(char *s)
+வெறுமை write_all(முழு fd, எழுத்து *buffer, size_t bytes)
 {
-    char *copy = malloc(strlen(s)+1);
+    size_t n = 0;
+    போது(n < bytes){
+        size_t next = லிக(fd, buffer + n, bytes-n);
+        எனில்(next <= 0) error("write failed");
+        n += next;
+    }
+}
+
+
+எழுத்து *copy_string(எழுத்து *s)
+{
+    எழுத்து *copy = malloc(strlen(s)+1);
     strncpy(copy, s, strlen(s)+1);
-    return copy;
+    திரும்பு copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_வரி(எழுத்து *வரி)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    எழுத்து *c, *p;
+    முழு in = 0;
+    க்கு(c = வரி, p = வரி; *c != '\0'; ++c){
+        எனில்(*c == '"') in = !in;
+        இல்லையெனில் எனில்(*c == ',' && !in){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_செருகு(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_செருகு(l, copy_string(p));
+    திரும்பு l;
 }
 
-int count_fields(char *line)
+முழு மொத்தம்_fields(எழுத்து *வரி)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
+    முழு மொத்தம் = 0;
+    முழு done = 0;
+    எழுத்து *c;
+    க்கு(c = வரி; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        எனில்(*c == ',' || done) ++மொத்தம்;
     }
-    return count;
+    திரும்பு மொத்தம்;
 }
 
-float *parse_fields(char *line, int n)
+தசம *parse_fields(எழுத்து *வரி, முழு n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
+    தசம *field = calloc(n, அளவு(தசம));
+    எழுத்து *c, *p, *end;
+    முழு மொத்தம் = 0;
+    முழு done = 0;
+    க்கு(c = வரி, p = வரி; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done){
+        எனில்(*c == ',' || done){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            field[மொத்தம்] = strtod(p, &end);
+            எனில்(p == c) field[மொத்தம்] = nan("");
+            எனில்(end != c && (end != c-1 || *end != '\r')) field[மொத்தம்] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++மொத்தம்;
         }
     }
-    return field;
+    திரும்பு field;
 }
 
-float sum_array(float *a, int n)
+தசம sum_array(தசம *a, முழு n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    முழு i;
+    தசம sum = 0;
+    க்கு(i = 0; i < n; ++i) sum += a[i];
+    திரும்பு sum;
 }
 
-float mean_array(float *a, int n)
+தசம mean_array(தசம *a, முழு n)
 {
-    return sum_array(a,n)/n;
+    திரும்பு sum_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+வெறுமை mean_arrays(தசம **a, முழு n, முழு els, தசம *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    முழு i;
+    முழு j;
+    memset(avg, 0, els*அளவு(தசம));
+    க்கு(j = 0; j < n; ++j){
+        க்கு(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    க்கு(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+வெறுமை print_statistics(தசம *a, முழு n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
+    தசம m = mean_array(a, n);
+    தசம v = variance_array(a, n);
     printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+தசம variance_array(தசம *a, முழு n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    முழு i;
+    தசம sum = 0;
+    தசம mean = mean_array(a, n);
+    க்கு(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
+    தசம variance = sum/n;
+    திரும்பு variance;
 }
 
-int constrain_int(int a, int min, int max)
+முழு constrain_int(முழு a, முழு min, முழு max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    எனில் (a < min) திரும்பு min;
+    எனில் (a > max) திரும்பு max;
+    திரும்பு a;
 }
 
-float constrain(float min, float max, float a)
+தசம constrain(தசம min, தசம max, தசம a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    எனில் (a < min) திரும்பு min;
+    எனில் (a > max) திரும்பு max;
+    திரும்பு a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+தசம dist_array(தசம *a, தசம *b, முழு n, முழு sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    முழு i;
+    தசம sum = 0;
+    க்கு(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
+    திரும்பு sqrt(sum);
 }
 
-float mse_array(float *a, int n)
+தசம mse_array(தசம *a, முழு n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    முழு i;
+    தசம sum = 0;
+    க்கு(i = 0; i < n; ++i) sum += a[i]*a[i];
+    திரும்பு sqrt(sum/n);
 }
 
-void normalize_array(float *a, int n)
+வெறுமை normalize_array(தசம *a, முழு n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    முழு i;
+    தசம mu = mean_array(a,n);
+    தசம sigma = sqrt(variance_array(a,n));
+    க்கு(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
     mu = mean_array(a,n);
     sigma = sqrt(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+வெறுமை translate_array(தசம *a, முழு n, தசம s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    முழு i;
+    க்கு(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+தசம mag_array(தசம *a, முழு n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
+    முழு i;
+    தசம sum = 0;
+    க்கு(i = 0; i < n; ++i){
         sum += a[i]*a[i];   
     }
-    return sqrt(sum);
+    திரும்பு sqrt(sum);
 }
 
-void scale_array(float *a, int n, float s)
+வெறுமை scale_array(தசம *a, முழு n, தசம s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    முழு i;
+    க்கு(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+முழு sample_array(தசம *a, முழு n)
 {
-    float sum = sum_array(a, n);
+    தசம sum = sum_array(a, n);
     scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    தசம r = rand_uniform(0, 1);
+    முழு i;
+    க்கு(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        எனில் (r <= 0) திரும்பு i;
     }
-    return n-1;
+    திரும்பு n-1;
 }
 
-int max_int_index(int *a, int n)
+முழு max_int_index(முழு *a, முழு n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    எனில்(n <= 0) திரும்பு -1;
+    முழு i, max_i = 0;
+    முழு max = a[0];
+    க்கு(i = 1; i < n; ++i){
+        எனில்(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    திரும்பு max_i;
 }
 
-int max_index(float *a, int n)
+முழு max_index(தசம *a, முழு n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    எனில்(n <= 0) திரும்பு -1;
+    முழு i, max_i = 0;
+    தசம max = a[0];
+    க்கு(i = 1; i < n; ++i){
+        எனில்(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    திரும்பு max_i;
 }
 
-int int_index(int *a, int val, int n)
+முழு int_index(முழு *a, முழு val, முழு n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    முழு i;
+    க்கு(i = 0; i < n; ++i){
+        எனில்(a[i] == val) திரும்பு i;
     }
-    return -1;
+    திரும்பு -1;
 }
 
-int rand_int(int min, int max)
+முழு rand_int(முழு min, முழு max)
 {
-    if (max < min){
-        int s = min;
+    எனில் (max < min){
+        முழு s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    முழு r = (rand()%(max - min + 1)) + min;
+    திரும்பு r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+தசம rand_normal()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    நிலையான முழு haveSpare = 0;
+    நிலையான இரட்டை rand1, rand2;
 
-    if(haveSpare)
+    எனில்(haveSpare)
     {
         haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        திரும்பு sqrt(rand1) * sin(rand2);
     }
 
     haveSpare = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = rand() / ((இரட்டை) RAND_MAX);
+    எனில்(rand1 < 1e-100) rand1 = 1e-100;
     rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand2 = (rand() / ((இரட்டை) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    திரும்பு sqrt(rand1) * cos(rand2);
 }
 
 /*
@@ -685,7 +685,7 @@ float rand_normal()
 
 size_t rand_size_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    திரும்பு  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -695,32 +695,32 @@ size_t rand_size_t()
         ((size_t)(rand()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+தசம rand_uniform(தசம min, தசம max)
 {
-    if(max < min){
-        float swap = min;
+    எனில்(max < min){
+        தசம swap = min;
         min = max;
         max = swap;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    திரும்பு ((தசம)rand()/RAND_MAX * (max - min)) + min;
 }
 
-float rand_scale(float s)
+தசம rand_scale(தசம s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    தசம scale = rand_uniform(1, s);
+    எனில்(rand()%2) திரும்பு scale;
+    திரும்பு 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+தசம **one_hot_encode(தசம *a, முழு n, முழு k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
+    முழு i;
+    தசம **t = calloc(n, அளவு(தசம*));
+    க்கு(i = 0; i < n; ++i){
+        t[i] = calloc(k, அளவு(தசம));
+        முழு index = (முழு)a[i];
         t[i][index] = 1;
     }
-    return t;
+    திரும்பு t;
 }
 

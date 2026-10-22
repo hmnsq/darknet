@@ -1,32 +1,32 @@
-#include "crnn_layer.h"
-#include "convolutional_layer.h"
-#include "utils.h"
-#include "cuda.h"
-#include "blas.h"
-#include "gemm.h"
+#அந்தர்பாவ "crnn_layer.h"
+#அந்தர்பாவ "convolutional_layer.h"
+#அந்தர்பாவ "utils.h"
+#அந்தர்பாவ "cuda.h"
+#அந்தர்பாவ "blas.h"
+#அந்தர்பாவ "gemm.h"
 
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#அந்தர்பாவ <math.h>
+#அந்தர்பாவ <stdio.h>
+#அந்தர்பாவ <stdlib.h>
+#அந்தர்பாவ <string.h>
 
-static void increment_layer(layer *l, int steps)
+நிலையான வெறுமை increment_layer(layer *l, முழு steps)
 {
-    int num = l->outputs*l->batch*steps;
-    l->output += num;
-    l->delta += num;
-    l->x += num;
-    l->x_norm += num;
+    முழு இலக்கம் = l->outputs*l->batch*steps;
+    l->output += இலக்கம்;
+    l->delta += இலக்கம்;
+    l->x += இலக்கம்;
+    l->x_norm += இலக்கம்;
 
 #ifdef GPU
-    l->output_gpu += num;
-    l->delta_gpu += num;
-    l->x_gpu += num;
-    l->x_norm_gpu += num;
+    l->output_gpu += இலக்கம்;
+    l->delta_gpu += இலக்கம்;
+    l->x_gpu += இலக்கம்;
+    l->x_norm_gpu += இலக்கம்;
 #endif
 }
 
-layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int output_filters, int steps, ACTIVATION activation, int batch_normalize)
+layer make_crnn_layer(முழு batch, முழு h, முழு w, முழு c, முழு hidden_filters, முழு output_filters, முழு steps, ACTIVATION activation, முழு batch_normalize)
 {
     fprintf(stderr, "CRNN Layer: %d x %d x %d image, %d filters\n", h,w,c,output_filters);
     batch = batch / steps;
@@ -44,19 +44,19 @@ layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int ou
     l.hidden = h * w * hidden_filters;
     l.outputs = l.out_h * l.out_w * l.out_c;
 
-    l.state = calloc(l.hidden*batch*(steps+1), sizeof(float));
+    l.state = calloc(l.hidden*batch*(steps+1), அளவு(தசம));
 
-    l.input_layer = malloc(sizeof(layer));
+    l.உள்ளீடு_layer = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
-    *(l.input_layer) = make_convolutional_layer(batch*steps, h, w, c, hidden_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
-    l.input_layer->batch = batch;
+    *(l.உள்ளீடு_layer) = make_convolutional_layer(batch*steps, h, w, c, hidden_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
+    l.உள்ளீடு_layer->batch = batch;
 
-    l.self_layer = malloc(sizeof(layer));
+    l.self_layer = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.self_layer) = make_convolutional_layer(batch*steps, h, w, hidden_filters, hidden_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
     l.self_layer->batch = batch;
 
-    l.output_layer = malloc(sizeof(layer));
+    l.output_layer = malloc(அளவு(layer));
     fprintf(stderr, "\t\t");
     *(l.output_layer) = make_convolutional_layer(batch*steps, h, w, hidden_filters, output_filters, 1, 3, 1, 1,  activation, batch_normalize, 0, 0, 0);
     l.output_layer->batch = batch;
@@ -78,75 +78,75 @@ layer make_crnn_layer(int batch, int h, int w, int c, int hidden_filters, int ou
     l.delta_gpu = l.output_layer->delta_gpu;
 #endif
 
-    return l;
+    திரும்பு l;
 }
 
-void update_crnn_layer(layer l, update_args a)
+வெறுமை update_crnn_layer(layer l, update_args a)
 {
-    update_convolutional_layer(*(l.input_layer),  a);
+    update_convolutional_layer(*(l.உள்ளீடு_layer),  a);
     update_convolutional_layer(*(l.self_layer),   a);
     update_convolutional_layer(*(l.output_layer), a);
 }
 
-void forward_crnn_layer(layer l, network net)
+வெறுமை forward_crnn_layer(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    முழு i;
+    layer உள்ளீடு_layer = *(l.உள்ளீடு_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
     fill_cpu(l.outputs * l.batch * l.steps, 0, output_layer.delta, 1);
     fill_cpu(l.hidden * l.batch * l.steps, 0, self_layer.delta, 1);
-    fill_cpu(l.hidden * l.batch * l.steps, 0, input_layer.delta, 1);
-    if(net.train) fill_cpu(l.hidden * l.batch, 0, l.state, 1);
+    fill_cpu(l.hidden * l.batch * l.steps, 0, உள்ளீடு_layer.delta, 1);
+    எனில்(net.train) fill_cpu(l.hidden * l.batch, 0, l.state, 1);
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input = net.input;
-        forward_convolutional_layer(input_layer, s);
+    க்கு (i = 0; i < l.steps; ++i) {
+        s.உள்ளீடு = net.உள்ளீடு;
+        forward_convolutional_layer(உள்ளீடு_layer, s);
 
-        s.input = l.state;
+        s.உள்ளீடு = l.state;
         forward_convolutional_layer(self_layer, s);
 
-        float *old_state = l.state;
-        if(net.train) l.state += l.hidden*l.batch;
-        if(l.shortcut){
+        தசம *old_state = l.state;
+        எனில்(net.train) l.state += l.hidden*l.batch;
+        எனில்(l.shortcut){
             copy_cpu(l.hidden * l.batch, old_state, 1, l.state, 1);
-        }else{
+        }இல்லையெனில்{
             fill_cpu(l.hidden * l.batch, 0, l.state, 1);
         }
-        axpy_cpu(l.hidden * l.batch, 1, input_layer.output, 1, l.state, 1);
+        axpy_cpu(l.hidden * l.batch, 1, உள்ளீடு_layer.output, 1, l.state, 1);
         axpy_cpu(l.hidden * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.உள்ளீடு = l.state;
         forward_convolutional_layer(output_layer, s);
 
-        net.input += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.உள்ளீடு += l.inputs*l.batch;
+        increment_layer(&உள்ளீடு_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_crnn_layer(layer l, network net)
+வெறுமை backward_crnn_layer(layer l, network net)
 {
     network s = net;
-    int i;
-    layer input_layer = *(l.input_layer);
+    முழு i;
+    layer உள்ளீடு_layer = *(l.உள்ளீடு_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
-    increment_layer(&input_layer, l.steps-1);
+    increment_layer(&உள்ளீடு_layer, l.steps-1);
     increment_layer(&self_layer, l.steps-1);
     increment_layer(&output_layer, l.steps-1);
 
     l.state += l.hidden*l.batch*l.steps;
-    for (i = l.steps-1; i >= 0; --i) {
-        copy_cpu(l.hidden * l.batch, input_layer.output, 1, l.state, 1);
+    க்கு (i = l.steps-1; i >= 0; --i) {
+        copy_cpu(l.hidden * l.batch, உள்ளீடு_layer.output, 1, l.state, 1);
         axpy_cpu(l.hidden * l.batch, 1, self_layer.output, 1, l.state, 1);
 
-        s.input = l.state;
+        s.உள்ளீடு = l.state;
         s.delta = self_layer.delta;
         backward_convolutional_layer(output_layer, s);
 
@@ -160,19 +160,19 @@ void backward_crnn_layer(layer l, network net)
            }
          */
 
-        s.input = l.state;
+        s.உள்ளீடு = l.state;
         s.delta = self_layer.delta - l.hidden*l.batch;
-        if (i == 0) s.delta = 0;
+        எனில் (i == 0) s.delta = 0;
         backward_convolutional_layer(self_layer, s);
 
-        copy_cpu(l.hidden*l.batch, self_layer.delta, 1, input_layer.delta, 1);
-        if (i > 0 && l.shortcut) axpy_cpu(l.hidden*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.hidden*l.batch, 1);
-        s.input = net.input + i*l.inputs*l.batch;
-        if(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
-        else s.delta = 0;
-        backward_convolutional_layer(input_layer, s);
+        copy_cpu(l.hidden*l.batch, self_layer.delta, 1, உள்ளீடு_layer.delta, 1);
+        எனில் (i > 0 && l.shortcut) axpy_cpu(l.hidden*l.batch, 1, self_layer.delta, 1, self_layer.delta - l.hidden*l.batch, 1);
+        s.உள்ளீடு = net.உள்ளீடு + i*l.inputs*l.batch;
+        எனில்(net.delta) s.delta = net.delta + i*l.inputs*l.batch;
+        இல்லையெனில் s.delta = 0;
+        backward_convolutional_layer(உள்ளீடு_layer, s);
 
-        increment_layer(&input_layer, -1);
+        increment_layer(&உள்ளீடு_layer, -1);
         increment_layer(&self_layer, -1);
         increment_layer(&output_layer, -1);
     }
@@ -180,102 +180,102 @@ void backward_crnn_layer(layer l, network net)
 
 #ifdef GPU
 
-void pull_crnn_layer(layer l)
+வெறுமை pull_crnn_layer(layer l)
 {
-    pull_convolutional_layer(*(l.input_layer));
+    pull_convolutional_layer(*(l.உள்ளீடு_layer));
     pull_convolutional_layer(*(l.self_layer));
     pull_convolutional_layer(*(l.output_layer));
 }
 
-void push_crnn_layer(layer l)
+வெறுமை தள்ளு_crnn_layer(layer l)
 {
-    push_convolutional_layer(*(l.input_layer));
-    push_convolutional_layer(*(l.self_layer));
-    push_convolutional_layer(*(l.output_layer));
+    தள்ளு_convolutional_layer(*(l.உள்ளீடு_layer));
+    தள்ளு_convolutional_layer(*(l.self_layer));
+    தள்ளு_convolutional_layer(*(l.output_layer));
 }
 
-void update_crnn_layer_gpu(layer l, update_args a)
+வெறுமை update_crnn_layer_gpu(layer l, update_args a)
 {
-    update_convolutional_layer_gpu(*(l.input_layer),  a);
+    update_convolutional_layer_gpu(*(l.உள்ளீடு_layer),  a);
     update_convolutional_layer_gpu(*(l.self_layer),   a);
     update_convolutional_layer_gpu(*(l.output_layer), a);
 }
 
-void forward_crnn_layer_gpu(layer l, network net)
+வெறுமை forward_crnn_layer_gpu(layer l, network net)
 {
     network s = net;
-    int i;
-    layer input_layer = *(l.input_layer);
+    முழு i;
+    layer உள்ளீடு_layer = *(l.உள்ளீடு_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
 
     fill_gpu(l.outputs * l.batch * l.steps, 0, output_layer.delta_gpu, 1);
     fill_gpu(l.hidden * l.batch * l.steps, 0, self_layer.delta_gpu, 1);
-    fill_gpu(l.hidden * l.batch * l.steps, 0, input_layer.delta_gpu, 1);
-    if(net.train) fill_gpu(l.hidden * l.batch, 0, l.state_gpu, 1);
+    fill_gpu(l.hidden * l.batch * l.steps, 0, உள்ளீடு_layer.delta_gpu, 1);
+    எனில்(net.train) fill_gpu(l.hidden * l.batch, 0, l.state_gpu, 1);
 
-    for (i = 0; i < l.steps; ++i) {
-        s.input_gpu = net.input_gpu;
-        forward_convolutional_layer_gpu(input_layer, s);
+    க்கு (i = 0; i < l.steps; ++i) {
+        s.உள்ளீடு_gpu = net.உள்ளீடு_gpu;
+        forward_convolutional_layer_gpu(உள்ளீடு_layer, s);
 
-        s.input_gpu = l.state_gpu;
+        s.உள்ளீடு_gpu = l.state_gpu;
         forward_convolutional_layer_gpu(self_layer, s);
 
-        float *old_state = l.state_gpu;
-        if(net.train) l.state_gpu += l.hidden*l.batch;
-        if(l.shortcut){
+        தசம *old_state = l.state_gpu;
+        எனில்(net.train) l.state_gpu += l.hidden*l.batch;
+        எனில்(l.shortcut){
             copy_gpu(l.hidden * l.batch, old_state, 1, l.state_gpu, 1);
-        }else{
+        }இல்லையெனில்{
             fill_gpu(l.hidden * l.batch, 0, l.state_gpu, 1);
         }
-        axpy_gpu(l.hidden * l.batch, 1, input_layer.output_gpu, 1, l.state_gpu, 1);
+        axpy_gpu(l.hidden * l.batch, 1, உள்ளீடு_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.hidden * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.உள்ளீடு_gpu = l.state_gpu;
         forward_convolutional_layer_gpu(output_layer, s);
 
-        net.input_gpu += l.inputs*l.batch;
-        increment_layer(&input_layer, 1);
+        net.உள்ளீடு_gpu += l.inputs*l.batch;
+        increment_layer(&உள்ளீடு_layer, 1);
         increment_layer(&self_layer, 1);
         increment_layer(&output_layer, 1);
     }
 }
 
-void backward_crnn_layer_gpu(layer l, network net)
+வெறுமை backward_crnn_layer_gpu(layer l, network net)
 {
     network s = net;
     s.train = net.train;
-    int i;
-    layer input_layer = *(l.input_layer);
+    முழு i;
+    layer உள்ளீடு_layer = *(l.உள்ளீடு_layer);
     layer self_layer = *(l.self_layer);
     layer output_layer = *(l.output_layer);
-    increment_layer(&input_layer,  l.steps - 1);
+    increment_layer(&உள்ளீடு_layer,  l.steps - 1);
     increment_layer(&self_layer,   l.steps - 1);
     increment_layer(&output_layer, l.steps - 1);
     l.state_gpu += l.hidden*l.batch*l.steps;
-    for (i = l.steps-1; i >= 0; --i) {
-        copy_gpu(l.hidden * l.batch, input_layer.output_gpu, 1, l.state_gpu, 1);
+    க்கு (i = l.steps-1; i >= 0; --i) {
+        copy_gpu(l.hidden * l.batch, உள்ளீடு_layer.output_gpu, 1, l.state_gpu, 1);
         axpy_gpu(l.hidden * l.batch, 1, self_layer.output_gpu, 1, l.state_gpu, 1);
 
-        s.input_gpu = l.state_gpu;
+        s.உள்ளீடு_gpu = l.state_gpu;
         s.delta_gpu = self_layer.delta_gpu;
         backward_convolutional_layer_gpu(output_layer, s);
 
         l.state_gpu -= l.hidden*l.batch;
 
-        s.input_gpu = l.state_gpu;
+        s.உள்ளீடு_gpu = l.state_gpu;
         s.delta_gpu = self_layer.delta_gpu - l.hidden*l.batch;
-        if (i == 0) s.delta_gpu = 0;
+        எனில் (i == 0) s.delta_gpu = 0;
         backward_convolutional_layer_gpu(self_layer, s);
 
-        copy_gpu(l.hidden*l.batch, self_layer.delta_gpu, 1, input_layer.delta_gpu, 1);
-        if (i > 0 && l.shortcut) axpy_gpu(l.hidden*l.batch, 1, self_layer.delta_gpu, 1, self_layer.delta_gpu - l.hidden*l.batch, 1);
-        s.input_gpu = net.input_gpu + i*l.inputs*l.batch;
-        if(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
-        else s.delta_gpu = 0;
-        backward_convolutional_layer_gpu(input_layer, s);
+        copy_gpu(l.hidden*l.batch, self_layer.delta_gpu, 1, உள்ளீடு_layer.delta_gpu, 1);
+        எனில் (i > 0 && l.shortcut) axpy_gpu(l.hidden*l.batch, 1, self_layer.delta_gpu, 1, self_layer.delta_gpu - l.hidden*l.batch, 1);
+        s.உள்ளீடு_gpu = net.உள்ளீடு_gpu + i*l.inputs*l.batch;
+        எனில்(net.delta_gpu) s.delta_gpu = net.delta_gpu + i*l.inputs*l.batch;
+        இல்லையெனில் s.delta_gpu = 0;
+        backward_convolutional_layer_gpu(உள்ளீடு_layer, s);
 
-        increment_layer(&input_layer,  -1);
+        increment_layer(&உள்ளீடு_layer,  -1);
         increment_layer(&self_layer,   -1);
         increment_layer(&output_layer, -1);
     }

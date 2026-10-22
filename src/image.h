@@ -1,65 +1,65 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <float.h>
-#include <string.h>
-#include <math.h>
-#include "box.h"
-#include "darknet.h"
+#அந்தர்பாவ <stdlib.h>
+#அந்தர்பாவ <stdio.h>
+#அந்தர்பாவ <float.h>
+#அந்தர்பாவ <string.h>
+#அந்தர்பாவ <math.h>
+#அந்தர்பாவ "box.h"
+#அந்தர்பாவ "darknet.h"
 
 #ifdef __cplusplus
-extern "C" {
+வெளி "C" {
 #endif
 
 #ifdef OPENCV
-void *open_video_stream(const char *f, int c, int w, int h, int fps);
-image get_image_from_stream(void *p);
-image load_image_cv(char *filename, int channels);
-int show_image_cv(image im, const char* name, int ms);
+வெறுமை *open_video_stream(மாறிலி எழுத்து *f, முழு c, முழு w, முழு h, முழு fps);
+image get_image_from_stream(வெறுமை *p);
+image load_image_cv(எழுத்து *filename, முழு channels);
+முழு show_image_cv(image im, மாறிலி எழுத்து* name, முழு ms);
 #endif
 
-float get_color(int c, int x, int max);
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b);
-void draw_bbox(image a, box bbox, int w, float r, float g, float b);
-void write_label(image a, int r, int c, image *characters, char *string, float *rgb);
+தசம get_color(முழு c, முழு x, முழு max);
+வெறுமை draw_box(image a, முழு x1, முழு y1, முழு x2, முழு y2, தசம r, தசம g, தசம b);
+வெறுமை draw_bbox(image a, box bbox, முழு w, தசம r, தசம g, தசம b);
+வெறுமை write_label(image a, முழு r, முழு c, image *characters, எழுத்து *string, தசம *rgb);
 image image_distance(image a, image b);
-void scale_image(image m, float s);
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect);
-image random_crop_image(image im, int w, int h);
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h);
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h);
-void letterbox_image_into(image im, int w, int h, image boxed);
-image resize_max(image im, int max);
-void translate_image(image m, float s);
-void embed_image(image source, image dest, int dx, int dy);
-void place_image(image im, int w, int h, int dx, int dy, image canvas);
-void saturate_image(image im, float sat);
-void exposure_image(image im, float sat);
-void distort_image(image im, float hue, float sat, float val);
-void saturate_exposure_image(image im, float sat, float exposure);
-void rgb_to_hsv(image im);
-void hsv_to_rgb(image im);
-void yuv_to_rgb(image im);
-void rgb_to_yuv(image im);
+வெறுமை scale_image(image m, தசம s);
+image rotate_crop_image(image im, தசம rad, தசம s, முழு w, முழு h, தசம dx, தசம dy, தசம aspect);
+image random_crop_image(image im, முழு w, முழு h);
+image random_augment_image(image im, தசம angle, தசம aspect, முழு கீழ், முழு உயர்வு, முழு w, முழு h);
+augment_args random_augment_args(image im, தசம angle, தசம aspect, முழு கீழ், முழு உயர்வு, முழு w, முழு h);
+வெறுமை letterbox_image_into(image im, முழு w, முழு h, image boxed);
+image resize_max(image im, முழு max);
+வெறுமை translate_image(image m, தசம s);
+வெறுமை embed_image(image source, image dest, முழு dx, முழு dy);
+வெறுமை place_image(image im, முழு w, முழு h, முழு dx, முழு dy, image canvas);
+வெறுமை saturate_image(image im, தசம sat);
+வெறுமை exposure_image(image im, தசம sat);
+வெறுமை distort_image(image im, தசம hue, தசம sat, தசம val);
+வெறுமை saturate_exposure_image(image im, தசம sat, தசம exposure);
+வெறுமை rgb_to_hsv(image im);
+வெறுமை hsv_to_rgb(image im);
+வெறுமை yuv_to_rgb(image im);
+வெறுமை rgb_to_yuv(image im);
 
 
-image collapse_image_layers(image source, int border);
-image collapse_images_horz(image *ims, int n);
-image collapse_images_vert(image *ims, int n);
+image collapse_image_layers(image source, முழு border);
+image collapse_images_horz(image *ims, முழு n);
+image collapse_images_vert(image *ims, முழு n);
 
-void show_image_normalized(image im, const char *name);
-void show_images(image *ims, int n, char *window);
-void show_image_layers(image p, char *name);
-void show_image_collapsed(image p, char *name);
+வெறுமை show_image_normalized(image im, மாறிலி எழுத்து *name);
+வெறுமை show_images(image *ims, முழு n, எழுத்து *window);
+வெறுமை show_image_layers(image p, எழுத்து *name);
+வெறுமை show_image_collapsed(image p, எழுத்து *name);
 
-void print_image(image m);
+வெறுமை print_image(image m);
 
-image make_empty_image(int w, int h, int c);
-void copy_image_into(image src, image dest);
+image make_empty_image(முழு w, முழு h, முழு c);
+வெறுமை copy_image_into(image src, image dest);
 
-image get_image_layer(image m, int l);
+image get_image_layer(image m, முழு l);
 
 #ifdef __cplusplus
 }
