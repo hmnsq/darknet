@@ -1,15 +1,15 @@
-#ifndef UPSAMPLE_LAYER_H
-#define UPSAMPLE_LAYER_H
-#include "darknet.h"
+#నిర్వచితం_కాకపోతే UPSAMPLE_LAYER_H
+#నిర్వచించు UPSAMPLE_LAYER_H
+#అన్తర్భావ "darknet.h"
 
-layer make_upsample_layer(int batch, int w, int h, int c, int stride);
-void forward_upsample_layer(const layer l, network net);
-void backward_upsample_layer(const layer l, network net);
-void resize_upsample_layer(layer *l, int w, int h);
+layer make_upsample_layer(పూర్ణాంకం batch, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం stride);
+శూన్య forward_upsample_layer(స్థిరరాశి layer l, జాలం net);
+శూన్య backward_upsample_layer(స్థిరరాశి layer l, జాలం net);
+శూన్య resize_upsample_layer(layer *l, పూర్ణాంకం w, పూర్ణాంకం h);
 
-#ifdef GPU
-void forward_upsample_layer_gpu(const layer l, network net);
-void backward_upsample_layer_gpu(const layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_upsample_layer_gpu(స్థిరరాశి layer l, జాలం net);
+శూన్య backward_upsample_layer_gpu(స్థిరరాశి layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు

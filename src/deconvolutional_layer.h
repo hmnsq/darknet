@@ -1,25 +1,25 @@
-#ifndef DECONVOLUTIONAL_LAYER_H
-#define DECONVOLUTIONAL_LAYER_H
+#నిర్వచితం_కాకపోతే DECONVOLUTIONAL_LAYER_H
+#నిర్వచించు DECONVOLUTIONAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-#ifdef GPU
-void forward_deconvolutional_layer_gpu(layer l, network net);
-void backward_deconvolutional_layer_gpu(layer l, network net);
-void update_deconvolutional_layer_gpu(layer l, update_args a);
-void push_deconvolutional_layer(layer l);
-void pull_deconvolutional_layer(layer l);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_deconvolutional_layer_gpu(layer l, జాలం net);
+శూన్య backward_deconvolutional_layer_gpu(layer l, జాలం net);
+శూన్య update_deconvolutional_layer_gpu(layer l, update_వాదనలు a);
+శూన్య నెట్టు_deconvolutional_layer(layer l);
+శూన్య pull_deconvolutional_layer(layer l);
+#అయితే_ముగింపు
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam);
-void resize_deconvolutional_layer(layer *l, int h, int w);
-void forward_deconvolutional_layer(const layer l, network net);
-void update_deconvolutional_layer(layer l, update_args a);
-void backward_deconvolutional_layer(layer l, network net);
+layer make_deconvolutional_layer(పూర్ణాంకం batch, పూర్ణాంకం h, పూర్ణాంకం w, పూర్ణాంకం c, పూర్ణాంకం n, పూర్ణాంకం కొలత, పూర్ణాంకం stride, పూర్ణాంకం padding, ACTIVATION activation, పూర్ణాంకం batch_normalize, పూర్ణాంకం adam);
+శూన్య resize_deconvolutional_layer(layer *l, పూర్ణాంకం h, పూర్ణాంకం w);
+శూన్య forward_deconvolutional_layer(స్థిరరాశి layer l, జాలం net);
+శూన్య update_deconvolutional_layer(layer l, update_వాదనలు a);
+శూన్య backward_deconvolutional_layer(layer l, జాలం net);
 
-#endif
+#అయితే_ముగింపు
 

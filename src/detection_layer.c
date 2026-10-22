@@ -1,17 +1,17 @@
-#include "detection_layer.h"
-#include "activations.h"
-#include "softmax_layer.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#అన్తర్భావ "detection_layer.h"
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "softmax_layer.h"
+#అన్తర్భావ "blas.h"
+#అన్తర్భావ "box.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <assert.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ <stdlib.h>
 
-detection_layer make_detection_layer(int batch, int inputs, int n, int side, int classes, int coords, int rescore)
+detection_layer make_detection_layer(పూర్ణాంకం batch, పూర్ణాంకం inputs, పూర్ణాంకం n, పూర్ణాంకం side, పూర్ణాంకం classes, పూర్ణాంకం coords, పూర్ణాంకం rescore)
 {
     detection_layer l = {0};
     l.type = DETECTION;
@@ -25,251 +25,251 @@ detection_layer make_detection_layer(int batch, int inputs, int n, int side, int
     l.side = side;
     l.w = side;
     l.h = side;
-    assert(side*side*((1 + l.coords)*l.n + l.classes) == inputs);
-    l.cost = calloc(1, sizeof(float));
+    ప్రతిజ్ఞా(side*side*((1 + l.coords)*l.n + l.classes) == inputs);
+    l.ఖర్చు_2 = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(దశాంశం));
     l.outputs = l.inputs;
     l.truths = l.side*l.side*(1+l.coords+l.classes);
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    l.delta = calloc(batch*l.outputs, sizeof(float));
+    l.output = సున్నా_జ్ఞాపకం_ఇవ్వు(batch*l.outputs, పరిమాణం(దశాంశం));
+    l.delta = సున్నా_జ్ఞాపకం_ఇవ్వు(batch*l.outputs, పరిమాణం(దశాంశం));
 
     l.forward = forward_detection_layer;
     l.backward = backward_detection_layer;
-#ifdef GPU
+#నిర్వచితమైతే GPU
     l.forward_gpu = forward_detection_layer_gpu;
     l.backward_gpu = backward_detection_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
     l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
-#endif
+#అయితే_ముగింపు
 
     fprintf(stderr, "Detection Layer\n");
     srand(0);
 
-    return l;
+    తిరిగి l;
 }
 
-void forward_detection_layer(const detection_layer l, network net)
+శూన్య forward_detection_layer(స్థిరరాశి detection_layer l, జాలం net)
 {
-    int locations = l.side*l.side;
-    int i,j;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    పూర్ణాంకం locations = l.side*l.side;
+    పూర్ణాంకం i,j;
+    జ్ఞాపకం_నకలు(l.output, net.ఆదానం, l.outputs*l.batch*పరిమాణం(దశాంశం));
     //if(l.reorg) reorg(l.output, l.w*l.h, size*l.n, l.batch, 1);
-    int b;
-    if (l.softmax){
-        for(b = 0; b < l.batch; ++b){
-            int index = b*l.inputs;
-            for (i = 0; i < locations; ++i) {
-                int offset = i*l.classes;
-                softmax(l.output + index + offset, l.classes, 1, 1,
-                        l.output + index + offset);
+    పూర్ణాంకం b;
+    ఒకవేళ (l.softmax){
+        కొరకు(b = 0; b < l.batch; ++b){
+            పూర్ణాంకం సూచీ = b*l.inputs;
+            కొరకు (i = 0; i < locations; ++i) {
+                పూర్ణాంకం స్థానభ్రంశం = i*l.classes;
+                softmax(l.output + సూచీ + స్థానభ్రంశం, l.classes, 1, 1,
+                        l.output + సూచీ + స్థానభ్రంశం);
             }
         }
     }
-    if(net.train){
-        float avg_iou = 0;
-        float avg_cat = 0;
-        float avg_allcat = 0;
-        float avg_obj = 0;
-        float avg_anyobj = 0;
-        int count = 0;
-        *(l.cost) = 0;
-        int size = l.inputs * l.batch;
-        memset(l.delta, 0, size * sizeof(float));
-        for (b = 0; b < l.batch; ++b){
-            int index = b*l.inputs;
-            for (i = 0; i < locations; ++i) {
-                int truth_index = (b*locations + i)*(1+l.coords+l.classes);
-                int is_obj = net.truth[truth_index];
-                for (j = 0; j < l.n; ++j) {
-                    int p_index = index + locations*l.classes + i*l.n + j;
-                    l.delta[p_index] = l.noobject_scale*(0 - l.output[p_index]);
-                    *(l.cost) += l.noobject_scale*pow(l.output[p_index], 2);
-                    avg_anyobj += l.output[p_index];
+    ఒకవేళ(net.train){
+        దశాంశం avg_iou = 0;
+        దశాంశం avg_cat = 0;
+        దశాంశం avg_allcat = 0;
+        దశాంశం avg_obj = 0;
+        దశాంశం avg_anyobj = 0;
+        పూర్ణాంకం లెక్క = 0;
+        *(l.ఖర్చు_2) = 0;
+        పూర్ణాంకం కొలత = l.inputs * l.batch;
+        memset(l.delta, 0, కొలత * పరిమాణం(దశాంశం));
+        కొరకు (b = 0; b < l.batch; ++b){
+            పూర్ణాంకం సూచీ = b*l.inputs;
+            కొరకు (i = 0; i < locations; ++i) {
+                పూర్ణాంకం truth_సూచీ = (b*locations + i)*(1+l.coords+l.classes);
+                పూర్ణాంకం is_obj = net.truth[truth_సూచీ];
+                కొరకు (j = 0; j < l.n; ++j) {
+                    పూర్ణాంకం p_సూచీ = సూచీ + locations*l.classes + i*l.n + j;
+                    l.delta[p_సూచీ] = l.noobject_scale*(0 - l.output[p_సూచీ]);
+                    *(l.ఖర్చు_2) += l.noobject_scale*ఘాతం(l.output[p_సూచీ], 2);
+                    avg_anyobj += l.output[p_సూచీ];
                 }
 
-                int best_index = -1;
-                float best_iou = 0;
-                float best_rmse = 20;
+                పూర్ణాంకం ఉత్తమ_సూచీ = -1;
+                దశాంశం ఉత్తమ_iou = 0;
+                దశాంశం ఉత్తమ_rmse = 20;
 
-                if (!is_obj){
-                    continue;
+                ఒకవేళ (!is_obj){
+                    కొనసాగు;
                 }
 
-                int class_index = index + i*l.classes;
-                for(j = 0; j < l.classes; ++j) {
-                    l.delta[class_index+j] = l.class_scale * (net.truth[truth_index+1+j] - l.output[class_index+j]);
-                    *(l.cost) += l.class_scale * pow(net.truth[truth_index+1+j] - l.output[class_index+j], 2);
-                    if(net.truth[truth_index + 1 + j]) avg_cat += l.output[class_index+j];
-                    avg_allcat += l.output[class_index+j];
+                పూర్ణాంకం class_సూచీ = సూచీ + i*l.classes;
+                కొరకు(j = 0; j < l.classes; ++j) {
+                    l.delta[class_సూచీ+j] = l.class_scale * (net.truth[truth_సూచీ+1+j] - l.output[class_సూచీ+j]);
+                    *(l.ఖర్చు_2) += l.class_scale * ఘాతం(net.truth[truth_సూచీ+1+j] - l.output[class_సూచీ+j], 2);
+                    ఒకవేళ(net.truth[truth_సూచీ + 1 + j]) avg_cat += l.output[class_సూచీ+j];
+                    avg_allcat += l.output[class_సూచీ+j];
                 }
 
-                box truth = float_to_box(net.truth + truth_index + 1 + l.classes, 1);
+                box truth = float_గమ్యం_box(net.truth + truth_సూచీ + 1 + l.classes, 1);
                 truth.x /= l.side;
                 truth.y /= l.side;
 
-                for(j = 0; j < l.n; ++j){
-                    int box_index = index + locations*(l.classes + l.n) + (i*l.n + j) * l.coords;
-                    box out = float_to_box(l.output + box_index, 1);
-                    out.x /= l.side;
-                    out.y /= l.side;
+                కొరకు(j = 0; j < l.n; ++j){
+                    పూర్ణాంకం box_సూచీ = సూచీ + locations*(l.classes + l.n) + (i*l.n + j) * l.coords;
+                    box బహిర్గతం = float_గమ్యం_box(l.output + box_సూచీ, 1);
+                    బహిర్గతం.x /= l.side;
+                    బహిర్గతం.y /= l.side;
 
-                    if (l.sqrt){
-                        out.w = out.w*out.w;
-                        out.h = out.h*out.h;
+                    ఒకవేళ (l.వర్గమూలం){
+                        బహిర్గతం.w = బహిర్గతం.w*బహిర్గతం.w;
+                        బహిర్గతం.h = బహిర్గతం.h*బహిర్గతం.h;
                     }
 
-                    float iou  = box_iou(out, truth);
+                    దశాంశం iou  = box_iou(బహిర్గతం, truth);
                     //iou = 0;
-                    float rmse = box_rmse(out, truth);
-                    if(best_iou > 0 || iou > 0){
-                        if(iou > best_iou){
-                            best_iou = iou;
-                            best_index = j;
+                    దశాంశం rmse = box_rmse(బహిర్గతం, truth);
+                    ఒకవేళ(ఉత్తమ_iou > 0 || iou > 0){
+                        ఒకవేళ(iou > ఉత్తమ_iou){
+                            ఉత్తమ_iou = iou;
+                            ఉత్తమ_సూచీ = j;
                         }
-                    }else{
-                        if(rmse < best_rmse){
-                            best_rmse = rmse;
-                            best_index = j;
+                    }లేకపోతే{
+                        ఒకవేళ(rmse < ఉత్తమ_rmse){
+                            ఉత్తమ_rmse = rmse;
+                            ఉత్తమ_సూచీ = j;
                         }
                     }
                 }
 
-                if(l.forced){
-                    if(truth.w*truth.h < .1){
-                        best_index = 1;
-                    }else{
-                        best_index = 0;
+                ఒకవేళ(l.forced){
+                    ఒకవేళ(truth.w*truth.h < .1){
+                        ఉత్తమ_సూచీ = 1;
+                    }లేకపోతే{
+                        ఉత్తమ_సూచీ = 0;
                     }
                 }
-                if(l.random && *(net.seen) < 64000){
-                    best_index = rand()%l.n;
+                ఒకవేళ(l.random && *(net.చూసిన) < 64000){
+                    ఉత్తమ_సూచీ = rand()%l.n;
                 }
 
-                int box_index = index + locations*(l.classes + l.n) + (i*l.n + best_index) * l.coords;
-                int tbox_index = truth_index + 1 + l.classes;
+                పూర్ణాంకం box_సూచీ = సూచీ + locations*(l.classes + l.n) + (i*l.n + ఉత్తమ_సూచీ) * l.coords;
+                పూర్ణాంకం tbox_సూచీ = truth_సూచీ + 1 + l.classes;
 
-                box out = float_to_box(l.output + box_index, 1);
-                out.x /= l.side;
-                out.y /= l.side;
-                if (l.sqrt) {
-                    out.w = out.w*out.w;
-                    out.h = out.h*out.h;
+                box బహిర్గతం = float_గమ్యం_box(l.output + box_సూచీ, 1);
+                బహిర్గతం.x /= l.side;
+                బహిర్గతం.y /= l.side;
+                ఒకవేళ (l.వర్గమూలం) {
+                    బహిర్గతం.w = బహిర్గతం.w*బహిర్గతం.w;
+                    బహిర్గతం.h = బహిర్గతం.h*బహిర్గతం.h;
                 }
-                float iou  = box_iou(out, truth);
+                దశాంశం iou  = box_iou(బహిర్గతం, truth);
 
                 //printf("%d,", best_index);
-                int p_index = index + locations*l.classes + i*l.n + best_index;
-                *(l.cost) -= l.noobject_scale * pow(l.output[p_index], 2);
-                *(l.cost) += l.object_scale * pow(1-l.output[p_index], 2);
-                avg_obj += l.output[p_index];
-                l.delta[p_index] = l.object_scale * (1.-l.output[p_index]);
+                పూర్ణాంకం p_సూచీ = సూచీ + locations*l.classes + i*l.n + ఉత్తమ_సూచీ;
+                *(l.ఖర్చు_2) -= l.noobject_scale * ఘాతం(l.output[p_సూచీ], 2);
+                *(l.ఖర్చు_2) += l.object_scale * ఘాతం(1-l.output[p_సూచీ], 2);
+                avg_obj += l.output[p_సూచీ];
+                l.delta[p_సూచీ] = l.object_scale * (1.-l.output[p_సూచీ]);
 
-                if(l.rescore){
-                    l.delta[p_index] = l.object_scale * (iou - l.output[p_index]);
+                ఒకవేళ(l.rescore){
+                    l.delta[p_సూచీ] = l.object_scale * (iou - l.output[p_సూచీ]);
                 }
 
-                l.delta[box_index+0] = l.coord_scale*(net.truth[tbox_index + 0] - l.output[box_index + 0]);
-                l.delta[box_index+1] = l.coord_scale*(net.truth[tbox_index + 1] - l.output[box_index + 1]);
-                l.delta[box_index+2] = l.coord_scale*(net.truth[tbox_index + 2] - l.output[box_index + 2]);
-                l.delta[box_index+3] = l.coord_scale*(net.truth[tbox_index + 3] - l.output[box_index + 3]);
-                if(l.sqrt){
-                    l.delta[box_index+2] = l.coord_scale*(sqrt(net.truth[tbox_index + 2]) - l.output[box_index + 2]);
-                    l.delta[box_index+3] = l.coord_scale*(sqrt(net.truth[tbox_index + 3]) - l.output[box_index + 3]);
+                l.delta[box_సూచీ+0] = l.coord_scale*(net.truth[tbox_సూచీ + 0] - l.output[box_సూచీ + 0]);
+                l.delta[box_సూచీ+1] = l.coord_scale*(net.truth[tbox_సూచీ + 1] - l.output[box_సూచీ + 1]);
+                l.delta[box_సూచీ+2] = l.coord_scale*(net.truth[tbox_సూచీ + 2] - l.output[box_సూచీ + 2]);
+                l.delta[box_సూచీ+3] = l.coord_scale*(net.truth[tbox_సూచీ + 3] - l.output[box_సూచీ + 3]);
+                ఒకవేళ(l.వర్గమూలం){
+                    l.delta[box_సూచీ+2] = l.coord_scale*(వర్గమూలం(net.truth[tbox_సూచీ + 2]) - l.output[box_సూచీ + 2]);
+                    l.delta[box_సూచీ+3] = l.coord_scale*(వర్గమూలం(net.truth[tbox_సూచీ + 3]) - l.output[box_సూచీ + 3]);
                 }
 
-                *(l.cost) += pow(1-iou, 2);
+                *(l.ఖర్చు_2) += ఘాతం(1-iou, 2);
                 avg_iou += iou;
-                ++count;
+                ++లెక్క;
             }
         }
 
-        if(0){
-            float *costs = calloc(l.batch*locations*l.n, sizeof(float));
-            for (b = 0; b < l.batch; ++b) {
-                int index = b*l.inputs;
-                for (i = 0; i < locations; ++i) {
-                    for (j = 0; j < l.n; ++j) {
-                        int p_index = index + locations*l.classes + i*l.n + j;
-                        costs[b*locations*l.n + i*l.n + j] = l.delta[p_index]*l.delta[p_index];
+        ఒకవేళ(0){
+            దశాంశం *costs = సున్నా_జ్ఞాపకం_ఇవ్వు(l.batch*locations*l.n, పరిమాణం(దశాంశం));
+            కొరకు (b = 0; b < l.batch; ++b) {
+                పూర్ణాంకం సూచీ = b*l.inputs;
+                కొరకు (i = 0; i < locations; ++i) {
+                    కొరకు (j = 0; j < l.n; ++j) {
+                        పూర్ణాంకం p_సూచీ = సూచీ + locations*l.classes + i*l.n + j;
+                        costs[b*locations*l.n + i*l.n + j] = l.delta[p_సూచీ]*l.delta[p_సూచీ];
                     }
                 }
             }
-            int indexes[100];
-            top_k(costs, l.batch*locations*l.n, 100, indexes);
-            float cutoff = costs[indexes[99]];
-            for (b = 0; b < l.batch; ++b) {
-                int index = b*l.inputs;
-                for (i = 0; i < locations; ++i) {
-                    for (j = 0; j < l.n; ++j) {
-                        int p_index = index + locations*l.classes + i*l.n + j;
-                        if (l.delta[p_index]*l.delta[p_index] < cutoff) l.delta[p_index] = 0;
+            పూర్ణాంకం indexes[100];
+            శిఖరం_k(costs, l.batch*locations*l.n, 100, indexes);
+            దశాంశం cutoff = costs[indexes[99]];
+            కొరకు (b = 0; b < l.batch; ++b) {
+                పూర్ణాంకం సూచీ = b*l.inputs;
+                కొరకు (i = 0; i < locations; ++i) {
+                    కొరకు (j = 0; j < l.n; ++j) {
+                        పూర్ణాంకం p_సూచీ = సూచీ + locations*l.classes + i*l.n + j;
+                        ఒకవేళ (l.delta[p_సూచీ]*l.delta[p_సూచీ] < cutoff) l.delta[p_సూచీ] = 0;
                     }
                 }
             }
-            free(costs);
+            విడుదల(costs);
         }
 
 
-        *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
+        *(l.ఖర్చు_2) = ఘాతం(mag_array(l.delta, l.outputs * l.batch), 2);
 
 
-        printf("Detection Avg IOU: %f, Pos Cat: %f, All Cat: %f, Pos Obj: %f, Any Obj: %f, count: %d\n", avg_iou/count, avg_cat/count, avg_allcat/(count*l.classes), avg_obj/count, avg_anyobj/(l.batch*locations*l.n), count);
+        రాయి("Detection Avg IOU: %f, Pos Cat: %f, All Cat: %f, Pos Obj: %f, Any Obj: %f, count: %d\n", avg_iou/లెక్క, avg_cat/లెక్క, avg_allcat/(లెక్క*l.classes), avg_obj/లెక్క, avg_anyobj/(l.batch*locations*l.n), లెక్క);
         //if(l.reorg) reorg(l.delta, l.w*l.h, size*l.n, l.batch, 0);
     }
 }
 
-void backward_detection_layer(const detection_layer l, network net)
+శూన్య backward_detection_layer(స్థిరరాశి detection_layer l, జాలం net)
 {
     axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void get_detection_detections(layer l, int w, int h, float thresh, detection *dets)
+శూన్య get_detection_detections(layer l, పూర్ణాంకం w, పూర్ణాంకం h, దశాంశం thresh, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
+    పూర్ణాంకం i,j,n;
+    దశాంశం *predictions = l.output;
     //int per_cell = 5*num+classes;
-    for (i = 0; i < l.side*l.side; ++i){
-        int row = i / l.side;
-        int col = i % l.side;
-        for(n = 0; n < l.n; ++n){
-            int index = i*l.n + n;
-            int p_index = l.side*l.side*l.classes + i*l.n + n;
-            float scale = predictions[p_index];
-            int box_index = l.side*l.side*(l.classes + l.n) + (i*l.n + n)*4;
+    కొరకు (i = 0; i < l.side*l.side; ++i){
+        పూర్ణాంకం అడ్డువరుస = i / l.side;
+        పూర్ణాంకం నిలువు = i % l.side;
+        కొరకు(n = 0; n < l.n; ++n){
+            పూర్ణాంకం సూచీ = i*l.n + n;
+            పూర్ణాంకం p_సూచీ = l.side*l.side*l.classes + i*l.n + n;
+            దశాంశం scale = predictions[p_సూచీ];
+            పూర్ణాంకం box_సూచీ = l.side*l.side*(l.classes + l.n) + (i*l.n + n)*4;
             box b;
-            b.x = (predictions[box_index + 0] + col) / l.side * w;
-            b.y = (predictions[box_index + 1] + row) / l.side * h;
-            b.w = pow(predictions[box_index + 2], (l.sqrt?2:1)) * w;
-            b.h = pow(predictions[box_index + 3], (l.sqrt?2:1)) * h;
-            dets[index].bbox = b;
-            dets[index].objectness = scale;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = i*l.classes;
-                float prob = scale*predictions[class_index+j];
-                dets[index].prob[j] = (prob > thresh) ? prob : 0;
+            b.x = (predictions[box_సూచీ + 0] + నిలువు) / l.side * w;
+            b.y = (predictions[box_సూచీ + 1] + అడ్డువరుస) / l.side * h;
+            b.w = ఘాతం(predictions[box_సూచీ + 2], (l.వర్గమూలం?2:1)) * w;
+            b.h = ఘాతం(predictions[box_సూచీ + 3], (l.వర్గమూలం?2:1)) * h;
+            dets[సూచీ].bbox = b;
+            dets[సూచీ].objectness = scale;
+            కొరకు(j = 0; j < l.classes; ++j){
+                పూర్ణాంకం class_సూచీ = i*l.classes;
+                దశాంశం prob = scale*predictions[class_సూచీ+j];
+                dets[సూచీ].prob[j] = (prob > thresh) ? prob : 0;
             }
         }
     }
 }
 
-#ifdef GPU
+#నిర్వచితమైతే GPU
 
-void forward_detection_layer_gpu(const detection_layer l, network net)
+శూన్య forward_detection_layer_gpu(స్థిరరాశి detection_layer l, జాలం net)
 {
-    if(!net.train){
-        copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-        return;
+    ఒకవేళ(!net.train){
+        copy_gpu(l.batch*l.inputs, net.ఆదానం_gpu, 1, l.output_gpu, 1);
+        తిరిగి;
     }
 
-    cuda_pull_array(net.input_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(net.ఆదానం_gpu, net.ఆదానం, l.batch*l.inputs);
     forward_detection_layer(l, net);
-    cuda_push_array(l.output_gpu, l.output, l.batch*l.outputs);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.inputs);
+    cuda_నెట్టు_array(l.output_gpu, l.output, l.batch*l.outputs);
+    cuda_నెట్టు_array(l.delta_gpu, l.delta, l.batch*l.inputs);
 }
 
-void backward_detection_layer_gpu(detection_layer l, network net)
+శూన్య backward_detection_layer_gpu(detection_layer l, జాలం net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
     //copy_gpu(l.batch*l.inputs, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#అయితే_ముగింపు
 

@@ -1,18 +1,18 @@
-#ifndef DETECTION_LAYER_H
-#define DETECTION_LAYER_H
+#నిర్వచితం_కాకపోతే DETECTION_LAYER_H
+#నిర్వచించు DETECTION_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-typedef layer detection_layer;
+రకనిర్వచనం layer detection_layer;
 
-detection_layer make_detection_layer(int batch, int inputs, int n, int size, int classes, int coords, int rescore);
-void forward_detection_layer(const detection_layer l, network net);
-void backward_detection_layer(const detection_layer l, network net);
+detection_layer make_detection_layer(పూర్ణాంకం batch, పూర్ణాంకం inputs, పూర్ణాంకం n, పూర్ణాంకం కొలత, పూర్ణాంకం classes, పూర్ణాంకం coords, పూర్ణాంకం rescore);
+శూన్య forward_detection_layer(స్థిరరాశి detection_layer l, జాలం net);
+శూన్య backward_detection_layer(స్థిరరాశి detection_layer l, జాలం net);
 
-#ifdef GPU
-void forward_detection_layer_gpu(const detection_layer l, network net);
-void backward_detection_layer_gpu(detection_layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_detection_layer_gpu(స్థిరరాశి detection_layer l, జాలం net);
+శూన్య backward_detection_layer_gpu(detection_layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు

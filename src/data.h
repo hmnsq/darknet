@@ -1,50 +1,50 @@
-#ifndef DATA_H
-#define DATA_H
-#include <pthread.h>
+#నిర్వచితం_కాకపోతే దత్తాంశం_H
+#నిర్వచించు దత్తాంశం_H
+#అన్తర్భావ <pthread.h>
 
-#include "darknet.h"
-#include "matrix.h"
-#include "list.h"
-#include "image.h"
-#include "tree.h"
+#అన్తర్భావ "darknet.h"
+#అన్తర్భావ "matrix.h"
+#అన్తర్భావ "list.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+స్థిర అంతఃవరుస దశాంశం దూరం_from_అంచు(పూర్ణాంకం x, పూర్ణాంకం max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    పూర్ణాంకం dx = (max/2) - x;
+    ఒకవేళ (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
-    float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    దశాంశం dist = (దశాంశం)dx/max;
+    ఒకవేళ (dist > 1) dist = 1;
+    తిరిగి dist;
 }
-void load_data_blocking(load_args args);
+శూన్య ఎక్కించు_దత్తాంశం_blocking(ఎక్కించు_వాదనలు వాదనలు);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+శూన్య print_letters(దశాంశం *pred, పూర్ణాంకం n);
+దత్తాంశం ఎక్కించు_దత్తాంశం_captcha(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం k, పూర్ణాంకం w, పూర్ణాంకం h);
+దత్తాంశం ఎక్కించు_దత్తాంశం_captcha_encode(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h);
+దత్తాంశం ఎక్కించు_దత్తాంశం_detection(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం boxes, పూర్ణాంకం classes, దశాంశం jitter, దశాంశం hue, దశాంశం saturation, దశాంశం exposure);
+దత్తాంశం ఎక్కించు_దత్తాంశం_ట్యాగ్(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం k, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure);
+మాతృక ఎక్కించు_image_augment_paths(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure, పూర్ణాంకం center);
+దత్తాంశం ఎక్కించు_దత్తాంశం_super(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం scale);
+దత్తాంశం ఎక్కించు_దత్తాంశం_augment(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, అక్షరం **labels, పూర్ణాంకం k, వృక్షం *hierarchy, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure, పూర్ణాంకం center);
+దత్తాంశం ఎక్కించు_దత్తాంశం_regression(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం classes, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure);
+దత్తాంశం ఎక్కించు_go(అక్షరం *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+దత్తాంశం ఎక్కించు_దత్తాంశం_writing(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం బహిర్గతం_w, పూర్ణాంకం బహిర్గతం_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
-void normalize_data_rows(data d);
-void scale_data_rows(data d, float s);
-void translate_data_rows(data d, float s);
-void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+శూన్య get_random_batch(దత్తాంశం d, పూర్ణాంకం n, దశాంశం *X, దశాంశం *y);
+దత్తాంశం get_దత్తాంశం_part(దత్తాంశం d, పూర్ణాంకం part, పూర్ణాంకం మొత్తం);
+దత్తాంశం get_random_దత్తాంశం(దత్తాంశం d, పూర్ణాంకం అంకె);
+దత్తాంశం ఎక్కించు_categorical_దత్తాంశం_csv(అక్షరం *filename, పూర్ణాంకం లక్ష్యం, పూర్ణాంకం k);
+శూన్య normalize_దత్తాంశం_అడ్డువరుసలు(దత్తాంశం d);
+శూన్య scale_దత్తాంశం_అడ్డువరుసలు(దత్తాంశం d, దశాంశం s);
+శూన్య translate_దత్తాంశం_అడ్డువరుసలు(దత్తాంశం d, దశాంశం s);
+శూన్య randomize_దత్తాంశం(దత్తాంశం d);
+దత్తాంశం *విభజించు_దత్తాంశం(దత్తాంశం d, పూర్ణాంకం part, పూర్ణాంకం మొత్తం);
+దత్తాంశం concat_datas(దత్తాంశం *d, పూర్ణాంకం n);
+శూన్య fill_truth(అక్షరం *మార్గం, అక్షరం **labels, పూర్ణాంకం k, దశాంశం *truth);
 
-#endif
+#అయితే_ముగింపు

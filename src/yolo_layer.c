@@ -1,66 +1,66 @@
-#include "yolo_layer.h"
-#include "activations.h"
-#include "blas.h"
-#include "box.h"
-#include "cuda.h"
-#include "utils.h"
+#అన్తర్భావ "yolo_layer.h"
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "blas.h"
+#అన్తర్భావ "box.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "utils.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <stdlib.h>
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <assert.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ <stdlib.h>
 
-layer make_yolo_layer(int batch, int w, int h, int n, int total, int *mask, int classes)
+layer make_yolo_layer(పూర్ణాంకం batch, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం n, పూర్ణాంకం మొత్తం, పూర్ణాంకం *ముసుగు, పూర్ణాంకం classes)
 {
-    int i;
+    పూర్ణాంకం i;
     layer l = {0};
     l.type = YOLO;
 
     l.n = n;
-    l.total = total;
+    l.మొత్తం = మొత్తం;
     l.batch = batch;
     l.h = h;
     l.w = w;
     l.c = n*(classes + 4 + 1);
-    l.out_w = l.w;
-    l.out_h = l.h;
-    l.out_c = l.c;
+    l.బహిర్గతం_w = l.w;
+    l.బహిర్గతం_h = l.h;
+    l.బహిర్గతం_c = l.c;
     l.classes = classes;
-    l.cost = calloc(1, sizeof(float));
-    l.biases = calloc(total*2, sizeof(float));
-    if(mask) l.mask = mask;
-    else{
-        l.mask = calloc(n, sizeof(int));
-        for(i = 0; i < n; ++i){
-            l.mask[i] = i;
+    l.ఖర్చు_2 = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(దశాంశం));
+    l.biases = సున్నా_జ్ఞాపకం_ఇవ్వు(మొత్తం*2, పరిమాణం(దశాంశం));
+    ఒకవేళ(ముసుగు) l.ముసుగు = ముసుగు;
+    లేకపోతే{
+        l.ముసుగు = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(పూర్ణాంకం));
+        కొరకు(i = 0; i < n; ++i){
+            l.ముసుగు[i] = i;
         }
     }
-    l.bias_updates = calloc(n*2, sizeof(float));
+    l.bias_updates = సున్నా_జ్ఞాపకం_ఇవ్వు(n*2, పరిమాణం(దశాంశం));
     l.outputs = h*w*n*(classes + 4 + 1);
     l.inputs = l.outputs;
     l.truths = 90*(4 + 1);
-    l.delta = calloc(batch*l.outputs, sizeof(float));
-    l.output = calloc(batch*l.outputs, sizeof(float));
-    for(i = 0; i < total*2; ++i){
+    l.delta = సున్నా_జ్ఞాపకం_ఇవ్వు(batch*l.outputs, పరిమాణం(దశాంశం));
+    l.output = సున్నా_జ్ఞాపకం_ఇవ్వు(batch*l.outputs, పరిమాణం(దశాంశం));
+    కొరకు(i = 0; i < మొత్తం*2; ++i){
         l.biases[i] = .5;
     }
 
     l.forward = forward_yolo_layer;
     l.backward = backward_yolo_layer;
-#ifdef GPU
+#నిర్వచితమైతే GPU
     l.forward_gpu = forward_yolo_layer_gpu;
     l.backward_gpu = backward_yolo_layer_gpu;
     l.output_gpu = cuda_make_array(l.output, batch*l.outputs);
     l.delta_gpu = cuda_make_array(l.delta, batch*l.outputs);
-#endif
+#అయితే_ముగింపు
 
     fprintf(stderr, "yolo\n");
     srand(0);
 
-    return l;
+    తిరిగి l;
 }
 
-void resize_yolo_layer(layer *l, int w, int h)
+శూన్య resize_yolo_layer(layer *l, పూర్ణాంకం w, పూర్ణాంకం h)
 {
     l->w = w;
     l->h = h;
@@ -68,201 +68,201 @@ void resize_yolo_layer(layer *l, int w, int h)
     l->outputs = h*w*l->n*(l->classes + 4 + 1);
     l->inputs = l->outputs;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta = realloc(l->delta, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*పరిమాణం(దశాంశం));
+    l->delta = realloc(l->delta, l->batch*l->outputs*పరిమాణం(దశాంశం));
 
-#ifdef GPU
+#నిర్వచితమైతే GPU
     cuda_free(l->delta_gpu);
     cuda_free(l->output_gpu);
 
     l->delta_gpu =     cuda_make_array(l->delta, l->batch*l->outputs);
     l->output_gpu =    cuda_make_array(l->output, l->batch*l->outputs);
-#endif
+#అయితే_ముగింపు
 }
 
-box get_yolo_box(float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, int stride)
+box get_yolo_box(దశాంశం *x, దశాంశం *biases, పూర్ణాంకం n, పూర్ణాంకం సూచీ, పూర్ణాంకం i, పూర్ణాంకం j, పూర్ణాంకం lw, పూర్ణాంకం lh, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం stride)
 {
     box b;
-    b.x = (i + x[index + 0*stride]) / lw;
-    b.y = (j + x[index + 1*stride]) / lh;
-    b.w = exp(x[index + 2*stride]) * biases[2*n]   / w;
-    b.h = exp(x[index + 3*stride]) * biases[2*n+1] / h;
-    return b;
+    b.x = (i + x[సూచీ + 0*stride]) / lw;
+    b.y = (j + x[సూచీ + 1*stride]) / lh;
+    b.w = ఘాతాంకం(x[సూచీ + 2*stride]) * biases[2*n]   / w;
+    b.h = ఘాతాంకం(x[సూచీ + 3*stride]) * biases[2*n+1] / h;
+    తిరిగి b;
 }
 
-float delta_yolo_box(box truth, float *x, float *biases, int n, int index, int i, int j, int lw, int lh, int w, int h, float *delta, float scale, int stride)
+దశాంశం delta_yolo_box(box truth, దశాంశం *x, దశాంశం *biases, పూర్ణాంకం n, పూర్ణాంకం సూచీ, పూర్ణాంకం i, పూర్ణాంకం j, పూర్ణాంకం lw, పూర్ణాంకం lh, పూర్ణాంకం w, పూర్ణాంకం h, దశాంశం *delta, దశాంశం scale, పూర్ణాంకం stride)
 {
-    box pred = get_yolo_box(x, biases, n, index, i, j, lw, lh, w, h, stride);
-    float iou = box_iou(pred, truth);
+    box pred = get_yolo_box(x, biases, n, సూచీ, i, j, lw, lh, w, h, stride);
+    దశాంశం iou = box_iou(pred, truth);
 
-    float tx = (truth.x*lw - i);
-    float ty = (truth.y*lh - j);
-    float tw = log(truth.w*w / biases[2*n]);
-    float th = log(truth.h*h / biases[2*n + 1]);
+    దశాంశం tx = (truth.x*lw - i);
+    దశాంశం ty = (truth.y*lh - j);
+    దశాంశం tw = సంవర్గమానం(truth.w*w / biases[2*n]);
+    దశాంశం th = సంవర్గమానం(truth.h*h / biases[2*n + 1]);
 
-    delta[index + 0*stride] = scale * (tx - x[index + 0*stride]);
-    delta[index + 1*stride] = scale * (ty - x[index + 1*stride]);
-    delta[index + 2*stride] = scale * (tw - x[index + 2*stride]);
-    delta[index + 3*stride] = scale * (th - x[index + 3*stride]);
-    return iou;
+    delta[సూచీ + 0*stride] = scale * (tx - x[సూచీ + 0*stride]);
+    delta[సూచీ + 1*stride] = scale * (ty - x[సూచీ + 1*stride]);
+    delta[సూచీ + 2*stride] = scale * (tw - x[సూచీ + 2*stride]);
+    delta[సూచీ + 3*stride] = scale * (th - x[సూచీ + 3*stride]);
+    తిరిగి iou;
 }
 
 
-void delta_yolo_class(float *output, float *delta, int index, int class, int classes, int stride, float *avg_cat)
+శూన్య delta_yolo_class(దశాంశం *output, దశాంశం *delta, పూర్ణాంకం సూచీ, పూర్ణాంకం class, పూర్ణాంకం classes, పూర్ణాంకం stride, దశాంశం *avg_cat)
 {
-    int n;
-    if (delta[index]){
-        delta[index + stride*class] = 1 - output[index + stride*class];
-        if(avg_cat) *avg_cat += output[index + stride*class];
-        return;
+    పూర్ణాంకం n;
+    ఒకవేళ (delta[సూచీ]){
+        delta[సూచీ + stride*class] = 1 - output[సూచీ + stride*class];
+        ఒకవేళ(avg_cat) *avg_cat += output[సూచీ + stride*class];
+        తిరిగి;
     }
-    for(n = 0; n < classes; ++n){
-        delta[index + stride*n] = ((n == class)?1 : 0) - output[index + stride*n];
-        if(n == class && avg_cat) *avg_cat += output[index + stride*n];
+    కొరకు(n = 0; n < classes; ++n){
+        delta[సూచీ + stride*n] = ((n == class)?1 : 0) - output[సూచీ + stride*n];
+        ఒకవేళ(n == class && avg_cat) *avg_cat += output[సూచీ + stride*n];
     }
 }
 
-static int entry_index(layer l, int batch, int location, int entry)
+స్థిర పూర్ణాంకం నమోదు_సూచీ(layer l, పూర్ణాంకం batch, పూర్ణాంకం location, పూర్ణాంకం నమోదు_2)
 {
-    int n =   location / (l.w*l.h);
-    int loc = location % (l.w*l.h);
-    return batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + entry*l.w*l.h + loc;
+    పూర్ణాంకం n =   location / (l.w*l.h);
+    పూర్ణాంకం loc = location % (l.w*l.h);
+    తిరిగి batch*l.outputs + n*l.w*l.h*(4+l.classes+1) + నమోదు_2*l.w*l.h + loc;
 }
 
-void forward_yolo_layer(const layer l, network net)
+శూన్య forward_yolo_layer(స్థిరరాశి layer l, జాలం net)
 {
-    int i,j,b,t,n;
-    memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
+    పూర్ణాంకం i,j,b,t,n;
+    జ్ఞాపకం_నకలు(l.output, net.ఆదానం, l.outputs*l.batch*పరిమాణం(దశాంశం));
 
-#ifndef GPU
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array(l.output + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, 4);
-            activate_array(l.output + index, (1+l.classes)*l.w*l.h, LOGISTIC);
+#నిర్వచితం_కాకపోతే GPU
+    కొరకు (b = 0; b < l.batch; ++b){
+        కొరకు(n = 0; n < l.n; ++n){
+            పూర్ణాంకం సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h, 0);
+            activate_array(l.output + సూచీ, 2*l.w*l.h, LOGISTIC);
+            సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h, 4);
+            activate_array(l.output + సూచీ, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-#endif
+#అయితే_ముగింపు
 
-    memset(l.delta, 0, l.outputs * l.batch * sizeof(float));
-    if(!net.train) return;
-    float avg_iou = 0;
-    float recall = 0;
-    float recall75 = 0;
-    float avg_cat = 0;
-    float avg_obj = 0;
-    float avg_anyobj = 0;
-    int count = 0;
-    int class_count = 0;
-    *(l.cost) = 0;
-    for (b = 0; b < l.batch; ++b) {
-        for (j = 0; j < l.h; ++j) {
-            for (i = 0; i < l.w; ++i) {
-                for (n = 0; n < l.n; ++n) {
-                    int box_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 0);
-                    box pred = get_yolo_box(l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
-                    float best_iou = 0;
-                    int best_t = 0;
-                    for(t = 0; t < l.max_boxes; ++t){
-                        box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
-                        if(!truth.x) break;
-                        float iou = box_iou(pred, truth);
-                        if (iou > best_iou) {
-                            best_iou = iou;
-                            best_t = t;
+    memset(l.delta, 0, l.outputs * l.batch * పరిమాణం(దశాంశం));
+    ఒకవేళ(!net.train) తిరిగి;
+    దశాంశం avg_iou = 0;
+    దశాంశం recall = 0;
+    దశాంశం recall75 = 0;
+    దశాంశం avg_cat = 0;
+    దశాంశం avg_obj = 0;
+    దశాంశం avg_anyobj = 0;
+    పూర్ణాంకం లెక్క = 0;
+    పూర్ణాంకం class_లెక్క = 0;
+    *(l.ఖర్చు_2) = 0;
+    కొరకు (b = 0; b < l.batch; ++b) {
+        కొరకు (j = 0; j < l.h; ++j) {
+            కొరకు (i = 0; i < l.w; ++i) {
+                కొరకు (n = 0; n < l.n; ++n) {
+                    పూర్ణాంకం box_సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h + j*l.w + i, 0);
+                    box pred = get_yolo_box(l.output, l.biases, l.ముసుగు[n], box_సూచీ, i, j, l.w, l.h, net.w, net.h, l.w*l.h);
+                    దశాంశం ఉత్తమ_iou = 0;
+                    పూర్ణాంకం ఉత్తమ_t = 0;
+                    కొరకు(t = 0; t < l.max_boxes; ++t){
+                        box truth = float_గమ్యం_box(net.truth + t*(4 + 1) + b*l.truths, 1);
+                        ఒకవేళ(!truth.x) ఆపు;
+                        దశాంశం iou = box_iou(pred, truth);
+                        ఒకవేళ (iou > ఉత్తమ_iou) {
+                            ఉత్తమ_iou = iou;
+                            ఉత్తమ_t = t;
                         }
                     }
-                    int obj_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4);
-                    avg_anyobj += l.output[obj_index];
-                    l.delta[obj_index] = 0 - l.output[obj_index];
-                    if (best_iou > l.ignore_thresh) {
-                        l.delta[obj_index] = 0;
+                    పూర్ణాంకం obj_సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h + j*l.w + i, 4);
+                    avg_anyobj += l.output[obj_సూచీ];
+                    l.delta[obj_సూచీ] = 0 - l.output[obj_సూచీ];
+                    ఒకవేళ (ఉత్తమ_iou > l.ignore_thresh) {
+                        l.delta[obj_సూచీ] = 0;
                     }
-                    if (best_iou > l.truth_thresh) {
-                        l.delta[obj_index] = 1 - l.output[obj_index];
+                    ఒకవేళ (ఉత్తమ_iou > l.truth_thresh) {
+                        l.delta[obj_సూచీ] = 1 - l.output[obj_సూచీ];
 
-                        int class = net.truth[best_t*(4 + 1) + b*l.truths + 4];
-                        if (l.map) class = l.map[class];
-                        int class_index = entry_index(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
-                        delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, 0);
-                        box truth = float_to_box(net.truth + best_t*(4 + 1) + b*l.truths, 1);
-                        delta_yolo_box(truth, l.output, l.biases, l.mask[n], box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+                        పూర్ణాంకం class = net.truth[ఉత్తమ_t*(4 + 1) + b*l.truths + 4];
+                        ఒకవేళ (l.map) class = l.map[class];
+                        పూర్ణాంకం class_సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h + j*l.w + i, 4 + 1);
+                        delta_yolo_class(l.output, l.delta, class_సూచీ, class, l.classes, l.w*l.h, 0);
+                        box truth = float_గమ్యం_box(net.truth + ఉత్తమ_t*(4 + 1) + b*l.truths, 1);
+                        delta_yolo_box(truth, l.output, l.biases, l.ముసుగు[n], box_సూచీ, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
                     }
                 }
             }
         }
-        for(t = 0; t < l.max_boxes; ++t){
-            box truth = float_to_box(net.truth + t*(4 + 1) + b*l.truths, 1);
+        కొరకు(t = 0; t < l.max_boxes; ++t){
+            box truth = float_గమ్యం_box(net.truth + t*(4 + 1) + b*l.truths, 1);
 
-            if(!truth.x) break;
-            float best_iou = 0;
-            int best_n = 0;
+            ఒకవేళ(!truth.x) ఆపు;
+            దశాంశం ఉత్తమ_iou = 0;
+            పూర్ణాంకం ఉత్తమ_n = 0;
             i = (truth.x * l.w);
             j = (truth.y * l.h);
-            box truth_shift = truth;
-            truth_shift.x = truth_shift.y = 0;
-            for(n = 0; n < l.total; ++n){
+            box truth_జరుపు = truth;
+            truth_జరుపు.x = truth_జరుపు.y = 0;
+            కొరకు(n = 0; n < l.మొత్తం; ++n){
                 box pred = {0};
                 pred.w = l.biases[2*n]/net.w;
                 pred.h = l.biases[2*n+1]/net.h;
-                float iou = box_iou(pred, truth_shift);
-                if (iou > best_iou){
-                    best_iou = iou;
-                    best_n = n;
+                దశాంశం iou = box_iou(pred, truth_జరుపు);
+                ఒకవేళ (iou > ఉత్తమ_iou){
+                    ఉత్తమ_iou = iou;
+                    ఉత్తమ_n = n;
                 }
             }
 
-            int mask_n = int_index(l.mask, best_n, l.n);
-            if(mask_n >= 0){
-                int box_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 0);
-                float iou = delta_yolo_box(truth, l.output, l.biases, best_n, box_index, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
+            పూర్ణాంకం ముసుగు_n = int_సూచీ(l.ముసుగు, ఉత్తమ_n, l.n);
+            ఒకవేళ(ముసుగు_n >= 0){
+                పూర్ణాంకం box_సూచీ = నమోదు_సూచీ(l, b, ముసుగు_n*l.w*l.h + j*l.w + i, 0);
+                దశాంశం iou = delta_yolo_box(truth, l.output, l.biases, ఉత్తమ_n, box_సూచీ, i, j, l.w, l.h, net.w, net.h, l.delta, (2-truth.w*truth.h), l.w*l.h);
 
-                int obj_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4);
-                avg_obj += l.output[obj_index];
-                l.delta[obj_index] = 1 - l.output[obj_index];
+                పూర్ణాంకం obj_సూచీ = నమోదు_సూచీ(l, b, ముసుగు_n*l.w*l.h + j*l.w + i, 4);
+                avg_obj += l.output[obj_సూచీ];
+                l.delta[obj_సూచీ] = 1 - l.output[obj_సూచీ];
 
-                int class = net.truth[t*(4 + 1) + b*l.truths + 4];
-                if (l.map) class = l.map[class];
-                int class_index = entry_index(l, b, mask_n*l.w*l.h + j*l.w + i, 4 + 1);
-                delta_yolo_class(l.output, l.delta, class_index, class, l.classes, l.w*l.h, &avg_cat);
+                పూర్ణాంకం class = net.truth[t*(4 + 1) + b*l.truths + 4];
+                ఒకవేళ (l.map) class = l.map[class];
+                పూర్ణాంకం class_సూచీ = నమోదు_సూచీ(l, b, ముసుగు_n*l.w*l.h + j*l.w + i, 4 + 1);
+                delta_yolo_class(l.output, l.delta, class_సూచీ, class, l.classes, l.w*l.h, &avg_cat);
 
-                ++count;
-                ++class_count;
-                if(iou > .5) recall += 1;
-                if(iou > .75) recall75 += 1;
+                ++లెక్క;
+                ++class_లెక్క;
+                ఒకవేళ(iou > .5) recall += 1;
+                ఒకవేళ(iou > .75) recall75 += 1;
                 avg_iou += iou;
             }
         }
     }
-    *(l.cost) = pow(mag_array(l.delta, l.outputs * l.batch), 2);
-    printf("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.index, avg_iou/count, avg_cat/class_count, avg_obj/count, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/count, recall75/count, count);
+    *(l.ఖర్చు_2) = ఘాతం(mag_array(l.delta, l.outputs * l.batch), 2);
+    రాయి("Region %d Avg IOU: %f, Class: %f, Obj: %f, No Obj: %f, .5R: %f, .75R: %f,  count: %d\n", net.సూచీ, avg_iou/లెక్క, avg_cat/class_లెక్క, avg_obj/లెక్క, avg_anyobj/(l.w*l.h*l.n*l.batch), recall/లెక్క, recall75/లెక్క, లెక్క);
 }
 
-void backward_yolo_layer(const layer l, network net)
+శూన్య backward_yolo_layer(స్థిరరాశి layer l, జాలం net)
 {
    axpy_cpu(l.batch*l.inputs, 1, l.delta, 1, net.delta, 1);
 }
 
-void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth, int relative)
+శూన్య correct_yolo_boxes(detection *dets, పూర్ణాంకం n, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం netw, పూర్ణాంకం neth, పూర్ణాంకం relative)
 {
-    int i;
-    int new_w=0;
-    int new_h=0;
-    if (((float)netw/w) < ((float)neth/h)) {
+    పూర్ణాంకం i;
+    పూర్ణాంకం new_w=0;
+    పూర్ణాంకం new_h=0;
+    ఒకవేళ (((దశాంశం)netw/w) < ((దశాంశం)neth/h)) {
         new_w = netw;
         new_h = (h * netw)/w;
-    } else {
+    } లేకపోతే {
         new_h = neth;
         new_w = (w * neth)/h;
     }
-    for (i = 0; i < n; ++i){
+    కొరకు (i = 0; i < n; ++i){
         box b = dets[i].bbox;
-        b.x =  (b.x - (netw - new_w)/2./netw) / ((float)new_w/netw); 
-        b.y =  (b.y - (neth - new_h)/2./neth) / ((float)new_h/neth); 
-        b.w *= (float)netw/new_w;
-        b.h *= (float)neth/new_h;
-        if(!relative){
+        b.x =  (b.x - (netw - new_w)/2./netw) / ((దశాంశం)new_w/netw); 
+        b.y =  (b.y - (neth - new_h)/2./neth) / ((దశాంశం)new_h/neth); 
+        b.w *= (దశాంశం)netw/new_w;
+        b.h *= (దశాంశం)neth/new_h;
+        ఒకవేళ(!relative){
             b.x *= w;
             b.w *= w;
             b.y *= h;
@@ -272,35 +272,35 @@ void correct_yolo_boxes(detection *dets, int n, int w, int h, int netw, int neth
     }
 }
 
-int yolo_num_detections(layer l, float thresh)
+పూర్ణాంకం yolo_అంకె_detections(layer l, దశాంశం thresh)
 {
-    int i, n;
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            if(l.output[obj_index] > thresh){
-                ++count;
+    పూర్ణాంకం i, n;
+    పూర్ణాంకం లెక్క = 0;
+    కొరకు (i = 0; i < l.w*l.h; ++i){
+        కొరకు(n = 0; n < l.n; ++n){
+            పూర్ణాంకం obj_సూచీ  = నమోదు_సూచీ(l, 0, n*l.w*l.h + i, 4);
+            ఒకవేళ(l.output[obj_సూచీ] > thresh){
+                ++లెక్క;
             }
         }
     }
-    return count;
+    తిరిగి లెక్క;
 }
 
-void avg_flipped_yolo(layer l)
+శూన్య avg_flipped_yolo(layer l)
 {
-    int i,j,n,z;
-    float *flip = l.output + l.outputs;
-    for (j = 0; j < l.h; ++j) {
-        for (i = 0; i < l.w/2; ++i) {
-            for (n = 0; n < l.n; ++n) {
-                for(z = 0; z < l.classes + 4 + 1; ++z){
-                    int i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
-                    int i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
-                    float swap = flip[i1];
+    పూర్ణాంకం i,j,n,z;
+    దశాంశం *flip = l.output + l.outputs;
+    కొరకు (j = 0; j < l.h; ++j) {
+        కొరకు (i = 0; i < l.w/2; ++i) {
+            కొరకు (n = 0; n < l.n; ++n) {
+                కొరకు(z = 0; z < l.classes + 4 + 1; ++z){
+                    పూర్ణాంకం i1 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + i;
+                    పూర్ణాంకం i2 = z*l.w*l.h*l.n + n*l.w*l.h + j*l.w + (l.w - i - 1);
+                    దశాంశం మార్పిడి = flip[i1];
                     flip[i1] = flip[i2];
-                    flip[i2] = swap;
-                    if(z == 0){
+                    flip[i2] = మార్పిడి;
+                    ఒకవేళ(z == 0){
                         flip[i1] = -flip[i1];
                         flip[i2] = -flip[i2];
                     }
@@ -308,67 +308,67 @@ void avg_flipped_yolo(layer l)
             }
         }
     }
-    for(i = 0; i < l.outputs; ++i){
+    కొరకు(i = 0; i < l.outputs; ++i){
         l.output[i] = (l.output[i] + flip[i])/2.;
     }
 }
 
-int get_yolo_detections(layer l, int w, int h, int netw, int neth, float thresh, int *map, int relative, detection *dets)
+పూర్ణాంకం get_yolo_detections(layer l, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం netw, పూర్ణాంకం neth, దశాంశం thresh, పూర్ణాంకం *map, పూర్ణాంకం relative, detection *dets)
 {
-    int i,j,n;
-    float *predictions = l.output;
-    if (l.batch == 2) avg_flipped_yolo(l);
-    int count = 0;
-    for (i = 0; i < l.w*l.h; ++i){
-        int row = i / l.w;
-        int col = i % l.w;
-        for(n = 0; n < l.n; ++n){
-            int obj_index  = entry_index(l, 0, n*l.w*l.h + i, 4);
-            float objectness = predictions[obj_index];
-            if(objectness <= thresh) continue;
-            int box_index  = entry_index(l, 0, n*l.w*l.h + i, 0);
-            dets[count].bbox = get_yolo_box(predictions, l.biases, l.mask[n], box_index, col, row, l.w, l.h, netw, neth, l.w*l.h);
-            dets[count].objectness = objectness;
-            dets[count].classes = l.classes;
-            for(j = 0; j < l.classes; ++j){
-                int class_index = entry_index(l, 0, n*l.w*l.h + i, 4 + 1 + j);
-                float prob = objectness*predictions[class_index];
-                dets[count].prob[j] = (prob > thresh) ? prob : 0;
+    పూర్ణాంకం i,j,n;
+    దశాంశం *predictions = l.output;
+    ఒకవేళ (l.batch == 2) avg_flipped_yolo(l);
+    పూర్ణాంకం లెక్క = 0;
+    కొరకు (i = 0; i < l.w*l.h; ++i){
+        పూర్ణాంకం అడ్డువరుస = i / l.w;
+        పూర్ణాంకం నిలువు = i % l.w;
+        కొరకు(n = 0; n < l.n; ++n){
+            పూర్ణాంకం obj_సూచీ  = నమోదు_సూచీ(l, 0, n*l.w*l.h + i, 4);
+            దశాంశం objectness = predictions[obj_సూచీ];
+            ఒకవేళ(objectness <= thresh) కొనసాగు;
+            పూర్ణాంకం box_సూచీ  = నమోదు_సూచీ(l, 0, n*l.w*l.h + i, 0);
+            dets[లెక్క].bbox = get_yolo_box(predictions, l.biases, l.ముసుగు[n], box_సూచీ, నిలువు, అడ్డువరుస, l.w, l.h, netw, neth, l.w*l.h);
+            dets[లెక్క].objectness = objectness;
+            dets[లెక్క].classes = l.classes;
+            కొరకు(j = 0; j < l.classes; ++j){
+                పూర్ణాంకం class_సూచీ = నమోదు_సూచీ(l, 0, n*l.w*l.h + i, 4 + 1 + j);
+                దశాంశం prob = objectness*predictions[class_సూచీ];
+                dets[లెక్క].prob[j] = (prob > thresh) ? prob : 0;
             }
-            ++count;
+            ++లెక్క;
         }
     }
-    correct_yolo_boxes(dets, count, w, h, netw, neth, relative);
-    return count;
+    correct_yolo_boxes(dets, లెక్క, w, h, netw, neth, relative);
+    తిరిగి లెక్క;
 }
 
-#ifdef GPU
+#నిర్వచితమైతే GPU
 
-void forward_yolo_layer_gpu(const layer l, network net)
+శూన్య forward_yolo_layer_gpu(స్థిరరాశి layer l, జాలం net)
 {
-    copy_gpu(l.batch*l.inputs, net.input_gpu, 1, l.output_gpu, 1);
-    int b, n;
-    for (b = 0; b < l.batch; ++b){
-        for(n = 0; n < l.n; ++n){
-            int index = entry_index(l, b, n*l.w*l.h, 0);
-            activate_array_gpu(l.output_gpu + index, 2*l.w*l.h, LOGISTIC);
-            index = entry_index(l, b, n*l.w*l.h, 4);
-            activate_array_gpu(l.output_gpu + index, (1+l.classes)*l.w*l.h, LOGISTIC);
+    copy_gpu(l.batch*l.inputs, net.ఆదానం_gpu, 1, l.output_gpu, 1);
+    పూర్ణాంకం b, n;
+    కొరకు (b = 0; b < l.batch; ++b){
+        కొరకు(n = 0; n < l.n; ++n){
+            పూర్ణాంకం సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h, 0);
+            activate_array_gpu(l.output_gpu + సూచీ, 2*l.w*l.h, LOGISTIC);
+            సూచీ = నమోదు_సూచీ(l, b, n*l.w*l.h, 4);
+            activate_array_gpu(l.output_gpu + సూచీ, (1+l.classes)*l.w*l.h, LOGISTIC);
         }
     }
-    if(!net.train || l.onlyforward){
+    ఒకవేళ(!net.train || l.onlyforward){
         cuda_pull_array(l.output_gpu, l.output, l.batch*l.outputs);
-        return;
+        తిరిగి;
     }
 
-    cuda_pull_array(l.output_gpu, net.input, l.batch*l.inputs);
+    cuda_pull_array(l.output_gpu, net.ఆదానం, l.batch*l.inputs);
     forward_yolo_layer(l, net);
-    cuda_push_array(l.delta_gpu, l.delta, l.batch*l.outputs);
+    cuda_నెట్టు_array(l.delta_gpu, l.delta, l.batch*l.outputs);
 }
 
-void backward_yolo_layer_gpu(const layer l, network net)
+శూన్య backward_yolo_layer_gpu(స్థిరరాశి layer l, జాలం net)
 {
     axpy_gpu(l.batch*l.inputs, 1, l.delta_gpu, 1, net.delta_gpu, 1);
 }
-#endif
+#అయితే_ముగింపు
 

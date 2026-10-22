@@ -145,189 +145,189 @@ LICENSE
 
 */
 
-#ifndef INCLUDE_STB_IMAGE_WRITE_H
-#define INCLUDE_STB_IMAGE_WRITE_H
+#నిర్వచితం_కాకపోతే INCLUDE_STB_IMAGE_WRITE_H
+#నిర్వచించు INCLUDE_STB_IMAGE_WRITE_H
 
 // if STB_IMAGE_WRITE_STATIC causes problems, try defining STBIWDEF to 'inline' or 'static inline'
-#ifndef STBIWDEF
-#ifdef STB_IMAGE_WRITE_STATIC
-#define STBIWDEF  static
-#else
-#ifdef __cplusplus
-#define STBIWDEF  extern "C"
-#else
-#define STBIWDEF  extern
-#endif
-#endif
-#endif
+#నిర్వచితం_కాకపోతే STBIWDEF
+#నిర్వచితమైతే STB_IMAGE_WRITE_STATIC
+#నిర్వచించు STBIWDEF  స్థిర
+#లేకపోతే
+#నిర్వచితమైతే __cplusplus
+#నిర్వచించు STBIWDEF  బాహ్య "C"
+#లేకపోతే
+#నిర్వచించు STBIWDEF  బాహ్య
+#అయితే_ముగింపు
+#అయితే_ముగింపు
+#అయితే_ముగింపు
 
-#ifndef STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
-extern int stbi_write_tga_with_rle;
-extern int stbi_write_png_compression_level;
-extern int stbi_write_force_png_filter;
-#endif
+#నిర్వచితం_కాకపోతే STB_IMAGE_WRITE_STATIC  // C++ forbids static forward declarations
+బాహ్య పూర్ణాంకం stbi_write_tga_with_rle;
+బాహ్య పూర్ణాంకం stbi_write_png_compression_level;
+బాహ్య పూర్ణాంకం stbi_write_force_png_filter;
+#అయితే_ముగింపు
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga(char const *filename, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr(char const *filename, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void  *data, int quality);
-#endif
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+STBIWDEF పూర్ణాంకం stbi_write_png(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం, పూర్ణాంకం stride_లోపల_బైట్లు);
+STBIWDEF పూర్ణాంకం stbi_write_bmp(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం);
+STBIWDEF పూర్ణాంకం stbi_write_tga(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం);
+STBIWDEF పూర్ణాంకం stbi_write_hdr(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి దశాంశం *దత్తాంశం);
+STBIWDEF పూర్ణాంకం stbi_write_jpg(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం, పూర్ణాంకం quality);
+#అయితే_ముగింపు
 
-typedef void stbi_write_func(void *context, void *data, int size);
+రకనిర్వచనం శూన్య stbi_write_func(శూన్య *context, శూన్య *దత్తాంశం, పూర్ణాంకం కొలత);
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data, int stride_in_bytes);
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const void  *data);
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int w, int h, int comp, const float *data);
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void  *data, int quality);
+STBIWDEF పూర్ణాంకం stbi_write_png_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం, పూర్ణాంకం stride_లోపల_బైట్లు);
+STBIWDEF పూర్ణాంకం stbi_write_bmp_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం);
+STBIWDEF పూర్ణాంకం stbi_write_tga_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం);
+STBIWDEF పూర్ణాంకం stbi_write_hdr_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం comp, స్థిరరాశి దశాంశం *దత్తాంశం);
+STBIWDEF పూర్ణాంకం stbi_write_jpg_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య  *దత్తాంశం, పూర్ణాంకం quality);
 
-STBIWDEF void stbi_flip_vertically_on_write(int flip_boolean);
+STBIWDEF శూన్య stbi_flip_vertically_on_write(పూర్ణాంకం flip_boolean);
 
-#endif//INCLUDE_STB_IMAGE_WRITE_H
+#అయితే_ముగింపు//INCLUDE_STB_IMAGE_WRITE_H
 
-#ifdef STB_IMAGE_WRITE_IMPLEMENTATION
+#నిర్వచితమైతే STB_IMAGE_WRITE_IMPLEMENTATION
 
-#ifdef _WIN32
-   #ifndef _CRT_SECURE_NO_WARNINGS
-   #define _CRT_SECURE_NO_WARNINGS
-   #endif
-   #ifndef _CRT_NONSTDC_NO_DEPRECATE
-   #define _CRT_NONSTDC_NO_DEPRECATE
-   #endif
-#endif
+#నిర్వచితమైతే _WIN32
+   #నిర్వచితం_కాకపోతే _CRT_SECURE_NO_WARNINGS
+   #నిర్వచించు _CRT_SECURE_NO_WARNINGS
+   #అయితే_ముగింపు
+   #నిర్వచితం_కాకపోతే _CRT_NONSTDC_NO_DEPRECATE
+   #నిర్వచించు _CRT_NONSTDC_NO_DEPRECATE
+   #అయితే_ముగింపు
+#అయితే_ముగింపు
 
-#ifndef STBI_WRITE_NO_STDIO
-#include <stdio.h>
-#endif // STBI_WRITE_NO_STDIO
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+#అన్తర్భావ <stdio.h>
+#అయితే_ముగింపు // STBI_WRITE_NO_STDIO
 
-#include <stdarg.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
+#అన్తర్భావ <stdarg.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ <math.h>
 
-#if defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
+#ఒకవేళ defined(STBIW_MALLOC) && defined(STBIW_FREE) && (defined(STBIW_REALLOC) || defined(STBIW_REALLOC_SIZED))
 // ok
-#elif !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
+#లేదావేళ !defined(STBIW_MALLOC) && !defined(STBIW_FREE) && !defined(STBIW_REALLOC) && !defined(STBIW_REALLOC_SIZED)
 // ok
-#else
-#error "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
-#endif
+#లేకపోతే
+#దోషం "Must define all or none of STBIW_MALLOC, STBIW_FREE, and STBIW_REALLOC (or STBIW_REALLOC_SIZED)."
+#అయితే_ముగింపు
 
-#ifndef STBIW_MALLOC
-#define STBIW_MALLOC(sz)        malloc(sz)
-#define STBIW_REALLOC(p,newsz)  realloc(p,newsz)
-#define STBIW_FREE(p)           free(p)
-#endif
+#నిర్వచితం_కాకపోతే STBIW_MALLOC
+#నిర్వచించు STBIW_MALLOC(sz)        జ్ఞాపకం_ఇవ్వు(sz)
+#నిర్వచించు STBIW_REALLOC(p,newsz)  realloc(p,newsz)
+#నిర్వచించు STBIW_FREE(p)           విడుదల(p)
+#అయితే_ముగింపు
 
-#ifndef STBIW_REALLOC_SIZED
-#define STBIW_REALLOC_SIZED(p,oldsz,newsz) STBIW_REALLOC(p,newsz)
-#endif
-
-
-#ifndef STBIW_MEMMOVE
-#define STBIW_MEMMOVE(a,b,sz) memmove(a,b,sz)
-#endif
+#నిర్వచితం_కాకపోతే STBIW_REALLOC_SIZED
+#నిర్వచించు STBIW_REALLOC_SIZED(p,oldsz,newsz) STBIW_REALLOC(p,newsz)
+#అయితే_ముగింపు
 
 
-#ifndef STBIW_ASSERT
-#include <assert.h>
-#define STBIW_ASSERT(x) assert(x)
-#endif
+#నిర్వచితం_కాకపోతే STBIW_MEMMOVE
+#నిర్వచించు STBIW_MEMMOVE(a,b,sz) memmove(a,b,sz)
+#అయితే_ముగింపు
 
-#define STBIW_UCHAR(x) (unsigned char) ((x) & 0xff)
 
-#ifdef STB_IMAGE_WRITE_STATIC
-static int stbi__flip_vertically_on_write=0;
-static int stbi_write_png_compression_level = 8;
-static int stbi_write_tga_with_rle = 1;
-static int stbi_write_force_png_filter = -1;
-#else
-int stbi_write_png_compression_level = 8;
-int stbi__flip_vertically_on_write=0;
-int stbi_write_tga_with_rle = 1;
-int stbi_write_force_png_filter = -1;
-#endif
+#నిర్వచితం_కాకపోతే STBIW_ASSERT
+#అన్తర్భావ <assert.h>
+#నిర్వచించు STBIW_ASSERT(x) ప్రతిజ్ఞా(x)
+#అయితే_ముగింపు
 
-STBIWDEF void stbi_flip_vertically_on_write(int flag)
+#నిర్వచించు STBIW_UCHAR(x) (గుర్తులేని అక్షరం) ((x) & 0xff)
+
+#నిర్వచితమైతే STB_IMAGE_WRITE_STATIC
+స్థిర పూర్ణాంకం stbi__flip_vertically_on_write=0;
+స్థిర పూర్ణాంకం stbi_write_png_compression_level = 8;
+స్థిర పూర్ణాంకం stbi_write_tga_with_rle = 1;
+స్థిర పూర్ణాంకం stbi_write_force_png_filter = -1;
+#లేకపోతే
+పూర్ణాంకం stbi_write_png_compression_level = 8;
+పూర్ణాంకం stbi__flip_vertically_on_write=0;
+పూర్ణాంకం stbi_write_tga_with_rle = 1;
+పూర్ణాంకం stbi_write_force_png_filter = -1;
+#అయితే_ముగింపు
+
+STBIWDEF శూన్య stbi_flip_vertically_on_write(పూర్ణాంకం flag)
 {
    stbi__flip_vertically_on_write = flag;
 }
 
-typedef struct
+రకనిర్వచనం నిర్మాణం
 {
    stbi_write_func *func;
-   void *context;
+   శూన్య *context;
 } stbi__write_context;
 
 // initialize a callback-based context
-static void stbi__start_write_callbacks(stbi__write_context *s, stbi_write_func *c, void *context)
+స్థిర శూన్య stbi_ప్రారంభం_write_callbacks(stbi__write_context *s, stbi_write_func *c, శూన్య *context)
 {
    s->func    = c;
    s->context = context;
 }
 
-#ifndef STBI_WRITE_NO_STDIO
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
 
-static void stbi__stdio_write(void *context, void *data, int size)
+స్థిర శూన్య stbi__stdio_write(శూన్య *context, శూన్య *దత్తాంశం, పూర్ణాంకం కొలత)
 {
-   fwrite(data,1,size,(FILE*) context);
+   fwrite(దత్తాంశం,1,కొలత,(FILE*) context);
 }
 
-static int stbi__start_write_file(stbi__write_context *s, const char *filename)
+స్థిర పూర్ణాంకం stbi_ప్రారంభం_write_file(stbi__write_context *s, స్థిరరాశి అక్షరం *filename)
 {
    FILE *f;
-#ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+#నిర్వచితమైతే STBI_MSC_SECURE_CRT
+   ఒకవేళ (fopen_s(&f, filename, "wb"))
+      f = ఖాళీ;
+#లేకపోతే
    f = fopen(filename, "wb");
-#endif
-   stbi__start_write_callbacks(s, stbi__stdio_write, (void *) f);
-   return f != NULL;
+#అయితే_ముగింపు
+   stbi_ప్రారంభం_write_callbacks(s, stbi__stdio_write, (శూన్య *) f);
+   తిరిగి f != ఖాళీ;
 }
 
-static void stbi__end_write_file(stbi__write_context *s)
+స్థిర శూన్య stbi_చివర_write_file(stbi__write_context *s)
 {
    fclose((FILE *)s->context);
 }
 
-#endif // !STBI_WRITE_NO_STDIO
+#అయితే_ముగింపు // !STBI_WRITE_NO_STDIO
 
-typedef unsigned int stbiw_uint32;
-typedef int stb_image_write_test[sizeof(stbiw_uint32)==4 ? 1 : -1];
+రకనిర్వచనం గుర్తులేని పూర్ణాంకం stbiw_uint32;
+రకనిర్వచనం పూర్ణాంకం stb_image_write_test[పరిమాణం(stbiw_uint32)==4 ? 1 : -1];
 
-static void stbiw__writefv(stbi__write_context *s, const char *fmt, va_list v)
+స్థిర శూన్య stbiw__writefv(stbi__write_context *s, స్థిరరాశి అక్షరం *fmt, va_list v)
 {
-   while (*fmt) {
-      switch (*fmt++) {
-         case ' ': break;
-         case '1': { unsigned char x = STBIW_UCHAR(va_arg(v, int));
+   అయితే (*fmt) {
+      ఎంపిక (*fmt++) {
+         స్థితి ' ': ఆపు;
+         స్థితి '1': { గుర్తులేని అక్షరం x = STBIW_UCHAR(va_arg(v, పూర్ణాంకం));
                      s->func(s->context,&x,1);
-                     break; }
-         case '2': { int x = va_arg(v,int);
-                     unsigned char b[2];
+                     ఆపు; }
+         స్థితి '2': { పూర్ణాంకం x = va_arg(v,పూర్ణాంకం);
+                     గుర్తులేని అక్షరం b[2];
                      b[0] = STBIW_UCHAR(x);
                      b[1] = STBIW_UCHAR(x>>8);
                      s->func(s->context,b,2);
-                     break; }
-         case '4': { stbiw_uint32 x = va_arg(v,int);
-                     unsigned char b[4];
+                     ఆపు; }
+         స్థితి '4': { stbiw_uint32 x = va_arg(v,పూర్ణాంకం);
+                     గుర్తులేని అక్షరం b[4];
                      b[0]=STBIW_UCHAR(x);
                      b[1]=STBIW_UCHAR(x>>8);
                      b[2]=STBIW_UCHAR(x>>16);
                      b[3]=STBIW_UCHAR(x>>24);
                      s->func(s->context,b,4);
-                     break; }
-         default:
+                     ఆపు; }
+         అప్రమేయ:
             STBIW_ASSERT(0);
-            return;
+            తిరిగి;
       }
    }
 }
 
-static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
+స్థిర శూన్య stbiw__writef(stbi__write_context *s, స్థిరరాశి అక్షరం *fmt, ...)
 {
    va_list v;
    va_start(v, fmt);
@@ -335,337 +335,337 @@ static void stbiw__writef(stbi__write_context *s, const char *fmt, ...)
    va_end(v);
 }
 
-static void stbiw__putc(stbi__write_context *s, unsigned char c)
+స్థిర శూన్య stbiw__putc(stbi__write_context *s, గుర్తులేని అక్షరం c)
 {
    s->func(s->context, &c, 1);
 }
 
-static void stbiw__write3(stbi__write_context *s, unsigned char a, unsigned char b, unsigned char c)
+స్థిర శూన్య stbiw__write3(stbi__write_context *s, గుర్తులేని అక్షరం a, గుర్తులేని అక్షరం b, గుర్తులేని అక్షరం c)
 {
-   unsigned char arr[3];
+   గుర్తులేని అక్షరం arr[3];
    arr[0] = a, arr[1] = b, arr[2] = c;
    s->func(s->context, arr, 3);
 }
 
-static void stbiw__write_pixel(stbi__write_context *s, int rgb_dir, int comp, int write_alpha, int expand_mono, unsigned char *d)
+స్థిర శూన్య stbiw__write_pixel(stbi__write_context *s, పూర్ణాంకం rgb_dir, పూర్ణాంకం comp, పూర్ణాంకం write_alpha, పూర్ణాంకం expand_mono, గుర్తులేని అక్షరం *d)
 {
-   unsigned char bg[3] = { 255, 0, 255}, px[3];
-   int k;
+   గుర్తులేని అక్షరం bg[3] = { 255, 0, 255}, px[3];
+   పూర్ణాంకం k;
 
-   if (write_alpha < 0)
+   ఒకవేళ (write_alpha < 0)
       s->func(s->context, &d[comp - 1], 1);
 
-   switch (comp) {
-      case 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
-      case 1:
-         if (expand_mono)
+   ఎంపిక (comp) {
+      స్థితి 2: // 2 pixels = mono + alpha, alpha is written separately, so same as 1-channel case
+      స్థితి 1:
+         ఒకవేళ (expand_mono)
             stbiw__write3(s, d[0], d[0], d[0]); // monochrome bmp
-         else
+         లేకపోతే
             s->func(s->context, d, 1);  // monochrome TGA
-         break;
-      case 4:
-         if (!write_alpha) {
+         ఆపు;
+      స్థితి 4:
+         ఒకవేళ (!write_alpha) {
             // composite against pink background
-            for (k = 0; k < 3; ++k)
+            కొరకు (k = 0; k < 3; ++k)
                px[k] = bg[k] + ((d[k] - bg[k]) * d[3]) / 255;
             stbiw__write3(s, px[1 - rgb_dir], px[1], px[1 + rgb_dir]);
-            break;
+            ఆపు;
          }
          /* FALLTHROUGH */
-      case 3:
+      స్థితి 3:
          stbiw__write3(s, d[1 - rgb_dir], d[1], d[1 + rgb_dir]);
-         break;
+         ఆపు;
    }
-   if (write_alpha > 0)
+   ఒకవేళ (write_alpha > 0)
       s->func(s->context, &d[comp - 1], 1);
 }
 
-static void stbiw__write_pixels(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, void *data, int write_alpha, int scanline_pad, int expand_mono)
+స్థిర శూన్య stbiw__write_pixels(stbi__write_context *s, పూర్ణాంకం rgb_dir, పూర్ణాంకం vdir, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, శూన్య *దత్తాంశం, పూర్ణాంకం write_alpha, పూర్ణాంకం scanline_pad, పూర్ణాంకం expand_mono)
 {
    stbiw_uint32 zero = 0;
-   int i,j, j_end;
+   పూర్ణాంకం i,j, j_చివర;
 
-   if (y <= 0)
-      return;
+   ఒకవేళ (y <= 0)
+      తిరిగి;
 
-   if (stbi__flip_vertically_on_write)
+   ఒకవేళ (stbi__flip_vertically_on_write)
       vdir *= -1;
 
-   if (vdir < 0)
-      j_end = -1, j = y-1;
-   else
-      j_end =  y, j = 0;
+   ఒకవేళ (vdir < 0)
+      j_చివర = -1, j = y-1;
+   లేకపోతే
+      j_చివర =  y, j = 0;
 
-   for (; j != j_end; j += vdir) {
-      for (i=0; i < x; ++i) {
-         unsigned char *d = (unsigned char *) data + (j*x+i)*comp;
+   కొరకు (; j != j_చివర; j += vdir) {
+      కొరకు (i=0; i < x; ++i) {
+         గుర్తులేని అక్షరం *d = (గుర్తులేని అక్షరం *) దత్తాంశం + (j*x+i)*comp;
          stbiw__write_pixel(s, rgb_dir, comp, write_alpha, expand_mono, d);
       }
       s->func(s->context, &zero, scanline_pad);
    }
 }
 
-static int stbiw__outfile(stbi__write_context *s, int rgb_dir, int vdir, int x, int y, int comp, int expand_mono, void *data, int alpha, int pad, const char *fmt, ...)
+స్థిర పూర్ణాంకం stbiw__outfile(stbi__write_context *s, పూర్ణాంకం rgb_dir, పూర్ణాంకం vdir, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, పూర్ణాంకం expand_mono, శూన్య *దత్తాంశం, పూర్ణాంకం alpha, పూర్ణాంకం pad, స్థిరరాశి అక్షరం *fmt, ...)
 {
-   if (y < 0 || x < 0) {
-      return 0;
-   } else {
+   ఒకవేళ (y < 0 || x < 0) {
+      తిరిగి 0;
+   } లేకపోతే {
       va_list v;
       va_start(v, fmt);
       stbiw__writefv(s, fmt, v);
       va_end(v);
-      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,data,alpha,pad, expand_mono);
-      return 1;
+      stbiw__write_pixels(s,rgb_dir,vdir,x,y,comp,దత్తాంశం,alpha,pad, expand_mono);
+      తిరిగి 1;
    }
 }
 
-static int stbi_write_bmp_core(stbi__write_context *s, int x, int y, int comp, const void *data)
+స్థిర పూర్ణాంకం stbi_write_bmp_core(stbi__write_context *s, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం)
 {
-   int pad = (-x*3) & 3;
-   return stbiw__outfile(s,-1,-1,x,y,comp,1,(void *) data,0,pad,
+   పూర్ణాంకం pad = (-x*3) & 3;
+   తిరిగి stbiw__outfile(s,-1,-1,x,y,comp,1,(శూన్య *) దత్తాంశం,0,pad,
            "11 4 22 4" "4 44 22 444444",
            'B', 'M', 14+40+(x*3+pad)*y, 0,0, 14+40,  // file header
             40, x,y, 1,24, 0,0,0,0,0,0);             // bitmap header
 }
 
-STBIWDEF int stbi_write_bmp_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF పూర్ణాంకం stbi_write_bmp_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_bmp_core(&s, x, y, comp, data);
+   stbi_ప్రారంభం_write_callbacks(&s, func, context);
+   తిరిగి stbi_write_bmp_core(&s, x, y, comp, దత్తాంశం);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_bmp(char const *filename, int x, int y, int comp, const void *data)
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+STBIWDEF పూర్ణాంకం stbi_write_bmp(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_bmp_core(&s, x, y, comp, data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ఒకవేళ (stbi_ప్రారంభం_write_file(&s,filename)) {
+      పూర్ణాంకం r = stbi_write_bmp_core(&s, x, y, comp, దత్తాంశం);
+      stbi_చివర_write_file(&s);
+      తిరిగి r;
+   } లేకపోతే
+      తిరిగి 0;
 }
-#endif //!STBI_WRITE_NO_STDIO
+#అయితే_ముగింపు //!STBI_WRITE_NO_STDIO
 
-static int stbi_write_tga_core(stbi__write_context *s, int x, int y, int comp, void *data)
+స్థిర పూర్ణాంకం stbi_write_tga_core(stbi__write_context *s, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, శూన్య *దత్తాంశం)
 {
-   int has_alpha = (comp == 2 || comp == 4);
-   int colorbytes = has_alpha ? comp-1 : comp;
-   int format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
+   పూర్ణాంకం has_alpha = (comp == 2 || comp == 4);
+   పూర్ణాంకం colorbytes = has_alpha ? comp-1 : comp;
+   పూర్ణాంకం format = colorbytes < 2 ? 3 : 2; // 3 color channels (RGB/RGBA) = 2, 1 color channel (Y/YA) = 3
 
-   if (y < 0 || x < 0)
-      return 0;
+   ఒకవేళ (y < 0 || x < 0)
+      తిరిగి 0;
 
-   if (!stbi_write_tga_with_rle) {
-      return stbiw__outfile(s, -1, -1, x, y, comp, 0, (void *) data, has_alpha, 0,
+   ఒకవేళ (!stbi_write_tga_with_rle) {
+      తిరిగి stbiw__outfile(s, -1, -1, x, y, comp, 0, (శూన్య *) దత్తాంశం, has_alpha, 0,
          "111 221 2222 11", 0, 0, format, 0, 0, 0, 0, 0, x, y, (colorbytes + has_alpha) * 8, has_alpha * 8);
-   } else {
-      int i,j,k;
-      int jend, jdir;
+   } లేకపోతే {
+      పూర్ణాంకం i,j,k;
+      పూర్ణాంకం jend, jdir;
 
       stbiw__writef(s, "111 221 2222 11", 0,0,format+8, 0,0,0, 0,0,x,y, (colorbytes + has_alpha) * 8, has_alpha * 8);
 
-      if (stbi__flip_vertically_on_write) {
+      ఒకవేళ (stbi__flip_vertically_on_write) {
          j = 0;
          jend = y;
          jdir = 1;
-      } else {
+      } లేకపోతే {
          j = y-1;
          jend = -1;
          jdir = -1;
       }
-      for (; j != jend; j += jdir) {
-         unsigned char *row = (unsigned char *) data + j * x * comp;
-         int len;
+      కొరకు (; j != jend; j += jdir) {
+         గుర్తులేని అక్షరం *అడ్డువరుస = (గుర్తులేని అక్షరం *) దత్తాంశం + j * x * comp;
+         పూర్ణాంకం len;
 
-         for (i = 0; i < x; i += len) {
-            unsigned char *begin = row + i * comp;
-            int diff = 1;
+         కొరకు (i = 0; i < x; i += len) {
+            గుర్తులేని అక్షరం *begin = అడ్డువరుస + i * comp;
+            పూర్ణాంకం diff = 1;
             len = 1;
 
-            if (i < x - 1) {
+            ఒకవేళ (i < x - 1) {
                ++len;
-               diff = memcmp(begin, row + (i + 1) * comp, comp);
-               if (diff) {
-                  const unsigned char *prev = begin;
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (memcmp(prev, row + k * comp, comp)) {
+               diff = memcmp(begin, అడ్డువరుస + (i + 1) * comp, comp);
+               ఒకవేళ (diff) {
+                  స్థిరరాశి గుర్తులేని అక్షరం *prev = begin;
+                  కొరకు (k = i + 2; k < x && len < 128; ++k) {
+                     ఒకవేళ (memcmp(prev, అడ్డువరుస + k * comp, comp)) {
                         prev += comp;
                         ++len;
-                     } else {
+                     } లేకపోతే {
                         --len;
-                        break;
+                        ఆపు;
                      }
                   }
-               } else {
-                  for (k = i + 2; k < x && len < 128; ++k) {
-                     if (!memcmp(begin, row + k * comp, comp)) {
+               } లేకపోతే {
+                  కొరకు (k = i + 2; k < x && len < 128; ++k) {
+                     ఒకవేళ (!memcmp(begin, అడ్డువరుస + k * comp, comp)) {
                         ++len;
-                     } else {
-                        break;
+                     } లేకపోతే {
+                        ఆపు;
                      }
                   }
                }
             }
 
-            if (diff) {
-               unsigned char header = STBIW_UCHAR(len - 1);
-               s->func(s->context, &header, 1);
-               for (k = 0; k < len; ++k) {
+            ఒకవేళ (diff) {
+               గుర్తులేని అక్షరం శీర్షిక = STBIW_UCHAR(len - 1);
+               s->func(s->context, &శీర్షిక, 1);
+               కొరకు (k = 0; k < len; ++k) {
                   stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin + k * comp);
                }
-            } else {
-               unsigned char header = STBIW_UCHAR(len - 129);
-               s->func(s->context, &header, 1);
+            } లేకపోతే {
+               గుర్తులేని అక్షరం శీర్షిక = STBIW_UCHAR(len - 129);
+               s->func(s->context, &శీర్షిక, 1);
                stbiw__write_pixel(s, -1, comp, has_alpha, 0, begin);
             }
          }
       }
    }
-   return 1;
+   తిరిగి 1;
 }
 
-STBIWDEF int stbi_write_tga_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data)
+STBIWDEF పూర్ణాంకం stbi_write_tga_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_tga_core(&s, x, y, comp, (void *) data);
+   stbi_ప్రారంభం_write_callbacks(&s, func, context);
+   తిరిగి stbi_write_tga_core(&s, x, y, comp, (శూన్య *) దత్తాంశం);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_tga(char const *filename, int x, int y, int comp, const void *data)
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+STBIWDEF పూర్ణాంకం stbi_write_tga(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_tga_core(&s, x, y, comp, (void *) data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ఒకవేళ (stbi_ప్రారంభం_write_file(&s,filename)) {
+      పూర్ణాంకం r = stbi_write_tga_core(&s, x, y, comp, (శూన్య *) దత్తాంశం);
+      stbi_చివర_write_file(&s);
+      తిరిగి r;
+   } లేకపోతే
+      తిరిగి 0;
 }
-#endif
+#అయితే_ముగింపు
 
 // *************************************************************************************************
 // Radiance RGBE HDR writer
 // by Baldur Karlsson
 
-#define stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
+#నిర్వచించు stbiw__max(a, b)  ((a) > (b) ? (a) : (b))
 
-void stbiw__linear_to_rgbe(unsigned char *rgbe, float *linear)
+శూన్య stbiw_రేఖీయ_గమ్యం_rgbe(గుర్తులేని అక్షరం *rgbe, దశాంశం *రేఖీయ_2)
 {
-   int exponent;
-   float maxcomp = stbiw__max(linear[0], stbiw__max(linear[1], linear[2]));
+   పూర్ణాంకం exponent;
+   దశాంశం maxcomp = stbiw__max(రేఖీయ_2[0], stbiw__max(రేఖీయ_2[1], రేఖీయ_2[2]));
 
-   if (maxcomp < 1e-32f) {
+   ఒకవేళ (maxcomp < 1e-32f) {
       rgbe[0] = rgbe[1] = rgbe[2] = rgbe[3] = 0;
-   } else {
-      float normalize = (float) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
+   } లేకపోతే {
+      దశాంశం normalize = (దశాంశం) frexp(maxcomp, &exponent) * 256.0f/maxcomp;
 
-      rgbe[0] = (unsigned char)(linear[0] * normalize);
-      rgbe[1] = (unsigned char)(linear[1] * normalize);
-      rgbe[2] = (unsigned char)(linear[2] * normalize);
-      rgbe[3] = (unsigned char)(exponent + 128);
+      rgbe[0] = (గుర్తులేని అక్షరం)(రేఖీయ_2[0] * normalize);
+      rgbe[1] = (గుర్తులేని అక్షరం)(రేఖీయ_2[1] * normalize);
+      rgbe[2] = (గుర్తులేని అక్షరం)(రేఖీయ_2[2] * normalize);
+      rgbe[3] = (గుర్తులేని అక్షరం)(exponent + 128);
    }
 }
 
-void stbiw__write_run_data(stbi__write_context *s, int length, unsigned char databyte)
+శూన్య stbiw_write_నిరంతరం_దత్తాంశం(stbi__write_context *s, పూర్ణాంకం నిడివి, గుర్తులేని అక్షరం databyte)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length+128);
-   STBIW_ASSERT(length+128 <= 255);
+   గుర్తులేని అక్షరం lengthbyte = STBIW_UCHAR(నిడివి+128);
+   STBIW_ASSERT(నిడివి+128 <= 255);
    s->func(s->context, &lengthbyte, 1);
    s->func(s->context, &databyte, 1);
 }
 
-void stbiw__write_dump_data(stbi__write_context *s, int length, unsigned char *data)
+శూన్య stbiw_write_dump_దత్తాంశం(stbi__write_context *s, పూర్ణాంకం నిడివి, గుర్తులేని అక్షరం *దత్తాంశం)
 {
-   unsigned char lengthbyte = STBIW_UCHAR(length);
-   STBIW_ASSERT(length <= 128); // inconsistent with spec but consistent with official code
+   గుర్తులేని అక్షరం lengthbyte = STBIW_UCHAR(నిడివి);
+   STBIW_ASSERT(నిడివి <= 128); // inconsistent with spec but consistent with official code
    s->func(s->context, &lengthbyte, 1);
-   s->func(s->context, data, length);
+   s->func(s->context, దత్తాంశం, నిడివి);
 }
 
-void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, unsigned char *scratch, float *scanline)
+శూన్య stbiw__write_hdr_scanline(stbi__write_context *s, పూర్ణాంకం వెడల్పు, పూర్ణాంకం ncomp, గుర్తులేని అక్షరం *scratch, దశాంశం *scanline)
 {
-   unsigned char scanlineheader[4] = { 2, 2, 0, 0 };
-   unsigned char rgbe[4];
-   float linear[3];
-   int x;
+   గుర్తులేని అక్షరం scanlineheader[4] = { 2, 2, 0, 0 };
+   గుర్తులేని అక్షరం rgbe[4];
+   దశాంశం రేఖీయ_2[3];
+   పూర్ణాంకం x;
 
-   scanlineheader[2] = (width&0xff00)>>8;
-   scanlineheader[3] = (width&0x00ff);
+   scanlineheader[2] = (వెడల్పు&0xff00)>>8;
+   scanlineheader[3] = (వెడల్పు&0x00ff);
 
    /* skip RLE for images too small or large */
-   if (width < 8 || width >= 32768) {
-      for (x=0; x < width; x++) {
-         switch (ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
-                    linear[1] = scanline[x*ncomp + 1];
-                    linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
-                    linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+   ఒకవేళ (వెడల్పు < 8 || వెడల్పు >= 32768) {
+      కొరకు (x=0; x < వెడల్పు; x++) {
+         ఎంపిక (ncomp) {
+            స్థితి 4: /* fallthrough */
+            స్థితి 3: రేఖీయ_2[2] = scanline[x*ncomp + 2];
+                    రేఖీయ_2[1] = scanline[x*ncomp + 1];
+                    రేఖీయ_2[0] = scanline[x*ncomp + 0];
+                    ఆపు;
+            అప్రమేయ:
+                    రేఖీయ_2[0] = రేఖీయ_2[1] = రేఖీయ_2[2] = scanline[x*ncomp + 0];
+                    ఆపు;
          }
-         stbiw__linear_to_rgbe(rgbe, linear);
+         stbiw_రేఖీయ_గమ్యం_rgbe(rgbe, రేఖీయ_2);
          s->func(s->context, rgbe, 4);
       }
-   } else {
-      int c,r;
+   } లేకపోతే {
+      పూర్ణాంకం c,r;
       /* encode into scratch buffer */
-      for (x=0; x < width; x++) {
-         switch(ncomp) {
-            case 4: /* fallthrough */
-            case 3: linear[2] = scanline[x*ncomp + 2];
-                    linear[1] = scanline[x*ncomp + 1];
-                    linear[0] = scanline[x*ncomp + 0];
-                    break;
-            default:
-                    linear[0] = linear[1] = linear[2] = scanline[x*ncomp + 0];
-                    break;
+      కొరకు (x=0; x < వెడల్పు; x++) {
+         ఎంపిక(ncomp) {
+            స్థితి 4: /* fallthrough */
+            స్థితి 3: రేఖీయ_2[2] = scanline[x*ncomp + 2];
+                    రేఖీయ_2[1] = scanline[x*ncomp + 1];
+                    రేఖీయ_2[0] = scanline[x*ncomp + 0];
+                    ఆపు;
+            అప్రమేయ:
+                    రేఖీయ_2[0] = రేఖీయ_2[1] = రేఖీయ_2[2] = scanline[x*ncomp + 0];
+                    ఆపు;
          }
-         stbiw__linear_to_rgbe(rgbe, linear);
-         scratch[x + width*0] = rgbe[0];
-         scratch[x + width*1] = rgbe[1];
-         scratch[x + width*2] = rgbe[2];
-         scratch[x + width*3] = rgbe[3];
+         stbiw_రేఖీయ_గమ్యం_rgbe(rgbe, రేఖీయ_2);
+         scratch[x + వెడల్పు*0] = rgbe[0];
+         scratch[x + వెడల్పు*1] = rgbe[1];
+         scratch[x + వెడల్పు*2] = rgbe[2];
+         scratch[x + వెడల్పు*3] = rgbe[3];
       }
 
       s->func(s->context, scanlineheader, 4);
 
       /* RLE each component separately */
-      for (c=0; c < 4; c++) {
-         unsigned char *comp = &scratch[width*c];
+      కొరకు (c=0; c < 4; c++) {
+         గుర్తులేని అక్షరం *comp = &scratch[వెడల్పు*c];
 
          x = 0;
-         while (x < width) {
+         అయితే (x < వెడల్పు) {
             // find first run
             r = x;
-            while (r+2 < width) {
-               if (comp[r] == comp[r+1] && comp[r] == comp[r+2])
-                  break;
+            అయితే (r+2 < వెడల్పు) {
+               ఒకవేళ (comp[r] == comp[r+1] && comp[r] == comp[r+2])
+                  ఆపు;
                ++r;
             }
-            if (r+2 >= width)
-               r = width;
+            ఒకవేళ (r+2 >= వెడల్పు)
+               r = వెడల్పు;
             // dump up to first run
-            while (x < r) {
-               int len = r-x;
-               if (len > 128) len = 128;
-               stbiw__write_dump_data(s, len, &comp[x]);
+            అయితే (x < r) {
+               పూర్ణాంకం len = r-x;
+               ఒకవేళ (len > 128) len = 128;
+               stbiw_write_dump_దత్తాంశం(s, len, &comp[x]);
                x += len;
             }
             // if there's a run, output it
-            if (r+2 < width) { // same test as what we break out of in search loop, so only true if we break'd
+            ఒకవేళ (r+2 < వెడల్పు) { // same test as what we break out of in search loop, so only true if we break'd
                // find next byte after run
-               while (r < width && comp[r] == comp[x])
+               అయితే (r < వెడల్పు && comp[r] == comp[x])
                   ++r;
                // output run up to r
-               while (x < r) {
-                  int len = r-x;
-                  if (len > 127) len = 127;
-                  stbiw__write_run_data(s, len, comp[x]);
+               అయితే (x < r) {
+                  పూర్ణాంకం len = r-x;
+                  ఒకవేళ (len > 127) len = 127;
+                  stbiw_write_నిరంతరం_దత్తాంశం(s, len, comp[x]);
                   x += len;
                }
             }
@@ -674,51 +674,51 @@ void stbiw__write_hdr_scanline(stbi__write_context *s, int width, int ncomp, uns
    }
 }
 
-static int stbi_write_hdr_core(stbi__write_context *s, int x, int y, int comp, float *data)
+స్థిర పూర్ణాంకం stbi_write_hdr_core(stbi__write_context *s, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, దశాంశం *దత్తాంశం)
 {
-   if (y <= 0 || x <= 0 || data == NULL)
-      return 0;
-   else {
+   ఒకవేళ (y <= 0 || x <= 0 || దత్తాంశం == ఖాళీ)
+      తిరిగి 0;
+   లేకపోతే {
       // Each component is stored separately. Allocate scratch space for full output scanline.
-      unsigned char *scratch = (unsigned char *) STBIW_MALLOC(x*4);
-      int i, len;
-      char buffer[128];
-      char header[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
-      s->func(s->context, header, sizeof(header)-1);
+      గుర్తులేని అక్షరం *scratch = (గుర్తులేని అక్షరం *) STBIW_MALLOC(x*4);
+      పూర్ణాంకం i, len;
+      అక్షరం బఫరు[128];
+      అక్షరం శీర్షిక[] = "#?RADIANCE\n# Written by stb_image_write.h\nFORMAT=32-bit_rle_rgbe\n";
+      s->func(s->context, శీర్షిక, పరిమాణం(శీర్షిక)-1);
 
-#ifdef STBI_MSC_SECURE_CRT
-      len = sprintf_s(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#else
-      len = sprintf(buffer, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
-#endif
-      s->func(s->context, buffer, len);
+#నిర్వచితమైతే STBI_MSC_SECURE_CRT
+      len = sprintf_s(బఫరు, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#లేకపోతే
+      len = sprintf(బఫరు, "EXPOSURE=          1.0000000000000\n\n-Y %d +X %d\n", y, x);
+#అయితే_ముగింపు
+      s->func(s->context, బఫరు, len);
 
-      for(i=0; i < y; i++)
-         stbiw__write_hdr_scanline(s, x, comp, scratch, data + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
+      కొరకు(i=0; i < y; i++)
+         stbiw__write_hdr_scanline(s, x, comp, scratch, దత్తాంశం + comp*x*(stbi__flip_vertically_on_write ? y-1-i : i)*x);
       STBIW_FREE(scratch);
-      return 1;
+      తిరిగి 1;
    }
 }
 
-STBIWDEF int stbi_write_hdr_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const float *data)
+STBIWDEF పూర్ణాంకం stbi_write_hdr_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి దశాంశం *దత్తాంశం)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_hdr_core(&s, x, y, comp, (float *) data);
+   stbi_ప్రారంభం_write_callbacks(&s, func, context);
+   తిరిగి stbi_write_hdr_core(&s, x, y, comp, (దశాంశం *) దత్తాంశం);
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const float *data)
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+STBIWDEF పూర్ణాంకం stbi_write_hdr(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి దశాంశం *దత్తాంశం)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_hdr_core(&s, x, y, comp, (float *) data);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ఒకవేళ (stbi_ప్రారంభం_write_file(&s,filename)) {
+      పూర్ణాంకం r = stbi_write_hdr_core(&s, x, y, comp, (దశాంశం *) దత్తాంశం);
+      stbi_చివర_write_file(&s);
+      తిరిగి r;
+   } లేకపోతే
+      తిరిగి 0;
 }
-#endif // STBI_WRITE_NO_STDIO
+#అయితే_ముగింపు // STBI_WRITE_NO_STDIO
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -726,204 +726,204 @@ STBIWDEF int stbi_write_hdr(char const *filename, int x, int y, int comp, const 
 // PNG writer
 //
 
-#ifndef STBIW_ZLIB_COMPRESS
+#నిర్వచితం_కాకపోతే STBIW_ZLIB_COMPRESS
 // stretchy buffer; stbiw__sbpush() == vector<>::push_back() -- stbiw__sbcount() == vector<>::size()
-#define stbiw__sbraw(a) ((int *) (a) - 2)
-#define stbiw__sbm(a)   stbiw__sbraw(a)[0]
-#define stbiw__sbn(a)   stbiw__sbraw(a)[1]
+#నిర్వచించు stbiw__sbraw(a) ((పూర్ణాంకం *) (a) - 2)
+#నిర్వచించు stbiw__sbm(a)   stbiw__sbraw(a)[0]
+#నిర్వచించు stbiw__sbn(a)   stbiw__sbraw(a)[1]
 
-#define stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
-#define stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
-#define stbiw__sbgrow(a,n)  stbiw__sbgrowf((void **) &(a), (n), sizeof(*(a)))
+#నిర్వచించు stbiw__sbneedgrow(a,n)  ((a)==0 || stbiw__sbn(a)+n >= stbiw__sbm(a))
+#నిర్వచించు stbiw__sbmaybegrow(a,n) (stbiw__sbneedgrow(a,(n)) ? stbiw__sbgrow(a,n) : 0)
+#నిర్వచించు stbiw__sbgrow(a,n)  stbiw__sbgrowf((శూన్య **) &(a), (n), పరిమాణం(*(a)))
 
-#define stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
-#define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
-#define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
+#నిర్వచించు stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
+#నిర్వచించు stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
+#నిర్వచించు stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
 
-static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
+స్థిర శూన్య *stbiw__sbgrowf(శూన్య **arr, పూర్ణాంకం increment, పూర్ణాంకం itemsize)
 {
-   int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
-   void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(int)*2) : 0, itemsize * m + sizeof(int)*2);
+   పూర్ణాంకం m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
+   శూన్య *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + పరిమాణం(పూర్ణాంకం)*2) : 0, itemsize * m + పరిమాణం(పూర్ణాంకం)*2);
    STBIW_ASSERT(p);
-   if (p) {
-      if (!*arr) ((int *) p)[1] = 0;
-      *arr = (void *) ((int *) p + 2);
+   ఒకవేళ (p) {
+      ఒకవేళ (!*arr) ((పూర్ణాంకం *) p)[1] = 0;
+      *arr = (శూన్య *) ((పూర్ణాంకం *) p + 2);
       stbiw__sbm(*arr) = m;
    }
-   return *arr;
+   తిరిగి *arr;
 }
 
-static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
+స్థిర గుర్తులేని అక్షరం *stbiw__zlib_flushf(గుర్తులేని అక్షరం *దత్తాంశం, గుర్తులేని పూర్ణాంకం *bitbuffer, పూర్ణాంకం *bitcount)
 {
-   while (*bitcount >= 8) {
-      stbiw__sbpush(data, STBIW_UCHAR(*bitbuffer));
+   అయితే (*bitcount >= 8) {
+      stbiw__sbpush(దత్తాంశం, STBIW_UCHAR(*bitbuffer));
       *bitbuffer >>= 8;
       *bitcount -= 8;
    }
-   return data;
+   తిరిగి దత్తాంశం;
 }
 
-static int stbiw__zlib_bitrev(int code, int codebits)
+స్థిర పూర్ణాంకం stbiw__zlib_bitrev(పూర్ణాంకం సంకేతం_2, పూర్ణాంకం codebits)
 {
-   int res=0;
-   while (codebits--) {
-      res = (res << 1) | (code & 1);
-      code >>= 1;
+   పూర్ణాంకం res=0;
+   అయితే (codebits--) {
+      res = (res << 1) | (సంకేతం_2 & 1);
+      సంకేతం_2 >>= 1;
    }
-   return res;
+   తిరిగి res;
 }
 
-static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
+స్థిర గుర్తులేని పూర్ణాంకం stbiw__zlib_countm(గుర్తులేని అక్షరం *a, గుర్తులేని అక్షరం *b, పూర్ణాంకం హద్దు)
 {
-   int i;
-   for (i=0; i < limit && i < 258; ++i)
-      if (a[i] != b[i]) break;
-   return i;
+   పూర్ణాంకం i;
+   కొరకు (i=0; i < హద్దు && i < 258; ++i)
+      ఒకవేళ (a[i] != b[i]) ఆపు;
+   తిరిగి i;
 }
 
-static unsigned int stbiw__zhash(unsigned char *data)
+స్థిర గుర్తులేని పూర్ణాంకం stbiw__zhash(గుర్తులేని అక్షరం *దత్తాంశం)
 {
-   stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
+   stbiw_uint32 hash = దత్తాంశం[0] + (దత్తాంశం[1] << 8) + (దత్తాంశం[2] << 16);
    hash ^= hash << 3;
    hash += hash >> 5;
    hash ^= hash << 4;
    hash += hash >> 17;
    hash ^= hash << 25;
    hash += hash >> 6;
-   return hash;
+   తిరిగి hash;
 }
 
-#define stbiw__zlib_flush() (out = stbiw__zlib_flushf(out, &bitbuf, &bitcount))
-#define stbiw__zlib_add(code,codebits) \
-      (bitbuf |= (code) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
-#define stbiw__zlib_huffa(b,c)  stbiw__zlib_add(stbiw__zlib_bitrev(b,c),c)
+#నిర్వచించు stbiw__zlib_flush() (బహిర్గతం = stbiw__zlib_flushf(బహిర్గతం, &bitbuf, &bitcount))
+#నిర్వచించు stbiw_zlib_కూడు(సంకేతం_2,codebits) \
+      (bitbuf |= (సంకేతం_2) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
+#నిర్వచించు stbiw__zlib_huffa(b,c)  stbiw_zlib_కూడు(stbiw__zlib_bitrev(b,c),c)
 // default huffman tables
-#define stbiw__zlib_huff1(n)  stbiw__zlib_huffa(0x30 + (n), 8)
-#define stbiw__zlib_huff2(n)  stbiw__zlib_huffa(0x190 + (n)-144, 9)
-#define stbiw__zlib_huff3(n)  stbiw__zlib_huffa(0 + (n)-256,7)
-#define stbiw__zlib_huff4(n)  stbiw__zlib_huffa(0xc0 + (n)-280,8)
-#define stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
-#define stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
+#నిర్వచించు stbiw__zlib_huff1(n)  stbiw__zlib_huffa(0x30 + (n), 8)
+#నిర్వచించు stbiw__zlib_huff2(n)  stbiw__zlib_huffa(0x190 + (n)-144, 9)
+#నిర్వచించు stbiw__zlib_huff3(n)  stbiw__zlib_huffa(0 + (n)-256,7)
+#నిర్వచించు stbiw__zlib_huff4(n)  stbiw__zlib_huffa(0xc0 + (n)-280,8)
+#నిర్వచించు stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
+#నిర్వచించు stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
 
-#define stbiw__ZHASH   16384
+#నిర్వచించు stbiw__ZHASH   16384
 
-#endif // STBIW_ZLIB_COMPRESS
+#అయితే_ముగింపు // STBIW_ZLIB_COMPRESS
 
-unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
+గుర్తులేని అక్షరం * stbi_zlib_compress(గుర్తులేని అక్షరం *దత్తాంశం, పూర్ణాంకం దత్తాంశం_len, పూర్ణాంకం *బహిర్గతం_len, పూర్ణాంకం quality)
 {
-#ifdef STBIW_ZLIB_COMPRESS
+#నిర్వచితమైతే STBIW_ZLIB_COMPRESS
    // user provided a zlib compress implementation, use that
-   return STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
-#else // use builtin
-   static unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
-   static unsigned char  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
-   static unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
-   static unsigned char  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
-   unsigned int bitbuf=0;
-   int i,j, bitcount=0;
-   unsigned char *out = NULL;
-   unsigned char ***hash_table = (unsigned char***) STBIW_MALLOC(stbiw__ZHASH * sizeof(char**));
-   if (hash_table == NULL)
-      return NULL;
-   if (quality < 5) quality = 5;
+   తిరిగి STBIW_ZLIB_COMPRESS(దత్తాంశం, దత్తాంశం_len, బహిర్గతం_len, quality);
+#లేకపోతే // use builtin
+   స్థిర గుర్తులేని పొట్టి lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
+   స్థిర గుర్తులేని అక్షరం  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
+   స్థిర గుర్తులేని పొట్టి distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
+   స్థిర గుర్తులేని అక్షరం  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
+   గుర్తులేని పూర్ణాంకం bitbuf=0;
+   పూర్ణాంకం i,j, bitcount=0;
+   గుర్తులేని అక్షరం *బహిర్గతం = ఖాళీ;
+   గుర్తులేని అక్షరం ***hash_పట్టిక = (గుర్తులేని అక్షరం***) STBIW_MALLOC(stbiw__ZHASH * పరిమాణం(అక్షరం**));
+   ఒకవేళ (hash_పట్టిక == ఖాళీ)
+      తిరిగి ఖాళీ;
+   ఒకవేళ (quality < 5) quality = 5;
 
-   stbiw__sbpush(out, 0x78);   // DEFLATE 32K window
-   stbiw__sbpush(out, 0x5e);   // FLEVEL = 1
-   stbiw__zlib_add(1,1);  // BFINAL = 1
-   stbiw__zlib_add(1,2);  // BTYPE = 1 -- fixed huffman
+   stbiw__sbpush(బహిర్గతం, 0x78);   // DEFLATE 32K window
+   stbiw__sbpush(బహిర్గతం, 0x5e);   // FLEVEL = 1
+   stbiw_zlib_కూడు(1,1);  // BFINAL = 1
+   stbiw_zlib_కూడు(1,2);  // BTYPE = 1 -- fixed huffman
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      hash_table[i] = NULL;
+   కొరకు (i=0; i < stbiw__ZHASH; ++i)
+      hash_పట్టిక[i] = ఖాళీ;
 
    i=0;
-   while (i < data_len-3) {
+   అయితే (i < దత్తాంశం_len-3) {
       // hash next 3 bytes of data to be compressed
-      int h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
-      unsigned char *bestloc = 0;
-      unsigned char **hlist = hash_table[h];
-      int n = stbiw__sbcount(hlist);
-      for (j=0; j < n; ++j) {
-         if (hlist[j]-data > i-32768) { // if entry lies within window
-            int d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
-            if (d >= best) best=d,bestloc=hlist[j];
+      పూర్ణాంకం h = stbiw__zhash(దత్తాంశం+i)&(stbiw__ZHASH-1), ఉత్తమ=3;
+      గుర్తులేని అక్షరం *bestloc = 0;
+      గుర్తులేని అక్షరం **hlist = hash_పట్టిక[h];
+      పూర్ణాంకం n = stbiw__sbcount(hlist);
+      కొరకు (j=0; j < n; ++j) {
+         ఒకవేళ (hlist[j]-దత్తాంశం > i-32768) { // if entry lies within window
+            పూర్ణాంకం d = stbiw__zlib_countm(hlist[j], దత్తాంశం+i, దత్తాంశం_len-i);
+            ఒకవేళ (d >= ఉత్తమ) ఉత్తమ=d,bestloc=hlist[j];
          }
       }
       // when hash table entry is too long, delete half the entries
-      if (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
-         STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, sizeof(hash_table[h][0])*quality);
-         stbiw__sbn(hash_table[h]) = quality;
+      ఒకవేళ (hash_పట్టిక[h] && stbiw__sbn(hash_పట్టిక[h]) == 2*quality) {
+         STBIW_MEMMOVE(hash_పట్టిక[h], hash_పట్టిక[h]+quality, పరిమాణం(hash_పట్టిక[h][0])*quality);
+         stbiw__sbn(hash_పట్టిక[h]) = quality;
       }
-      stbiw__sbpush(hash_table[h],data+i);
+      stbiw__sbpush(hash_పట్టిక[h],దత్తాంశం+i);
 
-      if (bestloc) {
+      ఒకవేళ (bestloc) {
          // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
-         h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
-         hlist = hash_table[h];
+         h = stbiw__zhash(దత్తాంశం+i+1)&(stbiw__ZHASH-1);
+         hlist = hash_పట్టిక[h];
          n = stbiw__sbcount(hlist);
-         for (j=0; j < n; ++j) {
-            if (hlist[j]-data > i-32767) {
-               int e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
-               if (e > best) { // if next match is better, bail on current match
-                  bestloc = NULL;
-                  break;
+         కొరకు (j=0; j < n; ++j) {
+            ఒకవేళ (hlist[j]-దత్తాంశం > i-32767) {
+               పూర్ణాంకం e = stbiw__zlib_countm(hlist[j], దత్తాంశం+i+1, దత్తాంశం_len-i-1);
+               ఒకవేళ (e > ఉత్తమ) { // if next match is better, bail on current match
+                  bestloc = ఖాళీ;
+                  ఆపు;
                }
             }
          }
       }
 
-      if (bestloc) {
-         int d = (int) (data+i - bestloc); // distance back
-         STBIW_ASSERT(d <= 32767 && best <= 258);
-         for (j=0; best > lengthc[j+1]-1; ++j);
+      ఒకవేళ (bestloc) {
+         పూర్ణాంకం d = (పూర్ణాంకం) (దత్తాంశం+i - bestloc); // distance back
+         STBIW_ASSERT(d <= 32767 && ఉత్తమ <= 258);
+         కొరకు (j=0; ఉత్తమ > lengthc[j+1]-1; ++j);
          stbiw__zlib_huff(j+257);
-         if (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
-         for (j=0; d > distc[j+1]-1; ++j);
-         stbiw__zlib_add(stbiw__zlib_bitrev(j,5),5);
-         if (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
-         i += best;
-      } else {
-         stbiw__zlib_huffb(data[i]);
+         ఒకవేళ (lengtheb[j]) stbiw_zlib_కూడు(ఉత్తమ - lengthc[j], lengtheb[j]);
+         కొరకు (j=0; d > distc[j+1]-1; ++j);
+         stbiw_zlib_కూడు(stbiw__zlib_bitrev(j,5),5);
+         ఒకవేళ (disteb[j]) stbiw_zlib_కూడు(d - distc[j], disteb[j]);
+         i += ఉత్తమ;
+      } లేకపోతే {
+         stbiw__zlib_huffb(దత్తాంశం[i]);
          ++i;
       }
    }
    // write out final bytes
-   for (;i < data_len; ++i)
-      stbiw__zlib_huffb(data[i]);
+   కొరకు (;i < దత్తాంశం_len; ++i)
+      stbiw__zlib_huffb(దత్తాంశం[i]);
    stbiw__zlib_huff(256); // end of block
    // pad with 0 bits to byte boundary
-   while (bitcount)
-      stbiw__zlib_add(0,1);
+   అయితే (bitcount)
+      stbiw_zlib_కూడు(0,1);
 
-   for (i=0; i < stbiw__ZHASH; ++i)
-      (void) stbiw__sbfree(hash_table[i]);
-   STBIW_FREE(hash_table);
+   కొరకు (i=0; i < stbiw__ZHASH; ++i)
+      (శూన్య) stbiw__sbfree(hash_పట్టిక[i]);
+   STBIW_FREE(hash_పట్టిక);
 
    {
       // compute adler32 on input
-      unsigned int s1=1, s2=0;
-      int blocklen = (int) (data_len % 5552);
+      గుర్తులేని పూర్ణాంకం s1=1, s2=0;
+      పూర్ణాంకం blocklen = (పూర్ణాంకం) (దత్తాంశం_len % 5552);
       j=0;
-      while (j < data_len) {
-         for (i=0; i < blocklen; ++i) s1 += data[j+i], s2 += s1;
+      అయితే (j < దత్తాంశం_len) {
+         కొరకు (i=0; i < blocklen; ++i) s1 += దత్తాంశం[j+i], s2 += s1;
          s1 %= 65521, s2 %= 65521;
          j += blocklen;
          blocklen = 5552;
       }
-      stbiw__sbpush(out, STBIW_UCHAR(s2 >> 8));
-      stbiw__sbpush(out, STBIW_UCHAR(s2));
-      stbiw__sbpush(out, STBIW_UCHAR(s1 >> 8));
-      stbiw__sbpush(out, STBIW_UCHAR(s1));
+      stbiw__sbpush(బహిర్గతం, STBIW_UCHAR(s2 >> 8));
+      stbiw__sbpush(బహిర్గతం, STBIW_UCHAR(s2));
+      stbiw__sbpush(బహిర్గతం, STBIW_UCHAR(s1 >> 8));
+      stbiw__sbpush(బహిర్గతం, STBIW_UCHAR(s1));
    }
-   *out_len = stbiw__sbn(out);
+   *బహిర్గతం_len = stbiw__sbn(బహిర్గతం);
    // make returned pointer freeable
-   STBIW_MEMMOVE(stbiw__sbraw(out), out, *out_len);
-   return (unsigned char *) stbiw__sbraw(out);
-#endif // STBIW_ZLIB_COMPRESS
+   STBIW_MEMMOVE(stbiw__sbraw(బహిర్గతం), బహిర్గతం, *బహిర్గతం_len);
+   తిరిగి (గుర్తులేని అక్షరం *) stbiw__sbraw(బహిర్గతం);
+#అయితే_ముగింపు // STBIW_ZLIB_COMPRESS
 }
 
-static unsigned int stbiw__crc32(unsigned char *buffer, int len)
+స్థిర గుర్తులేని పూర్ణాంకం stbiw_చక్రీయ_తనిఖీ_32(గుర్తులేని అక్షరం *బఫరు, పూర్ణాంకం len)
 {
-   static unsigned int crc_table[256] =
+   స్థిర గుర్తులేని పూర్ణాంకం చక్రీయ_తనిఖీ_పట్టిక[256] =
    {
       0x00000000, 0x77073096, 0xEE0E612C, 0x990951BA, 0x076DC419, 0x706AF48F, 0xE963A535, 0x9E6495A3,
       0x0eDB8832, 0x79DCB8A4, 0xE0D5E91E, 0x97D2D988, 0x09B64C2B, 0x7EB17CBD, 0xE7B82D07, 0x90BF1D91,
@@ -959,123 +959,123 @@ static unsigned int stbiw__crc32(unsigned char *buffer, int len)
       0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
    };
 
-   unsigned int crc = ~0u;
-   int i;
-   for (i=0; i < len; ++i)
-      crc = (crc >> 8) ^ crc_table[buffer[i] ^ (crc & 0xff)];
-   return ~crc;
+   గుర్తులేని పూర్ణాంకం చక్రీయ_తనిఖీ = ~0u;
+   పూర్ణాంకం i;
+   కొరకు (i=0; i < len; ++i)
+      చక్రీయ_తనిఖీ = (చక్రీయ_తనిఖీ >> 8) ^ చక్రీయ_తనిఖీ_పట్టిక[బఫరు[i] ^ (చక్రీయ_తనిఖీ & 0xff)];
+   తిరిగి ~చక్రీయ_తనిఖీ;
 }
 
-#define stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
-#define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
-#define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
+#నిర్వచించు stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
+#నిర్వచించు stbiw__wp32(దత్తాంశం,v) stbiw__wpng4(దత్తాంశం, (v)>>24,(v)>>16,(v)>>8,(v));
+#నిర్వచించు stbiw__wptag(దత్తాంశం,s) stbiw__wpng4(దత్తాంశం, s[0],s[1],s[2],s[3])
 
-static void stbiw__wpcrc(unsigned char **data, int len)
+స్థిర శూన్య stbiw__wpcrc(గుర్తులేని అక్షరం **దత్తాంశం, పూర్ణాంకం len)
 {
-   unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
-   stbiw__wp32(*data, crc);
+   గుర్తులేని పూర్ణాంకం చక్రీయ_తనిఖీ = stbiw_చక్రీయ_తనిఖీ_32(*దత్తాంశం - len - 4, len+4);
+   stbiw__wp32(*దత్తాంశం, చక్రీయ_తనిఖీ);
 }
 
-static unsigned char stbiw__paeth(int a, int b, int c)
+స్థిర గుర్తులేని అక్షరం stbiw__paeth(పూర్ణాంకం a, పూర్ణాంకం b, పూర్ణాంకం c)
 {
-   int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
-   if (pa <= pb && pa <= pc) return STBIW_UCHAR(a);
-   if (pb <= pc) return STBIW_UCHAR(b);
-   return STBIW_UCHAR(c);
+   పూర్ణాంకం p = a + b - c, pa = నిరపేక్ష(p-a), pb = నిరపేక్ష(p-b), pc = నిరపేక్ష(p-c);
+   ఒకవేళ (pa <= pb && pa <= pc) తిరిగి STBIW_UCHAR(a);
+   ఒకవేళ (pb <= pc) తిరిగి STBIW_UCHAR(b);
+   తిరిగి STBIW_UCHAR(c);
 }
 
 // @OPTIMIZE: provide an option that always forces left-predict or paeth predict
-static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
+స్థిర శూన్య stbiw_encode_png_పంక్తి(గుర్తులేని అక్షరం *pixels, పూర్ణాంకం stride_బైట్లు, పూర్ణాంకం వెడల్పు, పూర్ణాంకం ఎత్తు, పూర్ణాంకం y, పూర్ణాంకం n, పూర్ణాంకం filter_type, గుర్తుగల అక్షరం *పంక్తి_బఫరు)
 {
-   static int mapping[] = { 0,1,2,3,4 };
-   static int firstmap[] = { 0,1,0,5,6 };
-   int *mymap = (y != 0) ? mapping : firstmap;
-   int i;
-   int type = mymap[filter_type];
-   unsigned char *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
-   int signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
-   for (i = 0; i < n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - (z[i-signed_stride]>>1); break;
-         case 4: line_buffer[i] = (signed char) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); break;
-         case 5: line_buffer[i] = z[i]; break;
-         case 6: line_buffer[i] = z[i]; break;
+   స్థిర పూర్ణాంకం mapping[] = { 0,1,2,3,4 };
+   స్థిర పూర్ణాంకం firstmap[] = { 0,1,0,5,6 };
+   పూర్ణాంకం *mymap = (y != 0) ? mapping : firstmap;
+   పూర్ణాంకం i;
+   పూర్ణాంకం type = mymap[filter_type];
+   గుర్తులేని అక్షరం *z = pixels + stride_బైట్లు * (stbi__flip_vertically_on_write ? ఎత్తు-1-y : y);
+   పూర్ణాంకం signed_stride = stbi__flip_vertically_on_write ? -stride_బైట్లు : stride_బైట్లు;
+   కొరకు (i = 0; i < n; ++i) {
+      ఎంపిక (type) {
+         స్థితి 0: పంక్తి_బఫరు[i] = z[i]; ఆపు;
+         స్థితి 1: పంక్తి_బఫరు[i] = z[i]; ఆపు;
+         స్థితి 2: పంక్తి_బఫరు[i] = z[i] - z[i-signed_stride]; ఆపు;
+         స్థితి 3: పంక్తి_బఫరు[i] = z[i] - (z[i-signed_stride]>>1); ఆపు;
+         స్థితి 4: పంక్తి_బఫరు[i] = (గుర్తుగల అక్షరం) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); ఆపు;
+         స్థితి 5: పంక్తి_బఫరు[i] = z[i]; ఆపు;
+         స్థితి 6: పంక్తి_బఫరు[i] = z[i]; ఆపు;
       }
    }
-   for (i=n; i < width*n; ++i) {
-      switch (type) {
-         case 0: line_buffer[i] = z[i]; break;
-         case 1: line_buffer[i] = z[i] - z[i-n]; break;
-         case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
-         case 3: line_buffer[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); break;
-         case 4: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); break;
-         case 5: line_buffer[i] = z[i] - (z[i-n]>>1); break;
-         case 6: line_buffer[i] = z[i] - stbiw__paeth(z[i-n], 0,0); break;
+   కొరకు (i=n; i < వెడల్పు*n; ++i) {
+      ఎంపిక (type) {
+         స్థితి 0: పంక్తి_బఫరు[i] = z[i]; ఆపు;
+         స్థితి 1: పంక్తి_బఫరు[i] = z[i] - z[i-n]; ఆపు;
+         స్థితి 2: పంక్తి_బఫరు[i] = z[i] - z[i-signed_stride]; ఆపు;
+         స్థితి 3: పంక్తి_బఫరు[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); ఆపు;
+         స్థితి 4: పంక్తి_బఫరు[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); ఆపు;
+         స్థితి 5: పంక్తి_బఫరు[i] = z[i] - (z[i-n]>>1); ఆపు;
+         స్థితి 6: పంక్తి_బఫరు[i] = z[i] - stbiw__paeth(z[i-n], 0,0); ఆపు;
       }
    }
 }
 
-unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+గుర్తులేని అక్షరం *stbi_write_png_గమ్యం_mem(గుర్తులేని అక్షరం *pixels, పూర్ణాంకం stride_బైట్లు, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం n, పూర్ణాంకం *బహిర్గతం_len)
 {
-   int force_filter = stbi_write_force_png_filter;
-   int ctype[5] = { -1, 0, 4, 2, 6 };
-   unsigned char sig[8] = { 137,80,78,71,13,10,26,10 };
-   unsigned char *out,*o, *filt, *zlib;
-   signed char *line_buffer;
-   int j,zlen;
+   పూర్ణాంకం force_filter = stbi_write_force_png_filter;
+   పూర్ణాంకం ctype[5] = { -1, 0, 4, 2, 6 };
+   గుర్తులేని అక్షరం sig[8] = { 137,80,78,71,13,10,26,10 };
+   గుర్తులేని అక్షరం *బహిర్గతం,*o, *filt, *zlib;
+   గుర్తుగల అక్షరం *పంక్తి_బఫరు;
+   పూర్ణాంకం j,zlen;
 
-   if (stride_bytes == 0)
-      stride_bytes = x * n;
+   ఒకవేళ (stride_బైట్లు == 0)
+      stride_బైట్లు = x * n;
 
-   if (force_filter >= 5) {
+   ఒకవేళ (force_filter >= 5) {
       force_filter = -1;
    }
 
-   filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); if (!filt) return 0;
-   line_buffer = (signed char *) STBIW_MALLOC(x * n); if (!line_buffer) { STBIW_FREE(filt); return 0; }
-   for (j=0; j < y; ++j) {
-      int filter_type;
-      if (force_filter > -1) {
+   filt = (గుర్తులేని అక్షరం *) STBIW_MALLOC((x*n+1) * y); ఒకవేళ (!filt) తిరిగి 0;
+   పంక్తి_బఫరు = (గుర్తుగల అక్షరం *) STBIW_MALLOC(x * n); ఒకవేళ (!పంక్తి_బఫరు) { STBIW_FREE(filt); తిరిగి 0; }
+   కొరకు (j=0; j < y; ++j) {
+      పూర్ణాంకం filter_type;
+      ఒకవేళ (force_filter > -1) {
          filter_type = force_filter;
-         stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, force_filter, line_buffer);
-      } else { // Estimate the best filter by running through all of them:
-         int best_filter = 0, best_filter_val = 0x7fffffff, est, i;
-         for (filter_type = 0; filter_type < 5; filter_type++) {
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, filter_type, line_buffer);
+         stbiw_encode_png_పంక్తి(pixels, stride_బైట్లు, x, y, j, n, force_filter, పంక్తి_బఫరు);
+      } లేకపోతే { // Estimate the best filter by running through all of them:
+         పూర్ణాంకం ఉత్తమ_filter = 0, ఉత్తమ_filter_val = 0x7fffffff, est, i;
+         కొరకు (filter_type = 0; filter_type < 5; filter_type++) {
+            stbiw_encode_png_పంక్తి(pixels, stride_బైట్లు, x, y, j, n, filter_type, పంక్తి_బఫరు);
 
             // Estimate the entropy of the line using this filter; the less, the better.
             est = 0;
-            for (i = 0; i < x*n; ++i) {
-               est += abs((signed char) line_buffer[i]);
+            కొరకు (i = 0; i < x*n; ++i) {
+               est += నిరపేక్ష((గుర్తుగల అక్షరం) పంక్తి_బఫరు[i]);
             }
-            if (est < best_filter_val) {
-               best_filter_val = est;
-               best_filter = filter_type;
+            ఒకవేళ (est < ఉత్తమ_filter_val) {
+               ఉత్తమ_filter_val = est;
+               ఉత్తమ_filter = filter_type;
             }
          }
-         if (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
-            stbiw__encode_png_line(pixels, stride_bytes, x, y, j, n, best_filter, line_buffer);
-            filter_type = best_filter;
+         ఒకవేళ (filter_type != ఉత్తమ_filter) {  // If the last iteration already got us the best filter, don't redo it
+            stbiw_encode_png_పంక్తి(pixels, stride_బైట్లు, x, y, j, n, ఉత్తమ_filter, పంక్తి_బఫరు);
+            filter_type = ఉత్తమ_filter;
          }
       }
       // when we get here, filter_type contains the filter type, and line_buffer contains the data
-      filt[j*(x*n+1)] = (unsigned char) filter_type;
-      STBIW_MEMMOVE(filt+j*(x*n+1)+1, line_buffer, x*n);
+      filt[j*(x*n+1)] = (గుర్తులేని అక్షరం) filter_type;
+      STBIW_MEMMOVE(filt+j*(x*n+1)+1, పంక్తి_బఫరు, x*n);
    }
-   STBIW_FREE(line_buffer);
+   STBIW_FREE(పంక్తి_బఫరు);
    zlib = stbi_zlib_compress(filt, y*( x*n+1), &zlen, stbi_write_png_compression_level);
    STBIW_FREE(filt);
-   if (!zlib) return 0;
+   ఒకవేళ (!zlib) తిరిగి 0;
 
    // each tag requires 12 bytes of overhead
-   out = (unsigned char *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
-   if (!out) return 0;
-   *out_len = 8 + 12+13 + 12+zlen + 12;
+   బహిర్గతం = (గుర్తులేని అక్షరం *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
+   ఒకవేళ (!బహిర్గతం) తిరిగి 0;
+   *బహిర్గతం_len = 8 + 12+13 + 12+zlen + 12;
 
-   o=out;
+   o=బహిర్గతం;
    STBIW_MEMMOVE(o,sig,8); o+= 8;
    stbiw__wp32(o, 13); // header length
    stbiw__wptag(o, "IHDR");
@@ -1099,40 +1099,40 @@ unsigned char *stbi_write_png_to_mem(unsigned char *pixels, int stride_bytes, in
    stbiw__wptag(o, "IEND");
    stbiw__wpcrc(&o,0);
 
-   STBIW_ASSERT(o == out + *out_len);
+   STBIW_ASSERT(o == బహిర్గతం + *బహిర్గతం_len);
 
-   return out;
+   తిరిగి బహిర్గతం;
 }
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+STBIWDEF పూర్ణాంకం stbi_write_png(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం, పూర్ణాంకం stride_బైట్లు)
 {
    FILE *f;
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
-#ifdef STBI_MSC_SECURE_CRT
-   if (fopen_s(&f, filename, "wb"))
-      f = NULL;
-#else
+   పూర్ణాంకం len;
+   గుర్తులేని అక్షరం *png = stbi_write_png_గమ్యం_mem((గుర్తులేని అక్షరం *) దత్తాంశం, stride_బైట్లు, x, y, comp, &len);
+   ఒకవేళ (png == ఖాళీ) తిరిగి 0;
+#నిర్వచితమైతే STBI_MSC_SECURE_CRT
+   ఒకవేళ (fopen_s(&f, filename, "wb"))
+      f = ఖాళీ;
+#లేకపోతే
    f = fopen(filename, "wb");
-#endif
-   if (!f) { STBIW_FREE(png); return 0; }
+#అయితే_ముగింపు
+   ఒకవేళ (!f) { STBIW_FREE(png); తిరిగి 0; }
    fwrite(png, 1, len, f);
    fclose(f);
    STBIW_FREE(png);
-   return 1;
+   తిరిగి 1;
 }
-#endif
+#అయితే_ముగింపు
 
-STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
+STBIWDEF పూర్ణాంకం stbi_write_png_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం, పూర్ణాంకం stride_బైట్లు)
 {
-   int len;
-   unsigned char *png = stbi_write_png_to_mem((unsigned char *) data, stride_bytes, x, y, comp, &len);
-   if (png == NULL) return 0;
+   పూర్ణాంకం len;
+   గుర్తులేని అక్షరం *png = stbi_write_png_గమ్యం_mem((గుర్తులేని అక్షరం *) దత్తాంశం, stride_బైట్లు, x, y, comp, &len);
+   ఒకవేళ (png == ఖాళీ) తిరిగి 0;
    func(context, png, len);
    STBIW_FREE(png);
-   return 1;
+   తిరిగి 1;
 }
 
 
@@ -1144,44 +1144,44 @@ STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x,
  * public domain Simple, Minimalistic JPEG writer - http://www.jonolick.com/code.html
  */
 
-static const unsigned char stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
+స్థిర స్థిరరాశి గుర్తులేని అక్షరం stbiw__jpg_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,
       24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
 
-static void stbiw__jpg_writeBits(stbi__write_context *s, int *bitBufP, int *bitCntP, const unsigned short *bs) {
-   int bitBuf = *bitBufP, bitCnt = *bitCntP;
-   bitCnt += bs[1];
-   bitBuf |= bs[0] << (24 - bitCnt);
-   while(bitCnt >= 8) {
-      unsigned char c = (bitBuf >> 16) & 255;
+స్థిర శూన్య stbiw_jpg_write_బిట్లు(stbi__write_context *s, పూర్ణాంకం *బిట్టు_Buf_P, పూర్ణాంకం *బిట్టు_Cnt_P, స్థిరరాశి గుర్తులేని పొట్టి *bs) {
+   పూర్ణాంకం బిట్టు_Buf = *బిట్టు_Buf_P, బిట్టు_Cnt = *బిట్టు_Cnt_P;
+   బిట్టు_Cnt += bs[1];
+   బిట్టు_Buf |= bs[0] << (24 - బిట్టు_Cnt);
+   అయితే(బిట్టు_Cnt >= 8) {
+      గుర్తులేని అక్షరం c = (బిట్టు_Buf >> 16) & 255;
       stbiw__putc(s, c);
-      if(c == 255) {
+      ఒకవేళ(c == 255) {
          stbiw__putc(s, 0);
       }
-      bitBuf <<= 8;
-      bitCnt -= 8;
+      బిట్టు_Buf <<= 8;
+      బిట్టు_Cnt -= 8;
    }
-   *bitBufP = bitBuf;
-   *bitCntP = bitCnt;
+   *బిట్టు_Buf_P = బిట్టు_Buf;
+   *బిట్టు_Cnt_P = బిట్టు_Cnt;
 }
 
-static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float *d4p, float *d5p, float *d6p, float *d7p) {
-   float d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
-   float z1, z2, z3, z4, z5, z11, z13;
+స్థిర శూన్య stbiw__jpg_DCT(దశాంశం *d0p, దశాంశం *d1p, దశాంశం *d2p, దశాంశం *d3p, దశాంశం *d4p, దశాంశం *d5p, దశాంశం *d6p, దశాంశం *d7p) {
+   దశాంశం d0 = *d0p, d1 = *d1p, d2 = *d2p, d3 = *d3p, d4 = *d4p, d5 = *d5p, d6 = *d6p, d7 = *d7p;
+   దశాంశం z1, z2, z3, z4, z5, z11, z13;
 
-   float tmp0 = d0 + d7;
-   float tmp7 = d0 - d7;
-   float tmp1 = d1 + d6;
-   float tmp6 = d1 - d6;
-   float tmp2 = d2 + d5;
-   float tmp5 = d2 - d5;
-   float tmp3 = d3 + d4;
-   float tmp4 = d3 - d4;
+   దశాంశం tmp0 = d0 + d7;
+   దశాంశం tmp7 = d0 - d7;
+   దశాంశం tmp1 = d1 + d6;
+   దశాంశం tmp6 = d1 - d6;
+   దశాంశం tmp2 = d2 + d5;
+   దశాంశం tmp5 = d2 - d5;
+   దశాంశం tmp3 = d3 + d4;
+   దశాంశం tmp4 = d3 - d4;
 
    // Even part
-   float tmp10 = tmp0 + tmp3;   // phase 2
-   float tmp13 = tmp0 - tmp3;
-   float tmp11 = tmp1 + tmp2;
-   float tmp12 = tmp1 - tmp2;
+   దశాంశం tmp10 = tmp0 + tmp3;   // phase 2
+   దశాంశం tmp13 = tmp0 - tmp3;
+   దశాంశం tmp11 = tmp1 + tmp2;
+   దశాంశం tmp12 = tmp1 - tmp2;
 
    d0 = tmp10 + tmp11;       // phase 3
    d4 = tmp10 - tmp11;
@@ -1212,87 +1212,87 @@ static void stbiw__jpg_DCT(float *d0p, float *d1p, float *d2p, float *d3p, float
    *d0p = d0;  *d2p = d2;  *d4p = d4;  *d6p = d6;
 }
 
-static void stbiw__jpg_calcBits(int val, unsigned short bits[2]) {
-   int tmp1 = val < 0 ? -val : val;
+స్థిర శూన్య stbiw_jpg_calc_బిట్లు(పూర్ణాంకం val, గుర్తులేని పొట్టి బిట్లు[2]) {
+   పూర్ణాంకం tmp1 = val < 0 ? -val : val;
    val = val < 0 ? val-1 : val;
-   bits[1] = 1;
-   while(tmp1 >>= 1) {
-      ++bits[1];
+   బిట్లు[1] = 1;
+   అయితే(tmp1 >>= 1) {
+      ++బిట్లు[1];
    }
-   bits[0] = val & ((1<<bits[1])-1);
+   బిట్లు[0] = val & ((1<<బిట్లు[1])-1);
 }
 
-static int stbiw__jpg_processDU(stbi__write_context *s, int *bitBuf, int *bitCnt, float *CDU, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
-   const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
-   const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
-   int dataOff, i, diff, end0pos;
-   int DU[64];
+స్థిర పూర్ణాంకం stbiw__jpg_processDU(stbi__write_context *s, పూర్ణాంకం *బిట్టు_Buf, పూర్ణాంకం *బిట్టు_Cnt, దశాంశం *CDU, దశాంశం *fdtbl, పూర్ణాంకం DC, స్థిరరాశి గుర్తులేని పొట్టి HTDC[256][2], స్థిరరాశి గుర్తులేని పొట్టి HTAC[256][2]) {
+   స్థిరరాశి గుర్తులేని పొట్టి EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
+   స్థిరరాశి గుర్తులేని పొట్టి M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
+   పూర్ణాంకం దత్తాంశం_Off, i, diff, end0pos;
+   పూర్ణాంకం DU[64];
 
    // DCT rows
-   for(dataOff=0; dataOff<64; dataOff+=8) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+1], &CDU[dataOff+2], &CDU[dataOff+3], &CDU[dataOff+4], &CDU[dataOff+5], &CDU[dataOff+6], &CDU[dataOff+7]);
+   కొరకు(దత్తాంశం_Off=0; దత్తాంశం_Off<64; దత్తాంశం_Off+=8) {
+      stbiw__jpg_DCT(&CDU[దత్తాంశం_Off], &CDU[దత్తాంశం_Off+1], &CDU[దత్తాంశం_Off+2], &CDU[దత్తాంశం_Off+3], &CDU[దత్తాంశం_Off+4], &CDU[దత్తాంశం_Off+5], &CDU[దత్తాంశం_Off+6], &CDU[దత్తాంశం_Off+7]);
    }
    // DCT columns
-   for(dataOff=0; dataOff<8; ++dataOff) {
-      stbiw__jpg_DCT(&CDU[dataOff], &CDU[dataOff+8], &CDU[dataOff+16], &CDU[dataOff+24], &CDU[dataOff+32], &CDU[dataOff+40], &CDU[dataOff+48], &CDU[dataOff+56]);
+   కొరకు(దత్తాంశం_Off=0; దత్తాంశం_Off<8; ++దత్తాంశం_Off) {
+      stbiw__jpg_DCT(&CDU[దత్తాంశం_Off], &CDU[దత్తాంశం_Off+8], &CDU[దత్తాంశం_Off+16], &CDU[దత్తాంశం_Off+24], &CDU[దత్తాంశం_Off+32], &CDU[దత్తాంశం_Off+40], &CDU[దత్తాంశం_Off+48], &CDU[దత్తాంశం_Off+56]);
    }
    // Quantize/descale/zigzag the coefficients
-   for(i=0; i<64; ++i) {
-      float v = CDU[i]*fdtbl[i];
+   కొరకు(i=0; i<64; ++i) {
+      దశాంశం v = CDU[i]*fdtbl[i];
       // DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? ceilf(v - 0.5f) : floorf(v + 0.5f));
       // ceilf() and floorf() are C99, not C89, but I /think/ they're not needed here anyway?
-      DU[stbiw__jpg_ZigZag[i]] = (int)(v < 0 ? v - 0.5f : v + 0.5f);
+      DU[stbiw__jpg_ZigZag[i]] = (పూర్ణాంకం)(v < 0 ? v - 0.5f : v + 0.5f);
    }
 
    // Encode DC
    diff = DU[0] - DC;
-   if (diff == 0) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[0]);
-   } else {
-      unsigned short bits[2];
-      stbiw__jpg_calcBits(diff, bits);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTDC[bits[1]]);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
+   ఒకవేళ (diff == 0) {
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, HTDC[0]);
+   } లేకపోతే {
+      గుర్తులేని పొట్టి బిట్లు[2];
+      stbiw_jpg_calc_బిట్లు(diff, బిట్లు);
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, HTDC[బిట్లు[1]]);
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, బిట్లు);
    }
    // Encode ACs
    end0pos = 63;
-   for(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
+   కొరకు(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
    }
    // end0pos = first element in reverse order !=0
-   if(end0pos == 0) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
-      return DU[0];
+   ఒకవేళ(end0pos == 0) {
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, EOB);
+      తిరిగి DU[0];
    }
-   for(i = 1; i <= end0pos; ++i) {
-      int startpos = i;
-      int nrzeroes;
-      unsigned short bits[2];
-      for (; DU[i]==0 && i<=end0pos; ++i) {
+   కొరకు(i = 1; i <= end0pos; ++i) {
+      పూర్ణాంకం startpos = i;
+      పూర్ణాంకం nrzeroes;
+      గుర్తులేని పొట్టి బిట్లు[2];
+      కొరకు (; DU[i]==0 && i<=end0pos; ++i) {
       }
       nrzeroes = i-startpos;
-      if ( nrzeroes >= 16 ) {
-         int lng = nrzeroes>>4;
-         int nrmarker;
-         for (nrmarker=1; nrmarker <= lng; ++nrmarker)
-            stbiw__jpg_writeBits(s, bitBuf, bitCnt, M16zeroes);
+      ఒకవేళ ( nrzeroes >= 16 ) {
+         పూర్ణాంకం lng = nrzeroes>>4;
+         పూర్ణాంకం nrmarker;
+         కొరకు (nrmarker=1; nrmarker <= lng; ++nrmarker)
+            stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, M16zeroes);
          nrzeroes &= 15;
       }
-      stbiw__jpg_calcBits(DU[i], bits);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, HTAC[(nrzeroes<<4)+bits[1]]);
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, bits);
+      stbiw_jpg_calc_బిట్లు(DU[i], బిట్లు);
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, HTAC[(nrzeroes<<4)+బిట్లు[1]]);
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, బిట్లు);
    }
-   if(end0pos != 63) {
-      stbiw__jpg_writeBits(s, bitBuf, bitCnt, EOB);
+   ఒకవేళ(end0pos != 63) {
+      stbiw_jpg_write_బిట్లు(s, బిట్టు_Buf, బిట్టు_Cnt, EOB);
    }
-   return DU[0];
+   తిరిగి DU[0];
 }
 
-static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, int comp, const void* data, int quality) {
+స్థిర పూర్ణాంకం stbi_write_jpg_core(stbi__write_context *s, పూర్ణాంకం వెడల్పు, పూర్ణాంకం ఎత్తు, పూర్ణాంకం comp, స్థిరరాశి శూన్య* దత్తాంశం, పూర్ణాంకం quality) {
    // Constants that don't pollute global namespace
-   static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
-   static const unsigned char std_dc_luminance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
-   static const unsigned char std_ac_luminance_values[] = {
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_dc_luminance_విలువలు[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_ac_luminance_విలువలు[] = {
       0x01,0x02,0x03,0x00,0x04,0x11,0x05,0x12,0x21,0x31,0x41,0x06,0x13,0x51,0x61,0x07,0x22,0x71,0x14,0x32,0x81,0x91,0xa1,0x08,
       0x23,0x42,0xb1,0xc1,0x15,0x52,0xd1,0xf0,0x24,0x33,0x62,0x72,0x82,0x09,0x0a,0x16,0x17,0x18,0x19,0x1a,0x25,0x26,0x27,0x28,
       0x29,0x2a,0x34,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,0x59,
@@ -1301,10 +1301,10 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xb7,0xb8,0xb9,0xba,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xe1,0xe2,
       0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
-   static const unsigned char std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
-   static const unsigned char std_dc_chrominance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
-   static const unsigned char std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
-   static const unsigned char std_ac_chrominance_values[] = {
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_dc_chrominance_విలువలు[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
+   స్థిర స్థిరరాశి గుర్తులేని అక్షరం std_ac_chrominance_విలువలు[] = {
       0x00,0x01,0x02,0x03,0x11,0x04,0x05,0x21,0x31,0x06,0x12,0x41,0x51,0x07,0x61,0x71,0x13,0x22,0x32,0x81,0x08,0x14,0x42,0x91,
       0xa1,0xb1,0xc1,0x09,0x23,0x33,0x52,0xf0,0x15,0x62,0x72,0xd1,0x0a,0x16,0x24,0x34,0xe1,0x25,0xf1,0x17,0x18,0x19,0x1a,0x26,
       0x27,0x28,0x29,0x2a,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,
@@ -1314,9 +1314,9 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
    };
    // Huffman tables
-   static const unsigned short YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
-   static const unsigned short UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
-   static const unsigned short YAC_HT[256][2] = {
+   స్థిర స్థిరరాశి గుర్తులేని పొట్టి YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
+   స్థిర స్థిరరాశి గుర్తులేని పొట్టి UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
+   స్థిర స్థిరరాశి గుర్తులేని పొట్టి YAC_HT[256][2] = {
       {10,4},{0,2},{1,2},{4,3},{11,4},{26,5},{120,7},{248,8},{1014,10},{65410,16},{65411,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {12,4},{27,5},{121,7},{502,9},{2038,11},{65412,16},{65413,16},{65414,16},{65415,16},{65416,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {28,5},{249,8},{1015,10},{4084,12},{65417,16},{65418,16},{65419,16},{65420,16},{65421,16},{65422,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1334,7 +1334,7 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {65515,16},{65516,16},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {2041,11},{65525,16},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const unsigned short UVAC_HT[256][2] = {
+   స్థిర స్థిరరాశి గుర్తులేని పొట్టి UVAC_HT[256][2] = {
       {0,2},{1,2},{4,3},{10,4},{24,5},{25,5},{56,6},{120,7},{500,9},{1014,10},{4084,12},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {11,4},{57,6},{246,8},{501,9},{2038,11},{4085,12},{65416,16},{65417,16},{65418,16},{65419,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
       {26,5},{247,8},{1015,10},{4086,12},{32706,15},{65420,16},{65421,16},{65422,16},{65423,16},{65424,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
@@ -1352,135 +1352,135 @@ static int stbi_write_jpg_core(stbi__write_context *s, int width, int height, in
       {16352,14},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{65525,16},{0,0},{0,0},{0,0},{0,0},{0,0},
       {1018,10},{32707,15},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
    };
-   static const int YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
+   స్థిర స్థిరరాశి పూర్ణాంకం YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,
                              37,56,68,109,103,77,24,35,55,64,81,104,113,92,49,64,78,87,103,121,120,101,72,92,95,98,112,100,103,99};
-   static const int UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
+   స్థిర స్థిరరాశి పూర్ణాంకం UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,
                               99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
-   static const float aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
+   స్థిర స్థిరరాశి దశాంశం aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 
                                  1.0f * 2.828427125f, 0.785694958f * 2.828427125f, 0.541196100f * 2.828427125f, 0.275899379f * 2.828427125f };
 
-   int row, col, i, k;
-   float fdtbl_Y[64], fdtbl_UV[64];
-   unsigned char YTable[64], UVTable[64];
+   పూర్ణాంకం అడ్డువరుస, నిలువు, i, k;
+   దశాంశం fdtbl_Y[64], fdtbl_UV[64];
+   గుర్తులేని అక్షరం YTable[64], UVTable[64];
 
-   if(!data || !width || !height || comp > 4 || comp < 1) {
-      return 0;
+   ఒకవేళ(!దత్తాంశం || !వెడల్పు || !ఎత్తు || comp > 4 || comp < 1) {
+      తిరిగి 0;
    }
 
    quality = quality ? quality : 90;
    quality = quality < 1 ? 1 : quality > 100 ? 100 : quality;
    quality = quality < 50 ? 5000 / quality : 200 - quality * 2;
 
-   for(i = 0; i < 64; ++i) {
-      int uvti, yti = (YQT[i]*quality+50)/100;
-      YTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
+   కొరకు(i = 0; i < 64; ++i) {
+      పూర్ణాంకం uvti, yti = (YQT[i]*quality+50)/100;
+      YTable[stbiw__jpg_ZigZag[i]] = (గుర్తులేని అక్షరం) (yti < 1 ? 1 : yti > 255 ? 255 : yti);
       uvti = (UVQT[i]*quality+50)/100;
-      UVTable[stbiw__jpg_ZigZag[i]] = (unsigned char) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
+      UVTable[stbiw__jpg_ZigZag[i]] = (గుర్తులేని అక్షరం) (uvti < 1 ? 1 : uvti > 255 ? 255 : uvti);
    }
 
-   for(row = 0, k = 0; row < 8; ++row) {
-      for(col = 0; col < 8; ++col, ++k) {
-         fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
-         fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[row] * aasf[col]);
+   కొరకు(అడ్డువరుస = 0, k = 0; అడ్డువరుస < 8; ++అడ్డువరుస) {
+      కొరకు(నిలువు = 0; నిలువు < 8; ++నిలువు, ++k) {
+         fdtbl_Y[k]  = 1 / (YTable [stbiw__jpg_ZigZag[k]] * aasf[అడ్డువరుస] * aasf[నిలువు]);
+         fdtbl_UV[k] = 1 / (UVTable[stbiw__jpg_ZigZag[k]] * aasf[అడ్డువరుస] * aasf[నిలువు]);
       }
    }
 
    // Write Headers
    {
-      static const unsigned char head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
-      static const unsigned char head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
-      const unsigned char head1[] = { 0xFF,0xC0,0,0x11,8,(unsigned char)(height>>8),STBIW_UCHAR(height),(unsigned char)(width>>8),STBIW_UCHAR(width),
+      స్థిర స్థిరరాశి గుర్తులేని అక్షరం head0[] = { 0xFF,0xD8,0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,0xDB,0,0x84,0 };
+      స్థిర స్థిరరాశి గుర్తులేని అక్షరం head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
+      స్థిరరాశి గుర్తులేని అక్షరం head1[] = { 0xFF,0xC0,0,0x11,8,(గుర్తులేని అక్షరం)(ఎత్తు>>8),STBIW_UCHAR(ఎత్తు),(గుర్తులేని అక్షరం)(వెడల్పు>>8),STBIW_UCHAR(వెడల్పు),
                                       3,1,0x11,0,2,0x11,1,3,0x11,1,0xFF,0xC4,0x01,0xA2,0 };
-      s->func(s->context, (void*)head0, sizeof(head0));
-      s->func(s->context, (void*)YTable, sizeof(YTable));
+      s->func(s->context, (శూన్య*)head0, పరిమాణం(head0));
+      s->func(s->context, (శూన్య*)YTable, పరిమాణం(YTable));
       stbiw__putc(s, 1);
-      s->func(s->context, UVTable, sizeof(UVTable));
-      s->func(s->context, (void*)head1, sizeof(head1));
-      s->func(s->context, (void*)(std_dc_luminance_nrcodes+1), sizeof(std_dc_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_luminance_values, sizeof(std_dc_luminance_values));
+      s->func(s->context, UVTable, పరిమాణం(UVTable));
+      s->func(s->context, (శూన్య*)head1, పరిమాణం(head1));
+      s->func(s->context, (శూన్య*)(std_dc_luminance_nrcodes+1), పరిమాణం(std_dc_luminance_nrcodes)-1);
+      s->func(s->context, (శూన్య*)std_dc_luminance_విలువలు, పరిమాణం(std_dc_luminance_విలువలు));
       stbiw__putc(s, 0x10); // HTYACinfo
-      s->func(s->context, (void*)(std_ac_luminance_nrcodes+1), sizeof(std_ac_luminance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_luminance_values, sizeof(std_ac_luminance_values));
+      s->func(s->context, (శూన్య*)(std_ac_luminance_nrcodes+1), పరిమాణం(std_ac_luminance_nrcodes)-1);
+      s->func(s->context, (శూన్య*)std_ac_luminance_విలువలు, పరిమాణం(std_ac_luminance_విలువలు));
       stbiw__putc(s, 1); // HTUDCinfo
-      s->func(s->context, (void*)(std_dc_chrominance_nrcodes+1), sizeof(std_dc_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_dc_chrominance_values, sizeof(std_dc_chrominance_values));
+      s->func(s->context, (శూన్య*)(std_dc_chrominance_nrcodes+1), పరిమాణం(std_dc_chrominance_nrcodes)-1);
+      s->func(s->context, (శూన్య*)std_dc_chrominance_విలువలు, పరిమాణం(std_dc_chrominance_విలువలు));
       stbiw__putc(s, 0x11); // HTUACinfo
-      s->func(s->context, (void*)(std_ac_chrominance_nrcodes+1), sizeof(std_ac_chrominance_nrcodes)-1);
-      s->func(s->context, (void*)std_ac_chrominance_values, sizeof(std_ac_chrominance_values));
-      s->func(s->context, (void*)head2, sizeof(head2));
+      s->func(s->context, (శూన్య*)(std_ac_chrominance_nrcodes+1), పరిమాణం(std_ac_chrominance_nrcodes)-1);
+      s->func(s->context, (శూన్య*)std_ac_chrominance_విలువలు, పరిమాణం(std_ac_chrominance_విలువలు));
+      s->func(s->context, (శూన్య*)head2, పరిమాణం(head2));
    }
 
    // Encode 8x8 macroblocks
    {
-      static const unsigned short fillBits[] = {0x7F, 7};
-      const unsigned char *imageData = (const unsigned char *)data;
-      int DCY=0, DCU=0, DCV=0;
-      int bitBuf=0, bitCnt=0;
+      స్థిర స్థిరరాశి గుర్తులేని పొట్టి fill_బిట్లు[] = {0x7F, 7};
+      స్థిరరాశి గుర్తులేని అక్షరం *image_దత్తాంశం = (స్థిరరాశి గుర్తులేని అక్షరం *)దత్తాంశం;
+      పూర్ణాంకం DCY=0, DCU=0, DCV=0;
+      పూర్ణాంకం బిట్టు_Buf=0, బిట్టు_Cnt=0;
       // comp == 2 is grey+alpha (alpha is ignored)
-      int ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
-      int x, y, pos;
-      for(y = 0; y < height; y += 8) {
-         for(x = 0; x < width; x += 8) {
-            float YDU[64], UDU[64], VDU[64];
-            for(row = y, pos = 0; row < y+8; ++row) {
-               for(col = x; col < x+8; ++col, ++pos) {
-                  int p = (stbi__flip_vertically_on_write ? height-1-row : row)*width*comp + col*comp;
-                  float r, g, b;
-                  if(row >= height) {
-                     p -= width*comp*(row+1 - height);
+      పూర్ణాంకం ofsG = comp > 2 ? 1 : 0, ofsB = comp > 2 ? 2 : 0;
+      పూర్ణాంకం x, y, pos;
+      కొరకు(y = 0; y < ఎత్తు; y += 8) {
+         కొరకు(x = 0; x < వెడల్పు; x += 8) {
+            దశాంశం YDU[64], UDU[64], VDU[64];
+            కొరకు(అడ్డువరుస = y, pos = 0; అడ్డువరుస < y+8; ++అడ్డువరుస) {
+               కొరకు(నిలువు = x; నిలువు < x+8; ++నిలువు, ++pos) {
+                  పూర్ణాంకం p = (stbi__flip_vertically_on_write ? ఎత్తు-1-అడ్డువరుస : అడ్డువరుస)*వెడల్పు*comp + నిలువు*comp;
+                  దశాంశం r, g, b;
+                  ఒకవేళ(అడ్డువరుస >= ఎత్తు) {
+                     p -= వెడల్పు*comp*(అడ్డువరుస+1 - ఎత్తు);
                   }
-                  if(col >= width) {
-                     p -= comp*(col+1 - width);
+                  ఒకవేళ(నిలువు >= వెడల్పు) {
+                     p -= comp*(నిలువు+1 - వెడల్పు);
                   }
 
-                  r = imageData[p+0];
-                  g = imageData[p+ofsG];
-                  b = imageData[p+ofsB];
+                  r = image_దత్తాంశం[p+0];
+                  g = image_దత్తాంశం[p+ofsG];
+                  b = image_దత్తాంశం[p+ofsB];
                   YDU[pos]=+0.29900f*r+0.58700f*g+0.11400f*b-128;
                   UDU[pos]=-0.16874f*r-0.33126f*g+0.50000f*b;
                   VDU[pos]=+0.50000f*r-0.41869f*g-0.08131f*b;
                }
             }
 
-            DCY = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
-            DCU = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
-            DCV = stbiw__jpg_processDU(s, &bitBuf, &bitCnt, VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
+            DCY = stbiw__jpg_processDU(s, &బిట్టు_Buf, &బిట్టు_Cnt, YDU, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+            DCU = stbiw__jpg_processDU(s, &బిట్టు_Buf, &బిట్టు_Cnt, UDU, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
+            DCV = stbiw__jpg_processDU(s, &బిట్టు_Buf, &బిట్టు_Cnt, VDU, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
          }
       }
 
       // Do the bit alignment of the EOI marker
-      stbiw__jpg_writeBits(s, &bitBuf, &bitCnt, fillBits);
+      stbiw_jpg_write_బిట్లు(s, &బిట్టు_Buf, &బిట్టు_Cnt, fill_బిట్లు);
    }
 
    // EOI
    stbiw__putc(s, 0xFF);
    stbiw__putc(s, 0xD9);
 
-   return 1;
+   తిరిగి 1;
 }
 
-STBIWDEF int stbi_write_jpg_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int quality)
+STBIWDEF పూర్ణాంకం stbi_write_jpg_గమ్యం_func(stbi_write_func *func, శూన్య *context, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం, పూర్ణాంకం quality)
 {
    stbi__write_context s;
-   stbi__start_write_callbacks(&s, func, context);
-   return stbi_write_jpg_core(&s, x, y, comp, (void *) data, quality);
+   stbi_ప్రారంభం_write_callbacks(&s, func, context);
+   తిరిగి stbi_write_jpg_core(&s, x, y, comp, (శూన్య *) దత్తాంశం, quality);
 }
 
 
-#ifndef STBI_WRITE_NO_STDIO
-STBIWDEF int stbi_write_jpg(char const *filename, int x, int y, int comp, const void *data, int quality)
+#నిర్వచితం_కాకపోతే STBI_WRITE_NO_STDIO
+STBIWDEF పూర్ణాంకం stbi_write_jpg(అక్షరం స్థిరరాశి *filename, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం comp, స్థిరరాశి శూన్య *దత్తాంశం, పూర్ణాంకం quality)
 {
    stbi__write_context s;
-   if (stbi__start_write_file(&s,filename)) {
-      int r = stbi_write_jpg_core(&s, x, y, comp, data, quality);
-      stbi__end_write_file(&s);
-      return r;
-   } else
-      return 0;
+   ఒకవేళ (stbi_ప్రారంభం_write_file(&s,filename)) {
+      పూర్ణాంకం r = stbi_write_jpg_core(&s, x, y, comp, దత్తాంశం, quality);
+      stbi_చివర_write_file(&s);
+      తిరిగి r;
+   } లేకపోతే
+      తిరిగి 0;
 }
-#endif
+#అయితే_ముగింపు
 
-#endif // STB_IMAGE_WRITE_IMPLEMENTATION
+#అయితే_ముగింపు // STB_IMAGE_WRITE_IMPLEMENTATION
 
 /* Revision history
       1.09  (2018-02-11)

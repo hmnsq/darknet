@@ -1,178 +1,178 @@
-int gpu_index = 0;
+పూర్ణాంకం gpu_సూచీ = 0;
 
-#ifdef GPU
+#నిర్వచితమైతే GPU
 
-#include "cuda.h"
-#include "utils.h"
-#include "blas.h"
-#include <assert.h>
-#include <stdlib.h>
-#include <time.h>
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "utils.h"
+#అన్తర్భావ "blas.h"
+#అన్తర్భావ <assert.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <time.h>
 
-void cuda_set_device(int n)
+శూన్య cuda_సమితి_device(పూర్ణాంకం n)
 {
-    gpu_index = n;
-    cudaError_t status = cudaSetDevice(n);
-    check_error(status);
+    gpu_సూచీ = n;
+    cudaError_t స్థితి_2 = cuda_సమితి_Device(n);
+    check_error(స్థితి_2);
 }
 
-int cuda_get_device()
+పూర్ణాంకం cuda_get_device()
 {
-    int n = 0;
-    cudaError_t status = cudaGetDevice(&n);
-    check_error(status);
-    return n;
+    పూర్ణాంకం n = 0;
+    cudaError_t స్థితి_2 = cudaGetDevice(&n);
+    check_error(స్థితి_2);
+    తిరిగి n;
 }
 
-void check_error(cudaError_t status)
+శూన్య check_error(cudaError_t స్థితి_2)
 {
     //cudaDeviceSynchronize();
-    cudaError_t status2 = cudaGetLastError();
-    if (status != cudaSuccess)
+    cudaError_t status2 = cuda_Get_చివరి_Error();
+    ఒకవేళ (స్థితి_2 != cudaSuccess)
     {   
-        const char *s = cudaGetErrorString(status);
-        char buffer[256];
-        printf("CUDA Error: %s\n", s);
-        assert(0);
-        snprintf(buffer, 256, "CUDA Error: %s", s);
-        error(buffer);
+        స్థిరరాశి అక్షరం *s = cudaGetErrorString(స్థితి_2);
+        అక్షరం బఫరు[256];
+        రాయి("CUDA Error: %s\n", s);
+        ప్రతిజ్ఞా(0);
+        snprintf(బఫరు, 256, "CUDA Error: %s", s);
+        error(బఫరు);
     } 
-    if (status2 != cudaSuccess)
+    ఒకవేళ (status2 != cudaSuccess)
     {   
-        const char *s = cudaGetErrorString(status);
-        char buffer[256];
-        printf("CUDA Error Prev: %s\n", s);
-        assert(0);
-        snprintf(buffer, 256, "CUDA Error Prev: %s", s);
-        error(buffer);
+        స్థిరరాశి అక్షరం *s = cudaGetErrorString(స్థితి_2);
+        అక్షరం బఫరు[256];
+        రాయి("CUDA Error Prev: %s\n", s);
+        ప్రతిజ్ఞా(0);
+        snprintf(బఫరు, 256, "CUDA Error Prev: %s", s);
+        error(బఫరు);
     } 
 }
 
 dim3 cuda_gridsize(size_t n){
-    size_t k = (n-1) / BLOCK + 1;
+    size_t k = (n-1) / ఖండం + 1;
     size_t x = k;
     size_t y = 1;
-    if(x > 65535){
-        x = ceil(sqrt(k));
-        y = (n-1)/(x*BLOCK) + 1;
+    ఒకవేళ(x > 65535){
+        x = ceil(వర్గమూలం(k));
+        y = (n-1)/(x*ఖండం) + 1;
     }
     dim3 d = {x, y, 1};
     //printf("%ld %ld %ld %ld\n", n, x, y, x*y*BLOCK);
-    return d;
+    తిరిగి d;
 }
 
-#ifdef CUDNN
+#నిర్వచితమైతే CUDNN
 cudnnHandle_t cudnn_handle()
 {
-    static int init[16] = {0};
-    static cudnnHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    స్థిర పూర్ణాంకం init[16] = {0};
+    స్థిర cudnnHandle_t handle[16];
+    పూర్ణాంకం i = cuda_get_device();
+    ఒకవేళ(!init[i]) {
         cudnnCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    తిరిగి handle[i];
 }
-#endif
+#అయితే_ముగింపు
 
 cublasHandle_t blas_handle()
 {
-    static int init[16] = {0};
-    static cublasHandle_t handle[16];
-    int i = cuda_get_device();
-    if(!init[i]) {
+    స్థిర పూర్ణాంకం init[16] = {0};
+    స్థిర cublasHandle_t handle[16];
+    పూర్ణాంకం i = cuda_get_device();
+    ఒకవేళ(!init[i]) {
         cublasCreate(&handle[i]);
         init[i] = 1;
     }
-    return handle[i];
+    తిరిగి handle[i];
 }
 
-float *cuda_make_array(float *x, size_t n)
+దశాంశం *cuda_make_array(దశాంశం *x, size_t n)
 {
-    float *x_gpu;
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMalloc((void **)&x_gpu, size);
-    check_error(status);
-    if(x){
-        status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-        check_error(status);
-    } else {
+    దశాంశం *x_gpu;
+    size_t కొలత = పరిమాణం(దశాంశం)*n;
+    cudaError_t స్థితి_2 = cudaMalloc((శూన్య **)&x_gpu, కొలత);
+    check_error(స్థితి_2);
+    ఒకవేళ(x){
+        స్థితి_2 = cudaMemcpy(x_gpu, x, కొలత, cuda_Memcpy_Host_గమ్యం_Device);
+        check_error(స్థితి_2);
+    } లేకపోతే {
         fill_gpu(n, 0, x_gpu, 1);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    ఒకవేళ(!x_gpu) error("Cuda malloc failed\n");
+    తిరిగి x_gpu;
 }
 
-void cuda_random(float *x_gpu, size_t n)
+శూన్య cuda_random(దశాంశం *x_gpu, size_t n)
 {
-    static curandGenerator_t gen[16];
-    static int init[16] = {0};
-    int i = cuda_get_device();
-    if(!init[i]){
+    స్థిర curandGenerator_t gen[16];
+    స్థిర పూర్ణాంకం init[16] = {0};
+    పూర్ణాంకం i = cuda_get_device();
+    ఒకవేళ(!init[i]){
         curandCreateGenerator(&gen[i], CURAND_RNG_PSEUDO_DEFAULT);
-        curandSetPseudoRandomGeneratorSeed(gen[i], time(0));
+        curand_సమితి_Pseudo_Random_Generator_విత్తనం(gen[i], సమయం(0));
         init[i] = 1;
     }
-    curandGenerateUniform(gen[i], x_gpu, n);
-    check_error(cudaPeekAtLastError());
+    curand_Generate_ఏకరీతి(gen[i], x_gpu, n);
+    check_error(cuda_Peek_At_చివరి_Error());
 }
 
-float cuda_compare(float *x_gpu, float *x, size_t n, char *s)
+దశాంశం cuda_compare(దశాంశం *x_gpu, దశాంశం *x, size_t n, అక్షరం *s)
 {
-    float *tmp = calloc(n, sizeof(float));
+    దశాంశం *tmp = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(దశాంశం));
     cuda_pull_array(x_gpu, tmp, n);
     //int i;
     //for(i = 0; i < n; ++i) printf("%f %f\n", tmp[i], x[i]);
     axpy_cpu(n, -1, x, 1, tmp, 1);
-    float err = dot_cpu(n, tmp, 1, tmp, 1);
-    printf("Error %s: %f\n", s, sqrt(err/n));
-    free(tmp);
-    return err;
+    దశాంశం err = dot_cpu(n, tmp, 1, tmp, 1);
+    రాయి("Error %s: %f\n", s, వర్గమూలం(err/n));
+    విడుదల(tmp);
+    తిరిగి err;
 }
 
-int *cuda_make_int_array(int *x, size_t n)
+పూర్ణాంకం *cuda_make_int_array(పూర్ణాంకం *x, size_t n)
 {
-    int *x_gpu;
-    size_t size = sizeof(int)*n;
-    cudaError_t status = cudaMalloc((void **)&x_gpu, size);
-    check_error(status);
-    if(x){
-        status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-        check_error(status);
+    పూర్ణాంకం *x_gpu;
+    size_t కొలత = పరిమాణం(పూర్ణాంకం)*n;
+    cudaError_t స్థితి_2 = cudaMalloc((శూన్య **)&x_gpu, కొలత);
+    check_error(స్థితి_2);
+    ఒకవేళ(x){
+        స్థితి_2 = cudaMemcpy(x_gpu, x, కొలత, cuda_Memcpy_Host_గమ్యం_Device);
+        check_error(స్థితి_2);
     }
-    if(!x_gpu) error("Cuda malloc failed\n");
-    return x_gpu;
+    ఒకవేళ(!x_gpu) error("Cuda malloc failed\n");
+    తిరిగి x_gpu;
 }
 
-void cuda_free(float *x_gpu)
+శూన్య cuda_free(దశాంశం *x_gpu)
 {
-    cudaError_t status = cudaFree(x_gpu);
-    check_error(status);
+    cudaError_t స్థితి_2 = cudaFree(x_gpu);
+    check_error(స్థితి_2);
 }
 
-void cuda_push_array(float *x_gpu, float *x, size_t n)
+శూన్య cuda_నెట్టు_array(దశాంశం *x_gpu, దశాంశం *x, size_t n)
 {
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMemcpy(x_gpu, x, size, cudaMemcpyHostToDevice);
-    check_error(status);
+    size_t కొలత = పరిమాణం(దశాంశం)*n;
+    cudaError_t స్థితి_2 = cudaMemcpy(x_gpu, x, కొలత, cuda_Memcpy_Host_గమ్యం_Device);
+    check_error(స్థితి_2);
 }
 
-void cuda_pull_array(float *x_gpu, float *x, size_t n)
+శూన్య cuda_pull_array(దశాంశం *x_gpu, దశాంశం *x, size_t n)
 {
-    size_t size = sizeof(float)*n;
-    cudaError_t status = cudaMemcpy(x, x_gpu, size, cudaMemcpyDeviceToHost);
-    check_error(status);
+    size_t కొలత = పరిమాణం(దశాంశం)*n;
+    cudaError_t స్థితి_2 = cudaMemcpy(x, x_gpu, కొలత, cuda_Memcpy_Device_గమ్యం_Host);
+    check_error(స్థితి_2);
 }
 
-float cuda_mag_array(float *x_gpu, size_t n)
+దశాంశం cuda_mag_array(దశాంశం *x_gpu, size_t n)
 {
-    float *temp = calloc(n, sizeof(float));
-    cuda_pull_array(x_gpu, temp, n);
-    float m = mag_array(temp, n);
-    free(temp);
-    return m;
+    దశాంశం *తాత్కాలిక = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(దశాంశం));
+    cuda_pull_array(x_gpu, తాత్కాలిక, n);
+    దశాంశం m = mag_array(తాత్కాలిక, n);
+    విడుదల(తాత్కాలిక);
+    తిరిగి m;
 }
-#else
-void cuda_set_device(int n){}
+#లేకపోతే
+శూన్య cuda_సమితి_device(పూర్ణాంకం n){}
 
-#endif
+#అయితే_ముగింపు

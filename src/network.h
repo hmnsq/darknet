@@ -1,29 +1,29 @@
 // Oh boy, why am I about to do this....
-#ifndef NETWORK_H
-#define NETWORK_H
-#include "darknet.h"
+#నిర్వచితం_కాకపోతే జాలం_H
+#నిర్వచించు జాలం_H
+#అన్తర్భావ "darknet.h"
 
-#include "image.h"
-#include "layer.h"
-#include "data.h"
-#include "tree.h"
-
-
-#ifdef GPU
-void pull_network_output(network *net);
-#endif
-
-void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
-
-network *make_network(int n);
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "data.h"
+#అన్తర్భావ "tree.h"
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
-void print_network(network *net);
-int resize_network(network *net, int w, int h);
-void calc_network_cost(network *net);
+#నిర్వచితమైతే GPU
+శూన్య pull_జాలం_output(జాలం *net);
+#అయితే_ముగింపు
 
-#endif
+శూన్య compare_networks(జాలం *n1, జాలం *n2, దత్తాంశం d);
+అక్షరం *get_layer_string(LAYER_TYPE a);
+
+జాలం *make_జాలం(పూర్ణాంకం n);
+
+
+దశాంశం జాలం_accuracy_multi(జాలం *net, దత్తాంశం d, పూర్ణాంకం n);
+పూర్ణాంకం get_predicted_class_జాలం(జాలం *net);
+శూన్య print_జాలం(జాలం *net);
+పూర్ణాంకం resize_జాలం(జాలం *net, పూర్ణాంకం w, పూర్ణాంకం h);
+శూన్య calc_జాలం_ఖర్చు(జాలం *net);
+
+#అయితే_ముగింపు
 

@@ -1,38 +1,38 @@
-#include "im2col.h"
-#include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+#అన్తర్భావ "im2col.h"
+#అన్తర్భావ <stdio.h>
+దశాంశం im2col_get_pixel(దశాంశం *im, పూర్ణాంకం ఎత్తు, పూర్ణాంకం వెడల్పు, పూర్ణాంకం channels,
+                        పూర్ణాంకం అడ్డువరుస, పూర్ణాంకం నిలువు, పూర్ణాంకం channel, పూర్ణాంకం pad)
 {
-    row -= pad;
-    col -= pad;
+    అడ్డువరుస -= pad;
+    నిలువు -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    ఒకవేళ (అడ్డువరుస < 0 || నిలువు < 0 ||
+        అడ్డువరుస >= ఎత్తు || నిలువు >= వెడల్పు) తిరిగి 0;
+    తిరిగి im[నిలువు + వెడల్పు*(అడ్డువరుస + ఎత్తు*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
-void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+శూన్య im2col_cpu(దశాంశం* దత్తాంశం_im,
+     పూర్ణాంకం channels,  పూర్ణాంకం ఎత్తు,  పూర్ణాంకం వెడల్పు,
+     పూర్ణాంకం ksize,  పూర్ణాంకం stride, పూర్ణాంకం pad, దశాంశం* దత్తాంశం_నిలువు) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    పూర్ణాంకం c,h,w;
+    పూర్ణాంకం ఎత్తు_నిలువు = (ఎత్తు + 2*pad - ksize) / stride + 1;
+    పూర్ణాంకం వెడల్పు_నిలువు = (వెడల్పు + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
-                data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
-                        im_row, im_col, c_im, pad);
+    పూర్ణాంకం channels_నిలువు = channels * ksize * ksize;
+    కొరకు (c = 0; c < channels_నిలువు; ++c) {
+        పూర్ణాంకం w_స్థానభ్రంశం = c % ksize;
+        పూర్ణాంకం h_స్థానభ్రంశం = (c / ksize) % ksize;
+        పూర్ణాంకం c_im = c / ksize / ksize;
+        కొరకు (h = 0; h < ఎత్తు_నిలువు; ++h) {
+            కొరకు (w = 0; w < వెడల్పు_నిలువు; ++w) {
+                పూర్ణాంకం im_అడ్డువరుస = h_స్థానభ్రంశం + h * stride;
+                పూర్ణాంకం im_నిలువు = w_స్థానభ్రంశం + w * stride;
+                పూర్ణాంకం నిలువు_సూచీ = (c * ఎత్తు_నిలువు + h) * వెడల్పు_నిలువు + w;
+                దత్తాంశం_నిలువు[నిలువు_సూచీ] = im2col_get_pixel(దత్తాంశం_im, ఎత్తు, వెడల్పు, channels,
+                        im_అడ్డువరుస, im_నిలువు, c_im, pad);
             }
         }
     }

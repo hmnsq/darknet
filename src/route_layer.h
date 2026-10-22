@@ -1,18 +1,18 @@
-#ifndef ROUTE_LAYER_H
-#define ROUTE_LAYER_H
-#include "network.h"
-#include "layer.h"
+#నిర్వచితం_కాకపోతే ROUTE_LAYER_H
+#నిర్వచించు ROUTE_LAYER_H
+#అన్తర్భావ "network.h"
+#అన్తర్భావ "layer.h"
 
-typedef layer route_layer;
+రకనిర్వచనం layer route_layer;
 
-route_layer make_route_layer(int batch, int n, int *input_layers, int *input_size);
-void forward_route_layer(const route_layer l, network net);
-void backward_route_layer(const route_layer l, network net);
-void resize_route_layer(route_layer *l, network *net);
+route_layer make_route_layer(పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం *ఆదానం_layers, పూర్ణాంకం *ఆదానం_కొలత);
+శూన్య forward_route_layer(స్థిరరాశి route_layer l, జాలం net);
+శూన్య backward_route_layer(స్థిరరాశి route_layer l, జాలం net);
+శూన్య resize_route_layer(route_layer *l, జాలం *net);
 
-#ifdef GPU
-void forward_route_layer_gpu(const route_layer l, network net);
-void backward_route_layer_gpu(const route_layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_route_layer_gpu(స్థిరరాశి route_layer l, జాలం net);
+శూన్య backward_route_layer_gpu(స్థిరరాశి route_layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు

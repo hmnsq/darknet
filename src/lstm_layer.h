@@ -1,20 +1,20 @@
-#ifndef LSTM_LAYER_H
-#define LSTM_LAYER_H
+#నిర్వచితం_కాకపోతే LSTM_LAYER_H
+#నిర్వచించు LSTM_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
-#define USET
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
+#నిర్వచించు USET
 
-layer make_lstm_layer(int batch, int inputs, int outputs, int steps, int batch_normalize, int adam);
+layer make_lstm_layer(పూర్ణాంకం batch, పూర్ణాంకం inputs, పూర్ణాంకం outputs, పూర్ణాంకం అడుగులు, పూర్ణాంకం batch_normalize, పూర్ణాంకం adam);
 
-void forward_lstm_layer(layer l, network net); 
-void update_lstm_layer(layer l, update_args a);
+శూన్య forward_lstm_layer(layer l, జాలం net); 
+శూన్య update_lstm_layer(layer l, update_వాదనలు a);
 
-#ifdef GPU
-void forward_lstm_layer_gpu(layer l, network net);
-void backward_lstm_layer_gpu(layer l, network net);
-void update_lstm_layer_gpu(layer l, update_args a); 
+#నిర్వచితమైతే GPU
+శూన్య forward_lstm_layer_gpu(layer l, జాలం net);
+శూన్య backward_lstm_layer_gpu(layer l, జాలం net);
+శూన్య update_lstm_layer_gpu(layer l, update_వాదనలు a); 
 
-#endif
-#endif
+#అయితే_ముగింపు
+#అయితే_ముగింపు

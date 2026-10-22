@@ -1,135 +1,135 @@
-#ifdef OPENCV
+#నిర్వచితమైతే OPENCV
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "opencv2/opencv.hpp"
-#include "image.h"
+#అన్తర్భావ "stdio.h"
+#అన్తర్భావ "stdlib.h"
+#అన్తర్భావ "opencv2/opencv.hpp"
+#అన్తర్భావ "image.h"
 
-using namespace cv;
+ఉపయోగించి నామాకాశ cv;
 
-extern "C" {
+బాహ్య "C" {
 
-IplImage *image_to_ipl(image im)
+IplImage *image_గమ్యం_ipl(image im)
 {
-    int x,y,c;
-    IplImage *disp = cvCreateImage(cvSize(im.w,im.h), IPL_DEPTH_8U, im.c);
-    int step = disp->widthStep;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            for(c= 0; c < im.c; ++c){
-                float val = im.data[c*im.h*im.w + y*im.w + x];
-                disp->imageData[y*step + x*im.c + c] = (unsigned char)(val*255);
+    పూర్ణాంకం x,y,c;
+    IplImage *disp = cvCreateImage(cv_కొలత(im.w,im.h), IPL_లోతు_8_U, im.c);
+    పూర్ణాంకం అడుగు = disp->వెడల్పు_అడుగు;
+    కొరకు(y = 0; y < im.h; ++y){
+        కొరకు(x = 0; x < im.w; ++x){
+            కొరకు(c= 0; c < im.c; ++c){
+                దశాంశం val = im.దత్తాంశం[c*im.h*im.w + y*im.w + x];
+                disp->image_దత్తాంశం[y*అడుగు + x*im.c + c] = (గుర్తులేని అక్షరం)(val*255);
             }
         }
     }
-    return disp;
+    తిరిగి disp;
 }
 
-image ipl_to_image(IplImage* src)
+image ipl_గమ్యం_image(IplImage* src)
 {
-    int h = src->height;
-    int w = src->width;
-    int c = src->nChannels;
+    పూర్ణాంకం h = src->ఎత్తు;
+    పూర్ణాంకం w = src->వెడల్పు;
+    పూర్ణాంకం c = src->nChannels;
     image im = make_image(w, h, c);
-    unsigned char *data = (unsigned char *)src->imageData;
-    int step = src->widthStep;
-    int i, j, k;
+    గుర్తులేని అక్షరం *దత్తాంశం = (గుర్తులేని అక్షరం *)src->image_దత్తాంశం;
+    పూర్ణాంకం అడుగు = src->వెడల్పు_అడుగు;
+    పూర్ణాంకం i, j, k;
 
-    for(i = 0; i < h; ++i){
-        for(k= 0; k < c; ++k){
-            for(j = 0; j < w; ++j){
-                im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
+    కొరకు(i = 0; i < h; ++i){
+        కొరకు(k= 0; k < c; ++k){
+            కొరకు(j = 0; j < w; ++j){
+                im.దత్తాంశం[k*w*h + i*w + j] = దత్తాంశం[i*అడుగు + j*c + k]/255.;
             }
         }
     }
-    return im;
+    తిరిగి im;
 }
 
-Mat image_to_mat(image im)
+Mat image_గమ్యం_mat(image im)
 {
     image copy = copy_image(im);
     constrain_image(copy);
-    if(im.c == 3) rgbgr_image(copy);
+    ఒకవేళ(im.c == 3) rgbgr_image(copy);
 
-    IplImage *ipl = image_to_ipl(copy);
-    Mat m = cvarrToMat(ipl, true);
+    IplImage *ipl = image_గమ్యం_ipl(copy);
+    Mat m = cvarr_గమ్యం_Mat(ipl, నిజం);
     cvReleaseImage(&ipl);
     free_image(copy);
-    return m;
+    తిరిగి m;
 }
 
-image mat_to_image(Mat m)
+image mat_గమ్యం_image(Mat m)
 {
     IplImage ipl = m;
-    image im = ipl_to_image(&ipl);
+    image im = ipl_గమ్యం_image(&ipl);
     rgbgr_image(im);
-    return im;
+    తిరిగి im;
 }
 
-void *open_video_stream(const char *f, int c, int w, int h, int fps)
+శూన్య *open_video_ప్రవాహం(స్థిరరాశి అక్షరం *f, పూర్ణాంకం c, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం fps)
 {
     VideoCapture *cap;
-    if(f) cap = new VideoCapture(f);
-    else cap = new VideoCapture(c);
-    if(!cap->isOpened()) return 0;
-    if(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
-    if(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
-    if(fps) cap->set(CV_CAP_PROP_FPS, w);
-    return (void *) cap;
+    ఒకవేళ(f) cap = కొత్త VideoCapture(f);
+    లేకపోతే cap = కొత్త VideoCapture(c);
+    ఒకవేళ(!cap->isOpened()) తిరిగి 0;
+    ఒకవేళ(w) cap->సమితి(CV_CAP_PROP_చట్రం_వెడల్పు, w);
+    ఒకవేళ(h) cap->సమితి(CV_CAP_PROP_చట్రం_ఎత్తు, w);
+    ఒకవేళ(fps) cap->సమితి(CV_CAP_PROP_FPS, w);
+    తిరిగి (శూన్య *) cap;
 }
 
-image get_image_from_stream(void *p)
+image get_image_from_ప్రవాహం(శూన్య *p)
 {
     VideoCapture *cap = (VideoCapture *)p;
     Mat m;
     *cap >> m;
-    if(m.empty()) return make_empty_image(0,0,0);
-    return mat_to_image(m);
+    ఒకవేళ(m.ఖాళీలు()) తిరిగి make_ఖాళీలు_image(0,0,0);
+    తిరిగి mat_గమ్యం_image(m);
 }
 
-image load_image_cv(char *filename, int channels)
+image ఎక్కించు_image_cv(అక్షరం *filename, పూర్ణాంకం channels)
 {
-    int flag = -1;
-    if (channels == 0) flag = -1;
-    else if (channels == 1) flag = 0;
-    else if (channels == 3) flag = 1;
-    else {
+    పూర్ణాంకం flag = -1;
+    ఒకవేళ (channels == 0) flag = -1;
+    లేకపోతే ఒకవేళ (channels == 1) flag = 0;
+    లేకపోతే ఒకవేళ (channels == 3) flag = 1;
+    లేకపోతే {
         fprintf(stderr, "OpenCV can't force load with %d channels\n", channels);
     }
     Mat m;
     m = imread(filename, flag);
-    if(!m.data){
+    ఒకవేళ(!m.దత్తాంశం){
         fprintf(stderr, "Cannot load image \"%s\"\n", filename);
-        char buff[256];
+        అక్షరం buff[256];
         sprintf(buff, "echo %s >> bad.list", filename);
         system(buff);
-        return make_image(10,10,3);
+        తిరిగి make_image(10,10,3);
         //exit(0);
     }
-    image im = mat_to_image(m);
-    return im;
+    image im = mat_గమ్యం_image(m);
+    తిరిగి im;
 }
 
-int show_image_cv(image im, const char* name, int ms)
+పూర్ణాంకం show_image_cv(image im, స్థిరరాశి అక్షరం* name, పూర్ణాంకం ms)
 {
-    Mat m = image_to_mat(im);
+    Mat m = image_గమ్యం_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
-    if (c != -1) c = c%256;
-    return c;
+    పూర్ణాంకం c = wait_కీలకం(ms);
+    ఒకవేళ (c != -1) c = c%256;
+    తిరిగి c;
 }
 
-void make_window(char *name, int w, int h, int fullscreen)
+శూన్య make_కిటికీ(అక్షరం *name, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం fullscreen)
 {
-    namedWindow(name, WINDOW_NORMAL); 
-    if (fullscreen) {
-        setWindowProperty(name, CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
-    } else {
-        resizeWindow(name, w, h);
-        if(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
+    named_కిటికీ(name, కిటికీ_సాధారణ); 
+    ఒకవేళ (fullscreen) {
+        సమితి_కిటికీ_Property(name, CV_WND_PROP_FULLSCREEN, CV_కిటికీ_FULLSCREEN);
+    } లేకపోతే {
+        resize_కిటికీ(name, w, h);
+        ఒకవేళ(strcmp(name, "Demo") == 0) move_కిటికీ(name, 0, 0);
     }
 }
 
 }
 
-#endif
+#అయితే_ముగింపు

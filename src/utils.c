@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ <math.h>
+#అన్తర్భావ <assert.h>
+#అన్తర్భావ <unistd.h>
+#అన్తర్భావ <float.h>
+#అన్తర్భావ <limits.h>
+#అన్తర్భావ <time.h>
+#అన్తర్భావ <sys/time.h>
 
-#include "utils.h"
+#అన్తర్భావ "utils.h"
 
 
 /*
@@ -24,652 +24,652 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+ద్విగుణ what_సమయం_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    నిర్మాణం timeval సమయం;
+    ఒకవేళ (gettimeofday(&సమయం,ఖాళీ)){
+        తిరిగి 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    తిరిగి (ద్విగుణ)సమయం.tv_sec + (ద్విగుణ)సమయం.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+పూర్ణాంకం *read_intlist(అక్షరం *gpu_list, పూర్ణాంకం *ngpus, పూర్ణాంకం d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    పూర్ణాంకం *gpus = 0;
+    ఒకవేళ(gpu_list){
+        పూర్ణాంకం len = అక్షరశ్రేణి_పొడవు(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        పూర్ణాంకం i;
+        కొరకు(i = 0; i < len; ++i){
+            ఒకవేళ (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = సున్నా_జ్ఞాపకం_ఇవ్వు(*ngpus, పరిమాణం(పూర్ణాంకం));
+        కొరకు(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } లేకపోతే {
+        gpus = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(దశాంశం));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    తిరిగి gpus;
 }
 
-int *read_map(char *filename)
+పూర్ణాంకం *read_map(అక్షరం *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    పూర్ణాంకం n = 0;
+    పూర్ణాంకం *map = 0;
+    అక్షరం *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    ఒకవేళ(!file) file_error(filename);
+    అయితే((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*పరిమాణం(పూర్ణాంకం));
         map[n-1] = atoi(str);
     }
-    return map;
+    తిరిగి map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+శూన్య sorta_shuffle(శూన్య *arr, size_t n, size_t కొలత, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
-        size_t start = n*i/sections;
-        size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+    కొరకు(i = 0; i < sections; ++i){
+        size_t ప్రారంభం = n*i/sections;
+        size_t చివర = n*(i+1)/sections;
+        size_t అంకె = చివర-ప్రారంభం;
+        shuffle(arr+(ప్రారంభం*కొలత), అంకె, కొలత);
     }
 }
 
-void shuffle(void *arr, size_t n, size_t size)
+శూన్య shuffle(శూన్య *arr, size_t n, size_t కొలత)
 {
     size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    శూన్య *swp = సున్నా_జ్ఞాపకం_ఇవ్వు(1, కొలత);
+    కొరకు(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
-        memcpy(swp,          arr+(j*size), size);
-        memcpy(arr+(j*size), arr+(i*size), size);
-        memcpy(arr+(i*size), swp,          size);
+        జ్ఞాపకం_నకలు(swp,          arr+(j*కొలత), కొలత);
+        జ్ఞాపకం_నకలు(arr+(j*కొలత), arr+(i*కొలత), కొలత);
+        జ్ఞాపకం_నకలు(arr+(i*కొలత), swp,          కొలత);
     }
 }
 
-int *random_index_order(int min, int max)
+పూర్ణాంకం *random_సూచీ_క్రమం(పూర్ణాంకం min, పూర్ణాంకం max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    పూర్ణాంకం *inds = సున్నా_జ్ఞాపకం_ఇవ్వు(max-min, పరిమాణం(పూర్ణాంకం));
+    పూర్ణాంకం i;
+    కొరకు(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
-        inds[i] = inds[index];
-        inds[index] = swap;
+    కొరకు(i = min; i < max-1; ++i){
+        పూర్ణాంకం మార్పిడి = inds[i];
+        పూర్ణాంకం సూచీ = i + rand()%(max-i);
+        inds[i] = inds[సూచీ];
+        inds[సూచీ] = మార్పిడి;
     }
-    return inds;
+    తిరిగి inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+శూన్య del_arg(పూర్ణాంకం argc, అక్షరం **argv, పూర్ణాంకం సూచీ)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    పూర్ణాంకం i;
+    కొరకు(i = సూచీ; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+పూర్ణాంకం కనుగొను_arg(పూర్ణాంకం argc, అక్షరం* argv[], అక్షరం *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < argc; ++i) {
+        ఒకవేళ(!argv[i]) కొనసాగు;
+        ఒకవేళ(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            తిరిగి 1;
         }
     }
-    return 0;
+    తిరిగి 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+పూర్ణాంకం కనుగొను_int_arg(పూర్ణాంకం argc, అక్షరం **argv, అక్షరం *arg, పూర్ణాంకం def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < argc-1; ++i){
+        ఒకవేళ(!argv[i]) కొనసాగు;
+        ఒకవేళ(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ఆపు;
         }
     }
-    return def;
+    తిరిగి def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+దశాంశం కనుగొను_float_arg(పూర్ణాంకం argc, అక్షరం **argv, అక్షరం *arg, దశాంశం def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < argc-1; ++i){
+        ఒకవేళ(!argv[i]) కొనసాగు;
+        ఒకవేళ(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ఆపు;
         }
     }
-    return def;
+    తిరిగి def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+అక్షరం *కనుగొను_char_arg(పూర్ణాంకం argc, అక్షరం **argv, అక్షరం *arg, అక్షరం *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < argc-1; ++i){
+        ఒకవేళ(!argv[i]) కొనసాగు;
+        ఒకవేళ(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            ఆపు;
         }
     }
-    return def;
+    తిరిగి def;
 }
 
 
-char *basecfg(char *cfgfile)
+అక్షరం *basecfg(అక్షరం *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    అక్షరం *c = cfgfile;
+    అక్షరం *తదుపరి;
+    అయితే((తదుపరి = strchr(c, '/')))
     {
-        c = next+1;
+        c = తదుపరి+1;
     }
     c = copy_string(c);
-    next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    తదుపరి = strchr(c, '.');
+    ఒకవేళ (తదుపరి) *తదుపరి = 0;
+    తిరిగి c;
 }
 
-int alphanum_to_int(char c)
+పూర్ణాంకం alphanum_గమ్యం_int(అక్షరం c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    తిరిగి (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+అక్షరం int_గమ్యం_alphanum(పూర్ణాంకం i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    ఒకవేళ (i == 36) తిరిగి '.';
+    తిరిగి (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+శూన్య pm(పూర్ణాంకం M, పూర్ణాంకం N, దశాంశం *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
-        printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
-            printf("%2.4f, ", A[i*N+j]);
+    పూర్ణాంకం i,j;
+    కొరకు(i =0 ; i < M; ++i){
+        రాయి("%d ", i+1);
+        కొరకు(j = 0; j < N; ++j){
+            రాయి("%2.4f, ", A[i*N+j]);
         }
-        printf("\n");
+        రాయి("\n");
     }
-    printf("\n");
+    రాయి("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+శూన్య కనుగొను_replace(అక్షరం *str, అక్షరం *orig, అక్షరం *rep, అక్షరం *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    అక్షరం బఫరు[4096] = {0};
+    అక్షరం *p;
 
-    sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    sprintf(బఫరు, "%s", str);
+    ఒకవేళ(!(p = అక్షరశ్రేణి_శోధన(బఫరు, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        తిరిగి;
     }
 
     *p = '\0';
 
-    sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
+    sprintf(output, "%s%s%s", బఫరు, rep, p+అక్షరశ్రేణి_పొడవు(orig));
 }
 
-float sec(clock_t clocks)
+దశాంశం sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    తిరిగి (దశాంశం)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+శూన్య శిఖరం_k(దశాంశం *a, పూర్ణాంకం n, పూర్ణాంకం k, పూర్ణాంకం *సూచీ)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
-                curr = index[j];
-                index[j] = swap;
+    పూర్ణాంకం i,j;
+    కొరకు(j = 0; j < k; ++j) సూచీ[j] = -1;
+    కొరకు(i = 0; i < n; ++i){
+        పూర్ణాంకం curr = i;
+        కొరకు(j = 0; j < k; ++j){
+            ఒకవేళ((సూచీ[j] < 0) || a[curr] > a[సూచీ[j]]){
+                పూర్ణాంకం మార్పిడి = curr;
+                curr = సూచీ[j];
+                సూచీ[j] = మార్పిడి;
             }
         }
     }
 }
 
-void error(const char *s)
+శూన్య error(స్థిరరాశి అక్షరం *s)
 {
     perror(s);
-    assert(0);
-    exit(-1);
+    ప్రతిజ్ఞా(0);
+    నిష్క్రమించు(-1);
 }
 
-unsigned char *read_file(char *filename)
+గుర్తులేని అక్షరం *read_file(అక్షరం *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    size_t size;
+    size_t కొలత;
 
     fseek(fp, 0, SEEK_END); 
-    size = ftell(fp);
+    కొలత = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
-    fread(text, 1, size, fp);
+    గుర్తులేని అక్షరం *పాఠ్యం = సున్నా_జ్ఞాపకం_ఇవ్వు(కొలత+1, పరిమాణం(అక్షరం));
+    fread(పాఠ్యం, 1, కొలత, fp);
     fclose(fp);
-    return text;
+    తిరిగి పాఠ్యం;
 }
 
-void malloc_error()
+శూన్య malloc_error()
 {
     fprintf(stderr, "Malloc error\n");
-    exit(-1);
+    నిష్క్రమించు(-1);
 }
 
-void file_error(char *s)
+శూన్య file_error(అక్షరం *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
-    exit(0);
+    నిష్క్రమించు(0);
 }
 
-list *split_str(char *s, char delim)
+list *విభజించు_str(అక్షరం *s, అక్షరం delim)
 {
     size_t i;
-    size_t len = strlen(s);
+    size_t len = అక్షరశ్రేణి_పొడవు(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_చొప్పించు(l, s);
+    కొరకు(i = 0; i < len; ++i){
+        ఒకవేళ(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_చొప్పించు(l, &(s[i+1]));
         }
     }
-    return l;
+    తిరిగి l;
 }
 
-void strip(char *s)
+శూన్య strip(అక్షరం *s)
 {
     size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    size_t len = అక్షరశ్రేణి_పొడవు(s);
+    size_t స్థానభ్రంశం = 0;
+    కొరకు(i = 0; i < len; ++i){
+        అక్షరం c = s[i];
+        ఒకవేళ(c==' '||c=='\t'||c=='\n') ++స్థానభ్రంశం;
+        లేకపోతే s[i-స్థానభ్రంశం] = c;
     }
-    s[len-offset] = '\0';
+    s[len-స్థానభ్రంశం] = '\0';
 }
 
-void strip_char(char *s, char bad)
+శూన్య strip_char(అక్షరం *s, అక్షరం bad)
 {
     size_t i;
-    size_t len = strlen(s);
-    size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    size_t len = అక్షరశ్రేణి_పొడవు(s);
+    size_t స్థానభ్రంశం = 0;
+    కొరకు(i = 0; i < len; ++i){
+        అక్షరం c = s[i];
+        ఒకవేళ(c==bad) ++స్థానభ్రంశం;
+        లేకపోతే s[i-స్థానభ్రంశం] = c;
     }
-    s[len-offset] = '\0';
+    s[len-స్థానభ్రంశం] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+శూన్య free_ptrs(శూన్య **ptrs, పూర్ణాంకం n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i) విడుదల(ptrs[i]);
+    విడుదల(ptrs);
 }
 
-char *fgetl(FILE *fp)
+అక్షరం *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
-    size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    ఒకవేళ(feof(fp)) తిరిగి 0;
+    size_t కొలత = 512;
+    అక్షరం *పంక్తి = జ్ఞాపకం_ఇవ్వు(కొలత*పరిమాణం(అక్షరం));
+    ఒకవేళ(!fgets(పంక్తి, కొలత, fp)){
+        విడుదల(పంక్తి);
+        తిరిగి 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = అక్షరశ్రేణి_పొడవు(పంక్తి);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
-            size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
-                printf("%ld\n", size);
+    అయితే((పంక్తి[curr-1] != '\n') && !feof(fp)){
+        ఒకవేళ(curr == కొలత-1){
+            కొలత *= 2;
+            పంక్తి = realloc(పంక్తి, కొలత*పరిమాణం(అక్షరం));
+            ఒకవేళ(!పంక్తి) {
+                రాయి("%ld\n", కొలత);
                 malloc_error();
             }
         }
-        size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        size_t readsize = కొలత-curr;
+        ఒకవేళ(readsize > గరిష్ఠ_పూర్ణాంకం) readsize = గరిష్ఠ_పూర్ణాంకం-1;
+        fgets(&పంక్తి[curr], readsize, fp);
+        curr = అక్షరశ్రేణి_పొడవు(పంక్తి);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    ఒకవేళ(పంక్తి[curr-1] == '\n') పంక్తి[curr-1] = '\0';
 
-    return line;
+    తిరిగి పంక్తి;
 }
 
-int read_int(int fd)
+పూర్ణాంకం read_int(పూర్ణాంకం fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    పూర్ణాంకం n = 0;
+    పూర్ణాంకం తదుపరి = పఠ(fd, &n, పరిమాణం(పూర్ణాంకం));
+    ఒకవేళ(తదుపరి <= 0) తిరిగి -1;
+    తిరిగి n;
 }
 
-void write_int(int fd, int n)
+శూన్య write_int(పూర్ణాంకం fd, పూర్ణాంకం n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    పూర్ణాంకం తదుపరి = లిఖ(fd, &n, పరిమాణం(పూర్ణాంకం));
+    ఒకవేళ(తదుపరి <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+పూర్ణాంకం read_all_fail(పూర్ణాంకం fd, అక్షరం *బఫరు, size_t బైట్లు)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    అయితే(n < బైట్లు){
+        పూర్ణాంకం తదుపరి = పఠ(fd, బఫరు + n, బైట్లు-n);
+        ఒకవేళ(తదుపరి <= 0) తిరిగి 1;
+        n += తదుపరి;
     }
-    return 0;
+    తిరిగి 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+పూర్ణాంకం write_all_fail(పూర్ణాంకం fd, అక్షరం *బఫరు, size_t బైట్లు)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
-        n += next;
+    అయితే(n < బైట్లు){
+        size_t తదుపరి = లిఖ(fd, బఫరు + n, బైట్లు-n);
+        ఒకవేళ(తదుపరి <= 0) తిరిగి 1;
+        n += తదుపరి;
     }
-    return 0;
+    తిరిగి 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+శూన్య read_all(పూర్ణాంకం fd, అక్షరం *బఫరు, size_t బైట్లు)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
+    అయితే(n < బైట్లు){
+        పూర్ణాంకం తదుపరి = పఠ(fd, బఫరు + n, బైట్లు-n);
+        ఒకవేళ(తదుపరి <= 0) error("read failed");
+        n += తదుపరి;
     }
 }
 
-void write_all(int fd, char *buffer, size_t bytes)
+శూన్య write_all(పూర్ణాంకం fd, అక్షరం *బఫరు, size_t బైట్లు)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
-        n += next;
+    అయితే(n < బైట్లు){
+        size_t తదుపరి = లిఖ(fd, బఫరు + n, బైట్లు-n);
+        ఒకవేళ(తదుపరి <= 0) error("write failed");
+        n += తదుపరి;
     }
 }
 
 
-char *copy_string(char *s)
+అక్షరం *copy_string(అక్షరం *s)
 {
-    char *copy = malloc(strlen(s)+1);
-    strncpy(copy, s, strlen(s)+1);
-    return copy;
+    అక్షరం *copy = జ్ఞాపకం_ఇవ్వు(అక్షరశ్రేణి_పొడవు(s)+1);
+    strncpy(copy, s, అక్షరశ్రేణి_పొడవు(s)+1);
+    తిరిగి copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_పంక్తి(అక్షరం *పంక్తి)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    అక్షరం *c, *p;
+    పూర్ణాంకం లోపల = 0;
+    కొరకు(c = పంక్తి, p = పంక్తి; *c != '\0'; ++c){
+        ఒకవేళ(*c == '"') లోపల = !లోపల;
+        లేకపోతే ఒకవేళ(*c == ',' && !లోపల){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_చొప్పించు(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_చొప్పించు(l, copy_string(p));
+    తిరిగి l;
 }
 
-int count_fields(char *line)
+పూర్ణాంకం లెక్క_fields(అక్షరం *పంక్తి)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
-        done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+    పూర్ణాంకం లెక్క = 0;
+    పూర్ణాంకం పూర్తి = 0;
+    అక్షరం *c;
+    కొరకు(c = పంక్తి; !పూర్తి; ++c){
+        పూర్తి = (*c == '\0');
+        ఒకవేళ(*c == ',' || పూర్తి) ++లెక్క;
     }
-    return count;
+    తిరిగి లెక్క;
 }
 
-float *parse_fields(char *line, int n)
+దశాంశం *parse_fields(అక్షరం *పంక్తి, పూర్ణాంకం n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
-        done = (*c == '\0');
-        if(*c == ',' || done){
+    దశాంశం *క్షేత్రం = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(దశాంశం));
+    అక్షరం *c, *p, *చివర;
+    పూర్ణాంకం లెక్క = 0;
+    పూర్ణాంకం పూర్తి = 0;
+    కొరకు(c = పంక్తి, p = పంక్తి; !పూర్తి; ++c){
+        పూర్తి = (*c == '\0');
+        ఒకవేళ(*c == ',' || పూర్తి){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            క్షేత్రం[లెక్క] = strtod(p, &చివర);
+            ఒకవేళ(p == c) క్షేత్రం[లెక్క] = nan("");
+            ఒకవేళ(చివర != c && (చివర != c-1 || *చివర != '\r')) క్షేత్రం[లెక్క] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++లెక్క;
         }
     }
-    return field;
+    తిరిగి క్షేత్రం;
 }
 
-float sum_array(float *a, int n)
+దశాంశం కూడిక_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    పూర్ణాంకం i;
+    దశాంశం కూడిక = 0;
+    కొరకు(i = 0; i < n; ++i) కూడిక += a[i];
+    తిరిగి కూడిక;
 }
 
-float mean_array(float *a, int n)
+దశాంశం సగటు_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    return sum_array(a,n)/n;
+    తిరిగి కూడిక_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+శూన్య సగటు_arrays(దశాంశం **a, పూర్ణాంకం n, పూర్ణాంకం els, దశాంశం *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    పూర్ణాంకం i;
+    పూర్ణాంకం j;
+    memset(avg, 0, els*పరిమాణం(దశాంశం));
+    కొరకు(j = 0; j < n; ++j){
+        కొరకు(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    కొరకు(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+శూన్య print_statistics(దశాంశం *a, పూర్ణాంకం n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
-    printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
+    దశాంశం m = సగటు_array(a, n);
+    దశాంశం v = variance_array(a, n);
+    రాయి("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+దశాంశం variance_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    పూర్ణాంకం i;
+    దశాంశం కూడిక = 0;
+    దశాంశం సగటు = సగటు_array(a, n);
+    కొరకు(i = 0; i < n; ++i) కూడిక += (a[i] - సగటు)*(a[i]-సగటు);
+    దశాంశం variance = కూడిక/n;
+    తిరిగి variance;
 }
 
-int constrain_int(int a, int min, int max)
+పూర్ణాంకం constrain_int(పూర్ణాంకం a, పూర్ణాంకం min, పూర్ణాంకం max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ఒకవేళ (a < min) తిరిగి min;
+    ఒకవేళ (a > max) తిరిగి max;
+    తిరిగి a;
 }
 
-float constrain(float min, float max, float a)
+దశాంశం constrain(దశాంశం min, దశాంశం max, దశాంశం a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    ఒకవేళ (a < min) తిరిగి min;
+    ఒకవేళ (a > max) తిరిగి max;
+    తిరిగి a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+దశాంశం dist_array(దశాంశం *a, దశాంశం *b, పూర్ణాంకం n, పూర్ణాంకం sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    పూర్ణాంకం i;
+    దశాంశం కూడిక = 0;
+    కొరకు(i = 0; i < n; i += sub) కూడిక += ఘాతం(a[i]-b[i], 2);
+    తిరిగి వర్గమూలం(కూడిక);
 }
 
-float mse_array(float *a, int n)
+దశాంశం mse_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    పూర్ణాంకం i;
+    దశాంశం కూడిక = 0;
+    కొరకు(i = 0; i < n; ++i) కూడిక += a[i]*a[i];
+    తిరిగి వర్గమూలం(కూడిక/n);
 }
 
-void normalize_array(float *a, int n)
+శూన్య normalize_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    పూర్ణాంకం i;
+    దశాంశం mu = సగటు_array(a,n);
+    దశాంశం sigma = వర్గమూలం(variance_array(a,n));
+    కొరకు(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
-    mu = mean_array(a,n);
-    sigma = sqrt(variance_array(a,n));
+    mu = సగటు_array(a,n);
+    sigma = వర్గమూలం(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+శూన్య translate_array(దశాంశం *a, పూర్ణాంకం n, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+దశాంశం mag_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        sum += a[i]*a[i];   
+    పూర్ణాంకం i;
+    దశాంశం కూడిక = 0;
+    కొరకు(i = 0; i < n; ++i){
+        కూడిక += a[i]*a[i];   
     }
-    return sqrt(sum);
+    తిరిగి వర్గమూలం(కూడిక);
 }
 
-void scale_array(float *a, int n, float s)
+శూన్య scale_array(దశాంశం *a, పూర్ణాంకం n, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+పూర్ణాంకం sample_array(దశాంశం *a, పూర్ణాంకం n)
 {
-    float sum = sum_array(a, n);
-    scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    దశాంశం కూడిక = కూడిక_array(a, n);
+    scale_array(a, n, 1./కూడిక);
+    దశాంశం r = rand_ఏకరీతి(0, 1);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        ఒకవేళ (r <= 0) తిరిగి i;
     }
-    return n-1;
+    తిరిగి n-1;
 }
 
-int max_int_index(int *a, int n)
+పూర్ణాంకం max_int_సూచీ(పూర్ణాంకం *a, పూర్ణాంకం n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    ఒకవేళ(n <= 0) తిరిగి -1;
+    పూర్ణాంకం i, max_i = 0;
+    పూర్ణాంకం max = a[0];
+    కొరకు(i = 1; i < n; ++i){
+        ఒకవేళ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    తిరిగి max_i;
 }
 
-int max_index(float *a, int n)
+పూర్ణాంకం max_సూచీ(దశాంశం *a, పూర్ణాంకం n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    ఒకవేళ(n <= 0) తిరిగి -1;
+    పూర్ణాంకం i, max_i = 0;
+    దశాంశం max = a[0];
+    కొరకు(i = 1; i < n; ++i){
+        ఒకవేళ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    తిరిగి max_i;
 }
 
-int int_index(int *a, int val, int n)
+పూర్ణాంకం int_సూచీ(పూర్ణాంకం *a, పూర్ణాంకం val, పూర్ణాంకం n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        ఒకవేళ(a[i] == val) తిరిగి i;
     }
-    return -1;
+    తిరిగి -1;
 }
 
-int rand_int(int min, int max)
+పూర్ణాంకం rand_int(పూర్ణాంకం min, పూర్ణాంకం max)
 {
-    if (max < min){
-        int s = min;
+    ఒకవేళ (max < min){
+        పూర్ణాంకం s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    పూర్ణాంకం r = (rand()%(max - min + 1)) + min;
+    తిరిగి r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+దశాంశం rand_సాధారణ()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    స్థిర పూర్ణాంకం have_అదనపు = 0;
+    స్థిర ద్విగుణ rand1, rand2;
 
-    if(haveSpare)
+    ఒకవేళ(have_అదనపు)
     {
-        haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        have_అదనపు = 0;
+        తిరిగి వర్గమూలం(rand1) * జ్యా(rand2);
     }
 
-    haveSpare = 1;
+    have_అదనపు = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
-    rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand1 = rand() / ((ద్విగుణ) RAND_MAX);
+    ఒకవేళ(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = -2 * సంవర్గమానం(rand1);
+    rand2 = (rand() / ((ద్విగుణ) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    తిరిగి వర్గమూలం(rand1) * కోజ్యా(rand2);
 }
 
 /*
@@ -683,9 +683,9 @@ float rand_normal()
    }
  */
 
-size_t rand_size_t()
+size_t rand_కొలత_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    తిరిగి  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -695,32 +695,32 @@ size_t rand_size_t()
         ((size_t)(rand()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+దశాంశం rand_ఏకరీతి(దశాంశం min, దశాంశం max)
 {
-    if(max < min){
-        float swap = min;
+    ఒకవేళ(max < min){
+        దశాంశం మార్పిడి = min;
         min = max;
-        max = swap;
+        max = మార్పిడి;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    తిరిగి ((దశాంశం)rand()/RAND_MAX * (max - min)) + min;
 }
 
-float rand_scale(float s)
+దశాంశం rand_scale(దశాంశం s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    దశాంశం scale = rand_ఏకరీతి(1, s);
+    ఒకవేళ(rand()%2) తిరిగి scale;
+    తిరిగి 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+దశాంశం **one_hot_encode(దశాంశం *a, పూర్ణాంకం n, పూర్ణాంకం k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
-        t[i][index] = 1;
+    పూర్ణాంకం i;
+    దశాంశం **t = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(దశాంశం*));
+    కొరకు(i = 0; i < n; ++i){
+        t[i] = సున్నా_జ్ఞాపకం_ఇవ్వు(k, పరిమాణం(దశాంశం));
+        పూర్ణాంకం సూచీ = (పూర్ణాంకం)a[i];
+        t[i][సూచీ] = 1;
     }
-    return t;
+    తిరిగి t;
 }
 

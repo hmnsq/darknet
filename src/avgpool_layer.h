@@ -1,23 +1,23 @@
-#ifndef AVGPOOL_LAYER_H
-#define AVGPOOL_LAYER_H
+#నిర్వచితం_కాకపోతే AVGPOOL_LAYER_H
+#నిర్వచించు AVGPOOL_LAYER_H
 
-#include "image.h"
-#include "cuda.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-typedef layer avgpool_layer;
+రకనిర్వచనం layer avgpool_layer;
 
 image get_avgpool_image(avgpool_layer l);
-avgpool_layer make_avgpool_layer(int batch, int w, int h, int c);
-void resize_avgpool_layer(avgpool_layer *l, int w, int h);
-void forward_avgpool_layer(const avgpool_layer l, network net);
-void backward_avgpool_layer(const avgpool_layer l, network net);
+avgpool_layer make_avgpool_layer(పూర్ణాంకం batch, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c);
+శూన్య resize_avgpool_layer(avgpool_layer *l, పూర్ణాంకం w, పూర్ణాంకం h);
+శూన్య forward_avgpool_layer(స్థిరరాశి avgpool_layer l, జాలం net);
+శూన్య backward_avgpool_layer(స్థిరరాశి avgpool_layer l, జాలం net);
 
-#ifdef GPU
-void forward_avgpool_layer_gpu(avgpool_layer l, network net);
-void backward_avgpool_layer_gpu(avgpool_layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_avgpool_layer_gpu(avgpool_layer l, జాలం net);
+శూన్య backward_avgpool_layer_gpu(avgpool_layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు
 

@@ -1,103 +1,103 @@
-#include "network.h"
-#include "detection_layer.h"
-#include "region_layer.h"
-#include "cost_layer.h"
-#include "utils.h"
-#include "parser.h"
-#include "box.h"
-#include "image.h"
-#include "demo.h"
-#include <sys/time.h>
+#అన్తర్భావ "network.h"
+#అన్తర్భావ "detection_layer.h"
+#అన్తర్భావ "region_layer.h"
+#అన్తర్భావ "cost_layer.h"
+#అన్తర్భావ "utils.h"
+#అన్తర్భావ "parser.h"
+#అన్తర్భావ "box.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "demo.h"
+#అన్తర్భావ <sys/time.h>
 
-#define DEMO 1
+#నిర్వచించు DEMO 1
 
-#ifdef OPENCV
+#నిర్వచితమైతే OPENCV
 
-static char **demo_names;
-static image **demo_alphabet;
-static int demo_classes;
+స్థిర అక్షరం **demo_పేర్లు;
+స్థిర image **demo_alphabet;
+స్థిర పూర్ణాంకం demo_classes;
 
-static network *net;
-static image buff [3];
-static image buff_letter[3];
-static int buff_index = 0;
-static void * cap;
-static float fps = 0;
-static float demo_thresh = 0;
-static float demo_hier = .5;
-static int running = 0;
+స్థిర జాలం *net;
+స్థిర image buff [3];
+స్థిర image buff_letter[3];
+స్థిర పూర్ణాంకం buff_సూచీ = 0;
+స్థిర శూన్య * cap;
+స్థిర దశాంశం fps = 0;
+స్థిర దశాంశం demo_thresh = 0;
+స్థిర దశాంశం demo_hier = .5;
+స్థిర పూర్ణాంకం running = 0;
 
-static int demo_frame = 3;
-static int demo_index = 0;
-static float **predictions;
-static float *avg;
-static int demo_done = 0;
-static int demo_total = 0;
-double demo_time;
+స్థిర పూర్ణాంకం demo_చట్రం = 3;
+స్థిర పూర్ణాంకం demo_సూచీ = 0;
+స్థిర దశాంశం **predictions;
+స్థిర దశాంశం *avg;
+స్థిర పూర్ణాంకం demo_పూర్తి = 0;
+స్థిర పూర్ణాంకం demo_మొత్తం = 0;
+ద్విగుణ demo_సమయం;
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num);
+detection *get_జాలం_boxes(జాలం *net, పూర్ణాంకం w, పూర్ణాంకం h, దశాంశం thresh, దశాంశం hier, పూర్ణాంకం *map, పూర్ణాంకం relative, పూర్ణాంకం *అంకె);
 
-int size_network(network *net)
+పూర్ణాంకం కొలత_జాలం(జాలం *net)
 {
-    int i;
-    int count = 0;
-    for(i = 0; i < net->n; ++i){
+    పూర్ణాంకం i;
+    పూర్ణాంకం లెక్క = 0;
+    కొరకు(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            count += l.outputs;
+        ఒకవేళ(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            లెక్క += l.outputs;
         }
     }
-    return count;
+    తిరిగి లెక్క;
 }
 
-void remember_network(network *net)
+శూన్య remember_జాలం(జాలం *net)
 {
-    int i;
-    int count = 0;
-    for(i = 0; i < net->n; ++i){
+    పూర్ణాంకం i;
+    పూర్ణాంకం లెక్క = 0;
+    కొరకు(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(predictions[demo_index] + count, net->layers[i].output, sizeof(float) * l.outputs);
-            count += l.outputs;
+        ఒకవేళ(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            జ్ఞాపకం_నకలు(predictions[demo_సూచీ] + లెక్క, net->layers[i].output, పరిమాణం(దశాంశం) * l.outputs);
+            లెక్క += l.outputs;
         }
     }
 }
 
-detection *avg_predictions(network *net, int *nboxes)
+detection *avg_predictions(జాలం *net, పూర్ణాంకం *nboxes)
 {
-    int i, j;
-    int count = 0;
-    fill_cpu(demo_total, 0, avg, 1);
-    for(j = 0; j < demo_frame; ++j){
-        axpy_cpu(demo_total, 1./demo_frame, predictions[j], 1, avg, 1);
+    పూర్ణాంకం i, j;
+    పూర్ణాంకం లెక్క = 0;
+    fill_cpu(demo_మొత్తం, 0, avg, 1);
+    కొరకు(j = 0; j < demo_చట్రం; ++j){
+        axpy_cpu(demo_మొత్తం, 1./demo_చట్రం, predictions[j], 1, avg, 1);
     }
-    for(i = 0; i < net->n; ++i){
+    కొరకు(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(l.output, avg + count, sizeof(float) * l.outputs);
-            count += l.outputs;
+        ఒకవేళ(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            జ్ఞాపకం_నకలు(l.output, avg + లెక్క, పరిమాణం(దశాంశం) * l.outputs);
+            లెక్క += l.outputs;
         }
     }
-    detection *dets = get_network_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
-    return dets;
+    detection *dets = get_జాలం_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
+    తిరిగి dets;
 }
 
-void *detect_in_thread(void *ptr)
+శూన్య *detect_లోపల_thread(శూన్య *ptr)
 {
     running = 1;
-    float nms = .4;
+    దశాంశం nms = .4;
 
     layer l = net->layers[net->n-1];
-    float *X = buff_letter[(buff_index+2)%3].data;
-    network_predict(net, X);
+    దశాంశం *X = buff_letter[(buff_సూచీ+2)%3].దత్తాంశం;
+    జాలం_predict(net, X);
 
     /*
        if(l.type == DETECTION){
        get_detection_boxes(l, 1, 1, demo_thresh, probs, boxes, 0);
        } else */
-    remember_network(net);
+    remember_జాలం(net);
     detection *dets = 0;
-    int nboxes = 0;
+    పూర్ణాంకం nboxes = 0;
     dets = avg_predictions(net, &nboxes);
 
 
@@ -122,132 +122,132 @@ void *detect_in_thread(void *ptr)
     }
      */
 
-    if (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
+    ఒకవేళ (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
 
-    printf("\033[2J");
-    printf("\033[1;1H");
-    printf("\nFPS:%.1f\n",fps);
-    printf("Objects:\n\n");
-    image display = buff[(buff_index+2) % 3];
-    draw_detections(display, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes);
+    రాయి("\033[2J");
+    రాయి("\033[1;1H");
+    రాయి("\nFPS:%.1f\n",fps);
+    రాయి("Objects:\n\n");
+    image display = buff[(buff_సూచీ+2) % 3];
+    draw_detections(display, dets, nboxes, demo_thresh, demo_పేర్లు, demo_alphabet, demo_classes);
     free_detections(dets, nboxes);
 
-    demo_index = (demo_index + 1)%demo_frame;
+    demo_సూచీ = (demo_సూచీ + 1)%demo_చట్రం;
     running = 0;
-    return 0;
+    తిరిగి 0;
 }
 
-void *fetch_in_thread(void *ptr)
+శూన్య *fetch_లోపల_thread(శూన్య *ptr)
 {
-    free_image(buff[buff_index]);
-    buff[buff_index] = get_image_from_stream(cap);
-    if(buff[buff_index].data == 0) {
-        demo_done = 1;
-        return 0;
+    free_image(buff[buff_సూచీ]);
+    buff[buff_సూచీ] = get_image_from_ప్రవాహం(cap);
+    ఒకవేళ(buff[buff_సూచీ].దత్తాంశం == 0) {
+        demo_పూర్తి = 1;
+        తిరిగి 0;
     }
-    letterbox_image_into(buff[buff_index], net->w, net->h, buff_letter[buff_index]);
-    return 0;
+    letterbox_image_into(buff[buff_సూచీ], net->w, net->h, buff_letter[buff_సూచీ]);
+    తిరిగి 0;
 }
 
-void *display_in_thread(void *ptr)
+శూన్య *display_లోపల_thread(శూన్య *ptr)
 {
-    int c = show_image(buff[(buff_index + 1)%3], "Demo", 1);
-    if (c != -1) c = c%256;
-    if (c == 27) {
-        demo_done = 1;
-        return 0;
-    } else if (c == 82) {
+    పూర్ణాంకం c = show_image(buff[(buff_సూచీ + 1)%3], "Demo", 1);
+    ఒకవేళ (c != -1) c = c%256;
+    ఒకవేళ (c == 27) {
+        demo_పూర్తి = 1;
+        తిరిగి 0;
+    } లేకపోతే ఒకవేళ (c == 82) {
         demo_thresh += .02;
-    } else if (c == 84) {
+    } లేకపోతే ఒకవేళ (c == 84) {
         demo_thresh -= .02;
-        if(demo_thresh <= .02) demo_thresh = .02;
-    } else if (c == 83) {
+        ఒకవేళ(demo_thresh <= .02) demo_thresh = .02;
+    } లేకపోతే ఒకవేళ (c == 83) {
         demo_hier += .02;
-    } else if (c == 81) {
+    } లేకపోతే ఒకవేళ (c == 81) {
         demo_hier -= .02;
-        if(demo_hier <= .0) demo_hier = .0;
+        ఒకవేళ(demo_hier <= .0) demo_hier = .0;
     }
-    return 0;
+    తిరిగి 0;
 }
 
-void *display_loop(void *ptr)
+శూన్య *display_loop(శూన్య *ptr)
 {
-    while(1){
-        display_in_thread(0);
+    అయితే(1){
+        display_లోపల_thread(0);
     }
 }
 
-void *detect_loop(void *ptr)
+శూన్య *detect_loop(శూన్య *ptr)
 {
-    while(1){
-        detect_in_thread(0);
+    అయితే(1){
+        detect_లోపల_thread(0);
     }
 }
 
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg_frames, float hier, int w, int h, int frames, int fullscreen)
+శూన్య demo(అక్షరం *cfgfile, అక్షరం *weightfile, దశాంశం thresh, పూర్ణాంకం cam_సూచీ, స్థిరరాశి అక్షరం *filename, అక్షరం **పేర్లు, పూర్ణాంకం classes, పూర్ణాంకం delay, అక్షరం *ఉపసర్గ, పూర్ణాంకం avg_చట్రాలు, దశాంశం hier, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం చట్రాలు, పూర్ణాంకం fullscreen)
 {
     //demo_frame = avg_frames;
-    image **alphabet = load_alphabet();
-    demo_names = names;
+    image **alphabet = ఎక్కించు_alphabet();
+    demo_పేర్లు = పేర్లు;
     demo_alphabet = alphabet;
     demo_classes = classes;
     demo_thresh = thresh;
     demo_hier = hier;
-    printf("Demo\n");
-    net = load_network(cfgfile, weightfile, 0);
-    set_batch_network(net, 1);
+    రాయి("Demo\n");
+    net = ఎక్కించు_జాలం(cfgfile, weightfile, 0);
+    సమితి_batch_జాలం(net, 1);
     pthread_t detect_thread;
     pthread_t fetch_thread;
 
     srand(2222222);
 
-    int i;
-    demo_total = size_network(net);
-    predictions = calloc(demo_frame, sizeof(float*));
-    for (i = 0; i < demo_frame; ++i){
-        predictions[i] = calloc(demo_total, sizeof(float));
+    పూర్ణాంకం i;
+    demo_మొత్తం = కొలత_జాలం(net);
+    predictions = సున్నా_జ్ఞాపకం_ఇవ్వు(demo_చట్రం, పరిమాణం(దశాంశం*));
+    కొరకు (i = 0; i < demo_చట్రం; ++i){
+        predictions[i] = సున్నా_జ్ఞాపకం_ఇవ్వు(demo_మొత్తం, పరిమాణం(దశాంశం));
     }
-    avg = calloc(demo_total, sizeof(float));
+    avg = సున్నా_జ్ఞాపకం_ఇవ్వు(demo_మొత్తం, పరిమాణం(దశాంశం));
 
-    if(filename){
-        printf("video file: %s\n", filename);
-        cap = open_video_stream(filename, 0, 0, 0, 0);
-    }else{
-        cap = open_video_stream(0, cam_index, w, h, frames);
+    ఒకవేళ(filename){
+        రాయి("video file: %s\n", filename);
+        cap = open_video_ప్రవాహం(filename, 0, 0, 0, 0);
+    }లేకపోతే{
+        cap = open_video_ప్రవాహం(0, cam_సూచీ, w, h, చట్రాలు);
     }
 
-    if(!cap) error("Couldn't connect to webcam.\n");
+    ఒకవేళ(!cap) error("Couldn't connect to webcam.\n");
 
-    buff[0] = get_image_from_stream(cap);
+    buff[0] = get_image_from_ప్రవాహం(cap);
     buff[1] = copy_image(buff[0]);
     buff[2] = copy_image(buff[0]);
     buff_letter[0] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[1] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[2] = letterbox_image(buff[0], net->w, net->h);
 
-    int count = 0;
-    if(!prefix){
-        make_window("Demo", 1352, 1013, fullscreen);
+    పూర్ణాంకం లెక్క = 0;
+    ఒకవేళ(!ఉపసర్గ){
+        make_కిటికీ("Demo", 1352, 1013, fullscreen);
     }
 
-    demo_time = what_time_is_it_now();
+    demo_సమయం = what_సమయం_is_it_now();
 
-    while(!demo_done){
-        buff_index = (buff_index + 1) %3;
-        if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
-        if(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
-        if(!prefix){
-            fps = 1./(what_time_is_it_now() - demo_time);
-            demo_time = what_time_is_it_now();
-            display_in_thread(0);
-        }else{
-            char name[256];
-            sprintf(name, "%s_%08d", prefix, count);
-            save_image(buff[(buff_index + 1)%3], name);
+    అయితే(!demo_పూర్తి){
+        buff_సూచీ = (buff_సూచీ + 1) %3;
+        ఒకవేళ(pthread_create(&fetch_thread, 0, fetch_లోపల_thread, 0)) error("Thread creation failed");
+        ఒకవేళ(pthread_create(&detect_thread, 0, detect_లోపల_thread, 0)) error("Thread creation failed");
+        ఒకవేళ(!ఉపసర్గ){
+            fps = 1./(what_సమయం_is_it_now() - demo_సమయం);
+            demo_సమయం = what_సమయం_is_it_now();
+            display_లోపల_thread(0);
+        }లేకపోతే{
+            అక్షరం name[256];
+            sprintf(name, "%s_%08d", ఉపసర్గ, లెక్క);
+            save_image(buff[(buff_సూచీ + 1)%3], name);
         }
         pthread_join(fetch_thread, 0);
         pthread_join(detect_thread, 0);
-        ++count;
+        ++లెక్క;
     }
 }
 
@@ -340,10 +340,10 @@ pthread_join(detect_thread, 0);
 }
 }
 */
-#else
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg, float hier, int w, int h, int frames, int fullscreen)
+#లేకపోతే
+శూన్య demo(అక్షరం *cfgfile, అక్షరం *weightfile, దశాంశం thresh, పూర్ణాంకం cam_సూచీ, స్థిరరాశి అక్షరం *filename, అక్షరం **పేర్లు, పూర్ణాంకం classes, పూర్ణాంకం delay, అక్షరం *ఉపసర్గ, పూర్ణాంకం avg, దశాంశం hier, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం చట్రాలు, పూర్ణాంకం fullscreen)
 {
     fprintf(stderr, "Demo needs OpenCV for webcam images.\n");
 }
-#endif
+#అయితే_ముగింపు
 

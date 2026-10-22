@@ -1,23 +1,23 @@
-#ifndef CONNECTED_LAYER_H
-#define CONNECTED_LAYER_H
+#నిర్వచితం_కాకపోతే CONNECTED_LAYER_H
+#నిర్వచించు CONNECTED_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activation, int batch_normalize, int adam);
+layer make_connected_layer(పూర్ణాంకం batch, పూర్ణాంకం inputs, పూర్ణాంకం outputs, ACTIVATION activation, పూర్ణాంకం batch_normalize, పూర్ణాంకం adam);
 
-void forward_connected_layer(layer l, network net);
-void backward_connected_layer(layer l, network net);
-void update_connected_layer(layer l, update_args a);
+శూన్య forward_connected_layer(layer l, జాలం net);
+శూన్య backward_connected_layer(layer l, జాలం net);
+శూన్య update_connected_layer(layer l, update_వాదనలు a);
 
-#ifdef GPU
-void forward_connected_layer_gpu(layer l, network net);
-void backward_connected_layer_gpu(layer l, network net);
-void update_connected_layer_gpu(layer l, update_args a);
-void push_connected_layer(layer l);
-void pull_connected_layer(layer l);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_connected_layer_gpu(layer l, జాలం net);
+శూన్య backward_connected_layer_gpu(layer l, జాలం net);
+శూన్య update_connected_layer_gpu(layer l, update_వాదనలు a);
+శూన్య నెట్టు_connected_layer(layer l);
+శూన్య pull_connected_layer(layer l);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు
 

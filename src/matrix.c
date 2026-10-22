@@ -1,196 +1,196 @@
-#include "matrix.h"
-#include "utils.h"
-#include "blas.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-#include <math.h>
+#అన్తర్భావ "matrix.h"
+#అన్తర్భావ "utils.h"
+#అన్తర్భావ "blas.h"
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ <assert.h>
+#అన్తర్భావ <math.h>
 
-void free_matrix(matrix m)
+శూన్య free_మాతృక(మాతృక m)
 {
-    int i;
-    for(i = 0; i < m.rows; ++i) free(m.vals[i]);
-    free(m.vals);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < m.అడ్డువరుసలు; ++i) విడుదల(m.vals[i]);
+    విడుదల(m.vals);
 }
 
-float matrix_topk_accuracy(matrix truth, matrix guess, int k)
+దశాంశం మాతృక_topk_accuracy(మాతృక truth, మాతృక guess, పూర్ణాంకం k)
 {
-    int *indexes = calloc(k, sizeof(int));
-    int n = truth.cols;
-    int i,j;
-    int correct = 0;
-    for(i = 0; i < truth.rows; ++i){
-        top_k(guess.vals[i], n, k, indexes);
-        for(j = 0; j < k; ++j){
-            int class = indexes[j];
-            if(truth.vals[i][class]){
+    పూర్ణాంకం *indexes = సున్నా_జ్ఞాపకం_ఇవ్వు(k, పరిమాణం(పూర్ణాంకం));
+    పూర్ణాంకం n = truth.నిలువుల_సంఖ్య;
+    పూర్ణాంకం i,j;
+    పూర్ణాంకం correct = 0;
+    కొరకు(i = 0; i < truth.అడ్డువరుసలు; ++i){
+        శిఖరం_k(guess.vals[i], n, k, indexes);
+        కొరకు(j = 0; j < k; ++j){
+            పూర్ణాంకం class = indexes[j];
+            ఒకవేళ(truth.vals[i][class]){
                 ++correct;
-                break;
+                ఆపు;
             }
         }
     }
-    free(indexes);
-    return (float)correct/truth.rows;
+    విడుదల(indexes);
+    తిరిగి (దశాంశం)correct/truth.అడ్డువరుసలు;
 }
 
-void scale_matrix(matrix m, float scale)
+శూన్య scale_మాతృక(మాతృక m, దశాంశం scale)
 {
-    int i,j;
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < m.అడ్డువరుసలు; ++i){
+        కొరకు(j = 0; j < m.నిలువుల_సంఖ్య; ++j){
             m.vals[i][j] *= scale;
         }
     }
 }
 
-matrix resize_matrix(matrix m, int size)
+మాతృక resize_మాతృక(మాతృక m, పూర్ణాంకం కొలత)
 {
-    int i;
-    if (m.rows == size) return m;
-    if (m.rows < size) {
-        m.vals = realloc(m.vals, size*sizeof(float*));
-        for (i = m.rows; i < size; ++i) {
-            m.vals[i] = calloc(m.cols, sizeof(float));
+    పూర్ణాంకం i;
+    ఒకవేళ (m.అడ్డువరుసలు == కొలత) తిరిగి m;
+    ఒకవేళ (m.అడ్డువరుసలు < కొలత) {
+        m.vals = realloc(m.vals, కొలత*పరిమాణం(దశాంశం*));
+        కొరకు (i = m.అడ్డువరుసలు; i < కొలత; ++i) {
+            m.vals[i] = సున్నా_జ్ఞాపకం_ఇవ్వు(m.నిలువుల_సంఖ్య, పరిమాణం(దశాంశం));
         }
-    } else if (m.rows > size) {
-        for (i = size; i < m.rows; ++i) {
-            free(m.vals[i]);
+    } లేకపోతే ఒకవేళ (m.అడ్డువరుసలు > కొలత) {
+        కొరకు (i = కొలత; i < m.అడ్డువరుసలు; ++i) {
+            విడుదల(m.vals[i]);
         }
-        m.vals = realloc(m.vals, size*sizeof(float*));
+        m.vals = realloc(m.vals, కొలత*పరిమాణం(దశాంశం*));
     }
-    m.rows = size;
-    return m;
+    m.అడ్డువరుసలు = కొలత;
+    తిరిగి m;
 }
 
-void matrix_add_matrix(matrix from, matrix to)
+శూన్య మాతృక_కూడు_మాతృక(మాతృక from, మాతృక గమ్యం)
 {
-    assert(from.rows == to.rows && from.cols == to.cols);
-    int i,j;
-    for(i = 0; i < from.rows; ++i){
-        for(j = 0; j < from.cols; ++j){
-            to.vals[i][j] += from.vals[i][j];
+    ప్రతిజ్ఞా(from.అడ్డువరుసలు == గమ్యం.అడ్డువరుసలు && from.నిలువుల_సంఖ్య == గమ్యం.నిలువుల_సంఖ్య);
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < from.అడ్డువరుసలు; ++i){
+        కొరకు(j = 0; j < from.నిలువుల_సంఖ్య; ++j){
+            గమ్యం.vals[i][j] += from.vals[i][j];
         }
     }
 }
 
-matrix copy_matrix(matrix m)
+మాతృక copy_మాతృక(మాతృక m)
 {
-    matrix c = {0};
-    c.rows = m.rows;
-    c.cols = m.cols;
-    c.vals = calloc(c.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < c.rows; ++i){
-        c.vals[i] = calloc(c.cols, sizeof(float));
-        copy_cpu(c.cols, m.vals[i], 1, c.vals[i], 1);
+    మాతృక c = {0};
+    c.అడ్డువరుసలు = m.అడ్డువరుసలు;
+    c.నిలువుల_సంఖ్య = m.నిలువుల_సంఖ్య;
+    c.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(c.అడ్డువరుసలు, పరిమాణం(దశాంశం *));
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < c.అడ్డువరుసలు; ++i){
+        c.vals[i] = సున్నా_జ్ఞాపకం_ఇవ్వు(c.నిలువుల_సంఖ్య, పరిమాణం(దశాంశం));
+        copy_cpu(c.నిలువుల_సంఖ్య, m.vals[i], 1, c.vals[i], 1);
     }
-    return c;
+    తిరిగి c;
 }
 
-matrix make_matrix(int rows, int cols)
+మాతృక make_మాతృక(పూర్ణాంకం అడ్డువరుసలు, పూర్ణాంకం నిలువుల_సంఖ్య)
 {
-    int i;
-    matrix m;
-    m.rows = rows;
-    m.cols = cols;
-    m.vals = calloc(m.rows, sizeof(float *));
-    for(i = 0; i < m.rows; ++i){
-        m.vals[i] = calloc(m.cols, sizeof(float));
+    పూర్ణాంకం i;
+    మాతృక m;
+    m.అడ్డువరుసలు = అడ్డువరుసలు;
+    m.నిలువుల_సంఖ్య = నిలువుల_సంఖ్య;
+    m.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(m.అడ్డువరుసలు, పరిమాణం(దశాంశం *));
+    కొరకు(i = 0; i < m.అడ్డువరుసలు; ++i){
+        m.vals[i] = సున్నా_జ్ఞాపకం_ఇవ్వు(m.నిలువుల_సంఖ్య, పరిమాణం(దశాంశం));
     }
-    return m;
+    తిరిగి m;
 }
 
-matrix hold_out_matrix(matrix *m, int n)
+మాతృక hold_బహిర్గతం_మాతృక(మాతృక *m, పూర్ణాంకం n)
 {
-    int i;
-    matrix h;
-    h.rows = n;
-    h.cols = m->cols;
-    h.vals = calloc(h.rows, sizeof(float *));
-    for(i = 0; i < n; ++i){
-        int index = rand()%m->rows;
-        h.vals[i] = m->vals[index];
-        m->vals[index] = m->vals[--(m->rows)];
+    పూర్ణాంకం i;
+    మాతృక h;
+    h.అడ్డువరుసలు = n;
+    h.నిలువుల_సంఖ్య = m->నిలువుల_సంఖ్య;
+    h.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(h.అడ్డువరుసలు, పరిమాణం(దశాంశం *));
+    కొరకు(i = 0; i < n; ++i){
+        పూర్ణాంకం సూచీ = rand()%m->అడ్డువరుసలు;
+        h.vals[i] = m->vals[సూచీ];
+        m->vals[సూచీ] = m->vals[--(m->అడ్డువరుసలు)];
     }
-    return h;
+    తిరిగి h;
 }
 
-float *pop_column(matrix *m, int c)
+దశాంశం *తీయి_స్తంభం(మాతృక *m, పూర్ణాంకం c)
 {
-    float *col = calloc(m->rows, sizeof(float));
-    int i, j;
-    for(i = 0; i < m->rows; ++i){
-        col[i] = m->vals[i][c];
-        for(j = c; j < m->cols-1; ++j){
+    దశాంశం *నిలువు = సున్నా_జ్ఞాపకం_ఇవ్వు(m->అడ్డువరుసలు, పరిమాణం(దశాంశం));
+    పూర్ణాంకం i, j;
+    కొరకు(i = 0; i < m->అడ్డువరుసలు; ++i){
+        నిలువు[i] = m->vals[i][c];
+        కొరకు(j = c; j < m->నిలువుల_సంఖ్య-1; ++j){
             m->vals[i][j] = m->vals[i][j+1];
         }
     }
-    --m->cols;
-    return col;
+    --m->నిలువుల_సంఖ్య;
+    తిరిగి నిలువు;
 }
 
-matrix csv_to_matrix(char *filename)
+మాతృక csv_గమ్యం_మాతృక(అక్షరం *filename)
 {
     FILE *fp = fopen(filename, "r");
-    if(!fp) file_error(filename);
+    ఒకవేళ(!fp) file_error(filename);
 
-    matrix m;
-    m.cols = -1;
+    మాతృక m;
+    m.నిలువుల_సంఖ్య = -1;
 
-    char *line;
+    అక్షరం *పంక్తి;
 
-    int n = 0;
-    int size = 1024;
-    m.vals = calloc(size, sizeof(float*));
-    while((line = fgetl(fp))){
-        if(m.cols == -1) m.cols = count_fields(line);
-        if(n == size){
-            size *= 2;
-            m.vals = realloc(m.vals, size*sizeof(float*));
+    పూర్ణాంకం n = 0;
+    పూర్ణాంకం కొలత = 1024;
+    m.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(కొలత, పరిమాణం(దశాంశం*));
+    అయితే((పంక్తి = fgetl(fp))){
+        ఒకవేళ(m.నిలువుల_సంఖ్య == -1) m.నిలువుల_సంఖ్య = లెక్క_fields(పంక్తి);
+        ఒకవేళ(n == కొలత){
+            కొలత *= 2;
+            m.vals = realloc(m.vals, కొలత*పరిమాణం(దశాంశం*));
         }
-        m.vals[n] = parse_fields(line, m.cols);
-        free(line);
+        m.vals[n] = parse_fields(పంక్తి, m.నిలువుల_సంఖ్య);
+        విడుదల(పంక్తి);
         ++n;
     }
-    m.vals = realloc(m.vals, n*sizeof(float*));
-    m.rows = n;
-    return m;
+    m.vals = realloc(m.vals, n*పరిమాణం(దశాంశం*));
+    m.అడ్డువరుసలు = n;
+    తిరిగి m;
 }
 
-void matrix_to_csv(matrix m)
+శూన్య మాతృక_గమ్యం_csv(మాతృక m)
 {
-    int i, j;
+    పూర్ణాంకం i, j;
 
-    for(i = 0; i < m.rows; ++i){
-        for(j = 0; j < m.cols; ++j){
-            if(j > 0) printf(",");
-            printf("%.17g", m.vals[i][j]);
+    కొరకు(i = 0; i < m.అడ్డువరుసలు; ++i){
+        కొరకు(j = 0; j < m.నిలువుల_సంఖ్య; ++j){
+            ఒకవేళ(j > 0) రాయి(",");
+            రాయి("%.17g", m.vals[i][j]);
         }
-        printf("\n");
+        రాయి("\n");
     }
 }
 
-void print_matrix(matrix m)
+శూన్య print_మాతృక(మాతృక m)
 {
-    int i, j;
-    printf("%d X %d Matrix:\n",m.rows, m.cols);
-    printf(" __");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__ \n");
+    పూర్ణాంకం i, j;
+    రాయి("%d X %d Matrix:\n",m.అడ్డువరుసలు, m.నిలువుల_సంఖ్య);
+    రాయి(" __");
+    కొరకు(j = 0; j < 16*m.నిలువుల_సంఖ్య-1; ++j) రాయి(" ");
+    రాయి("__ \n");
 
-    printf("|  ");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("  |\n");
+    రాయి("|  ");
+    కొరకు(j = 0; j < 16*m.నిలువుల_సంఖ్య-1; ++j) రాయి(" ");
+    రాయి("  |\n");
 
-    for(i = 0; i < m.rows; ++i){
-        printf("|  ");
-        for(j = 0; j < m.cols; ++j){
-            printf("%15.7f ", m.vals[i][j]);
+    కొరకు(i = 0; i < m.అడ్డువరుసలు; ++i){
+        రాయి("|  ");
+        కొరకు(j = 0; j < m.నిలువుల_సంఖ్య; ++j){
+            రాయి("%15.7f ", m.vals[i][j]);
         }
-        printf(" |\n");
+        రాయి(" |\n");
     }
-    printf("|__");
-    for(j = 0; j < 16*m.cols-1; ++j) printf(" ");
-    printf("__|\n");
+    రాయి("|__");
+    కొరకు(j = 0; j < 16*m.నిలువుల_సంఖ్య-1; ++j) రాయి(" ");
+    రాయి("__|\n");
 }

@@ -1,34 +1,34 @@
-#ifndef GEMM_H
-#define GEMM_H
+#నిర్వచితం_కాకపోతే GEMM_H
+#నిర్వచించు GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+శూన్య gemm_bin(పూర్ణాంకం M, పూర్ణాంకం N, పూర్ణాంకం K, దశాంశం ALPHA, 
+        అక్షరం  *A, పూర్ణాంకం lda, 
+        దశాంశం *B, పూర్ణాంకం ldb,
+        దశాంశం *C, పూర్ణాంకం ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+శూన్య gemm(పూర్ణాంకం TA, పూర్ణాంకం TB, పూర్ణాంకం M, పూర్ణాంకం N, పూర్ణాంకం K, దశాంశం ALPHA, 
+                    దశాంశం *A, పూర్ణాంకం lda, 
+                    దశాంశం *B, పూర్ణాంకం ldb,
+                    దశాంశం BETA,
+                    దశాంశం *C, పూర్ణాంకం ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+శూన్య gemm_cpu(పూర్ణాంకం TA, పూర్ణాంకం TB, పూర్ణాంకం M, పూర్ణాంకం N, పూర్ణాంకం K, దశాంశం ALPHA, 
+        దశాంశం *A, పూర్ణాంకం lda, 
+        దశాంశం *B, పూర్ణాంకం ldb,
+        దశాంశం BETA,
+        దశాంశం *C, పూర్ణాంకం ldc);
 
-#ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+#నిర్వచితమైతే GPU
+శూన్య gemm_gpu(పూర్ణాంకం TA, పూర్ణాంకం TB, పూర్ణాంకం M, పూర్ణాంకం N, పూర్ణాంకం K, దశాంశం ALPHA, 
+        దశాంశం *A_gpu, పూర్ణాంకం lda, 
+        దశాంశం *B_gpu, పూర్ణాంకం ldb,
+        దశాంశం BETA,
+        దశాంశం *C_gpu, పూర్ణాంకం ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
-#endif
-#endif
+శూన్య gemm_gpu(పూర్ణాంకం TA, పూర్ణాంకం TB, పూర్ణాంకం M, పూర్ణాంకం N, పూర్ణాంకం K, దశాంశం ALPHA, 
+        దశాంశం *A, పూర్ణాంకం lda, 
+        దశాంశం *B, పూర్ణాంకం ldb,
+        దశాంశం BETA,
+        దశాంశం *C, పూర్ణాంకం ldc);
+#అయితే_ముగింపు
+#అయితే_ముగింపు

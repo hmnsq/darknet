@@ -1,9 +1,9 @@
-#ifndef PARSER_H
-#define PARSER_H
-#include "darknet.h"
-#include "network.h"
+#నిర్వచితం_కాకపోతే PARSER_H
+#నిర్వచించు PARSER_H
+#అన్తర్భావ "darknet.h"
+#అన్తర్భావ "network.h"
 
-void save_network(network net, char *filename);
-void save_weights_double(network net, char *filename);
+శూన్య save_జాలం(జాలం net, అక్షరం *filename);
+శూన్య save_weights_double(జాలం net, అక్షరం *filename);
 
-#endif
+#అయితే_ముగింపు

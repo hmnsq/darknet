@@ -1,140 +1,140 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include "option_list.h"
-#include "utils.h"
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ "option_list.h"
+#అన్తర్భావ "utils.h"
 
-list *read_data_cfg(char *filename)
+list *read_దత్తాంశం_cfg(అక్షరం *filename)
 {
     FILE *file = fopen(filename, "r");
-    if(file == 0) file_error(filename);
-    char *line;
-    int nu = 0;
+    ఒకవేళ(file == 0) file_error(filename);
+    అక్షరం *పంక్తి;
+    పూర్ణాంకం nu = 0;
     list *options = make_list();
-    while((line=fgetl(file)) != 0){
+    అయితే((పంక్తి=fgetl(file)) != 0){
         ++ nu;
-        strip(line);
-        switch(line[0]){
-            case '\0':
-            case '#':
-            case ';':
-                free(line);
-                break;
-            default:
-                if(!read_option(line, options)){
-                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, line);
-                    free(line);
+        strip(పంక్తి);
+        ఎంపిక(పంక్తి[0]){
+            స్థితి '\0':
+            స్థితి '#':
+            స్థితి ';':
+                విడుదల(పంక్తి);
+                ఆపు;
+            అప్రమేయ:
+                ఒకవేళ(!read_option(పంక్తి, options)){
+                    fprintf(stderr, "Config file error line %d, could parse: %s\n", nu, పంక్తి);
+                    విడుదల(పంక్తి);
                 }
-                break;
+                ఆపు;
         }
     }
     fclose(file);
-    return options;
+    తిరిగి options;
 }
 
-metadata get_metadata(char *file)
+metadata get_metadata(అక్షరం *file)
 {
     metadata m = {0};
-    list *options = read_data_cfg(file);
+    list *options = read_దత్తాంశం_cfg(file);
 
-    char *name_list = option_find_str(options, "names", 0);
-    if(!name_list) name_list = option_find_str(options, "labels", 0);
-    if(!name_list) {
+    అక్షరం *name_list = option_కనుగొను_str(options, "names", 0);
+    ఒకవేళ(!name_list) name_list = option_కనుగొను_str(options, "labels", 0);
+    ఒకవేళ(!name_list) {
         fprintf(stderr, "No names or labels found\n");
-    } else {
-        m.names = get_labels(name_list);
+    } లేకపోతే {
+        m.పేర్లు = get_labels(name_list);
     }
-    m.classes = option_find_int(options, "classes", 2);
+    m.classes = option_కనుగొను_int(options, "classes", 2);
     free_list(options);
-    return m;
+    తిరిగి m;
 }
 
-int read_option(char *s, list *options)
+పూర్ణాంకం read_option(అక్షరం *s, list *options)
 {
     size_t i;
-    size_t len = strlen(s);
-    char *val = 0;
-    for(i = 0; i < len; ++i){
-        if(s[i] == '='){
+    size_t len = అక్షరశ్రేణి_పొడవు(s);
+    అక్షరం *val = 0;
+    కొరకు(i = 0; i < len; ++i){
+        ఒకవేళ(s[i] == '='){
             s[i] = '\0';
             val = s+i+1;
-            break;
+            ఆపు;
         }
     }
-    if(i == len-1) return 0;
-    char *key = s;
-    option_insert(options, key, val);
-    return 1;
+    ఒకవేళ(i == len-1) తిరిగి 0;
+    అక్షరం *కీలకం = s;
+    option_చొప్పించు(options, కీలకం, val);
+    తిరిగి 1;
 }
 
-void option_insert(list *l, char *key, char *val)
+శూన్య option_చొప్పించు(list *l, అక్షరం *కీలకం, అక్షరం *val)
 {
-    kvp *p = malloc(sizeof(kvp));
-    p->key = key;
+    kvp *p = జ్ఞాపకం_ఇవ్వు(పరిమాణం(kvp));
+    p->కీలకం = కీలకం;
     p->val = val;
-    p->used = 0;
-    list_insert(l, p);
+    p->వాడిన = 0;
+    list_చొప్పించు(l, p);
 }
 
-void option_unused(list *l)
+శూన్య option_వాడని(list *l)
 {
-    node *n = l->front;
-    while(n){
+    కణుపు *n = l->front;
+    అయితే(n){
         kvp *p = (kvp *)n->val;
-        if(!p->used){
-            fprintf(stderr, "Unused field: '%s = %s'\n", p->key, p->val);
+        ఒకవేళ(!p->వాడిన){
+            fprintf(stderr, "Unused field: '%s = %s'\n", p->కీలకం, p->val);
         }
-        n = n->next;
+        n = n->తదుపరి;
     }
 }
 
-char *option_find(list *l, char *key)
+అక్షరం *option_కనుగొను(list *l, అక్షరం *కీలకం)
 {
-    node *n = l->front;
-    while(n){
+    కణుపు *n = l->front;
+    అయితే(n){
         kvp *p = (kvp *)n->val;
-        if(strcmp(p->key, key) == 0){
-            p->used = 1;
-            return p->val;
+        ఒకవేళ(strcmp(p->కీలకం, కీలకం) == 0){
+            p->వాడిన = 1;
+            తిరిగి p->val;
         }
-        n = n->next;
+        n = n->తదుపరి;
     }
-    return 0;
+    తిరిగి 0;
 }
-char *option_find_str(list *l, char *key, char *def)
+అక్షరం *option_కనుగొను_str(list *l, అక్షరం *కీలకం, అక్షరం *def)
 {
-    char *v = option_find(l, key);
-    if(v) return v;
-    if(def) fprintf(stderr, "%s: Using default '%s'\n", key, def);
-    return def;
-}
-
-int option_find_int(list *l, char *key, int def)
-{
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    fprintf(stderr, "%s: Using default '%d'\n", key, def);
-    return def;
+    అక్షరం *v = option_కనుగొను(l, కీలకం);
+    ఒకవేళ(v) తిరిగి v;
+    ఒకవేళ(def) fprintf(stderr, "%s: Using default '%s'\n", కీలకం, def);
+    తిరిగి def;
 }
 
-int option_find_int_quiet(list *l, char *key, int def)
+పూర్ణాంకం option_కనుగొను_int(list *l, అక్షరం *కీలకం, పూర్ణాంకం def)
 {
-    char *v = option_find(l, key);
-    if(v) return atoi(v);
-    return def;
+    అక్షరం *v = option_కనుగొను(l, కీలకం);
+    ఒకవేళ(v) తిరిగి atoi(v);
+    fprintf(stderr, "%s: Using default '%d'\n", కీలకం, def);
+    తిరిగి def;
 }
 
-float option_find_float_quiet(list *l, char *key, float def)
+పూర్ణాంకం option_కనుగొను_int_quiet(list *l, అక్షరం *కీలకం, పూర్ణాంకం def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    return def;
+    అక్షరం *v = option_కనుగొను(l, కీలకం);
+    ఒకవేళ(v) తిరిగి atoi(v);
+    తిరిగి def;
 }
 
-float option_find_float(list *l, char *key, float def)
+దశాంశం option_కనుగొను_float_quiet(list *l, అక్షరం *కీలకం, దశాంశం def)
 {
-    char *v = option_find(l, key);
-    if(v) return atof(v);
-    fprintf(stderr, "%s: Using default '%lf'\n", key, def);
-    return def;
+    అక్షరం *v = option_కనుగొను(l, కీలకం);
+    ఒకవేళ(v) తిరిగి atof(v);
+    తిరిగి def;
+}
+
+దశాంశం option_కనుగొను_float(list *l, అక్షరం *కీలకం, దశాంశం def)
+{
+    అక్షరం *v = option_కనుగొను(l, కీలకం);
+    ఒకవేళ(v) తిరిగి atof(v);
+    fprintf(stderr, "%s: Using default '%lf'\n", కీలకం, def);
+    తిరిగి def;
 }

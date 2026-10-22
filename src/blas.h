@@ -1,105 +1,105 @@
-#ifndef BLAS_H
-#define BLAS_H
-#include "darknet.h"
+#నిర్వచితం_కాకపోతే BLAS_H
+#నిర్వచించు BLAS_H
+#అన్తర్భావ "darknet.h"
 
-void flatten(float *x, int size, int layers, int batch, int forward);
-void pm(int M, int N, float *A);
-float *random_matrix(int rows, int cols);
-void time_random_matrix(int TA, int TB, int m, int k, int n);
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+శూన్య flatten(దశాంశం *x, పూర్ణాంకం కొలత, పూర్ణాంకం layers, పూర్ణాంకం batch, పూర్ణాంకం forward);
+శూన్య pm(పూర్ణాంకం M, పూర్ణాంకం N, దశాంశం *A);
+దశాంశం *random_మాతృక(పూర్ణాంకం అడ్డువరుసలు, పూర్ణాంకం నిలువుల_సంఖ్య);
+శూన్య సమయం_random_మాతృక(పూర్ణాంకం TA, పూర్ణాంకం TB, పూర్ణాంకం m, పూర్ణాంకం k, పూర్ణాంకం n);
+శూన్య reorg_cpu(దశాంశం *x, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం batch, పూర్ణాంకం stride, పూర్ణాంకం forward, దశాంశం *బహిర్గతం);
 
-void test_blas();
+శూన్య test_blas();
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z);
+శూన్య inter_cpu(పూర్ణాంకం NX, దశాంశం *X, పూర్ణాంకం NY, దశాంశం *Y, పూర్ణాంకం B, దశాంశం *బహిర్గతం_2);
+శూన్య deinter_cpu(పూర్ణాంకం NX, దశాంశం *X, పూర్ణాంకం NY, దశాంశం *Y, పూర్ణాంకం B, దశాంశం *బహిర్గతం_2);
+శూన్య mult_కూడు_into_cpu(పూర్ణాంకం N, దశాంశం *X, దశాంశం *Y, దశాంశం *Z);
 
-void const_cpu(int N, float ALPHA, float *X, int INCX);
-void constrain_gpu(int N, float ALPHA, float * X, int INCX);
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY);
+శూన్య const_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX);
+శూన్య constrain_gpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం * X, పూర్ణాంకం INCX);
+శూన్య pow_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY);
+శూన్య mul_cpu(పూర్ణాంకం N, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY);
 
-int test_gpu_blas();
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
+పూర్ణాంకం test_gpu_blas();
+శూన్య shortcut_cpu(పూర్ణాంకం batch, పూర్ణాంకం w1, పూర్ణాంకం h1, పూర్ణాంకం c1, దశాంశం *కూడు, పూర్ణాంకం w2, పూర్ణాంకం h2, పూర్ణాంకం c2, దశాంశం s1, దశాంశం s2, దశాంశం *బహిర్గతం);
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
+శూన్య సగటు_cpu(దశాంశం *x, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *సగటు);
+శూన్య variance_cpu(దశాంశం *x, దశాంశం *సగటు, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *variance);
 
-void scale_bias(float *output, float *scales, int batch, int n, int size);
-void backward_scale_cpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void mean_delta_cpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void  variance_delta_cpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
-void normalize_delta_cpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial);
+శూన్య scale_bias(దశాంశం *output, దశాంశం *scales, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
+శూన్య backward_scale_cpu(దశాంశం *x_norm, దశాంశం *delta, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత, దశాంశం *scale_updates);
+శూన్య సగటు_delta_cpu(దశాంశం *delta, దశాంశం *variance, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *సగటు_delta);
+శూన్య  variance_delta_cpu(దశాంశం *x, దశాంశం *delta, దశాంశం *సగటు, దశాంశం *variance, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *variance_delta);
+శూన్య normalize_delta_cpu(దశాంశం *x, దశాంశం *సగటు, దశాంశం *variance, దశాంశం *సగటు_delta, దశాంశం *variance_delta, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *delta);
+శూన్య l2normalize_cpu(దశాంశం *x, దశాంశం *dx, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial);
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_sum_cpu(float *a, float *b, float *s, int num, float *c);
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc);
+శూన్య smooth_l1_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య l2_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య l1_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య logistic_x_ent_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య softmax_x_ent_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య weighted_కూడిక_cpu(దశాంశం *a, దశాంశం *b, దశాంశం *s, పూర్ణాంకం అంకె, దశాంశం *c);
+శూన్య weighted_delta_cpu(దశాంశం *a, దశాంశం *b, దశాంశం *s, దశాంశం *da, దశాంశం *db, దశాంశం *ds, పూర్ణాంకం n, దశాంశం *dc);
 
-void softmax(float *input, int n, float temp, int stride, float *output);
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+శూన్య softmax(దశాంశం *ఆదానం, పూర్ణాంకం n, దశాంశం తాత్కాలిక, పూర్ణాంకం stride, దశాంశం *output);
+శూన్య softmax_cpu(దశాంశం *ఆదానం, పూర్ణాంకం n, పూర్ణాంకం batch, పూర్ణాంకం batch_స్థానభ్రంశం, పూర్ణాంకం groups, పూర్ణాంకం సమూహం_స్థానభ్రంశం, పూర్ణాంకం stride, దశాంశం తాత్కాలిక, దశాంశం *output);
+శూన్య upsample_cpu(దశాంశం *లోపల, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం batch, పూర్ణాంకం stride, పూర్ణాంకం forward, దశాంశం scale, దశాంశం *బహిర్గతం);
 
-#ifdef GPU
-#include "cuda.h"
-#include "tree.h"
+#నిర్వచితమైతే GPU
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "tree.h"
 
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void axpy_gpu_offset(int N, float ALPHA, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
-void copy_gpu_offset(int N, float * X, int OFFX, int INCX, float * Y, int OFFY, int INCY);
-void add_gpu(int N, float ALPHA, float * X, int INCX);
-void supp_gpu(int N, float ALPHA, float * X, int INCX);
-void mask_gpu(int N, float * X, float mask_num, float * mask, float val);
-void scale_mask_gpu(int N, float * X, float mask_num, float * mask, float scale);
-void const_gpu(int N, float ALPHA, float *X, int INCX);
-void pow_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
-void mul_gpu(int N, float *X, int INCX, float *Y, int INCY);
+శూన్య axpy_gpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం * X, పూర్ణాంకం INCX, దశాంశం * Y, పూర్ణాంకం INCY);
+శూన్య axpy_gpu_స్థానభ్రంశం(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం * X, పూర్ణాంకం OFFX, పూర్ణాంకం INCX, దశాంశం * Y, పూర్ణాంకం OFFY, పూర్ణాంకం INCY);
+శూన్య copy_gpu(పూర్ణాంకం N, దశాంశం * X, పూర్ణాంకం INCX, దశాంశం * Y, పూర్ణాంకం INCY);
+శూన్య copy_gpu_స్థానభ్రంశం(పూర్ణాంకం N, దశాంశం * X, పూర్ణాంకం OFFX, పూర్ణాంకం INCX, దశాంశం * Y, పూర్ణాంకం OFFY, పూర్ణాంకం INCY);
+శూన్య కూడు_gpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం * X, పూర్ణాంకం INCX);
+శూన్య supp_gpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం * X, పూర్ణాంకం INCX);
+శూన్య ముసుగు_gpu(పూర్ణాంకం N, దశాంశం * X, దశాంశం ముసుగు_అంకె, దశాంశం * ముసుగు, దశాంశం val);
+శూన్య scale_ముసుగు_gpu(పూర్ణాంకం N, దశాంశం * X, దశాంశం ముసుగు_అంకె, దశాంశం * ముసుగు, దశాంశం scale);
+శూన్య const_gpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX);
+శూన్య pow_gpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY);
+శూన్య mul_gpu(పూర్ణాంకం N, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY);
 
-void mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void normalize_gpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
-void l2normalize_gpu(float *x, float *dx, int batch, int filters, int spatial);
+శూన్య సగటు_gpu(దశాంశం *x, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *సగటు);
+శూన్య variance_gpu(దశాంశం *x, దశాంశం *సగటు, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *variance);
+శూన్య normalize_gpu(దశాంశం *x, దశాంశం *సగటు, దశాంశం *variance, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial);
+శూన్య l2normalize_gpu(దశాంశం *x, దశాంశం *dx, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial);
 
-void normalize_delta_gpu(float *x, float *mean, float *variance, float *mean_delta, float *variance_delta, int batch, int filters, int spatial, float *delta);
+శూన్య normalize_delta_gpu(దశాంశం *x, దశాంశం *సగటు, దశాంశం *variance, దశాంశం *సగటు_delta, దశాంశం *variance_delta, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *delta);
 
-void fast_mean_delta_gpu(float *delta, float *variance, int batch, int filters, int spatial, float *mean_delta);
-void fast_variance_delta_gpu(float *x, float *delta, float *mean, float *variance, int batch, int filters, int spatial, float *variance_delta);
+శూన్య fast_సగటు_delta_gpu(దశాంశం *delta, దశాంశం *variance, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *సగటు_delta);
+శూన్య fast_variance_delta_gpu(దశాంశం *x, దశాంశం *delta, దశాంశం *సగటు, దశాంశం *variance, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *variance_delta);
 
-void fast_variance_gpu(float *x, float *mean, int batch, int filters, int spatial, float *variance);
-void fast_mean_gpu(float *x, int batch, int filters, int spatial, float *mean);
-void shortcut_gpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_scale_gpu(float *x_norm, float *delta, int batch, int n, int size, float *scale_updates);
-void scale_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void add_bias_gpu(float *output, float *biases, int batch, int n, int size);
-void backward_bias_gpu(float *bias_updates, float *delta, int batch, int n, int size);
+శూన్య fast_variance_gpu(దశాంశం *x, దశాంశం *సగటు, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *variance);
+శూన్య fast_సగటు_gpu(దశాంశం *x, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *సగటు);
+శూన్య shortcut_gpu(పూర్ణాంకం batch, పూర్ణాంకం w1, పూర్ణాంకం h1, పూర్ణాంకం c1, దశాంశం *కూడు, పూర్ణాంకం w2, పూర్ణాంకం h2, పూర్ణాంకం c2, దశాంశం s1, దశాంశం s2, దశాంశం *బహిర్గతం);
+శూన్య scale_bias_gpu(దశాంశం *output, దశాంశం *biases, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
+శూన్య backward_scale_gpu(దశాంశం *x_norm, దశాంశం *delta, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత, దశాంశం *scale_updates);
+శూన్య scale_bias_gpu(దశాంశం *output, దశాంశం *biases, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
+శూన్య కూడు_bias_gpu(దశాంశం *output, దశాంశం *biases, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
+శూన్య backward_bias_gpu(దశాంశం *bias_updates, దశాంశం *delta, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
 
-void logistic_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void softmax_x_ent_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void smooth_l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l2_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void l1_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void wgan_gpu(int n, float *pred, float *truth, float *delta, float *error);
-void weighted_delta_gpu(float *a, float *b, float *s, float *da, float *db, float *ds, int num, float *dc);
-void weighted_sum_gpu(float *a, float *b, float *s, int num, float *c);
-void mult_add_into_gpu(int num, float *a, float *b, float *c);
-void inter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
-void deinter_gpu(int NX, float *X, int NY, float *Y, int B, float *OUT);
+శూన్య logistic_x_ent_gpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య softmax_x_ent_gpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య smooth_l1_gpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య l2_gpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య l1_gpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య wgan_gpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error);
+శూన్య weighted_delta_gpu(దశాంశం *a, దశాంశం *b, దశాంశం *s, దశాంశం *da, దశాంశం *db, దశాంశం *ds, పూర్ణాంకం అంకె, దశాంశం *dc);
+శూన్య weighted_కూడిక_gpu(దశాంశం *a, దశాంశం *b, దశాంశం *s, పూర్ణాంకం అంకె, దశాంశం *c);
+శూన్య mult_కూడు_into_gpu(పూర్ణాంకం అంకె, దశాంశం *a, దశాంశం *b, దశాంశం *c);
+శూన్య inter_gpu(పూర్ణాంకం NX, దశాంశం *X, పూర్ణాంకం NY, దశాంశం *Y, పూర్ణాంకం B, దశాంశం *బహిర్గతం_2);
+శూన్య deinter_gpu(పూర్ణాంకం NX, దశాంశం *X, పూర్ణాంకం NY, దశాంశం *Y, పూర్ణాంకం B, దశాంశం *బహిర్గతం_2);
 
-void reorg_gpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out);
+శూన్య reorg_gpu(దశాంశం *x, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం batch, పూర్ణాంకం stride, పూర్ణాంకం forward, దశాంశం *బహిర్గతం);
 
-void softmax_gpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output);
-void adam_update_gpu(float *w, float *d, float *m, float *v, float B1, float B2, float eps, float decay, float rate, int n, int batch, int t);
-void adam_gpu(int n, float *x, float *m, float *v, float B1, float B2, float rate, float eps, int t);
+శూన్య softmax_gpu(దశాంశం *ఆదానం, పూర్ణాంకం n, పూర్ణాంకం batch, పూర్ణాంకం batch_స్థానభ్రంశం, పూర్ణాంకం groups, పూర్ణాంకం సమూహం_స్థానభ్రంశం, పూర్ణాంకం stride, దశాంశం తాత్కాలిక, దశాంశం *output);
+శూన్య adam_update_gpu(దశాంశం *w, దశాంశం *d, దశాంశం *m, దశాంశం *v, దశాంశం B1, దశాంశం B2, దశాంశం eps, దశాంశం decay, దశాంశం రేటు, పూర్ణాంకం n, పూర్ణాంకం batch, పూర్ణాంకం t);
+శూన్య adam_gpu(పూర్ణాంకం n, దశాంశం *x, దశాంశం *m, దశాంశం *v, దశాంశం B1, దశాంశం B2, దశాంశం రేటు, దశాంశం eps, పూర్ణాంకం t);
 
-void flatten_gpu(float *x, int spatial, int layers, int batch, int forward, float *out);
-void softmax_tree(float *input, int spatial, int batch, int stride, float temp, float *output, tree hier);
-void upsample_gpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out);
+శూన్య flatten_gpu(దశాంశం *x, పూర్ణాంకం spatial, పూర్ణాంకం layers, పూర్ణాంకం batch, పూర్ణాంకం forward, దశాంశం *బహిర్గతం);
+శూన్య softmax_వృక్షం(దశాంశం *ఆదానం, పూర్ణాంకం spatial, పూర్ణాంకం batch, పూర్ణాంకం stride, దశాంశం తాత్కాలిక, దశాంశం *output, వృక్షం hier);
+శూన్య upsample_gpu(దశాంశం *లోపల, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం batch, పూర్ణాంకం stride, పూర్ణాంకం forward, దశాంశం scale, దశాంశం *బహిర్గతం);
 
-#endif
-#endif
+#అయితే_ముగింపు
+#అయితే_ముగింపు

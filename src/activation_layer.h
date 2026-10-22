@@ -1,19 +1,19 @@
-#ifndef ACTIVATION_LAYER_H
-#define ACTIVATION_LAYER_H
+#నిర్వచితం_కాకపోతే ACTIVATION_LAYER_H
+#నిర్వచించు ACTIVATION_LAYER_H
 
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-layer make_activation_layer(int batch, int inputs, ACTIVATION activation);
+layer make_activation_layer(పూర్ణాంకం batch, పూర్ణాంకం inputs, ACTIVATION activation);
 
-void forward_activation_layer(layer l, network net);
-void backward_activation_layer(layer l, network net);
+శూన్య forward_activation_layer(layer l, జాలం net);
+శూన్య backward_activation_layer(layer l, జాలం net);
 
-#ifdef GPU
-void forward_activation_layer_gpu(layer l, network net);
-void backward_activation_layer_gpu(layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_activation_layer_gpu(layer l, జాలం net);
+శూన్య backward_activation_layer_gpu(layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు
 

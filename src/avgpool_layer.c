@@ -1,8 +1,8 @@
-#include "avgpool_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#అన్తర్భావ "avgpool_layer.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ <stdio.h>
 
-avgpool_layer make_avgpool_layer(int batch, int w, int h, int c)
+avgpool_layer make_avgpool_layer(పూర్ణాంకం batch, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c)
 {
     fprintf(stderr, "avg                     %4d x%4d x%4d   ->  %4d\n",  w, h, c, c);
     avgpool_layer l = {0};
@@ -11,59 +11,59 @@ avgpool_layer make_avgpool_layer(int batch, int w, int h, int c)
     l.h = h;
     l.w = w;
     l.c = c;
-    l.out_w = 1;
-    l.out_h = 1;
-    l.out_c = c;
-    l.outputs = l.out_c;
+    l.బహిర్గతం_w = 1;
+    l.బహిర్గతం_h = 1;
+    l.బహిర్గతం_c = c;
+    l.outputs = l.బహిర్గతం_c;
     l.inputs = h*w*c;
-    int output_size = l.outputs * batch;
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    పూర్ణాంకం output_కొలత = l.outputs * batch;
+    l.output =  సున్నా_జ్ఞాపకం_ఇవ్వు(output_కొలత, పరిమాణం(దశాంశం));
+    l.delta =   సున్నా_జ్ఞాపకం_ఇవ్వు(output_కొలత, పరిమాణం(దశాంశం));
     l.forward = forward_avgpool_layer;
     l.backward = backward_avgpool_layer;
-    #ifdef GPU
+    #నిర్వచితమైతే GPU
     l.forward_gpu = forward_avgpool_layer_gpu;
     l.backward_gpu = backward_avgpool_layer_gpu;
-    l.output_gpu  = cuda_make_array(l.output, output_size);
-    l.delta_gpu   = cuda_make_array(l.delta, output_size);
-    #endif
-    return l;
+    l.output_gpu  = cuda_make_array(l.output, output_కొలత);
+    l.delta_gpu   = cuda_make_array(l.delta, output_కొలత);
+    #అయితే_ముగింపు
+    తిరిగి l;
 }
 
-void resize_avgpool_layer(avgpool_layer *l, int w, int h)
+శూన్య resize_avgpool_layer(avgpool_layer *l, పూర్ణాంకం w, పూర్ణాంకం h)
 {
     l->w = w;
     l->h = h;
     l->inputs = h*w*l->c;
 }
 
-void forward_avgpool_layer(const avgpool_layer l, network net)
+శూన్య forward_avgpool_layer(స్థిరరాశి avgpool_layer l, జాలం net)
 {
-    int b,i,k;
+    పూర్ణాంకం b,i,k;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < l.c; ++k){
-            int out_index = k + b*l.c;
-            l.output[out_index] = 0;
-            for(i = 0; i < l.h*l.w; ++i){
-                int in_index = i + l.h*l.w*(k + b*l.c);
-                l.output[out_index] += net.input[in_index];
+    కొరకు(b = 0; b < l.batch; ++b){
+        కొరకు(k = 0; k < l.c; ++k){
+            పూర్ణాంకం బహిర్గతం_సూచీ = k + b*l.c;
+            l.output[బహిర్గతం_సూచీ] = 0;
+            కొరకు(i = 0; i < l.h*l.w; ++i){
+                పూర్ణాంకం లోపల_సూచీ = i + l.h*l.w*(k + b*l.c);
+                l.output[బహిర్గతం_సూచీ] += net.ఆదానం[లోపల_సూచీ];
             }
-            l.output[out_index] /= l.h*l.w;
+            l.output[బహిర్గతం_సూచీ] /= l.h*l.w;
         }
     }
 }
 
-void backward_avgpool_layer(const avgpool_layer l, network net)
+శూన్య backward_avgpool_layer(స్థిరరాశి avgpool_layer l, జాలం net)
 {
-    int b,i,k;
+    పూర్ణాంకం b,i,k;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < l.c; ++k){
-            int out_index = k + b*l.c;
-            for(i = 0; i < l.h*l.w; ++i){
-                int in_index = i + l.h*l.w*(k + b*l.c);
-                net.delta[in_index] += l.delta[out_index] / (l.h*l.w);
+    కొరకు(b = 0; b < l.batch; ++b){
+        కొరకు(k = 0; k < l.c; ++k){
+            పూర్ణాంకం బహిర్గతం_సూచీ = k + b*l.c;
+            కొరకు(i = 0; i < l.h*l.w; ++i){
+                పూర్ణాంకం లోపల_సూచీ = i + l.h*l.w*(k + b*l.c);
+                net.delta[లోపల_సూచీ] += l.delta[బహిర్గతం_సూచీ] / (l.h*l.w);
             }
         }
     }

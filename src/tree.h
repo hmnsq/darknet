@@ -1,8 +1,8 @@
-#ifndef TREE_H
-#define TREE_H
-#include "darknet.h"
+#నిర్వచితం_కాకపోతే వృక్షం_H
+#నిర్వచించు వృక్షం_H
+#అన్తర్భావ "darknet.h"
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride);
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride);
+పూర్ణాంకం hierarchy_శిఖరం_prediction(దశాంశం *predictions, వృక్షం *hier, దశాంశం thresh, పూర్ణాంకం stride);
+దశాంశం get_hierarchy_probability(దశాంశం *x, వృక్షం *hier, పూర్ణాంకం c, పూర్ణాంకం stride);
 
-#endif
+#అయితే_ముగింపు

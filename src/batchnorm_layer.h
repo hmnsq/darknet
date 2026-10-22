@@ -1,19 +1,19 @@
-#ifndef BATCHNORM_LAYER_H
-#define BATCHNORM_LAYER_H
+#నిర్వచితం_కాకపోతే BATCHNORM_LAYER_H
+#నిర్వచించు BATCHNORM_LAYER_H
 
-#include "image.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-layer make_batchnorm_layer(int batch, int w, int h, int c);
-void forward_batchnorm_layer(layer l, network net);
-void backward_batchnorm_layer(layer l, network net);
+layer make_batchnorm_layer(పూర్ణాంకం batch, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c);
+శూన్య forward_batchnorm_layer(layer l, జాలం net);
+శూన్య backward_batchnorm_layer(layer l, జాలం net);
 
-#ifdef GPU
-void forward_batchnorm_layer_gpu(layer l, network net);
-void backward_batchnorm_layer_gpu(layer l, network net);
-void pull_batchnorm_layer(layer l);
-void push_batchnorm_layer(layer l);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_batchnorm_layer_gpu(layer l, జాలం net);
+శూన్య backward_batchnorm_layer_gpu(layer l, జాలం net);
+శూన్య pull_batchnorm_layer(layer l);
+శూన్య నెట్టు_batchnorm_layer(layer l);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు

@@ -1,13 +1,13 @@
-#ifndef MATRIX_H
-#define MATRIX_H
-#include "darknet.h"
+#నిర్వచితం_కాకపోతే మాతృక_H
+#నిర్వచించు మాతృక_H
+#అన్తర్భావ "darknet.h"
 
-matrix copy_matrix(matrix m);
-void print_matrix(matrix m);
+మాతృక copy_మాతృక(మాతృక m);
+శూన్య print_మాతృక(మాతృక m);
 
-matrix hold_out_matrix(matrix *m, int n);
-matrix resize_matrix(matrix m, int size);
+మాతృక hold_బహిర్గతం_మాతృక(మాతృక *m, పూర్ణాంకం n);
+మాతృక resize_మాతృక(మాతృక m, పూర్ణాంకం కొలత);
 
-float *pop_column(matrix *m, int c);
+దశాంశం *తీయి_స్తంభం(మాతృక *m, పూర్ణాంకం c);
 
-#endif
+#అయితే_ముగింపు

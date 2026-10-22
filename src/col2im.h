@@ -1,13 +1,13 @@
-#ifndef COL2IM_H
-#define COL2IM_H
+#నిర్వచితం_కాకపోతే COL2IM_H
+#నిర్వచించు COL2IM_H
 
-void col2im_cpu(float* data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float* data_im);
+శూన్య col2im_cpu(దశాంశం* దత్తాంశం_నిలువు,
+        పూర్ణాంకం channels, పూర్ణాంకం ఎత్తు, పూర్ణాంకం వెడల్పు,
+        పూర్ణాంకం ksize, పూర్ణాంకం stride, పూర్ణాంకం pad, దశాంశం* దత్తాంశం_im);
 
-#ifdef GPU
-void col2im_gpu(float *data_col,
-        int channels, int height, int width,
-        int ksize, int stride, int pad, float *data_im);
-#endif
-#endif
+#నిర్వచితమైతే GPU
+శూన్య col2im_gpu(దశాంశం *దత్తాంశం_నిలువు,
+        పూర్ణాంకం channels, పూర్ణాంకం ఎత్తు, పూర్ణాంకం వెడల్పు,
+        పూర్ణాంకం ksize, పూర్ణాంకం stride, పూర్ణాంకం pad, దశాంశం *దత్తాంశం_im);
+#అయితే_ముగింపు
+#అయితే_ముగింపు

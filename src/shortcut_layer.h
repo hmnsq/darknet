@@ -1,17 +1,17 @@
-#ifndef SHORTCUT_LAYER_H
-#define SHORTCUT_LAYER_H
+#నిర్వచితం_కాకపోతే SHORTCUT_LAYER_H
+#నిర్వచించు SHORTCUT_LAYER_H
 
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2);
-void forward_shortcut_layer(const layer l, network net);
-void backward_shortcut_layer(const layer l, network net);
-void resize_shortcut_layer(layer *l, int w, int h);
+layer make_shortcut_layer(పూర్ణాంకం batch, పూర్ణాంకం సూచీ, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం w2, పూర్ణాంకం h2, పూర్ణాంకం c2);
+శూన్య forward_shortcut_layer(స్థిరరాశి layer l, జాలం net);
+శూన్య backward_shortcut_layer(స్థిరరాశి layer l, జాలం net);
+శూన్య resize_shortcut_layer(layer *l, పూర్ణాంకం w, పూర్ణాంకం h);
 
-#ifdef GPU
-void forward_shortcut_layer_gpu(const layer l, network net);
-void backward_shortcut_layer_gpu(const layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_shortcut_layer_gpu(స్థిరరాశి layer l, జాలం net);
+శూన్య backward_shortcut_layer_gpu(స్థిరరాశి layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు

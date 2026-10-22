@@ -1,87 +1,87 @@
-#ifndef ACTIVATIONS_H
-#define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#నిర్వచితం_కాకపోతే ACTIVATIONS_H
+#నిర్వచించు ACTIVATIONS_H
+#అన్తర్భావ "darknet.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(అక్షరం *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
-#ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
-#endif
+అక్షరం *get_activation_string(ACTIVATION a);
+దశాంశం activate(దశాంశం x, ACTIVATION a);
+దశాంశం gradient(దశాంశం x, ACTIVATION a);
+శూన్య gradient_array(స్థిరరాశి దశాంశం *x, స్థిరరాశి పూర్ణాంకం n, స్థిరరాశి ACTIVATION a, దశాంశం *delta);
+శూన్య activate_array(దశాంశం *x, స్థిరరాశి పూర్ణాంకం n, స్థిరరాశి ACTIVATION a);
+#నిర్వచితమైతే GPU
+శూన్య activate_array_gpu(దశాంశం *x, పూర్ణాంకం n, ACTIVATION a);
+శూన్య gradient_array_gpu(దశాంశం *x, పూర్ణాంకం n, ACTIVATION a, దశాంశం *delta);
+#అయితే_ముగింపు
 
-static inline float stair_activate(float x)
+స్థిర అంతఃవరుస దశాంశం stair_activate(దశాంశం x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    పూర్ణాంకం n = floor(x);
+    ఒకవేళ (n%2 == 0) తిరిగి floor(x/2.);
+    లేకపోతే తిరిగి (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+స్థిర అంతఃవరుస దశాంశం hardtan_activate(దశాంశం x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    ఒకవేళ (x < -1) తిరిగి -1;
+    ఒకవేళ (x > 1) తిరిగి 1;
+    తిరిగి x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+స్థిర అంతఃవరుస దశాంశం రేఖీయ_activate(దశాంశం x){తిరిగి x;}
+స్థిర అంతఃవరుస దశాంశం logistic_activate(దశాంశం x){తిరిగి 1./(1. + ఘాతాంకం(-x));}
+స్థిర అంతఃవరుస దశాంశం loggy_activate(దశాంశం x){తిరిగి 2./(1. + ఘాతాంకం(-x)) - 1;}
+స్థిర అంతఃవరుస దశాంశం relu_activate(దశాంశం x){తిరిగి x*(x>0);}
+స్థిర అంతఃవరుస దశాంశం elu_activate(దశాంశం x){తిరిగి (x >= 0)*x + (x < 0)*(ఘాతాంకం(x)-1);}
+స్థిర అంతఃవరుస దశాంశం selu_activate(దశాంశం x){తిరిగి (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(ఘాతాంకం(x)-1);}
+స్థిర అంతఃవరుస దశాంశం relie_activate(దశాంశం x){తిరిగి (x>0) ? x : .01*x;}
+స్థిర అంతఃవరుస దశాంశం ramp_activate(దశాంశం x){తిరిగి x*(x>0)+.1*x;}
+స్థిర అంతఃవరుస దశాంశం leaky_activate(దశాంశం x){తిరిగి (x>0) ? x : .1*x;}
+స్థిర అంతఃవరుస దశాంశం tanh_activate(దశాంశం x){తిరిగి (ఘాతాంకం(2*x)-1)/(ఘాతాంకం(2*x)+1);}
+స్థిర అంతఃవరుస దశాంశం plse_activate(దశాంశం x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    ఒకవేళ(x < -4) తిరిగి .01 * (x + 4);
+    ఒకవేళ(x > 4)  తిరిగి .01 * (x - 4) + 1;
+    తిరిగి .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+స్థిర అంతఃవరుస దశాంశం lhtan_activate(దశాంశం x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    ఒకవేళ(x < 0) తిరిగి .001*x;
+    ఒకవేళ(x > 1) తిరిగి .001*(x-1) + 1;
+    తిరిగి x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+స్థిర అంతఃవరుస దశాంశం lhtan_gradient(దశాంశం x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    ఒకవేళ(x > 0 && x < 1) తిరిగి 1;
+    తిరిగి .001;
 }
-static inline float stair_gradient(float x)
-{
-    if (floor(x) == x) return 0;
-    return 1;
-}
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
 
-#endif
+స్థిర అంతఃవరుస దశాంశం hardtan_gradient(దశాంశం x)
+{
+    ఒకవేళ (x > -1 && x < 1) తిరిగి 1;
+    తిరిగి 0;
+}
+స్థిర అంతఃవరుస దశాంశం రేఖీయ_gradient(దశాంశం x){తిరిగి 1;}
+స్థిర అంతఃవరుస దశాంశం logistic_gradient(దశాంశం x){తిరిగి (1-x)*x;}
+స్థిర అంతఃవరుస దశాంశం loggy_gradient(దశాంశం x)
+{
+    దశాంశం y = (x+1.)/2.;
+    తిరిగి 2*(1-y)*y;
+}
+స్థిర అంతఃవరుస దశాంశం stair_gradient(దశాంశం x)
+{
+    ఒకవేళ (floor(x) == x) తిరిగి 0;
+    తిరిగి 1;
+}
+స్థిర అంతఃవరుస దశాంశం relu_gradient(దశాంశం x){తిరిగి (x>0);}
+స్థిర అంతఃవరుస దశాంశం elu_gradient(దశాంశం x){తిరిగి (x >= 0) + (x < 0)*(x + 1);}
+స్థిర అంతఃవరుస దశాంశం selu_gradient(దశాంశం x){తిరిగి (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+స్థిర అంతఃవరుస దశాంశం relie_gradient(దశాంశం x){తిరిగి (x>0) ? 1 : .01;}
+స్థిర అంతఃవరుస దశాంశం ramp_gradient(దశాంశం x){తిరిగి (x>0)+.1;}
+స్థిర అంతఃవరుస దశాంశం leaky_gradient(దశాంశం x){తిరిగి (x>0) ? 1 : .1;}
+స్థిర అంతఃవరుస దశాంశం tanh_gradient(దశాంశం x){తిరిగి 1-x*x;}
+స్థిర అంతఃవరుస దశాంశం plse_gradient(దశాంశం x){తిరిగి (x < 0 || x > 1) ? .01 : .125;}
+
+#అయితే_ముగింపు
 

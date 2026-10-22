@@ -1,20 +1,20 @@
-#ifndef COST_LAYER_H
-#define COST_LAYER_H
-#include "layer.h"
-#include "network.h"
+#నిర్వచితం_కాకపోతే ఖర్చు_LAYER_H
+#నిర్వచించు ఖర్చు_LAYER_H
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-typedef layer cost_layer;
+రకనిర్వచనం layer ఖర్చు_layer;
 
-COST_TYPE get_cost_type(char *s);
-char *get_cost_string(COST_TYPE a);
-cost_layer make_cost_layer(int batch, int inputs, COST_TYPE type, float scale);
-void forward_cost_layer(const cost_layer l, network net);
-void backward_cost_layer(const cost_layer l, network net);
-void resize_cost_layer(cost_layer *l, int inputs);
+ఖర్చు_TYPE get_ఖర్చు_type(అక్షరం *s);
+అక్షరం *get_ఖర్చు_string(ఖర్చు_TYPE a);
+ఖర్చు_layer make_ఖర్చు_layer(పూర్ణాంకం batch, పూర్ణాంకం inputs, ఖర్చు_TYPE type, దశాంశం scale);
+శూన్య forward_ఖర్చు_layer(స్థిరరాశి ఖర్చు_layer l, జాలం net);
+శూన్య backward_ఖర్చు_layer(స్థిరరాశి ఖర్చు_layer l, జాలం net);
+శూన్య resize_ఖర్చు_layer(ఖర్చు_layer *l, పూర్ణాంకం inputs);
 
-#ifdef GPU
-void forward_cost_layer_gpu(cost_layer l, network net);
-void backward_cost_layer_gpu(const cost_layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_ఖర్చు_layer_gpu(ఖర్చు_layer l, జాలం net);
+శూన్య backward_ఖర్చు_layer_gpu(స్థిరరాశి ఖర్చు_layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు

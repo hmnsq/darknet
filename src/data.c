@@ -1,25 +1,25 @@
-#include "data.h"
-#include "utils.h"
-#include "image.h"
-#include "cuda.h"
+#అన్తర్భావ "data.h"
+#అన్తర్భావ "utils.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "cuda.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <string.h>
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-list *get_paths(char *filename)
+list *get_paths(అక్షరం *filename)
 {
-    char *path;
+    అక్షరం *మార్గం;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    list *lines = make_list();
-    while((path=fgetl(file))){
-        list_insert(lines, path);
+    ఒకవేళ(!file) file_error(filename);
+    list *పంక్తులు = make_list();
+    అయితే((మార్గం=fgetl(file))){
+        list_చొప్పించు(పంక్తులు, మార్గం);
     }
     fclose(file);
-    return lines;
+    తిరిగి పంక్తులు;
 }
 
 /*
@@ -39,87 +39,87 @@ char **get_random_paths_indexes(char **paths, int n, int m, int *indexes)
 }
 */
 
-char **get_random_paths(char **paths, int n, int m)
+అక్షరం **get_random_paths(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m)
 {
-    char **random_paths = calloc(n, sizeof(char*));
-    int i;
+    అక్షరం **random_paths = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(అక్షరం*));
+    పూర్ణాంకం i;
     pthread_mutex_lock(&mutex);
-    for(i = 0; i < n; ++i){
-        int index = rand()%m;
-        random_paths[i] = paths[index];
+    కొరకు(i = 0; i < n; ++i){
+        పూర్ణాంకం సూచీ = rand()%m;
+        random_paths[i] = paths[సూచీ];
         //if(i == 0) printf("%s\n", paths[index]);
     }
     pthread_mutex_unlock(&mutex);
-    return random_paths;
+    తిరిగి random_paths;
 }
 
-char **find_replace_paths(char **paths, int n, char *find, char *replace)
+అక్షరం **కనుగొను_replace_paths(అక్షరం **paths, పూర్ణాంకం n, అక్షరం *కనుగొను, అక్షరం *replace)
 {
-    char **replace_paths = calloc(n, sizeof(char*));
-    int i;
-    for(i = 0; i < n; ++i){
-        char replaced[4096];
-        find_replace(paths[i], find, replace, replaced);
+    అక్షరం **replace_paths = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(అక్షరం*));
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        అక్షరం replaced[4096];
+        కనుగొను_replace(paths[i], కనుగొను, replace, replaced);
         replace_paths[i] = copy_string(replaced);
     }
-    return replace_paths;
+    తిరిగి replace_paths;
 }
 
-matrix load_image_paths_gray(char **paths, int n, int w, int h)
+మాతృక ఎక్కించు_image_paths_బూడిద(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    పూర్ణాంకం i;
+    మాతృక X;
+    X.అడ్డువరుసలు = n;
+    X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    X.నిలువుల_సంఖ్య = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image(paths[i], w, h, 3);
+    కొరకు(i = 0; i < n; ++i){
+        image im = ఎక్కించు_image(paths[i], w, h, 3);
 
-        image gray = grayscale_image(im);
+        image బూడిద = grayscale_image(im);
         free_image(im);
-        im = gray;
+        im = బూడిద;
 
-        X.vals[i] = im.data;
-        X.cols = im.h*im.w*im.c;
+        X.vals[i] = im.దత్తాంశం;
+        X.నిలువుల_సంఖ్య = im.h*im.w*im.c;
     }
-    return X;
+    తిరిగి X;
 }
 
-matrix load_image_paths(char **paths, int n, int w, int h)
+మాతృక ఎక్కించు_image_paths(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    పూర్ణాంకం i;
+    మాతృక X;
+    X.అడ్డువరుసలు = n;
+    X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    X.నిలువుల_సంఖ్య = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], w, h);
-        X.vals[i] = im.data;
-        X.cols = im.h*im.w*im.c;
+    కొరకు(i = 0; i < n; ++i){
+        image im = ఎక్కించు_image_color(paths[i], w, h);
+        X.vals[i] = im.దత్తాంశం;
+        X.నిలువుల_సంఖ్య = im.h*im.w*im.c;
     }
-    return X;
+    తిరిగి X;
 }
 
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+మాతృక ఎక్కించు_image_augment_paths(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure, పూర్ణాంకం center)
 {
-    int i;
-    matrix X;
-    X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
-    X.cols = 0;
+    పూర్ణాంకం i;
+    మాతృక X;
+    X.అడ్డువరుసలు = n;
+    X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    X.నిలువుల_సంఖ్య = 0;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], 0, 0);
+    కొరకు(i = 0; i < n; ++i){
+        image im = ఎక్కించు_image_color(paths[i], 0, 0);
         image crop;
-        if(center){
-            crop = center_crop_image(im, size, size);
-        } else {
-            crop = random_augment_image(im, angle, aspect, min, max, size, size);
+        ఒకవేళ(center){
+            crop = center_crop_image(im, కొలత, కొలత);
+        } లేకపోతే {
+            crop = random_augment_image(im, angle, aspect, min, max, కొలత, కొలత);
         }
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        పూర్ణాంకం flip = rand()%2;
+        ఒకవేళ (flip) flip_image(crop);
         random_distort_image(crop, hue, saturation, exposure);
 
         /*
@@ -129,210 +129,210 @@ matrix load_image_augment_paths(char **paths, int n, int min, int max, int size,
         */
         //grayscale_image_3c(crop);
         free_image(im);
-        X.vals[i] = crop.data;
-        X.cols = crop.h*crop.w*crop.c;
+        X.vals[i] = crop.దత్తాంశం;
+        X.నిలువుల_సంఖ్య = crop.h*crop.w*crop.c;
     }
-    return X;
+    తిరిగి X;
 }
 
 
-box_label *read_boxes(char *filename, int *n)
+box_label *read_boxes(అక్షరం *filename, పూర్ణాంకం *n)
 {
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    float x, y, h, w;
-    int id;
-    int count = 0;
-    int size = 64;
-    box_label *boxes = calloc(size, sizeof(box_label));
-    while(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
-        if(count == size) {
-            size = size * 2;
-            boxes = realloc(boxes, size*sizeof(box_label));
+    ఒకవేళ(!file) file_error(filename);
+    దశాంశం x, y, h, w;
+    పూర్ణాంకం id;
+    పూర్ణాంకం లెక్క = 0;
+    పూర్ణాంకం కొలత = 64;
+    box_label *boxes = సున్నా_జ్ఞాపకం_ఇవ్వు(కొలత, పరిమాణం(box_label));
+    అయితే(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
+        ఒకవేళ(లెక్క == కొలత) {
+            కొలత = కొలత * 2;
+            boxes = realloc(boxes, కొలత*పరిమాణం(box_label));
         }
-        boxes[count].id = id;
-        boxes[count].x = x;
-        boxes[count].y = y;
-        boxes[count].h = h;
-        boxes[count].w = w;
-        boxes[count].left   = x - w/2;
-        boxes[count].right  = x + w/2;
-        boxes[count].top    = y - h/2;
-        boxes[count].bottom = y + h/2;
-        ++count;
+        boxes[లెక్క].id = id;
+        boxes[లెక్క].x = x;
+        boxes[లెక్క].y = y;
+        boxes[లెక్క].h = h;
+        boxes[లెక్క].w = w;
+        boxes[లెక్క].ఎడమ   = x - w/2;
+        boxes[లెక్క].కుడి  = x + w/2;
+        boxes[లెక్క].శిఖరం    = y - h/2;
+        boxes[లెక్క].bottom = y + h/2;
+        ++లెక్క;
     }
     fclose(file);
-    *n = count;
-    return boxes;
+    *n = లెక్క;
+    తిరిగి boxes;
 }
 
-void randomize_boxes(box_label *b, int n)
+శూన్య randomize_boxes(box_label *b, పూర్ణాంకం n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        box_label swap = b[i];
-        int index = rand()%n;
-        b[i] = b[index];
-        b[index] = swap;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        box_label మార్పిడి = b[i];
+        పూర్ణాంకం సూచీ = rand()%n;
+        b[i] = b[సూచీ];
+        b[సూచీ] = మార్పిడి;
     }
 }
 
-void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float sy, int flip)
+శూన్య correct_boxes(box_label *boxes, పూర్ణాంకం n, దశాంశం dx, దశాంశం dy, దశాంశం sx, దశాంశం sy, పూర్ణాంకం flip)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(boxes[i].x == 0 && boxes[i].y == 0) {
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        ఒకవేళ(boxes[i].x == 0 && boxes[i].y == 0) {
             boxes[i].x = 999999;
             boxes[i].y = 999999;
             boxes[i].w = 999999;
             boxes[i].h = 999999;
-            continue;
+            కొనసాగు;
         }
-        boxes[i].left   = boxes[i].left  * sx - dx;
-        boxes[i].right  = boxes[i].right * sx - dx;
-        boxes[i].top    = boxes[i].top   * sy - dy;
+        boxes[i].ఎడమ   = boxes[i].ఎడమ  * sx - dx;
+        boxes[i].కుడి  = boxes[i].కుడి * sx - dx;
+        boxes[i].శిఖరం    = boxes[i].శిఖరం   * sy - dy;
         boxes[i].bottom = boxes[i].bottom* sy - dy;
 
-        if(flip){
-            float swap = boxes[i].left;
-            boxes[i].left = 1. - boxes[i].right;
-            boxes[i].right = 1. - swap;
+        ఒకవేళ(flip){
+            దశాంశం మార్పిడి = boxes[i].ఎడమ;
+            boxes[i].ఎడమ = 1. - boxes[i].కుడి;
+            boxes[i].కుడి = 1. - మార్పిడి;
         }
 
-        boxes[i].left =  constrain(0, 1, boxes[i].left);
-        boxes[i].right = constrain(0, 1, boxes[i].right);
-        boxes[i].top =   constrain(0, 1, boxes[i].top);
+        boxes[i].ఎడమ =  constrain(0, 1, boxes[i].ఎడమ);
+        boxes[i].కుడి = constrain(0, 1, boxes[i].కుడి);
+        boxes[i].శిఖరం =   constrain(0, 1, boxes[i].శిఖరం);
         boxes[i].bottom =   constrain(0, 1, boxes[i].bottom);
 
-        boxes[i].x = (boxes[i].left+boxes[i].right)/2;
-        boxes[i].y = (boxes[i].top+boxes[i].bottom)/2;
-        boxes[i].w = (boxes[i].right - boxes[i].left);
-        boxes[i].h = (boxes[i].bottom - boxes[i].top);
+        boxes[i].x = (boxes[i].ఎడమ+boxes[i].కుడి)/2;
+        boxes[i].y = (boxes[i].శిఖరం+boxes[i].bottom)/2;
+        boxes[i].w = (boxes[i].కుడి - boxes[i].ఎడమ);
+        boxes[i].h = (boxes[i].bottom - boxes[i].శిఖరం);
 
         boxes[i].w = constrain(0, 1, boxes[i].w);
         boxes[i].h = constrain(0, 1, boxes[i].h);
     }
 }
 
-void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+శూన్య fill_truth_swag(అక్షరం *మార్గం, దశాంశం *truth, పూర్ణాంకం classes, పూర్ణాంకం flip, దశాంశం dx, దశాంశం dy, దశాంశం sx, దశాంశం sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "labels", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "labels", labelpath);
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    పూర్ణాంకం లెక్క = 0;
+    box_label *boxes = read_boxes(labelpath, &లెక్క);
+    randomize_boxes(boxes, లెక్క);
+    correct_boxes(boxes, లెక్క, dx, dy, sx, sy, flip);
+    దశాంశం x,y,w,h;
+    పూర్ణాంకం id;
+    పూర్ణాంకం i;
 
-    for (i = 0; i < count && i < 90; ++i) {
+    కొరకు (i = 0; i < లెక్క && i < 90; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .0 || h < .0) continue;
+        ఒకవేళ (w < .0 || h < .0) కొనసాగు;
 
-        int index = (4+classes) * i;
+        పూర్ణాంకం సూచీ = (4+classes) * i;
 
-        truth[index++] = x;
-        truth[index++] = y;
-        truth[index++] = w;
-        truth[index++] = h;
+        truth[సూచీ++] = x;
+        truth[సూచీ++] = y;
+        truth[సూచీ++] = w;
+        truth[సూచీ++] = h;
 
-        if (id < classes) truth[index+id] = 1;
+        ఒకవేళ (id < classes) truth[సూచీ+id] = 1;
     }
-    free(boxes);
+    విడుదల(boxes);
 }
 
-void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
+శూన్య fill_truth_region(అక్షరం *మార్గం, దశాంశం *truth, పూర్ణాంకం classes, పూర్ణాంకం అంకె_boxes, పూర్ణాంకం flip, దశాంశం dx, దశాంశం dy, దశాంశం sx, దశాంశం sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "labels", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "labels", labelpath);
 
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".png", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".png", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
+    పూర్ణాంకం లెక్క = 0;
+    box_label *boxes = read_boxes(labelpath, &లెక్క);
+    randomize_boxes(boxes, లెక్క);
+    correct_boxes(boxes, లెక్క, dx, dy, sx, sy, flip);
+    దశాంశం x,y,w,h;
+    పూర్ణాంకం id;
+    పూర్ణాంకం i;
 
-    for (i = 0; i < count; ++i) {
+    కొరకు (i = 0; i < లెక్క; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .005 || h < .005) continue;
+        ఒకవేళ (w < .005 || h < .005) కొనసాగు;
 
-        int col = (int)(x*num_boxes);
-        int row = (int)(y*num_boxes);
+        పూర్ణాంకం నిలువు = (పూర్ణాంకం)(x*అంకె_boxes);
+        పూర్ణాంకం అడ్డువరుస = (పూర్ణాంకం)(y*అంకె_boxes);
 
-        x = x*num_boxes - col;
-        y = y*num_boxes - row;
+        x = x*అంకె_boxes - నిలువు;
+        y = y*అంకె_boxes - అడ్డువరుస;
 
-        int index = (col+row*num_boxes)*(5+classes);
-        if (truth[index]) continue;
-        truth[index++] = 1;
+        పూర్ణాంకం సూచీ = (నిలువు+అడ్డువరుస*అంకె_boxes)*(5+classes);
+        ఒకవేళ (truth[సూచీ]) కొనసాగు;
+        truth[సూచీ++] = 1;
 
-        if (id < classes) truth[index+id] = 1;
-        index += classes;
+        ఒకవేళ (id < classes) truth[సూచీ+id] = 1;
+        సూచీ += classes;
 
-        truth[index++] = x;
-        truth[index++] = y;
-        truth[index++] = w;
-        truth[index++] = h;
+        truth[సూచీ++] = x;
+        truth[సూచీ++] = y;
+        truth[సూచీ++] = w;
+        truth[సూచీ++] = h;
     }
-    free(boxes);
+    విడుదల(boxes);
 }
 
-void load_rle(image im, int *rle, int n)
+శూన్య ఎక్కించు_rle(image im, పూర్ణాంకం *rle, పూర్ణాంకం n)
 {
-    int count = 0;
-    int curr = 0;
-    int i,j;
-    for(i = 0; i < n; ++i){
-        for(j = 0; j < rle[i]; ++j){
-            im.data[count++] = curr;
+    పూర్ణాంకం లెక్క = 0;
+    పూర్ణాంకం curr = 0;
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < n; ++i){
+        కొరకు(j = 0; j < rle[i]; ++j){
+            im.దత్తాంశం[లెక్క++] = curr;
         }
         curr = 1 - curr;
     }
-    for(; count < im.h*im.w*im.c; ++count){
-        im.data[count] = curr;
+    కొరకు(; లెక్క < im.h*im.w*im.c; ++లెక్క){
+        im.దత్తాంశం[లెక్క] = curr;
     }
 }
 
-void or_image(image src, image dest, int c)
+శూన్య or_image(image src, image dest, పూర్ణాంకం c)
 {
-    int i;
-    for(i = 0; i < src.w*src.h; ++i){
-        if(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < src.w*src.h; ++i){
+        ఒకవేళ(src.దత్తాంశం[i]) dest.దత్తాంశం[dest.w*dest.h*c + i] = 1;
     }
 }
 
-void exclusive_image(image src)
+శూన్య exclusive_image(image src)
 {
-    int k, j, i;
-    int s = src.w*src.h;
-    for(k = 0; k < src.c-1; ++k){
-        for(i = 0; i < s; ++i){
-            if (src.data[k*s + i]){
-                for(j = k+1; j < src.c; ++j){
-                    src.data[j*s + i] = 0;
+    పూర్ణాంకం k, j, i;
+    పూర్ణాంకం s = src.w*src.h;
+    కొరకు(k = 0; k < src.c-1; ++k){
+        కొరకు(i = 0; i < s; ++i){
+            ఒకవేళ (src.దత్తాంశం[k*s + i]){
+                కొరకు(j = k+1; j < src.c; ++j){
+                    src.దత్తాంశం[j*s + i] = 0;
                 }
             }
         }
@@ -341,14 +341,14 @@ void exclusive_image(image src)
 
 box bound_image(image im)
 {
-    int x,y;
-    int minx = im.w;
-    int miny = im.h;
-    int maxx = 0;
-    int maxy = 0;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            if(im.data[y*im.w + x]){
+    పూర్ణాంకం x,y;
+    పూర్ణాంకం minx = im.w;
+    పూర్ణాంకం miny = im.h;
+    పూర్ణాంకం maxx = 0;
+    పూర్ణాంకం maxy = 0;
+    కొరకు(y = 0; y < im.h; ++y){
+        కొరకు(x = 0; x < im.w; ++x){
+            ఒకవేళ(im.దత్తాంశం[y*im.w + x]){
                 minx = (x < minx) ? x : minx;
                 miny = (y < miny) ? y : miny;
                 maxx = (x > maxx) ? x : maxx;
@@ -358,123 +358,123 @@ box bound_image(image im)
     }
     box b = {minx, miny, maxx-minx + 1, maxy-miny + 1};
     //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
-    return b;
+    తిరిగి b;
 }
 
-void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+శూన్య fill_truth_iseg(అక్షరం *మార్గం, పూర్ణాంకం అంకె_boxes, దశాంశం *truth, పూర్ణాంకం classes, పూర్ణాంకం w, పూర్ణాంకం h, augment_వాదనలు aug, పూర్ణాంకం flip, పూర్ణాంకం mw, పూర్ణాంకం mh)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "mask", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "mask", labelpath);
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
-    int j;
+    ఒకవేళ(!file) file_error(labelpath);
+    అక్షరం buff[32788];
+    పూర్ణాంకం id;
+    పూర్ణాంకం i = 0;
+    పూర్ణాంకం j;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
+    అయితే((fscanf(file, "%d %s", &id, buff) == 2) && i < అంకె_boxes){
+        పూర్ణాంకం n = 0;
+        పూర్ణాంకం *rle = read_intlist(buff, &n, 0);
+        ఎక్కించు_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        ఒకవేళ(flip) flip_image(sized);
 
-        image mask = resize_image(sized, mw, mh);
+        image ముసుగు = resize_image(sized, mw, mh);
         truth[i*(mw*mh+1)] = id;
-        for(j = 0; j < mw*mh; ++j){
-            truth[i*(mw*mh + 1) + 1 + j] = mask.data[j];
+        కొరకు(j = 0; j < mw*mh; ++j){
+            truth[i*(mw*mh + 1) + 1 + j] = ముసుగు.దత్తాంశం[j];
         }
         ++i;
 
-        free_image(mask);
+        free_image(ముసుగు);
         free_image(sized);
-        free(rle);
+        విడుదల(rle);
     }
-    if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
+    ఒకవేళ(i < అంకె_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
     free_image(part);
 }
 
-void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+శూన్య fill_truth_ముసుగు(అక్షరం *మార్గం, పూర్ణాంకం అంకె_boxes, దశాంశం *truth, పూర్ణాంకం classes, పూర్ణాంకం w, పూర్ణాంకం h, augment_వాదనలు aug, పూర్ణాంకం flip, పూర్ణాంకం mw, పూర్ణాంకం mh)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "mask", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "mask", labelpath);
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
+    ఒకవేళ(!file) file_error(labelpath);
+    అక్షరం buff[32788];
+    పూర్ణాంకం id;
+    పూర్ణాంకం i = 0;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
+    అయితే((fscanf(file, "%d %s", &id, buff) == 2) && i < అంకె_boxes){
+        పూర్ణాంకం n = 0;
+        పూర్ణాంకం *rle = read_intlist(buff, &n, 0);
+        ఎక్కించు_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        ఒకవేళ(flip) flip_image(sized);
         box b = bound_image(sized);
-        if(b.w > 0){
+        ఒకవేళ(b.w > 0){
             image crop = crop_image(sized, b.x, b.y, b.w, b.h);
-            image mask = resize_image(crop, mw, mh);
+            image ముసుగు = resize_image(crop, mw, mh);
             truth[i*(4 + mw*mh + 1) + 0] = (b.x + b.w/2.)/sized.w;
             truth[i*(4 + mw*mh + 1) + 1] = (b.y + b.h/2.)/sized.h;
             truth[i*(4 + mw*mh + 1) + 2] = b.w/sized.w;
             truth[i*(4 + mw*mh + 1) + 3] = b.h/sized.h;
-            int j;
-            for(j = 0; j < mw*mh; ++j){
-                truth[i*(4 + mw*mh + 1) + 4 + j] = mask.data[j];
+            పూర్ణాంకం j;
+            కొరకు(j = 0; j < mw*mh; ++j){
+                truth[i*(4 + mw*mh + 1) + 4 + j] = ముసుగు.దత్తాంశం[j];
             }
             truth[i*(4 + mw*mh + 1) + 4 + mw*mh] = id;
             free_image(crop);
-            free_image(mask);
+            free_image(ముసుగు);
             ++i;
         }
         free_image(sized);
-        free(rle);
+        విడుదల(rle);
     }
     fclose(file);
     free_image(part);
 }
 
 
-void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+శూన్య fill_truth_detection(అక్షరం *మార్గం, పూర్ణాంకం అంకె_boxes, దశాంశం *truth, పూర్ణాంకం classes, పూర్ణాంకం flip, దశాంశం dx, దశాంశం dy, దశాంశం sx, దశాంశం sy)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "labels", labelpath);
-    find_replace(labelpath, "JPEGImages", "labels", labelpath);
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "labels", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "labels", labelpath);
 
-    find_replace(labelpath, "raw", "labels", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".png", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    if(count > num_boxes) count = num_boxes;
-    float x,y,w,h;
-    int id;
-    int i;
-    int sub = 0;
+    కనుగొను_replace(labelpath, "raw", "labels", labelpath);
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".png", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
+    పూర్ణాంకం లెక్క = 0;
+    box_label *boxes = read_boxes(labelpath, &లెక్క);
+    randomize_boxes(boxes, లెక్క);
+    correct_boxes(boxes, లెక్క, dx, dy, sx, sy, flip);
+    ఒకవేళ(లెక్క > అంకె_boxes) లెక్క = అంకె_boxes;
+    దశాంశం x,y,w,h;
+    పూర్ణాంకం id;
+    పూర్ణాంకం i;
+    పూర్ణాంకం sub = 0;
 
-    for (i = 0; i < count; ++i) {
+    కొరకు (i = 0; i < లెక్క; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if ((w < .001 || h < .001)) {
+        ఒకవేళ ((w < .001 || h < .001)) {
             ++sub;
-            continue;
+            కొనసాగు;
         }
 
         truth[(i-sub)*5+0] = x;
@@ -483,292 +483,292 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
         truth[(i-sub)*5+3] = h;
         truth[(i-sub)*5+4] = id;
     }
-    free(boxes);
+    విడుదల(boxes);
 }
 
-#define NUMCHARS 37
+#నిర్వచించు NUMCHARS 37
 
-void print_letters(float *pred, int n)
+శూన్య print_letters(దశాంశం *pred, పూర్ణాంకం n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        int index = max_index(pred+i*NUMCHARS, NUMCHARS);
-        printf("%c", int_to_alphanum(index));
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        పూర్ణాంకం సూచీ = max_సూచీ(pred+i*NUMCHARS, NUMCHARS);
+        రాయి("%c", int_గమ్యం_alphanum(సూచీ));
     }
-    printf("\n");
+    రాయి("\n");
 }
 
-void fill_truth_captcha(char *path, int n, float *truth)
+శూన్య fill_truth_captcha(అక్షరం *మార్గం, పూర్ణాంకం n, దశాంశం *truth)
 {
-    char *begin = strrchr(path, '/');
+    అక్షరం *begin = strrchr(మార్గం, '/');
     ++begin;
-    int i;
-    for(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
-        int index = alphanum_to_int(begin[i]);
-        if(index > 35) printf("Bad %c\n", begin[i]);
-        truth[i*NUMCHARS+index] = 1;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < అక్షరశ్రేణి_పొడవు(begin) && i < n && begin[i] != '.'; ++i){
+        పూర్ణాంకం సూచీ = alphanum_గమ్యం_int(begin[i]);
+        ఒకవేళ(సూచీ > 35) రాయి("Bad %c\n", begin[i]);
+        truth[i*NUMCHARS+సూచీ] = 1;
     }
-    for(;i < n; ++i){
+    కొరకు(;i < n; ++i){
         truth[i*NUMCHARS + NUMCHARS-1] = 1;
     }
 }
 
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
+దత్తాంశం ఎక్కించు_దత్తాంశం_captcha(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం k, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = make_matrix(n, k*NUMCHARS);
-    int i;
-    for(i = 0; i < n; ++i){
+    d.X = ఎక్కించు_image_paths(paths, n, w, h);
+    d.y = make_మాతృక(n, k*NUMCHARS);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
         fill_truth_captcha(paths[i], k, d.y.vals[i]);
     }
-    if(m) free(paths);
-    return d;
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
+దత్తాంశం ఎక్కించు_దత్తాంశం_captcha_encode(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.X.cols = 17100;
+    d.X = ఎక్కించు_image_paths(paths, n, w, h);
+    d.X.నిలువుల_సంఖ్య = 17100;
     d.y = d.X;
-    if(m) free(paths);
-    return d;
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-void fill_truth(char *path, char **labels, int k, float *truth)
+శూన్య fill_truth(అక్షరం *మార్గం, అక్షరం **labels, పూర్ణాంకం k, దశాంశం *truth)
 {
-    int i;
-    memset(truth, 0, k*sizeof(float));
-    int count = 0;
-    for(i = 0; i < k; ++i){
-        if(strstr(path, labels[i])){
+    పూర్ణాంకం i;
+    memset(truth, 0, k*పరిమాణం(దశాంశం));
+    పూర్ణాంకం లెక్క = 0;
+    కొరకు(i = 0; i < k; ++i){
+        ఒకవేళ(అక్షరశ్రేణి_శోధన(మార్గం, labels[i])){
             truth[i] = 1;
-            ++count;
+            ++లెక్క;
             //printf("%s %s %d\n", path, labels[i], i);
         }
     }
-    if(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
+    ఒకవేళ(లెక్క != 1 && (k != 1 || లెక్క != 0)) రాయి("Too many or too few labels: %d, %s\n", లెక్క, మార్గం);
 }
 
-void fill_hierarchy(float *truth, int k, tree *hierarchy)
+శూన్య fill_hierarchy(దశాంశం *truth, పూర్ణాంకం k, వృక్షం *hierarchy)
 {
-    int j;
-    for(j = 0; j < k; ++j){
-        if(truth[j]){
-            int parent = hierarchy->parent[j];
-            while(parent >= 0){
-                truth[parent] = 1;
-                parent = hierarchy->parent[parent];
+    పూర్ణాంకం j;
+    కొరకు(j = 0; j < k; ++j){
+        ఒకవేళ(truth[j]){
+            పూర్ణాంకం మాతృ = hierarchy->మాతృ[j];
+            అయితే(మాతృ >= 0){
+                truth[మాతృ] = 1;
+                మాతృ = hierarchy->మాతృ[మాతృ];
             }
         }
     }
-    int i;
-    int count = 0;
-    for(j = 0; j < hierarchy->groups; ++j){
+    పూర్ణాంకం i;
+    పూర్ణాంకం లెక్క = 0;
+    కొరకు(j = 0; j < hierarchy->groups; ++j){
         //printf("%d\n", count);
-        int mask = 1;
-        for(i = 0; i < hierarchy->group_size[j]; ++i){
-            if(truth[count + i]){
-                mask = 0;
-                break;
+        పూర్ణాంకం ముసుగు = 1;
+        కొరకు(i = 0; i < hierarchy->సమూహం_కొలత[j]; ++i){
+            ఒకవేళ(truth[లెక్క + i]){
+                ముసుగు = 0;
+                ఆపు;
             }
         }
-        if (mask) {
-            for(i = 0; i < hierarchy->group_size[j]; ++i){
-                truth[count + i] = SECRET_NUM;
+        ఒకవేళ (ముసుగు) {
+            కొరకు(i = 0; i < hierarchy->సమూహం_కొలత[j]; ++i){
+                truth[లెక్క + i] = SECRET_అంకె;
             }
         }
-        count += hierarchy->group_size[j];
+        లెక్క += hierarchy->సమూహం_కొలత[j];
     }
 }
 
-matrix load_regression_labels_paths(char **paths, int n, int k)
+మాతృక ఎక్కించు_regression_labels_paths(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం k)
 {
-    matrix y = make_matrix(n, k);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        char labelpath[4096];
-        find_replace(paths[i], "images", "labels", labelpath);
-        find_replace(labelpath, "JPEGImages", "labels", labelpath);
-        find_replace(labelpath, ".BMP", ".txt", labelpath);
-        find_replace(labelpath, ".JPEG", ".txt", labelpath);
-        find_replace(labelpath, ".JPG", ".txt", labelpath);
-        find_replace(labelpath, ".JPeG", ".txt", labelpath);
-        find_replace(labelpath, ".Jpeg", ".txt", labelpath);
-        find_replace(labelpath, ".PNG", ".txt", labelpath);
-        find_replace(labelpath, ".TIF", ".txt", labelpath);
-        find_replace(labelpath, ".bmp", ".txt", labelpath);
-        find_replace(labelpath, ".jpeg", ".txt", labelpath);
-        find_replace(labelpath, ".jpg", ".txt", labelpath);
-        find_replace(labelpath, ".png", ".txt", labelpath);
-        find_replace(labelpath, ".tif", ".txt", labelpath);
+    మాతృక y = make_మాతృక(n, k);
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < n; ++i){
+        అక్షరం labelpath[4096];
+        కనుగొను_replace(paths[i], "images", "labels", labelpath);
+        కనుగొను_replace(labelpath, "JPEGImages", "labels", labelpath);
+        కనుగొను_replace(labelpath, ".BMP", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".JPeG", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".Jpeg", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".PNG", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".TIF", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".bmp", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".jpeg", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".png", ".txt", labelpath);
+        కనుగొను_replace(labelpath, ".tif", ".txt", labelpath);
 
         FILE *file = fopen(labelpath, "r");
-        for(j = 0; j < k; ++j){
+        కొరకు(j = 0; j < k; ++j){
             fscanf(file, "%f", &(y.vals[i][j]));
         }
         fclose(file);
     }
-    return y;
+    తిరిగి y;
 }
 
-matrix load_labels_paths(char **paths, int n, char **labels, int k, tree *hierarchy)
+మాతృక ఎక్కించు_labels_paths(అక్షరం **paths, పూర్ణాంకం n, అక్షరం **labels, పూర్ణాంకం k, వృక్షం *hierarchy)
 {
-    matrix y = make_matrix(n, k);
-    int i;
-    for(i = 0; i < n && labels; ++i){
+    మాతృక y = make_మాతృక(n, k);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n && labels; ++i){
         fill_truth(paths[i], labels, k, y.vals[i]);
-        if(hierarchy){
+        ఒకవేళ(hierarchy){
             fill_hierarchy(y.vals[i], k, hierarchy);
         }
     }
-    return y;
+    తిరిగి y;
 }
 
-matrix load_tags_paths(char **paths, int n, int k)
+మాతృక ఎక్కించు_ట్యాగులు_paths(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం k)
 {
-    matrix y = make_matrix(n, k);
-    int i;
+    మాతృక y = make_మాతృక(n, k);
+    పూర్ణాంకం i;
     //int count = 0;
-    for(i = 0; i < n; ++i){
-        char label[4096];
-        find_replace(paths[i], "images", "labels", label);
-        find_replace(label, ".jpg", ".txt", label);
+    కొరకు(i = 0; i < n; ++i){
+        అక్షరం label[4096];
+        కనుగొను_replace(paths[i], "images", "labels", label);
+        కనుగొను_replace(label, ".jpg", ".txt", label);
         FILE *file = fopen(label, "r");
-        if (!file) continue;
+        ఒకవేళ (!file) కొనసాగు;
         //++count;
-        int tag;
-        while(fscanf(file, "%d", &tag) == 1){
-            if(tag < k){
-                y.vals[i][tag] = 1;
+        పూర్ణాంకం ట్యాగ్;
+        అయితే(fscanf(file, "%d", &ట్యాగ్) == 1){
+            ఒకవేళ(ట్యాగ్ < k){
+                y.vals[i][ట్యాగ్] = 1;
             }
         }
         fclose(file);
     }
     //printf("%d/%d\n", count, n);
-    return y;
+    తిరిగి y;
 }
 
-char **get_labels(char *filename)
+అక్షరం **get_labels(అక్షరం *filename)
 {
     list *plist = get_paths(filename);
-    char **labels = (char **)list_to_array(plist);
+    అక్షరం **labels = (అక్షరం **)list_గమ్యం_array(plist);
     free_list(plist);
-    return labels;
+    తిరిగి labels;
 }
 
-void free_data(data d)
+శూన్య free_దత్తాంశం(దత్తాంశం d)
 {
-    if(!d.shallow){
-        free_matrix(d.X);
-        free_matrix(d.y);
-    }else{
-        free(d.X.vals);
-        free(d.y.vals);
+    ఒకవేళ(!d.shallow){
+        free_మాతృక(d.X);
+        free_మాతృక(d.y);
+    }లేకపోతే{
+        విడుదల(d.X.vals);
+        విడుదల(d.y.vals);
     }
 }
 
-image get_segmentation_image(char *path, int w, int h, int classes)
+image get_segmentation_image(అక్షరం *మార్గం, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం classes)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    image mask = make_image(w, h, classes);
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "mask", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "mask", labelpath);
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
+    image ముసుగు = make_image(w, h, classes);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    ఒకవేళ(!file) file_error(labelpath);
+    అక్షరం buff[32788];
+    పూర్ణాంకం id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
-        or_image(part, mask, id);
-        free(rle);
+    అయితే(fscanf(file, "%d %s", &id, buff) == 2){
+        పూర్ణాంకం n = 0;
+        పూర్ణాంకం *rle = read_intlist(buff, &n, 0);
+        ఎక్కించు_rle(part, rle, n);
+        or_image(part, ముసుగు, id);
+        విడుదల(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    తిరిగి ముసుగు;
 }
 
-image get_segmentation_image2(char *path, int w, int h, int classes)
+image get_segmentation_image2(అక్షరం *మార్గం, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం classes)
 {
-    char labelpath[4096];
-    find_replace(path, "images", "mask", labelpath);
-    find_replace(labelpath, "JPEGImages", "mask", labelpath);
-    find_replace(labelpath, ".jpg", ".txt", labelpath);
-    find_replace(labelpath, ".JPG", ".txt", labelpath);
-    find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    image mask = make_image(w, h, classes+1);
-    int i;
-    for(i = 0; i < w*h; ++i){
-        mask.data[w*h*classes + i] = 1;
+    అక్షరం labelpath[4096];
+    కనుగొను_replace(మార్గం, "images", "mask", labelpath);
+    కనుగొను_replace(labelpath, "JPEGImages", "mask", labelpath);
+    కనుగొను_replace(labelpath, ".jpg", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPG", ".txt", labelpath);
+    కనుగొను_replace(labelpath, ".JPEG", ".txt", labelpath);
+    image ముసుగు = make_image(w, h, classes+1);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < w*h; ++i){
+        ముసుగు.దత్తాంశం[w*h*classes + i] = 1;
     }
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    ఒకవేళ(!file) file_error(labelpath);
+    అక్షరం buff[32788];
+    పూర్ణాంకం id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
-        load_rle(part, rle, n);
-        or_image(part, mask, id);
-        for(i = 0; i < w*h; ++i){
-            if(part.data[i]) mask.data[w*h*classes + i] = 0;
+    అయితే(fscanf(file, "%d %s", &id, buff) == 2){
+        పూర్ణాంకం n = 0;
+        పూర్ణాంకం *rle = read_intlist(buff, &n, 0);
+        ఎక్కించు_rle(part, rle, n);
+        or_image(part, ముసుగు, id);
+        కొరకు(i = 0; i < w*h; ++i){
+            ఒకవేళ(part.దత్తాంశం[i]) ముసుగు.దత్తాంశం[w*h*classes + i] = 0;
         }
-        free(rle);
+        విడుదల(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    తిరిగి ముసుగు;
 }
 
-data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure, int div)
+దత్తాంశం ఎక్కించు_దత్తాంశం_seg(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం classes, పూర్ణాంకం min, పూర్ణాంకం max, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure, పూర్ణాంకం div)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    అక్షరం **random_paths = get_random_paths(paths, n, m);
+    పూర్ణాంకం i;
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*3;
 
 
-    d.y.rows = n;
-    d.y.cols = h*w*classes/div/div;
-    d.y.vals = calloc(d.X.rows, sizeof(float*));
+    d.y.అడ్డువరుసలు = n;
+    d.y.నిలువుల_సంఖ్య = h*w*classes/div/div;
+    d.y.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    కొరకు(i = 0; i < n; ++i){
+        image orig = ఎక్కించు_image_color(random_paths[i], 0, 0);
+        augment_వాదనలు a = random_augment_వాదనలు(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        పూర్ణాంకం flip = rand()%2;
+        ఒకవేళ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.దత్తాంశం;
 
-        image mask = get_segmentation_image(random_paths[i], orig.w, orig.h, classes);
+        image ముసుగు = get_segmentation_image(random_paths[i], orig.w, orig.h, classes);
         //image mask = make_image(orig.w, orig.h, classes+1);
-        image sized_m = rotate_crop_image(mask, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
+        image sized_m = rotate_crop_image(ముసుగు, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
 
-        if(flip) flip_image(sized_m);
-        d.y.vals[i] = sized_m.data;
+        ఒకవేళ(flip) flip_image(sized_m);
+        d.y.vals[i] = sized_m.దత్తాంశం;
 
         free_image(orig);
-        free_image(mask);
+        free_image(ముసుగు);
 
         /*
            image rgb = mask_to_rgb(sized_m, classes);
@@ -778,32 +778,32 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    విడుదల(random_paths);
+    తిరిగి d;
 }
 
-data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int boxes, int div, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+దత్తాంశం ఎక్కించు_దత్తాంశం_iseg(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం classes, పూర్ణాంకం boxes, పూర్ణాంకం div, పూర్ణాంకం min, పూర్ణాంకం max, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    అక్షరం **random_paths = get_random_paths(paths, n, m);
+    పూర్ణాంకం i;
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*3;
 
-    d.y = make_matrix(n, (((w/div)*(h/div))+1)*boxes);
+    d.y = make_మాతృక(n, (((w/div)*(h/div))+1)*boxes);
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    కొరకు(i = 0; i < n; ++i){
+        image orig = ఎక్కించు_image_color(random_paths[i], 0, 0);
+        augment_వాదనలు a = random_augment_వాదనలు(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        పూర్ణాంకం flip = rand()%2;
+        ఒకవేళ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.దత్తాంశం;
         //show_image(sized, "image");
 
         fill_truth_iseg(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, w/div, h/div);
@@ -818,35 +818,35 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    విడుదల(random_paths);
+    తిరిగి d;
 }
 
-data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int boxes, int coords, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+దత్తాంశం ఎక్కించు_దత్తాంశం_ముసుగు(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం classes, పూర్ణాంకం boxes, పూర్ణాంకం coords, పూర్ణాంకం min, పూర్ణాంకం max, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    అక్షరం **random_paths = get_random_paths(paths, n, m);
+    పూర్ణాంకం i;
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*3;
 
-    d.y = make_matrix(n, (coords+1)*boxes);
+    d.y = make_మాతృక(n, (coords+1)*boxes);
 
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
-        augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
+    కొరకు(i = 0; i < n; ++i){
+        image orig = ఎక్కించు_image_color(random_paths[i], 0, 0);
+        augment_వాదనలు a = random_augment_వాదనలు(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        పూర్ణాంకం flip = rand()%2;
+        ఒకవేళ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.దత్తాంశం;
         //show_image(sized, "image");
 
-        fill_truth_mask(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, 14, 14);
+        fill_truth_ముసుగు(random_paths[i], boxes, d.y.vals[i], classes, orig.w, orig.h, a, flip, 14, 14);
 
         free_image(orig);
 
@@ -858,116 +858,116 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    విడుదల(random_paths);
+    తిరిగి d;
 }
 
-data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure)
+దత్తాంశం ఎక్కించు_దత్తాంశం_region(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం కొలత, పూర్ణాంకం classes, దశాంశం jitter, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    అక్షరం **random_paths = get_random_paths(paths, n, m);
+    పూర్ణాంకం i;
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*3;
 
 
-    int k = size*size*(5+classes);
-    d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
+    పూర్ణాంకం k = కొలత*కొలత*(5+classes);
+    d.y = make_మాతృక(n, k);
+    కొరకు(i = 0; i < n; ++i){
+        image orig = ఎక్కించు_image_color(random_paths[i], 0, 0);
 
-        int oh = orig.h;
-        int ow = orig.w;
+        పూర్ణాంకం oh = orig.h;
+        పూర్ణాంకం ow = orig.w;
 
-        int dw = (ow*jitter);
-        int dh = (oh*jitter);
+        పూర్ణాంకం dw = (ow*jitter);
+        పూర్ణాంకం dh = (oh*jitter);
 
-        int pleft  = rand_uniform(-dw, dw);
-        int pright = rand_uniform(-dw, dw);
-        int ptop   = rand_uniform(-dh, dh);
-        int pbot   = rand_uniform(-dh, dh);
+        పూర్ణాంకం pleft  = rand_ఏకరీతి(-dw, dw);
+        పూర్ణాంకం pright = rand_ఏకరీతి(-dw, dw);
+        పూర్ణాంకం ptop   = rand_ఏకరీతి(-dh, dh);
+        పూర్ణాంకం pbot   = rand_ఏకరీతి(-dh, dh);
 
-        int swidth =  ow - pleft - pright;
-        int sheight = oh - ptop - pbot;
+        పూర్ణాంకం swidth =  ow - pleft - pright;
+        పూర్ణాంకం sheight = oh - ptop - pbot;
 
-        float sx = (float)swidth  / ow;
-        float sy = (float)sheight / oh;
+        దశాంశం sx = (దశాంశం)swidth  / ow;
+        దశాంశం sy = (దశాంశం)sheight / oh;
 
-        int flip = rand()%2;
+        పూర్ణాంకం flip = rand()%2;
         image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-        float dx = ((float)pleft/ow)/sx;
-        float dy = ((float)ptop /oh)/sy;
+        దశాంశం dx = ((దశాంశం)pleft/ow)/sx;
+        దశాంశం dy = ((దశాంశం)ptop /oh)/sy;
 
         image sized = resize_image(cropped, w, h);
-        if(flip) flip_image(sized);
+        ఒకవేళ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
-        d.X.vals[i] = sized.data;
+        d.X.vals[i] = sized.దత్తాంశం;
 
-        fill_truth_region(random_paths[i], d.y.vals[i], classes, size, flip, dx, dy, 1./sx, 1./sy);
+        fill_truth_region(random_paths[i], d.y.vals[i], classes, కొలత, flip, dx, dy, 1./sx, 1./sy);
 
         free_image(orig);
         free_image(cropped);
     }
-    free(random_paths);
-    return d;
+    విడుదల(random_paths);
+    తిరిగి d;
 }
 
-data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
+దత్తాంశం ఎక్కించు_దత్తాంశం_compare(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం classes, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    if(m) paths = get_random_paths(paths, 2*n, m);
-    int i,j;
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, 2*n, m);
+    పూర్ణాంకం i,j;
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*6;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*6;
 
-    int k = 2*(classes);
-    d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
-        image im1 = load_image_color(paths[i*2],   w, h);
-        image im2 = load_image_color(paths[i*2+1], w, h);
+    పూర్ణాంకం k = 2*(classes);
+    d.y = make_మాతృక(n, k);
+    కొరకు(i = 0; i < n; ++i){
+        image im1 = ఎక్కించు_image_color(paths[i*2],   w, h);
+        image im2 = ఎక్కించు_image_color(paths[i*2+1], w, h);
 
-        d.X.vals[i] = calloc(d.X.cols, sizeof(float));
-        memcpy(d.X.vals[i],         im1.data, h*w*3*sizeof(float));
-        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*sizeof(float));
+        d.X.vals[i] = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.నిలువుల_సంఖ్య, పరిమాణం(దశాంశం));
+        జ్ఞాపకం_నకలు(d.X.vals[i],         im1.దత్తాంశం, h*w*3*పరిమాణం(దశాంశం));
+        జ్ఞాపకం_నకలు(d.X.vals[i] + h*w*3, im2.దత్తాంశం, h*w*3*పరిమాణం(దశాంశం));
 
-        int id;
-        float iou;
+        పూర్ణాంకం id;
+        దశాంశం iou;
 
-        char imlabel1[4096];
-        char imlabel2[4096];
-        find_replace(paths[i*2],   "imgs", "labels", imlabel1);
-        find_replace(imlabel1, "jpg", "txt", imlabel1);
+        అక్షరం imlabel1[4096];
+        అక్షరం imlabel2[4096];
+        కనుగొను_replace(paths[i*2],   "imgs", "labels", imlabel1);
+        కనుగొను_replace(imlabel1, "jpg", "txt", imlabel1);
         FILE *fp1 = fopen(imlabel1, "r");
 
-        while(fscanf(fp1, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
+        అయితే(fscanf(fp1, "%d %f", &id, &iou) == 2){
+            ఒకవేళ (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
         }
 
-        find_replace(paths[i*2+1], "imgs", "labels", imlabel2);
-        find_replace(imlabel2, "jpg", "txt", imlabel2);
+        కనుగొను_replace(paths[i*2+1], "imgs", "labels", imlabel2);
+        కనుగొను_replace(imlabel2, "jpg", "txt", imlabel2);
         FILE *fp2 = fopen(imlabel2, "r");
 
-        while(fscanf(fp2, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
+        అయితే(fscanf(fp2, "%d %f", &id, &iou) == 2){
+            ఒకవేళ (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
         }
 
-        for (j = 0; j < classes; ++j){
-            if (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
+        కొరకు (j = 0; j < classes; ++j){
+            ఒకవేళ (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
                 d.y.vals[i][2*j] = 1;
                 d.y.vals[i][2*j+1] = 0;
-            } else if (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
+            } లేకపోతే ఒకవేళ (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
                 d.y.vals[i][2*j] = 0;
                 d.y.vals[i][2*j+1] = 1;
-            } else {
-                d.y.vals[i][2*j]   = SECRET_NUM;
-                d.y.vals[i][2*j+1] = SECRET_NUM;
+            } లేకపోతే {
+                d.y.vals[i][2*j]   = SECRET_అంకె;
+                d.y.vals[i][2*j+1] = SECRET_అంకె;
             }
         }
         fclose(fp1);
@@ -976,240 +976,240 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
         free_image(im1);
         free_image(im2);
     }
-    if(m) free(paths);
-    return d;
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-data load_data_swag(char **paths, int n, int classes, float jitter)
+దత్తాంశం ఎక్కించు_దత్తాంశం_swag(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం classes, దశాంశం jitter)
 {
-    int index = rand()%n;
-    char *random_path = paths[index];
+    పూర్ణాంకం సూచీ = rand()%n;
+    అక్షరం *random_మార్గం = paths[సూచీ];
 
-    image orig = load_image_color(random_path, 0, 0);
-    int h = orig.h;
-    int w = orig.w;
+    image orig = ఎక్కించు_image_color(random_మార్గం, 0, 0);
+    పూర్ణాంకం h = orig.h;
+    పూర్ణాంకం w = orig.w;
 
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
 
-    d.X.rows = 1;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.అడ్డువరుసలు = 1;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*3;
 
-    int k = (4+classes)*90;
-    d.y = make_matrix(1, k);
+    పూర్ణాంకం k = (4+classes)*90;
+    d.y = make_మాతృక(1, k);
 
-    int dw = w*jitter;
-    int dh = h*jitter;
+    పూర్ణాంకం dw = w*jitter;
+    పూర్ణాంకం dh = h*jitter;
 
-    int pleft  = rand_uniform(-dw, dw);
-    int pright = rand_uniform(-dw, dw);
-    int ptop   = rand_uniform(-dh, dh);
-    int pbot   = rand_uniform(-dh, dh);
+    పూర్ణాంకం pleft  = rand_ఏకరీతి(-dw, dw);
+    పూర్ణాంకం pright = rand_ఏకరీతి(-dw, dw);
+    పూర్ణాంకం ptop   = rand_ఏకరీతి(-dh, dh);
+    పూర్ణాంకం pbot   = rand_ఏకరీతి(-dh, dh);
 
-    int swidth =  w - pleft - pright;
-    int sheight = h - ptop - pbot;
+    పూర్ణాంకం swidth =  w - pleft - pright;
+    పూర్ణాంకం sheight = h - ptop - pbot;
 
-    float sx = (float)swidth  / w;
-    float sy = (float)sheight / h;
+    దశాంశం sx = (దశాంశం)swidth  / w;
+    దశాంశం sy = (దశాంశం)sheight / h;
 
-    int flip = rand()%2;
+    పూర్ణాంకం flip = rand()%2;
     image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-    float dx = ((float)pleft/w)/sx;
-    float dy = ((float)ptop /h)/sy;
+    దశాంశం dx = ((దశాంశం)pleft/w)/sx;
+    దశాంశం dy = ((దశాంశం)ptop /h)/sy;
 
     image sized = resize_image(cropped, w, h);
-    if(flip) flip_image(sized);
-    d.X.vals[0] = sized.data;
+    ఒకవేళ(flip) flip_image(sized);
+    d.X.vals[0] = sized.దత్తాంశం;
 
-    fill_truth_swag(random_path, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
+    fill_truth_swag(random_మార్గం, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
 
     free_image(orig);
     free_image(cropped);
 
-    return d;
+    తిరిగి d;
 }
 
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure)
+దత్తాంశం ఎక్కించు_దత్తాంశం_detection(పూర్ణాంకం n, అక్షరం **paths, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం boxes, పూర్ణాంకం classes, దశాంశం jitter, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
-    data d = {0};
+    అక్షరం **random_paths = get_random_paths(paths, n, m);
+    పూర్ణాంకం i;
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
-    d.X.cols = h*w*3;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = h*w*3;
 
-    d.y = make_matrix(n, 5*boxes);
-    for(i = 0; i < n; ++i){
-        image orig = load_image_color(random_paths[i], 0, 0);
+    d.y = make_మాతృక(n, 5*boxes);
+    కొరకు(i = 0; i < n; ++i){
+        image orig = ఎక్కించు_image_color(random_paths[i], 0, 0);
         image sized = make_image(w, h, orig.c);
         fill_image(sized, .5);
 
-        float dw = jitter * orig.w;
-        float dh = jitter * orig.h;
+        దశాంశం dw = jitter * orig.w;
+        దశాంశం dh = jitter * orig.h;
 
-        float new_ar = (orig.w + rand_uniform(-dw, dw)) / (orig.h + rand_uniform(-dh, dh));
+        దశాంశం new_ar = (orig.w + rand_ఏకరీతి(-dw, dw)) / (orig.h + rand_ఏకరీతి(-dh, dh));
         //float scale = rand_uniform(.25, 2);
-        float scale = 1;
+        దశాంశం scale = 1;
 
-        float nw, nh;
+        దశాంశం nw, nh;
 
-        if(new_ar < 1){
+        ఒకవేళ(new_ar < 1){
             nh = scale * h;
             nw = nh * new_ar;
-        } else {
+        } లేకపోతే {
             nw = scale * w;
             nh = nw / new_ar;
         }
 
-        float dx = rand_uniform(0, w - nw);
-        float dy = rand_uniform(0, h - nh);
+        దశాంశం dx = rand_ఏకరీతి(0, w - nw);
+        దశాంశం dy = rand_ఏకరీతి(0, h - nh);
 
-        place_image(orig, nw, nh, dx, dy, sized);
+        ఉంచు_image(orig, nw, nh, dx, dy, sized);
 
         random_distort_image(sized, hue, saturation, exposure);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
-        d.X.vals[i] = sized.data;
+        పూర్ణాంకం flip = rand()%2;
+        ఒకవేళ(flip) flip_image(sized);
+        d.X.vals[i] = sized.దత్తాంశం;
 
 
         fill_truth_detection(random_paths[i], boxes, d.y.vals[i], classes, flip, -dx/w, -dy/h, nw/w, nh/h);
 
         free_image(orig);
     }
-    free(random_paths);
-    return d;
+    విడుదల(random_paths);
+    తిరిగి d;
 }
 
-void *load_thread(void *ptr)
+శూన్య *ఎక్కించు_thread(శూన్య *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
-    if(a.exposure == 0) a.exposure = 1;
-    if(a.saturation == 0) a.saturation = 1;
-    if(a.aspect == 0) a.aspect = 1;
+    ఎక్కించు_వాదనలు a = *(నిర్మాణం ఎక్కించు_వాదనలు*)ptr;
+    ఒకవేళ(a.exposure == 0) a.exposure = 1;
+    ఒకవేళ(a.saturation == 0) a.saturation = 1;
+    ఒకవేళ(a.aspect == 0) a.aspect = 1;
 
-    if (a.type == OLD_CLASSIFICATION_DATA){
-        *a.d = load_data_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
-    } else if (a.type == REGRESSION_DATA){
-        *a.d = load_data_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == CLASSIFICATION_DATA){
-        *a.d = load_data_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
-    } else if (a.type == SUPER_DATA){
-        *a.d = load_data_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
-    } else if (a.type == WRITING_DATA){
-        *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
-    } else if (a.type == ISEG_DATA){
-        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == INSTANCE_DATA){
-        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SEGMENTATION_DATA){
-        *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
-    } else if (a.type == REGION_DATA){
-        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == DETECTION_DATA){
-        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SWAG_DATA){
-        *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
-    } else if (a.type == COMPARE_DATA){
-        *a.d = load_data_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
-    } else if (a.type == IMAGE_DATA){
-        *(a.im) = load_image_color(a.path, 0, 0);
+    ఒకవేళ (a.type == OLD_CLASSIFICATION_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
+    } లేకపోతే ఒకవేళ (a.type == REGRESSION_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.కొలత, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } లేకపోతే ఒకవేళ (a.type == CLASSIFICATION_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.కొలత, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
+    } లేకపోతే ఒకవేళ (a.type == SUPER_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
+    } లేకపోతే ఒకవేళ (a.type == WRITING_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_writing(a.paths, a.n, a.m, a.w, a.h, a.బహిర్గతం_w, a.బహిర్గతం_h);
+    } లేకపోతే ఒకవేళ (a.type == ISEG_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.అంకె_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } లేకపోతే ఒకవేళ (a.type == INSTANCE_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_ముసుగు(a.n, a.paths, a.m, a.w, a.h, a.classes, a.అంకె_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } లేకపోతే ఒకవేళ (a.type == SEGMENTATION_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
+    } లేకపోతే ఒకవేళ (a.type == REGION_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_region(a.n, a.paths, a.m, a.w, a.h, a.అంకె_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } లేకపోతే ఒకవేళ (a.type == DETECTION_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_detection(a.n, a.paths, a.m, a.w, a.h, a.అంకె_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } లేకపోతే ఒకవేళ (a.type == SWAG_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_swag(a.paths, a.n, a.classes, a.jitter);
+    } లేకపోతే ఒకవేళ (a.type == COMPARE_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
+    } లేకపోతే ఒకవేళ (a.type == IMAGE_దత్తాంశం){
+        *(a.im) = ఎక్కించు_image_color(a.మార్గం, 0, 0);
         *(a.resized) = resize_image(*(a.im), a.w, a.h);
-    } else if (a.type == LETTERBOX_DATA){
-        *(a.im) = load_image_color(a.path, 0, 0);
+    } లేకపోతే ఒకవేళ (a.type == LETTERBOX_దత్తాంశం){
+        *(a.im) = ఎక్కించు_image_color(a.మార్గం, 0, 0);
         *(a.resized) = letterbox_image(*(a.im), a.w, a.h);
-    } else if (a.type == TAG_DATA){
-        *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } లేకపోతే ఒకవేళ (a.type == ట్యాగ్_దత్తాంశం){
+        *a.d = ఎక్కించు_దత్తాంశం_ట్యాగ్(a.paths, a.n, a.m, a.classes, a.min, a.max, a.కొలత, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     }
-    free(ptr);
-    return 0;
+    విడుదల(ptr);
+    తిరిగి 0;
 }
 
-pthread_t load_data_in_thread(load_args args)
+pthread_t ఎక్కించు_దత్తాంశం_లోపల_thread(ఎక్కించు_వాదనలు వాదనలు)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
-    return thread;
+    నిర్మాణం ఎక్కించు_వాదనలు *ptr = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(నిర్మాణం ఎక్కించు_వాదనలు));
+    *ptr = వాదనలు;
+    ఒకవేళ(pthread_create(&thread, 0, ఎక్కించు_thread, ptr)) error("Thread creation failed");
+    తిరిగి thread;
 }
 
-void *load_threads(void *ptr)
+శూన్య *ఎక్కించు_దారాలు(శూన్య *ptr)
 {
-    int i;
-    load_args args = *(load_args *)ptr;
-    if (args.threads == 0) args.threads = 1;
-    data *out = args.d;
-    int total = args.n;
-    free(ptr);
-    data *buffers = calloc(args.threads, sizeof(data));
-    pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
-    for(i = 0; i < args.threads; ++i){
-        args.d = buffers + i;
-        args.n = (i+1) * total/args.threads - i * total/args.threads;
-        threads[i] = load_data_in_thread(args);
+    పూర్ణాంకం i;
+    ఎక్కించు_వాదనలు వాదనలు = *(ఎక్కించు_వాదనలు *)ptr;
+    ఒకవేళ (వాదనలు.దారాలు == 0) వాదనలు.దారాలు = 1;
+    దత్తాంశం *బహిర్గతం = వాదనలు.d;
+    పూర్ణాంకం మొత్తం = వాదనలు.n;
+    విడుదల(ptr);
+    దత్తాంశం *buffers = సున్నా_జ్ఞాపకం_ఇవ్వు(వాదనలు.దారాలు, పరిమాణం(దత్తాంశం));
+    pthread_t *దారాలు = సున్నా_జ్ఞాపకం_ఇవ్వు(వాదనలు.దారాలు, పరిమాణం(pthread_t));
+    కొరకు(i = 0; i < వాదనలు.దారాలు; ++i){
+        వాదనలు.d = buffers + i;
+        వాదనలు.n = (i+1) * మొత్తం/వాదనలు.దారాలు - i * మొత్తం/వాదనలు.దారాలు;
+        దారాలు[i] = ఎక్కించు_దత్తాంశం_లోపల_thread(వాదనలు);
     }
-    for(i = 0; i < args.threads; ++i){
-        pthread_join(threads[i], 0);
+    కొరకు(i = 0; i < వాదనలు.దారాలు; ++i){
+        pthread_join(దారాలు[i], 0);
     }
-    *out = concat_datas(buffers, args.threads);
-    out->shallow = 0;
-    for(i = 0; i < args.threads; ++i){
+    *బహిర్గతం = concat_datas(buffers, వాదనలు.దారాలు);
+    బహిర్గతం->shallow = 0;
+    కొరకు(i = 0; i < వాదనలు.దారాలు; ++i){
         buffers[i].shallow = 1;
-        free_data(buffers[i]);
+        free_దత్తాంశం(buffers[i]);
     }
-    free(buffers);
-    free(threads);
-    return 0;
+    విడుదల(buffers);
+    విడుదల(దారాలు);
+    తిరిగి 0;
 }
 
-void load_data_blocking(load_args args)
+శూన్య ఎక్కించు_దత్తాంశం_blocking(ఎక్కించు_వాదనలు వాదనలు)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    load_thread(ptr);
+    నిర్మాణం ఎక్కించు_వాదనలు *ptr = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(నిర్మాణం ఎక్కించు_వాదనలు));
+    *ptr = వాదనలు;
+    ఎక్కించు_thread(ptr);
 }
 
-pthread_t load_data(load_args args)
+pthread_t ఎక్కించు_దత్తాంశం(ఎక్కించు_వాదనలు వాదనలు)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
-    *ptr = args;
-    if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
-    return thread;
+    నిర్మాణం ఎక్కించు_వాదనలు *ptr = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(నిర్మాణం ఎక్కించు_వాదనలు));
+    *ptr = వాదనలు;
+    ఒకవేళ(pthread_create(&thread, 0, ఎక్కించు_దారాలు, ptr)) error("Thread creation failed");
+    తిరిగి thread;
 }
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h)
+దత్తాంశం ఎక్కించు_దత్తాంశం_writing(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం బహిర్గతం_w, పూర్ణాంకం బహిర్గతం_h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    char **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    అక్షరం **replace_paths = కనుగొను_replace_paths(paths, n, ".png", "-label.png");
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = load_image_paths_gray(replace_paths, n, out_w, out_h);
-    if(m) free(paths);
-    int i;
-    for(i = 0; i < n; ++i) free(replace_paths[i]);
-    free(replace_paths);
-    return d;
+    d.X = ఎక్కించు_image_paths(paths, n, w, h);
+    d.y = ఎక్కించు_image_paths_బూడిద(replace_paths, n, బహిర్గతం_w, బహిర్గతం_h);
+    ఒకవేళ(m) విడుదల(paths);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i) విడుదల(replace_paths[i]);
+    విడుదల(replace_paths);
+    తిరిగి d;
 }
 
-data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int h)
+దత్తాంశం ఎక్కించు_దత్తాంశం_old(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, అక్షరం **labels, పూర్ణాంకం k, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    d.X = load_image_paths(paths, n, w, h);
-    d.y = load_labels_paths(paths, n, labels, k, 0);
-    if(m) free(paths);
-    return d;
+    d.X = ఎక్కించు_image_paths(paths, n, w, h);
+    d.y = ఎక్కించు_labels_paths(paths, n, labels, k, 0);
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
 /*
@@ -1226,327 +1226,327 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    }
  */
 
-data load_data_super(char **paths, int n, int m, int w, int h, int scale)
+దత్తాంశం ఎక్కించు_దత్తాంశం_super(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం scale)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
     d.shallow = 0;
 
-    int i;
-    d.X.rows = n;
-    d.X.vals = calloc(n, sizeof(float*));
-    d.X.cols = w*h*3;
+    పూర్ణాంకం i;
+    d.X.అడ్డువరుసలు = n;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(దశాంశం*));
+    d.X.నిలువుల_సంఖ్య = w*h*3;
 
-    d.y.rows = n;
-    d.y.vals = calloc(n, sizeof(float*));
-    d.y.cols = w*scale * h*scale * 3;
+    d.y.అడ్డువరుసలు = n;
+    d.y.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(దశాంశం*));
+    d.y.నిలువుల_సంఖ్య = w*scale * h*scale * 3;
 
-    for(i = 0; i < n; ++i){
-        image im = load_image_color(paths[i], 0, 0);
+    కొరకు(i = 0; i < n; ++i){
+        image im = ఎక్కించు_image_color(paths[i], 0, 0);
         image crop = random_crop_image(im, w*scale, h*scale);
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        పూర్ణాంకం flip = rand()%2;
+        ఒకవేళ (flip) flip_image(crop);
         image resize = resize_image(crop, w, h);
-        d.X.vals[i] = resize.data;
-        d.y.vals[i] = crop.data;
+        d.X.vals[i] = resize.దత్తాంశం;
+        d.y.vals[i] = crop.దత్తాంశం;
         free_image(im);
     }
 
-    if(m) free(paths);
-    return d;
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-data load_data_regression(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+దత్తాంశం ఎక్కించు_దత్తాంశం_regression(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం k, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
-    d.y = load_regression_labels_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    d.X = ఎక్కించు_image_augment_paths(paths, n, min, max, కొలత, angle, aspect, hue, saturation, exposure, 0);
+    d.y = ఎక్కించు_regression_labels_paths(paths, n, k);
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-data select_data(data *orig, int *inds)
+దత్తాంశం select_దత్తాంశం(దత్తాంశం *orig, పూర్ణాంకం *inds)
 {
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 1;
     d.w = orig[0].w;
     d.h = orig[0].h;
 
-    d.X.rows = orig[0].X.rows;
-    d.y.rows = orig[0].X.rows;
+    d.X.అడ్డువరుసలు = orig[0].X.అడ్డువరుసలు;
+    d.y.అడ్డువరుసలు = orig[0].X.అడ్డువరుసలు;
 
-    d.X.cols = orig[0].X.cols;
-    d.y.cols = orig[0].y.cols;
+    d.X.నిలువుల_సంఖ్య = orig[0].X.నిలువుల_సంఖ్య;
+    d.y.నిలువుల_సంఖ్య = orig[0].y.నిలువుల_సంఖ్య;
 
-    d.X.vals = calloc(orig[0].X.rows, sizeof(float *));
-    d.y.vals = calloc(orig[0].y.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(orig[0].X.అడ్డువరుసలు, పరిమాణం(దశాంశం *));
+    d.y.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(orig[0].y.అడ్డువరుసలు, పరిమాణం(దశాంశం *));
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < d.X.అడ్డువరుసలు; ++i){
         d.X.vals[i] = orig[inds[i]].X.vals[i];
         d.y.vals[i] = orig[inds[i]].y.vals[i];
     }
-    return d;
+    తిరిగి d;
 }
 
-data *tile_data(data orig, int divs, int size)
+దత్తాంశం *tile_దత్తాంశం(దత్తాంశం orig, పూర్ణాంకం divs, పూర్ణాంకం కొలత)
 {
-    data *ds = calloc(divs*divs, sizeof(data));
-    int i, j;
-#pragma omp parallel for
-    for(i = 0; i < divs*divs; ++i){
-        data d;
+    దత్తాంశం *ds = సున్నా_జ్ఞాపకం_ఇవ్వు(divs*divs, పరిమాణం(దత్తాంశం));
+    పూర్ణాంకం i, j;
+#సూచన omp parallel కొరకు
+    కొరకు(i = 0; i < divs*divs; ++i){
+        దత్తాంశం d;
         d.shallow = 0;
-        d.w = orig.w/divs * size;
-        d.h = orig.h/divs * size;
-        d.X.rows = orig.X.rows;
-        d.X.cols = d.w*d.h*3;
-        d.X.vals = calloc(d.X.rows, sizeof(float*));
+        d.w = orig.w/divs * కొలత;
+        d.h = orig.h/divs * కొలత;
+        d.X.అడ్డువరుసలు = orig.X.అడ్డువరుసలు;
+        d.X.నిలువుల_సంఖ్య = d.w*d.h*3;
+        d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
 
-        d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-        for(j = 0; j < orig.X.rows; ++j){
-            int x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
-            int y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
-            image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[j]);
-            d.X.vals[j] = crop_image(im, x, y, d.w, d.h).data;
+        d.y = copy_మాతృక(orig.y);
+#సూచన omp parallel కొరకు
+        కొరకు(j = 0; j < orig.X.అడ్డువరుసలు; ++j){
+            పూర్ణాంకం x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
+            పూర్ణాంకం y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
+            image im = float_గమ్యం_image(orig.w, orig.h, 3, orig.X.vals[j]);
+            d.X.vals[j] = crop_image(im, x, y, d.w, d.h).దత్తాంశం;
         }
         ds[i] = d;
     }
-    return ds;
+    తిరిగి ds;
 }
 
-data resize_data(data orig, int w, int h)
+దత్తాంశం resize_దత్తాంశం(దత్తాంశం orig, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
-    int i;
-    d.X.rows = orig.X.rows;
-    d.X.cols = w*h*3;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    పూర్ణాంకం i;
+    d.X.అడ్డువరుసలు = orig.X.అడ్డువరుసలు;
+    d.X.నిలువుల_సంఖ్య = w*h*3;
+    d.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(d.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
 
-    d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-    for(i = 0; i < orig.X.rows; ++i){
-        image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[i]);
-        d.X.vals[i] = resize_image(im, w, h).data;
+    d.y = copy_మాతృక(orig.y);
+#సూచన omp parallel కొరకు
+    కొరకు(i = 0; i < orig.X.అడ్డువరుసలు; ++i){
+        image im = float_గమ్యం_image(orig.w, orig.h, 3, orig.X.vals[i]);
+        d.X.vals[i] = resize_image(im, w, h).దత్తాంశం;
     }
-    return d;
+    తిరిగి d;
 }
 
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+దత్తాంశం ఎక్కించు_దత్తాంశం_augment(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, అక్షరం **labels, పూర్ణాంకం k, వృక్షం *hierarchy, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure, పూర్ణాంకం center)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    d.w=size;
-    d.h=size;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, center);
-    d.y = load_labels_paths(paths, n, labels, k, hierarchy);
-    if(m) free(paths);
-    return d;
+    d.w=కొలత;
+    d.h=కొలత;
+    d.X = ఎక్కించు_image_augment_paths(paths, n, min, max, కొలత, angle, aspect, hue, saturation, exposure, center);
+    d.y = ఎక్కించు_labels_paths(paths, n, labels, k, hierarchy);
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+దత్తాంశం ఎక్కించు_దత్తాంశం_ట్యాగ్(అక్షరం **paths, పూర్ణాంకం n, పూర్ణాంకం m, పూర్ణాంకం k, పూర్ణాంకం min, పూర్ణాంకం max, పూర్ణాంకం కొలత, దశాంశం angle, దశాంశం aspect, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    data d = {0};
-    d.w = size;
-    d.h = size;
+    ఒకవేళ(m) paths = get_random_paths(paths, n, m);
+    దత్తాంశం d = {0};
+    d.w = కొలత;
+    d.h = కొలత;
     d.shallow = 0;
-    d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
-    d.y = load_tags_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    d.X = ఎక్కించు_image_augment_paths(paths, n, min, max, కొలత, angle, aspect, hue, saturation, exposure, 0);
+    d.y = ఎక్కించు_ట్యాగులు_paths(paths, n, k);
+    ఒకవేళ(m) విడుదల(paths);
+    తిరిగి d;
 }
 
-matrix concat_matrix(matrix m1, matrix m2)
+మాతృక concat_మాతృక(మాతృక m1, మాతృక m2)
 {
-    int i, count = 0;
-    matrix m;
-    m.cols = m1.cols;
-    m.rows = m1.rows+m2.rows;
-    m.vals = calloc(m1.rows + m2.rows, sizeof(float*));
-    for(i = 0; i < m1.rows; ++i){
-        m.vals[count++] = m1.vals[i];
+    పూర్ణాంకం i, లెక్క = 0;
+    మాతృక m;
+    m.నిలువుల_సంఖ్య = m1.నిలువుల_సంఖ్య;
+    m.అడ్డువరుసలు = m1.అడ్డువరుసలు+m2.అడ్డువరుసలు;
+    m.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(m1.అడ్డువరుసలు + m2.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    కొరకు(i = 0; i < m1.అడ్డువరుసలు; ++i){
+        m.vals[లెక్క++] = m1.vals[i];
     }
-    for(i = 0; i < m2.rows; ++i){
-        m.vals[count++] = m2.vals[i];
+    కొరకు(i = 0; i < m2.అడ్డువరుసలు; ++i){
+        m.vals[లెక్క++] = m2.vals[i];
     }
-    return m;
+    తిరిగి m;
 }
 
-data concat_data(data d1, data d2)
+దత్తాంశం concat_దత్తాంశం(దత్తాంశం d1, దత్తాంశం d2)
 {
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 1;
-    d.X = concat_matrix(d1.X, d2.X);
-    d.y = concat_matrix(d1.y, d2.y);
+    d.X = concat_మాతృక(d1.X, d2.X);
+    d.y = concat_మాతృక(d1.y, d2.y);
     d.w = d1.w;
     d.h = d1.h;
-    return d;
+    తిరిగి d;
 }
 
-data concat_datas(data *d, int n)
+దత్తాంశం concat_datas(దత్తాంశం *d, పూర్ణాంకం n)
 {
-    int i;
-    data out = {0};
-    for(i = 0; i < n; ++i){
-        data new = concat_data(d[i], out);
-        free_data(out);
-        out = new;
+    పూర్ణాంకం i;
+    దత్తాంశం బహిర్గతం = {0};
+    కొరకు(i = 0; i < n; ++i){
+        దత్తాంశం new = concat_దత్తాంశం(d[i], బహిర్గతం);
+        free_దత్తాంశం(బహిర్గతం);
+        బహిర్గతం = new;
     }
-    return out;
+    తిరిగి బహిర్గతం;
 }
 
-data load_categorical_data_csv(char *filename, int target, int k)
+దత్తాంశం ఎక్కించు_categorical_దత్తాంశం_csv(అక్షరం *filename, పూర్ణాంకం లక్ష్యం, పూర్ణాంకం k)
 {
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    matrix X = csv_to_matrix(filename);
-    float *truth_1d = pop_column(&X, target);
-    float **truth = one_hot_encode(truth_1d, X.rows, k);
-    matrix y;
-    y.rows = X.rows;
-    y.cols = k;
+    మాతృక X = csv_గమ్యం_మాతృక(filename);
+    దశాంశం *truth_1d = తీయి_స్తంభం(&X, లక్ష్యం);
+    దశాంశం **truth = one_hot_encode(truth_1d, X.అడ్డువరుసలు, k);
+    మాతృక y;
+    y.అడ్డువరుసలు = X.అడ్డువరుసలు;
+    y.నిలువుల_సంఖ్య = k;
     y.vals = truth;
     d.X = X;
     d.y = y;
-    free(truth_1d);
-    return d;
+    విడుదల(truth_1d);
+    తిరిగి d;
 }
 
-data load_cifar10_data(char *filename)
+దత్తాంశం ఎక్కించు_cifar10_దత్తాంశం(అక్షరం *filename)
 {
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    long i,j;
-    matrix X = make_matrix(10000, 3072);
-    matrix y = make_matrix(10000, 10);
+    దీర్ఘ i,j;
+    మాతృక X = make_మాతృక(10000, 3072);
+    మాతృక y = make_మాతృక(10000, 10);
     d.X = X;
     d.y = y;
 
     FILE *fp = fopen(filename, "rb");
-    if(!fp) file_error(filename);
-    for(i = 0; i < 10000; ++i){
-        unsigned char bytes[3073];
-        fread(bytes, 1, 3073, fp);
-        int class = bytes[0];
+    ఒకవేళ(!fp) file_error(filename);
+    కొరకు(i = 0; i < 10000; ++i){
+        గుర్తులేని అక్షరం బైట్లు[3073];
+        fread(బైట్లు, 1, 3073, fp);
+        పూర్ణాంకం class = బైట్లు[0];
         y.vals[i][class] = 1;
-        for(j = 0; j < X.cols; ++j){
-            X.vals[i][j] = (double)bytes[j+1];
+        కొరకు(j = 0; j < X.నిలువుల_సంఖ్య; ++j){
+            X.vals[i][j] = (ద్విగుణ)బైట్లు[j+1];
         }
     }
-    scale_data_rows(d, 1./255);
+    scale_దత్తాంశం_అడ్డువరుసలు(d, 1./255);
     //normalize_data_rows(d);
     fclose(fp);
-    return d;
+    తిరిగి d;
 }
 
-void get_random_batch(data d, int n, float *X, float *y)
+శూన్య get_random_batch(దత్తాంశం d, పూర్ణాంకం n, దశాంశం *X, దశాంశం *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = rand()%d.X.rows;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    పూర్ణాంకం j;
+    కొరకు(j = 0; j < n; ++j){
+        పూర్ణాంకం సూచీ = rand()%d.X.అడ్డువరుసలు;
+        జ్ఞాపకం_నకలు(X+j*d.X.నిలువుల_సంఖ్య, d.X.vals[సూచీ], d.X.నిలువుల_సంఖ్య*పరిమాణం(దశాంశం));
+        జ్ఞాపకం_నకలు(y+j*d.y.నిలువుల_సంఖ్య, d.y.vals[సూచీ], d.y.నిలువుల_సంఖ్య*పరిమాణం(దశాంశం));
     }
 }
 
-void get_next_batch(data d, int n, int offset, float *X, float *y)
+శూన్య get_తదుపరి_batch(దత్తాంశం d, పూర్ణాంకం n, పూర్ణాంకం స్థానభ్రంశం, దశాంశం *X, దశాంశం *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = offset + j;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        if(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    పూర్ణాంకం j;
+    కొరకు(j = 0; j < n; ++j){
+        పూర్ణాంకం సూచీ = స్థానభ్రంశం + j;
+        జ్ఞాపకం_నకలు(X+j*d.X.నిలువుల_సంఖ్య, d.X.vals[సూచీ], d.X.నిలువుల_సంఖ్య*పరిమాణం(దశాంశం));
+        ఒకవేళ(y) జ్ఞాపకం_నకలు(y+j*d.y.నిలువుల_సంఖ్య, d.y.vals[సూచీ], d.y.నిలువుల_సంఖ్య*పరిమాణం(దశాంశం));
     }
 }
 
-void smooth_data(data d)
+శూన్య smooth_దత్తాంశం(దత్తాంశం d)
 {
-    int i, j;
-    float scale = 1. / d.y.cols;
-    float eps = .1;
-    for(i = 0; i < d.y.rows; ++i){
-        for(j = 0; j < d.y.cols; ++j){
+    పూర్ణాంకం i, j;
+    దశాంశం scale = 1. / d.y.నిలువుల_సంఖ్య;
+    దశాంశం eps = .1;
+    కొరకు(i = 0; i < d.y.అడ్డువరుసలు; ++i){
+        కొరకు(j = 0; j < d.y.నిలువుల_సంఖ్య; ++j){
             d.y.vals[i][j] = eps * scale + (1-eps) * d.y.vals[i][j];
         }
     }
 }
 
-data load_all_cifar10()
+దత్తాంశం ఎక్కించు_all_cifar10()
 {
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 0;
-    int i,j,b;
-    matrix X = make_matrix(50000, 3072);
-    matrix y = make_matrix(50000, 10);
+    పూర్ణాంకం i,j,b;
+    మాతృక X = make_మాతృక(50000, 3072);
+    మాతృక y = make_మాతృక(50000, 10);
     d.X = X;
     d.y = y;
 
 
-    for(b = 0; b < 5; ++b){
-        char buff[256];
+    కొరకు(b = 0; b < 5; ++b){
+        అక్షరం buff[256];
         sprintf(buff, "data/cifar/cifar-10-batches-bin/data_batch_%d.bin", b+1);
         FILE *fp = fopen(buff, "rb");
-        if(!fp) file_error(buff);
-        for(i = 0; i < 10000; ++i){
-            unsigned char bytes[3073];
-            fread(bytes, 1, 3073, fp);
-            int class = bytes[0];
+        ఒకవేళ(!fp) file_error(buff);
+        కొరకు(i = 0; i < 10000; ++i){
+            గుర్తులేని అక్షరం బైట్లు[3073];
+            fread(బైట్లు, 1, 3073, fp);
+            పూర్ణాంకం class = బైట్లు[0];
             y.vals[i+b*10000][class] = 1;
-            for(j = 0; j < X.cols; ++j){
-                X.vals[i+b*10000][j] = (double)bytes[j+1];
+            కొరకు(j = 0; j < X.నిలువుల_సంఖ్య; ++j){
+                X.vals[i+b*10000][j] = (ద్విగుణ)బైట్లు[j+1];
             }
         }
         fclose(fp);
     }
     //normalize_data_rows(d);
-    scale_data_rows(d, 1./255);
-    smooth_data(d);
-    return d;
+    scale_దత్తాంశం_అడ్డువరుసలు(d, 1./255);
+    smooth_దత్తాంశం(d);
+    తిరిగి d;
 }
 
-data load_go(char *filename)
+దత్తాంశం ఎక్కించు_go(అక్షరం *filename)
 {
     FILE *fp = fopen(filename, "rb");
-    matrix X = make_matrix(3363059, 361);
-    matrix y = make_matrix(3363059, 361);
-    int row, col;
+    మాతృక X = make_మాతృక(3363059, 361);
+    మాతృక y = make_మాతృక(3363059, 361);
+    పూర్ణాంకం అడ్డువరుస, నిలువు;
 
-    if(!fp) file_error(filename);
-    char *label;
-    int count = 0;
-    while((label = fgetl(fp))){
-        int i;
-        if(count == X.rows){
-            X = resize_matrix(X, count*2);
-            y = resize_matrix(y, count*2);
+    ఒకవేళ(!fp) file_error(filename);
+    అక్షరం *label;
+    పూర్ణాంకం లెక్క = 0;
+    అయితే((label = fgetl(fp))){
+        పూర్ణాంకం i;
+        ఒకవేళ(లెక్క == X.అడ్డువరుసలు){
+            X = resize_మాతృక(X, లెక్క*2);
+            y = resize_మాతృక(y, లెక్క*2);
         }
-        sscanf(label, "%d %d", &row, &col);
-        char *board = fgetl(fp);
+        అక్షరశ్రేణి_చదువు(label, "%d %d", &అడ్డువరుస, &నిలువు);
+        అక్షరం *board = fgetl(fp);
 
-        int index = row*19 + col;
-        y.vals[count][index] = 1;
+        పూర్ణాంకం సూచీ = అడ్డువరుస*19 + నిలువు;
+        y.vals[లెక్క][సూచీ] = 1;
 
-        for(i = 0; i < 19*19; ++i){
-            float val = 0;
-            if(board[i] == '1') val = 1;
-            else if(board[i] == '2') val = -1;
-            X.vals[count][i] = val;
+        కొరకు(i = 0; i < 19*19; ++i){
+            దశాంశం val = 0;
+            ఒకవేళ(board[i] == '1') val = 1;
+            లేకపోతే ఒకవేళ(board[i] == '2') val = -1;
+            X.vals[లెక్క][i] = val;
         }
-        ++count;
-        free(label);
-        free(board);
+        ++లెక్క;
+        విడుదల(label);
+        విడుదల(board);
     }
-    X = resize_matrix(X, count);
-    y = resize_matrix(y, count);
+    X = resize_మాతృక(X, లెక్క);
+    y = resize_మాతృక(y, లెక్క);
 
-    data d = {0};
+    దత్తాంశం d = {0};
     d.shallow = 0;
     d.X = X;
     d.y = y;
@@ -1554,132 +1554,132 @@ data load_go(char *filename)
 
     fclose(fp);
 
-    return d;
+    తిరిగి d;
 }
 
 
-void randomize_data(data d)
+శూన్య randomize_దత్తాంశం(దత్తాంశం d)
 {
-    int i;
-    for(i = d.X.rows-1; i > 0; --i){
-        int index = rand()%i;
-        float *swap = d.X.vals[index];
-        d.X.vals[index] = d.X.vals[i];
-        d.X.vals[i] = swap;
+    పూర్ణాంకం i;
+    కొరకు(i = d.X.అడ్డువరుసలు-1; i > 0; --i){
+        పూర్ణాంకం సూచీ = rand()%i;
+        దశాంశం *మార్పిడి = d.X.vals[సూచీ];
+        d.X.vals[సూచీ] = d.X.vals[i];
+        d.X.vals[i] = మార్పిడి;
 
-        swap = d.y.vals[index];
-        d.y.vals[index] = d.y.vals[i];
-        d.y.vals[i] = swap;
+        మార్పిడి = d.y.vals[సూచీ];
+        d.y.vals[సూచీ] = d.y.vals[i];
+        d.y.vals[i] = మార్పిడి;
     }
 }
 
-void scale_data_rows(data d, float s)
+శూన్య scale_దత్తాంశం_అడ్డువరుసలు(దత్తాంశం d, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        scale_array(d.X.vals[i], d.X.cols, s);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < d.X.అడ్డువరుసలు; ++i){
+        scale_array(d.X.vals[i], d.X.నిలువుల_సంఖ్య, s);
     }
 }
 
-void translate_data_rows(data d, float s)
+శూన్య translate_దత్తాంశం_అడ్డువరుసలు(దత్తాంశం d, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        translate_array(d.X.vals[i], d.X.cols, s);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < d.X.అడ్డువరుసలు; ++i){
+        translate_array(d.X.vals[i], d.X.నిలువుల_సంఖ్య, s);
     }
 }
 
-data copy_data(data d)
+దత్తాంశం copy_దత్తాంశం(దత్తాంశం d)
 {
-    data c = {0};
+    దత్తాంశం c = {0};
     c.w = d.w;
     c.h = d.h;
     c.shallow = 0;
-    c.num_boxes = d.num_boxes;
+    c.అంకె_boxes = d.అంకె_boxes;
     c.boxes = d.boxes;
-    c.X = copy_matrix(d.X);
-    c.y = copy_matrix(d.y);
-    return c;
+    c.X = copy_మాతృక(d.X);
+    c.y = copy_మాతృక(d.y);
+    తిరిగి c;
 }
 
-void normalize_data_rows(data d)
+శూన్య normalize_దత్తాంశం_అడ్డువరుసలు(దత్తాంశం d)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
-        normalize_array(d.X.vals[i], d.X.cols);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < d.X.అడ్డువరుసలు; ++i){
+        normalize_array(d.X.vals[i], d.X.నిలువుల_సంఖ్య);
     }
 }
 
-data get_data_part(data d, int part, int total)
+దత్తాంశం get_దత్తాంశం_part(దత్తాంశం d, పూర్ణాంకం part, పూర్ణాంకం మొత్తం)
 {
-    data p = {0};
+    దత్తాంశం p = {0};
     p.shallow = 1;
-    p.X.rows = d.X.rows * (part + 1) / total - d.X.rows * part / total;
-    p.y.rows = d.y.rows * (part + 1) / total - d.y.rows * part / total;
-    p.X.cols = d.X.cols;
-    p.y.cols = d.y.cols;
-    p.X.vals = d.X.vals + d.X.rows * part / total;
-    p.y.vals = d.y.vals + d.y.rows * part / total;
-    return p;
+    p.X.అడ్డువరుసలు = d.X.అడ్డువరుసలు * (part + 1) / మొత్తం - d.X.అడ్డువరుసలు * part / మొత్తం;
+    p.y.అడ్డువరుసలు = d.y.అడ్డువరుసలు * (part + 1) / మొత్తం - d.y.అడ్డువరుసలు * part / మొత్తం;
+    p.X.నిలువుల_సంఖ్య = d.X.నిలువుల_సంఖ్య;
+    p.y.నిలువుల_సంఖ్య = d.y.నిలువుల_సంఖ్య;
+    p.X.vals = d.X.vals + d.X.అడ్డువరుసలు * part / మొత్తం;
+    p.y.vals = d.y.vals + d.y.అడ్డువరుసలు * part / మొత్తం;
+    తిరిగి p;
 }
 
-data get_random_data(data d, int num)
+దత్తాంశం get_random_దత్తాంశం(దత్తాంశం d, పూర్ణాంకం అంకె)
 {
-    data r = {0};
+    దత్తాంశం r = {0};
     r.shallow = 1;
 
-    r.X.rows = num;
-    r.y.rows = num;
+    r.X.అడ్డువరుసలు = అంకె;
+    r.y.అడ్డువరుసలు = అంకె;
 
-    r.X.cols = d.X.cols;
-    r.y.cols = d.y.cols;
+    r.X.నిలువుల_సంఖ్య = d.X.నిలువుల_సంఖ్య;
+    r.y.నిలువుల_సంఖ్య = d.y.నిలువుల_సంఖ్య;
 
-    r.X.vals = calloc(num, sizeof(float *));
-    r.y.vals = calloc(num, sizeof(float *));
+    r.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(అంకె, పరిమాణం(దశాంశం *));
+    r.y.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(అంకె, పరిమాణం(దశాంశం *));
 
-    int i;
-    for(i = 0; i < num; ++i){
-        int index = rand()%d.X.rows;
-        r.X.vals[i] = d.X.vals[index];
-        r.y.vals[i] = d.y.vals[index];
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < అంకె; ++i){
+        పూర్ణాంకం సూచీ = rand()%d.X.అడ్డువరుసలు;
+        r.X.vals[i] = d.X.vals[సూచీ];
+        r.y.vals[i] = d.y.vals[సూచీ];
     }
-    return r;
+    తిరిగి r;
 }
 
-data *split_data(data d, int part, int total)
+దత్తాంశం *విభజించు_దత్తాంశం(దత్తాంశం d, పూర్ణాంకం part, పూర్ణాంకం మొత్తం)
 {
-    data *split = calloc(2, sizeof(data));
-    int i;
-    int start = part*d.X.rows/total;
-    int end = (part+1)*d.X.rows/total;
-    data train;
-    data test;
+    దత్తాంశం *విభజించు = సున్నా_జ్ఞాపకం_ఇవ్వు(2, పరిమాణం(దత్తాంశం));
+    పూర్ణాంకం i;
+    పూర్ణాంకం ప్రారంభం = part*d.X.అడ్డువరుసలు/మొత్తం;
+    పూర్ణాంకం చివర = (part+1)*d.X.అడ్డువరుసలు/మొత్తం;
+    దత్తాంశం train;
+    దత్తాంశం test;
     train.shallow = test.shallow = 1;
 
-    test.X.rows = test.y.rows = end-start;
-    train.X.rows = train.y.rows = d.X.rows - (end-start);
-    train.X.cols = test.X.cols = d.X.cols;
-    train.y.cols = test.y.cols = d.y.cols;
+    test.X.అడ్డువరుసలు = test.y.అడ్డువరుసలు = చివర-ప్రారంభం;
+    train.X.అడ్డువరుసలు = train.y.అడ్డువరుసలు = d.X.అడ్డువరుసలు - (చివర-ప్రారంభం);
+    train.X.నిలువుల_సంఖ్య = test.X.నిలువుల_సంఖ్య = d.X.నిలువుల_సంఖ్య;
+    train.y.నిలువుల_సంఖ్య = test.y.నిలువుల_సంఖ్య = d.y.నిలువుల_సంఖ్య;
 
-    train.X.vals = calloc(train.X.rows, sizeof(float*));
-    test.X.vals = calloc(test.X.rows, sizeof(float*));
-    train.y.vals = calloc(train.y.rows, sizeof(float*));
-    test.y.vals = calloc(test.y.rows, sizeof(float*));
+    train.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(train.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    test.X.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(test.X.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    train.y.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(train.y.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
+    test.y.vals = సున్నా_జ్ఞాపకం_ఇవ్వు(test.y.అడ్డువరుసలు, పరిమాణం(దశాంశం*));
 
-    for(i = 0; i < start; ++i){
+    కొరకు(i = 0; i < ప్రారంభం; ++i){
         train.X.vals[i] = d.X.vals[i];
         train.y.vals[i] = d.y.vals[i];
     }
-    for(i = start; i < end; ++i){
-        test.X.vals[i-start] = d.X.vals[i];
-        test.y.vals[i-start] = d.y.vals[i];
+    కొరకు(i = ప్రారంభం; i < చివర; ++i){
+        test.X.vals[i-ప్రారంభం] = d.X.vals[i];
+        test.y.vals[i-ప్రారంభం] = d.y.vals[i];
     }
-    for(i = end; i < d.X.rows; ++i){
-        train.X.vals[i-(end-start)] = d.X.vals[i];
-        train.y.vals[i-(end-start)] = d.y.vals[i];
+    కొరకు(i = చివర; i < d.X.అడ్డువరుసలు; ++i){
+        train.X.vals[i-(చివర-ప్రారంభం)] = d.X.vals[i];
+        train.y.vals[i-(చివర-ప్రారంభం)] = d.y.vals[i];
     }
-    split[0] = train;
-    split[1] = test;
-    return split;
+    విభజించు[0] = train;
+    విభజించు[1] = test;
+    తిరిగి విభజించు;
 }
 

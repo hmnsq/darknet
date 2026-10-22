@@ -1,20 +1,20 @@
-#ifndef REORG_LAYER_H
-#define REORG_LAYER_H
+#నిర్వచితం_కాకపోతే REORG_LAYER_H
+#నిర్వచించు REORG_LAYER_H
 
-#include "image.h"
-#include "cuda.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra);
-void resize_reorg_layer(layer *l, int w, int h);
-void forward_reorg_layer(const layer l, network net);
-void backward_reorg_layer(const layer l, network net);
+layer make_reorg_layer(పూర్ణాంకం batch, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం stride, పూర్ణాంకం తిరగేయి, పూర్ణాంకం flatten, పూర్ణాంకం extra);
+శూన్య resize_reorg_layer(layer *l, పూర్ణాంకం w, పూర్ణాంకం h);
+శూన్య forward_reorg_layer(స్థిరరాశి layer l, జాలం net);
+శూన్య backward_reorg_layer(స్థిరరాశి layer l, జాలం net);
 
-#ifdef GPU
-void forward_reorg_layer_gpu(layer l, network net);
-void backward_reorg_layer_gpu(layer l, network net);
-#endif
+#నిర్వచితమైతే GPU
+శూన్య forward_reorg_layer_gpu(layer l, జాలం net);
+శూన్య backward_reorg_layer_gpu(layer l, జాలం net);
+#అయితే_ముగింపు
 
-#endif
+#అయితే_ముగింపు
 

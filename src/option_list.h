@@ -1,19 +1,19 @@
-#ifndef OPTION_LIST_H
-#define OPTION_LIST_H
-#include "list.h"
+#నిర్వచితం_కాకపోతే OPTION_LIST_H
+#నిర్వచించు OPTION_LIST_H
+#అన్తర్భావ "list.h"
 
-typedef struct{
-    char *key;
-    char *val;
-    int used;
+రకనిర్వచనం నిర్మాణం{
+    అక్షరం *కీలకం;
+    అక్షరం *val;
+    పూర్ణాంకం వాడిన;
 } kvp;
 
 
-int read_option(char *s, list *options);
-void option_insert(list *l, char *key, char *val);
-char *option_find(list *l, char *key);
-float option_find_float(list *l, char *key, float def);
-float option_find_float_quiet(list *l, char *key, float def);
-void option_unused(list *l);
+పూర్ణాంకం read_option(అక్షరం *s, list *options);
+శూన్య option_చొప్పించు(list *l, అక్షరం *కీలకం, అక్షరం *val);
+అక్షరం *option_కనుగొను(list *l, అక్షరం *కీలకం);
+దశాంశం option_కనుగొను_float(list *l, అక్షరం *కీలకం, దశాంశం def);
+దశాంశం option_కనుగొను_float_quiet(list *l, అక్షరం *కీలకం, దశాంశం def);
+శూన్య option_వాడని(list *l);
 
-#endif
+#అయితే_ముగింపు

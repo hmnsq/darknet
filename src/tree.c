@@ -1,139 +1,139 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tree.h"
-#include "utils.h"
-#include "data.h"
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ "tree.h"
+#అన్తర్భావ "utils.h"
+#అన్తర్భావ "data.h"
 
-void change_leaves(tree *t, char *leaf_list)
+శూన్య change_leaves(వృక్షం *t, అక్షరం *ఆకు_list)
 {
-    list *llist = get_paths(leaf_list);
-    char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
-        t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
-                t->leaf[i] = 1;
-                ++found;
-                break;
+    list *llist = get_paths(ఆకు_list);
+    అక్షరం **leaves = (అక్షరం **)list_గమ్యం_array(llist);
+    పూర్ణాంకం n = llist->కొలత;
+    పూర్ణాంకం i,j;
+    పూర్ణాంకం దొరికింది = 0;
+    కొరకు(i = 0; i < t->n; ++i){
+        t->ఆకు[i] = 0;
+        కొరకు(j = 0; j < n; ++j){
+            ఒకవేళ (0==strcmp(t->name[i], leaves[j])){
+                t->ఆకు[i] = 1;
+                ++దొరికింది;
+                ఆపు;
             }
         }
     }
-    fprintf(stderr, "Found %d leaves.\n", found);
+    fprintf(stderr, "Found %d leaves.\n", దొరికింది);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+దశాంశం get_hierarchy_probability(దశాంశం *x, వృక్షం *hier, పూర్ణాంకం c, పూర్ణాంకం stride)
 {
-    float p = 1;
-    while(c >= 0){
+    దశాంశం p = 1;
+    అయితే(c >= 0){
         p = p * x[c*stride];
-        c = hier->parent[c];
+        c = hier->మాతృ[c];
     }
-    return p;
+    తిరిగి p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+శూన్య hierarchy_predictions(దశాంశం *predictions, పూర్ణాంకం n, వృక్షం *hier, పూర్ణాంకం only_leaves, పూర్ణాంకం stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
-            predictions[j*stride] *= predictions[parent*stride]; 
+    పూర్ణాంకం j;
+    కొరకు(j = 0; j < n; ++j){
+        పూర్ణాంకం మాతృ = hier->మాతృ[j];
+        ఒకవేళ(మాతృ >= 0){
+            predictions[j*stride] *= predictions[మాతృ*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    ఒకవేళ(only_leaves){
+        కొరకు(j = 0; j < n; ++j){
+            ఒకవేళ(!hier->ఆకు[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+పూర్ణాంకం hierarchy_శిఖరం_prediction(దశాంశం *predictions, వృక్షం *hier, దశాంశం thresh, పూర్ణాంకం stride)
 {
-    float p = 1;
-    int group = 0;
-    int i;
-    while(1){
-        float max = 0;
-        int max_i = 0;
+    దశాంశం p = 1;
+    పూర్ణాంకం సమూహం = 0;
+    పూర్ణాంకం i;
+    అయితే(1){
+        దశాంశం max = 0;
+        పూర్ణాంకం max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
-            float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
-                max_i = index;
+        కొరకు(i = 0; i < hier->సమూహం_కొలత[సమూహం]; ++i){
+            పూర్ణాంకం సూచీ = i + hier->సమూహం_స్థానభ్రంశం[సమూహం];
+            దశాంశం val = predictions[(i + hier->సమూహం_స్థానభ్రంశం[సమూహం])*stride];
+            ఒకవేళ(val > max){
+                max_i = సూచీ;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        ఒకవేళ(p*max > thresh){
             p = p*max;
-            group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            సమూహం = hier->బిడ్డ[max_i];
+            ఒకవేళ(hier->బిడ్డ[max_i] < 0) తిరిగి max_i;
+        } లేకపోతే ఒకవేళ (సమూహం == 0){
+            తిరిగి max_i;
+        } లేకపోతే {
+            తిరిగి hier->మాతృ[hier->సమూహం_స్థానభ్రంశం[సమూహం]];
         }
     }
-    return 0;
+    తిరిగి 0;
 }
 
-tree *read_tree(char *filename)
+వృక్షం *read_వృక్షం(అక్షరం *filename)
 {
-    tree t = {0};
+    వృక్షం t = {0};
     FILE *fp = fopen(filename, "r");
 
-    char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
-        char *id = calloc(256, sizeof(char));
-        int parent = -1;
-        sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
-        t.parent[n] = parent;
+    అక్షరం *పంక్తి;
+    పూర్ణాంకం చివరి_మాతృ = -1;
+    పూర్ణాంకం సమూహం_కొలత = 0;
+    పూర్ణాంకం groups = 0;
+    పూర్ణాంకం n = 0;
+    అయితే((పంక్తి=fgetl(fp)) != 0){
+        అక్షరం *id = సున్నా_జ్ఞాపకం_ఇవ్వు(256, పరిమాణం(అక్షరం));
+        పూర్ణాంకం మాతృ = -1;
+        అక్షరశ్రేణి_చదువు(పంక్తి, "%s %d", id, &మాతృ);
+        t.మాతృ = realloc(t.మాతృ, (n+1)*పరిమాణం(పూర్ణాంకం));
+        t.మాతృ[n] = మాతృ;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
-        t.child[n] = -1;
+        t.బిడ్డ = realloc(t.బిడ్డ, (n+1)*పరిమాణం(పూర్ణాంకం));
+        t.బిడ్డ[n] = -1;
 
-        t.name = realloc(t.name, (n+1)*sizeof(char *));
+        t.name = realloc(t.name, (n+1)*పరిమాణం(అక్షరం *));
         t.name[n] = id;
-        if(parent != last_parent){
+        ఒకవేళ(మాతృ != చివరి_మాతృ){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-            t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
-            t.group_size[groups - 1] = group_size;
-            group_size = 0;
-            last_parent = parent;
+            t.సమూహం_స్థానభ్రంశం = realloc(t.సమూహం_స్థానభ్రంశం, groups * పరిమాణం(పూర్ణాంకం));
+            t.సమూహం_స్థానభ్రంశం[groups - 1] = n - సమూహం_కొలత;
+            t.సమూహం_కొలత = realloc(t.సమూహం_కొలత, groups * పరిమాణం(పూర్ణాంకం));
+            t.సమూహం_కొలత[groups - 1] = సమూహం_కొలత;
+            సమూహం_కొలత = 0;
+            చివరి_మాతృ = మాతృ;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
-        t.group[n] = groups;
-        if (parent >= 0) {
-            t.child[parent] = groups;
+        t.సమూహం = realloc(t.సమూహం, (n+1)*పరిమాణం(పూర్ణాంకం));
+        t.సమూహం[n] = groups;
+        ఒకవేళ (మాతృ >= 0) {
+            t.బిడ్డ[మాతృ] = groups;
         }
         ++n;
-        ++group_size;
+        ++సమూహం_కొలత;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
-    t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
-    t.group_size[groups - 1] = group_size;
+    t.సమూహం_స్థానభ్రంశం = realloc(t.సమూహం_స్థానభ్రంశం, groups * పరిమాణం(పూర్ణాంకం));
+    t.సమూహం_స్థానభ్రంశం[groups - 1] = n - సమూహం_కొలత;
+    t.సమూహం_కొలత = realloc(t.సమూహం_కొలత, groups * పరిమాణం(పూర్ణాంకం));
+    t.సమూహం_కొలత[groups - 1] = సమూహం_కొలత;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.ఆకు = సున్నా_జ్ఞాపకం_ఇవ్వు(n, పరిమాణం(పూర్ణాంకం));
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i) t.ఆకు[i] = 1;
+    కొరకు(i = 0; i < n; ++i) ఒకవేళ(t.మాతృ[i] >= 0) t.ఆకు[t.మాతృ[i]] = 0;
 
     fclose(fp);
-    tree *tree_ptr = calloc(1, sizeof(tree));
-    *tree_ptr = t;
+    వృక్షం *వృక్షం_ptr = సున్నా_జ్ఞాపకం_ఇవ్వు(1, పరిమాణం(వృక్షం));
+    *వృక్షం_ptr = t;
     //error(0);
-    return tree_ptr;
+    తిరిగి వృక్షం_ptr;
 }

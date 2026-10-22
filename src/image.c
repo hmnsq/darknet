@@ -1,262 +1,262 @@
-#include "image.h"
-#include "utils.h"
-#include "blas.h"
-#include "cuda.h"
-#include <stdio.h>
-#include <math.h>
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "utils.h"
+#అన్తర్భావ "blas.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <math.h>
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#నిర్వచించు STB_IMAGE_IMPLEMENTATION
+#అన్తర్భావ "stb_image.h"
+#నిర్వచించు STB_IMAGE_WRITE_IMPLEMENTATION
+#అన్తర్భావ "stb_image_write.h"
 
-int windows = 0;
+పూర్ణాంకం windows = 0;
 
-float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
+దశాంశం colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
 
-float get_color(int c, int x, int max)
+దశాంశం get_color(పూర్ణాంకం c, పూర్ణాంకం x, పూర్ణాంకం max)
 {
-    float ratio = ((float)x/max)*5;
-    int i = floor(ratio);
-    int j = ceil(ratio);
-    ratio -= i;
-    float r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
+    దశాంశం నిష్పత్తి = ((దశాంశం)x/max)*5;
+    పూర్ణాంకం i = floor(నిష్పత్తి);
+    పూర్ణాంకం j = ceil(నిష్పత్తి);
+    నిష్పత్తి -= i;
+    దశాంశం r = (1-నిష్పత్తి) * colors[i][c] + నిష్పత్తి*colors[j][c];
     //printf("%f\n", r);
-    return r;
+    తిరిగి r;
 }
 
-image mask_to_rgb(image mask)
+image ముసుగు_గమ్యం_rgb(image ముసుగు)
 {
-    int n = mask.c;
-    image im = make_image(mask.w, mask.h, 3);
-    int i, j;
-    for(j = 0; j < n; ++j){
-        int offset = j*123457 % n;
-        float red = get_color(2,offset,n);
-        float green = get_color(1,offset,n);
-        float blue = get_color(0,offset,n);
-        for(i = 0; i < im.w*im.h; ++i){
-            im.data[i + 0*im.w*im.h] += mask.data[j*im.h*im.w + i]*red;
-            im.data[i + 1*im.w*im.h] += mask.data[j*im.h*im.w + i]*green;
-            im.data[i + 2*im.w*im.h] += mask.data[j*im.h*im.w + i]*blue;
+    పూర్ణాంకం n = ముసుగు.c;
+    image im = make_image(ముసుగు.w, ముసుగు.h, 3);
+    పూర్ణాంకం i, j;
+    కొరకు(j = 0; j < n; ++j){
+        పూర్ణాంకం స్థానభ్రంశం = j*123457 % n;
+        దశాంశం red = get_color(2,స్థానభ్రంశం,n);
+        దశాంశం green = get_color(1,స్థానభ్రంశం,n);
+        దశాంశం blue = get_color(0,స్థానభ్రంశం,n);
+        కొరకు(i = 0; i < im.w*im.h; ++i){
+            im.దత్తాంశం[i + 0*im.w*im.h] += ముసుగు.దత్తాంశం[j*im.h*im.w + i]*red;
+            im.దత్తాంశం[i + 1*im.w*im.h] += ముసుగు.దత్తాంశం[j*im.h*im.w + i]*green;
+            im.దత్తాంశం[i + 2*im.w*im.h] += ముసుగు.దత్తాంశం[j*im.h*im.w + i]*blue;
         }
     }
-    return im;
+    తిరిగి im;
 }
 
-static float get_pixel(image m, int x, int y, int c)
+స్థిర దశాంశం get_pixel(image m, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం c)
 {
-    assert(x < m.w && y < m.h && c < m.c);
-    return m.data[c*m.h*m.w + y*m.w + x];
+    ప్రతిజ్ఞా(x < m.w && y < m.h && c < m.c);
+    తిరిగి m.దత్తాంశం[c*m.h*m.w + y*m.w + x];
 }
-static float get_pixel_extend(image m, int x, int y, int c)
+స్థిర దశాంశం get_pixel_extend(image m, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం c)
 {
-    if(x < 0 || x >= m.w || y < 0 || y >= m.h) return 0;
+    ఒకవేళ(x < 0 || x >= m.w || y < 0 || y >= m.h) తిరిగి 0;
     /*
     if(x < 0) x = 0;
     if(x >= m.w) x = m.w-1;
     if(y < 0) y = 0;
     if(y >= m.h) y = m.h-1;
     */
-    if(c < 0 || c >= m.c) return 0;
-    return get_pixel(m, x, y, c);
+    ఒకవేళ(c < 0 || c >= m.c) తిరిగి 0;
+    తిరిగి get_pixel(m, x, y, c);
 }
-static void set_pixel(image m, int x, int y, int c, float val)
+స్థిర శూన్య సమితి_pixel(image m, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం c, దశాంశం val)
 {
-    if (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) return;
-    assert(x < m.w && y < m.h && c < m.c);
-    m.data[c*m.h*m.w + y*m.w + x] = val;
+    ఒకవేళ (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) తిరిగి;
+    ప్రతిజ్ఞా(x < m.w && y < m.h && c < m.c);
+    m.దత్తాంశం[c*m.h*m.w + y*m.w + x] = val;
 }
-static void add_pixel(image m, int x, int y, int c, float val)
+స్థిర శూన్య కూడు_pixel(image m, పూర్ణాంకం x, పూర్ణాంకం y, పూర్ణాంకం c, దశాంశం val)
 {
-    assert(x < m.w && y < m.h && c < m.c);
-    m.data[c*m.h*m.w + y*m.w + x] += val;
+    ప్రతిజ్ఞా(x < m.w && y < m.h && c < m.c);
+    m.దత్తాంశం[c*m.h*m.w + y*m.w + x] += val;
 }
 
-static float bilinear_interpolate(image im, float x, float y, int c)
+స్థిర దశాంశం bilinear_interpolate(image im, దశాంశం x, దశాంశం y, పూర్ణాంకం c)
 {
-    int ix = (int) floorf(x);
-    int iy = (int) floorf(y);
+    పూర్ణాంకం ix = (పూర్ణాంకం) floorf(x);
+    పూర్ణాంకం iy = (పూర్ణాంకం) floorf(y);
 
-    float dx = x - ix;
-    float dy = y - iy;
+    దశాంశం dx = x - ix;
+    దశాంశం dy = y - iy;
 
-    float val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
+    దశాంశం val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
         dy     * (1-dx) * get_pixel_extend(im, ix, iy+1, c) + 
         (1-dy) *   dx   * get_pixel_extend(im, ix+1, iy, c) +
         dy     *   dx   * get_pixel_extend(im, ix+1, iy+1, c);
-    return val;
+    తిరిగి val;
 }
 
 
-void composite_image(image source, image dest, int dx, int dy)
+శూన్య సంయుక్త_image(image ఆధారం, image dest, పూర్ణాంకం dx, పూర్ణాంకం dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x, y, k);
-                float val2 = get_pixel_extend(dest, dx+x, dy+y, k);
-                set_pixel(dest, dx+x, dy+y, k, val * val2);
+    పూర్ణాంకం x,y,k;
+    కొరకు(k = 0; k < ఆధారం.c; ++k){
+        కొరకు(y = 0; y < ఆధారం.h; ++y){
+            కొరకు(x = 0; x < ఆధారం.w; ++x){
+                దశాంశం val = get_pixel(ఆధారం, x, y, k);
+                దశాంశం val2 = get_pixel_extend(dest, dx+x, dy+y, k);
+                సమితి_pixel(dest, dx+x, dy+y, k, val * val2);
             }
         }
     }
 }
 
-image border_image(image a, int border)
+image border_image(image a, పూర్ణాంకం border)
 {
     image b = make_image(a.w + 2*border, a.h + 2*border, a.c);
-    int x,y,k;
-    for(k = 0; k < b.c; ++k){
-        for(y = 0; y < b.h; ++y){
-            for(x = 0; x < b.w; ++x){
-                float val = get_pixel_extend(a, x - border, y - border, k);
-                if(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
-                set_pixel(b, x, y, k, val);
+    పూర్ణాంకం x,y,k;
+    కొరకు(k = 0; k < b.c; ++k){
+        కొరకు(y = 0; y < b.h; ++y){
+            కొరకు(x = 0; x < b.w; ++x){
+                దశాంశం val = get_pixel_extend(a, x - border, y - border, k);
+                ఒకవేళ(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
+                సమితి_pixel(b, x, y, k, val);
             }
         }
     }
-    return b;
+    తిరిగి b;
 }
 
-image tile_images(image a, image b, int dx)
+image tile_images(image a, image b, పూర్ణాంకం dx)
 {
-    if(a.w == 0) return copy_image(b);
+    ఒకవేళ(a.w == 0) తిరిగి copy_image(b);
     image c = make_image(a.w + b.w + dx, (a.h > b.h) ? a.h : b.h, (a.c > b.c) ? a.c : b.c);
-    fill_cpu(c.w*c.h*c.c, 1, c.data, 1);
+    fill_cpu(c.w*c.h*c.c, 1, c.దత్తాంశం, 1);
     embed_image(a, c, 0, 0); 
-    composite_image(b, c, a.w + dx, 0);
-    return c;
+    సంయుక్త_image(b, c, a.w + dx, 0);
+    తిరిగి c;
 }
 
-image get_label(image **characters, char *string, int size)
+image get_label(image **characters, అక్షరం *string, పూర్ణాంకం కొలత)
 {
-    size = size/10;
-    if(size > 7) size = 7;
-    image label = make_empty_image(0,0,0);
-    while(*string){
-        image l = characters[size][(int)*string];
-        image n = tile_images(label, l, -size - 1 + (size+1)/2);
+    కొలత = కొలత/10;
+    ఒకవేళ(కొలత > 7) కొలత = 7;
+    image label = make_ఖాళీలు_image(0,0,0);
+    అయితే(*string){
+        image l = characters[కొలత][(పూర్ణాంకం)*string];
+        image n = tile_images(label, l, -కొలత - 1 + (కొలత+1)/2);
         free_image(label);
         label = n;
         ++string;
     }
     image b = border_image(label, label.h*.25);
     free_image(label);
-    return b;
+    తిరిగి b;
 }
 
-void draw_label(image a, int r, int c, image label, const float *rgb)
+శూన్య draw_label(image a, పూర్ణాంకం r, పూర్ణాంకం c, image label, స్థిరరాశి దశాంశం *rgb)
 {
-    int w = label.w;
-    int h = label.h;
-    if (r - h >= 0) r = r - h;
+    పూర్ణాంకం w = label.w;
+    పూర్ణాంకం h = label.h;
+    ఒకవేళ (r - h >= 0) r = r - h;
 
-    int i, j, k;
-    for(j = 0; j < h && j + r < a.h; ++j){
-        for(i = 0; i < w && i + c < a.w; ++i){
-            for(k = 0; k < label.c; ++k){
-                float val = get_pixel(label, i, j, k);
-                set_pixel(a, i+c, j+r, k, rgb[k] * val);
+    పూర్ణాంకం i, j, k;
+    కొరకు(j = 0; j < h && j + r < a.h; ++j){
+        కొరకు(i = 0; i < w && i + c < a.w; ++i){
+            కొరకు(k = 0; k < label.c; ++k){
+                దశాంశం val = get_pixel(label, i, j, k);
+                సమితి_pixel(a, i+c, j+r, k, rgb[k] * val);
             }
         }
     }
 }
 
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b)
+శూన్య draw_box(image a, పూర్ణాంకం x1, పూర్ణాంకం y1, పూర్ణాంకం x2, పూర్ణాంకం y2, దశాంశం r, దశాంశం g, దశాంశం b)
 {
     //normalize_image(a);
-    int i;
-    if(x1 < 0) x1 = 0;
-    if(x1 >= a.w) x1 = a.w-1;
-    if(x2 < 0) x2 = 0;
-    if(x2 >= a.w) x2 = a.w-1;
+    పూర్ణాంకం i;
+    ఒకవేళ(x1 < 0) x1 = 0;
+    ఒకవేళ(x1 >= a.w) x1 = a.w-1;
+    ఒకవేళ(x2 < 0) x2 = 0;
+    ఒకవేళ(x2 >= a.w) x2 = a.w-1;
 
-    if(y1 < 0) y1 = 0;
-    if(y1 >= a.h) y1 = a.h-1;
-    if(y2 < 0) y2 = 0;
-    if(y2 >= a.h) y2 = a.h-1;
+    ఒకవేళ(y1 < 0) y1 = 0;
+    ఒకవేళ(y1 >= a.h) y1 = a.h-1;
+    ఒకవేళ(y2 < 0) y2 = 0;
+    ఒకవేళ(y2 >= a.h) y2 = a.h-1;
 
-    for(i = x1; i <= x2; ++i){
-        a.data[i + y1*a.w + 0*a.w*a.h] = r;
-        a.data[i + y2*a.w + 0*a.w*a.h] = r;
+    కొరకు(i = x1; i <= x2; ++i){
+        a.దత్తాంశం[i + y1*a.w + 0*a.w*a.h] = r;
+        a.దత్తాంశం[i + y2*a.w + 0*a.w*a.h] = r;
 
-        a.data[i + y1*a.w + 1*a.w*a.h] = g;
-        a.data[i + y2*a.w + 1*a.w*a.h] = g;
+        a.దత్తాంశం[i + y1*a.w + 1*a.w*a.h] = g;
+        a.దత్తాంశం[i + y2*a.w + 1*a.w*a.h] = g;
 
-        a.data[i + y1*a.w + 2*a.w*a.h] = b;
-        a.data[i + y2*a.w + 2*a.w*a.h] = b;
+        a.దత్తాంశం[i + y1*a.w + 2*a.w*a.h] = b;
+        a.దత్తాంశం[i + y2*a.w + 2*a.w*a.h] = b;
     }
-    for(i = y1; i <= y2; ++i){
-        a.data[x1 + i*a.w + 0*a.w*a.h] = r;
-        a.data[x2 + i*a.w + 0*a.w*a.h] = r;
+    కొరకు(i = y1; i <= y2; ++i){
+        a.దత్తాంశం[x1 + i*a.w + 0*a.w*a.h] = r;
+        a.దత్తాంశం[x2 + i*a.w + 0*a.w*a.h] = r;
 
-        a.data[x1 + i*a.w + 1*a.w*a.h] = g;
-        a.data[x2 + i*a.w + 1*a.w*a.h] = g;
+        a.దత్తాంశం[x1 + i*a.w + 1*a.w*a.h] = g;
+        a.దత్తాంశం[x2 + i*a.w + 1*a.w*a.h] = g;
 
-        a.data[x1 + i*a.w + 2*a.w*a.h] = b;
-        a.data[x2 + i*a.w + 2*a.w*a.h] = b;
+        a.దత్తాంశం[x1 + i*a.w + 2*a.w*a.h] = b;
+        a.దత్తాంశం[x2 + i*a.w + 2*a.w*a.h] = b;
     }
 }
 
-void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
+శూన్య draw_box_వెడల్పు(image a, పూర్ణాంకం x1, పూర్ణాంకం y1, పూర్ణాంకం x2, పూర్ణాంకం y2, పూర్ణాంకం w, దశాంశం r, దశాంశం g, దశాంశం b)
 {
-    int i;
-    for(i = 0; i < w; ++i){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < w; ++i){
         draw_box(a, x1+i, y1+i, x2-i, y2-i, r, g, b);
     }
 }
 
-void draw_bbox(image a, box bbox, int w, float r, float g, float b)
+శూన్య draw_bbox(image a, box bbox, పూర్ణాంకం w, దశాంశం r, దశాంశం g, దశాంశం b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
-    int bot   = (bbox.y+bbox.h/2)*a.h;
+    పూర్ణాంకం ఎడమ  = (bbox.x-bbox.w/2)*a.w;
+    పూర్ణాంకం కుడి = (bbox.x+bbox.w/2)*a.w;
+    పూర్ణాంకం శిఖరం   = (bbox.y-bbox.h/2)*a.h;
+    పూర్ణాంకం bot   = (bbox.y+bbox.h/2)*a.h;
 
-    int i;
-    for(i = 0; i < w; ++i){
-        draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < w; ++i){
+        draw_box(a, ఎడమ+i, శిఖరం+i, కుడి-i, bot-i, r, g, b);
     }
 }
 
-image **load_alphabet()
+image **ఎక్కించు_alphabet()
 {
-    int i, j;
-    const int nsize = 8;
-    image **alphabets = calloc(nsize, sizeof(image));
-    for(j = 0; j < nsize; ++j){
-        alphabets[j] = calloc(128, sizeof(image));
-        for(i = 32; i < 127; ++i){
-            char buff[256];
+    పూర్ణాంకం i, j;
+    స్థిరరాశి పూర్ణాంకం nsize = 8;
+    image **alphabets = సున్నా_జ్ఞాపకం_ఇవ్వు(nsize, పరిమాణం(image));
+    కొరకు(j = 0; j < nsize; ++j){
+        alphabets[j] = సున్నా_జ్ఞాపకం_ఇవ్వు(128, పరిమాణం(image));
+        కొరకు(i = 32; i < 127; ++i){
+            అక్షరం buff[256];
             sprintf(buff, "data/labels/%d_%d.png", i, j);
-            alphabets[j][i] = load_image_color(buff, 0, 0);
+            alphabets[j][i] = ఎక్కించు_image_color(buff, 0, 0);
         }
     }
-    return alphabets;
+    తిరిగి alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+శూన్య draw_detections(image im, detection *dets, పూర్ణాంకం అంకె, దశాంశం thresh, అక్షరం **పేర్లు, image **alphabet, పూర్ణాంకం classes)
 {
-    int i,j;
+    పూర్ణాంకం i,j;
 
-    for(i = 0; i < num; ++i){
-        char labelstr[4096] = {0};
-        int class = -1;
-        for(j = 0; j < classes; ++j){
-            if (dets[i].prob[j] > thresh){
-                if (class < 0) {
-                    strcat(labelstr, names[j]);
+    కొరకు(i = 0; i < అంకె; ++i){
+        అక్షరం labelstr[4096] = {0};
+        పూర్ణాంకం class = -1;
+        కొరకు(j = 0; j < classes; ++j){
+            ఒకవేళ (dets[i].prob[j] > thresh){
+                ఒకవేళ (class < 0) {
+                    strcat(labelstr, పేర్లు[j]);
                     class = j;
-                } else {
+                } లేకపోతే {
                     strcat(labelstr, ", ");
-                    strcat(labelstr, names[j]);
+                    strcat(labelstr, పేర్లు[j]);
                 }
-                printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
+                రాయి("%s: %.0f%%\n", పేర్లు[j], dets[i].prob[j]*100);
             }
         }
-        if(class >= 0){
-            int width = im.h * .006;
+        ఒకవేళ(class >= 0){
+            పూర్ణాంకం వెడల్పు = im.h * .006;
 
             /*
                if(0){
@@ -266,11 +266,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
              */
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
-            int offset = class*123457 % classes;
-            float red = get_color(2,offset,classes);
-            float green = get_color(1,offset,classes);
-            float blue = get_color(0,offset,classes);
-            float rgb[3];
+            పూర్ణాంకం స్థానభ్రంశం = class*123457 % classes;
+            దశాంశం red = get_color(2,స్థానభ్రంశం,classes);
+            దశాంశం green = get_color(1,స్థానభ్రంశం,classes);
+            దశాంశం blue = get_color(0,స్థానభ్రంశం,classes);
+            దశాంశం rgb[3];
 
             //width = prob*20+2;
 
@@ -280,307 +280,307 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             box b = dets[i].bbox;
             //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
-            int bot   = (b.y+b.h/2.)*im.h;
+            పూర్ణాంకం ఎడమ  = (b.x-b.w/2.)*im.w;
+            పూర్ణాంకం కుడి = (b.x+b.w/2.)*im.w;
+            పూర్ణాంకం శిఖరం   = (b.y-b.h/2.)*im.h;
+            పూర్ణాంకం bot   = (b.y+b.h/2.)*im.h;
 
-            if(left < 0) left = 0;
-            if(right > im.w-1) right = im.w-1;
-            if(top < 0) top = 0;
-            if(bot > im.h-1) bot = im.h-1;
+            ఒకవేళ(ఎడమ < 0) ఎడమ = 0;
+            ఒకవేళ(కుడి > im.w-1) కుడి = im.w-1;
+            ఒకవేళ(శిఖరం < 0) శిఖరం = 0;
+            ఒకవేళ(bot > im.h-1) bot = im.h-1;
 
-            draw_box_width(im, left, top, right, bot, width, red, green, blue);
-            if (alphabet) {
+            draw_box_వెడల్పు(im, ఎడమ, శిఖరం, కుడి, bot, వెడల్పు, red, green, blue);
+            ఒకవేళ (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.03));
-                draw_label(im, top + width, left, label, rgb);
+                draw_label(im, శిఖరం + వెడల్పు, ఎడమ, label, rgb);
                 free_image(label);
             }
-            if (dets[i].mask){
-                image mask = float_to_image(14, 14, 1, dets[i].mask);
-                image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
-                image tmask = threshold_image(resized_mask, .5);
-                embed_image(tmask, im, left, top);
-                free_image(mask);
-                free_image(resized_mask);
+            ఒకవేళ (dets[i].ముసుగు){
+                image ముసుగు = float_గమ్యం_image(14, 14, 1, dets[i].ముసుగు);
+                image resized_ముసుగు = resize_image(ముసుగు, b.w*im.w, b.h*im.h);
+                image tmask = పరిమితి_image(resized_ముసుగు, .5);
+                embed_image(tmask, im, ఎడమ, శిఖరం);
+                free_image(ముసుగు);
+                free_image(resized_ముసుగు);
                 free_image(tmask);
             }
         }
     }
 }
 
-void transpose_image(image im)
+శూన్య transpose_image(image im)
 {
-    assert(im.w == im.h);
-    int n, m;
-    int c;
-    for(c = 0; c < im.c; ++c){
-        for(n = 0; n < im.w-1; ++n){
-            for(m = n + 1; m < im.w; ++m){
-                float swap = im.data[m + im.w*(n + im.h*c)];
-                im.data[m + im.w*(n + im.h*c)] = im.data[n + im.w*(m + im.h*c)];
-                im.data[n + im.w*(m + im.h*c)] = swap;
+    ప్రతిజ్ఞా(im.w == im.h);
+    పూర్ణాంకం n, m;
+    పూర్ణాంకం c;
+    కొరకు(c = 0; c < im.c; ++c){
+        కొరకు(n = 0; n < im.w-1; ++n){
+            కొరకు(m = n + 1; m < im.w; ++m){
+                దశాంశం మార్పిడి = im.దత్తాంశం[m + im.w*(n + im.h*c)];
+                im.దత్తాంశం[m + im.w*(n + im.h*c)] = im.దత్తాంశం[n + im.w*(m + im.h*c)];
+                im.దత్తాంశం[n + im.w*(m + im.h*c)] = మార్పిడి;
             }
         }
     }
 }
 
-void rotate_image_cw(image im, int times)
+శూన్య rotate_image_cw(image im, పూర్ణాంకం times)
 {
-    assert(im.w == im.h);
+    ప్రతిజ్ఞా(im.w == im.h);
     times = (times + 400) % 4;
-    int i, x, y, c;
-    int n = im.w;
-    for(i = 0; i < times; ++i){
-        for(c = 0; c < im.c; ++c){
-            for(x = 0; x < n/2; ++x){
-                for(y = 0; y < (n-1)/2 + 1; ++y){
-                    float temp = im.data[y + im.w*(x + im.h*c)];
-                    im.data[y + im.w*(x + im.h*c)] = im.data[n-1-x + im.w*(y + im.h*c)];
-                    im.data[n-1-x + im.w*(y + im.h*c)] = im.data[n-1-y + im.w*(n-1-x + im.h*c)];
-                    im.data[n-1-y + im.w*(n-1-x + im.h*c)] = im.data[x + im.w*(n-1-y + im.h*c)];
-                    im.data[x + im.w*(n-1-y + im.h*c)] = temp;
+    పూర్ణాంకం i, x, y, c;
+    పూర్ణాంకం n = im.w;
+    కొరకు(i = 0; i < times; ++i){
+        కొరకు(c = 0; c < im.c; ++c){
+            కొరకు(x = 0; x < n/2; ++x){
+                కొరకు(y = 0; y < (n-1)/2 + 1; ++y){
+                    దశాంశం తాత్కాలిక = im.దత్తాంశం[y + im.w*(x + im.h*c)];
+                    im.దత్తాంశం[y + im.w*(x + im.h*c)] = im.దత్తాంశం[n-1-x + im.w*(y + im.h*c)];
+                    im.దత్తాంశం[n-1-x + im.w*(y + im.h*c)] = im.దత్తాంశం[n-1-y + im.w*(n-1-x + im.h*c)];
+                    im.దత్తాంశం[n-1-y + im.w*(n-1-x + im.h*c)] = im.దత్తాంశం[x + im.w*(n-1-y + im.h*c)];
+                    im.దత్తాంశం[x + im.w*(n-1-y + im.h*c)] = తాత్కాలిక;
                 }
             }
         }
     }
 }
 
-void flip_image(image a)
+శూన్య flip_image(image a)
 {
-    int i,j,k;
-    for(k = 0; k < a.c; ++k){
-        for(i = 0; i < a.h; ++i){
-            for(j = 0; j < a.w/2; ++j){
-                int index = j + a.w*(i + a.h*(k));
-                int flip = (a.w - j - 1) + a.w*(i + a.h*(k));
-                float swap = a.data[flip];
-                a.data[flip] = a.data[index];
-                a.data[index] = swap;
+    పూర్ణాంకం i,j,k;
+    కొరకు(k = 0; k < a.c; ++k){
+        కొరకు(i = 0; i < a.h; ++i){
+            కొరకు(j = 0; j < a.w/2; ++j){
+                పూర్ణాంకం సూచీ = j + a.w*(i + a.h*(k));
+                పూర్ణాంకం flip = (a.w - j - 1) + a.w*(i + a.h*(k));
+                దశాంశం మార్పిడి = a.దత్తాంశం[flip];
+                a.దత్తాంశం[flip] = a.దత్తాంశం[సూచీ];
+                a.దత్తాంశం[సూచీ] = మార్పిడి;
             }
         }
     }
 }
 
-image image_distance(image a, image b)
+image image_దూరం(image a, image b)
 {
-    int i,j;
+    పూర్ణాంకం i,j;
     image dist = make_image(a.w, a.h, 1);
-    for(i = 0; i < a.c; ++i){
-        for(j = 0; j < a.h*a.w; ++j){
-            dist.data[j] += pow(a.data[i*a.h*a.w+j]-b.data[i*a.h*a.w+j],2);
+    కొరకు(i = 0; i < a.c; ++i){
+        కొరకు(j = 0; j < a.h*a.w; ++j){
+            dist.దత్తాంశం[j] += ఘాతం(a.దత్తాంశం[i*a.h*a.w+j]-b.దత్తాంశం[i*a.h*a.w+j],2);
         }
     }
-    for(j = 0; j < a.h*a.w; ++j){
-        dist.data[j] = sqrt(dist.data[j]);
+    కొరకు(j = 0; j < a.h*a.w; ++j){
+        dist.దత్తాంశం[j] = వర్గమూలం(dist.దత్తాంశం[j]);
     }
-    return dist;
+    తిరిగి dist;
 }
 
-void ghost_image(image source, image dest, int dx, int dy)
+శూన్య ghost_image(image ఆధారం, image dest, పూర్ణాంకం dx, పూర్ణాంకం dy)
 {
-    int x,y,k;
-    float max_dist = sqrt((-source.w/2. + .5)*(-source.w/2. + .5));
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float dist = sqrt((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
-                float alpha = (1 - dist/max_dist);
-                if(alpha < 0) alpha = 0;
-                float v1 = get_pixel(source, x,y,k);
-                float v2 = get_pixel(dest, dx+x,dy+y,k);
-                float val = alpha*v1 + (1-alpha)*v2;
-                set_pixel(dest, dx+x, dy+y, k, val);
+    పూర్ణాంకం x,y,k;
+    దశాంశం max_dist = వర్గమూలం((-ఆధారం.w/2. + .5)*(-ఆధారం.w/2. + .5));
+    కొరకు(k = 0; k < ఆధారం.c; ++k){
+        కొరకు(y = 0; y < ఆధారం.h; ++y){
+            కొరకు(x = 0; x < ఆధారం.w; ++x){
+                దశాంశం dist = వర్గమూలం((x - ఆధారం.w/2. + .5)*(x - ఆధారం.w/2. + .5) + (y - ఆధారం.h/2. + .5)*(y - ఆధారం.h/2. + .5));
+                దశాంశం alpha = (1 - dist/max_dist);
+                ఒకవేళ(alpha < 0) alpha = 0;
+                దశాంశం v1 = get_pixel(ఆధారం, x,y,k);
+                దశాంశం v2 = get_pixel(dest, dx+x,dy+y,k);
+                దశాంశం val = alpha*v1 + (1-alpha)*v2;
+                సమితి_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-void blocky_image(image im, int s)
+శూన్య blocky_image(image im, పూర్ణాంకం s)
 {
-    int i,j,k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
-                im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
+    పూర్ణాంకం i,j,k;
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(j = 0; j < im.h; ++j){
+            కొరకు(i = 0; i < im.w; ++i){
+                im.దత్తాంశం[i + im.w*(j + im.h*k)] = im.దత్తాంశం[i/s*s + im.w*(j/s*s + im.h*k)];
             }
         }
     }
 }
 
-void censor_image(image im, int dx, int dy, int w, int h)
+శూన్య censor_image(image im, పూర్ణాంకం dx, పూర్ణాంకం dy, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    int i,j,k;
-    int s = 32;
-    if(dx < 0) dx = 0;
-    if(dy < 0) dy = 0;
+    పూర్ణాంకం i,j,k;
+    పూర్ణాంకం s = 32;
+    ఒకవేళ(dx < 0) dx = 0;
+    ఒకవేళ(dy < 0) dy = 0;
 
-    for(k = 0; k < im.c; ++k){
-        for(j = dy; j < dy + h && j < im.h; ++j){
-            for(i = dx; i < dx + w && i < im.w; ++i){
-                im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(j = dy; j < dy + h && j < im.h; ++j){
+            కొరకు(i = dx; i < dx + w && i < im.w; ++i){
+                im.దత్తాంశం[i + im.w*(j + im.h*k)] = im.దత్తాంశం[i/s*s + im.w*(j/s*s + im.h*k)];
                 //im.data[i + j*im.w + k*im.w*im.h] = 0;
             }
         }
     }
 }
 
-void embed_image(image source, image dest, int dx, int dy)
+శూన్య embed_image(image ఆధారం, image dest, పూర్ణాంకం dx, పూర్ణాంకం dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x,y,k);
-                set_pixel(dest, dx+x, dy+y, k, val);
+    పూర్ణాంకం x,y,k;
+    కొరకు(k = 0; k < ఆధారం.c; ++k){
+        కొరకు(y = 0; y < ఆధారం.h; ++y){
+            కొరకు(x = 0; x < ఆధారం.w; ++x){
+                దశాంశం val = get_pixel(ఆధారం, x,y,k);
+                సమితి_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-image collapse_image_layers(image source, int border)
+image collapse_image_layers(image ఆధారం, పూర్ణాంకం border)
 {
-    int h = source.h;
-    h = (h+border)*source.c - border;
-    image dest = make_image(source.w, h, 1);
-    int i;
-    for(i = 0; i < source.c; ++i){
-        image layer = get_image_layer(source, i);
-        int h_offset = i*(source.h+border);
-        embed_image(layer, dest, 0, h_offset);
+    పూర్ణాంకం h = ఆధారం.h;
+    h = (h+border)*ఆధారం.c - border;
+    image dest = make_image(ఆధారం.w, h, 1);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < ఆధారం.c; ++i){
+        image layer = get_image_layer(ఆధారం, i);
+        పూర్ణాంకం h_స్థానభ్రంశం = i*(ఆధారం.h+border);
+        embed_image(layer, dest, 0, h_స్థానభ్రంశం);
         free_image(layer);
     }
-    return dest;
+    తిరిగి dest;
 }
 
-void constrain_image(image im)
+శూన్య constrain_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        if(im.data[i] < 0) im.data[i] = 0;
-        if(im.data[i] > 1) im.data[i] = 1;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < im.w*im.h*im.c; ++i){
+        ఒకవేళ(im.దత్తాంశం[i] < 0) im.దత్తాంశం[i] = 0;
+        ఒకవేళ(im.దత్తాంశం[i] > 1) im.దత్తాంశం[i] = 1;
     }
 }
 
-void normalize_image(image p)
+శూన్య normalize_image(image p)
 {
-    int i;
-    float min = 9999999;
-    float max = -999999;
+    పూర్ణాంకం i;
+    దశాంశం min = 9999999;
+    దశాంశం max = -999999;
 
-    for(i = 0; i < p.h*p.w*p.c; ++i){
-        float v = p.data[i];
-        if(v < min) min = v;
-        if(v > max) max = v;
+    కొరకు(i = 0; i < p.h*p.w*p.c; ++i){
+        దశాంశం v = p.దత్తాంశం[i];
+        ఒకవేళ(v < min) min = v;
+        ఒకవేళ(v > max) max = v;
     }
-    if(max - min < .000000001){
+    ఒకవేళ(max - min < .000000001){
         min = 0;
         max = 1;
     }
-    for(i = 0; i < p.c*p.w*p.h; ++i){
-        p.data[i] = (p.data[i] - min)/(max-min);
+    కొరకు(i = 0; i < p.c*p.w*p.h; ++i){
+        p.దత్తాంశం[i] = (p.దత్తాంశం[i] - min)/(max-min);
     }
 }
 
-void normalize_image2(image p)
+శూన్య normalize_image2(image p)
 {
-    float *min = calloc(p.c, sizeof(float));
-    float *max = calloc(p.c, sizeof(float));
-    int i,j;
-    for(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
+    దశాంశం *min = సున్నా_జ్ఞాపకం_ఇవ్వు(p.c, పరిమాణం(దశాంశం));
+    దశాంశం *max = సున్నా_జ్ఞాపకం_ఇవ్వు(p.c, పరిమాణం(దశాంశం));
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < p.c; ++i) min[i] = max[i] = p.దత్తాంశం[i*p.h*p.w];
 
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.h*p.w; ++i){
-            float v = p.data[i+j*p.h*p.w];
-            if(v < min[j]) min[j] = v;
-            if(v > max[j]) max[j] = v;
+    కొరకు(j = 0; j < p.c; ++j){
+        కొరకు(i = 0; i < p.h*p.w; ++i){
+            దశాంశం v = p.దత్తాంశం[i+j*p.h*p.w];
+            ఒకవేళ(v < min[j]) min[j] = v;
+            ఒకవేళ(v > max[j]) max[j] = v;
         }
     }
-    for(i = 0; i < p.c; ++i){
-        if(max[i] - min[i] < .000000001){
+    కొరకు(i = 0; i < p.c; ++i){
+        ఒకవేళ(max[i] - min[i] < .000000001){
             min[i] = 0;
             max[i] = 1;
         }
     }
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.w*p.h; ++i){
-            p.data[i+j*p.h*p.w] = (p.data[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
+    కొరకు(j = 0; j < p.c; ++j){
+        కొరకు(i = 0; i < p.w*p.h; ++i){
+            p.దత్తాంశం[i+j*p.h*p.w] = (p.దత్తాంశం[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
         }
     }
-    free(min);
-    free(max);
+    విడుదల(min);
+    విడుదల(max);
 }
 
-void copy_image_into(image src, image dest)
+శూన్య copy_image_into(image src, image dest)
 {
-    memcpy(dest.data, src.data, src.h*src.w*src.c*sizeof(float));
+    జ్ఞాపకం_నకలు(dest.దత్తాంశం, src.దత్తాంశం, src.h*src.w*src.c*పరిమాణం(దశాంశం));
 }
 
 image copy_image(image p)
 {
     image copy = p;
-    copy.data = calloc(p.h*p.w*p.c, sizeof(float));
-    memcpy(copy.data, p.data, p.h*p.w*p.c*sizeof(float));
-    return copy;
+    copy.దత్తాంశం = సున్నా_జ్ఞాపకం_ఇవ్వు(p.h*p.w*p.c, పరిమాణం(దశాంశం));
+    జ్ఞాపకం_నకలు(copy.దత్తాంశం, p.దత్తాంశం, p.h*p.w*p.c*పరిమాణం(దశాంశం));
+    తిరిగి copy;
 }
 
-void rgbgr_image(image im)
+శూన్య rgbgr_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        float swap = im.data[i];
-        im.data[i] = im.data[i+im.w*im.h*2];
-        im.data[i+im.w*im.h*2] = swap;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < im.w*im.h; ++i){
+        దశాంశం మార్పిడి = im.దత్తాంశం[i];
+        im.దత్తాంశం[i] = im.దత్తాంశం[i+im.w*im.h*2];
+        im.దత్తాంశం[i+im.w*im.h*2] = మార్పిడి;
     }
 }
 
-int show_image(image p, const char *name, int ms)
+పూర్ణాంకం show_image(image p, స్థిరరాశి అక్షరం *name, పూర్ణాంకం ms)
 {
-#ifdef OPENCV
-    int c = show_image_cv(p, name, ms);
-    return c;
-#else
+#నిర్వచితమైతే OPENCV
+    పూర్ణాంకం c = show_image_cv(p, name, ms);
+    తిరిగి c;
+#లేకపోతే
     fprintf(stderr, "Not compiled with OpenCV, saving to %s.png instead\n", name);
     save_image(p, name);
-    return -1;
-#endif
+    తిరిగి -1;
+#అయితే_ముగింపు
 }
 
-void save_image_options(image im, const char *name, IMTYPE f, int quality)
+శూన్య save_image_options(image im, స్థిరరాశి అక్షరం *name, IMTYPE f, పూర్ణాంకం quality)
 {
-    char buff[256];
+    అక్షరం buff[256];
     //sprintf(buff, "%s (%d)", name, windows);
-    if(f == PNG)       sprintf(buff, "%s.png", name);
-    else if (f == BMP) sprintf(buff, "%s.bmp", name);
-    else if (f == TGA) sprintf(buff, "%s.tga", name);
-    else if (f == JPG) sprintf(buff, "%s.jpg", name);
-    else               sprintf(buff, "%s.png", name);
-    unsigned char *data = calloc(im.w*im.h*im.c, sizeof(char));
-    int i,k;
-    for(k = 0; k < im.c; ++k){
-        for(i = 0; i < im.w*im.h; ++i){
-            data[i*im.c+k] = (unsigned char) (255*im.data[i + k*im.w*im.h]);
+    ఒకవేళ(f == PNG)       sprintf(buff, "%s.png", name);
+    లేకపోతే ఒకవేళ (f == BMP) sprintf(buff, "%s.bmp", name);
+    లేకపోతే ఒకవేళ (f == TGA) sprintf(buff, "%s.tga", name);
+    లేకపోతే ఒకవేళ (f == JPG) sprintf(buff, "%s.jpg", name);
+    లేకపోతే               sprintf(buff, "%s.png", name);
+    గుర్తులేని అక్షరం *దత్తాంశం = సున్నా_జ్ఞాపకం_ఇవ్వు(im.w*im.h*im.c, పరిమాణం(అక్షరం));
+    పూర్ణాంకం i,k;
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(i = 0; i < im.w*im.h; ++i){
+            దత్తాంశం[i*im.c+k] = (గుర్తులేని అక్షరం) (255*im.దత్తాంశం[i + k*im.w*im.h]);
         }
     }
-    int success = 0;
-    if(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
-    else if (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
-    else if (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
-    else if (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
-    free(data);
-    if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
+    పూర్ణాంకం success = 0;
+    ఒకవేళ(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, దత్తాంశం, im.w*im.c);
+    లేకపోతే ఒకవేళ (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, దత్తాంశం);
+    లేకపోతే ఒకవేళ (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, దత్తాంశం);
+    లేకపోతే ఒకవేళ (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, దత్తాంశం, quality);
+    విడుదల(దత్తాంశం);
+    ఒకవేళ(!success) fprintf(stderr, "Failed to write image %s\n", buff);
 }
 
-void save_image(image im, const char *name)
+శూన్య save_image(image im, స్థిరరాశి అక్షరం *name)
 {
     save_image_options(im, name, JPG, 80);
 }
 
-void show_image_layers(image p, char *name)
+శూన్య show_image_layers(image p, అక్షరం *name)
 {
-    int i;
-    char buff[256];
-    for(i = 0; i < p.c; ++i){
+    పూర్ణాంకం i;
+    అక్షరం buff[256];
+    కొరకు(i = 0; i < p.c; ++i){
         sprintf(buff, "%s - Layer %d", name, i);
         image layer = get_image_layer(p, i);
         show_image(layer, buff, 1);
@@ -588,219 +588,219 @@ void show_image_layers(image p, char *name)
     }
 }
 
-void show_image_collapsed(image p, char *name)
+శూన్య show_image_collapsed(image p, అక్షరం *name)
 {
     image c = collapse_image_layers(p, 1);
     show_image(c, name, 1);
     free_image(c);
 }
 
-image make_empty_image(int w, int h, int c)
+image make_ఖాళీలు_image(పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c)
 {
-    image out;
-    out.data = 0;
-    out.h = h;
-    out.w = w;
-    out.c = c;
-    return out;
+    image బహిర్గతం;
+    బహిర్గతం.దత్తాంశం = 0;
+    బహిర్గతం.h = h;
+    బహిర్గతం.w = w;
+    బహిర్గతం.c = c;
+    తిరిగి బహిర్గతం;
 }
 
-image make_image(int w, int h, int c)
+image make_image(పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c)
 {
-    image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    return out;
+    image బహిర్గతం = make_ఖాళీలు_image(w,h,c);
+    బహిర్గతం.దత్తాంశం = సున్నా_జ్ఞాపకం_ఇవ్వు(h*w*c, పరిమాణం(దశాంశం));
+    తిరిగి బహిర్గతం;
 }
 
-image make_random_image(int w, int h, int c)
+image make_random_image(పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c)
 {
-    image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    int i;
-    for(i = 0; i < w*h*c; ++i){
-        out.data[i] = (rand_normal() * .25) + .5;
+    image బహిర్గతం = make_ఖాళీలు_image(w,h,c);
+    బహిర్గతం.దత్తాంశం = సున్నా_జ్ఞాపకం_ఇవ్వు(h*w*c, పరిమాణం(దశాంశం));
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < w*h*c; ++i){
+        బహిర్గతం.దత్తాంశం[i] = (rand_సాధారణ() * .25) + .5;
     }
-    return out;
+    తిరిగి బహిర్గతం;
 }
 
-image float_to_image(int w, int h, int c, float *data)
+image float_గమ్యం_image(పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, దశాంశం *దత్తాంశం)
 {
-    image out = make_empty_image(w,h,c);
-    out.data = data;
-    return out;
+    image బహిర్గతం = make_ఖాళీలు_image(w,h,c);
+    బహిర్గతం.దత్తాంశం = దత్తాంశం;
+    తిరిగి బహిర్గతం;
 }
 
-void place_image(image im, int w, int h, int dx, int dy, image canvas)
+శూన్య ఉంచు_image(image im, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం dx, పూర్ణాంకం dy, image canvas)
 {
-    int x, y, c;
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = ((float)x / w) * im.w;
-                float ry = ((float)y / h) * im.h;
-                float val = bilinear_interpolate(im, rx, ry, c);
-                set_pixel(canvas, x + dx, y + dy, c, val);
+    పూర్ణాంకం x, y, c;
+    కొరకు(c = 0; c < im.c; ++c){
+        కొరకు(y = 0; y < h; ++y){
+            కొరకు(x = 0; x < w; ++x){
+                దశాంశం rx = ((దశాంశం)x / w) * im.w;
+                దశాంశం ry = ((దశాంశం)y / h) * im.h;
+                దశాంశం val = bilinear_interpolate(im, rx, ry, c);
+                సమితి_pixel(canvas, x + dx, y + dy, c, val);
             }
         }
     }
 }
 
-image center_crop_image(image im, int w, int h)
+image center_crop_image(image im, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    int m = (im.w < im.h) ? im.w : im.h;   
+    పూర్ణాంకం m = (im.w < im.h) ? im.w : im.h;   
     image c = crop_image(im, (im.w - m) / 2, (im.h - m)/2, m, m);
     image r = resize_image(c, w, h);
     free_image(c);
-    return r;
+    తిరిగి r;
 }
 
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect)
+image rotate_crop_image(image im, దశాంశం rad, దశాంశం s, పూర్ణాంకం w, పూర్ణాంకం h, దశాంశం dx, దశాంశం dy, దశాంశం aspect)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    పూర్ణాంకం x, y, c;
+    దశాంశం cx = im.w/2.;
+    దశాంశం cy = im.h/2.;
     image rot = make_image(w, h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
-                float ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
-                set_pixel(rot, x, y, c, val);
+    కొరకు(c = 0; c < im.c; ++c){
+        కొరకు(y = 0; y < h; ++y){
+            కొరకు(x = 0; x < w; ++x){
+                దశాంశం rx = కోజ్యా(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - జ్యా(rad)*((y - h/2.)/s + dy/s) + cx;
+                దశాంశం ry = జ్యా(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + కోజ్యా(rad)*((y - h/2.)/s + dy/s) + cy;
+                దశాంశం val = bilinear_interpolate(im, rx, ry, c);
+                సమితి_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    తిరిగి rot;
 }
 
-image rotate_image(image im, float rad)
+image rotate_image(image im, దశాంశం rad)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    పూర్ణాంకం x, y, c;
+    దశాంశం cx = im.w/2.;
+    దశాంశం cy = im.h/2.;
     image rot = make_image(im.w, im.h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < im.h; ++y){
-            for(x = 0; x < im.w; ++x){
-                float rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
-                float ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
-                set_pixel(rot, x, y, c, val);
+    కొరకు(c = 0; c < im.c; ++c){
+        కొరకు(y = 0; y < im.h; ++y){
+            కొరకు(x = 0; x < im.w; ++x){
+                దశాంశం rx = కోజ్యా(rad)*(x-cx) - జ్యా(rad)*(y-cy) + cx;
+                దశాంశం ry = జ్యా(rad)*(x-cx) + కోజ్యా(rad)*(y-cy) + cy;
+                దశాంశం val = bilinear_interpolate(im, rx, ry, c);
+                సమితి_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    తిరిగి rot;
 }
 
-void fill_image(image m, float s)
+శూన్య fill_image(image m, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < m.h*m.w*m.c; ++i) m.దత్తాంశం[i] = s;
 }
 
-void translate_image(image m, float s)
+శూన్య translate_image(image m, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < m.h*m.w*m.c; ++i) m.దత్తాంశం[i] += s;
 }
 
-void scale_image(image m, float s)
+శూన్య scale_image(image m, దశాంశం s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < m.h*m.w*m.c; ++i) m.దత్తాంశం[i] *= s;
 }
 
-image crop_image(image im, int dx, int dy, int w, int h)
+image crop_image(image im, పూర్ణాంకం dx, పూర్ణాంకం dy, పూర్ణాంకం w, పూర్ణాంకం h)
 {
     image cropped = make_image(w, h, im.c);
-    int i, j, k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int r = j + dy;
-                int c = i + dx;
-                float val = 0;
+    పూర్ణాంకం i, j, k;
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(j = 0; j < h; ++j){
+            కొరకు(i = 0; i < w; ++i){
+                పూర్ణాంకం r = j + dy;
+                పూర్ణాంకం c = i + dx;
+                దశాంశం val = 0;
                 r = constrain_int(r, 0, im.h-1);
                 c = constrain_int(c, 0, im.w-1);
                 val = get_pixel(im, c, r, k);
-                set_pixel(cropped, i, j, k, val);
+                సమితి_pixel(cropped, i, j, k, val);
             }
         }
     }
-    return cropped;
+    తిరిగి cropped;
 }
 
-int best_3d_shift_r(image a, image b, int min, int max)
+పూర్ణాంకం ఉత్తమ_3d_జరుపు_r(image a, image b, పూర్ణాంకం min, పూర్ణాంకం max)
 {
-    if(min == max) return min;
-    int mid = floor((min + max) / 2.);
+    ఒకవేళ(min == max) తిరిగి min;
+    పూర్ణాంకం mid = floor((min + max) / 2.);
     image c1 = crop_image(b, 0, mid, b.w, b.h);
     image c2 = crop_image(b, 0, mid+1, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
+    దశాంశం d1 = dist_array(c1.దత్తాంశం, a.దత్తాంశం, a.w*a.h*a.c, 10);
+    దశాంశం d2 = dist_array(c2.దత్తాంశం, a.దత్తాంశం, a.w*a.h*a.c, 10);
     free_image(c1);
     free_image(c2);
-    if(d1 < d2) return best_3d_shift_r(a, b, min, mid);
-    else return best_3d_shift_r(a, b, mid+1, max);
+    ఒకవేళ(d1 < d2) తిరిగి ఉత్తమ_3d_జరుపు_r(a, b, min, mid);
+    లేకపోతే తిరిగి ఉత్తమ_3d_జరుపు_r(a, b, mid+1, max);
 }
 
-int best_3d_shift(image a, image b, int min, int max)
+పూర్ణాంకం ఉత్తమ_3d_జరుపు(image a, image b, పూర్ణాంకం min, పూర్ణాంకం max)
 {
-    int i;
-    int best = 0;
-    float best_distance = FLT_MAX;
-    for(i = min; i <= max; i += 2){
+    పూర్ణాంకం i;
+    పూర్ణాంకం ఉత్తమ = 0;
+    దశాంశం ఉత్తమ_దూరం = FLT_MAX;
+    కొరకు(i = min; i <= max; i += 2){
         image c = crop_image(b, 0, i, b.w, b.h);
-        float d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
-        if(d < best_distance){
-            best_distance = d;
-            best = i;
+        దశాంశం d = dist_array(c.దత్తాంశం, a.దత్తాంశం, a.w*a.h*a.c, 100);
+        ఒకవేళ(d < ఉత్తమ_దూరం){
+            ఉత్తమ_దూరం = d;
+            ఉత్తమ = i;
         }
-        printf("%d %f\n", i, d);
+        రాయి("%d %f\n", i, d);
         free_image(c);
     }
-    return best;
+    తిరిగి ఉత్తమ;
 }
 
-void composite_3d(char *f1, char *f2, char *out, int delta)
+శూన్య సంయుక్త_3d(అక్షరం *f1, అక్షరం *f2, అక్షరం *బహిర్గతం, పూర్ణాంకం delta)
 {
-    if(!out) out = "out";
-    image a = load_image(f1, 0,0,0);
-    image b = load_image(f2, 0,0,0);
-    int shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
+    ఒకవేళ(!బహిర్గతం) బహిర్గతం = "out";
+    image a = ఎక్కించు_image(f1, 0,0,0);
+    image b = ఎక్కించు_image(f2, 0,0,0);
+    పూర్ణాంకం జరుపు = ఉత్తమ_3d_జరుపు_r(a, b, -a.h/100, a.h/100);
 
-    image c1 = crop_image(b, 10, shift, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
-    image c2 = crop_image(b, -10, shift, b.w, b.h);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
+    image c1 = crop_image(b, 10, జరుపు, b.w, b.h);
+    దశాంశం d1 = dist_array(c1.దత్తాంశం, a.దత్తాంశం, a.w*a.h*a.c, 100);
+    image c2 = crop_image(b, -10, జరుపు, b.w, b.h);
+    దశాంశం d2 = dist_array(c2.దత్తాంశం, a.దత్తాంశం, a.w*a.h*a.c, 100);
 
-    if(d2 < d1 && 0){
-        image swap = a;
+    ఒకవేళ(d2 < d1 && 0){
+        image మార్పిడి = a;
         a = b;
-        b = swap;
-        shift = -shift;
-        printf("swapped, %d\n", shift);
+        b = మార్పిడి;
+        జరుపు = -జరుపు;
+        రాయి("swapped, %d\n", జరుపు);
     }
-    else{
-        printf("%d\n", shift);
+    లేకపోతే{
+        రాయి("%d\n", జరుపు);
     }
 
-    image c = crop_image(b, delta, shift, a.w, a.h);
-    int i;
-    for(i = 0; i < c.w*c.h; ++i){
-        c.data[i] = a.data[i];
+    image c = crop_image(b, delta, జరుపు, a.w, a.h);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < c.w*c.h; ++i){
+        c.దత్తాంశం[i] = a.దత్తాంశం[i];
     }
-    save_image(c, out);
+    save_image(c, బహిర్గతం);
 }
 
-void letterbox_image_into(image im, int w, int h, image boxed)
+శూన్య letterbox_image_into(image im, పూర్ణాంకం w, పూర్ణాంకం h, image boxed)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    పూర్ణాంకం new_w = im.w;
+    పూర్ణాంకం new_h = im.h;
+    ఒకవేళ (((దశాంశం)w/im.w) < ((దశాంశం)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } లేకపోతే {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -809,14 +809,14 @@ void letterbox_image_into(image im, int w, int h, image boxed)
     free_image(resized);
 }
 
-image letterbox_image(image im, int w, int h)
+image letterbox_image(image im, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    పూర్ణాంకం new_w = im.w;
+    పూర్ణాంకం new_h = im.h;
+    ఒకవేళ (((దశాంశం)w/im.w) < ((దశాంశం)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } లేకపోతే {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -827,65 +827,65 @@ image letterbox_image(image im, int w, int h)
     //for(i = 0; i < boxed.w*boxed.h*boxed.c; ++i) boxed.data[i] = 0;
     embed_image(resized, boxed, (w-new_w)/2, (h-new_h)/2); 
     free_image(resized);
-    return boxed;
+    తిరిగి boxed;
 }
 
-image resize_max(image im, int max)
+image resize_max(image im, పూర్ణాంకం max)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w > h){
+    పూర్ణాంకం w = im.w;
+    పూర్ణాంకం h = im.h;
+    ఒకవేళ(w > h){
         h = (h * max) / w;
         w = max;
-    } else {
+    } లేకపోతే {
         w = (w * max) / h;
         h = max;
     }
-    if(w == im.w && h == im.h) return im;
+    ఒకవేళ(w == im.w && h == im.h) తిరిగి im;
     image resized = resize_image(im, w, h);
-    return resized;
+    తిరిగి resized;
 }
 
-image resize_min(image im, int min)
+image resize_min(image im, పూర్ణాంకం min)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w < h){
+    పూర్ణాంకం w = im.w;
+    పూర్ణాంకం h = im.h;
+    ఒకవేళ(w < h){
         h = (h * min) / w;
         w = min;
-    } else {
+    } లేకపోతే {
         w = (w * min) / h;
         h = min;
     }
-    if(w == im.w && h == im.h) return im;
+    ఒకవేళ(w == im.w && h == im.h) తిరిగి im;
     image resized = resize_image(im, w, h);
-    return resized;
+    తిరిగి resized;
 }
 
-image random_crop_image(image im, int w, int h)
+image random_crop_image(image im, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    int dx = rand_int(0, im.w - w);
-    int dy = rand_int(0, im.h - h);
+    పూర్ణాంకం dx = rand_int(0, im.w - w);
+    పూర్ణాంకం dy = rand_int(0, im.h - h);
     image crop = crop_image(im, dx, dy, w, h);
-    return crop;
+    తిరిగి crop;
 }
 
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h)
+augment_వాదనలు random_augment_వాదనలు(image im, దశాంశం angle, దశాంశం aspect, పూర్ణాంకం దిగువ, పూర్ణాంకం ఎగువ, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    augment_args a = {0};
+    augment_వాదనలు a = {0};
     aspect = rand_scale(aspect);
-    int r = rand_int(low, high);
-    int min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
-    float scale = (float)r / min;
+    పూర్ణాంకం r = rand_int(దిగువ, ఎగువ);
+    పూర్ణాంకం min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
+    దశాంశం scale = (దశాంశం)r / min;
 
-    float rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
+    దశాంశం rad = rand_ఏకరీతి(-angle, angle) * TWO_PI / 360.;
 
-    float dx = (im.w*scale/aspect - w) / 2.;
-    float dy = (im.h*scale - w) / 2.;
+    దశాంశం dx = (im.w*scale/aspect - w) / 2.;
+    దశాంశం dy = (im.h*scale - w) / 2.;
     //if(dx < 0) dx = 0;
     //if(dy < 0) dy = 0;
-    dx = rand_uniform(-dx, dx);
-    dy = rand_uniform(-dy, dy);
+    dx = rand_ఏకరీతి(-dx, dx);
+    dy = rand_ఏకరీతి(-dy, dy);
 
     a.rad = rad;
     a.scale = scale;
@@ -894,34 +894,34 @@ augment_args random_augment_args(image im, float angle, float aspect, int low, i
     a.dx = dx;
     a.dy = dy;
     a.aspect = aspect;
-    return a;
+    తిరిగి a;
 }
 
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h)
+image random_augment_image(image im, దశాంశం angle, దశాంశం aspect, పూర్ణాంకం దిగువ, పూర్ణాంకం ఎగువ, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    augment_args a = random_augment_args(im, angle, aspect, low, high, w, h);
+    augment_వాదనలు a = random_augment_వాదనలు(im, angle, aspect, దిగువ, ఎగువ, w, h);
     image crop = rotate_crop_image(im, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
-    return crop;
+    తిరిగి crop;
 }
 
-float three_way_max(float a, float b, float c)
+దశాంశం three_way_max(దశాంశం a, దశాంశం b, దశాంశం c)
 {
-    return (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
+    తిరిగి (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
 }
 
-float three_way_min(float a, float b, float c)
+దశాంశం three_way_min(దశాంశం a, దశాంశం b, దశాంశం c)
 {
-    return (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
+    తిరిగి (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
 }
 
-void yuv_to_rgb(image im)
+శూన్య yuv_గమ్యం_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ప్రతిజ్ఞా(im.c == 3);
+    పూర్ణాంకం i, j;
+    దశాంశం r, g, b;
+    దశాంశం y, u, v;
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
             y = get_pixel(im, i , j, 0);
             u = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
@@ -930,21 +930,21 @@ void yuv_to_rgb(image im)
             g = y + -.39465*u + -.58060*v;
             b = y + 2.03211*u;
 
-            set_pixel(im, i, j, 0, r);
-            set_pixel(im, i, j, 1, g);
-            set_pixel(im, i, j, 2, b);
+            సమితి_pixel(im, i, j, 0, r);
+            సమితి_pixel(im, i, j, 1, g);
+            సమితి_pixel(im, i, j, 2, b);
         }
     }
 }
 
-void rgb_to_yuv(image im)
+శూన్య rgb_గమ్యం_yuv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ప్రతిజ్ఞా(im.c == 3);
+    పూర్ణాంకం i, j;
+    దశాంశం r, g, b;
+    దశాంశం y, u, v;
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
@@ -953,173 +953,173 @@ void rgb_to_yuv(image im)
             u = -.14713*r + -.28886*g + .436*b;
             v = .615*r + -.51499*g + -.10001*b;
 
-            set_pixel(im, i, j, 0, y);
-            set_pixel(im, i, j, 1, u);
-            set_pixel(im, i, j, 2, v);
+            సమితి_pixel(im, i, j, 0, y);
+            సమితి_pixel(im, i, j, 1, u);
+            సమితి_pixel(im, i, j, 2, v);
         }
     }
 }
 
 // http://www.cs.rit.edu/~ncs/color/t_convert.html
-void rgb_to_hsv(image im)
+శూన్య rgb_గమ్యం_hsv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ప్రతిజ్ఞా(im.c == 3);
+    పూర్ణాంకం i, j;
+    దశాంశం r, g, b;
+    దశాంశం h, s, v;
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
-            float max = three_way_max(r,g,b);
-            float min = three_way_min(r,g,b);
-            float delta = max - min;
+            దశాంశం max = three_way_max(r,g,b);
+            దశాంశం min = three_way_min(r,g,b);
+            దశాంశం delta = max - min;
             v = max;
-            if(max == 0){
+            ఒకవేళ(max == 0){
                 s = 0;
                 h = 0;
-            }else{
+            }లేకపోతే{
                 s = delta/max;
-                if(r == max){
+                ఒకవేళ(r == max){
                     h = (g - b) / delta;
-                } else if (g == max) {
+                } లేకపోతే ఒకవేళ (g == max) {
                     h = 2 + (b - r) / delta;
-                } else {
+                } లేకపోతే {
                     h = 4 + (r - g) / delta;
                 }
-                if (h < 0) h += 6;
+                ఒకవేళ (h < 0) h += 6;
                 h = h/6.;
             }
-            set_pixel(im, i, j, 0, h);
-            set_pixel(im, i, j, 1, s);
-            set_pixel(im, i, j, 2, v);
+            సమితి_pixel(im, i, j, 0, h);
+            సమితి_pixel(im, i, j, 1, s);
+            సమితి_pixel(im, i, j, 2, v);
         }
     }
 }
 
-void hsv_to_rgb(image im)
+శూన్య hsv_గమ్యం_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    float f, p, q, t;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    ప్రతిజ్ఞా(im.c == 3);
+    పూర్ణాంకం i, j;
+    దశాంశం r, g, b;
+    దశాంశం h, s, v;
+    దశాంశం f, p, q, t;
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
             h = 6 * get_pixel(im, i , j, 0);
             s = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
-            if (s == 0) {
+            ఒకవేళ (s == 0) {
                 r = g = b = v;
-            } else {
-                int index = floor(h);
-                f = h - index;
+            } లేకపోతే {
+                పూర్ణాంకం సూచీ = floor(h);
+                f = h - సూచీ;
                 p = v*(1-s);
                 q = v*(1-s*f);
                 t = v*(1-s*(1-f));
-                if(index == 0){
+                ఒకవేళ(సూచీ == 0){
                     r = v; g = t; b = p;
-                } else if(index == 1){
+                } లేకపోతే ఒకవేళ(సూచీ == 1){
                     r = q; g = v; b = p;
-                } else if(index == 2){
+                } లేకపోతే ఒకవేళ(సూచీ == 2){
                     r = p; g = v; b = t;
-                } else if(index == 3){
+                } లేకపోతే ఒకవేళ(సూచీ == 3){
                     r = p; g = q; b = v;
-                } else if(index == 4){
+                } లేకపోతే ఒకవేళ(సూచీ == 4){
                     r = t; g = p; b = v;
-                } else {
+                } లేకపోతే {
                     r = v; g = p; b = q;
                 }
             }
-            set_pixel(im, i, j, 0, r);
-            set_pixel(im, i, j, 1, g);
-            set_pixel(im, i, j, 2, b);
+            సమితి_pixel(im, i, j, 0, r);
+            సమితి_pixel(im, i, j, 1, g);
+            సమితి_pixel(im, i, j, 2, b);
         }
     }
 }
 
-void grayscale_image_3c(image im)
+శూన్య grayscale_image_3c(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
-    float scale[] = {0.299, 0.587, 0.114};
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float val = 0;
-            for(k = 0; k < 3; ++k){
+    ప్రతిజ్ఞా(im.c == 3);
+    పూర్ణాంకం i, j, k;
+    దశాంశం scale[] = {0.299, 0.587, 0.114};
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
+            దశాంశం val = 0;
+            కొరకు(k = 0; k < 3; ++k){
                 val += scale[k]*get_pixel(im, i, j, k);
             }
-            im.data[0*im.h*im.w + im.w*j + i] = val;
-            im.data[1*im.h*im.w + im.w*j + i] = val;
-            im.data[2*im.h*im.w + im.w*j + i] = val;
+            im.దత్తాంశం[0*im.h*im.w + im.w*j + i] = val;
+            im.దత్తాంశం[1*im.h*im.w + im.w*j + i] = val;
+            im.దత్తాంశం[2*im.h*im.w + im.w*j + i] = val;
         }
     }
 }
 
 image grayscale_image(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
-    image gray = make_image(im.w, im.h, 1);
-    float scale[] = {0.299, 0.587, 0.114};
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
-                gray.data[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
+    ప్రతిజ్ఞా(im.c == 3);
+    పూర్ణాంకం i, j, k;
+    image బూడిద = make_image(im.w, im.h, 1);
+    దశాంశం scale[] = {0.299, 0.587, 0.114};
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(j = 0; j < im.h; ++j){
+            కొరకు(i = 0; i < im.w; ++i){
+                బూడిద.దత్తాంశం[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
             }
         }
     }
-    return gray;
+    తిరిగి బూడిద;
 }
 
-image threshold_image(image im, float thresh)
+image పరిమితి_image(image im, దశాంశం thresh)
 {
-    int i;
+    పూర్ణాంకం i;
     image t = make_image(im.w, im.h, im.c);
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        t.data[i] = im.data[i]>thresh ? 1 : 0;
+    కొరకు(i = 0; i < im.w*im.h*im.c; ++i){
+        t.దత్తాంశం[i] = im.దత్తాంశం[i]>thresh ? 1 : 0;
     }
-    return t;
+    తిరిగి t;
 }
 
-image blend_image(image fore, image back, float alpha)
+image blend_image(image fore, image వెనుక, దశాంశం alpha)
 {
-    assert(fore.w == back.w && fore.h == back.h && fore.c == back.c);
+    ప్రతిజ్ఞా(fore.w == వెనుక.w && fore.h == వెనుక.h && fore.c == వెనుక.c);
     image blend = make_image(fore.w, fore.h, fore.c);
-    int i, j, k;
-    for(k = 0; k < fore.c; ++k){
-        for(j = 0; j < fore.h; ++j){
-            for(i = 0; i < fore.w; ++i){
-                float val = alpha * get_pixel(fore, i, j, k) + 
-                    (1 - alpha)* get_pixel(back, i, j, k);
-                set_pixel(blend, i, j, k, val);
+    పూర్ణాంకం i, j, k;
+    కొరకు(k = 0; k < fore.c; ++k){
+        కొరకు(j = 0; j < fore.h; ++j){
+            కొరకు(i = 0; i < fore.w; ++i){
+                దశాంశం val = alpha * get_pixel(fore, i, j, k) + 
+                    (1 - alpha)* get_pixel(వెనుక, i, j, k);
+                సమితి_pixel(blend, i, j, k, val);
             }
         }
     }
-    return blend;
+    తిరిగి blend;
 }
 
-void scale_image_channel(image im, int c, float v)
+శూన్య scale_image_channel(image im, పూర్ణాంకం c, దశాంశం v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    పూర్ణాంకం i, j;
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
+            దశాంశం pix = get_pixel(im, i, j, c);
             pix = pix*v;
-            set_pixel(im, i, j, c, pix);
+            సమితి_pixel(im, i, j, c, pix);
         }
     }
 }
 
-void translate_image_channel(image im, int c, float v)
+శూన్య translate_image_channel(image im, పూర్ణాంకం c, దశాంశం v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    పూర్ణాంకం i, j;
+    కొరకు(j = 0; j < im.h; ++j){
+        కొరకు(i = 0; i < im.w; ++i){
+            దశాంశం pix = get_pixel(im, i, j, c);
             pix = pix+v;
-            set_pixel(im, i, j, c, pix);
+            సమితి_pixel(im, i, j, c, pix);
         }
     }
 }
@@ -1127,126 +1127,126 @@ void translate_image_channel(image im, int c, float v)
 image binarize_image(image im)
 {
     image c = copy_image(im);
-    int i;
-    for(i = 0; i < im.w * im.h * im.c; ++i){
-        if(c.data[i] > .5) c.data[i] = 1;
-        else c.data[i] = 0;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < im.w * im.h * im.c; ++i){
+        ఒకవేళ(c.దత్తాంశం[i] > .5) c.దత్తాంశం[i] = 1;
+        లేకపోతే c.దత్తాంశం[i] = 0;
     }
-    return c;
+    తిరిగి c;
 }
 
-void saturate_image(image im, float sat)
+శూన్య saturate_image(image im, దశాంశం sat)
 {
-    rgb_to_hsv(im);
+    rgb_గమ్యం_hsv(im);
     scale_image_channel(im, 1, sat);
-    hsv_to_rgb(im);
+    hsv_గమ్యం_rgb(im);
     constrain_image(im);
 }
 
-void hue_image(image im, float hue)
+శూన్య hue_image(image im, దశాంశం hue)
 {
-    rgb_to_hsv(im);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+    rgb_గమ్యం_hsv(im);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < im.w*im.h; ++i){
+        im.దత్తాంశం[i] = im.దత్తాంశం[i] + hue;
+        ఒకవేళ (im.దత్తాంశం[i] > 1) im.దత్తాంశం[i] -= 1;
+        ఒకవేళ (im.దత్తాంశం[i] < 0) im.దత్తాంశం[i] += 1;
     }
-    hsv_to_rgb(im);
+    hsv_గమ్యం_rgb(im);
     constrain_image(im);
 }
 
-void exposure_image(image im, float sat)
+శూన్య exposure_image(image im, దశాంశం sat)
 {
-    rgb_to_hsv(im);
+    rgb_గమ్యం_hsv(im);
     scale_image_channel(im, 2, sat);
-    hsv_to_rgb(im);
+    hsv_గమ్యం_rgb(im);
     constrain_image(im);
 }
 
-void distort_image(image im, float hue, float sat, float val)
+శూన్య distort_image(image im, దశాంశం hue, దశాంశం sat, దశాంశం val)
 {
-    rgb_to_hsv(im);
+    rgb_గమ్యం_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, val);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < im.w*im.h; ++i){
+        im.దత్తాంశం[i] = im.దత్తాంశం[i] + hue;
+        ఒకవేళ (im.దత్తాంశం[i] > 1) im.దత్తాంశం[i] -= 1;
+        ఒకవేళ (im.దత్తాంశం[i] < 0) im.దత్తాంశం[i] += 1;
     }
-    hsv_to_rgb(im);
+    hsv_గమ్యం_rgb(im);
     constrain_image(im);
 }
 
-void random_distort_image(image im, float hue, float saturation, float exposure)
+శూన్య random_distort_image(image im, దశాంశం hue, దశాంశం saturation, దశాంశం exposure)
 {
-    float dhue = rand_uniform(-hue, hue);
-    float dsat = rand_scale(saturation);
-    float dexp = rand_scale(exposure);
+    దశాంశం dhue = rand_ఏకరీతి(-hue, hue);
+    దశాంశం dsat = rand_scale(saturation);
+    దశాంశం dexp = rand_scale(exposure);
     distort_image(im, dhue, dsat, dexp);
 }
 
-void saturate_exposure_image(image im, float sat, float exposure)
+శూన్య saturate_exposure_image(image im, దశాంశం sat, దశాంశం exposure)
 {
-    rgb_to_hsv(im);
+    rgb_గమ్యం_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, exposure);
-    hsv_to_rgb(im);
+    hsv_గమ్యం_rgb(im);
     constrain_image(im);
 }
 
-image resize_image(image im, int w, int h)
+image resize_image(image im, పూర్ణాంకం w, పూర్ణాంకం h)
 {
     image resized = make_image(w, h, im.c);   
     image part = make_image(w, im.h, im.c);
-    int r, c, k;
-    float w_scale = (float)(im.w - 1) / (w - 1);
-    float h_scale = (float)(im.h - 1) / (h - 1);
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < im.h; ++r){
-            for(c = 0; c < w; ++c){
-                float val = 0;
-                if(c == w-1 || im.w == 1){
+    పూర్ణాంకం r, c, k;
+    దశాంశం w_scale = (దశాంశం)(im.w - 1) / (w - 1);
+    దశాంశం h_scale = (దశాంశం)(im.h - 1) / (h - 1);
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(r = 0; r < im.h; ++r){
+            కొరకు(c = 0; c < w; ++c){
+                దశాంశం val = 0;
+                ఒకవేళ(c == w-1 || im.w == 1){
                     val = get_pixel(im, im.w-1, r, k);
-                } else {
-                    float sx = c*w_scale;
-                    int ix = (int) sx;
-                    float dx = sx - ix;
+                } లేకపోతే {
+                    దశాంశం sx = c*w_scale;
+                    పూర్ణాంకం ix = (పూర్ణాంకం) sx;
+                    దశాంశం dx = sx - ix;
                     val = (1 - dx) * get_pixel(im, ix, r, k) + dx * get_pixel(im, ix+1, r, k);
                 }
-                set_pixel(part, c, r, k, val);
+                సమితి_pixel(part, c, r, k, val);
             }
         }
     }
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < h; ++r){
-            float sy = r*h_scale;
-            int iy = (int) sy;
-            float dy = sy - iy;
-            for(c = 0; c < w; ++c){
-                float val = (1-dy) * get_pixel(part, c, iy, k);
-                set_pixel(resized, c, r, k, val);
+    కొరకు(k = 0; k < im.c; ++k){
+        కొరకు(r = 0; r < h; ++r){
+            దశాంశం sy = r*h_scale;
+            పూర్ణాంకం iy = (పూర్ణాంకం) sy;
+            దశాంశం dy = sy - iy;
+            కొరకు(c = 0; c < w; ++c){
+                దశాంశం val = (1-dy) * get_pixel(part, c, iy, k);
+                సమితి_pixel(resized, c, r, k, val);
             }
-            if(r == h-1 || im.h == 1) continue;
-            for(c = 0; c < w; ++c){
-                float val = dy * get_pixel(part, c, iy+1, k);
-                add_pixel(resized, c, r, k, val);
+            ఒకవేళ(r == h-1 || im.h == 1) కొనసాగు;
+            కొరకు(c = 0; c < w; ++c){
+                దశాంశం val = dy * get_pixel(part, c, iy+1, k);
+                కూడు_pixel(resized, c, r, k, val);
             }
         }
     }
 
     free_image(part);
-    return resized;
+    తిరిగి resized;
 }
 
 
-void test_resize(char *filename)
+శూన్య test_resize(అక్షరం *filename)
 {
-    image im = load_image(filename, 0,0, 3);
-    float mag = mag_array(im.data, im.w*im.h*im.c);
-    printf("L2 Norm: %f\n", mag);
-    image gray = grayscale_image(im);
+    image im = ఎక్కించు_image(filename, 0,0, 3);
+    దశాంశం mag = mag_array(im.దత్తాంశం, im.w*im.h*im.c);
+    రాయి("L2 Norm: %f\n", mag);
+    image బూడిద = grayscale_image(im);
 
     image c1 = copy_image(im);
     image c2 = copy_image(im);
@@ -1259,180 +1259,180 @@ void test_resize(char *filename)
 
 
     show_image(im,   "Original", 1);
-    show_image(gray, "Gray", 1);
+    show_image(బూడిద, "Gray", 1);
     show_image(c1, "C1", 1);
     show_image(c2, "C2", 1);
     show_image(c3, "C3", 1);
     show_image(c4, "C4", 1);
-#ifdef OPENCV
-    while(1){
+#నిర్వచితమైతే OPENCV
+    అయితే(1){
         image aug = random_augment_image(im, 0, .75, 320, 448, 320, 320);
         show_image(aug, "aug", 1);
         free_image(aug);
 
 
-        float exposure = 1.15;
-        float saturation = 1.15;
-        float hue = .05;
+        దశాంశం exposure = 1.15;
+        దశాంశం saturation = 1.15;
+        దశాంశం hue = .05;
 
         image c = copy_image(im);
 
-        float dexp = rand_scale(exposure);
-        float dsat = rand_scale(saturation);
-        float dhue = rand_uniform(-hue, hue);
+        దశాంశం dexp = rand_scale(exposure);
+        దశాంశం dsat = rand_scale(saturation);
+        దశాంశం dhue = rand_ఏకరీతి(-hue, hue);
 
         distort_image(c, dhue, dsat, dexp);
         show_image(c, "rand", 1);
-        printf("%f %f %f\n", dhue, dsat, dexp);
+        రాయి("%f %f %f\n", dhue, dsat, dexp);
         free_image(c);
     }
-#endif
+#అయితే_ముగింపు
 }
 
 
-image load_image_stb(char *filename, int channels)
+image ఎక్కించు_image_stb(అక్షరం *filename, పూర్ణాంకం channels)
 {
-    int w, h, c;
-    unsigned char *data = stbi_load(filename, &w, &h, &c, channels);
-    if (!data) {
+    పూర్ణాంకం w, h, c;
+    గుర్తులేని అక్షరం *దత్తాంశం = stbi_ఎక్కించు(filename, &w, &h, &c, channels);
+    ఒకవేళ (!దత్తాంశం) {
         fprintf(stderr, "Cannot load image \"%s\"\nSTB Reason: %s\n", filename, stbi_failure_reason());
-        exit(0);
+        నిష్క్రమించు(0);
     }
-    if(channels) c = channels;
-    int i,j,k;
+    ఒకవేళ(channels) c = channels;
+    పూర్ణాంకం i,j,k;
     image im = make_image(w, h, c);
-    for(k = 0; k < c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int dst_index = i + w*j + w*h*k;
-                int src_index = k + c*i + c*w*j;
-                im.data[dst_index] = (float)data[src_index]/255.;
+    కొరకు(k = 0; k < c; ++k){
+        కొరకు(j = 0; j < h; ++j){
+            కొరకు(i = 0; i < w; ++i){
+                పూర్ణాంకం dst_సూచీ = i + w*j + w*h*k;
+                పూర్ణాంకం src_సూచీ = k + c*i + c*w*j;
+                im.దత్తాంశం[dst_సూచీ] = (దశాంశం)దత్తాంశం[src_సూచీ]/255.;
             }
         }
     }
-    free(data);
-    return im;
+    విడుదల(దత్తాంశం);
+    తిరిగి im;
 }
 
-image load_image(char *filename, int w, int h, int c)
+image ఎక్కించు_image(అక్షరం *filename, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c)
 {
-#ifdef OPENCV
-    image out = load_image_cv(filename, c);
-#else
-    image out = load_image_stb(filename, c);
-#endif
+#నిర్వచితమైతే OPENCV
+    image బహిర్గతం = ఎక్కించు_image_cv(filename, c);
+#లేకపోతే
+    image బహిర్గతం = ఎక్కించు_image_stb(filename, c);
+#అయితే_ముగింపు
 
-    if((h && w) && (h != out.h || w != out.w)){
-        image resized = resize_image(out, w, h);
-        free_image(out);
-        out = resized;
+    ఒకవేళ((h && w) && (h != బహిర్గతం.h || w != బహిర్గతం.w)){
+        image resized = resize_image(బహిర్గతం, w, h);
+        free_image(బహిర్గతం);
+        బహిర్గతం = resized;
     }
-    return out;
+    తిరిగి బహిర్గతం;
 }
 
-image load_image_color(char *filename, int w, int h)
+image ఎక్కించు_image_color(అక్షరం *filename, పూర్ణాంకం w, పూర్ణాంకం h)
 {
-    return load_image(filename, w, h, 3);
+    తిరిగి ఎక్కించు_image(filename, w, h, 3);
 }
 
-image get_image_layer(image m, int l)
+image get_image_layer(image m, పూర్ణాంకం l)
 {
-    image out = make_image(m.w, m.h, 1);
-    int i;
-    for(i = 0; i < m.h*m.w; ++i){
-        out.data[i] = m.data[i+l*m.h*m.w];
+    image బహిర్గతం = make_image(m.w, m.h, 1);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < m.h*m.w; ++i){
+        బహిర్గతం.దత్తాంశం[i] = m.దత్తాంశం[i+l*m.h*m.w];
     }
-    return out;
+    తిరిగి బహిర్గతం;
 }
-void print_image(image m)
+శూన్య print_image(image m)
 {
-    int i, j, k;
-    for(i =0 ; i < m.c; ++i){
-        for(j =0 ; j < m.h; ++j){
-            for(k = 0; k < m.w; ++k){
-                printf("%.2lf, ", m.data[i*m.h*m.w + j*m.w + k]);
-                if(k > 30) break;
+    పూర్ణాంకం i, j, k;
+    కొరకు(i =0 ; i < m.c; ++i){
+        కొరకు(j =0 ; j < m.h; ++j){
+            కొరకు(k = 0; k < m.w; ++k){
+                రాయి("%.2lf, ", m.దత్తాంశం[i*m.h*m.w + j*m.w + k]);
+                ఒకవేళ(k > 30) ఆపు;
             }
-            printf("\n");
-            if(j > 30) break;
+            రాయి("\n");
+            ఒకవేళ(j > 30) ఆపు;
         }
-        printf("\n");
+        రాయి("\n");
     }
-    printf("\n");
+    రాయి("\n");
 }
 
-image collapse_images_vert(image *ims, int n)
+image collapse_images_vert(image *ims, పూర్ణాంకం n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
+    పూర్ణాంకం color = 1;
+    పూర్ణాంకం border = 1;
+    పూర్ణాంకం h,w,c;
     w = ims[0].w;
     h = (ims[0].h + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    ఒకవేళ(c != 3 || !color){
         w = (w+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int h_offset = i*(ims[0].h+border);
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < n; ++i){
+        పూర్ణాంకం h_స్థానభ్రంశం = i*(ims[0].h+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
-            embed_image(copy, filters, 0, h_offset);
+        ఒకవేళ(c == 3 && color){
+            embed_image(copy, filters, 0, h_స్థానభ్రంశం);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int w_offset = j*(ims[0].w+border);
+        లేకపోతే{
+            కొరకు(j = 0; j < copy.c; ++j){
+                పూర్ణాంకం w_స్థానభ్రంశం = j*(ims[0].w+border);
                 image layer = get_image_layer(copy, j);
-                embed_image(layer, filters, w_offset, h_offset);
+                embed_image(layer, filters, w_స్థానభ్రంశం, h_స్థానభ్రంశం);
                 free_image(layer);
             }
         }
         free_image(copy);
     }
-    return filters;
+    తిరిగి filters;
 } 
 
-image collapse_images_horz(image *ims, int n)
+image collapse_images_horz(image *ims, పూర్ణాంకం n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
-    int size = ims[0].h;
-    h = size;
+    పూర్ణాంకం color = 1;
+    పూర్ణాంకం border = 1;
+    పూర్ణాంకం h,w,c;
+    పూర్ణాంకం కొలత = ims[0].h;
+    h = కొలత;
     w = (ims[0].w + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    ఒకవేళ(c != 3 || !color){
         h = (h+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int w_offset = i*(size+border);
+    పూర్ణాంకం i,j;
+    కొరకు(i = 0; i < n; ++i){
+        పూర్ణాంకం w_స్థానభ్రంశం = i*(కొలత+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
-            embed_image(copy, filters, w_offset, 0);
+        ఒకవేళ(c == 3 && color){
+            embed_image(copy, filters, w_స్థానభ్రంశం, 0);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int h_offset = j*(size+border);
+        లేకపోతే{
+            కొరకు(j = 0; j < copy.c; ++j){
+                పూర్ణాంకం h_స్థానభ్రంశం = j*(కొలత+border);
                 image layer = get_image_layer(copy, j);
-                embed_image(layer, filters, w_offset, h_offset);
+                embed_image(layer, filters, w_స్థానభ్రంశం, h_స్థానభ్రంశం);
                 free_image(layer);
             }
         }
         free_image(copy);
     }
-    return filters;
+    తిరిగి filters;
 } 
 
-void show_image_normalized(image im, const char *name)
+శూన్య show_image_normalized(image im, స్థిరరాశి అక్షరం *name)
 {
     image c = copy_image(im);
     normalize_image(c);
@@ -1440,7 +1440,7 @@ void show_image_normalized(image im, const char *name)
     free_image(c);
 }
 
-void show_images(image *ims, int n, char *window)
+శూన్య show_images(image *ims, పూర్ణాంకం n, అక్షరం *కిటికీ)
 {
     image m = collapse_images_vert(ims, n);
     /*
@@ -1453,14 +1453,14 @@ void show_images(image *ims, int n, char *window)
        image sized = resize_image(m, w, h);
      */
     normalize_image(m);
-    save_image(m, window);
-    show_image(m, window, 1);
+    save_image(m, కిటికీ);
+    show_image(m, కిటికీ, 1);
     free_image(m);
 }
 
-void free_image(image m)
+శూన్య free_image(image m)
 {
-    if(m.data){
-        free(m.data);
+    ఒకవేళ(m.దత్తాంశం){
+        విడుదల(m.దత్తాంశం);
     }
 }

@@ -1,347 +1,347 @@
-#include "blas.h"
+#అన్తర్భావ "blas.h"
 
-#include <math.h>
-#include <assert.h>
-#include <float.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out)
+#అన్తర్భావ <math.h>
+#అన్తర్భావ <assert.h>
+#అన్తర్భావ <float.h>
+#అన్తర్భావ <stdio.h>
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <string.h>
+శూన్య reorg_cpu(దశాంశం *x, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం batch, పూర్ణాంకం stride, పూర్ణాంకం forward, దశాంశం *బహిర్గతం)
 {
-    int b,i,j,k;
-    int out_c = c/(stride*stride);
+    పూర్ణాంకం b,i,j,k;
+    పూర్ణాంకం బహిర్గతం_c = c/(stride*stride);
 
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h; ++j){
-                for(i = 0; i < w; ++i){
-                    int in_index  = i + w*(j + h*(k + c*b));
-                    int c2 = k % out_c;
-                    int offset = k / out_c;
-                    int w2 = i*stride + offset % stride;
-                    int h2 = j*stride + offset / stride;
-                    int out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
-                    if(forward) out[out_index] = x[in_index];
-                    else out[in_index] = x[out_index];
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(k = 0; k < c; ++k){
+            కొరకు(j = 0; j < h; ++j){
+                కొరకు(i = 0; i < w; ++i){
+                    పూర్ణాంకం లోపల_సూచీ  = i + w*(j + h*(k + c*b));
+                    పూర్ణాంకం c2 = k % బహిర్గతం_c;
+                    పూర్ణాంకం స్థానభ్రంశం = k / బహిర్గతం_c;
+                    పూర్ణాంకం w2 = i*stride + స్థానభ్రంశం % stride;
+                    పూర్ణాంకం h2 = j*stride + స్థానభ్రంశం / stride;
+                    పూర్ణాంకం బహిర్గతం_సూచీ = w2 + w*stride*(h2 + h*stride*(c2 + బహిర్గతం_c*b));
+                    ఒకవేళ(forward) బహిర్గతం[బహిర్గతం_సూచీ] = x[లోపల_సూచీ];
+                    లేకపోతే బహిర్గతం[లోపల_సూచీ] = x[బహిర్గతం_సూచీ];
                 }
             }
         }
     }
 }
 
-void flatten(float *x, int size, int layers, int batch, int forward)
+శూన్య flatten(దశాంశం *x, పూర్ణాంకం కొలత, పూర్ణాంకం layers, పూర్ణాంకం batch, పూర్ణాంకం forward)
 {
-    float *swap = calloc(size*layers*batch, sizeof(float));
-    int i,c,b;
-    for(b = 0; b < batch; ++b){
-        for(c = 0; c < layers; ++c){
-            for(i = 0; i < size; ++i){
-                int i1 = b*layers*size + c*size + i;
-                int i2 = b*layers*size + i*layers + c;
-                if (forward) swap[i2] = x[i1];
-                else swap[i1] = x[i2];
+    దశాంశం *మార్పిడి = సున్నా_జ్ఞాపకం_ఇవ్వు(కొలత*layers*batch, పరిమాణం(దశాంశం));
+    పూర్ణాంకం i,c,b;
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(c = 0; c < layers; ++c){
+            కొరకు(i = 0; i < కొలత; ++i){
+                పూర్ణాంకం i1 = b*layers*కొలత + c*కొలత + i;
+                పూర్ణాంకం i2 = b*layers*కొలత + i*layers + c;
+                ఒకవేళ (forward) మార్పిడి[i2] = x[i1];
+                లేకపోతే మార్పిడి[i1] = x[i2];
             }
         }
     }
-    memcpy(x, swap, size*layers*batch*sizeof(float));
-    free(swap);
+    జ్ఞాపకం_నకలు(x, మార్పిడి, కొలత*layers*batch*పరిమాణం(దశాంశం));
+    విడుదల(మార్పిడి);
 }
 
-void weighted_sum_cpu(float *a, float *b, float *s, int n, float *c)
+శూన్య weighted_కూడిక_cpu(దశాంశం *a, దశాంశం *b, దశాంశం *s, పూర్ణాంకం n, దశాంశం *c)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
         c[i] = s[i]*a[i] + (1-s[i])*(b ? b[i] : 0);
     }
 }
 
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc)
+శూన్య weighted_delta_cpu(దశాంశం *a, దశాంశం *b, దశాంశం *s, దశాంశం *da, దశాంశం *db, దశాంశం *ds, పూర్ణాంకం n, దశాంశం *dc)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(da) da[i] += dc[i] * s[i];
-        if(db) db[i] += dc[i] * (1-s[i]);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        ఒకవేళ(da) da[i] += dc[i] * s[i];
+        ఒకవేళ(db) db[i] += dc[i] * (1-s[i]);
         ds[i] += dc[i] * (a[i] - b[i]);
     }
 }
 
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out)
+శూన్య shortcut_cpu(పూర్ణాంకం batch, పూర్ణాంకం w1, పూర్ణాంకం h1, పూర్ణాంకం c1, దశాంశం *కూడు, పూర్ణాంకం w2, పూర్ణాంకం h2, పూర్ణాంకం c2, దశాంశం s1, దశాంశం s2, దశాంశం *బహిర్గతం)
 {
-    int stride = w1/w2;
-    int sample = w2/w1;
-    assert(stride == h1/h2);
-    assert(sample == h2/h1);
-    if(stride < 1) stride = 1;
-    if(sample < 1) sample = 1;
-    int minw = (w1 < w2) ? w1 : w2;
-    int minh = (h1 < h2) ? h1 : h2;
-    int minc = (c1 < c2) ? c1 : c2;
+    పూర్ణాంకం stride = w1/w2;
+    పూర్ణాంకం sample = w2/w1;
+    ప్రతిజ్ఞా(stride == h1/h2);
+    ప్రతిజ్ఞా(sample == h2/h1);
+    ఒకవేళ(stride < 1) stride = 1;
+    ఒకవేళ(sample < 1) sample = 1;
+    పూర్ణాంకం minw = (w1 < w2) ? w1 : w2;
+    పూర్ణాంకం minh = (h1 < h2) ? h1 : h2;
+    పూర్ణాంకం minc = (c1 < c2) ? c1 : c2;
 
-    int i,j,k,b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < minc; ++k){
-            for(j = 0; j < minh; ++j){
-                for(i = 0; i < minw; ++i){
-                    int out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
-                    int add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
-                    out[out_index] = s1*out[out_index] + s2*add[add_index];
+    పూర్ణాంకం i,j,k,b;
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(k = 0; k < minc; ++k){
+            కొరకు(j = 0; j < minh; ++j){
+                కొరకు(i = 0; i < minw; ++i){
+                    పూర్ణాంకం బహిర్గతం_సూచీ = i*sample + w2*(j*sample + h2*(k + c2*b));
+                    పూర్ణాంకం కూడు_సూచీ = i*stride + w1*(j*stride + h1*(k + c1*b));
+                    బహిర్గతం[బహిర్గతం_సూచీ] = s1*బహిర్గతం[బహిర్గతం_సూచీ] + s2*కూడు[కూడు_సూచీ];
                 }
             }
         }
     }
 }
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
+శూన్య సగటు_cpu(దశాంశం *x, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *సగటు)
 {
-    float scale = 1./(batch * spatial);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
-        mean[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
-                mean[i] += x[index];
+    దశాంశం scale = 1./(batch * spatial);
+    పూర్ణాంకం i,j,k;
+    కొరకు(i = 0; i < filters; ++i){
+        సగటు[i] = 0;
+        కొరకు(j = 0; j < batch; ++j){
+            కొరకు(k = 0; k < spatial; ++k){
+                పూర్ణాంకం సూచీ = j*filters*spatial + i*spatial + k;
+                సగటు[i] += x[సూచీ];
             }
         }
-        mean[i] *= scale;
+        సగటు[i] *= scale;
     }
 }
 
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance)
+శూన్య variance_cpu(దశాంశం *x, దశాంశం *సగటు, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial, దశాంశం *variance)
 {
-    float scale = 1./(batch * spatial - 1);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    దశాంశం scale = 1./(batch * spatial - 1);
+    పూర్ణాంకం i,j,k;
+    కొరకు(i = 0; i < filters; ++i){
         variance[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
-                variance[i] += pow((x[index] - mean[i]), 2);
+        కొరకు(j = 0; j < batch; ++j){
+            కొరకు(k = 0; k < spatial; ++k){
+                పూర్ణాంకం సూచీ = j*filters*spatial + i*spatial + k;
+                variance[i] += ఘాతం((x[సూచీ] - సగటు[i]), 2);
             }
         }
         variance[i] *= scale;
     }
 }
 
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
+శూన్య l2normalize_cpu(దశాంశం *x, దశాంశం *dx, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial)
 {
-    int b,f,i;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < spatial; ++i){
-            float sum = 0;
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
-                sum += powf(x[index], 2);
+    పూర్ణాంకం b,f,i;
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(i = 0; i < spatial; ++i){
+            దశాంశం కూడిక = 0;
+            కొరకు(f = 0; f < filters; ++f){
+                పూర్ణాంకం సూచీ = b*filters*spatial + f*spatial + i;
+                కూడిక += powf(x[సూచీ], 2);
             }
-            sum = sqrtf(sum);
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
-                x[index] /= sum;
-                dx[index] = (1 - x[index]) / sum;
-            }
-        }
-    }
-}
-
-
-void normalize_cpu(float *x, float *mean, float *variance, int batch, int filters, int spatial)
-{
-    int b, f, i;
-    for(b = 0; b < batch; ++b){
-        for(f = 0; f < filters; ++f){
-            for(i = 0; i < spatial; ++i){
-                int index = b*filters*spatial + f*spatial + i;
-                x[index] = (x[index] - mean[f])/(sqrt(variance[f]) + .000001f);
+            కూడిక = sqrtf(కూడిక);
+            కొరకు(f = 0; f < filters; ++f){
+                పూర్ణాంకం సూచీ = b*filters*spatial + f*spatial + i;
+                x[సూచీ] /= కూడిక;
+                dx[సూచీ] = (1 - x[సూచీ]) / కూడిక;
             }
         }
     }
 }
 
-void const_cpu(int N, float ALPHA, float *X, int INCX)
-{
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
-}
 
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY)
+శూన్య normalize_cpu(దశాంశం *x, దశాంశం *సగటు, దశాంశం *variance, పూర్ణాంకం batch, పూర్ణాంకం filters, పూర్ణాంకం spatial)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
-}
-
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
-{
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = pow(X[i*INCX], ALPHA);
-}
-
-void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
-{
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
-}
-
-void scal_cpu(int N, float ALPHA, float *X, int INCX)
-{
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
-}
-
-void fill_cpu(int N, float ALPHA, float *X, int INCX)
-{
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
-}
-
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
-{
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
-            if(X) X[j*NX + i] += OUT[index];
-            ++index;
-        }
-        for(i = 0; i < NY; ++i){
-            if(Y) Y[j*NY + i] += OUT[index];
-            ++index;
+    పూర్ణాంకం b, f, i;
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(f = 0; f < filters; ++f){
+            కొరకు(i = 0; i < spatial; ++i){
+                పూర్ణాంకం సూచీ = b*filters*spatial + f*spatial + i;
+                x[సూచీ] = (x[సూచీ] - సగటు[f])/(వర్గమూలం(variance[f]) + .000001f);
+            }
         }
     }
 }
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+శూన్య const_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
-            OUT[index++] = X[j*NX + i];
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+}
+
+శూన్య mul_cpu(పూర్ణాంకం N, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY)
+{
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
+}
+
+శూన్య pow_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY)
+{
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) Y[i*INCY] = ఘాతం(X[i*INCX], ALPHA);
+}
+
+శూన్య axpy_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY)
+{
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
+}
+
+శూన్య scal_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX)
+{
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
+}
+
+శూన్య fill_cpu(పూర్ణాంకం N, దశాంశం ALPHA, దశాంశం *X, పూర్ణాంకం INCX)
+{
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+}
+
+శూన్య deinter_cpu(పూర్ణాంకం NX, దశాంశం *X, పూర్ణాంకం NY, దశాంశం *Y, పూర్ణాంకం B, దశాంశం *బహిర్గతం_2)
+{
+    పూర్ణాంకం i, j;
+    పూర్ణాంకం సూచీ = 0;
+    కొరకు(j = 0; j < B; ++j) {
+        కొరకు(i = 0; i < NX; ++i){
+            ఒకవేళ(X) X[j*NX + i] += బహిర్గతం_2[సూచీ];
+            ++సూచీ;
         }
-        for(i = 0; i < NY; ++i){
-            OUT[index++] = Y[j*NY + i];
+        కొరకు(i = 0; i < NY; ++i){
+            ఒకవేళ(Y) Y[j*NY + i] += బహిర్గతం_2[సూచీ];
+            ++సూచీ;
         }
     }
 }
 
-void copy_cpu(int N, float *X, int INCX, float *Y, int INCY)
+శూన్య inter_cpu(పూర్ణాంకం NX, దశాంశం *X, పూర్ణాంకం NY, దశాంశం *Y, పూర్ణాంకం B, దశాంశం *బహిర్గతం_2)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
+    పూర్ణాంకం i, j;
+    పూర్ణాంకం సూచీ = 0;
+    కొరకు(j = 0; j < B; ++j) {
+        కొరకు(i = 0; i < NX; ++i){
+            బహిర్గతం_2[సూచీ++] = X[j*NX + i];
+        }
+        కొరకు(i = 0; i < NY; ++i){
+            బహిర్గతం_2[సూచీ++] = Y[j*NY + i];
+        }
+    }
 }
 
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z)
+శూన్య copy_cpu(పూర్ణాంకం N, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
 }
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+శూన్య mult_కూడు_into_cpu(పూర్ణాంకం N, దశాంశం *X, దశాంశం *Y, దశాంశం *Z)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
-        float abs_val = fabs(diff);
-        if(abs_val < 1) {
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
+}
+
+శూన్య smooth_l1_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error)
+{
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        దశాంశం diff = truth[i] - pred[i];
+        దశాంశం abs_val = fabs(diff);
+        ఒకవేళ(abs_val < 1) {
             error[i] = diff * diff;
             delta[i] = diff;
         }
-        else {
+        లేకపోతే {
             error[i] = 2*abs_val - 1;
             delta[i] = (diff < 0) ? 1 : -1;
         }
     }
 }
 
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+శూన్య l1_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        దశాంశం diff = truth[i] - pred[i];
         error[i] = fabs(diff);
         delta[i] = diff > 0 ? 1 : -1;
     }
 }
 
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+శూన్య softmax_x_ent_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float t = truth[i];
-        float p = pred[i];
-        error[i] = (t) ? -log(p) : 0;
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        దశాంశం t = truth[i];
+        దశాంశం p = pred[i];
+        error[i] = (t) ? -సంవర్గమానం(p) : 0;
         delta[i] = t-p;
     }
 }
 
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+శూన్య logistic_x_ent_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float t = truth[i];
-        float p = pred[i];
-        error[i] = -t*log(p) - (1-t)*log(1-p);
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        దశాంశం t = truth[i];
+        దశాంశం p = pred[i];
+        error[i] = -t*సంవర్గమానం(p) - (1-t)*సంవర్గమానం(1-p);
         delta[i] = t-p;
     }
 }
 
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error)
+శూన్య l2_cpu(పూర్ణాంకం n, దశాంశం *pred, దశాంశం *truth, దశాంశం *delta, దశాంశం *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
+    పూర్ణాంకం i;
+    కొరకు(i = 0; i < n; ++i){
+        దశాంశం diff = truth[i] - pred[i];
         error[i] = diff * diff;
         delta[i] = diff;
     }
 }
 
-float dot_cpu(int N, float *X, int INCX, float *Y, int INCY)
+దశాంశం dot_cpu(పూర్ణాంకం N, దశాంశం *X, పూర్ణాంకం INCX, దశాంశం *Y, పూర్ణాంకం INCY)
 {
-    int i;
-    float dot = 0;
-    for(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
-    return dot;
+    పూర్ణాంకం i;
+    దశాంశం dot = 0;
+    కొరకు(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
+    తిరిగి dot;
 }
 
-void softmax(float *input, int n, float temp, int stride, float *output)
+శూన్య softmax(దశాంశం *ఆదానం, పూర్ణాంకం n, దశాంశం తాత్కాలిక, పూర్ణాంకం stride, దశాంశం *output)
 {
-    int i;
-    float sum = 0;
-    float largest = -FLT_MAX;
-    for(i = 0; i < n; ++i){
-        if(input[i*stride] > largest) largest = input[i*stride];
+    పూర్ణాంకం i;
+    దశాంశం కూడిక = 0;
+    దశాంశం అతిపెద్ద = -FLT_MAX;
+    కొరకు(i = 0; i < n; ++i){
+        ఒకవేళ(ఆదానం[i*stride] > అతిపెద్ద) అతిపెద్ద = ఆదానం[i*stride];
     }
-    for(i = 0; i < n; ++i){
-        float e = exp(input[i*stride]/temp - largest/temp);
-        sum += e;
+    కొరకు(i = 0; i < n; ++i){
+        దశాంశం e = ఘాతాంకం(ఆదానం[i*stride]/తాత్కాలిక - అతిపెద్ద/తాత్కాలిక);
+        కూడిక += e;
         output[i*stride] = e;
     }
-    for(i = 0; i < n; ++i){
-        output[i*stride] /= sum;
+    కొరకు(i = 0; i < n; ++i){
+        output[i*stride] /= కూడిక;
     }
 }
 
 
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output)
+శూన్య softmax_cpu(దశాంశం *ఆదానం, పూర్ణాంకం n, పూర్ణాంకం batch, పూర్ణాంకం batch_స్థానభ్రంశం, పూర్ణాంకం groups, పూర్ణాంకం సమూహం_స్థానభ్రంశం, పూర్ణాంకం stride, దశాంశం తాత్కాలిక, దశాంశం *output)
 {
-    int g, b;
-    for(b = 0; b < batch; ++b){
-        for(g = 0; g < groups; ++g){
-            softmax(input + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
+    పూర్ణాంకం g, b;
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(g = 0; g < groups; ++g){
+            softmax(ఆదానం + b*batch_స్థానభ్రంశం + g*సమూహం_స్థానభ్రంశం, n, తాత్కాలిక, stride, output + b*batch_స్థానభ్రంశం + g*సమూహం_స్థానభ్రంశం);
         }
     }
 }
 
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out)
+శూన్య upsample_cpu(దశాంశం *లోపల, పూర్ణాంకం w, పూర్ణాంకం h, పూర్ణాంకం c, పూర్ణాంకం batch, పూర్ణాంకం stride, పూర్ణాంకం forward, దశాంశం scale, దశాంశం *బహిర్గతం)
 {
-    int i, j, k, b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h*stride; ++j){
-                for(i = 0; i < w*stride; ++i){
-                    int in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
-                    int out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
-                    if(forward) out[out_index] = scale*in[in_index];
-                    else in[in_index] += scale*out[out_index];
+    పూర్ణాంకం i, j, k, b;
+    కొరకు(b = 0; b < batch; ++b){
+        కొరకు(k = 0; k < c; ++k){
+            కొరకు(j = 0; j < h*stride; ++j){
+                కొరకు(i = 0; i < w*stride; ++i){
+                    పూర్ణాంకం లోపల_సూచీ = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
+                    పూర్ణాంకం బహిర్గతం_సూచీ = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
+                    ఒకవేళ(forward) బహిర్గతం[బహిర్గతం_సూచీ] = scale*లోపల[లోపల_సూచీ];
+                    లేకపోతే లోపల[లోపల_సూచీ] += scale*బహిర్గతం[బహిర్గతం_సూచీ];
                 }
             }
         }

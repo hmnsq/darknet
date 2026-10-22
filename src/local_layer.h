@@ -1,31 +1,31 @@
-#ifndef LOCAL_LAYER_H
-#define LOCAL_LAYER_H
+#నిర్వచితం_కాకపోతే LOCAL_LAYER_H
+#నిర్వచించు LOCAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#అన్తర్భావ "cuda.h"
+#అన్తర్భావ "image.h"
+#అన్తర్భావ "activations.h"
+#అన్తర్భావ "layer.h"
+#అన్తర్భావ "network.h"
 
-typedef layer local_layer;
+రకనిర్వచనం layer local_layer;
 
-#ifdef GPU
-void forward_local_layer_gpu(local_layer layer, network net);
-void backward_local_layer_gpu(local_layer layer, network net);
-void update_local_layer_gpu(local_layer layer, update_args a);
+#నిర్వచితమైతే GPU
+శూన్య forward_local_layer_gpu(local_layer layer, జాలం net);
+శూన్య backward_local_layer_gpu(local_layer layer, జాలం net);
+శూన్య update_local_layer_gpu(local_layer layer, update_వాదనలు a);
 
-void push_local_layer(local_layer layer);
-void pull_local_layer(local_layer layer);
-#endif
+శూన్య నెట్టు_local_layer(local_layer layer);
+శూన్య pull_local_layer(local_layer layer);
+#అయితే_ముగింపు
 
-local_layer make_local_layer(int batch, int h, int w, int c, int n, int size, int stride, int pad, ACTIVATION activation);
+local_layer make_local_layer(పూర్ణాంకం batch, పూర్ణాంకం h, పూర్ణాంకం w, పూర్ణాంకం c, పూర్ణాంకం n, పూర్ణాంకం కొలత, పూర్ణాంకం stride, పూర్ణాంకం pad, ACTIVATION activation);
 
-void forward_local_layer(const local_layer layer, network net);
-void backward_local_layer(local_layer layer, network net);
-void update_local_layer(local_layer layer, update_args a);
+శూన్య forward_local_layer(స్థిరరాశి local_layer layer, జాలం net);
+శూన్య backward_local_layer(local_layer layer, జాలం net);
+శూన్య update_local_layer(local_layer layer, update_వాదనలు a);
 
-void bias_output(float *output, float *biases, int batch, int n, int size);
-void backward_bias(float *bias_updates, float *delta, int batch, int n, int size);
+శూన్య bias_output(దశాంశం *output, దశాంశం *biases, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
+శూన్య backward_bias(దశాంశం *bias_updates, దశాంశం *delta, పూర్ణాంకం batch, పూర్ణాంకం n, పూర్ణాంకం కొలత);
 
-#endif
+#అయితే_ముగింపు
 

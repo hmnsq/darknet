@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#అన్తర్భావ <stdlib.h>
+#అన్తర్భావ <string.h>
+#అన్తర్భావ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
-	l->size = 0;
+	list *l = జ్ఞాపకం_ఇవ్వు(పరిమాణం(list));
+	l->కొలత = 0;
 	l->front = 0;
-	l->back = 0;
-	return l;
+	l->వెనుక = 0;
+	తిరిగి l;
 }
 
 /*
@@ -25,68 +25,68 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
-    l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
-    --l->size;
+శూన్య *list_తీయి(list *l){
+    ఒకవేళ(!l->వెనుక) తిరిగి 0;
+    కణుపు *b = l->వెనుక;
+    శూన్య *val = b->val;
+    l->వెనుక = b->prev;
+    ఒకవేళ(l->వెనుక) l->వెనుక->తదుపరి = 0;
+    విడుదల(b);
+    --l->కొలత;
     
-    return val;
+    తిరిగి val;
 }
 
-void list_insert(list *l, void *val)
+శూన్య list_చొప్పించు(list *l, శూన్య *val)
 {
-	node *new = malloc(sizeof(node));
+	కణుపు *new = జ్ఞాపకం_ఇవ్వు(పరిమాణం(కణుపు));
 	new->val = val;
-	new->next = 0;
+	new->తదుపరి = 0;
 
-	if(!l->back){
+	ఒకవేళ(!l->వెనుక){
 		l->front = new;
 		new->prev = 0;
-	}else{
-		l->back->next = new;
-		new->prev = l->back;
+	}లేకపోతే{
+		l->వెనుక->తదుపరి = new;
+		new->prev = l->వెనుక;
 	}
-	l->back = new;
-	++l->size;
+	l->వెనుక = new;
+	++l->కొలత;
 }
 
-void free_node(node *n)
+శూన్య free_కణుపు(కణుపు *n)
 {
-	node *next;
-	while(n) {
-		next = n->next;
-		free(n);
-		n = next;
-	}
-}
-
-void free_list(list *l)
-{
-	free_node(l->front);
-	free(l);
-}
-
-void free_list_contents(list *l)
-{
-	node *n = l->front;
-	while(n){
-		free(n->val);
-		n = n->next;
+	కణుపు *తదుపరి;
+	అయితే(n) {
+		తదుపరి = n->తదుపరి;
+		విడుదల(n);
+		n = తదుపరి;
 	}
 }
 
-void **list_to_array(list *l)
+శూన్య free_list(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
-        n = n->next;
+	free_కణుపు(l->front);
+	విడుదల(l);
+}
+
+శూన్య free_list_contents(list *l)
+{
+	కణుపు *n = l->front;
+	అయితే(n){
+		విడుదల(n->val);
+		n = n->తదుపరి;
+	}
+}
+
+శూన్య **list_గమ్యం_array(list *l)
+{
+    శూన్య **a = సున్నా_జ్ఞాపకం_ఇవ్వు(l->కొలత, పరిమాణం(శూన్య*));
+    పూర్ణాంకం లెక్క = 0;
+    కణుపు *n = l->front;
+    అయితే(n){
+        a[లెక్క++] = n->val;
+        n = n->తదుపరి;
     }
-    return a;
+    తిరిగి a;
 }
