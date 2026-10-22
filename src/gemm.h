@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+शून्य gemm_bin(पूर्णाङ्क M, पूर्णाङ्क N, पूर्णाङ्क K, भिन्न ALPHA, 
+        वर्ण  *A, पूर्णाङ्क lda, 
+        भिन्न *B, पूर्णाङ्क ldb,
+        भिन्न *C, पूर्णाङ्क ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+शून्य gemm(पूर्णाङ्क TA, पूर्णाङ्क TB, पूर्णाङ्क M, पूर्णाङ्क N, पूर्णाङ्क K, भिन्न ALPHA, 
+                    भिन्न *A, पूर्णाङ्क lda, 
+                    भिन्न *B, पूर्णाङ्क ldb,
+                    भिन्न BETA,
+                    भिन्न *C, पूर्णाङ्क ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+शून्य gemm_cpu(पूर्णाङ्क TA, पूर्णाङ्क TB, पूर्णाङ्क M, पूर्णाङ्क N, पूर्णाङ्क K, भिन्न ALPHA, 
+        भिन्न *A, पूर्णाङ्क lda, 
+        भिन्न *B, पूर्णाङ्क ldb,
+        भिन्न BETA,
+        भिन्न *C, पूर्णाङ्क ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+शून्य gemm_gpu(पूर्णाङ्क TA, पूर्णाङ्क TB, पूर्णाङ्क M, पूर्णाङ्क N, पूर्णाङ्क K, भिन्न ALPHA, 
+        भिन्न *A_gpu, पूर्णाङ्क lda, 
+        भिन्न *B_gpu, पूर्णाङ्क ldb,
+        भिन्न BETA,
+        भिन्न *C_gpu, पूर्णाङ्क ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+शून्य gemm_gpu(पूर्णाङ्क TA, पूर्णाङ्क TB, पूर्णाङ्क M, पूर्णाङ्क N, पूर्णाङ्क K, भिन्न ALPHA, 
+        भिन्न *A, पूर्णाङ्क lda, 
+        भिन्न *B, पूर्णाङ्क ldb,
+        भिन्न BETA,
+        भिन्न *C, पूर्णाङ्क ldc);
 #endif
 #endif
