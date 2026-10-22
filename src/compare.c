@@ -1,30 +1,30 @@
-#include <stdio.h>
+#अन्तर्भाव <stdio.h>
 
-#include "network.h"
-#include "detection_layer.h"
-#include "cost_layer.h"
-#include "utils.h"
-#include "parser.h"
-#include "box.h"
+#अन्तर्भाव "network.h"
+#अन्तर्भाव "detection_layer.h"
+#अन्तर्भाव "cost_layer.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "parser.h"
+#अन्तर्भाव "box.h"
 
-void train_compare(char *cfgfile, char *weightfile)
+शून्य train_compare(वर्ण *cfgfile, वर्ण *weightfile)
 {
-    srand(time(0));
-    float avg_loss = -1;
-    char *base = basecfg(cfgfile);
-    char *backup_directory = "/home/pjreddie/backup/";
-    printf("%s\n", base);
+    बेक्रम(समय(0));
+    भिन्न avg_loss = -1;
+    वर्ण *base = basecfg(cfgfile);
+    वर्ण *backup_directory = "/home/pjreddie/backup/";
+    म_लिखो("%s\n", base);
     network net = parse_network_cfg(cfgfile);
-    if(weightfile){
+    यदि(weightfile){
         load_weights(&net, weightfile);
     }
-    printf("Learning Rate: %g, Momentum: %g, Decay: %g\n", net.learning_rate, net.momentum, net.decay);
-    int imgs = 1024;
+    म_लिखो("Learning Rate: %g, Momentum: %g, Decay: %g\n", net.learning_rate, net.momentum, net.decay);
+    पूर्णाङ्क imgs = 1024;
     list *plist = get_paths("data/compare.train.list");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size;
-    printf("%d\n", N);
-    clock_t time;
+    वर्ण **paths = (वर्ण **)list_to_array(plist);
+    पूर्णाङ्क N = plist->size;
+    म_लिखो("%d\n", N);
+    घड़ी_प्रकार समय;
     pthread_t load_thread;
     data train;
     data buffer;
@@ -40,64 +40,64 @@ void train_compare(char *cfgfile, char *weightfile)
     args.type = COMPARE_DATA;
 
     load_thread = load_data_in_thread(args);
-    int epoch = *net.seen/N;
-    int i = 0;
-    while(1){
+    पूर्णाङ्क epoch = *net.seen/N;
+    पूर्णाङ्क i = 0;
+    यावत्(1){
         ++i;
-        time=clock();
+        समय=घड़ी();
         pthread_join(load_thread, 0);
         train = buffer;
 
         load_thread = load_data_in_thread(args);
-        printf("Loaded: %lf seconds\n", sec(clock()-time));
-        time=clock();
-        float loss = train_network(net, train);
-        if(avg_loss == -1) avg_loss = loss;
+        म_लिखो("Loaded: %lf seconds\n", sec(घड़ी()-समय));
+        समय=घड़ी();
+        भिन्न loss = train_network(net, train);
+        यदि(avg_loss == -1) avg_loss = loss;
         avg_loss = avg_loss*.9 + loss*.1;
-        printf("%.3f: %f, %f avg, %lf seconds, %ld images\n", (float)*net.seen/N, loss, avg_loss, sec(clock()-time), *net.seen);
+        म_लिखो("%.3f: %f, %f avg, %lf seconds, %ld images\n", (भिन्न)*net.seen/N, loss, avg_loss, sec(घड़ी()-समय), *net.seen);
         free_data(train);
-        if(i%100 == 0){
-            char buff[256];
-            sprintf(buff, "%s/%s_%d_minor_%d.weights",backup_directory,base, epoch, i);
+        यदि(i%100 == 0){
+            वर्ण buff[256];
+            प्र_लिखो(buff, "%s/%s_%d_minor_%d.weights",backup_directory,base, epoch, i);
             save_weights(net, buff);
         }
-        if(*net.seen/N > epoch){
+        यदि(*net.seen/N > epoch){
             epoch = *net.seen/N;
             i = 0;
-            char buff[256];
-            sprintf(buff, "%s/%s_%d.weights",backup_directory,base, epoch);
+            वर्ण buff[256];
+            प्र_लिखो(buff, "%s/%s_%d.weights",backup_directory,base, epoch);
             save_weights(net, buff);
-            if(epoch%22 == 0) net.learning_rate *= .1;
+            यदि(epoch%22 == 0) net.learning_rate *= .1;
         }
     }
     pthread_join(load_thread, 0);
     free_data(buffer);
     free_network(net);
-    free_ptrs((void**)paths, plist->size);
+    free_ptrs((शून्य**)paths, plist->size);
     free_list(plist);
-    free(base);
+    मुक्त(base);
 }
 
-void validate_compare(char *filename, char *weightfile)
+शून्य validate_compare(वर्ण *filename, वर्ण *weightfile)
 {
-    int i = 0;
+    पूर्णाङ्क i = 0;
     network net = parse_network_cfg(filename);
-    if(weightfile){
+    यदि(weightfile){
         load_weights(&net, weightfile);
     }
-    srand(time(0));
+    बेक्रम(समय(0));
 
     list *plist = get_paths("data/compare.val.list");
     //list *plist = get_paths("data/compare.val.old");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size/2;
+    वर्ण **paths = (वर्ण **)list_to_array(plist);
+    पूर्णाङ्क N = plist->size/2;
     free_list(plist);
 
-    clock_t time;
-    int correct = 0;
-    int total = 0;
-    int splits = 10;
-    int num = (i+1)*N/splits - i*N/splits;
+    घड़ी_प्रकार समय;
+    पूर्णाङ्क correct = 0;
+    पूर्णाङ्क total = 0;
+    पूर्णाङ्क splits = 10;
+    पूर्णाङ्क अंक = (i+1)*N/splits - i*N/splits;
 
     data val, buffer;
 
@@ -106,244 +106,244 @@ void validate_compare(char *filename, char *weightfile)
     args.h = net.h;
     args.paths = paths;
     args.classes = 20;
-    args.n = num;
+    args.n = अंक;
     args.m = 0;
     args.d = &buffer;
     args.type = COMPARE_DATA;
 
     pthread_t load_thread = load_data_in_thread(args);
-    for(i = 1; i <= splits; ++i){
-        time=clock();
+    प्रति(i = 1; i <= splits; ++i){
+        समय=घड़ी();
 
         pthread_join(load_thread, 0);
         val = buffer;
 
-        num = (i+1)*N/splits - i*N/splits;
-        char **part = paths+(i*N/splits);
-        if(i != splits){
+        अंक = (i+1)*N/splits - i*N/splits;
+        वर्ण **part = paths+(i*N/splits);
+        यदि(i != splits){
             args.paths = part;
             load_thread = load_data_in_thread(args);
         }
-        printf("Loaded: %d images in %lf seconds\n", val.X.rows, sec(clock()-time));
+        म_लिखो("Loaded: %d images in %lf seconds\n", val.X.rows, sec(घड़ी()-समय));
 
-        time=clock();
+        समय=घड़ी();
         matrix pred = network_predict_data(net, val);
-        int j,k;
-        for(j = 0; j < val.y.rows; ++j){
-            for(k = 0; k < 20; ++k){
-                if(val.y.vals[j][k*2] != val.y.vals[j][k*2+1]){
+        पूर्णाङ्क j,k;
+        प्रति(j = 0; j < val.y.rows; ++j){
+            प्रति(k = 0; k < 20; ++k){
+                यदि(val.y.vals[j][k*2] != val.y.vals[j][k*2+1]){
                     ++total;
-                    if((val.y.vals[j][k*2] < val.y.vals[j][k*2+1]) == (pred.vals[j][k*2] < pred.vals[j][k*2+1])){
+                    यदि((val.y.vals[j][k*2] < val.y.vals[j][k*2+1]) == (pred.vals[j][k*2] < pred.vals[j][k*2+1])){
                         ++correct;
                     }
                 }
             }
         }
         free_matrix(pred);
-        printf("%d: Acc: %f, %lf seconds, %d images\n", i, (float)correct/total, sec(clock()-time), val.X.rows);
+        म_लिखो("%d: Acc: %f, %lf seconds, %d images\n", i, (भिन्न)correct/total, sec(घड़ी()-समय), val.X.rows);
         free_data(val);
     }
 }
 
-typedef struct {
+प्रकारनिर्देश संरचना {
     network net;
-    char *filename;
-    int class;
-    int classes;
-    float elo;
-    float *elos;
+    वर्ण *filename;
+    पूर्णाङ्क class;
+    पूर्णाङ्क classes;
+    भिन्न elo;
+    भिन्न *elos;
 } sortable_bbox;
 
-int total_compares = 0;
-int current_class = 0;
+पूर्णाङ्क total_compares = 0;
+पूर्णाङ्क current_class = 0;
 
-int elo_comparator(const void*a, const void *b)
+पूर्णाङ्क elo_comparator(ध्रुव शून्य*a, ध्रुव शून्य *b)
 {
     sortable_bbox box1 = *(sortable_bbox*)a;
     sortable_bbox box2 = *(sortable_bbox*)b;
-    if(box1.elos[current_class] == box2.elos[current_class]) return 0;
-    if(box1.elos[current_class] >  box2.elos[current_class]) return -1;
-    return 1;
+    यदि(box1.elos[current_class] == box2.elos[current_class]) प्रत्यागम 0;
+    यदि(box1.elos[current_class] >  box2.elos[current_class]) प्रत्यागम -1;
+    प्रत्यागम 1;
 }
 
-int bbox_comparator(const void *a, const void *b)
+पूर्णाङ्क bbox_comparator(ध्रुव शून्य *a, ध्रुव शून्य *b)
 {
     ++total_compares;
     sortable_bbox box1 = *(sortable_bbox*)a;
     sortable_bbox box2 = *(sortable_bbox*)b;
     network net = box1.net;
-    int class   = box1.class;
+    पूर्णाङ्क class   = box1.class;
 
     image im1 = load_image_color(box1.filename, net.w, net.h);
     image im2 = load_image_color(box2.filename, net.w, net.h);
-    float *X  = calloc(net.w*net.h*net.c, sizeof(float));
-    memcpy(X,                   im1.data, im1.w*im1.h*im1.c*sizeof(float));
-    memcpy(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*sizeof(float));
-    float *predictions = network_predict(net, X);
+    भिन्न *X  = सुस्मृति(net.w*net.h*net.c, परिमाण(भिन्न));
+    स_नकल(X,                   im1.data, im1.w*im1.h*im1.c*परिमाण(भिन्न));
+    स_नकल(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*परिमाण(भिन्न));
+    भिन्न *predictions = network_predict(net, X);
     
     free_image(im1);
     free_image(im2);
-    free(X);
-    if (predictions[class*2] > predictions[class*2+1]){
-        return 1;
+    मुक्त(X);
+    यदि (predictions[class*2] > predictions[class*2+1]){
+        प्रत्यागम 1;
     }
-    return -1;
+    प्रत्यागम -1;
 }
 
-void bbox_update(sortable_bbox *a, sortable_bbox *b, int class, int result)
+शून्य bbox_update(sortable_bbox *a, sortable_bbox *b, पूर्णाङ्क class, पूर्णाङ्क result)
 {
-    int k = 32;
-    float EA = 1./(1+pow(10, (b->elos[class] - a->elos[class])/400.));
-    float EB = 1./(1+pow(10, (a->elos[class] - b->elos[class])/400.));
-    float SA = result ? 1 : 0;
-    float SB = result ? 0 : 1;
+    पूर्णाङ्क k = 32;
+    भिन्न EA = 1./(1+घात(10, (b->elos[class] - a->elos[class])/400.));
+    भिन्न EB = 1./(1+घात(10, (a->elos[class] - b->elos[class])/400.));
+    भिन्न SA = result ? 1 : 0;
+    भिन्न SB = result ? 0 : 1;
     a->elos[class] += k*(SA - EA);
     b->elos[class] += k*(SB - EB);
 }
 
-void bbox_fight(network net, sortable_bbox *a, sortable_bbox *b, int classes, int class)
+शून्य bbox_fight(network net, sortable_bbox *a, sortable_bbox *b, पूर्णाङ्क classes, पूर्णाङ्क class)
 {
     image im1 = load_image_color(a->filename, net.w, net.h);
     image im2 = load_image_color(b->filename, net.w, net.h);
-    float *X  = calloc(net.w*net.h*net.c, sizeof(float));
-    memcpy(X,                   im1.data, im1.w*im1.h*im1.c*sizeof(float));
-    memcpy(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*sizeof(float));
-    float *predictions = network_predict(net, X);
+    भिन्न *X  = सुस्मृति(net.w*net.h*net.c, परिमाण(भिन्न));
+    स_नकल(X,                   im1.data, im1.w*im1.h*im1.c*परिमाण(भिन्न));
+    स_नकल(X+im1.w*im1.h*im1.c, im2.data, im2.w*im2.h*im2.c*परिमाण(भिन्न));
+    भिन्न *predictions = network_predict(net, X);
     ++total_compares;
 
-    int i;
-    for(i = 0; i < classes; ++i){
-        if(class < 0 || class == i){
-            int result = predictions[i*2] > predictions[i*2+1];
+    पूर्णाङ्क i;
+    प्रति(i = 0; i < classes; ++i){
+        यदि(class < 0 || class == i){
+            पूर्णाङ्क result = predictions[i*2] > predictions[i*2+1];
             bbox_update(a, b, i, result);
         }
     }
     
     free_image(im1);
     free_image(im2);
-    free(X);
+    मुक्त(X);
 }
 
-void SortMaster3000(char *filename, char *weightfile)
+शून्य SortMaster3000(वर्ण *filename, वर्ण *weightfile)
 {
-    int i = 0;
+    पूर्णाङ्क i = 0;
     network net = parse_network_cfg(filename);
-    if(weightfile){
+    यदि(weightfile){
         load_weights(&net, weightfile);
     }
-    srand(time(0));
+    बेक्रम(समय(0));
     set_batch_network(&net, 1);
 
     list *plist = get_paths("data/compare.sort.list");
     //list *plist = get_paths("data/compare.val.old");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size;
+    वर्ण **paths = (वर्ण **)list_to_array(plist);
+    पूर्णाङ्क N = plist->size;
     free_list(plist);
-    sortable_bbox *boxes = calloc(N, sizeof(sortable_bbox));
-    printf("Sorting %d boxes...\n", N);
-    for(i = 0; i < N; ++i){
+    sortable_bbox *boxes = सुस्मृति(N, परिमाण(sortable_bbox));
+    म_लिखो("Sorting %d boxes...\n", N);
+    प्रति(i = 0; i < N; ++i){
         boxes[i].filename = paths[i];
         boxes[i].net = net;
         boxes[i].class = 7;
         boxes[i].elo = 1500;
     }
-    clock_t time=clock();
-    qsort(boxes, N, sizeof(sortable_bbox), bbox_comparator);
-    for(i = 0; i < N; ++i){
-        printf("%s\n", boxes[i].filename);
+    घड़ी_प्रकार समय=घड़ी();
+    क्विक(boxes, N, परिमाण(sortable_bbox), bbox_comparator);
+    प्रति(i = 0; i < N; ++i){
+        म_लिखो("%s\n", boxes[i].filename);
     }
-    printf("Sorted in %d compares, %f secs\n", total_compares, sec(clock()-time));
+    म_लिखो("Sorted in %d compares, %f secs\n", total_compares, sec(घड़ी()-समय));
 }
 
-void BattleRoyaleWithCheese(char *filename, char *weightfile)
+शून्य BattleRoyaleWithCheese(वर्ण *filename, वर्ण *weightfile)
 {
-    int classes = 20;
-    int i,j;
+    पूर्णाङ्क classes = 20;
+    पूर्णाङ्क i,j;
     network net = parse_network_cfg(filename);
-    if(weightfile){
+    यदि(weightfile){
         load_weights(&net, weightfile);
     }
-    srand(time(0));
+    बेक्रम(समय(0));
     set_batch_network(&net, 1);
 
     list *plist = get_paths("data/compare.sort.list");
     //list *plist = get_paths("data/compare.small.list");
     //list *plist = get_paths("data/compare.cat.list");
     //list *plist = get_paths("data/compare.val.old");
-    char **paths = (char **)list_to_array(plist);
-    int N = plist->size;
-    int total = N;
+    वर्ण **paths = (वर्ण **)list_to_array(plist);
+    पूर्णाङ्क N = plist->size;
+    पूर्णाङ्क total = N;
     free_list(plist);
-    sortable_bbox *boxes = calloc(N, sizeof(sortable_bbox));
-    printf("Battling %d boxes...\n", N);
-    for(i = 0; i < N; ++i){
+    sortable_bbox *boxes = सुस्मृति(N, परिमाण(sortable_bbox));
+    म_लिखो("Battling %d boxes...\n", N);
+    प्रति(i = 0; i < N; ++i){
         boxes[i].filename = paths[i];
         boxes[i].net = net;
         boxes[i].classes = classes;
-        boxes[i].elos = calloc(classes, sizeof(float));;
-        for(j = 0; j < classes; ++j){
+        boxes[i].elos = सुस्मृति(classes, परिमाण(भिन्न));;
+        प्रति(j = 0; j < classes; ++j){
             boxes[i].elos[j] = 1500;
         }
     }
-    int round;
-    clock_t time=clock();
-    for(round = 1; round <= 4; ++round){
-        clock_t round_time=clock();
-        printf("Round: %d\n", round);
-        shuffle(boxes, N, sizeof(sortable_bbox));
-        for(i = 0; i < N/2; ++i){
+    पूर्णाङ्क round;
+    घड़ी_प्रकार समय=घड़ी();
+    प्रति(round = 1; round <= 4; ++round){
+        घड़ी_प्रकार round_time=घड़ी();
+        म_लिखो("Round: %d\n", round);
+        shuffle(boxes, N, परिमाण(sortable_bbox));
+        प्रति(i = 0; i < N/2; ++i){
             bbox_fight(net, boxes+i*2, boxes+i*2+1, classes, -1);
         }
-        printf("Round: %f secs, %d remaining\n", sec(clock()-round_time), N);
+        म_लिखो("Round: %f secs, %d remaining\n", sec(घड़ी()-round_time), N);
     }
 
-    int class;
+    पूर्णाङ्क class;
 
-    for (class = 0; class < classes; ++class){
+    प्रति (class = 0; class < classes; ++class){
 
         N = total;
         current_class = class;
-        qsort(boxes, N, sizeof(sortable_bbox), elo_comparator);
+        क्विक(boxes, N, परिमाण(sortable_bbox), elo_comparator);
         N /= 2;
 
-        for(round = 1; round <= 100; ++round){
-            clock_t round_time=clock();
-            printf("Round: %d\n", round);
+        प्रति(round = 1; round <= 100; ++round){
+            घड़ी_प्रकार round_time=घड़ी();
+            म_लिखो("Round: %d\n", round);
 
-            sorta_shuffle(boxes, N, sizeof(sortable_bbox), 10);
-            for(i = 0; i < N/2; ++i){
+            sorta_shuffle(boxes, N, परिमाण(sortable_bbox), 10);
+            प्रति(i = 0; i < N/2; ++i){
                 bbox_fight(net, boxes+i*2, boxes+i*2+1, classes, class);
             }
-            qsort(boxes, N, sizeof(sortable_bbox), elo_comparator);
-            if(round <= 20) N = (N*9/10)/2*2;
+            क्विक(boxes, N, परिमाण(sortable_bbox), elo_comparator);
+            यदि(round <= 20) N = (N*9/10)/2*2;
 
-            printf("Round: %f secs, %d remaining\n", sec(clock()-round_time), N);
+            म_लिखो("Round: %f secs, %d remaining\n", sec(घड़ी()-round_time), N);
         }
-        char buff[256];
-        sprintf(buff, "results/battle_%d.log", class);
-        FILE *outfp = fopen(buff, "w");
-        for(i = 0; i < N; ++i){
-            fprintf(outfp, "%s %f\n", boxes[i].filename, boxes[i].elos[class]);
+        वर्ण buff[256];
+        प्र_लिखो(buff, "results/battle_%d.log", class);
+        खाता *outfp = ख_खोलो(buff, "w");
+        प्रति(i = 0; i < N; ++i){
+            ख_लिखो(outfp, "%s %f\n", boxes[i].filename, boxes[i].elos[class]);
         }
-        fclose(outfp);
+        ख_बंद(outfp);
     }
-    printf("Tournament in %d compares, %f secs\n", total_compares, sec(clock()-time));
+    म_लिखो("Tournament in %d compares, %f secs\n", total_compares, sec(घड़ी()-समय));
 }
 
-void run_compare(int argc, char **argv)
+शून्य run_compare(पूर्णाङ्क argc, वर्ण **argv)
 {
-    if(argc < 4){
-        fprintf(stderr, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
-        return;
+    यदि(argc < 4){
+        ख_लिखो(मानक_त्रुटि, "usage: %s %s [train/test/valid] [cfg] [weights (optional)]\n", argv[0], argv[1]);
+        प्रत्यागम;
     }
 
-    char *cfg = argv[3];
-    char *weights = (argc > 4) ? argv[4] : 0;
+    वर्ण *cfg = argv[3];
+    वर्ण *weights = (argc > 4) ? argv[4] : 0;
     //char *filename = (argc > 5) ? argv[5]: 0;
-    if(0==strcmp(argv[2], "train")) train_compare(cfg, weights);
-    else if(0==strcmp(argv[2], "valid")) validate_compare(cfg, weights);
-    else if(0==strcmp(argv[2], "sort")) SortMaster3000(cfg, weights);
-    else if(0==strcmp(argv[2], "battle")) BattleRoyaleWithCheese(cfg, weights);
+    यदि(0==म_भेद(argv[2], "train")) train_compare(cfg, weights);
+    अन्यथा यदि(0==म_भेद(argv[2], "valid")) validate_compare(cfg, weights);
+    अन्यथा यदि(0==म_भेद(argv[2], "sort")) SortMaster3000(cfg, weights);
+    अन्यथा यदि(0==म_भेद(argv[2], "battle")) BattleRoyaleWithCheese(cfg, weights);
     /*
        else if(0==strcmp(argv[2], "train")) train_coco(cfg, weights);
        else if(0==strcmp(argv[2], "extract")) extract_boxes(cfg, weights);

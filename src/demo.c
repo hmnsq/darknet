@@ -1,94 +1,94 @@
-#include "network.h"
-#include "detection_layer.h"
-#include "region_layer.h"
-#include "cost_layer.h"
-#include "utils.h"
-#include "parser.h"
-#include "box.h"
-#include "image.h"
-#include "demo.h"
-#include <sys/time.h>
+#अन्तर्भाव "network.h"
+#अन्तर्भाव "detection_layer.h"
+#अन्तर्भाव "region_layer.h"
+#अन्तर्भाव "cost_layer.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "parser.h"
+#अन्तर्भाव "box.h"
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "demo.h"
+#अन्तर्भाव <sys/time.h>
 
 #define DEMO 1
 
 #ifdef OPENCV
 
-static char **demo_names;
-static image **demo_alphabet;
-static int demo_classes;
+स्थिर वर्ण **demo_names;
+स्थिर image **demo_alphabet;
+स्थिर पूर्णाङ्क demo_classes;
 
-static network *net;
-static image buff [3];
-static image buff_letter[3];
-static int buff_index = 0;
-static void * cap;
-static float fps = 0;
-static float demo_thresh = 0;
-static float demo_hier = .5;
-static int running = 0;
+स्थिर network *net;
+स्थिर image buff [3];
+स्थिर image buff_letter[3];
+स्थिर पूर्णाङ्क buff_index = 0;
+स्थिर शून्य * cap;
+स्थिर भिन्न fps = 0;
+स्थिर भिन्न demo_thresh = 0;
+स्थिर भिन्न demo_hier = .5;
+स्थिर पूर्णाङ्क running = 0;
 
-static int demo_frame = 3;
-static int demo_index = 0;
-static float **predictions;
-static float *avg;
-static int demo_done = 0;
-static int demo_total = 0;
-double demo_time;
+स्थिर पूर्णाङ्क demo_frame = 3;
+स्थिर पूर्णाङ्क demo_index = 0;
+स्थिर भिन्न **predictions;
+स्थिर भिन्न *avg;
+स्थिर पूर्णाङ्क demo_done = 0;
+स्थिर पूर्णाङ्क demo_total = 0;
+द्विगुण demo_time;
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num);
+detection *get_network_boxes(network *net, पूर्णाङ्क w, पूर्णाङ्क h, भिन्न thresh, भिन्न hier, पूर्णाङ्क *map, पूर्णाङ्क relative, पूर्णाङ्क *अंक);
 
-int size_network(network *net)
+पूर्णाङ्क size_network(network *net)
 {
-    int i;
-    int count = 0;
-    for(i = 0; i < net->n; ++i){
+    पूर्णाङ्क i;
+    पूर्णाङ्क गिनती = 0;
+    प्रति(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            count += l.outputs;
+        यदि(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            गिनती += l.outputs;
         }
     }
-    return count;
+    प्रत्यागम गिनती;
 }
 
-void remember_network(network *net)
+शून्य remember_network(network *net)
 {
-    int i;
-    int count = 0;
-    for(i = 0; i < net->n; ++i){
+    पूर्णाङ्क i;
+    पूर्णाङ्क गिनती = 0;
+    प्रति(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(predictions[demo_index] + count, net->layers[i].output, sizeof(float) * l.outputs);
-            count += l.outputs;
+        यदि(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            स_नकल(predictions[demo_index] + गिनती, net->layers[i].output, परिमाण(भिन्न) * l.outputs);
+            गिनती += l.outputs;
         }
     }
 }
 
-detection *avg_predictions(network *net, int *nboxes)
+detection *avg_predictions(network *net, पूर्णाङ्क *nboxes)
 {
-    int i, j;
-    int count = 0;
+    पूर्णाङ्क i, j;
+    पूर्णाङ्क गिनती = 0;
     fill_cpu(demo_total, 0, avg, 1);
-    for(j = 0; j < demo_frame; ++j){
+    प्रति(j = 0; j < demo_frame; ++j){
         axpy_cpu(demo_total, 1./demo_frame, predictions[j], 1, avg, 1);
     }
-    for(i = 0; i < net->n; ++i){
+    प्रति(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO || l.type == REGION || l.type == DETECTION){
-            memcpy(l.output, avg + count, sizeof(float) * l.outputs);
-            count += l.outputs;
+        यदि(l.type == YOLO || l.type == REGION || l.type == DETECTION){
+            स_नकल(l.output, avg + गिनती, परिमाण(भिन्न) * l.outputs);
+            गिनती += l.outputs;
         }
     }
     detection *dets = get_network_boxes(net, buff[0].w, buff[0].h, demo_thresh, demo_hier, 0, 1, nboxes);
-    return dets;
+    प्रत्यागम dets;
 }
 
-void *detect_in_thread(void *ptr)
+शून्य *detect_in_thread(शून्य *ptr)
 {
     running = 1;
-    float nms = .4;
+    भिन्न nms = .4;
 
     layer l = net->layers[net->n-1];
-    float *X = buff_letter[(buff_index+2)%3].data;
+    भिन्न *X = buff_letter[(buff_index+2)%3].data;
     network_predict(net, X);
 
     /*
@@ -97,7 +97,7 @@ void *detect_in_thread(void *ptr)
        } else */
     remember_network(net);
     detection *dets = 0;
-    int nboxes = 0;
+    पूर्णाङ्क nboxes = 0;
     dets = avg_predictions(net, &nboxes);
 
 
@@ -122,69 +122,69 @@ void *detect_in_thread(void *ptr)
     }
      */
 
-    if (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
+    यदि (nms > 0) do_nms_obj(dets, nboxes, l.classes, nms);
 
-    printf("\033[2J");
-    printf("\033[1;1H");
-    printf("\nFPS:%.1f\n",fps);
-    printf("Objects:\n\n");
+    म_लिखो("\033[2J");
+    म_लिखो("\033[1;1H");
+    म_लिखो("\nFPS:%.1f\n",fps);
+    म_लिखो("Objects:\n\n");
     image display = buff[(buff_index+2) % 3];
     draw_detections(display, dets, nboxes, demo_thresh, demo_names, demo_alphabet, demo_classes);
     free_detections(dets, nboxes);
 
     demo_index = (demo_index + 1)%demo_frame;
     running = 0;
-    return 0;
+    प्रत्यागम 0;
 }
 
-void *fetch_in_thread(void *ptr)
+शून्य *fetch_in_thread(शून्य *ptr)
 {
     free_image(buff[buff_index]);
     buff[buff_index] = get_image_from_stream(cap);
-    if(buff[buff_index].data == 0) {
+    यदि(buff[buff_index].data == 0) {
         demo_done = 1;
-        return 0;
+        प्रत्यागम 0;
     }
     letterbox_image_into(buff[buff_index], net->w, net->h, buff_letter[buff_index]);
-    return 0;
+    प्रत्यागम 0;
 }
 
-void *display_in_thread(void *ptr)
+शून्य *display_in_thread(शून्य *ptr)
 {
-    int c = show_image(buff[(buff_index + 1)%3], "Demo", 1);
-    if (c != -1) c = c%256;
-    if (c == 27) {
+    पूर्णाङ्क c = show_image(buff[(buff_index + 1)%3], "Demo", 1);
+    यदि (c != -1) c = c%256;
+    यदि (c == 27) {
         demo_done = 1;
-        return 0;
-    } else if (c == 82) {
+        प्रत्यागम 0;
+    } अन्यथा यदि (c == 82) {
         demo_thresh += .02;
-    } else if (c == 84) {
+    } अन्यथा यदि (c == 84) {
         demo_thresh -= .02;
-        if(demo_thresh <= .02) demo_thresh = .02;
-    } else if (c == 83) {
+        यदि(demo_thresh <= .02) demo_thresh = .02;
+    } अन्यथा यदि (c == 83) {
         demo_hier += .02;
-    } else if (c == 81) {
+    } अन्यथा यदि (c == 81) {
         demo_hier -= .02;
-        if(demo_hier <= .0) demo_hier = .0;
+        यदि(demo_hier <= .0) demo_hier = .0;
     }
-    return 0;
+    प्रत्यागम 0;
 }
 
-void *display_loop(void *ptr)
+शून्य *display_loop(शून्य *ptr)
 {
-    while(1){
+    यावत्(1){
         display_in_thread(0);
     }
 }
 
-void *detect_loop(void *ptr)
+शून्य *detect_loop(शून्य *ptr)
 {
-    while(1){
+    यावत्(1){
         detect_in_thread(0);
     }
 }
 
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg_frames, float hier, int w, int h, int frames, int fullscreen)
+शून्य demo(वर्ण *cfgfile, वर्ण *weightfile, भिन्न thresh, पूर्णाङ्क cam_index, ध्रुव वर्ण *filename, वर्ण **names, पूर्णाङ्क classes, पूर्णाङ्क delay, वर्ण *prefix, पूर्णाङ्क avg_frames, भिन्न hier, पूर्णाङ्क w, पूर्णाङ्क h, पूर्णाङ्क frames, पूर्णाङ्क fullscreen)
 {
     //demo_frame = avg_frames;
     image **alphabet = load_alphabet();
@@ -193,30 +193,30 @@ void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const ch
     demo_classes = classes;
     demo_thresh = thresh;
     demo_hier = hier;
-    printf("Demo\n");
+    म_लिखो("Demo\n");
     net = load_network(cfgfile, weightfile, 0);
     set_batch_network(net, 1);
     pthread_t detect_thread;
     pthread_t fetch_thread;
 
-    srand(2222222);
+    बेक्रम(2222222);
 
-    int i;
+    पूर्णाङ्क i;
     demo_total = size_network(net);
-    predictions = calloc(demo_frame, sizeof(float*));
-    for (i = 0; i < demo_frame; ++i){
-        predictions[i] = calloc(demo_total, sizeof(float));
+    predictions = सुस्मृति(demo_frame, परिमाण(भिन्न*));
+    प्रति (i = 0; i < demo_frame; ++i){
+        predictions[i] = सुस्मृति(demo_total, परिमाण(भिन्न));
     }
-    avg = calloc(demo_total, sizeof(float));
+    avg = सुस्मृति(demo_total, परिमाण(भिन्न));
 
-    if(filename){
-        printf("video file: %s\n", filename);
+    यदि(filename){
+        म_लिखो("video file: %s\n", filename);
         cap = open_video_stream(filename, 0, 0, 0, 0);
-    }else{
+    }अन्यथा{
         cap = open_video_stream(0, cam_index, w, h, frames);
     }
 
-    if(!cap) error("Couldn't connect to webcam.\n");
+    यदि(!cap) error("Couldn't connect to webcam.\n");
 
     buff[0] = get_image_from_stream(cap);
     buff[1] = copy_image(buff[0]);
@@ -225,29 +225,29 @@ void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const ch
     buff_letter[1] = letterbox_image(buff[0], net->w, net->h);
     buff_letter[2] = letterbox_image(buff[0], net->w, net->h);
 
-    int count = 0;
-    if(!prefix){
+    पूर्णाङ्क गिनती = 0;
+    यदि(!prefix){
         make_window("Demo", 1352, 1013, fullscreen);
     }
 
     demo_time = what_time_is_it_now();
 
-    while(!demo_done){
+    यावत्(!demo_done){
         buff_index = (buff_index + 1) %3;
-        if(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
-        if(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
-        if(!prefix){
+        यदि(pthread_create(&fetch_thread, 0, fetch_in_thread, 0)) error("Thread creation failed");
+        यदि(pthread_create(&detect_thread, 0, detect_in_thread, 0)) error("Thread creation failed");
+        यदि(!prefix){
             fps = 1./(what_time_is_it_now() - demo_time);
             demo_time = what_time_is_it_now();
             display_in_thread(0);
-        }else{
-            char name[256];
-            sprintf(name, "%s_%08d", prefix, count);
+        }अन्यथा{
+            वर्ण name[256];
+            प्र_लिखो(name, "%s_%08d", prefix, गिनती);
             save_image(buff[(buff_index + 1)%3], name);
         }
         pthread_join(fetch_thread, 0);
         pthread_join(detect_thread, 0);
-        ++count;
+        ++गिनती;
     }
 }
 
@@ -340,10 +340,10 @@ pthread_join(detect_thread, 0);
 }
 }
 */
-#else
-void demo(char *cfgfile, char *weightfile, float thresh, int cam_index, const char *filename, char **names, int classes, int delay, char *prefix, int avg, float hier, int w, int h, int frames, int fullscreen)
+#अन्यथा
+शून्य demo(वर्ण *cfgfile, वर्ण *weightfile, भिन्न thresh, पूर्णाङ्क cam_index, ध्रुव वर्ण *filename, वर्ण **names, पूर्णाङ्क classes, पूर्णाङ्क delay, वर्ण *prefix, पूर्णाङ्क avg, भिन्न hier, पूर्णाङ्क w, पूर्णाङ्क h, पूर्णाङ्क frames, पूर्णाङ्क fullscreen)
 {
-    fprintf(stderr, "Demo needs OpenCV for webcam images.\n");
+    ख_लिखो(मानक_त्रुटि, "Demo needs OpenCV for webcam images.\n");
 }
 #endif
 
