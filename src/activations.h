@@ -1,87 +1,87 @@
 #ifndef ACTIVATIONS_H
 #define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#ضمن "darknet.h"
+#ضمن "cuda.h"
+#ضمن "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(حرف *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
+حرف *get_activation_string(ACTIVATION a);
+عائم activate(عائم x, ACTIVATION a);
+عائم gradient(عائم x, ACTIVATION a);
+فراغ gradient_array(ثابت عائم *x, ثابت صحيح n, ثابت ACTIVATION a, عائم *delta);
+فراغ activate_array(عائم *x, ثابت صحيح n, ثابت ACTIVATION a);
 #ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
+فراغ activate_array_gpu(عائم *x, صحيح n, ACTIVATION a);
+فراغ gradient_array_gpu(عائم *x, صحيح n, ACTIVATION a, عائم *delta);
 #endif
 
-static inline float stair_activate(float x)
+ساكن مضمن عائم stair_activate(عائم x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    صحيح n = floor(x);
+    إذا (n%2 == 0) أرجع floor(x/2.);
+    وإلا أرجع (x - n) + floor(x/2.);
 }
-static inline float hardtan_activate(float x)
+ساكن مضمن عائم hardtan_activate(عائم x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    إذا (x < -1) أرجع -1;
+    إذا (x > 1) أرجع 1;
+    أرجع x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+ساكن مضمن عائم linear_activate(عائم x){أرجع x;}
+ساكن مضمن عائم logistic_activate(عائم x){أرجع 1./(1. + exp(-x));}
+ساكن مضمن عائم loggy_activate(عائم x){أرجع 2./(1. + exp(-x)) - 1;}
+ساكن مضمن عائم relu_activate(عائم x){أرجع x*(x>0);}
+ساكن مضمن عائم elu_activate(عائم x){أرجع (x >= 0)*x + (x < 0)*(exp(x)-1);}
+ساكن مضمن عائم selu_activate(عائم x){أرجع (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
+ساكن مضمن عائم relie_activate(عائم x){أرجع (x>0) ? x : .01*x;}
+ساكن مضمن عائم ramp_activate(عائم x){أرجع x*(x>0)+.1*x;}
+ساكن مضمن عائم leaky_activate(عائم x){أرجع (x>0) ? x : .1*x;}
+ساكن مضمن عائم tanh_activate(عائم x){أرجع (exp(2*x)-1)/(exp(2*x)+1);}
+ساكن مضمن عائم plse_activate(عائم x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    إذا(x < -4) أرجع .01 * (x + 4);
+    إذا(x > 4)  أرجع .01 * (x - 4) + 1;
+    أرجع .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+ساكن مضمن عائم lhtan_activate(عائم x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    إذا(x < 0) أرجع .001*x;
+    إذا(x > 1) أرجع .001*(x-1) + 1;
+    أرجع x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+ساكن مضمن عائم lhtan_gradient(عائم x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    إذا(x > 0 && x < 1) أرجع 1;
+    أرجع .001;
 }
-static inline float stair_gradient(float x)
+
+ساكن مضمن عائم hardtan_gradient(عائم x)
 {
-    if (floor(x) == x) return 0;
-    return 1;
+    إذا (x > -1 && x < 1) أرجع 1;
+    أرجع 0;
 }
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
+ساكن مضمن عائم linear_gradient(عائم x){أرجع 1;}
+ساكن مضمن عائم logistic_gradient(عائم x){أرجع (1-x)*x;}
+ساكن مضمن عائم loggy_gradient(عائم x)
+{
+    عائم y = (x+1.)/2.;
+    أرجع 2*(1-y)*y;
+}
+ساكن مضمن عائم stair_gradient(عائم x)
+{
+    إذا (floor(x) == x) أرجع 0;
+    أرجع 1;
+}
+ساكن مضمن عائم relu_gradient(عائم x){أرجع (x>0);}
+ساكن مضمن عائم elu_gradient(عائم x){أرجع (x >= 0) + (x < 0)*(x + 1);}
+ساكن مضمن عائم selu_gradient(عائم x){أرجع (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+ساكن مضمن عائم relie_gradient(عائم x){أرجع (x>0) ? 1 : .01;}
+ساكن مضمن عائم ramp_gradient(عائم x){أرجع (x>0)+.1;}
+ساكن مضمن عائم leaky_gradient(عائم x){أرجع (x>0) ? 1 : .1;}
+ساكن مضمن عائم tanh_gradient(عائم x){أرجع 1-x*x;}
+ساكن مضمن عائم plse_gradient(عائم x){أرجع (x < 0 || x > 1) ? .01 : .125;}
 
 #endif
 
