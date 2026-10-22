@@ -1,19 +1,19 @@
 #ifndef OPTION_LIST_H
 #define OPTION_LIST_H
-#include "list.h"
+#अन्तर्भाव "list.h"
 
-typedef struct{
-    char *key;
-    char *val;
-    int used;
+प्रकारव्याख्या संरचना{
+    अक्षर *किल्ली;
+    अक्षर *val;
+    पूर्णांक used;
 } kvp;
 
 
-int read_option(char *s, list *options);
-void option_insert(list *l, char *key, char *val);
-char *option_find(list *l, char *key);
-float option_find_float(list *l, char *key, float def);
-float option_find_float_quiet(list *l, char *key, float def);
-void option_unused(list *l);
+पूर्णांक read_option(अक्षर *s, list *options);
+शून्य option_घाला(list *l, अक्षर *किल्ली, अक्षर *val);
+अक्षर *option_find(list *l, अक्षर *किल्ली);
+दशांश option_find_float(list *l, अक्षर *किल्ली, दशांश def);
+दशांश option_find_float_quiet(list *l, अक्षर *किल्ली, दशांश def);
+शून्य option_unused(list *l);
 
 #endif

@@ -1,30 +1,30 @@
-#include "deconvolutional_layer.h"
-#include "convolutional_layer.h"
-#include "batchnorm_layer.h"
-#include "utils.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "blas.h"
-#include "gemm.h"
+#अन्तर्भाव "deconvolutional_layer.h"
+#अन्तर्भाव "convolutional_layer.h"
+#अन्तर्भाव "batchnorm_layer.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "im2col.h"
+#अन्तर्भाव "col2im.h"
+#अन्तर्भाव "blas.h"
+#अन्तर्भाव "gemm.h"
 
-#include <stdio.h>
-#include <time.h>
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <time.h>
 
 
-static size_t get_workspace_size(layer l){
-    return (size_t)l.h*l.w*l.size*l.size*l.n*sizeof(float);
+स्थिर माप_प्रकार get_workspace_size(layer l){
+    परत (माप_प्रकार)l.h*l.w*l.size*l.size*l.n*आकार(दशांश);
 }
 
-void bilinear_init(layer l)
+शून्य bilinear_init(layer l)
 {
-    int i,j,f;
-    float center = (l.size-1) / 2.;
-    for(f = 0; f < l.n; ++f){
-        for(j = 0; j < l.size; ++j){
-            for(i = 0; i < l.size; ++i){
-                float val = (1 - fabs(i - center)) * (1 - fabs(j - center));
-                int c = f%l.c;
-                int ind = f*l.size*l.size*l.c + c*l.size*l.size + j*l.size + i;
+    पूर्णांक i,j,f;
+    दशांश center = (l.size-1) / 2.;
+    साठी(f = 0; f < l.n; ++f){
+        साठी(j = 0; j < l.size; ++j){
+            साठी(i = 0; i < l.size; ++i){
+                दशांश val = (1 - भ_असल(i - center)) * (1 - भ_असल(j - center));
+                पूर्णांक c = f%l.c;
+                पूर्णांक ind = f*l.size*l.size*l.c + c*l.size*l.size + j*l.size + i;
                 l.weights[ind] = val;
             }
         }
@@ -32,9 +32,9 @@ void bilinear_init(layer l)
 }
 
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam)
+layer make_deconvolutional_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक n, पूर्णांक size, पूर्णांक stride, पूर्णांक padding, ACTIVATION activation, पूर्णांक batch_normalize, पूर्णांक adam)
 {
-    int i;
+    पूर्णांक i;
     layer l = {0};
     l.type = DECONVOLUTIONAL;
 
@@ -49,17 +49,17 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.nweights = c*n*size*size;
     l.nbiases = n;
 
-    l.weights = calloc(c*n*size*size, sizeof(float));
-    l.weight_updates = calloc(c*n*size*size, sizeof(float));
+    l.weights = सुस्मृति(c*n*size*size, आकार(दशांश));
+    l.weight_updates = सुस्मृति(c*n*size*size, आकार(दशांश));
 
-    l.biases = calloc(n, sizeof(float));
-    l.bias_updates = calloc(n, sizeof(float));
+    l.biases = सुस्मृति(n, आकार(दशांश));
+    l.bias_updates = सुस्मृति(n, आकार(दशांश));
     //float scale = n/(size*size*c);
     //printf("scale: %f\n", scale);
-    float scale = .02;
-    for(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_normal();
+    दशांश scale = .02;
+    साठी(i = 0; i < c*n*size*size; ++i) l.weights[i] = scale*rand_normal();
     //bilinear_init(l);
-    for(i = 0; i < n; ++i){
+    साठी(i = 0; i < n; ++i){
         l.biases[i] = 0;
     }
     l.pad = padding;
@@ -70,10 +70,10 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.outputs = l.out_w * l.out_h * l.out_c;
     l.inputs = l.w * l.h * l.c;
 
-    scal_cpu(l.nweights, (float)l.out_w*l.out_h/(l.w*l.h), l.weights, 1);
+    scal_cpu(l.nweights, (दशांश)l.out_w*l.out_h/(l.w*l.h), l.weights, 1);
 
-    l.output = calloc(l.batch*l.outputs, sizeof(float));
-    l.delta  = calloc(l.batch*l.outputs, sizeof(float));
+    l.output = सुस्मृति(l.batch*l.outputs, आकार(दशांश));
+    l.delta  = सुस्मृति(l.batch*l.outputs, आकार(दशांश));
 
     l.forward = forward_deconvolutional_layer;
     l.backward = backward_deconvolutional_layer;
@@ -81,31 +81,31 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
 
     l.batch_normalize = batch_normalize;
 
-    if(batch_normalize){
-        l.scales = calloc(n, sizeof(float));
-        l.scale_updates = calloc(n, sizeof(float));
-        for(i = 0; i < n; ++i){
+    जर(batch_normalize){
+        l.scales = सुस्मृति(n, आकार(दशांश));
+        l.scale_updates = सुस्मृति(n, आकार(दशांश));
+        साठी(i = 0; i < n; ++i){
             l.scales[i] = 1;
         }
 
-        l.mean = calloc(n, sizeof(float));
-        l.variance = calloc(n, sizeof(float));
+        l.mean = सुस्मृति(n, आकार(दशांश));
+        l.variance = सुस्मृति(n, आकार(दशांश));
 
-        l.mean_delta = calloc(n, sizeof(float));
-        l.variance_delta = calloc(n, sizeof(float));
+        l.mean_delta = सुस्मृति(n, आकार(दशांश));
+        l.variance_delta = सुस्मृति(n, आकार(दशांश));
 
-        l.rolling_mean = calloc(n, sizeof(float));
-        l.rolling_variance = calloc(n, sizeof(float));
-        l.x = calloc(l.batch*l.outputs, sizeof(float));
-        l.x_norm = calloc(l.batch*l.outputs, sizeof(float));
+        l.rolling_mean = सुस्मृति(n, आकार(दशांश));
+        l.rolling_variance = सुस्मृति(n, आकार(दशांश));
+        l.x = सुस्मृति(l.batch*l.outputs, आकार(दशांश));
+        l.x_norm = सुस्मृति(l.batch*l.outputs, आकार(दशांश));
     }
-    if(adam){
-        l.m = calloc(c*n*size*size, sizeof(float));
-        l.v = calloc(c*n*size*size, sizeof(float));
-        l.bias_m = calloc(n, sizeof(float));
-        l.scale_m = calloc(n, sizeof(float));
-        l.bias_v = calloc(n, sizeof(float));
-        l.scale_v = calloc(n, sizeof(float));
+    जर(adam){
+        l.m = सुस्मृति(c*n*size*size, आकार(दशांश));
+        l.v = सुस्मृति(c*n*size*size, आकार(दशांश));
+        l.bias_m = सुस्मृति(n, आकार(दशांश));
+        l.scale_m = सुस्मृति(n, आकार(दशांश));
+        l.bias_v = सुस्मृति(n, आकार(दशांश));
+        l.scale_v = सुस्मृति(n, आकार(दशांश));
     }
 
 #ifdef GPU
@@ -113,9 +113,9 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.backward_gpu = backward_deconvolutional_layer_gpu;
     l.update_gpu = update_deconvolutional_layer_gpu;
 
-    if(gpu_index >= 0){
+    जर(gpu_index >= 0){
 
-        if (adam) {
+        जर (adam) {
             l.m_gpu = cuda_make_array(l.m, c*n*size*size);
             l.v_gpu = cuda_make_array(l.v, c*n*size*size);
             l.bias_m_gpu = cuda_make_array(l.bias_m, n);
@@ -132,7 +132,7 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
         l.delta_gpu = cuda_make_array(l.delta, l.batch*l.out_h*l.out_w*n);
         l.output_gpu = cuda_make_array(l.output, l.batch*l.out_h*l.out_w*n);
 
-        if(batch_normalize){
+        जर(batch_normalize){
             l.mean_gpu = cuda_make_array(0, n);
             l.variance_gpu = cuda_make_array(0, n);
 
@@ -160,17 +160,17 @@ layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size
     l.activation = activation;
     l.workspace_size = get_workspace_size(l);
 
-    fprintf(stderr, "deconv%5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
+    ख_लिखो(मानक_त्रुटि, "deconv%5d %2d x%2d /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", n, size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
 
-    return l;
+    परत l;
 }
 
-void denormalize_deconvolutional_layer(layer l)
+शून्य denormalize_deconvolutional_layer(layer l)
 {
-    int i, j;
-    for(i = 0; i < l.n; ++i){
-        float scale = l.scales[i]/sqrt(l.rolling_variance[i] + .00001);
-        for(j = 0; j < l.c*l.size*l.size; ++j){
+    पूर्णांक i, j;
+    साठी(i = 0; i < l.n; ++i){
+        दशांश scale = l.scales[i]/वर्ग_मूल(l.rolling_variance[i] + .00001);
+        साठी(j = 0; j < l.c*l.size*l.size; ++j){
             l.weights[i*l.c*l.size*l.size + j] *= scale;
         }
         l.biases[i] -= l.rolling_mean[i] * scale;
@@ -180,7 +180,7 @@ void denormalize_deconvolutional_layer(layer l)
     }
 }
 
-void resize_deconvolutional_layer(layer *l, int h, int w)
+शून्य resize_deconvolutional_layer(layer *l, पूर्णांक h, पूर्णांक w)
 {
     l->h = h;
     l->w = w;
@@ -190,11 +190,11 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->w * l->h * l->c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
-    l->delta  = realloc(l->delta,  l->batch*l->outputs*sizeof(float));
-    if(l->batch_normalize){
-        l->x = realloc(l->x, l->batch*l->outputs*sizeof(float));
-        l->x_norm  = realloc(l->x_norm, l->batch*l->outputs*sizeof(float));
+    l->output = पुनः_स्मृति(l->output, l->batch*l->outputs*आकार(दशांश));
+    l->delta  = पुनः_स्मृति(l->delta,  l->batch*l->outputs*आकार(दशांश));
+    जर(l->batch_normalize){
+        l->x = पुनः_स्मृति(l->x, l->batch*l->outputs*आकार(दशांश));
+        l->x_norm  = पुनः_स्मृति(l->x_norm, l->batch*l->outputs*आकार(दशांश));
     }
 
 #ifdef GPU
@@ -204,7 +204,7 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->delta_gpu =  cuda_make_array(l->delta,  l->batch*l->outputs);
     l->output_gpu = cuda_make_array(l->output, l->batch*l->outputs);
 
-    if(l->batch_normalize){
+    जर(l->batch_normalize){
         cuda_free(l->x_gpu);
         cuda_free(l->x_norm_gpu);
 
@@ -219,86 +219,86 @@ void resize_deconvolutional_layer(layer *l, int h, int w)
     l->workspace_size = get_workspace_size(*l);
 }
 
-void forward_deconvolutional_layer(const layer l, network net)
+शून्य forward_deconvolutional_layer(स्थिरांक layer l, network net)
 {
-    int i;
+    पूर्णांक i;
 
-    int m = l.size*l.size*l.n;
-    int n = l.h*l.w;
-    int k = l.c;
+    पूर्णांक m = l.size*l.size*l.n;
+    पूर्णांक n = l.h*l.w;
+    पूर्णांक k = l.c;
 
     fill_cpu(l.outputs*l.batch, 0, l.output, 1);
 
-    for(i = 0; i < l.batch; ++i){
-        float *a = l.weights;
-        float *b = net.input + i*l.c*l.h*l.w;
-        float *c = net.workspace;
+    साठी(i = 0; i < l.batch; ++i){
+        दशांश *a = l.weights;
+        दशांश *b = net.आदान + i*l.c*l.h*l.w;
+        दशांश *c = net.workspace;
 
         gemm_cpu(1,0,m,n,k,1,a,m,b,n,0,c,n);
 
         col2im_cpu(net.workspace, l.out_c, l.out_h, l.out_w, l.size, l.stride, l.pad, l.output+i*l.outputs);
     }
-    if (l.batch_normalize) {
+    जर (l.batch_normalize) {
         forward_batchnorm_layer(l, net);
-    } else {
+    } अन्यथा {
         add_bias(l.output, l.biases, l.batch, l.n, l.out_w*l.out_h);
     }
     activate_array(l.output, l.batch*l.n*l.out_w*l.out_h, l.activation);
 }
 
-void backward_deconvolutional_layer(layer l, network net)
+शून्य backward_deconvolutional_layer(layer l, network net)
 {
-    int i;
+    पूर्णांक i;
 
     gradient_array(l.output, l.outputs*l.batch, l.activation, l.delta);
 
-    if(l.batch_normalize){
+    जर(l.batch_normalize){
         backward_batchnorm_layer(l, net);
-    } else {
+    } अन्यथा {
         backward_bias(l.bias_updates, l.delta, l.batch, l.n, l.out_w*l.out_h);
     }
 
     //if(net.delta) memset(net.delta, 0, l.batch*l.h*l.w*l.c*sizeof(float));
 
-    for(i = 0; i < l.batch; ++i){
-        int m = l.c;
-        int n = l.size*l.size*l.n;
-        int k = l.h*l.w;
+    साठी(i = 0; i < l.batch; ++i){
+        पूर्णांक m = l.c;
+        पूर्णांक n = l.size*l.size*l.n;
+        पूर्णांक k = l.h*l.w;
 
-        float *a = net.input + i*m*k;
-        float *b = net.workspace;
-        float *c = l.weight_updates;
+        दशांश *a = net.आदान + i*m*k;
+        दशांश *b = net.workspace;
+        दशांश *c = l.weight_updates;
 
         im2col_cpu(l.delta + i*l.outputs, l.out_c, l.out_h, l.out_w, 
                 l.size, l.stride, l.pad, b);
         gemm_cpu(0,1,m,n,k,1,a,k,b,k,1,c,n);
 
-        if(net.delta){
-            int m = l.c;
-            int n = l.h*l.w;
-            int k = l.size*l.size*l.n;
+        जर(net.delta){
+            पूर्णांक m = l.c;
+            पूर्णांक n = l.h*l.w;
+            पूर्णांक k = l.size*l.size*l.n;
 
-            float *a = l.weights;
-            float *b = net.workspace;
-            float *c = net.delta + i*n*m;
+            दशांश *a = l.weights;
+            दशांश *b = net.workspace;
+            दशांश *c = net.delta + i*n*m;
 
             gemm_cpu(0,0,m,n,k,1,a,k,b,n,1,c,n);
         }
     }
 }
 
-void update_deconvolutional_layer(layer l, update_args a)
+शून्य update_deconvolutional_layer(layer l, update_args a)
 {
-    float learning_rate = a.learning_rate*l.learning_rate_scale;
-    float momentum = a.momentum;
-    float decay = a.decay;
-    int batch = a.batch;
+    दशांश learning_rate = a.learning_rate*l.learning_rate_scale;
+    दशांश momentum = a.momentum;
+    दशांश decay = a.decay;
+    पूर्णांक batch = a.batch;
 
-    int size = l.size*l.size*l.c*l.n;
+    पूर्णांक size = l.size*l.size*l.c*l.n;
     axpy_cpu(l.n, learning_rate/batch, l.bias_updates, 1, l.biases, 1);
     scal_cpu(l.n, momentum, l.bias_updates, 1);
 
-    if(l.scales){
+    जर(l.scales){
         axpy_cpu(l.n, learning_rate/batch, l.scale_updates, 1, l.scales, 1);
         scal_cpu(l.n, momentum, l.scale_updates, 1);
     }

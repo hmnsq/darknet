@@ -1,141 +1,141 @@
-#include "image.h"
-#include "utils.h"
-#include "blas.h"
-#include "cuda.h"
-#include <stdio.h>
-#include <math.h>
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "utils.h"
+#अन्तर्भाव "blas.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <math.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#अन्तर्भाव "stb_image.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#अन्तर्भाव "stb_image_write.h"
 
-int windows = 0;
+पूर्णांक windows = 0;
 
-float colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
+दशांश colors[6][3] = { {1,0,1}, {0,0,1},{0,1,1},{0,1,0},{1,1,0},{1,0,0} };
 
-float get_color(int c, int x, int max)
+दशांश get_color(पूर्णांक c, पूर्णांक x, पूर्णांक max)
 {
-    float ratio = ((float)x/max)*5;
-    int i = floor(ratio);
-    int j = ceil(ratio);
+    दशांश ratio = ((दशांश)x/max)*5;
+    पूर्णांक i = न्यूनमान(ratio);
+    पूर्णांक j = उच्चमान(ratio);
     ratio -= i;
-    float r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
+    दशांश r = (1-ratio) * colors[i][c] + ratio*colors[j][c];
     //printf("%f\n", r);
-    return r;
+    परत r;
 }
 
 image mask_to_rgb(image mask)
 {
-    int n = mask.c;
+    पूर्णांक n = mask.c;
     image im = make_image(mask.w, mask.h, 3);
-    int i, j;
-    for(j = 0; j < n; ++j){
-        int offset = j*123457 % n;
-        float red = get_color(2,offset,n);
-        float green = get_color(1,offset,n);
-        float blue = get_color(0,offset,n);
-        for(i = 0; i < im.w*im.h; ++i){
+    पूर्णांक i, j;
+    साठी(j = 0; j < n; ++j){
+        पूर्णांक offset = j*123457 % n;
+        दशांश red = get_color(2,offset,n);
+        दशांश green = get_color(1,offset,n);
+        दशांश blue = get_color(0,offset,n);
+        साठी(i = 0; i < im.w*im.h; ++i){
             im.data[i + 0*im.w*im.h] += mask.data[j*im.h*im.w + i]*red;
             im.data[i + 1*im.w*im.h] += mask.data[j*im.h*im.w + i]*green;
             im.data[i + 2*im.w*im.h] += mask.data[j*im.h*im.w + i]*blue;
         }
     }
-    return im;
+    परत im;
 }
 
-static float get_pixel(image m, int x, int y, int c)
+स्थिर दशांश get_pixel(image m, पूर्णांक x, पूर्णांक y, पूर्णांक c)
 {
-    assert(x < m.w && y < m.h && c < m.c);
-    return m.data[c*m.h*m.w + y*m.w + x];
+    प्रतिज्ञा(x < m.w && y < m.h && c < m.c);
+    परत m.data[c*m.h*m.w + y*m.w + x];
 }
-static float get_pixel_extend(image m, int x, int y, int c)
+स्थिर दशांश get_pixel_extend(image m, पूर्णांक x, पूर्णांक y, पूर्णांक c)
 {
-    if(x < 0 || x >= m.w || y < 0 || y >= m.h) return 0;
+    जर(x < 0 || x >= m.w || y < 0 || y >= m.h) परत 0;
     /*
     if(x < 0) x = 0;
     if(x >= m.w) x = m.w-1;
     if(y < 0) y = 0;
     if(y >= m.h) y = m.h-1;
     */
-    if(c < 0 || c >= m.c) return 0;
-    return get_pixel(m, x, y, c);
+    जर(c < 0 || c >= m.c) परत 0;
+    परत get_pixel(m, x, y, c);
 }
-static void set_pixel(image m, int x, int y, int c, float val)
+स्थिर शून्य set_pixel(image m, पूर्णांक x, पूर्णांक y, पूर्णांक c, दशांश val)
 {
-    if (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) return;
-    assert(x < m.w && y < m.h && c < m.c);
+    जर (x < 0 || y < 0 || c < 0 || x >= m.w || y >= m.h || c >= m.c) परत;
+    प्रतिज्ञा(x < m.w && y < m.h && c < m.c);
     m.data[c*m.h*m.w + y*m.w + x] = val;
 }
-static void add_pixel(image m, int x, int y, int c, float val)
+स्थिर शून्य add_pixel(image m, पूर्णांक x, पूर्णांक y, पूर्णांक c, दशांश val)
 {
-    assert(x < m.w && y < m.h && c < m.c);
+    प्रतिज्ञा(x < m.w && y < m.h && c < m.c);
     m.data[c*m.h*m.w + y*m.w + x] += val;
 }
 
-static float bilinear_interpolate(image im, float x, float y, int c)
+स्थिर दशांश bilinear_interpolate(image im, दशांश x, दशांश y, पूर्णांक c)
 {
-    int ix = (int) floorf(x);
-    int iy = (int) floorf(y);
+    पूर्णांक ix = (पूर्णांक) floorf(x);
+    पूर्णांक iy = (पूर्णांक) floorf(y);
 
-    float dx = x - ix;
-    float dy = y - iy;
+    दशांश dx = x - ix;
+    दशांश dy = y - iy;
 
-    float val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
+    दशांश val = (1-dy) * (1-dx) * get_pixel_extend(im, ix, iy, c) + 
         dy     * (1-dx) * get_pixel_extend(im, ix, iy+1, c) + 
         (1-dy) *   dx   * get_pixel_extend(im, ix+1, iy, c) +
         dy     *   dx   * get_pixel_extend(im, ix+1, iy+1, c);
-    return val;
+    परत val;
 }
 
 
-void composite_image(image source, image dest, int dx, int dy)
+शून्य composite_image(image source, image dest, पूर्णांक dx, पूर्णांक dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x, y, k);
-                float val2 = get_pixel_extend(dest, dx+x, dy+y, k);
+    पूर्णांक x,y,k;
+    साठी(k = 0; k < source.c; ++k){
+        साठी(y = 0; y < source.h; ++y){
+            साठी(x = 0; x < source.w; ++x){
+                दशांश val = get_pixel(source, x, y, k);
+                दशांश val2 = get_pixel_extend(dest, dx+x, dy+y, k);
                 set_pixel(dest, dx+x, dy+y, k, val * val2);
             }
         }
     }
 }
 
-image border_image(image a, int border)
+image border_image(image a, पूर्णांक border)
 {
     image b = make_image(a.w + 2*border, a.h + 2*border, a.c);
-    int x,y,k;
-    for(k = 0; k < b.c; ++k){
-        for(y = 0; y < b.h; ++y){
-            for(x = 0; x < b.w; ++x){
-                float val = get_pixel_extend(a, x - border, y - border, k);
-                if(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
+    पूर्णांक x,y,k;
+    साठी(k = 0; k < b.c; ++k){
+        साठी(y = 0; y < b.h; ++y){
+            साठी(x = 0; x < b.w; ++x){
+                दशांश val = get_pixel_extend(a, x - border, y - border, k);
+                जर(x - border < 0 || x - border >= a.w || y - border < 0 || y - border >= a.h) val = 1;
                 set_pixel(b, x, y, k, val);
             }
         }
     }
-    return b;
+    परत b;
 }
 
-image tile_images(image a, image b, int dx)
+image tile_images(image a, image b, पूर्णांक dx)
 {
-    if(a.w == 0) return copy_image(b);
+    जर(a.w == 0) परत copy_image(b);
     image c = make_image(a.w + b.w + dx, (a.h > b.h) ? a.h : b.h, (a.c > b.c) ? a.c : b.c);
     fill_cpu(c.w*c.h*c.c, 1, c.data, 1);
     embed_image(a, c, 0, 0); 
     composite_image(b, c, a.w + dx, 0);
-    return c;
+    परत c;
 }
 
-image get_label(image **characters, char *string, int size)
+image get_label(image **characters, अक्षर *string, पूर्णांक size)
 {
     size = size/10;
-    if(size > 7) size = 7;
+    जर(size > 7) size = 7;
     image label = make_empty_image(0,0,0);
-    while(*string){
-        image l = characters[size][(int)*string];
+    पर्यंत(*string){
+        image l = characters[size][(पूर्णांक)*string];
         image n = tile_images(label, l, -size - 1 + (size+1)/2);
         free_image(label);
         label = n;
@@ -143,41 +143,41 @@ image get_label(image **characters, char *string, int size)
     }
     image b = border_image(label, label.h*.25);
     free_image(label);
-    return b;
+    परत b;
 }
 
-void draw_label(image a, int r, int c, image label, const float *rgb)
+शून्य draw_label(image a, पूर्णांक r, पूर्णांक c, image label, स्थिरांक दशांश *rgb)
 {
-    int w = label.w;
-    int h = label.h;
-    if (r - h >= 0) r = r - h;
+    पूर्णांक w = label.w;
+    पूर्णांक h = label.h;
+    जर (r - h >= 0) r = r - h;
 
-    int i, j, k;
-    for(j = 0; j < h && j + r < a.h; ++j){
-        for(i = 0; i < w && i + c < a.w; ++i){
-            for(k = 0; k < label.c; ++k){
-                float val = get_pixel(label, i, j, k);
+    पूर्णांक i, j, k;
+    साठी(j = 0; j < h && j + r < a.h; ++j){
+        साठी(i = 0; i < w && i + c < a.w; ++i){
+            साठी(k = 0; k < label.c; ++k){
+                दशांश val = get_pixel(label, i, j, k);
                 set_pixel(a, i+c, j+r, k, rgb[k] * val);
             }
         }
     }
 }
 
-void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b)
+शून्य draw_box(image a, पूर्णांक x1, पूर्णांक y1, पूर्णांक x2, पूर्णांक y2, दशांश r, दशांश g, दशांश b)
 {
     //normalize_image(a);
-    int i;
-    if(x1 < 0) x1 = 0;
-    if(x1 >= a.w) x1 = a.w-1;
-    if(x2 < 0) x2 = 0;
-    if(x2 >= a.w) x2 = a.w-1;
+    पूर्णांक i;
+    जर(x1 < 0) x1 = 0;
+    जर(x1 >= a.w) x1 = a.w-1;
+    जर(x2 < 0) x2 = 0;
+    जर(x2 >= a.w) x2 = a.w-1;
 
-    if(y1 < 0) y1 = 0;
-    if(y1 >= a.h) y1 = a.h-1;
-    if(y2 < 0) y2 = 0;
-    if(y2 >= a.h) y2 = a.h-1;
+    जर(y1 < 0) y1 = 0;
+    जर(y1 >= a.h) y1 = a.h-1;
+    जर(y2 < 0) y2 = 0;
+    जर(y2 >= a.h) y2 = a.h-1;
 
-    for(i = x1; i <= x2; ++i){
+    साठी(i = x1; i <= x2; ++i){
         a.data[i + y1*a.w + 0*a.w*a.h] = r;
         a.data[i + y2*a.w + 0*a.w*a.h] = r;
 
@@ -187,7 +187,7 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
         a.data[i + y1*a.w + 2*a.w*a.h] = b;
         a.data[i + y2*a.w + 2*a.w*a.h] = b;
     }
-    for(i = y1; i <= y2; ++i){
+    साठी(i = y1; i <= y2; ++i){
         a.data[x1 + i*a.w + 0*a.w*a.h] = r;
         a.data[x2 + i*a.w + 0*a.w*a.h] = r;
 
@@ -199,64 +199,64 @@ void draw_box(image a, int x1, int y1, int x2, int y2, float r, float g, float b
     }
 }
 
-void draw_box_width(image a, int x1, int y1, int x2, int y2, int w, float r, float g, float b)
+शून्य draw_box_width(image a, पूर्णांक x1, पूर्णांक y1, पूर्णांक x2, पूर्णांक y2, पूर्णांक w, दशांश r, दशांश g, दशांश b)
 {
-    int i;
-    for(i = 0; i < w; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < w; ++i){
         draw_box(a, x1+i, y1+i, x2-i, y2-i, r, g, b);
     }
 }
 
-void draw_bbox(image a, box bbox, int w, float r, float g, float b)
+शून्य draw_bbox(image a, box bbox, पूर्णांक w, दशांश r, दशांश g, दशांश b)
 {
-    int left  = (bbox.x-bbox.w/2)*a.w;
-    int right = (bbox.x+bbox.w/2)*a.w;
-    int top   = (bbox.y-bbox.h/2)*a.h;
-    int bot   = (bbox.y+bbox.h/2)*a.h;
+    पूर्णांक डावा  = (bbox.x-bbox.w/2)*a.w;
+    पूर्णांक उजवा = (bbox.x+bbox.w/2)*a.w;
+    पूर्णांक शीर्ष   = (bbox.y-bbox.h/2)*a.h;
+    पूर्णांक bot   = (bbox.y+bbox.h/2)*a.h;
 
-    int i;
-    for(i = 0; i < w; ++i){
-        draw_box(a, left+i, top+i, right-i, bot-i, r, g, b);
+    पूर्णांक i;
+    साठी(i = 0; i < w; ++i){
+        draw_box(a, डावा+i, शीर्ष+i, उजवा-i, bot-i, r, g, b);
     }
 }
 
 image **load_alphabet()
 {
-    int i, j;
-    const int nsize = 8;
-    image **alphabets = calloc(nsize, sizeof(image));
-    for(j = 0; j < nsize; ++j){
-        alphabets[j] = calloc(128, sizeof(image));
-        for(i = 32; i < 127; ++i){
-            char buff[256];
-            sprintf(buff, "data/labels/%d_%d.png", i, j);
+    पूर्णांक i, j;
+    स्थिरांक पूर्णांक nsize = 8;
+    image **alphabets = सुस्मृति(nsize, आकार(image));
+    साठी(j = 0; j < nsize; ++j){
+        alphabets[j] = सुस्मृति(128, आकार(image));
+        साठी(i = 32; i < 127; ++i){
+            अक्षर buff[256];
+            प्र_लिखो(buff, "data/labels/%d_%d.png", i, j);
             alphabets[j][i] = load_image_color(buff, 0, 0);
         }
     }
-    return alphabets;
+    परत alphabets;
 }
 
-void draw_detections(image im, detection *dets, int num, float thresh, char **names, image **alphabet, int classes)
+शून्य draw_detections(image im, detection *dets, पूर्णांक अंक, दशांश thresh, अक्षर **names, image **alphabet, पूर्णांक classes)
 {
-    int i,j;
+    पूर्णांक i,j;
 
-    for(i = 0; i < num; ++i){
-        char labelstr[4096] = {0};
-        int class = -1;
-        for(j = 0; j < classes; ++j){
-            if (dets[i].prob[j] > thresh){
-                if (class < 0) {
-                    strcat(labelstr, names[j]);
+    साठी(i = 0; i < अंक; ++i){
+        अक्षर labelstr[4096] = {0};
+        पूर्णांक class = -1;
+        साठी(j = 0; j < classes; ++j){
+            जर (dets[i].prob[j] > thresh){
+                जर (class < 0) {
+                    म_जोड़ो(labelstr, names[j]);
                     class = j;
-                } else {
-                    strcat(labelstr, ", ");
-                    strcat(labelstr, names[j]);
+                } अन्यथा {
+                    म_जोड़ो(labelstr, ", ");
+                    म_जोड़ो(labelstr, names[j]);
                 }
-                printf("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
+                म_लिखो("%s: %.0f%%\n", names[j], dets[i].prob[j]*100);
             }
         }
-        if(class >= 0){
-            int width = im.h * .006;
+        जर(class >= 0){
+            पूर्णांक width = im.h * .006;
 
             /*
                if(0){
@@ -266,11 +266,11 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
              */
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
-            int offset = class*123457 % classes;
-            float red = get_color(2,offset,classes);
-            float green = get_color(1,offset,classes);
-            float blue = get_color(0,offset,classes);
-            float rgb[3];
+            पूर्णांक offset = class*123457 % classes;
+            दशांश red = get_color(2,offset,classes);
+            दशांश green = get_color(1,offset,classes);
+            दशांश blue = get_color(0,offset,classes);
+            दशांश rgb[3];
 
             //width = prob*20+2;
 
@@ -280,27 +280,27 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
             box b = dets[i].bbox;
             //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
 
-            int left  = (b.x-b.w/2.)*im.w;
-            int right = (b.x+b.w/2.)*im.w;
-            int top   = (b.y-b.h/2.)*im.h;
-            int bot   = (b.y+b.h/2.)*im.h;
+            पूर्णांक डावा  = (b.x-b.w/2.)*im.w;
+            पूर्णांक उजवा = (b.x+b.w/2.)*im.w;
+            पूर्णांक शीर्ष   = (b.y-b.h/2.)*im.h;
+            पूर्णांक bot   = (b.y+b.h/2.)*im.h;
 
-            if(left < 0) left = 0;
-            if(right > im.w-1) right = im.w-1;
-            if(top < 0) top = 0;
-            if(bot > im.h-1) bot = im.h-1;
+            जर(डावा < 0) डावा = 0;
+            जर(उजवा > im.w-1) उजवा = im.w-1;
+            जर(शीर्ष < 0) शीर्ष = 0;
+            जर(bot > im.h-1) bot = im.h-1;
 
-            draw_box_width(im, left, top, right, bot, width, red, green, blue);
-            if (alphabet) {
+            draw_box_width(im, डावा, शीर्ष, उजवा, bot, width, red, green, blue);
+            जर (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.03));
-                draw_label(im, top + width, left, label, rgb);
+                draw_label(im, शीर्ष + width, डावा, label, rgb);
                 free_image(label);
             }
-            if (dets[i].mask){
+            जर (dets[i].mask){
                 image mask = float_to_image(14, 14, 1, dets[i].mask);
                 image resized_mask = resize_image(mask, b.w*im.w, b.h*im.h);
                 image tmask = threshold_image(resized_mask, .5);
-                embed_image(tmask, im, left, top);
+                embed_image(tmask, im, डावा, शीर्ष);
                 free_image(mask);
                 free_image(resized_mask);
                 free_image(tmask);
@@ -309,15 +309,15 @@ void draw_detections(image im, detection *dets, int num, float thresh, char **na
     }
 }
 
-void transpose_image(image im)
+शून्य transpose_image(image im)
 {
-    assert(im.w == im.h);
-    int n, m;
-    int c;
-    for(c = 0; c < im.c; ++c){
-        for(n = 0; n < im.w-1; ++n){
-            for(m = n + 1; m < im.w; ++m){
-                float swap = im.data[m + im.w*(n + im.h*c)];
+    प्रतिज्ञा(im.w == im.h);
+    पूर्णांक n, m;
+    पूर्णांक c;
+    साठी(c = 0; c < im.c; ++c){
+        साठी(n = 0; n < im.w-1; ++n){
+            साठी(m = n + 1; m < im.w; ++m){
+                दशांश swap = im.data[m + im.w*(n + im.h*c)];
                 im.data[m + im.w*(n + im.h*c)] = im.data[n + im.w*(m + im.h*c)];
                 im.data[n + im.w*(m + im.h*c)] = swap;
             }
@@ -325,17 +325,17 @@ void transpose_image(image im)
     }
 }
 
-void rotate_image_cw(image im, int times)
+शून्य rotate_image_cw(image im, पूर्णांक बार)
 {
-    assert(im.w == im.h);
-    times = (times + 400) % 4;
-    int i, x, y, c;
-    int n = im.w;
-    for(i = 0; i < times; ++i){
-        for(c = 0; c < im.c; ++c){
-            for(x = 0; x < n/2; ++x){
-                for(y = 0; y < (n-1)/2 + 1; ++y){
-                    float temp = im.data[y + im.w*(x + im.h*c)];
+    प्रतिज्ञा(im.w == im.h);
+    बार = (बार + 400) % 4;
+    पूर्णांक i, x, y, c;
+    पूर्णांक n = im.w;
+    साठी(i = 0; i < बार; ++i){
+        साठी(c = 0; c < im.c; ++c){
+            साठी(x = 0; x < n/2; ++x){
+                साठी(y = 0; y < (n-1)/2 + 1; ++y){
+                    दशांश temp = im.data[y + im.w*(x + im.h*c)];
                     im.data[y + im.w*(x + im.h*c)] = im.data[n-1-x + im.w*(y + im.h*c)];
                     im.data[n-1-x + im.w*(y + im.h*c)] = im.data[n-1-y + im.w*(n-1-x + im.h*c)];
                     im.data[n-1-y + im.w*(n-1-x + im.h*c)] = im.data[x + im.w*(n-1-y + im.h*c)];
@@ -346,15 +346,15 @@ void rotate_image_cw(image im, int times)
     }
 }
 
-void flip_image(image a)
+शून्य flip_image(image a)
 {
-    int i,j,k;
-    for(k = 0; k < a.c; ++k){
-        for(i = 0; i < a.h; ++i){
-            for(j = 0; j < a.w/2; ++j){
-                int index = j + a.w*(i + a.h*(k));
-                int flip = (a.w - j - 1) + a.w*(i + a.h*(k));
-                float swap = a.data[flip];
+    पूर्णांक i,j,k;
+    साठी(k = 0; k < a.c; ++k){
+        साठी(i = 0; i < a.h; ++i){
+            साठी(j = 0; j < a.w/2; ++j){
+                पूर्णांक index = j + a.w*(i + a.h*(k));
+                पूर्णांक flip = (a.w - j - 1) + a.w*(i + a.h*(k));
+                दशांश swap = a.data[flip];
                 a.data[flip] = a.data[index];
                 a.data[index] = swap;
             }
@@ -364,60 +364,60 @@ void flip_image(image a)
 
 image image_distance(image a, image b)
 {
-    int i,j;
+    पूर्णांक i,j;
     image dist = make_image(a.w, a.h, 1);
-    for(i = 0; i < a.c; ++i){
-        for(j = 0; j < a.h*a.w; ++j){
-            dist.data[j] += pow(a.data[i*a.h*a.w+j]-b.data[i*a.h*a.w+j],2);
+    साठी(i = 0; i < a.c; ++i){
+        साठी(j = 0; j < a.h*a.w; ++j){
+            dist.data[j] += घात(a.data[i*a.h*a.w+j]-b.data[i*a.h*a.w+j],2);
         }
     }
-    for(j = 0; j < a.h*a.w; ++j){
-        dist.data[j] = sqrt(dist.data[j]);
+    साठी(j = 0; j < a.h*a.w; ++j){
+        dist.data[j] = वर्ग_मूल(dist.data[j]);
     }
-    return dist;
+    परत dist;
 }
 
-void ghost_image(image source, image dest, int dx, int dy)
+शून्य ghost_image(image source, image dest, पूर्णांक dx, पूर्णांक dy)
 {
-    int x,y,k;
-    float max_dist = sqrt((-source.w/2. + .5)*(-source.w/2. + .5));
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float dist = sqrt((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
-                float alpha = (1 - dist/max_dist);
-                if(alpha < 0) alpha = 0;
-                float v1 = get_pixel(source, x,y,k);
-                float v2 = get_pixel(dest, dx+x,dy+y,k);
-                float val = alpha*v1 + (1-alpha)*v2;
+    पूर्णांक x,y,k;
+    दशांश max_dist = वर्ग_मूल((-source.w/2. + .5)*(-source.w/2. + .5));
+    साठी(k = 0; k < source.c; ++k){
+        साठी(y = 0; y < source.h; ++y){
+            साठी(x = 0; x < source.w; ++x){
+                दशांश dist = वर्ग_मूल((x - source.w/2. + .5)*(x - source.w/2. + .5) + (y - source.h/2. + .5)*(y - source.h/2. + .5));
+                दशांश alpha = (1 - dist/max_dist);
+                जर(alpha < 0) alpha = 0;
+                दशांश v1 = get_pixel(source, x,y,k);
+                दशांश v2 = get_pixel(dest, dx+x,dy+y,k);
+                दशांश val = alpha*v1 + (1-alpha)*v2;
                 set_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-void blocky_image(image im, int s)
+शून्य blocky_image(image im, पूर्णांक s)
 {
-    int i,j,k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
+    पूर्णांक i,j,k;
+    साठी(k = 0; k < im.c; ++k){
+        साठी(j = 0; j < im.h; ++j){
+            साठी(i = 0; i < im.w; ++i){
                 im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
             }
         }
     }
 }
 
-void censor_image(image im, int dx, int dy, int w, int h)
+शून्य censor_image(image im, पूर्णांक dx, पूर्णांक dy, पूर्णांक w, पूर्णांक h)
 {
-    int i,j,k;
-    int s = 32;
-    if(dx < 0) dx = 0;
-    if(dy < 0) dy = 0;
+    पूर्णांक i,j,k;
+    पूर्णांक s = 32;
+    जर(dx < 0) dx = 0;
+    जर(dy < 0) dy = 0;
 
-    for(k = 0; k < im.c; ++k){
-        for(j = dy; j < dy + h && j < im.h; ++j){
-            for(i = dx; i < dx + w && i < im.w; ++i){
+    साठी(k = 0; k < im.c; ++k){
+        साठी(j = dy; j < dy + h && j < im.h; ++j){
+            साठी(i = dx; i < dx + w && i < im.w; ++i){
                 im.data[i + im.w*(j + im.h*k)] = im.data[i/s*s + im.w*(j/s*s + im.h*k)];
                 //im.data[i + j*im.w + k*im.w*im.h] = 0;
             }
@@ -425,301 +425,301 @@ void censor_image(image im, int dx, int dy, int w, int h)
     }
 }
 
-void embed_image(image source, image dest, int dx, int dy)
+शून्य embed_image(image source, image dest, पूर्णांक dx, पूर्णांक dy)
 {
-    int x,y,k;
-    for(k = 0; k < source.c; ++k){
-        for(y = 0; y < source.h; ++y){
-            for(x = 0; x < source.w; ++x){
-                float val = get_pixel(source, x,y,k);
+    पूर्णांक x,y,k;
+    साठी(k = 0; k < source.c; ++k){
+        साठी(y = 0; y < source.h; ++y){
+            साठी(x = 0; x < source.w; ++x){
+                दशांश val = get_pixel(source, x,y,k);
                 set_pixel(dest, dx+x, dy+y, k, val);
             }
         }
     }
 }
 
-image collapse_image_layers(image source, int border)
+image collapse_image_layers(image source, पूर्णांक border)
 {
-    int h = source.h;
+    पूर्णांक h = source.h;
     h = (h+border)*source.c - border;
     image dest = make_image(source.w, h, 1);
-    int i;
-    for(i = 0; i < source.c; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < source.c; ++i){
         image layer = get_image_layer(source, i);
-        int h_offset = i*(source.h+border);
+        पूर्णांक h_offset = i*(source.h+border);
         embed_image(layer, dest, 0, h_offset);
         free_image(layer);
     }
-    return dest;
+    परत dest;
 }
 
-void constrain_image(image im)
+शून्य constrain_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h*im.c; ++i){
-        if(im.data[i] < 0) im.data[i] = 0;
-        if(im.data[i] > 1) im.data[i] = 1;
+    पूर्णांक i;
+    साठी(i = 0; i < im.w*im.h*im.c; ++i){
+        जर(im.data[i] < 0) im.data[i] = 0;
+        जर(im.data[i] > 1) im.data[i] = 1;
     }
 }
 
-void normalize_image(image p)
+शून्य normalize_image(image p)
 {
-    int i;
-    float min = 9999999;
-    float max = -999999;
+    पूर्णांक i;
+    दशांश min = 9999999;
+    दशांश max = -999999;
 
-    for(i = 0; i < p.h*p.w*p.c; ++i){
-        float v = p.data[i];
-        if(v < min) min = v;
-        if(v > max) max = v;
+    साठी(i = 0; i < p.h*p.w*p.c; ++i){
+        दशांश v = p.data[i];
+        जर(v < min) min = v;
+        जर(v > max) max = v;
     }
-    if(max - min < .000000001){
+    जर(max - min < .000000001){
         min = 0;
         max = 1;
     }
-    for(i = 0; i < p.c*p.w*p.h; ++i){
+    साठी(i = 0; i < p.c*p.w*p.h; ++i){
         p.data[i] = (p.data[i] - min)/(max-min);
     }
 }
 
-void normalize_image2(image p)
+शून्य normalize_image2(image p)
 {
-    float *min = calloc(p.c, sizeof(float));
-    float *max = calloc(p.c, sizeof(float));
-    int i,j;
-    for(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
+    दशांश *min = सुस्मृति(p.c, आकार(दशांश));
+    दशांश *max = सुस्मृति(p.c, आकार(दशांश));
+    पूर्णांक i,j;
+    साठी(i = 0; i < p.c; ++i) min[i] = max[i] = p.data[i*p.h*p.w];
 
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.h*p.w; ++i){
-            float v = p.data[i+j*p.h*p.w];
-            if(v < min[j]) min[j] = v;
-            if(v > max[j]) max[j] = v;
+    साठी(j = 0; j < p.c; ++j){
+        साठी(i = 0; i < p.h*p.w; ++i){
+            दशांश v = p.data[i+j*p.h*p.w];
+            जर(v < min[j]) min[j] = v;
+            जर(v > max[j]) max[j] = v;
         }
     }
-    for(i = 0; i < p.c; ++i){
-        if(max[i] - min[i] < .000000001){
+    साठी(i = 0; i < p.c; ++i){
+        जर(max[i] - min[i] < .000000001){
             min[i] = 0;
             max[i] = 1;
         }
     }
-    for(j = 0; j < p.c; ++j){
-        for(i = 0; i < p.w*p.h; ++i){
+    साठी(j = 0; j < p.c; ++j){
+        साठी(i = 0; i < p.w*p.h; ++i){
             p.data[i+j*p.h*p.w] = (p.data[i+j*p.h*p.w] - min[j])/(max[j]-min[j]);
         }
     }
-    free(min);
-    free(max);
+    मुक्त(min);
+    मुक्त(max);
 }
 
-void copy_image_into(image src, image dest)
+शून्य copy_image_into(image src, image dest)
 {
-    memcpy(dest.data, src.data, src.h*src.w*src.c*sizeof(float));
+    स_नकल(dest.data, src.data, src.h*src.w*src.c*आकार(दशांश));
 }
 
 image copy_image(image p)
 {
     image copy = p;
-    copy.data = calloc(p.h*p.w*p.c, sizeof(float));
-    memcpy(copy.data, p.data, p.h*p.w*p.c*sizeof(float));
-    return copy;
+    copy.data = सुस्मृति(p.h*p.w*p.c, आकार(दशांश));
+    स_नकल(copy.data, p.data, p.h*p.w*p.c*आकार(दशांश));
+    परत copy;
 }
 
-void rgbgr_image(image im)
+शून्य rgbgr_image(image im)
 {
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
-        float swap = im.data[i];
+    पूर्णांक i;
+    साठी(i = 0; i < im.w*im.h; ++i){
+        दशांश swap = im.data[i];
         im.data[i] = im.data[i+im.w*im.h*2];
         im.data[i+im.w*im.h*2] = swap;
     }
 }
 
-int show_image(image p, const char *name, int ms)
+पूर्णांक show_image(image p, स्थिरांक अक्षर *name, पूर्णांक ms)
 {
 #ifdef OPENCV
-    int c = show_image_cv(p, name, ms);
-    return c;
-#else
-    fprintf(stderr, "Not compiled with OpenCV, saving to %s.png instead\n", name);
+    पूर्णांक c = show_image_cv(p, name, ms);
+    परत c;
+#अन्यथा
+    ख_लिखो(मानक_त्रुटि, "Not compiled with OpenCV, saving to %s.png instead\n", name);
     save_image(p, name);
-    return -1;
+    परत -1;
 #endif
 }
 
-void save_image_options(image im, const char *name, IMTYPE f, int quality)
+शून्य save_image_options(image im, स्थिरांक अक्षर *name, IMTYPE f, पूर्णांक quality)
 {
-    char buff[256];
+    अक्षर buff[256];
     //sprintf(buff, "%s (%d)", name, windows);
-    if(f == PNG)       sprintf(buff, "%s.png", name);
-    else if (f == BMP) sprintf(buff, "%s.bmp", name);
-    else if (f == TGA) sprintf(buff, "%s.tga", name);
-    else if (f == JPG) sprintf(buff, "%s.jpg", name);
-    else               sprintf(buff, "%s.png", name);
-    unsigned char *data = calloc(im.w*im.h*im.c, sizeof(char));
-    int i,k;
-    for(k = 0; k < im.c; ++k){
-        for(i = 0; i < im.w*im.h; ++i){
-            data[i*im.c+k] = (unsigned char) (255*im.data[i + k*im.w*im.h]);
+    जर(f == PNG)       प्र_लिखो(buff, "%s.png", name);
+    अन्यथा जर (f == BMP) प्र_लिखो(buff, "%s.bmp", name);
+    अन्यथा जर (f == TGA) प्र_लिखो(buff, "%s.tga", name);
+    अन्यथा जर (f == JPG) प्र_लिखो(buff, "%s.jpg", name);
+    अन्यथा               प्र_लिखो(buff, "%s.png", name);
+    अचिन्हित अक्षर *data = सुस्मृति(im.w*im.h*im.c, आकार(अक्षर));
+    पूर्णांक i,k;
+    साठी(k = 0; k < im.c; ++k){
+        साठी(i = 0; i < im.w*im.h; ++i){
+            data[i*im.c+k] = (अचिन्हित अक्षर) (255*im.data[i + k*im.w*im.h]);
         }
     }
-    int success = 0;
-    if(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
-    else if (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
-    else if (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
-    else if (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
-    free(data);
-    if(!success) fprintf(stderr, "Failed to write image %s\n", buff);
+    पूर्णांक success = 0;
+    जर(f == PNG)       success = stbi_write_png(buff, im.w, im.h, im.c, data, im.w*im.c);
+    अन्यथा जर (f == BMP) success = stbi_write_bmp(buff, im.w, im.h, im.c, data);
+    अन्यथा जर (f == TGA) success = stbi_write_tga(buff, im.w, im.h, im.c, data);
+    अन्यथा जर (f == JPG) success = stbi_write_jpg(buff, im.w, im.h, im.c, data, quality);
+    मुक्त(data);
+    जर(!success) ख_लिखो(मानक_त्रुटि, "Failed to write image %s\n", buff);
 }
 
-void save_image(image im, const char *name)
+शून्य save_image(image im, स्थिरांक अक्षर *name)
 {
     save_image_options(im, name, JPG, 80);
 }
 
-void show_image_layers(image p, char *name)
+शून्य show_image_layers(image p, अक्षर *name)
 {
-    int i;
-    char buff[256];
-    for(i = 0; i < p.c; ++i){
-        sprintf(buff, "%s - Layer %d", name, i);
+    पूर्णांक i;
+    अक्षर buff[256];
+    साठी(i = 0; i < p.c; ++i){
+        प्र_लिखो(buff, "%s - Layer %d", name, i);
         image layer = get_image_layer(p, i);
         show_image(layer, buff, 1);
         free_image(layer);
     }
 }
 
-void show_image_collapsed(image p, char *name)
+शून्य show_image_collapsed(image p, अक्षर *name)
 {
     image c = collapse_image_layers(p, 1);
     show_image(c, name, 1);
     free_image(c);
 }
 
-image make_empty_image(int w, int h, int c)
+image make_empty_image(पूर्णांक w, पूर्णांक h, पूर्णांक c)
 {
     image out;
     out.data = 0;
     out.h = h;
     out.w = w;
     out.c = c;
-    return out;
+    परत out;
 }
 
-image make_image(int w, int h, int c)
+image make_image(पूर्णांक w, पूर्णांक h, पूर्णांक c)
 {
     image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    return out;
+    out.data = सुस्मृति(h*w*c, आकार(दशांश));
+    परत out;
 }
 
-image make_random_image(int w, int h, int c)
+image make_random_image(पूर्णांक w, पूर्णांक h, पूर्णांक c)
 {
     image out = make_empty_image(w,h,c);
-    out.data = calloc(h*w*c, sizeof(float));
-    int i;
-    for(i = 0; i < w*h*c; ++i){
+    out.data = सुस्मृति(h*w*c, आकार(दशांश));
+    पूर्णांक i;
+    साठी(i = 0; i < w*h*c; ++i){
         out.data[i] = (rand_normal() * .25) + .5;
     }
-    return out;
+    परत out;
 }
 
-image float_to_image(int w, int h, int c, float *data)
+image float_to_image(पूर्णांक w, पूर्णांक h, पूर्णांक c, दशांश *data)
 {
     image out = make_empty_image(w,h,c);
     out.data = data;
-    return out;
+    परत out;
 }
 
-void place_image(image im, int w, int h, int dx, int dy, image canvas)
+शून्य place_image(image im, पूर्णांक w, पूर्णांक h, पूर्णांक dx, पूर्णांक dy, image canvas)
 {
-    int x, y, c;
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = ((float)x / w) * im.w;
-                float ry = ((float)y / h) * im.h;
-                float val = bilinear_interpolate(im, rx, ry, c);
+    पूर्णांक x, y, c;
+    साठी(c = 0; c < im.c; ++c){
+        साठी(y = 0; y < h; ++y){
+            साठी(x = 0; x < w; ++x){
+                दशांश rx = ((दशांश)x / w) * im.w;
+                दशांश ry = ((दशांश)y / h) * im.h;
+                दशांश val = bilinear_interpolate(im, rx, ry, c);
                 set_pixel(canvas, x + dx, y + dy, c, val);
             }
         }
     }
 }
 
-image center_crop_image(image im, int w, int h)
+image center_crop_image(image im, पूर्णांक w, पूर्णांक h)
 {
-    int m = (im.w < im.h) ? im.w : im.h;   
+    पूर्णांक m = (im.w < im.h) ? im.w : im.h;   
     image c = crop_image(im, (im.w - m) / 2, (im.h - m)/2, m, m);
     image r = resize_image(c, w, h);
     free_image(c);
-    return r;
+    परत r;
 }
 
-image rotate_crop_image(image im, float rad, float s, int w, int h, float dx, float dy, float aspect)
+image rotate_crop_image(image im, दशांश rad, दशांश s, पूर्णांक w, पूर्णांक h, दशांश dx, दशांश dy, दशांश aspect)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    पूर्णांक x, y, c;
+    दशांश cx = im.w/2.;
+    दशांश cy = im.h/2.;
     image rot = make_image(w, h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < h; ++y){
-            for(x = 0; x < w; ++x){
-                float rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
-                float ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
+    साठी(c = 0; c < im.c; ++c){
+        साठी(y = 0; y < h; ++y){
+            साठी(x = 0; x < w; ++x){
+                दशांश rx = cos(rad)*((x - w/2.)/s*aspect + dx/s*aspect) - sin(rad)*((y - h/2.)/s + dy/s) + cx;
+                दशांश ry = sin(rad)*((x - w/2.)/s*aspect + dx/s*aspect) + cos(rad)*((y - h/2.)/s + dy/s) + cy;
+                दशांश val = bilinear_interpolate(im, rx, ry, c);
                 set_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    परत rot;
 }
 
-image rotate_image(image im, float rad)
+image rotate_image(image im, दशांश rad)
 {
-    int x, y, c;
-    float cx = im.w/2.;
-    float cy = im.h/2.;
+    पूर्णांक x, y, c;
+    दशांश cx = im.w/2.;
+    दशांश cy = im.h/2.;
     image rot = make_image(im.w, im.h, im.c);
-    for(c = 0; c < im.c; ++c){
-        for(y = 0; y < im.h; ++y){
-            for(x = 0; x < im.w; ++x){
-                float rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
-                float ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
-                float val = bilinear_interpolate(im, rx, ry, c);
+    साठी(c = 0; c < im.c; ++c){
+        साठी(y = 0; y < im.h; ++y){
+            साठी(x = 0; x < im.w; ++x){
+                दशांश rx = cos(rad)*(x-cx) - sin(rad)*(y-cy) + cx;
+                दशांश ry = sin(rad)*(x-cx) + cos(rad)*(y-cy) + cy;
+                दशांश val = bilinear_interpolate(im, rx, ry, c);
                 set_pixel(rot, x, y, c, val);
             }
         }
     }
-    return rot;
+    परत rot;
 }
 
-void fill_image(image m, float s)
+शून्य fill_image(image m, दशांश s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
+    पूर्णांक i;
+    साठी(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] = s;
 }
 
-void translate_image(image m, float s)
+शून्य translate_image(image m, दशांश s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
+    पूर्णांक i;
+    साठी(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] += s;
 }
 
-void scale_image(image m, float s)
+शून्य scale_image(image m, दशांश s)
 {
-    int i;
-    for(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
+    पूर्णांक i;
+    साठी(i = 0; i < m.h*m.w*m.c; ++i) m.data[i] *= s;
 }
 
-image crop_image(image im, int dx, int dy, int w, int h)
+image crop_image(image im, पूर्णांक dx, पूर्णांक dy, पूर्णांक w, पूर्णांक h)
 {
     image cropped = make_image(w, h, im.c);
-    int i, j, k;
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int r = j + dy;
-                int c = i + dx;
-                float val = 0;
+    पूर्णांक i, j, k;
+    साठी(k = 0; k < im.c; ++k){
+        साठी(j = 0; j < h; ++j){
+            साठी(i = 0; i < w; ++i){
+                पूर्णांक r = j + dy;
+                पूर्णांक c = i + dx;
+                दशांश val = 0;
                 r = constrain_int(r, 0, im.h-1);
                 c = constrain_int(c, 0, im.w-1);
                 val = get_pixel(im, c, r, k);
@@ -727,80 +727,80 @@ image crop_image(image im, int dx, int dy, int w, int h)
             }
         }
     }
-    return cropped;
+    परत cropped;
 }
 
-int best_3d_shift_r(image a, image b, int min, int max)
+पूर्णांक best_3d_shift_r(image a, image b, पूर्णांक min, पूर्णांक max)
 {
-    if(min == max) return min;
-    int mid = floor((min + max) / 2.);
+    जर(min == max) परत min;
+    पूर्णांक mid = न्यूनमान((min + max) / 2.);
     image c1 = crop_image(b, 0, mid, b.w, b.h);
     image c2 = crop_image(b, 0, mid+1, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
+    दशांश d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 10);
+    दशांश d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 10);
     free_image(c1);
     free_image(c2);
-    if(d1 < d2) return best_3d_shift_r(a, b, min, mid);
-    else return best_3d_shift_r(a, b, mid+1, max);
+    जर(d1 < d2) परत best_3d_shift_r(a, b, min, mid);
+    अन्यथा परत best_3d_shift_r(a, b, mid+1, max);
 }
 
-int best_3d_shift(image a, image b, int min, int max)
+पूर्णांक best_3d_shift(image a, image b, पूर्णांक min, पूर्णांक max)
 {
-    int i;
-    int best = 0;
-    float best_distance = FLT_MAX;
-    for(i = min; i <= max; i += 2){
+    पूर्णांक i;
+    पूर्णांक best = 0;
+    दशांश best_distance = भग्न_उच्च;
+    साठी(i = min; i <= max; i += 2){
         image c = crop_image(b, 0, i, b.w, b.h);
-        float d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
-        if(d < best_distance){
+        दशांश d = dist_array(c.data, a.data, a.w*a.h*a.c, 100);
+        जर(d < best_distance){
             best_distance = d;
             best = i;
         }
-        printf("%d %f\n", i, d);
+        म_लिखो("%d %f\n", i, d);
         free_image(c);
     }
-    return best;
+    परत best;
 }
 
-void composite_3d(char *f1, char *f2, char *out, int delta)
+शून्य composite_3d(अक्षर *f1, अक्षर *f2, अक्षर *out, पूर्णांक delta)
 {
-    if(!out) out = "out";
+    जर(!out) out = "out";
     image a = load_image(f1, 0,0,0);
     image b = load_image(f2, 0,0,0);
-    int shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
+    पूर्णांक shift = best_3d_shift_r(a, b, -a.h/100, a.h/100);
 
     image c1 = crop_image(b, 10, shift, b.w, b.h);
-    float d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
+    दशांश d1 = dist_array(c1.data, a.data, a.w*a.h*a.c, 100);
     image c2 = crop_image(b, -10, shift, b.w, b.h);
-    float d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
+    दशांश d2 = dist_array(c2.data, a.data, a.w*a.h*a.c, 100);
 
-    if(d2 < d1 && 0){
+    जर(d2 < d1 && 0){
         image swap = a;
         a = b;
         b = swap;
         shift = -shift;
-        printf("swapped, %d\n", shift);
+        म_लिखो("swapped, %d\n", shift);
     }
-    else{
-        printf("%d\n", shift);
+    अन्यथा{
+        म_लिखो("%d\n", shift);
     }
 
     image c = crop_image(b, delta, shift, a.w, a.h);
-    int i;
-    for(i = 0; i < c.w*c.h; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < c.w*c.h; ++i){
         c.data[i] = a.data[i];
     }
     save_image(c, out);
 }
 
-void letterbox_image_into(image im, int w, int h, image boxed)
+शून्य letterbox_image_into(image im, पूर्णांक w, पूर्णांक h, image boxed)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    पूर्णांक new_w = im.w;
+    पूर्णांक new_h = im.h;
+    जर (((दशांश)w/im.w) < ((दशांश)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } अन्यथा {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -809,14 +809,14 @@ void letterbox_image_into(image im, int w, int h, image boxed)
     free_image(resized);
 }
 
-image letterbox_image(image im, int w, int h)
+image letterbox_image(image im, पूर्णांक w, पूर्णांक h)
 {
-    int new_w = im.w;
-    int new_h = im.h;
-    if (((float)w/im.w) < ((float)h/im.h)) {
+    पूर्णांक new_w = im.w;
+    पूर्णांक new_h = im.h;
+    जर (((दशांश)w/im.w) < ((दशांश)h/im.h)) {
         new_w = w;
         new_h = (im.h * w)/im.w;
-    } else {
+    } अन्यथा {
         new_h = h;
         new_w = (im.w * h)/im.h;
     }
@@ -827,61 +827,61 @@ image letterbox_image(image im, int w, int h)
     //for(i = 0; i < boxed.w*boxed.h*boxed.c; ++i) boxed.data[i] = 0;
     embed_image(resized, boxed, (w-new_w)/2, (h-new_h)/2); 
     free_image(resized);
-    return boxed;
+    परत boxed;
 }
 
-image resize_max(image im, int max)
+image resize_max(image im, पूर्णांक max)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w > h){
+    पूर्णांक w = im.w;
+    पूर्णांक h = im.h;
+    जर(w > h){
         h = (h * max) / w;
         w = max;
-    } else {
+    } अन्यथा {
         w = (w * max) / h;
         h = max;
     }
-    if(w == im.w && h == im.h) return im;
+    जर(w == im.w && h == im.h) परत im;
     image resized = resize_image(im, w, h);
-    return resized;
+    परत resized;
 }
 
-image resize_min(image im, int min)
+image resize_min(image im, पूर्णांक min)
 {
-    int w = im.w;
-    int h = im.h;
-    if(w < h){
+    पूर्णांक w = im.w;
+    पूर्णांक h = im.h;
+    जर(w < h){
         h = (h * min) / w;
         w = min;
-    } else {
+    } अन्यथा {
         w = (w * min) / h;
         h = min;
     }
-    if(w == im.w && h == im.h) return im;
+    जर(w == im.w && h == im.h) परत im;
     image resized = resize_image(im, w, h);
-    return resized;
+    परत resized;
 }
 
-image random_crop_image(image im, int w, int h)
+image random_crop_image(image im, पूर्णांक w, पूर्णांक h)
 {
-    int dx = rand_int(0, im.w - w);
-    int dy = rand_int(0, im.h - h);
+    पूर्णांक dx = rand_int(0, im.w - w);
+    पूर्णांक dy = rand_int(0, im.h - h);
     image crop = crop_image(im, dx, dy, w, h);
-    return crop;
+    परत crop;
 }
 
-augment_args random_augment_args(image im, float angle, float aspect, int low, int high, int w, int h)
+augment_args random_augment_args(image im, दशांश angle, दशांश aspect, पूर्णांक खालचा, पूर्णांक वरचा, पूर्णांक w, पूर्णांक h)
 {
     augment_args a = {0};
     aspect = rand_scale(aspect);
-    int r = rand_int(low, high);
-    int min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
-    float scale = (float)r / min;
+    पूर्णांक r = rand_int(खालचा, वरचा);
+    पूर्णांक min = (im.h < im.w*aspect) ? im.h : im.w*aspect;
+    दशांश scale = (दशांश)r / min;
 
-    float rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
+    दशांश rad = rand_uniform(-angle, angle) * TWO_PI / 360.;
 
-    float dx = (im.w*scale/aspect - w) / 2.;
-    float dy = (im.h*scale - w) / 2.;
+    दशांश dx = (im.w*scale/aspect - w) / 2.;
+    दशांश dy = (im.h*scale - w) / 2.;
     //if(dx < 0) dx = 0;
     //if(dy < 0) dy = 0;
     dx = rand_uniform(-dx, dx);
@@ -894,34 +894,34 @@ augment_args random_augment_args(image im, float angle, float aspect, int low, i
     a.dx = dx;
     a.dy = dy;
     a.aspect = aspect;
-    return a;
+    परत a;
 }
 
-image random_augment_image(image im, float angle, float aspect, int low, int high, int w, int h)
+image random_augment_image(image im, दशांश angle, दशांश aspect, पूर्णांक खालचा, पूर्णांक वरचा, पूर्णांक w, पूर्णांक h)
 {
-    augment_args a = random_augment_args(im, angle, aspect, low, high, w, h);
+    augment_args a = random_augment_args(im, angle, aspect, खालचा, वरचा, w, h);
     image crop = rotate_crop_image(im, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
-    return crop;
+    परत crop;
 }
 
-float three_way_max(float a, float b, float c)
+दशांश three_way_max(दशांश a, दशांश b, दशांश c)
 {
-    return (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
+    परत (a > b) ? ( (a > c) ? a : c) : ( (b > c) ? b : c) ;
 }
 
-float three_way_min(float a, float b, float c)
+दशांश three_way_min(दशांश a, दशांश b, दशांश c)
 {
-    return (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
+    परत (a < b) ? ( (a < c) ? a : c) : ( (b < c) ? b : c) ;
 }
 
-void yuv_to_rgb(image im)
+शून्य yuv_to_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    प्रतिज्ञा(im.c == 3);
+    पूर्णांक i, j;
+    दशांश r, g, b;
+    दशांश y, u, v;
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
             y = get_pixel(im, i , j, 0);
             u = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
@@ -937,14 +937,14 @@ void yuv_to_rgb(image im)
     }
 }
 
-void rgb_to_yuv(image im)
+शून्य rgb_to_yuv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float y, u, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    प्रतिज्ञा(im.c == 3);
+    पूर्णांक i, j;
+    दशांश r, g, b;
+    दशांश y, u, v;
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
@@ -961,34 +961,34 @@ void rgb_to_yuv(image im)
 }
 
 // http://www.cs.rit.edu/~ncs/color/t_convert.html
-void rgb_to_hsv(image im)
+शून्य rgb_to_hsv(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    प्रतिज्ञा(im.c == 3);
+    पूर्णांक i, j;
+    दशांश r, g, b;
+    दशांश h, s, v;
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
             r = get_pixel(im, i , j, 0);
             g = get_pixel(im, i , j, 1);
             b = get_pixel(im, i , j, 2);
-            float max = three_way_max(r,g,b);
-            float min = three_way_min(r,g,b);
-            float delta = max - min;
+            दशांश max = three_way_max(r,g,b);
+            दशांश min = three_way_min(r,g,b);
+            दशांश delta = max - min;
             v = max;
-            if(max == 0){
+            जर(max == 0){
                 s = 0;
                 h = 0;
-            }else{
+            }अन्यथा{
                 s = delta/max;
-                if(r == max){
+                जर(r == max){
                     h = (g - b) / delta;
-                } else if (g == max) {
+                } अन्यथा जर (g == max) {
                     h = 2 + (b - r) / delta;
-                } else {
+                } अन्यथा {
                     h = 4 + (r - g) / delta;
                 }
-                if (h < 0) h += 6;
+                जर (h < 0) h += 6;
                 h = h/6.;
             }
             set_pixel(im, i, j, 0, h);
@@ -998,37 +998,37 @@ void rgb_to_hsv(image im)
     }
 }
 
-void hsv_to_rgb(image im)
+शून्य hsv_to_rgb(image im)
 {
-    assert(im.c == 3);
-    int i, j;
-    float r, g, b;
-    float h, s, v;
-    float f, p, q, t;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
+    प्रतिज्ञा(im.c == 3);
+    पूर्णांक i, j;
+    दशांश r, g, b;
+    दशांश h, s, v;
+    दशांश f, p, q, t;
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
             h = 6 * get_pixel(im, i , j, 0);
             s = get_pixel(im, i , j, 1);
             v = get_pixel(im, i , j, 2);
-            if (s == 0) {
+            जर (s == 0) {
                 r = g = b = v;
-            } else {
-                int index = floor(h);
+            } अन्यथा {
+                पूर्णांक index = न्यूनमान(h);
                 f = h - index;
                 p = v*(1-s);
                 q = v*(1-s*f);
                 t = v*(1-s*(1-f));
-                if(index == 0){
+                जर(index == 0){
                     r = v; g = t; b = p;
-                } else if(index == 1){
+                } अन्यथा जर(index == 1){
                     r = q; g = v; b = p;
-                } else if(index == 2){
+                } अन्यथा जर(index == 2){
                     r = p; g = v; b = t;
-                } else if(index == 3){
+                } अन्यथा जर(index == 3){
                     r = p; g = q; b = v;
-                } else if(index == 4){
+                } अन्यथा जर(index == 4){
                     r = t; g = p; b = v;
-                } else {
+                } अन्यथा {
                     r = v; g = p; b = q;
                 }
             }
@@ -1039,15 +1039,15 @@ void hsv_to_rgb(image im)
     }
 }
 
-void grayscale_image_3c(image im)
+शून्य grayscale_image_3c(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
-    float scale[] = {0.299, 0.587, 0.114};
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float val = 0;
-            for(k = 0; k < 3; ++k){
+    प्रतिज्ञा(im.c == 3);
+    पूर्णांक i, j, k;
+    दशांश scale[] = {0.299, 0.587, 0.114};
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
+            दशांश val = 0;
+            साठी(k = 0; k < 3; ++k){
                 val += scale[k]*get_pixel(im, i, j, k);
             }
             im.data[0*im.h*im.w + im.w*j + i] = val;
@@ -1059,65 +1059,65 @@ void grayscale_image_3c(image im)
 
 image grayscale_image(image im)
 {
-    assert(im.c == 3);
-    int i, j, k;
+    प्रतिज्ञा(im.c == 3);
+    पूर्णांक i, j, k;
     image gray = make_image(im.w, im.h, 1);
-    float scale[] = {0.299, 0.587, 0.114};
-    for(k = 0; k < im.c; ++k){
-        for(j = 0; j < im.h; ++j){
-            for(i = 0; i < im.w; ++i){
+    दशांश scale[] = {0.299, 0.587, 0.114};
+    साठी(k = 0; k < im.c; ++k){
+        साठी(j = 0; j < im.h; ++j){
+            साठी(i = 0; i < im.w; ++i){
                 gray.data[i+im.w*j] += scale[k]*get_pixel(im, i, j, k);
             }
         }
     }
-    return gray;
+    परत gray;
 }
 
-image threshold_image(image im, float thresh)
+image threshold_image(image im, दशांश thresh)
 {
-    int i;
+    पूर्णांक i;
     image t = make_image(im.w, im.h, im.c);
-    for(i = 0; i < im.w*im.h*im.c; ++i){
+    साठी(i = 0; i < im.w*im.h*im.c; ++i){
         t.data[i] = im.data[i]>thresh ? 1 : 0;
     }
-    return t;
+    परत t;
 }
 
-image blend_image(image fore, image back, float alpha)
+image blend_image(image fore, image back, दशांश alpha)
 {
-    assert(fore.w == back.w && fore.h == back.h && fore.c == back.c);
+    प्रतिज्ञा(fore.w == back.w && fore.h == back.h && fore.c == back.c);
     image blend = make_image(fore.w, fore.h, fore.c);
-    int i, j, k;
-    for(k = 0; k < fore.c; ++k){
-        for(j = 0; j < fore.h; ++j){
-            for(i = 0; i < fore.w; ++i){
-                float val = alpha * get_pixel(fore, i, j, k) + 
+    पूर्णांक i, j, k;
+    साठी(k = 0; k < fore.c; ++k){
+        साठी(j = 0; j < fore.h; ++j){
+            साठी(i = 0; i < fore.w; ++i){
+                दशांश val = alpha * get_pixel(fore, i, j, k) + 
                     (1 - alpha)* get_pixel(back, i, j, k);
                 set_pixel(blend, i, j, k, val);
             }
         }
     }
-    return blend;
+    परत blend;
 }
 
-void scale_image_channel(image im, int c, float v)
+शून्य scale_image_channel(image im, पूर्णांक c, दशांश v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    पूर्णांक i, j;
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
+            दशांश pix = get_pixel(im, i, j, c);
             pix = pix*v;
             set_pixel(im, i, j, c, pix);
         }
     }
 }
 
-void translate_image_channel(image im, int c, float v)
+शून्य translate_image_channel(image im, पूर्णांक c, दशांश v)
 {
-    int i, j;
-    for(j = 0; j < im.h; ++j){
-        for(i = 0; i < im.w; ++i){
-            float pix = get_pixel(im, i, j, c);
+    पूर्णांक i, j;
+    साठी(j = 0; j < im.h; ++j){
+        साठी(i = 0; i < im.w; ++i){
+            दशांश pix = get_pixel(im, i, j, c);
             pix = pix+v;
             set_pixel(im, i, j, c, pix);
         }
@@ -1127,15 +1127,15 @@ void translate_image_channel(image im, int c, float v)
 image binarize_image(image im)
 {
     image c = copy_image(im);
-    int i;
-    for(i = 0; i < im.w * im.h * im.c; ++i){
-        if(c.data[i] > .5) c.data[i] = 1;
-        else c.data[i] = 0;
+    पूर्णांक i;
+    साठी(i = 0; i < im.w * im.h * im.c; ++i){
+        जर(c.data[i] > .5) c.data[i] = 1;
+        अन्यथा c.data[i] = 0;
     }
-    return c;
+    परत c;
 }
 
-void saturate_image(image im, float sat)
+शून्य saturate_image(image im, दशांश sat)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
@@ -1143,20 +1143,20 @@ void saturate_image(image im, float sat)
     constrain_image(im);
 }
 
-void hue_image(image im, float hue)
+शून्य hue_image(image im, दशांश hue)
 {
     rgb_to_hsv(im);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < im.w*im.h; ++i){
         im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+        जर (im.data[i] > 1) im.data[i] -= 1;
+        जर (im.data[i] < 0) im.data[i] += 1;
     }
     hsv_to_rgb(im);
     constrain_image(im);
 }
 
-void exposure_image(image im, float sat)
+शून्य exposure_image(image im, दशांश sat)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 2, sat);
@@ -1164,30 +1164,30 @@ void exposure_image(image im, float sat)
     constrain_image(im);
 }
 
-void distort_image(image im, float hue, float sat, float val)
+शून्य distort_image(image im, दशांश hue, दशांश sat, दशांश val)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
     scale_image_channel(im, 2, val);
-    int i;
-    for(i = 0; i < im.w*im.h; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < im.w*im.h; ++i){
         im.data[i] = im.data[i] + hue;
-        if (im.data[i] > 1) im.data[i] -= 1;
-        if (im.data[i] < 0) im.data[i] += 1;
+        जर (im.data[i] > 1) im.data[i] -= 1;
+        जर (im.data[i] < 0) im.data[i] += 1;
     }
     hsv_to_rgb(im);
     constrain_image(im);
 }
 
-void random_distort_image(image im, float hue, float saturation, float exposure)
+शून्य random_distort_image(image im, दशांश hue, दशांश saturation, दशांश exposure)
 {
-    float dhue = rand_uniform(-hue, hue);
-    float dsat = rand_scale(saturation);
-    float dexp = rand_scale(exposure);
+    दशांश dhue = rand_uniform(-hue, hue);
+    दशांश dsat = rand_scale(saturation);
+    दशांश dexp = rand_scale(exposure);
     distort_image(im, dhue, dsat, dexp);
 }
 
-void saturate_exposure_image(image im, float sat, float exposure)
+शून्य saturate_exposure_image(image im, दशांश sat, दशांश exposure)
 {
     rgb_to_hsv(im);
     scale_image_channel(im, 1, sat);
@@ -1196,56 +1196,56 @@ void saturate_exposure_image(image im, float sat, float exposure)
     constrain_image(im);
 }
 
-image resize_image(image im, int w, int h)
+image resize_image(image im, पूर्णांक w, पूर्णांक h)
 {
     image resized = make_image(w, h, im.c);   
     image part = make_image(w, im.h, im.c);
-    int r, c, k;
-    float w_scale = (float)(im.w - 1) / (w - 1);
-    float h_scale = (float)(im.h - 1) / (h - 1);
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < im.h; ++r){
-            for(c = 0; c < w; ++c){
-                float val = 0;
-                if(c == w-1 || im.w == 1){
+    पूर्णांक r, c, k;
+    दशांश w_scale = (दशांश)(im.w - 1) / (w - 1);
+    दशांश h_scale = (दशांश)(im.h - 1) / (h - 1);
+    साठी(k = 0; k < im.c; ++k){
+        साठी(r = 0; r < im.h; ++r){
+            साठी(c = 0; c < w; ++c){
+                दशांश val = 0;
+                जर(c == w-1 || im.w == 1){
                     val = get_pixel(im, im.w-1, r, k);
-                } else {
-                    float sx = c*w_scale;
-                    int ix = (int) sx;
-                    float dx = sx - ix;
+                } अन्यथा {
+                    दशांश sx = c*w_scale;
+                    पूर्णांक ix = (पूर्णांक) sx;
+                    दशांश dx = sx - ix;
                     val = (1 - dx) * get_pixel(im, ix, r, k) + dx * get_pixel(im, ix+1, r, k);
                 }
                 set_pixel(part, c, r, k, val);
             }
         }
     }
-    for(k = 0; k < im.c; ++k){
-        for(r = 0; r < h; ++r){
-            float sy = r*h_scale;
-            int iy = (int) sy;
-            float dy = sy - iy;
-            for(c = 0; c < w; ++c){
-                float val = (1-dy) * get_pixel(part, c, iy, k);
+    साठी(k = 0; k < im.c; ++k){
+        साठी(r = 0; r < h; ++r){
+            दशांश sy = r*h_scale;
+            पूर्णांक iy = (पूर्णांक) sy;
+            दशांश dy = sy - iy;
+            साठी(c = 0; c < w; ++c){
+                दशांश val = (1-dy) * get_pixel(part, c, iy, k);
                 set_pixel(resized, c, r, k, val);
             }
-            if(r == h-1 || im.h == 1) continue;
-            for(c = 0; c < w; ++c){
-                float val = dy * get_pixel(part, c, iy+1, k);
+            जर(r == h-1 || im.h == 1) सुरूठेवा;
+            साठी(c = 0; c < w; ++c){
+                दशांश val = dy * get_pixel(part, c, iy+1, k);
                 add_pixel(resized, c, r, k, val);
             }
         }
     }
 
     free_image(part);
-    return resized;
+    परत resized;
 }
 
 
-void test_resize(char *filename)
+शून्य test_resize(अक्षर *filename)
 {
     image im = load_image(filename, 0,0, 3);
-    float mag = mag_array(im.data, im.w*im.h*im.c);
-    printf("L2 Norm: %f\n", mag);
+    दशांश mag = mag_array(im.data, im.w*im.h*im.c);
+    म_लिखो("L2 Norm: %f\n", mag);
     image gray = grayscale_image(im);
 
     image c1 = copy_image(im);
@@ -1265,127 +1265,127 @@ void test_resize(char *filename)
     show_image(c3, "C3", 1);
     show_image(c4, "C4", 1);
 #ifdef OPENCV
-    while(1){
+    पर्यंत(1){
         image aug = random_augment_image(im, 0, .75, 320, 448, 320, 320);
         show_image(aug, "aug", 1);
         free_image(aug);
 
 
-        float exposure = 1.15;
-        float saturation = 1.15;
-        float hue = .05;
+        दशांश exposure = 1.15;
+        दशांश saturation = 1.15;
+        दशांश hue = .05;
 
         image c = copy_image(im);
 
-        float dexp = rand_scale(exposure);
-        float dsat = rand_scale(saturation);
-        float dhue = rand_uniform(-hue, hue);
+        दशांश dexp = rand_scale(exposure);
+        दशांश dsat = rand_scale(saturation);
+        दशांश dhue = rand_uniform(-hue, hue);
 
         distort_image(c, dhue, dsat, dexp);
         show_image(c, "rand", 1);
-        printf("%f %f %f\n", dhue, dsat, dexp);
+        म_लिखो("%f %f %f\n", dhue, dsat, dexp);
         free_image(c);
     }
 #endif
 }
 
 
-image load_image_stb(char *filename, int channels)
+image load_image_stb(अक्षर *filename, पूर्णांक channels)
 {
-    int w, h, c;
-    unsigned char *data = stbi_load(filename, &w, &h, &c, channels);
-    if (!data) {
-        fprintf(stderr, "Cannot load image \"%s\"\nSTB Reason: %s\n", filename, stbi_failure_reason());
-        exit(0);
+    पूर्णांक w, h, c;
+    अचिन्हित अक्षर *data = stbi_load(filename, &w, &h, &c, channels);
+    जर (!data) {
+        ख_लिखो(मानक_त्रुटि, "Cannot load image \"%s\"\nSTB Reason: %s\n", filename, stbi_failure_reason());
+        निकास(0);
     }
-    if(channels) c = channels;
-    int i,j,k;
+    जर(channels) c = channels;
+    पूर्णांक i,j,k;
     image im = make_image(w, h, c);
-    for(k = 0; k < c; ++k){
-        for(j = 0; j < h; ++j){
-            for(i = 0; i < w; ++i){
-                int dst_index = i + w*j + w*h*k;
-                int src_index = k + c*i + c*w*j;
-                im.data[dst_index] = (float)data[src_index]/255.;
+    साठी(k = 0; k < c; ++k){
+        साठी(j = 0; j < h; ++j){
+            साठी(i = 0; i < w; ++i){
+                पूर्णांक dst_index = i + w*j + w*h*k;
+                पूर्णांक src_index = k + c*i + c*w*j;
+                im.data[dst_index] = (दशांश)data[src_index]/255.;
             }
         }
     }
-    free(data);
-    return im;
+    मुक्त(data);
+    परत im;
 }
 
-image load_image(char *filename, int w, int h, int c)
+image load_image(अक्षर *filename, पूर्णांक w, पूर्णांक h, पूर्णांक c)
 {
 #ifdef OPENCV
     image out = load_image_cv(filename, c);
-#else
+#अन्यथा
     image out = load_image_stb(filename, c);
 #endif
 
-    if((h && w) && (h != out.h || w != out.w)){
+    जर((h && w) && (h != out.h || w != out.w)){
         image resized = resize_image(out, w, h);
         free_image(out);
         out = resized;
     }
-    return out;
+    परत out;
 }
 
-image load_image_color(char *filename, int w, int h)
+image load_image_color(अक्षर *filename, पूर्णांक w, पूर्णांक h)
 {
-    return load_image(filename, w, h, 3);
+    परत load_image(filename, w, h, 3);
 }
 
-image get_image_layer(image m, int l)
+image get_image_layer(image m, पूर्णांक l)
 {
     image out = make_image(m.w, m.h, 1);
-    int i;
-    for(i = 0; i < m.h*m.w; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < m.h*m.w; ++i){
         out.data[i] = m.data[i+l*m.h*m.w];
     }
-    return out;
+    परत out;
 }
-void print_image(image m)
+शून्य print_image(image m)
 {
-    int i, j, k;
-    for(i =0 ; i < m.c; ++i){
-        for(j =0 ; j < m.h; ++j){
-            for(k = 0; k < m.w; ++k){
-                printf("%.2lf, ", m.data[i*m.h*m.w + j*m.w + k]);
-                if(k > 30) break;
+    पूर्णांक i, j, k;
+    साठी(i =0 ; i < m.c; ++i){
+        साठी(j =0 ; j < m.h; ++j){
+            साठी(k = 0; k < m.w; ++k){
+                म_लिखो("%.2lf, ", m.data[i*m.h*m.w + j*m.w + k]);
+                जर(k > 30) थांबा;
             }
-            printf("\n");
-            if(j > 30) break;
+            म_लिखो("\n");
+            जर(j > 30) थांबा;
         }
-        printf("\n");
+        म_लिखो("\n");
     }
-    printf("\n");
+    म_लिखो("\n");
 }
 
-image collapse_images_vert(image *ims, int n)
+image collapse_images_vert(image *ims, पूर्णांक n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
+    पूर्णांक color = 1;
+    पूर्णांक border = 1;
+    पूर्णांक h,w,c;
     w = ims[0].w;
     h = (ims[0].h + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    जर(c != 3 || !color){
         w = (w+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int h_offset = i*(ims[0].h+border);
+    पूर्णांक i,j;
+    साठी(i = 0; i < n; ++i){
+        पूर्णांक h_offset = i*(ims[0].h+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
+        जर(c == 3 && color){
             embed_image(copy, filters, 0, h_offset);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int w_offset = j*(ims[0].w+border);
+        अन्यथा{
+            साठी(j = 0; j < copy.c; ++j){
+                पूर्णांक w_offset = j*(ims[0].w+border);
                 image layer = get_image_layer(copy, j);
                 embed_image(layer, filters, w_offset, h_offset);
                 free_image(layer);
@@ -1393,35 +1393,35 @@ image collapse_images_vert(image *ims, int n)
         }
         free_image(copy);
     }
-    return filters;
+    परत filters;
 } 
 
-image collapse_images_horz(image *ims, int n)
+image collapse_images_horz(image *ims, पूर्णांक n)
 {
-    int color = 1;
-    int border = 1;
-    int h,w,c;
-    int size = ims[0].h;
+    पूर्णांक color = 1;
+    पूर्णांक border = 1;
+    पूर्णांक h,w,c;
+    पूर्णांक size = ims[0].h;
     h = size;
     w = (ims[0].w + border) * n - border;
     c = ims[0].c;
-    if(c != 3 || !color){
+    जर(c != 3 || !color){
         h = (h+border)*c - border;
         c = 1;
     }
 
     image filters = make_image(w, h, c);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        int w_offset = i*(size+border);
+    पूर्णांक i,j;
+    साठी(i = 0; i < n; ++i){
+        पूर्णांक w_offset = i*(size+border);
         image copy = copy_image(ims[i]);
         //normalize_image(copy);
-        if(c == 3 && color){
+        जर(c == 3 && color){
             embed_image(copy, filters, w_offset, 0);
         }
-        else{
-            for(j = 0; j < copy.c; ++j){
-                int h_offset = j*(size+border);
+        अन्यथा{
+            साठी(j = 0; j < copy.c; ++j){
+                पूर्णांक h_offset = j*(size+border);
                 image layer = get_image_layer(copy, j);
                 embed_image(layer, filters, w_offset, h_offset);
                 free_image(layer);
@@ -1429,10 +1429,10 @@ image collapse_images_horz(image *ims, int n)
         }
         free_image(copy);
     }
-    return filters;
+    परत filters;
 } 
 
-void show_image_normalized(image im, const char *name)
+शून्य show_image_normalized(image im, स्थिरांक अक्षर *name)
 {
     image c = copy_image(im);
     normalize_image(c);
@@ -1440,7 +1440,7 @@ void show_image_normalized(image im, const char *name)
     free_image(c);
 }
 
-void show_images(image *ims, int n, char *window)
+शून्य show_images(image *ims, पूर्णांक n, अक्षर *window)
 {
     image m = collapse_images_vert(ims, n);
     /*
@@ -1458,9 +1458,9 @@ void show_images(image *ims, int n, char *window)
     free_image(m);
 }
 
-void free_image(image m)
+शून्य free_image(image m)
 {
-    if(m.data){
-        free(m.data);
+    जर(m.data){
+        मुक्त(m.data);
     }
 }

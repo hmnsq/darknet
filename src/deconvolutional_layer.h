@@ -1,25 +1,25 @@
 #ifndef DECONVOLUTIONAL_LAYER_H
 #define DECONVOLUTIONAL_LAYER_H
 
-#include "cuda.h"
-#include "image.h"
-#include "activations.h"
-#include "layer.h"
-#include "network.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "activations.h"
+#अन्तर्भाव "layer.h"
+#अन्तर्भाव "network.h"
 
 #ifdef GPU
-void forward_deconvolutional_layer_gpu(layer l, network net);
-void backward_deconvolutional_layer_gpu(layer l, network net);
-void update_deconvolutional_layer_gpu(layer l, update_args a);
-void push_deconvolutional_layer(layer l);
-void pull_deconvolutional_layer(layer l);
+शून्य forward_deconvolutional_layer_gpu(layer l, network net);
+शून्य backward_deconvolutional_layer_gpu(layer l, network net);
+शून्य update_deconvolutional_layer_gpu(layer l, update_args a);
+शून्य ढकला_deconvolutional_layer(layer l);
+शून्य pull_deconvolutional_layer(layer l);
 #endif
 
-layer make_deconvolutional_layer(int batch, int h, int w, int c, int n, int size, int stride, int padding, ACTIVATION activation, int batch_normalize, int adam);
-void resize_deconvolutional_layer(layer *l, int h, int w);
-void forward_deconvolutional_layer(const layer l, network net);
-void update_deconvolutional_layer(layer l, update_args a);
-void backward_deconvolutional_layer(layer l, network net);
+layer make_deconvolutional_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक n, पूर्णांक size, पूर्णांक stride, पूर्णांक padding, ACTIVATION activation, पूर्णांक batch_normalize, पूर्णांक adam);
+शून्य resize_deconvolutional_layer(layer *l, पूर्णांक h, पूर्णांक w);
+शून्य forward_deconvolutional_layer(स्थिरांक layer l, network net);
+शून्य update_deconvolutional_layer(layer l, update_args a);
+शून्य backward_deconvolutional_layer(layer l, network net);
 
 #endif
 

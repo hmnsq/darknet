@@ -1,89 +1,89 @@
-#include "blas.h"
+#अन्तर्भाव "blas.h"
 
-#include <math.h>
-#include <assert.h>
-#include <float.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out)
+#अन्तर्भाव <math.h>
+#अन्तर्भाव <assert.h>
+#अन्तर्भाव <float.h>
+#अन्तर्भाव <stdio.h>
+#अन्तर्भाव <stdlib.h>
+#अन्तर्भाव <string.h>
+शून्य reorg_cpu(दशांश *x, पूर्णांक w, पूर्णांक h, पूर्णांक c, पूर्णांक batch, पूर्णांक stride, पूर्णांक forward, दशांश *out)
 {
-    int b,i,j,k;
-    int out_c = c/(stride*stride);
+    पूर्णांक b,i,j,k;
+    पूर्णांक out_c = c/(stride*stride);
 
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h; ++j){
-                for(i = 0; i < w; ++i){
-                    int in_index  = i + w*(j + h*(k + c*b));
-                    int c2 = k % out_c;
-                    int offset = k / out_c;
-                    int w2 = i*stride + offset % stride;
-                    int h2 = j*stride + offset / stride;
-                    int out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
-                    if(forward) out[out_index] = x[in_index];
-                    else out[in_index] = x[out_index];
+    साठी(b = 0; b < batch; ++b){
+        साठी(k = 0; k < c; ++k){
+            साठी(j = 0; j < h; ++j){
+                साठी(i = 0; i < w; ++i){
+                    पूर्णांक in_index  = i + w*(j + h*(k + c*b));
+                    पूर्णांक c2 = k % out_c;
+                    पूर्णांक offset = k / out_c;
+                    पूर्णांक w2 = i*stride + offset % stride;
+                    पूर्णांक h2 = j*stride + offset / stride;
+                    पूर्णांक out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
+                    जर(forward) out[out_index] = x[in_index];
+                    अन्यथा out[in_index] = x[out_index];
                 }
             }
         }
     }
 }
 
-void flatten(float *x, int size, int layers, int batch, int forward)
+शून्य flatten(दशांश *x, पूर्णांक size, पूर्णांक layers, पूर्णांक batch, पूर्णांक forward)
 {
-    float *swap = calloc(size*layers*batch, sizeof(float));
-    int i,c,b;
-    for(b = 0; b < batch; ++b){
-        for(c = 0; c < layers; ++c){
-            for(i = 0; i < size; ++i){
-                int i1 = b*layers*size + c*size + i;
-                int i2 = b*layers*size + i*layers + c;
-                if (forward) swap[i2] = x[i1];
-                else swap[i1] = x[i2];
+    दशांश *swap = सुस्मृति(size*layers*batch, आकार(दशांश));
+    पूर्णांक i,c,b;
+    साठी(b = 0; b < batch; ++b){
+        साठी(c = 0; c < layers; ++c){
+            साठी(i = 0; i < size; ++i){
+                पूर्णांक i1 = b*layers*size + c*size + i;
+                पूर्णांक i2 = b*layers*size + i*layers + c;
+                जर (forward) swap[i2] = x[i1];
+                अन्यथा swap[i1] = x[i2];
             }
         }
     }
-    memcpy(x, swap, size*layers*batch*sizeof(float));
-    free(swap);
+    स_नकल(x, swap, size*layers*batch*आकार(दशांश));
+    मुक्त(swap);
 }
 
-void weighted_sum_cpu(float *a, float *b, float *s, int n, float *c)
+शून्य weighted_sum_cpu(दशांश *a, दशांश *b, दशांश *s, पूर्णांक n, दशांश *c)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
         c[i] = s[i]*a[i] + (1-s[i])*(b ? b[i] : 0);
     }
 }
 
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc)
+शून्य weighted_delta_cpu(दशांश *a, दशांश *b, दशांश *s, दशांश *da, दशांश *db, दशांश *ds, पूर्णांक n, दशांश *dc)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(da) da[i] += dc[i] * s[i];
-        if(db) db[i] += dc[i] * (1-s[i]);
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
+        जर(da) da[i] += dc[i] * s[i];
+        जर(db) db[i] += dc[i] * (1-s[i]);
         ds[i] += dc[i] * (a[i] - b[i]);
     }
 }
 
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out)
+शून्य shortcut_cpu(पूर्णांक batch, पूर्णांक w1, पूर्णांक h1, पूर्णांक c1, दशांश *add, पूर्णांक w2, पूर्णांक h2, पूर्णांक c2, दशांश s1, दशांश s2, दशांश *out)
 {
-    int stride = w1/w2;
-    int sample = w2/w1;
-    assert(stride == h1/h2);
-    assert(sample == h2/h1);
-    if(stride < 1) stride = 1;
-    if(sample < 1) sample = 1;
-    int minw = (w1 < w2) ? w1 : w2;
-    int minh = (h1 < h2) ? h1 : h2;
-    int minc = (c1 < c2) ? c1 : c2;
+    पूर्णांक stride = w1/w2;
+    पूर्णांक sample = w2/w1;
+    प्रतिज्ञा(stride == h1/h2);
+    प्रतिज्ञा(sample == h2/h1);
+    जर(stride < 1) stride = 1;
+    जर(sample < 1) sample = 1;
+    पूर्णांक minw = (w1 < w2) ? w1 : w2;
+    पूर्णांक minh = (h1 < h2) ? h1 : h2;
+    पूर्णांक minc = (c1 < c2) ? c1 : c2;
 
-    int i,j,k,b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < minc; ++k){
-            for(j = 0; j < minh; ++j){
-                for(i = 0; i < minw; ++i){
-                    int out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
-                    int add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
+    पूर्णांक i,j,k,b;
+    साठी(b = 0; b < batch; ++b){
+        साठी(k = 0; k < minc; ++k){
+            साठी(j = 0; j < minh; ++j){
+                साठी(i = 0; i < minw; ++i){
+                    पूर्णांक out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
+                    पूर्णांक add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
                     out[out_index] = s1*out[out_index] + s2*add[add_index];
                 }
             }
@@ -91,15 +91,15 @@ void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2,
     }
 }
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
+शून्य mean_cpu(दशांश *x, पूर्णांक batch, पूर्णांक filters, पूर्णांक spatial, दशांश *mean)
 {
-    float scale = 1./(batch * spatial);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    दशांश scale = 1./(batch * spatial);
+    पूर्णांक i,j,k;
+    साठी(i = 0; i < filters; ++i){
         mean[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
+        साठी(j = 0; j < batch; ++j){
+            साठी(k = 0; k < spatial; ++k){
+                पूर्णांक index = j*filters*spatial + i*spatial + k;
                 mean[i] += x[index];
             }
         }
@@ -107,35 +107,35 @@ void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
     }
 }
 
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance)
+शून्य variance_cpu(दशांश *x, दशांश *mean, पूर्णांक batch, पूर्णांक filters, पूर्णांक spatial, दशांश *variance)
 {
-    float scale = 1./(batch * spatial - 1);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    दशांश scale = 1./(batch * spatial - 1);
+    पूर्णांक i,j,k;
+    साठी(i = 0; i < filters; ++i){
         variance[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
-                variance[i] += pow((x[index] - mean[i]), 2);
+        साठी(j = 0; j < batch; ++j){
+            साठी(k = 0; k < spatial; ++k){
+                पूर्णांक index = j*filters*spatial + i*spatial + k;
+                variance[i] += घात((x[index] - mean[i]), 2);
             }
         }
         variance[i] *= scale;
     }
 }
 
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
+शून्य l2normalize_cpu(दशांश *x, दशांश *dx, पूर्णांक batch, पूर्णांक filters, पूर्णांक spatial)
 {
-    int b,f,i;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < spatial; ++i){
-            float sum = 0;
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
+    पूर्णांक b,f,i;
+    साठी(b = 0; b < batch; ++b){
+        साठी(i = 0; i < spatial; ++i){
+            दशांश sum = 0;
+            साठी(f = 0; f < filters; ++f){
+                पूर्णांक index = b*filters*spatial + f*spatial + i;
                 sum += powf(x[index], 2);
             }
             sum = sqrtf(sum);
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
+            साठी(f = 0; f < filters; ++f){
+                पूर्णांक index = b*filters*spatial + f*spatial + i;
                 x[index] /= sum;
                 dx[index] = (1 - x[index]) / sum;
             }
@@ -144,204 +144,204 @@ void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
 }
 
 
-void normalize_cpu(float *x, float *mean, float *variance, int batch, int filters, int spatial)
+शून्य normalize_cpu(दशांश *x, दशांश *mean, दशांश *variance, पूर्णांक batch, पूर्णांक filters, पूर्णांक spatial)
 {
-    int b, f, i;
-    for(b = 0; b < batch; ++b){
-        for(f = 0; f < filters; ++f){
-            for(i = 0; i < spatial; ++i){
-                int index = b*filters*spatial + f*spatial + i;
-                x[index] = (x[index] - mean[f])/(sqrt(variance[f]) + .000001f);
+    पूर्णांक b, f, i;
+    साठी(b = 0; b < batch; ++b){
+        साठी(f = 0; f < filters; ++f){
+            साठी(i = 0; i < spatial; ++i){
+                पूर्णांक index = b*filters*spatial + f*spatial + i;
+                x[index] = (x[index] - mean[f])/(वर्ग_मूल(variance[f]) + .000001f);
             }
         }
     }
 }
 
-void const_cpu(int N, float ALPHA, float *X, int INCX)
+शून्य const_cpu(पूर्णांक N, दशांश ALPHA, दशांश *X, पूर्णांक INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
 }
 
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY)
+शून्य mul_cpu(पूर्णांक N, दशांश *X, पूर्णांक INCX, दशांश *Y, पूर्णांक INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
 }
 
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
+शून्य pow_cpu(पूर्णांक N, दशांश ALPHA, दशांश *X, पूर्णांक INCX, दशांश *Y, पूर्णांक INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = pow(X[i*INCX], ALPHA);
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) Y[i*INCY] = घात(X[i*INCX], ALPHA);
 }
 
-void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
+शून्य axpy_cpu(पूर्णांक N, दशांश ALPHA, दशांश *X, पूर्णांक INCX, दशांश *Y, पूर्णांक INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
 }
 
-void scal_cpu(int N, float ALPHA, float *X, int INCX)
+शून्य scal_cpu(पूर्णांक N, दशांश ALPHA, दशांश *X, पूर्णांक INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
 }
 
-void fill_cpu(int N, float ALPHA, float *X, int INCX)
+शून्य fill_cpu(पूर्णांक N, दशांश ALPHA, दशांश *X, पूर्णांक INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
 }
 
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+शून्य deinter_cpu(पूर्णांक NX, दशांश *X, पूर्णांक NY, दशांश *Y, पूर्णांक B, दशांश *OUT)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
-            if(X) X[j*NX + i] += OUT[index];
+    पूर्णांक i, j;
+    पूर्णांक index = 0;
+    साठी(j = 0; j < B; ++j) {
+        साठी(i = 0; i < NX; ++i){
+            जर(X) X[j*NX + i] += OUT[index];
             ++index;
         }
-        for(i = 0; i < NY; ++i){
-            if(Y) Y[j*NY + i] += OUT[index];
+        साठी(i = 0; i < NY; ++i){
+            जर(Y) Y[j*NY + i] += OUT[index];
             ++index;
         }
     }
 }
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+शून्य inter_cpu(पूर्णांक NX, दशांश *X, पूर्णांक NY, दशांश *Y, पूर्णांक B, दशांश *OUT)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
+    पूर्णांक i, j;
+    पूर्णांक index = 0;
+    साठी(j = 0; j < B; ++j) {
+        साठी(i = 0; i < NX; ++i){
             OUT[index++] = X[j*NX + i];
         }
-        for(i = 0; i < NY; ++i){
+        साठी(i = 0; i < NY; ++i){
             OUT[index++] = Y[j*NY + i];
         }
     }
 }
 
-void copy_cpu(int N, float *X, int INCX, float *Y, int INCY)
+शून्य copy_cpu(पूर्णांक N, दशांश *X, पूर्णांक INCX, दशांश *Y, पूर्णांक INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
 }
 
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z)
+शून्य mult_add_into_cpu(पूर्णांक N, दशांश *X, दशांश *Y, दशांश *Z)
 {
-    int i;
-    for(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
+    पूर्णांक i;
+    साठी(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
 }
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+शून्य smooth_l1_cpu(पूर्णांक n, दशांश *pred, दशांश *truth, दशांश *delta, दशांश *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
-        float abs_val = fabs(diff);
-        if(abs_val < 1) {
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
+        दशांश diff = truth[i] - pred[i];
+        दशांश abs_val = भ_असल(diff);
+        जर(abs_val < 1) {
             error[i] = diff * diff;
             delta[i] = diff;
         }
-        else {
+        अन्यथा {
             error[i] = 2*abs_val - 1;
             delta[i] = (diff < 0) ? 1 : -1;
         }
     }
 }
 
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+शून्य l1_cpu(पूर्णांक n, दशांश *pred, दशांश *truth, दशांश *delta, दशांश *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
-        error[i] = fabs(diff);
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
+        दशांश diff = truth[i] - pred[i];
+        error[i] = भ_असल(diff);
         delta[i] = diff > 0 ? 1 : -1;
     }
 }
 
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+शून्य softmax_x_ent_cpu(पूर्णांक n, दशांश *pred, दशांश *truth, दशांश *delta, दशांश *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float t = truth[i];
-        float p = pred[i];
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
+        दशांश t = truth[i];
+        दशांश p = pred[i];
         error[i] = (t) ? -log(p) : 0;
         delta[i] = t-p;
     }
 }
 
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+शून्य logistic_x_ent_cpu(पूर्णांक n, दशांश *pred, दशांश *truth, दशांश *delta, दशांश *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float t = truth[i];
-        float p = pred[i];
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
+        दशांश t = truth[i];
+        दशांश p = pred[i];
         error[i] = -t*log(p) - (1-t)*log(1-p);
         delta[i] = t-p;
     }
 }
 
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error)
+शून्य l2_cpu(पूर्णांक n, दशांश *pred, दशांश *truth, दशांश *delta, दशांश *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        float diff = truth[i] - pred[i];
+    पूर्णांक i;
+    साठी(i = 0; i < n; ++i){
+        दशांश diff = truth[i] - pred[i];
         error[i] = diff * diff;
         delta[i] = diff;
     }
 }
 
-float dot_cpu(int N, float *X, int INCX, float *Y, int INCY)
+दशांश dot_cpu(पूर्णांक N, दशांश *X, पूर्णांक INCX, दशांश *Y, पूर्णांक INCY)
 {
-    int i;
-    float dot = 0;
-    for(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
-    return dot;
+    पूर्णांक i;
+    दशांश dot = 0;
+    साठी(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
+    परत dot;
 }
 
-void softmax(float *input, int n, float temp, int stride, float *output)
+शून्य softmax(दशांश *आदान, पूर्णांक n, दशांश temp, पूर्णांक stride, दशांश *output)
 {
-    int i;
-    float sum = 0;
-    float largest = -FLT_MAX;
-    for(i = 0; i < n; ++i){
-        if(input[i*stride] > largest) largest = input[i*stride];
+    पूर्णांक i;
+    दशांश sum = 0;
+    दशांश largest = -भग्न_उच्च;
+    साठी(i = 0; i < n; ++i){
+        जर(आदान[i*stride] > largest) largest = आदान[i*stride];
     }
-    for(i = 0; i < n; ++i){
-        float e = exp(input[i*stride]/temp - largest/temp);
+    साठी(i = 0; i < n; ++i){
+        दशांश e = exp(आदान[i*stride]/temp - largest/temp);
         sum += e;
         output[i*stride] = e;
     }
-    for(i = 0; i < n; ++i){
+    साठी(i = 0; i < n; ++i){
         output[i*stride] /= sum;
     }
 }
 
 
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output)
+शून्य softmax_cpu(दशांश *आदान, पूर्णांक n, पूर्णांक batch, पूर्णांक batch_offset, पूर्णांक groups, पूर्णांक group_offset, पूर्णांक stride, दशांश temp, दशांश *output)
 {
-    int g, b;
-    for(b = 0; b < batch; ++b){
-        for(g = 0; g < groups; ++g){
-            softmax(input + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
+    पूर्णांक g, b;
+    साठी(b = 0; b < batch; ++b){
+        साठी(g = 0; g < groups; ++g){
+            softmax(आदान + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
         }
     }
 }
 
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out)
+शून्य upsample_cpu(दशांश *in, पूर्णांक w, पूर्णांक h, पूर्णांक c, पूर्णांक batch, पूर्णांक stride, पूर्णांक forward, दशांश scale, दशांश *out)
 {
-    int i, j, k, b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h*stride; ++j){
-                for(i = 0; i < w*stride; ++i){
-                    int in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
-                    int out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
-                    if(forward) out[out_index] = scale*in[in_index];
-                    else in[in_index] += scale*out[out_index];
+    पूर्णांक i, j, k, b;
+    साठी(b = 0; b < batch; ++b){
+        साठी(k = 0; k < c; ++k){
+            साठी(j = 0; j < h*stride; ++j){
+                साठी(i = 0; i < w*stride; ++i){
+                    पूर्णांक in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
+                    पूर्णांक out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
+                    जर(forward) out[out_index] = scale*in[in_index];
+                    अन्यथा in[in_index] += scale*out[out_index];
                 }
             }
         }

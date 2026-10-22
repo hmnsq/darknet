@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+शून्य gemm_bin(पूर्णांक M, पूर्णांक N, पूर्णांक K, दशांश ALPHA, 
+        अक्षर  *A, पूर्णांक lda, 
+        दशांश *B, पूर्णांक ldb,
+        दशांश *C, पूर्णांक ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+शून्य gemm(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, दशांश ALPHA, 
+                    दशांश *A, पूर्णांक lda, 
+                    दशांश *B, पूर्णांक ldb,
+                    दशांश BETA,
+                    दशांश *C, पूर्णांक ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+शून्य gemm_cpu(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, दशांश ALPHA, 
+        दशांश *A, पूर्णांक lda, 
+        दशांश *B, पूर्णांक ldb,
+        दशांश BETA,
+        दशांश *C, पूर्णांक ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+शून्य gemm_gpu(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, दशांश ALPHA, 
+        दशांश *A_gpu, पूर्णांक lda, 
+        दशांश *B_gpu, पूर्णांक ldb,
+        दशांश BETA,
+        दशांश *C_gpu, पूर्णांक ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+शून्य gemm_gpu(पूर्णांक TA, पूर्णांक TB, पूर्णांक M, पूर्णांक N, पूर्णांक K, दशांश ALPHA, 
+        दशांश *A, पूर्णांक lda, 
+        दशांश *B, पूर्णांक ldb,
+        दशांश BETA,
+        दशांश *C, पूर्णांक ldc);
 #endif
 #endif

@@ -1,24 +1,24 @@
-#include "maxpool_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#अन्तर्भाव "maxpool_layer.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव <stdio.h>
 
 image get_maxpool_image(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.output);
+    पूर्णांक h = l.out_h;
+    पूर्णांक w = l.out_w;
+    पूर्णांक c = l.c;
+    परत float_to_image(w,h,c,l.output);
 }
 
 image get_maxpool_delta(maxpool_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    return float_to_image(w,h,c,l.delta);
+    पूर्णांक h = l.out_h;
+    पूर्णांक w = l.out_w;
+    पूर्णांक c = l.c;
+    परत float_to_image(w,h,c,l.delta);
 }
 
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding)
+maxpool_layer make_maxpool_layer(पूर्णांक batch, पूर्णांक h, पूर्णांक w, पूर्णांक c, पूर्णांक size, पूर्णांक stride, पूर्णांक padding)
 {
     maxpool_layer l = {0};
     l.type = MAXPOOL;
@@ -34,10 +34,10 @@ maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int s
     l.inputs = h*w*c;
     l.size = size;
     l.stride = stride;
-    int output_size = l.out_h * l.out_w * l.out_c * batch;
-    l.indexes = calloc(output_size, sizeof(int));
-    l.output =  calloc(output_size, sizeof(float));
-    l.delta =   calloc(output_size, sizeof(float));
+    पूर्णांक output_size = l.out_h * l.out_w * l.out_c * batch;
+    l.indexes = सुस्मृति(output_size, आकार(पूर्णांक));
+    l.output =  सुस्मृति(output_size, आकार(दशांश));
+    l.delta =   सुस्मृति(output_size, आकार(दशांश));
     l.forward = forward_maxpool_layer;
     l.backward = backward_maxpool_layer;
     #ifdef GPU
@@ -47,11 +47,11 @@ maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int s
     l.output_gpu  = cuda_make_array(l.output, output_size);
     l.delta_gpu   = cuda_make_array(l.delta, output_size);
     #endif
-    fprintf(stderr, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
-    return l;
+    ख_लिखो(मानक_त्रुटि, "max          %d x %d / %d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n", size, size, stride, w, h, c, l.out_w, l.out_h, l.out_c);
+    परत l;
 }
 
-void resize_maxpool_layer(maxpool_layer *l, int w, int h)
+शून्य resize_maxpool_layer(maxpool_layer *l, पूर्णांक w, पूर्णांक h)
 {
     l->h = h;
     l->w = w;
@@ -60,14 +60,14 @@ void resize_maxpool_layer(maxpool_layer *l, int w, int h)
     l->out_w = (w + l->pad - l->size)/l->stride + 1;
     l->out_h = (h + l->pad - l->size)/l->stride + 1;
     l->outputs = l->out_w * l->out_h * l->c;
-    int output_size = l->outputs * l->batch;
+    पूर्णांक output_size = l->outputs * l->batch;
 
-    l->indexes = realloc(l->indexes, output_size * sizeof(int));
-    l->output = realloc(l->output, output_size * sizeof(float));
-    l->delta = realloc(l->delta, output_size * sizeof(float));
+    l->indexes = पुनः_स्मृति(l->indexes, output_size * आकार(पूर्णांक));
+    l->output = पुनः_स्मृति(l->output, output_size * आकार(दशांश));
+    l->delta = पुनः_स्मृति(l->delta, output_size * आकार(दशांश));
 
     #ifdef GPU
-    cuda_free((float *)l->indexes_gpu);
+    cuda_free((दशांश *)l->indexes_gpu);
     cuda_free(l->output_gpu);
     cuda_free(l->delta_gpu);
     l->indexes_gpu = cuda_make_int_array(0, output_size);
@@ -76,31 +76,31 @@ void resize_maxpool_layer(maxpool_layer *l, int w, int h)
     #endif
 }
 
-void forward_maxpool_layer(const maxpool_layer l, network net)
+शून्य forward_maxpool_layer(स्थिरांक maxpool_layer l, network net)
 {
-    int b,i,j,k,m,n;
-    int w_offset = -l.pad/2;
-    int h_offset = -l.pad/2;
+    पूर्णांक b,i,j,k,m,n;
+    पूर्णांक w_offset = -l.pad/2;
+    पूर्णांक h_offset = -l.pad/2;
 
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
+    पूर्णांक h = l.out_h;
+    पूर्णांक w = l.out_w;
+    पूर्णांक c = l.c;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(i = 0; i < h; ++i){
-                for(j = 0; j < w; ++j){
-                    int out_index = j + w*(i + h*(k + c*b));
-                    float max = -FLT_MAX;
-                    int max_i = -1;
-                    for(n = 0; n < l.size; ++n){
-                        for(m = 0; m < l.size; ++m){
-                            int cur_h = h_offset + i*l.stride + n;
-                            int cur_w = w_offset + j*l.stride + m;
-                            int index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
-                            int valid = (cur_h >= 0 && cur_h < l.h &&
+    साठी(b = 0; b < l.batch; ++b){
+        साठी(k = 0; k < c; ++k){
+            साठी(i = 0; i < h; ++i){
+                साठी(j = 0; j < w; ++j){
+                    पूर्णांक out_index = j + w*(i + h*(k + c*b));
+                    दशांश max = -भग्न_उच्च;
+                    पूर्णांक max_i = -1;
+                    साठी(n = 0; n < l.size; ++n){
+                        साठी(m = 0; m < l.size; ++m){
+                            पूर्णांक cur_h = h_offset + i*l.stride + n;
+                            पूर्णांक cur_w = w_offset + j*l.stride + m;
+                            पूर्णांक index = cur_w + l.w*(cur_h + l.h*(k + b*l.c));
+                            पूर्णांक valid = (cur_h >= 0 && cur_h < l.h &&
                                          cur_w >= 0 && cur_w < l.w);
-                            float val = (valid != 0) ? net.input[index] : -FLT_MAX;
+                            दशांश val = (valid != 0) ? net.आदान[index] : -भग्न_उच्च;
                             max_i = (val > max) ? index : max_i;
                             max   = (val > max) ? val   : max;
                         }
@@ -113,14 +113,14 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
     }
 }
 
-void backward_maxpool_layer(const maxpool_layer l, network net)
+शून्य backward_maxpool_layer(स्थिरांक maxpool_layer l, network net)
 {
-    int i;
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.c;
-    for(i = 0; i < h*w*c*l.batch; ++i){
-        int index = l.indexes[i];
+    पूर्णांक i;
+    पूर्णांक h = l.out_h;
+    पूर्णांक w = l.out_w;
+    पूर्णांक c = l.c;
+    साठी(i = 0; i < h*w*c*l.batch; ++i){
+        पूर्णांक index = l.indexes[i];
         net.delta[index] += l.delta[i];
     }
 }

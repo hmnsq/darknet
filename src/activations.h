@@ -1,87 +1,87 @@
 #ifndef ACTIVATIONS_H
 #define ACTIVATIONS_H
-#include "darknet.h"
-#include "cuda.h"
-#include "math.h"
+#अन्तर्भाव "darknet.h"
+#अन्तर्भाव "cuda.h"
+#अन्तर्भाव "math.h"
 
-ACTIVATION get_activation(char *s);
+ACTIVATION get_activation(अक्षर *s);
 
-char *get_activation_string(ACTIVATION a);
-float activate(float x, ACTIVATION a);
-float gradient(float x, ACTIVATION a);
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta);
-void activate_array(float *x, const int n, const ACTIVATION a);
+अक्षर *get_activation_string(ACTIVATION a);
+दशांश activate(दशांश x, ACTIVATION a);
+दशांश gradient(दशांश x, ACTIVATION a);
+शून्य gradient_array(स्थिरांक दशांश *x, स्थिरांक पूर्णांक n, स्थिरांक ACTIVATION a, दशांश *delta);
+शून्य activate_array(दशांश *x, स्थिरांक पूर्णांक n, स्थिरांक ACTIVATION a);
 #ifdef GPU
-void activate_array_gpu(float *x, int n, ACTIVATION a);
-void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta);
+शून्य activate_array_gpu(दशांश *x, पूर्णांक n, ACTIVATION a);
+शून्य gradient_array_gpu(दशांश *x, पूर्णांक n, ACTIVATION a, दशांश *delta);
 #endif
 
-static inline float stair_activate(float x)
+स्थिर ओळीत दशांश stair_activate(दशांश x)
 {
-    int n = floor(x);
-    if (n%2 == 0) return floor(x/2.);
-    else return (x - n) + floor(x/2.);
+    पूर्णांक n = न्यूनमान(x);
+    जर (n%2 == 0) परत न्यूनमान(x/2.);
+    अन्यथा परत (x - n) + न्यूनमान(x/2.);
 }
-static inline float hardtan_activate(float x)
+स्थिर ओळीत दशांश hardtan_activate(दशांश x)
 {
-    if (x < -1) return -1;
-    if (x > 1) return 1;
-    return x;
+    जर (x < -1) परत -1;
+    जर (x > 1) परत 1;
+    परत x;
 }
-static inline float linear_activate(float x){return x;}
-static inline float logistic_activate(float x){return 1./(1. + exp(-x));}
-static inline float loggy_activate(float x){return 2./(1. + exp(-x)) - 1;}
-static inline float relu_activate(float x){return x*(x>0);}
-static inline float elu_activate(float x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
-static inline float selu_activate(float x){return (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
-static inline float relie_activate(float x){return (x>0) ? x : .01*x;}
-static inline float ramp_activate(float x){return x*(x>0)+.1*x;}
-static inline float leaky_activate(float x){return (x>0) ? x : .1*x;}
-static inline float tanh_activate(float x){return (exp(2*x)-1)/(exp(2*x)+1);}
-static inline float plse_activate(float x)
+स्थिर ओळीत दशांश linear_activate(दशांश x){परत x;}
+स्थिर ओळीत दशांश logistic_activate(दशांश x){परत 1./(1. + exp(-x));}
+स्थिर ओळीत दशांश loggy_activate(दशांश x){परत 2./(1. + exp(-x)) - 1;}
+स्थिर ओळीत दशांश relu_activate(दशांश x){परत x*(x>0);}
+स्थिर ओळीत दशांश elu_activate(दशांश x){परत (x >= 0)*x + (x < 0)*(exp(x)-1);}
+स्थिर ओळीत दशांश selu_activate(दशांश x){परत (x >= 0)*1.0507*x + (x < 0)*1.0507*1.6732*(exp(x)-1);}
+स्थिर ओळीत दशांश relie_activate(दशांश x){परत (x>0) ? x : .01*x;}
+स्थिर ओळीत दशांश ramp_activate(दशांश x){परत x*(x>0)+.1*x;}
+स्थिर ओळीत दशांश leaky_activate(दशांश x){परत (x>0) ? x : .1*x;}
+स्थिर ओळीत दशांश tanh_activate(दशांश x){परत (exp(2*x)-1)/(exp(2*x)+1);}
+स्थिर ओळीत दशांश plse_activate(दशांश x)
 {
-    if(x < -4) return .01 * (x + 4);
-    if(x > 4)  return .01 * (x - 4) + 1;
-    return .125*x + .5;
-}
-
-static inline float lhtan_activate(float x)
-{
-    if(x < 0) return .001*x;
-    if(x > 1) return .001*(x-1) + 1;
-    return x;
-}
-static inline float lhtan_gradient(float x)
-{
-    if(x > 0 && x < 1) return 1;
-    return .001;
+    जर(x < -4) परत .01 * (x + 4);
+    जर(x > 4)  परत .01 * (x - 4) + 1;
+    परत .125*x + .5;
 }
 
-static inline float hardtan_gradient(float x)
+स्थिर ओळीत दशांश lhtan_activate(दशांश x)
 {
-    if (x > -1 && x < 1) return 1;
-    return 0;
+    जर(x < 0) परत .001*x;
+    जर(x > 1) परत .001*(x-1) + 1;
+    परत x;
 }
-static inline float linear_gradient(float x){return 1;}
-static inline float logistic_gradient(float x){return (1-x)*x;}
-static inline float loggy_gradient(float x)
+स्थिर ओळीत दशांश lhtan_gradient(दशांश x)
 {
-    float y = (x+1.)/2.;
-    return 2*(1-y)*y;
+    जर(x > 0 && x < 1) परत 1;
+    परत .001;
 }
-static inline float stair_gradient(float x)
+
+स्थिर ओळीत दशांश hardtan_gradient(दशांश x)
 {
-    if (floor(x) == x) return 0;
-    return 1;
+    जर (x > -1 && x < 1) परत 1;
+    परत 0;
 }
-static inline float relu_gradient(float x){return (x>0);}
-static inline float elu_gradient(float x){return (x >= 0) + (x < 0)*(x + 1);}
-static inline float selu_gradient(float x){return (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
-static inline float relie_gradient(float x){return (x>0) ? 1 : .01;}
-static inline float ramp_gradient(float x){return (x>0)+.1;}
-static inline float leaky_gradient(float x){return (x>0) ? 1 : .1;}
-static inline float tanh_gradient(float x){return 1-x*x;}
-static inline float plse_gradient(float x){return (x < 0 || x > 1) ? .01 : .125;}
+स्थिर ओळीत दशांश linear_gradient(दशांश x){परत 1;}
+स्थिर ओळीत दशांश logistic_gradient(दशांश x){परत (1-x)*x;}
+स्थिर ओळीत दशांश loggy_gradient(दशांश x)
+{
+    दशांश y = (x+1.)/2.;
+    परत 2*(1-y)*y;
+}
+स्थिर ओळीत दशांश stair_gradient(दशांश x)
+{
+    जर (न्यूनमान(x) == x) परत 0;
+    परत 1;
+}
+स्थिर ओळीत दशांश relu_gradient(दशांश x){परत (x>0);}
+स्थिर ओळीत दशांश elu_gradient(दशांश x){परत (x >= 0) + (x < 0)*(x + 1);}
+स्थिर ओळीत दशांश selu_gradient(दशांश x){परत (x >= 0)*1.0507 + (x < 0)*(x + 1.0507*1.6732);}
+स्थिर ओळीत दशांश relie_gradient(दशांश x){परत (x>0) ? 1 : .01;}
+स्थिर ओळीत दशांश ramp_gradient(दशांश x){परत (x>0)+.1;}
+स्थिर ओळीत दशांश leaky_gradient(दशांश x){परत (x>0) ? 1 : .1;}
+स्थिर ओळीत दशांश tanh_gradient(दशांश x){परत 1-x*x;}
+स्थिर ओळीत दशांश plse_gradient(दशांश x){परत (x < 0 || x > 1) ? .01 : .125;}
 
 #endif
 

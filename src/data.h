@@ -1,50 +1,50 @@
 #ifndef DATA_H
 #define DATA_H
-#include <pthread.h>
+#अन्तर्भाव <pthread.h>
 
-#include "darknet.h"
-#include "matrix.h"
-#include "list.h"
-#include "image.h"
-#include "tree.h"
+#अन्तर्भाव "darknet.h"
+#अन्तर्भाव "matrix.h"
+#अन्तर्भाव "list.h"
+#अन्तर्भाव "image.h"
+#अन्तर्भाव "tree.h"
 
-static inline float distance_from_edge(int x, int max)
+स्थिर ओळीत दशांश distance_from_edge(पूर्णांक x, पूर्णांक max)
 {
-    int dx = (max/2) - x;
-    if (dx < 0) dx = -dx;
+    पूर्णांक dx = (max/2) - x;
+    जर (dx < 0) dx = -dx;
     dx = (max/2) + 1 - dx;
     dx *= 2;
-    float dist = (float)dx/max;
-    if (dist > 1) dist = 1;
-    return dist;
+    दशांश dist = (दशांश)dx/max;
+    जर (dist > 1) dist = 1;
+    परत dist;
 }
-void load_data_blocking(load_args args);
+शून्य load_data_blocking(load_args args);
 
 
-void print_letters(float *pred, int n);
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h);
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h);
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure);
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_super(char **paths, int n, int m, int w, int h, int scale);
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center);
-data load_data_regression(char **paths, int n, int m, int classes, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure);
-data load_go(char *filename);
+शून्य print_letters(दशांश *pred, पूर्णांक n);
+data load_data_captcha(अक्षर **paths, पूर्णांक n, पूर्णांक m, पूर्णांक k, पूर्णांक w, पूर्णांक h);
+data load_data_captcha_encode(अक्षर **paths, पूर्णांक n, पूर्णांक m, पूर्णांक w, पूर्णांक h);
+data load_data_detection(पूर्णांक n, अक्षर **paths, पूर्णांक m, पूर्णांक w, पूर्णांक h, पूर्णांक boxes, पूर्णांक classes, दशांश jitter, दशांश hue, दशांश saturation, दशांश exposure);
+data load_data_tag(अक्षर **paths, पूर्णांक n, पूर्णांक m, पूर्णांक k, पूर्णांक min, पूर्णांक max, पूर्णांक size, दशांश angle, दशांश aspect, दशांश hue, दशांश saturation, दशांश exposure);
+matrix load_image_augment_paths(अक्षर **paths, पूर्णांक n, पूर्णांक min, पूर्णांक max, पूर्णांक size, दशांश angle, दशांश aspect, दशांश hue, दशांश saturation, दशांश exposure, पूर्णांक center);
+data load_data_super(अक्षर **paths, पूर्णांक n, पूर्णांक m, पूर्णांक w, पूर्णांक h, पूर्णांक scale);
+data load_data_augment(अक्षर **paths, पूर्णांक n, पूर्णांक m, अक्षर **labels, पूर्णांक k, वृक्ष *hierarchy, पूर्णांक min, पूर्णांक max, पूर्णांक size, दशांश angle, दशांश aspect, दशांश hue, दशांश saturation, दशांश exposure, पूर्णांक center);
+data load_data_regression(अक्षर **paths, पूर्णांक n, पूर्णांक m, पूर्णांक classes, पूर्णांक min, पूर्णांक max, पूर्णांक size, दशांश angle, दशांश aspect, दशांश hue, दशांश saturation, दशांश exposure);
+data load_go(अक्षर *filename);
 
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h);
+data load_data_writing(अक्षर **paths, पूर्णांक n, पूर्णांक m, पूर्णांक w, पूर्णांक h, पूर्णांक out_w, पूर्णांक out_h);
 
-void get_random_batch(data d, int n, float *X, float *y);
-data get_data_part(data d, int part, int total);
-data get_random_data(data d, int num);
-data load_categorical_data_csv(char *filename, int target, int k);
-void normalize_data_rows(data d);
-void scale_data_rows(data d, float s);
-void translate_data_rows(data d, float s);
-void randomize_data(data d);
-data *split_data(data d, int part, int total);
-data concat_datas(data *d, int n);
-void fill_truth(char *path, char **labels, int k, float *truth);
+शून्य get_random_batch(data d, पूर्णांक n, दशांश *X, दशांश *y);
+data get_data_part(data d, पूर्णांक part, पूर्णांक total);
+data get_random_data(data d, पूर्णांक अंक);
+data load_categorical_data_csv(अक्षर *filename, पूर्णांक target, पूर्णांक k);
+शून्य normalize_data_rows(data d);
+शून्य scale_data_rows(data d, दशांश s);
+शून्य translate_data_rows(data d, दशांश s);
+शून्य randomize_data(data d);
+data *split_data(data d, पूर्णांक part, पूर्णांक total);
+data concat_datas(data *d, पूर्णांक n);
+शून्य fill_truth(अक्षर *path, अक्षर **labels, पूर्णांक k, दशांश *truth);
 
 #endif
