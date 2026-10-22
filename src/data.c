@@ -1,25 +1,25 @@
-#include "data.h"
-#include "utils.h"
-#include "image.h"
-#include "cuda.h"
+#അന്തര്ഭാവ "data.h"
+#അന്തര്ഭാവ "utils.h"
+#അന്തര്ഭാവ "image.h"
+#അന്തര്ഭാവ "cuda.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#അന്തര്ഭാവ <stdio.h>
+#അന്തര്ഭാവ <stdlib.h>
+#അന്തര്ഭാവ <string.h>
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-list *get_paths(char *filename)
+list *get_paths(അക്ഷരം *filename)
 {
-    char *path;
+    അക്ഷരം *path;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    list *lines = make_list();
-    while((path=fgetl(file))){
-        list_insert(lines, path);
+    എങ്കിൽ(!file) file_error(filename);
+    list *വരികൾ = make_list();
+    ആകുമ്പോൾ((path=fgetl(file))){
+        list_തിരുകുക(വരികൾ, path);
     }
     fclose(file);
-    return lines;
+    തിരികെ വരികൾ;
 }
 
 /*
@@ -39,41 +39,41 @@ char **get_random_paths_indexes(char **paths, int n, int m, int *indexes)
 }
 */
 
-char **get_random_paths(char **paths, int n, int m)
+അക്ഷരം **get_random_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m)
 {
-    char **random_paths = calloc(n, sizeof(char*));
-    int i;
+    അക്ഷരം **random_paths = calloc(n, വലുപ്പം(അക്ഷരം*));
+    പൂർണ്ണസംഖ്യ i;
     pthread_mutex_lock(&mutex);
-    for(i = 0; i < n; ++i){
-        int index = rand()%m;
+    വേണ്ടി(i = 0; i < n; ++i){
+        പൂർണ്ണസംഖ്യ index = rand()%m;
         random_paths[i] = paths[index];
         //if(i == 0) printf("%s\n", paths[index]);
     }
     pthread_mutex_unlock(&mutex);
-    return random_paths;
+    തിരികെ random_paths;
 }
 
-char **find_replace_paths(char **paths, int n, char *find, char *replace)
+അക്ഷരം **find_replace_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, അക്ഷരം *find, അക്ഷരം *replace)
 {
-    char **replace_paths = calloc(n, sizeof(char*));
-    int i;
-    for(i = 0; i < n; ++i){
-        char replaced[4096];
+    അക്ഷരം **replace_paths = calloc(n, വലുപ്പം(അക്ഷരം*));
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
+        അക്ഷരം replaced[4096];
         find_replace(paths[i], find, replace, replaced);
         replace_paths[i] = copy_string(replaced);
     }
-    return replace_paths;
+    തിരികെ replace_paths;
 }
 
-matrix load_image_paths_gray(char **paths, int n, int w, int h)
+matrix load_image_paths_gray(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     matrix X;
     X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
+    X.vals = calloc(X.rows, വലുപ്പം(ദശാംശം*));
     X.cols = 0;
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image im = load_image(paths[i], w, h, 3);
 
         image gray = grayscale_image(im);
@@ -83,43 +83,43 @@ matrix load_image_paths_gray(char **paths, int n, int w, int h)
         X.vals[i] = im.data;
         X.cols = im.h*im.w*im.c;
     }
-    return X;
+    തിരികെ X;
 }
 
-matrix load_image_paths(char **paths, int n, int w, int h)
+matrix load_image_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     matrix X;
     X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
+    X.vals = calloc(X.rows, വലുപ്പം(ദശാംശം*));
     X.cols = 0;
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image im = load_image_color(paths[i], w, h);
         X.vals[i] = im.data;
         X.cols = im.h*im.w*im.c;
     }
-    return X;
+    തിരികെ X;
 }
 
-matrix load_image_augment_paths(char **paths, int n, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+matrix load_image_augment_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, പൂർണ്ണസംഖ്യ size, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure, പൂർണ്ണസംഖ്യ center)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     matrix X;
     X.rows = n;
-    X.vals = calloc(X.rows, sizeof(float*));
+    X.vals = calloc(X.rows, വലുപ്പം(ദശാംശം*));
     X.cols = 0;
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image im = load_image_color(paths[i], 0, 0);
         image crop;
-        if(center){
+        എങ്കിൽ(center){
             crop = center_crop_image(im, size, size);
-        } else {
+        } അല്ലെങ്കിൽ {
             crop = random_augment_image(im, angle, aspect, min, max, size, size);
         }
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
+        എങ്കിൽ (flip) flip_image(crop);
         random_distort_image(crop, hue, saturation, exposure);
 
         /*
@@ -132,129 +132,129 @@ matrix load_image_augment_paths(char **paths, int n, int min, int max, int size,
         X.vals[i] = crop.data;
         X.cols = crop.h*crop.w*crop.c;
     }
-    return X;
+    തിരികെ X;
 }
 
 
-box_label *read_boxes(char *filename, int *n)
+box_label *read_boxes(അക്ഷരം *filename, പൂർണ്ണസംഖ്യ *n)
 {
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    float x, y, h, w;
-    int id;
-    int count = 0;
-    int size = 64;
-    box_label *boxes = calloc(size, sizeof(box_label));
-    while(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
-        if(count == size) {
+    എങ്കിൽ(!file) file_error(filename);
+    ദശാംശം x, y, h, w;
+    പൂർണ്ണസംഖ്യ id;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    പൂർണ്ണസംഖ്യ size = 64;
+    box_label *boxes = calloc(size, വലുപ്പം(box_label));
+    ആകുമ്പോൾ(fscanf(file, "%d %f %f %f %f", &id, &x, &y, &w, &h) == 5){
+        എങ്കിൽ(എണ്ണം == size) {
             size = size * 2;
-            boxes = realloc(boxes, size*sizeof(box_label));
+            boxes = realloc(boxes, size*വലുപ്പം(box_label));
         }
-        boxes[count].id = id;
-        boxes[count].x = x;
-        boxes[count].y = y;
-        boxes[count].h = h;
-        boxes[count].w = w;
-        boxes[count].left   = x - w/2;
-        boxes[count].right  = x + w/2;
-        boxes[count].top    = y - h/2;
-        boxes[count].bottom = y + h/2;
-        ++count;
+        boxes[എണ്ണം].id = id;
+        boxes[എണ്ണം].x = x;
+        boxes[എണ്ണം].y = y;
+        boxes[എണ്ണം].h = h;
+        boxes[എണ്ണം].w = w;
+        boxes[എണ്ണം].ഇടത്   = x - w/2;
+        boxes[എണ്ണം].വലത്  = x + w/2;
+        boxes[എണ്ണം].മുകൾ    = y - h/2;
+        boxes[എണ്ണം].bottom = y + h/2;
+        ++എണ്ണം;
     }
     fclose(file);
-    *n = count;
-    return boxes;
+    *n = എണ്ണം;
+    തിരികെ boxes;
 }
 
-void randomize_boxes(box_label *b, int n)
+ശൂന്യം randomize_boxes(box_label *b, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
         box_label swap = b[i];
-        int index = rand()%n;
+        പൂർണ്ണസംഖ്യ index = rand()%n;
         b[i] = b[index];
         b[index] = swap;
     }
 }
 
-void correct_boxes(box_label *boxes, int n, float dx, float dy, float sx, float sy, int flip)
+ശൂന്യം correct_boxes(box_label *boxes, പൂർണ്ണസംഖ്യ n, ദശാംശം dx, ദശാംശം dy, ദശാംശം sx, ദശാംശം sy, പൂർണ്ണസംഖ്യ flip)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(boxes[i].x == 0 && boxes[i].y == 0) {
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
+        എങ്കിൽ(boxes[i].x == 0 && boxes[i].y == 0) {
             boxes[i].x = 999999;
             boxes[i].y = 999999;
             boxes[i].w = 999999;
             boxes[i].h = 999999;
-            continue;
+            തുടരുക;
         }
-        boxes[i].left   = boxes[i].left  * sx - dx;
-        boxes[i].right  = boxes[i].right * sx - dx;
-        boxes[i].top    = boxes[i].top   * sy - dy;
+        boxes[i].ഇടത്   = boxes[i].ഇടത്  * sx - dx;
+        boxes[i].വലത്  = boxes[i].വലത് * sx - dx;
+        boxes[i].മുകൾ    = boxes[i].മുകൾ   * sy - dy;
         boxes[i].bottom = boxes[i].bottom* sy - dy;
 
-        if(flip){
-            float swap = boxes[i].left;
-            boxes[i].left = 1. - boxes[i].right;
-            boxes[i].right = 1. - swap;
+        എങ്കിൽ(flip){
+            ദശാംശം swap = boxes[i].ഇടത്;
+            boxes[i].ഇടത് = 1. - boxes[i].വലത്;
+            boxes[i].വലത് = 1. - swap;
         }
 
-        boxes[i].left =  constrain(0, 1, boxes[i].left);
-        boxes[i].right = constrain(0, 1, boxes[i].right);
-        boxes[i].top =   constrain(0, 1, boxes[i].top);
+        boxes[i].ഇടത് =  constrain(0, 1, boxes[i].ഇടത്);
+        boxes[i].വലത് = constrain(0, 1, boxes[i].വലത്);
+        boxes[i].മുകൾ =   constrain(0, 1, boxes[i].മുകൾ);
         boxes[i].bottom =   constrain(0, 1, boxes[i].bottom);
 
-        boxes[i].x = (boxes[i].left+boxes[i].right)/2;
-        boxes[i].y = (boxes[i].top+boxes[i].bottom)/2;
-        boxes[i].w = (boxes[i].right - boxes[i].left);
-        boxes[i].h = (boxes[i].bottom - boxes[i].top);
+        boxes[i].x = (boxes[i].ഇടത്+boxes[i].വലത്)/2;
+        boxes[i].y = (boxes[i].മുകൾ+boxes[i].bottom)/2;
+        boxes[i].w = (boxes[i].വലത് - boxes[i].ഇടത്);
+        boxes[i].h = (boxes[i].bottom - boxes[i].മുകൾ);
 
         boxes[i].w = constrain(0, 1, boxes[i].w);
         boxes[i].h = constrain(0, 1, boxes[i].h);
     }
 }
 
-void fill_truth_swag(char *path, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+ശൂന്യം fill_truth_swag(അക്ഷരം *path, ദശാംശം *truth, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ flip, ദശാംശം dx, ദശാംശം dy, ദശാംശം sx, ദശാംശം sy)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
     find_replace(labelpath, "JPEGImages", "labels", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
 
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    box_label *boxes = read_boxes(labelpath, &എണ്ണം);
+    randomize_boxes(boxes, എണ്ണം);
+    correct_boxes(boxes, എണ്ണം, dx, dy, sx, sy, flip);
+    ദശാംശം x,y,w,h;
+    പൂർണ്ണസംഖ്യ id;
+    പൂർണ്ണസംഖ്യ i;
 
-    for (i = 0; i < count && i < 90; ++i) {
+    വേണ്ടി (i = 0; i < എണ്ണം && i < 90; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .0 || h < .0) continue;
+        എങ്കിൽ (w < .0 || h < .0) തുടരുക;
 
-        int index = (4+classes) * i;
+        പൂർണ്ണസംഖ്യ index = (4+classes) * i;
 
         truth[index++] = x;
         truth[index++] = y;
         truth[index++] = w;
         truth[index++] = h;
 
-        if (id < classes) truth[index+id] = 1;
+        എങ്കിൽ (id < classes) truth[index+id] = 1;
     }
-    free(boxes);
+    സ്വതന്ത്രം(boxes);
 }
 
-void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int flip, float dx, float dy, float sx, float sy)
+ശൂന്യം fill_truth_region(അക്ഷരം *path, ദശാംശം *truth, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ അക്കം_boxes, പൂർണ്ണസംഖ്യ flip, ദശാംശം dx, ദശാംശം dy, ദശാംശം sx, ദശാംശം sy)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
     find_replace(labelpath, "JPEGImages", "labels", labelpath);
 
@@ -262,34 +262,34 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
     find_replace(labelpath, ".png", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    float x,y,w,h;
-    int id;
-    int i;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    box_label *boxes = read_boxes(labelpath, &എണ്ണം);
+    randomize_boxes(boxes, എണ്ണം);
+    correct_boxes(boxes, എണ്ണം, dx, dy, sx, sy, flip);
+    ദശാംശം x,y,w,h;
+    പൂർണ്ണസംഖ്യ id;
+    പൂർണ്ണസംഖ്യ i;
 
-    for (i = 0; i < count; ++i) {
+    വേണ്ടി (i = 0; i < എണ്ണം; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if (w < .005 || h < .005) continue;
+        എങ്കിൽ (w < .005 || h < .005) തുടരുക;
 
-        int col = (int)(x*num_boxes);
-        int row = (int)(y*num_boxes);
+        പൂർണ്ണസംഖ്യ col = (പൂർണ്ണസംഖ്യ)(x*അക്കം_boxes);
+        പൂർണ്ണസംഖ്യ row = (പൂർണ്ണസംഖ്യ)(y*അക്കം_boxes);
 
-        x = x*num_boxes - col;
-        y = y*num_boxes - row;
+        x = x*അക്കം_boxes - col;
+        y = y*അക്കം_boxes - row;
 
-        int index = (col+row*num_boxes)*(5+classes);
-        if (truth[index]) continue;
+        പൂർണ്ണസംഖ്യ index = (col+row*അക്കം_boxes)*(5+classes);
+        എങ്കിൽ (truth[index]) തുടരുക;
         truth[index++] = 1;
 
-        if (id < classes) truth[index+id] = 1;
+        എങ്കിൽ (id < classes) truth[index+id] = 1;
         index += classes;
 
         truth[index++] = x;
@@ -297,41 +297,41 @@ void fill_truth_region(char *path, float *truth, int classes, int num_boxes, int
         truth[index++] = w;
         truth[index++] = h;
     }
-    free(boxes);
+    സ്വതന്ത്രം(boxes);
 }
 
-void load_rle(image im, int *rle, int n)
+ശൂന്യം load_rle(image im, പൂർണ്ണസംഖ്യ *rle, പൂർണ്ണസംഖ്യ n)
 {
-    int count = 0;
-    int curr = 0;
-    int i,j;
-    for(i = 0; i < n; ++i){
-        for(j = 0; j < rle[i]; ++j){
-            im.data[count++] = curr;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    പൂർണ്ണസംഖ്യ curr = 0;
+    പൂർണ്ണസംഖ്യ i,j;
+    വേണ്ടി(i = 0; i < n; ++i){
+        വേണ്ടി(j = 0; j < rle[i]; ++j){
+            im.data[എണ്ണം++] = curr;
         }
         curr = 1 - curr;
     }
-    for(; count < im.h*im.w*im.c; ++count){
-        im.data[count] = curr;
+    വേണ്ടി(; എണ്ണം < im.h*im.w*im.c; ++എണ്ണം){
+        im.data[എണ്ണം] = curr;
     }
 }
 
-void or_image(image src, image dest, int c)
+ശൂന്യം or_image(image src, image dest, പൂർണ്ണസംഖ്യ c)
 {
-    int i;
-    for(i = 0; i < src.w*src.h; ++i){
-        if(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < src.w*src.h; ++i){
+        എങ്കിൽ(src.data[i]) dest.data[dest.w*dest.h*c + i] = 1;
     }
 }
 
-void exclusive_image(image src)
+ശൂന്യം exclusive_image(image src)
 {
-    int k, j, i;
-    int s = src.w*src.h;
-    for(k = 0; k < src.c-1; ++k){
-        for(i = 0; i < s; ++i){
-            if (src.data[k*s + i]){
-                for(j = k+1; j < src.c; ++j){
+    പൂർണ്ണസംഖ്യ k, j, i;
+    പൂർണ്ണസംഖ്യ s = src.w*src.h;
+    വേണ്ടി(k = 0; k < src.c-1; ++k){
+        വേണ്ടി(i = 0; i < s; ++i){
+            എങ്കിൽ (src.data[k*s + i]){
+                വേണ്ടി(j = k+1; j < src.c; ++j){
                     src.data[j*s + i] = 0;
                 }
             }
@@ -341,14 +341,14 @@ void exclusive_image(image src)
 
 box bound_image(image im)
 {
-    int x,y;
-    int minx = im.w;
-    int miny = im.h;
-    int maxx = 0;
-    int maxy = 0;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            if(im.data[y*im.w + x]){
+    പൂർണ്ണസംഖ്യ x,y;
+    പൂർണ്ണസംഖ്യ minx = im.w;
+    പൂർണ്ണസംഖ്യ miny = im.h;
+    പൂർണ്ണസംഖ്യ maxx = 0;
+    പൂർണ്ണസംഖ്യ maxy = 0;
+    വേണ്ടി(y = 0; y < im.h; ++y){
+        വേണ്ടി(x = 0; x < im.w; ++x){
+            എങ്കിൽ(im.data[y*im.w + x]){
                 minx = (x < minx) ? x : minx;
                 miny = (y < miny) ? y : miny;
                 maxx = (x > maxx) ? x : maxx;
@@ -358,77 +358,77 @@ box bound_image(image im)
     }
     box b = {minx, miny, maxx-minx + 1, maxy-miny + 1};
     //printf("%f %f %f %f\n", b.x, b.y, b.w, b.h);
-    return b;
+    തിരികെ b;
 }
 
-void fill_truth_iseg(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+ശൂന്യം fill_truth_iseg(അക്ഷരം *path, പൂർണ്ണസംഖ്യ അക്കം_boxes, ദശാംശം *truth, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, augment_args aug, പൂർണ്ണസംഖ്യ flip, പൂർണ്ണസംഖ്യ mw, പൂർണ്ണസംഖ്യ mh)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
-    int j;
+    എങ്കിൽ(!file) file_error(labelpath);
+    അക്ഷരം buff[32788];
+    പൂർണ്ണസംഖ്യ id;
+    പൂർണ്ണസംഖ്യ i = 0;
+    പൂർണ്ണസംഖ്യ j;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ആകുമ്പോൾ((fscanf(file, "%d %s", &id, buff) == 2) && i < അക്കം_boxes){
+        പൂർണ്ണസംഖ്യ n = 0;
+        പൂർണ്ണസംഖ്യ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        എങ്കിൽ(flip) flip_image(sized);
 
         image mask = resize_image(sized, mw, mh);
         truth[i*(mw*mh+1)] = id;
-        for(j = 0; j < mw*mh; ++j){
+        വേണ്ടി(j = 0; j < mw*mh; ++j){
             truth[i*(mw*mh + 1) + 1 + j] = mask.data[j];
         }
         ++i;
 
         free_image(mask);
         free_image(sized);
-        free(rle);
+        സ്വതന്ത്രം(rle);
     }
-    if(i < num_boxes) truth[i*(mw*mh+1)] = -1;
+    എങ്കിൽ(i < അക്കം_boxes) truth[i*(mw*mh+1)] = -1;
     fclose(file);
     free_image(part);
 }
 
-void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w, int h, augment_args aug, int flip, int mw, int mh)
+ശൂന്യം fill_truth_mask(അക്ഷരം *path, പൂർണ്ണസംഖ്യ അക്കം_boxes, ദശാംശം *truth, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, augment_args aug, പൂർണ്ണസംഖ്യ flip, പൂർണ്ണസംഖ്യ mw, പൂർണ്ണസംഖ്യ mh)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
-    int i = 0;
+    എങ്കിൽ(!file) file_error(labelpath);
+    അക്ഷരം buff[32788];
+    പൂർണ്ണസംഖ്യ id;
+    പൂർണ്ണസംഖ്യ i = 0;
     image part = make_image(w, h, 1);
-    while((fscanf(file, "%d %s", &id, buff) == 2) && i < num_boxes){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ആകുമ്പോൾ((fscanf(file, "%d %s", &id, buff) == 2) && i < അക്കം_boxes){
+        പൂർണ്ണസംഖ്യ n = 0;
+        പൂർണ്ണസംഖ്യ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         image sized = rotate_crop_image(part, aug.rad, aug.scale, aug.w, aug.h, aug.dx, aug.dy, aug.aspect);
-        if(flip) flip_image(sized);
+        എങ്കിൽ(flip) flip_image(sized);
         box b = bound_image(sized);
-        if(b.w > 0){
+        എങ്കിൽ(b.w > 0){
             image crop = crop_image(sized, b.x, b.y, b.w, b.h);
             image mask = resize_image(crop, mw, mh);
             truth[i*(4 + mw*mh + 1) + 0] = (b.x + b.w/2.)/sized.w;
             truth[i*(4 + mw*mh + 1) + 1] = (b.y + b.h/2.)/sized.h;
             truth[i*(4 + mw*mh + 1) + 2] = b.w/sized.w;
             truth[i*(4 + mw*mh + 1) + 3] = b.h/sized.h;
-            int j;
-            for(j = 0; j < mw*mh; ++j){
+            പൂർണ്ണസംഖ്യ j;
+            വേണ്ടി(j = 0; j < mw*mh; ++j){
                 truth[i*(4 + mw*mh + 1) + 4 + j] = mask.data[j];
             }
             truth[i*(4 + mw*mh + 1) + 4 + mw*mh] = id;
@@ -437,16 +437,16 @@ void fill_truth_mask(char *path, int num_boxes, float *truth, int classes, int w
             ++i;
         }
         free_image(sized);
-        free(rle);
+        സ്വതന്ത്രം(rle);
     }
     fclose(file);
     free_image(part);
 }
 
 
-void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, int flip, float dx, float dy, float sx, float sy)
+ശൂന്യം fill_truth_detection(അക്ഷരം *path, പൂർണ്ണസംഖ്യ അക്കം_boxes, ദശാംശം *truth, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ flip, ദശാംശം dx, ദശാംശം dy, ദശാംശം sx, ദശാംശം sy)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "labels", labelpath);
     find_replace(labelpath, "JPEGImages", "labels", labelpath);
 
@@ -455,26 +455,26 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
     find_replace(labelpath, ".png", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
-    int count = 0;
-    box_label *boxes = read_boxes(labelpath, &count);
-    randomize_boxes(boxes, count);
-    correct_boxes(boxes, count, dx, dy, sx, sy, flip);
-    if(count > num_boxes) count = num_boxes;
-    float x,y,w,h;
-    int id;
-    int i;
-    int sub = 0;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    box_label *boxes = read_boxes(labelpath, &എണ്ണം);
+    randomize_boxes(boxes, എണ്ണം);
+    correct_boxes(boxes, എണ്ണം, dx, dy, sx, sy, flip);
+    എങ്കിൽ(എണ്ണം > അക്കം_boxes) എണ്ണം = അക്കം_boxes;
+    ദശാംശം x,y,w,h;
+    പൂർണ്ണസംഖ്യ id;
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ sub = 0;
 
-    for (i = 0; i < count; ++i) {
+    വേണ്ടി (i = 0; i < എണ്ണം; ++i) {
         x =  boxes[i].x;
         y =  boxes[i].y;
         w =  boxes[i].w;
         h =  boxes[i].h;
         id = boxes[i].id;
 
-        if ((w < .001 || h < .001)) {
+        എങ്കിൽ ((w < .001 || h < .001)) {
             ++sub;
-            continue;
+            തുടരുക;
         }
 
         truth[(i-sub)*5+0] = x;
@@ -483,116 +483,116 @@ void fill_truth_detection(char *path, int num_boxes, float *truth, int classes, 
         truth[(i-sub)*5+3] = h;
         truth[(i-sub)*5+4] = id;
     }
-    free(boxes);
+    സ്വതന്ത്രം(boxes);
 }
 
 #define NUMCHARS 37
 
-void print_letters(float *pred, int n)
+ശൂന്യം print_letters(ദശാംശം *pred, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        int index = max_index(pred+i*NUMCHARS, NUMCHARS);
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
+        പൂർണ്ണസംഖ്യ index = max_index(pred+i*NUMCHARS, NUMCHARS);
         printf("%c", int_to_alphanum(index));
     }
     printf("\n");
 }
 
-void fill_truth_captcha(char *path, int n, float *truth)
+ശൂന്യം fill_truth_captcha(അക്ഷരം *path, പൂർണ്ണസംഖ്യ n, ദശാംശം *truth)
 {
-    char *begin = strrchr(path, '/');
+    അക്ഷരം *begin = strrchr(path, '/');
     ++begin;
-    int i;
-    for(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
-        int index = alphanum_to_int(begin[i]);
-        if(index > 35) printf("Bad %c\n", begin[i]);
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < strlen(begin) && i < n && begin[i] != '.'; ++i){
+        പൂർണ്ണസംഖ്യ index = alphanum_to_int(begin[i]);
+        എങ്കിൽ(index > 35) printf("Bad %c\n", begin[i]);
         truth[i*NUMCHARS+index] = 1;
     }
-    for(;i < n; ++i){
+    വേണ്ടി(;i < n; ++i){
         truth[i*NUMCHARS + NUMCHARS-1] = 1;
     }
 }
 
-data load_data_captcha(char **paths, int n, int m, int k, int w, int h)
+data load_data_captcha(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = make_matrix(n, k*NUMCHARS);
-    int i;
-    for(i = 0; i < n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
         fill_truth_captcha(paths[i], k, d.y.vals[i]);
     }
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
-data load_data_captcha_encode(char **paths, int n, int m, int w, int h)
+data load_data_captcha_encode(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.X.cols = 17100;
     d.y = d.X;
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
-void fill_truth(char *path, char **labels, int k, float *truth)
+ശൂന്യം fill_truth(അക്ഷരം *path, അക്ഷരം **labels, പൂർണ്ണസംഖ്യ k, ദശാംശം *truth)
 {
-    int i;
-    memset(truth, 0, k*sizeof(float));
-    int count = 0;
-    for(i = 0; i < k; ++i){
-        if(strstr(path, labels[i])){
+    പൂർണ്ണസംഖ്യ i;
+    memset(truth, 0, k*വലുപ്പം(ദശാംശം));
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    വേണ്ടി(i = 0; i < k; ++i){
+        എങ്കിൽ(strstr(path, labels[i])){
             truth[i] = 1;
-            ++count;
+            ++എണ്ണം;
             //printf("%s %s %d\n", path, labels[i], i);
         }
     }
-    if(count != 1 && (k != 1 || count != 0)) printf("Too many or too few labels: %d, %s\n", count, path);
+    എങ്കിൽ(എണ്ണം != 1 && (k != 1 || എണ്ണം != 0)) printf("Too many or too few labels: %d, %s\n", എണ്ണം, path);
 }
 
-void fill_hierarchy(float *truth, int k, tree *hierarchy)
+ശൂന്യം fill_hierarchy(ദശാംശം *truth, പൂർണ്ണസംഖ്യ k, വൃക്ഷം *hierarchy)
 {
-    int j;
-    for(j = 0; j < k; ++j){
-        if(truth[j]){
-            int parent = hierarchy->parent[j];
-            while(parent >= 0){
+    പൂർണ്ണസംഖ്യ j;
+    വേണ്ടി(j = 0; j < k; ++j){
+        എങ്കിൽ(truth[j]){
+            പൂർണ്ണസംഖ്യ parent = hierarchy->parent[j];
+            ആകുമ്പോൾ(parent >= 0){
                 truth[parent] = 1;
                 parent = hierarchy->parent[parent];
             }
         }
     }
-    int i;
-    int count = 0;
-    for(j = 0; j < hierarchy->groups; ++j){
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    വേണ്ടി(j = 0; j < hierarchy->groups; ++j){
         //printf("%d\n", count);
-        int mask = 1;
-        for(i = 0; i < hierarchy->group_size[j]; ++i){
-            if(truth[count + i]){
+        പൂർണ്ണസംഖ്യ mask = 1;
+        വേണ്ടി(i = 0; i < hierarchy->group_size[j]; ++i){
+            എങ്കിൽ(truth[എണ്ണം + i]){
                 mask = 0;
-                break;
+                നിർത്തുക;
             }
         }
-        if (mask) {
-            for(i = 0; i < hierarchy->group_size[j]; ++i){
-                truth[count + i] = SECRET_NUM;
+        എങ്കിൽ (mask) {
+            വേണ്ടി(i = 0; i < hierarchy->group_size[j]; ++i){
+                truth[എണ്ണം + i] = SECRET_അക്കം;
             }
         }
-        count += hierarchy->group_size[j];
+        എണ്ണം += hierarchy->group_size[j];
     }
 }
 
-matrix load_regression_labels_paths(char **paths, int n, int k)
+matrix load_regression_labels_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ k)
 {
     matrix y = make_matrix(n, k);
-    int i,j;
-    for(i = 0; i < n; ++i){
-        char labelpath[4096];
+    പൂർണ്ണസംഖ്യ i,j;
+    വേണ്ടി(i = 0; i < n; ++i){
+        അക്ഷരം labelpath[4096];
         find_replace(paths[i], "images", "labels", labelpath);
         find_replace(labelpath, "JPEGImages", "labels", labelpath);
         find_replace(labelpath, ".BMP", ".txt", labelpath);
@@ -609,73 +609,73 @@ matrix load_regression_labels_paths(char **paths, int n, int k)
         find_replace(labelpath, ".tif", ".txt", labelpath);
 
         FILE *file = fopen(labelpath, "r");
-        for(j = 0; j < k; ++j){
+        വേണ്ടി(j = 0; j < k; ++j){
             fscanf(file, "%f", &(y.vals[i][j]));
         }
         fclose(file);
     }
-    return y;
+    തിരികെ y;
 }
 
-matrix load_labels_paths(char **paths, int n, char **labels, int k, tree *hierarchy)
+matrix load_labels_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, അക്ഷരം **labels, പൂർണ്ണസംഖ്യ k, വൃക്ഷം *hierarchy)
 {
     matrix y = make_matrix(n, k);
-    int i;
-    for(i = 0; i < n && labels; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n && labels; ++i){
         fill_truth(paths[i], labels, k, y.vals[i]);
-        if(hierarchy){
+        എങ്കിൽ(hierarchy){
             fill_hierarchy(y.vals[i], k, hierarchy);
         }
     }
-    return y;
+    തിരികെ y;
 }
 
-matrix load_tags_paths(char **paths, int n, int k)
+matrix load_tags_paths(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ k)
 {
     matrix y = make_matrix(n, k);
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     //int count = 0;
-    for(i = 0; i < n; ++i){
-        char label[4096];
+    വേണ്ടി(i = 0; i < n; ++i){
+        അക്ഷരം label[4096];
         find_replace(paths[i], "images", "labels", label);
         find_replace(label, ".jpg", ".txt", label);
         FILE *file = fopen(label, "r");
-        if (!file) continue;
+        എങ്കിൽ (!file) തുടരുക;
         //++count;
-        int tag;
-        while(fscanf(file, "%d", &tag) == 1){
-            if(tag < k){
+        പൂർണ്ണസംഖ്യ tag;
+        ആകുമ്പോൾ(fscanf(file, "%d", &tag) == 1){
+            എങ്കിൽ(tag < k){
                 y.vals[i][tag] = 1;
             }
         }
         fclose(file);
     }
     //printf("%d/%d\n", count, n);
-    return y;
+    തിരികെ y;
 }
 
-char **get_labels(char *filename)
+അക്ഷരം **get_labels(അക്ഷരം *filename)
 {
     list *plist = get_paths(filename);
-    char **labels = (char **)list_to_array(plist);
+    അക്ഷരം **labels = (അക്ഷരം **)list_to_array(plist);
     free_list(plist);
-    return labels;
+    തിരികെ labels;
 }
 
-void free_data(data d)
+ശൂന്യം free_data(data d)
 {
-    if(!d.shallow){
+    എങ്കിൽ(!d.shallow){
         free_matrix(d.X);
         free_matrix(d.y);
-    }else{
-        free(d.X.vals);
-        free(d.y.vals);
+    }അല്ലെങ്കിൽ{
+        സ്വതന്ത്രം(d.X.vals);
+        സ്വതന്ത്രം(d.y.vals);
     }
 }
 
-image get_segmentation_image(char *path, int w, int h, int classes)
+image get_segmentation_image(അക്ഷരം *path, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ classes)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
@@ -683,80 +683,80 @@ image get_segmentation_image(char *path, int w, int h, int classes)
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     image mask = make_image(w, h, classes);
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    എങ്കിൽ(!file) file_error(labelpath);
+    അക്ഷരം buff[32788];
+    പൂർണ്ണസംഖ്യ id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ആകുമ്പോൾ(fscanf(file, "%d %s", &id, buff) == 2){
+        പൂർണ്ണസംഖ്യ n = 0;
+        പൂർണ്ണസംഖ്യ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         or_image(part, mask, id);
-        free(rle);
+        സ്വതന്ത്രം(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    തിരികെ mask;
 }
 
-image get_segmentation_image2(char *path, int w, int h, int classes)
+image get_segmentation_image2(അക്ഷരം *path, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ classes)
 {
-    char labelpath[4096];
+    അക്ഷരം labelpath[4096];
     find_replace(path, "images", "mask", labelpath);
     find_replace(labelpath, "JPEGImages", "mask", labelpath);
     find_replace(labelpath, ".jpg", ".txt", labelpath);
     find_replace(labelpath, ".JPG", ".txt", labelpath);
     find_replace(labelpath, ".JPEG", ".txt", labelpath);
     image mask = make_image(w, h, classes+1);
-    int i;
-    for(i = 0; i < w*h; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < w*h; ++i){
         mask.data[w*h*classes + i] = 1;
     }
     FILE *file = fopen(labelpath, "r");
-    if(!file) file_error(labelpath);
-    char buff[32788];
-    int id;
+    എങ്കിൽ(!file) file_error(labelpath);
+    അക്ഷരം buff[32788];
+    പൂർണ്ണസംഖ്യ id;
     image part = make_image(w, h, 1);
-    while(fscanf(file, "%d %s", &id, buff) == 2){
-        int n = 0;
-        int *rle = read_intlist(buff, &n, 0);
+    ആകുമ്പോൾ(fscanf(file, "%d %s", &id, buff) == 2){
+        പൂർണ്ണസംഖ്യ n = 0;
+        പൂർണ്ണസംഖ്യ *rle = read_intlist(buff, &n, 0);
         load_rle(part, rle, n);
         or_image(part, mask, id);
-        for(i = 0; i < w*h; ++i){
-            if(part.data[i]) mask.data[w*h*classes + i] = 0;
+        വേണ്ടി(i = 0; i < w*h; ++i){
+            എങ്കിൽ(part.data[i]) mask.data[w*h*classes + i] = 0;
         }
-        free(rle);
+        സ്വതന്ത്രം(rle);
     }
     //exclusive_image(mask);
     fclose(file);
     free_image(part);
-    return mask;
+    തിരികെ mask;
 }
 
-data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int min, int max, float angle, float aspect, float hue, float saturation, float exposure, int div)
+data load_data_seg(പൂർണ്ണസംഖ്യ n, അക്ഷരം **paths, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure, പൂർണ്ണസംഖ്യ div)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    അക്ഷരം **random_paths = get_random_paths(paths, n, m);
+    പൂർണ്ണസംഖ്യ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*3;
 
 
     d.y.rows = n;
     d.y.cols = h*w*classes/div/div;
-    d.y.vals = calloc(d.X.rows, sizeof(float*));
+    d.y.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
+        എങ്കിൽ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
 
@@ -764,7 +764,7 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
         //image mask = make_image(orig.w, orig.h, classes+1);
         image sized_m = rotate_crop_image(mask, a.rad, a.scale/div, a.w/div, a.h/div, a.dx/div, a.dy/div, a.aspect);
 
-        if(flip) flip_image(sized_m);
+        എങ്കിൽ(flip) flip_image(sized_m);
         d.y.vals[i] = sized_m.data;
 
         free_image(orig);
@@ -778,30 +778,30 @@ data load_data_seg(int n, char **paths, int m, int w, int h, int classes, int mi
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    സ്വതന്ത്രം(random_paths);
+    തിരികെ d;
 }
 
-data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int boxes, int div, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_iseg(പൂർണ്ണസംഖ്യ n, അക്ഷരം **paths, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ boxes, പൂർണ്ണസംഖ്യ div, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    അക്ഷരം **random_paths = get_random_paths(paths, n, m);
+    പൂർണ്ണസംഖ്യ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*3;
 
     d.y = make_matrix(n, (((w/div)*(h/div))+1)*boxes);
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
+        എങ്കിൽ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
         //show_image(sized, "image");
@@ -818,30 +818,30 @@ data load_data_iseg(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    സ്വതന്ത്രം(random_paths);
+    തിരികെ d;
 }
 
-data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int boxes, int coords, int min, int max, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_mask(പൂർണ്ണസംഖ്യ n, അക്ഷരം **paths, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ boxes, പൂർണ്ണസംഖ്യ coords, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    അക്ഷരം **random_paths = get_random_paths(paths, n, m);
+    പൂർണ്ണസംഖ്യ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*3;
 
     d.y = make_matrix(n, (coords+1)*boxes);
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         augment_args a = random_augment_args(orig, angle, aspect, min, max, w, h);
         image sized = rotate_crop_image(orig, a.rad, a.scale, a.w, a.h, a.dx, a.dy, a.aspect);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
+        എങ്കിൽ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
         //show_image(sized, "image");
@@ -858,52 +858,52 @@ data load_data_mask(int n, char **paths, int m, int w, int h, int classes, int b
            free_image(rgb);
          */
     }
-    free(random_paths);
-    return d;
+    സ്വതന്ത്രം(random_paths);
+    തിരികെ d;
 }
 
-data load_data_region(int n, char **paths, int m, int w, int h, int size, int classes, float jitter, float hue, float saturation, float exposure)
+data load_data_region(പൂർണ്ണസംഖ്യ n, അക്ഷരം **paths, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ size, പൂർണ്ണസംഖ്യ classes, ദശാംശം jitter, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    അക്ഷരം **random_paths = get_random_paths(paths, n, m);
+    പൂർണ്ണസംഖ്യ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*3;
 
 
-    int k = size*size*(5+classes);
+    പൂർണ്ണസംഖ്യ k = size*size*(5+classes);
     d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
 
-        int oh = orig.h;
-        int ow = orig.w;
+        പൂർണ്ണസംഖ്യ oh = orig.h;
+        പൂർണ്ണസംഖ്യ ow = orig.w;
 
-        int dw = (ow*jitter);
-        int dh = (oh*jitter);
+        പൂർണ്ണസംഖ്യ dw = (ow*jitter);
+        പൂർണ്ണസംഖ്യ dh = (oh*jitter);
 
-        int pleft  = rand_uniform(-dw, dw);
-        int pright = rand_uniform(-dw, dw);
-        int ptop   = rand_uniform(-dh, dh);
-        int pbot   = rand_uniform(-dh, dh);
+        പൂർണ്ണസംഖ്യ pleft  = rand_uniform(-dw, dw);
+        പൂർണ്ണസംഖ്യ pright = rand_uniform(-dw, dw);
+        പൂർണ്ണസംഖ്യ ptop   = rand_uniform(-dh, dh);
+        പൂർണ്ണസംഖ്യ pbot   = rand_uniform(-dh, dh);
 
-        int swidth =  ow - pleft - pright;
-        int sheight = oh - ptop - pbot;
+        പൂർണ്ണസംഖ്യ swidth =  ow - pleft - pright;
+        പൂർണ്ണസംഖ്യ sheight = oh - ptop - pbot;
 
-        float sx = (float)swidth  / ow;
-        float sy = (float)sheight / oh;
+        ദശാംശം sx = (ദശാംശം)swidth  / ow;
+        ദശാംശം sy = (ദശാംശം)sheight / oh;
 
-        int flip = rand()%2;
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
         image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-        float dx = ((float)pleft/ow)/sx;
-        float dy = ((float)ptop /oh)/sy;
+        ദശാംശം dx = ((ദശാംശം)pleft/ow)/sx;
+        ദശാംശം dy = ((ദശാംശം)ptop /oh)/sy;
 
         image sized = resize_image(cropped, w, h);
-        if(flip) flip_image(sized);
+        എങ്കിൽ(flip) flip_image(sized);
         random_distort_image(sized, hue, saturation, exposure);
         d.X.vals[i] = sized.data;
 
@@ -912,62 +912,62 @@ data load_data_region(int n, char **paths, int m, int w, int h, int size, int cl
         free_image(orig);
         free_image(cropped);
     }
-    free(random_paths);
-    return d;
+    സ്വതന്ത്രം(random_paths);
+    തിരികെ d;
 }
 
-data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
+data load_data_compare(പൂർണ്ണസംഖ്യ n, അക്ഷരം **paths, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ classes, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
-    if(m) paths = get_random_paths(paths, 2*n, m);
-    int i,j;
+    എങ്കിൽ(m) paths = get_random_paths(paths, 2*n, m);
+    പൂർണ്ണസംഖ്യ i,j;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*6;
 
-    int k = 2*(classes);
+    പൂർണ്ണസംഖ്യ k = 2*(classes);
     d.y = make_matrix(n, k);
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image im1 = load_image_color(paths[i*2],   w, h);
         image im2 = load_image_color(paths[i*2+1], w, h);
 
-        d.X.vals[i] = calloc(d.X.cols, sizeof(float));
-        memcpy(d.X.vals[i],         im1.data, h*w*3*sizeof(float));
-        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*sizeof(float));
+        d.X.vals[i] = calloc(d.X.cols, വലുപ്പം(ദശാംശം));
+        memcpy(d.X.vals[i],         im1.data, h*w*3*വലുപ്പം(ദശാംശം));
+        memcpy(d.X.vals[i] + h*w*3, im2.data, h*w*3*വലുപ്പം(ദശാംശം));
 
-        int id;
-        float iou;
+        പൂർണ്ണസംഖ്യ id;
+        ദശാംശം iou;
 
-        char imlabel1[4096];
-        char imlabel2[4096];
+        അക്ഷരം imlabel1[4096];
+        അക്ഷരം imlabel2[4096];
         find_replace(paths[i*2],   "imgs", "labels", imlabel1);
         find_replace(imlabel1, "jpg", "txt", imlabel1);
         FILE *fp1 = fopen(imlabel1, "r");
 
-        while(fscanf(fp1, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
+        ആകുമ്പോൾ(fscanf(fp1, "%d %f", &id, &iou) == 2){
+            എങ്കിൽ (d.y.vals[i][2*id] < iou) d.y.vals[i][2*id] = iou;
         }
 
         find_replace(paths[i*2+1], "imgs", "labels", imlabel2);
         find_replace(imlabel2, "jpg", "txt", imlabel2);
         FILE *fp2 = fopen(imlabel2, "r");
 
-        while(fscanf(fp2, "%d %f", &id, &iou) == 2){
-            if (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
+        ആകുമ്പോൾ(fscanf(fp2, "%d %f", &id, &iou) == 2){
+            എങ്കിൽ (d.y.vals[i][2*id + 1] < iou) d.y.vals[i][2*id + 1] = iou;
         }
 
-        for (j = 0; j < classes; ++j){
-            if (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
+        വേണ്ടി (j = 0; j < classes; ++j){
+            എങ്കിൽ (d.y.vals[i][2*j] > .5 &&  d.y.vals[i][2*j+1] < .5){
                 d.y.vals[i][2*j] = 1;
                 d.y.vals[i][2*j+1] = 0;
-            } else if (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
+            } അല്ലെങ്കിൽ എങ്കിൽ (d.y.vals[i][2*j] < .5 &&  d.y.vals[i][2*j+1] > .5){
                 d.y.vals[i][2*j] = 0;
                 d.y.vals[i][2*j+1] = 1;
-            } else {
-                d.y.vals[i][2*j]   = SECRET_NUM;
-                d.y.vals[i][2*j+1] = SECRET_NUM;
+            } അല്ലെങ്കിൽ {
+                d.y.vals[i][2*j]   = SECRET_അക്കം;
+                d.y.vals[i][2*j+1] = SECRET_അക്കം;
             }
         }
         fclose(fp1);
@@ -976,18 +976,18 @@ data load_data_compare(int n, char **paths, int m, int classes, int w, int h)
         free_image(im1);
         free_image(im2);
     }
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
-data load_data_swag(char **paths, int n, int classes, float jitter)
+data load_data_swag(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ classes, ദശാംശം jitter)
 {
-    int index = rand()%n;
-    char *random_path = paths[index];
+    പൂർണ്ണസംഖ്യ index = rand()%n;
+    അക്ഷരം *random_path = paths[index];
 
     image orig = load_image_color(random_path, 0, 0);
-    int h = orig.h;
-    int w = orig.w;
+    പൂർണ്ണസംഖ്യ h = orig.h;
+    പൂർണ്ണസംഖ്യ w = orig.w;
 
     data d = {0};
     d.shallow = 0;
@@ -995,34 +995,34 @@ data load_data_swag(char **paths, int n, int classes, float jitter)
     d.h = h;
 
     d.X.rows = 1;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*3;
 
-    int k = (4+classes)*90;
+    പൂർണ്ണസംഖ്യ k = (4+classes)*90;
     d.y = make_matrix(1, k);
 
-    int dw = w*jitter;
-    int dh = h*jitter;
+    പൂർണ്ണസംഖ്യ dw = w*jitter;
+    പൂർണ്ണസംഖ്യ dh = h*jitter;
 
-    int pleft  = rand_uniform(-dw, dw);
-    int pright = rand_uniform(-dw, dw);
-    int ptop   = rand_uniform(-dh, dh);
-    int pbot   = rand_uniform(-dh, dh);
+    പൂർണ്ണസംഖ്യ pleft  = rand_uniform(-dw, dw);
+    പൂർണ്ണസംഖ്യ pright = rand_uniform(-dw, dw);
+    പൂർണ്ണസംഖ്യ ptop   = rand_uniform(-dh, dh);
+    പൂർണ്ണസംഖ്യ pbot   = rand_uniform(-dh, dh);
 
-    int swidth =  w - pleft - pright;
-    int sheight = h - ptop - pbot;
+    പൂർണ്ണസംഖ്യ swidth =  w - pleft - pright;
+    പൂർണ്ണസംഖ്യ sheight = h - ptop - pbot;
 
-    float sx = (float)swidth  / w;
-    float sy = (float)sheight / h;
+    ദശാംശം sx = (ദശാംശം)swidth  / w;
+    ദശാംശം sy = (ദശാംശം)sheight / h;
 
-    int flip = rand()%2;
+    പൂർണ്ണസംഖ്യ flip = rand()%2;
     image cropped = crop_image(orig, pleft, ptop, swidth, sheight);
 
-    float dx = ((float)pleft/w)/sx;
-    float dy = ((float)ptop /h)/sy;
+    ദശാംശം dx = ((ദശാംശം)pleft/w)/sx;
+    ദശാംശം dy = ((ദശാംശം)ptop /h)/sy;
 
     image sized = resize_image(cropped, w, h);
-    if(flip) flip_image(sized);
+    എങ്കിൽ(flip) flip_image(sized);
     d.X.vals[0] = sized.data;
 
     fill_truth_swag(random_path, d.y.vals[0], classes, flip, dx, dy, 1./sx, 1./sy);
@@ -1030,52 +1030,52 @@ data load_data_swag(char **paths, int n, int classes, float jitter)
     free_image(orig);
     free_image(cropped);
 
-    return d;
+    തിരികെ d;
 }
 
-data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, int classes, float jitter, float hue, float saturation, float exposure)
+data load_data_detection(പൂർണ്ണസംഖ്യ n, അക്ഷരം **paths, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ boxes, പൂർണ്ണസംഖ്യ classes, ദശാംശം jitter, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure)
 {
-    char **random_paths = get_random_paths(paths, n, m);
-    int i;
+    അക്ഷരം **random_paths = get_random_paths(paths, n, m);
+    പൂർണ്ണസംഖ്യ i;
     data d = {0};
     d.shallow = 0;
 
     d.X.rows = n;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
     d.X.cols = h*w*3;
 
     d.y = make_matrix(n, 5*boxes);
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image orig = load_image_color(random_paths[i], 0, 0);
         image sized = make_image(w, h, orig.c);
         fill_image(sized, .5);
 
-        float dw = jitter * orig.w;
-        float dh = jitter * orig.h;
+        ദശാംശം dw = jitter * orig.w;
+        ദശാംശം dh = jitter * orig.h;
 
-        float new_ar = (orig.w + rand_uniform(-dw, dw)) / (orig.h + rand_uniform(-dh, dh));
+        ദശാംശം new_ar = (orig.w + rand_uniform(-dw, dw)) / (orig.h + rand_uniform(-dh, dh));
         //float scale = rand_uniform(.25, 2);
-        float scale = 1;
+        ദശാംശം scale = 1;
 
-        float nw, nh;
+        ദശാംശം nw, nh;
 
-        if(new_ar < 1){
+        എങ്കിൽ(new_ar < 1){
             nh = scale * h;
             nw = nh * new_ar;
-        } else {
+        } അല്ലെങ്കിൽ {
             nw = scale * w;
             nh = nw / new_ar;
         }
 
-        float dx = rand_uniform(0, w - nw);
-        float dy = rand_uniform(0, h - nh);
+        ദശാംശം dx = rand_uniform(0, w - nw);
+        ദശാംശം dy = rand_uniform(0, h - nh);
 
         place_image(orig, nw, nh, dx, dy, sized);
 
         random_distort_image(sized, hue, saturation, exposure);
 
-        int flip = rand()%2;
-        if(flip) flip_image(sized);
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
+        എങ്കിൽ(flip) flip_image(sized);
         d.X.vals[i] = sized.data;
 
 
@@ -1083,96 +1083,96 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
 
         free_image(orig);
     }
-    free(random_paths);
-    return d;
+    സ്വതന്ത്രം(random_paths);
+    തിരികെ d;
 }
 
-void *load_thread(void *ptr)
+ശൂന്യം *load_thread(ശൂന്യം *ptr)
 {
     //printf("Loading data: %d\n", rand());
-    load_args a = *(struct load_args*)ptr;
-    if(a.exposure == 0) a.exposure = 1;
-    if(a.saturation == 0) a.saturation = 1;
-    if(a.aspect == 0) a.aspect = 1;
+    load_args a = *(ഘടന load_args*)ptr;
+    എങ്കിൽ(a.exposure == 0) a.exposure = 1;
+    എങ്കിൽ(a.saturation == 0) a.saturation = 1;
+    എങ്കിൽ(a.aspect == 0) a.aspect = 1;
 
-    if (a.type == OLD_CLASSIFICATION_DATA){
+    എങ്കിൽ (a.type == OLD_CLASSIFICATION_DATA){
         *a.d = load_data_old(a.paths, a.n, a.m, a.labels, a.classes, a.w, a.h);
-    } else if (a.type == REGRESSION_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == REGRESSION_DATA){
         *a.d = load_data_regression(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == CLASSIFICATION_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == CLASSIFICATION_DATA){
         *a.d = load_data_augment(a.paths, a.n, a.m, a.labels, a.classes, a.hierarchy, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.center);
-    } else if (a.type == SUPER_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == SUPER_DATA){
         *a.d = load_data_super(a.paths, a.n, a.m, a.w, a.h, a.scale);
-    } else if (a.type == WRITING_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == WRITING_DATA){
         *a.d = load_data_writing(a.paths, a.n, a.m, a.w, a.h, a.out_w, a.out_h);
-    } else if (a.type == ISEG_DATA){
-        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == INSTANCE_DATA){
-        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.num_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SEGMENTATION_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == ISEG_DATA){
+        *a.d = load_data_iseg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.അക്കം_boxes, a.scale, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == INSTANCE_DATA){
+        *a.d = load_data_mask(a.n, a.paths, a.m, a.w, a.h, a.classes, a.അക്കം_boxes, a.coords, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == SEGMENTATION_DATA){
         *a.d = load_data_seg(a.n, a.paths, a.m, a.w, a.h, a.classes, a.min, a.max, a.angle, a.aspect, a.hue, a.saturation, a.exposure, a.scale);
-    } else if (a.type == REGION_DATA){
-        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == DETECTION_DATA){
-        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.num_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
-    } else if (a.type == SWAG_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == REGION_DATA){
+        *a.d = load_data_region(a.n, a.paths, a.m, a.w, a.h, a.അക്കം_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == DETECTION_DATA){
+        *a.d = load_data_detection(a.n, a.paths, a.m, a.w, a.h, a.അക്കം_boxes, a.classes, a.jitter, a.hue, a.saturation, a.exposure);
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == SWAG_DATA){
         *a.d = load_data_swag(a.paths, a.n, a.classes, a.jitter);
-    } else if (a.type == COMPARE_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == COMPARE_DATA){
         *a.d = load_data_compare(a.n, a.paths, a.m, a.classes, a.w, a.h);
-    } else if (a.type == IMAGE_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == IMAGE_DATA){
         *(a.im) = load_image_color(a.path, 0, 0);
         *(a.resized) = resize_image(*(a.im), a.w, a.h);
-    } else if (a.type == LETTERBOX_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == LETTERBOX_DATA){
         *(a.im) = load_image_color(a.path, 0, 0);
         *(a.resized) = letterbox_image(*(a.im), a.w, a.h);
-    } else if (a.type == TAG_DATA){
+    } അല്ലെങ്കിൽ എങ്കിൽ (a.type == TAG_DATA){
         *a.d = load_data_tag(a.paths, a.n, a.m, a.classes, a.min, a.max, a.size, a.angle, a.aspect, a.hue, a.saturation, a.exposure);
     }
-    free(ptr);
-    return 0;
+    സ്വതന്ത്രം(ptr);
+    തിരികെ 0;
 }
 
 pthread_t load_data_in_thread(load_args args)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    ഘടന load_args *ptr = calloc(1, വലുപ്പം(ഘടന load_args));
     *ptr = args;
-    if(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
-    return thread;
+    എങ്കിൽ(pthread_create(&thread, 0, load_thread, ptr)) error("Thread creation failed");
+    തിരികെ thread;
 }
 
-void *load_threads(void *ptr)
+ശൂന്യം *load_threads(ശൂന്യം *ptr)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     load_args args = *(load_args *)ptr;
-    if (args.threads == 0) args.threads = 1;
+    എങ്കിൽ (args.threads == 0) args.threads = 1;
     data *out = args.d;
-    int total = args.n;
-    free(ptr);
-    data *buffers = calloc(args.threads, sizeof(data));
-    pthread_t *threads = calloc(args.threads, sizeof(pthread_t));
-    for(i = 0; i < args.threads; ++i){
+    പൂർണ്ണസംഖ്യ total = args.n;
+    സ്വതന്ത്രം(ptr);
+    data *buffers = calloc(args.threads, വലുപ്പം(data));
+    pthread_t *threads = calloc(args.threads, വലുപ്പം(pthread_t));
+    വേണ്ടി(i = 0; i < args.threads; ++i){
         args.d = buffers + i;
         args.n = (i+1) * total/args.threads - i * total/args.threads;
         threads[i] = load_data_in_thread(args);
     }
-    for(i = 0; i < args.threads; ++i){
+    വേണ്ടി(i = 0; i < args.threads; ++i){
         pthread_join(threads[i], 0);
     }
     *out = concat_datas(buffers, args.threads);
     out->shallow = 0;
-    for(i = 0; i < args.threads; ++i){
+    വേണ്ടി(i = 0; i < args.threads; ++i){
         buffers[i].shallow = 1;
         free_data(buffers[i]);
     }
-    free(buffers);
-    free(threads);
-    return 0;
+    സ്വതന്ത്രം(buffers);
+    സ്വതന്ത്രം(threads);
+    തിരികെ 0;
 }
 
-void load_data_blocking(load_args args)
+ശൂന്യം load_data_blocking(load_args args)
 {
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    ഘടന load_args *ptr = calloc(1, വലുപ്പം(ഘടന load_args));
     *ptr = args;
     load_thread(ptr);
 }
@@ -1180,36 +1180,36 @@ void load_data_blocking(load_args args)
 pthread_t load_data(load_args args)
 {
     pthread_t thread;
-    struct load_args *ptr = calloc(1, sizeof(struct load_args));
+    ഘടന load_args *ptr = calloc(1, വലുപ്പം(ഘടന load_args));
     *ptr = args;
-    if(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
-    return thread;
+    എങ്കിൽ(pthread_create(&thread, 0, load_threads, ptr)) error("Thread creation failed");
+    തിരികെ thread;
 }
 
-data load_data_writing(char **paths, int n, int m, int w, int h, int out_w, int out_h)
+data load_data_writing(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ out_w, പൂർണ്ണസംഖ്യ out_h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
-    char **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
+    അക്ഷരം **replace_paths = find_replace_paths(paths, n, ".png", "-label.png");
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = load_image_paths_gray(replace_paths, n, out_w, out_h);
-    if(m) free(paths);
-    int i;
-    for(i = 0; i < n; ++i) free(replace_paths[i]);
-    free(replace_paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i) സ്വതന്ത്രം(replace_paths[i]);
+    സ്വതന്ത്രം(replace_paths);
+    തിരികെ d;
 }
 
-data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int h)
+data load_data_old(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, അക്ഷരം **labels, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_paths(paths, n, w, h);
     d.y = load_labels_paths(paths, n, labels, k, 0);
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
 /*
@@ -1226,48 +1226,48 @@ data load_data_old(char **paths, int n, int m, char **labels, int k, int w, int 
    }
  */
 
-data load_data_super(char **paths, int n, int m, int w, int h, int scale)
+data load_data_super(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ scale)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
 
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     d.X.rows = n;
-    d.X.vals = calloc(n, sizeof(float*));
+    d.X.vals = calloc(n, വലുപ്പം(ദശാംശം*));
     d.X.cols = w*h*3;
 
     d.y.rows = n;
-    d.y.vals = calloc(n, sizeof(float*));
+    d.y.vals = calloc(n, വലുപ്പം(ദശാംശം*));
     d.y.cols = w*scale * h*scale * 3;
 
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         image im = load_image_color(paths[i], 0, 0);
         image crop = random_crop_image(im, w*scale, h*scale);
-        int flip = rand()%2;
-        if (flip) flip_image(crop);
+        പൂർണ്ണസംഖ്യ flip = rand()%2;
+        എങ്കിൽ (flip) flip_image(crop);
         image resize = resize_image(crop, w, h);
         d.X.vals[i] = resize.data;
         d.y.vals[i] = crop.data;
         free_image(im);
     }
 
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
-data load_data_regression(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_regression(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, പൂർണ്ണസംഖ്യ size, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
     d.y = load_regression_labels_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
-data select_data(data *orig, int *inds)
+data select_data(data *orig, പൂർണ്ണസംഖ്യ *inds)
 {
     data d = {0};
     d.shallow = 1;
@@ -1280,103 +1280,103 @@ data select_data(data *orig, int *inds)
     d.X.cols = orig[0].X.cols;
     d.y.cols = orig[0].y.cols;
 
-    d.X.vals = calloc(orig[0].X.rows, sizeof(float *));
-    d.y.vals = calloc(orig[0].y.rows, sizeof(float *));
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    d.X.vals = calloc(orig[0].X.rows, വലുപ്പം(ദശാംശം *));
+    d.y.vals = calloc(orig[0].y.rows, വലുപ്പം(ദശാംശം *));
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < d.X.rows; ++i){
         d.X.vals[i] = orig[inds[i]].X.vals[i];
         d.y.vals[i] = orig[inds[i]].y.vals[i];
     }
-    return d;
+    തിരികെ d;
 }
 
-data *tile_data(data orig, int divs, int size)
+data *tile_data(data orig, പൂർണ്ണസംഖ്യ divs, പൂർണ്ണസംഖ്യ size)
 {
-    data *ds = calloc(divs*divs, sizeof(data));
-    int i, j;
-#pragma omp parallel for
-    for(i = 0; i < divs*divs; ++i){
+    data *ds = calloc(divs*divs, വലുപ്പം(data));
+    പൂർണ്ണസംഖ്യ i, j;
+#pragma omp parallel വേണ്ടി
+    വേണ്ടി(i = 0; i < divs*divs; ++i){
         data d;
         d.shallow = 0;
         d.w = orig.w/divs * size;
         d.h = orig.h/divs * size;
         d.X.rows = orig.X.rows;
         d.X.cols = d.w*d.h*3;
-        d.X.vals = calloc(d.X.rows, sizeof(float*));
+        d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
 
         d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-        for(j = 0; j < orig.X.rows; ++j){
-            int x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
-            int y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
+#pragma omp parallel വേണ്ടി
+        വേണ്ടി(j = 0; j < orig.X.rows; ++j){
+            പൂർണ്ണസംഖ്യ x = (i%divs) * orig.w / divs - (d.w - orig.w/divs)/2;
+            പൂർണ്ണസംഖ്യ y = (i/divs) * orig.h / divs - (d.h - orig.h/divs)/2;
             image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[j]);
             d.X.vals[j] = crop_image(im, x, y, d.w, d.h).data;
         }
         ds[i] = d;
     }
-    return ds;
+    തിരികെ ds;
 }
 
-data resize_data(data orig, int w, int h)
+data resize_data(data orig, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
     data d = {0};
     d.shallow = 0;
     d.w = w;
     d.h = h;
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     d.X.rows = orig.X.rows;
     d.X.cols = w*h*3;
-    d.X.vals = calloc(d.X.rows, sizeof(float*));
+    d.X.vals = calloc(d.X.rows, വലുപ്പം(ദശാംശം*));
 
     d.y = copy_matrix(orig.y);
-#pragma omp parallel for
-    for(i = 0; i < orig.X.rows; ++i){
+#pragma omp parallel വേണ്ടി
+    വേണ്ടി(i = 0; i < orig.X.rows; ++i){
         image im = float_to_image(orig.w, orig.h, 3, orig.X.vals[i]);
         d.X.vals[i] = resize_image(im, w, h).data;
     }
-    return d;
+    തിരികെ d;
 }
 
-data load_data_augment(char **paths, int n, int m, char **labels, int k, tree *hierarchy, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure, int center)
+data load_data_augment(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, അക്ഷരം **labels, പൂർണ്ണസംഖ്യ k, വൃക്ഷം *hierarchy, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, പൂർണ്ണസംഖ്യ size, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure, പൂർണ്ണസംഖ്യ center)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.shallow = 0;
     d.w=size;
     d.h=size;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, center);
     d.y = load_labels_paths(paths, n, labels, k, hierarchy);
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
-data load_data_tag(char **paths, int n, int m, int k, int min, int max, int size, float angle, float aspect, float hue, float saturation, float exposure)
+data load_data_tag(അക്ഷരം **paths, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max, പൂർണ്ണസംഖ്യ size, ദശാംശം angle, ദശാംശം aspect, ദശാംശം hue, ദശാംശം saturation, ദശാംശം exposure)
 {
-    if(m) paths = get_random_paths(paths, n, m);
+    എങ്കിൽ(m) paths = get_random_paths(paths, n, m);
     data d = {0};
     d.w = size;
     d.h = size;
     d.shallow = 0;
     d.X = load_image_augment_paths(paths, n, min, max, size, angle, aspect, hue, saturation, exposure, 0);
     d.y = load_tags_paths(paths, n, k);
-    if(m) free(paths);
-    return d;
+    എങ്കിൽ(m) സ്വതന്ത്രം(paths);
+    തിരികെ d;
 }
 
 matrix concat_matrix(matrix m1, matrix m2)
 {
-    int i, count = 0;
+    പൂർണ്ണസംഖ്യ i, എണ്ണം = 0;
     matrix m;
     m.cols = m1.cols;
     m.rows = m1.rows+m2.rows;
-    m.vals = calloc(m1.rows + m2.rows, sizeof(float*));
-    for(i = 0; i < m1.rows; ++i){
-        m.vals[count++] = m1.vals[i];
+    m.vals = calloc(m1.rows + m2.rows, വലുപ്പം(ദശാംശം*));
+    വേണ്ടി(i = 0; i < m1.rows; ++i){
+        m.vals[എണ്ണം++] = m1.vals[i];
     }
-    for(i = 0; i < m2.rows; ++i){
-        m.vals[count++] = m2.vals[i];
+    വേണ്ടി(i = 0; i < m2.rows; ++i){
+        m.vals[എണ്ണം++] = m2.vals[i];
     }
-    return m;
+    തിരികെ m;
 }
 
 data concat_data(data d1, data d2)
@@ -1387,39 +1387,39 @@ data concat_data(data d1, data d2)
     d.y = concat_matrix(d1.y, d2.y);
     d.w = d1.w;
     d.h = d1.h;
-    return d;
+    തിരികെ d;
 }
 
-data concat_datas(data *d, int n)
+data concat_datas(data *d, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     data out = {0};
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         data new = concat_data(d[i], out);
         free_data(out);
         out = new;
     }
-    return out;
+    തിരികെ out;
 }
 
-data load_categorical_data_csv(char *filename, int target, int k)
+data load_categorical_data_csv(അക്ഷരം *filename, പൂർണ്ണസംഖ്യ target, പൂർണ്ണസംഖ്യ k)
 {
     data d = {0};
     d.shallow = 0;
     matrix X = csv_to_matrix(filename);
-    float *truth_1d = pop_column(&X, target);
-    float **truth = one_hot_encode(truth_1d, X.rows, k);
+    ദശാംശം *truth_1d = എടുക്കുക_column(&X, target);
+    ദശാംശം **truth = one_hot_encode(truth_1d, X.rows, k);
     matrix y;
     y.rows = X.rows;
     y.cols = k;
     y.vals = truth;
     d.X = X;
     d.y = y;
-    free(truth_1d);
-    return d;
+    സ്വതന്ത്രം(truth_1d);
+    തിരികെ d;
 }
 
-data load_cifar10_data(char *filename)
+data load_cifar10_data(അക്ഷരം *filename)
 {
     data d = {0};
     d.shallow = 0;
@@ -1430,49 +1430,49 @@ data load_cifar10_data(char *filename)
     d.y = y;
 
     FILE *fp = fopen(filename, "rb");
-    if(!fp) file_error(filename);
-    for(i = 0; i < 10000; ++i){
-        unsigned char bytes[3073];
+    എങ്കിൽ(!fp) file_error(filename);
+    വേണ്ടി(i = 0; i < 10000; ++i){
+        unsigned അക്ഷരം bytes[3073];
         fread(bytes, 1, 3073, fp);
-        int class = bytes[0];
+        പൂർണ്ണസംഖ്യ class = bytes[0];
         y.vals[i][class] = 1;
-        for(j = 0; j < X.cols; ++j){
-            X.vals[i][j] = (double)bytes[j+1];
+        വേണ്ടി(j = 0; j < X.cols; ++j){
+            X.vals[i][j] = (ഇരട്ട)bytes[j+1];
         }
     }
     scale_data_rows(d, 1./255);
     //normalize_data_rows(d);
     fclose(fp);
-    return d;
+    തിരികെ d;
 }
 
-void get_random_batch(data d, int n, float *X, float *y)
+ശൂന്യം get_random_batch(data d, പൂർണ്ണസംഖ്യ n, ദശാംശം *X, ദശാംശം *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = rand()%d.X.rows;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    പൂർണ്ണസംഖ്യ j;
+    വേണ്ടി(j = 0; j < n; ++j){
+        പൂർണ്ണസംഖ്യ index = rand()%d.X.rows;
+        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*വലുപ്പം(ദശാംശം));
+        memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*വലുപ്പം(ദശാംശം));
     }
 }
 
-void get_next_batch(data d, int n, int offset, float *X, float *y)
+ശൂന്യം get_next_batch(data d, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ offset, ദശാംശം *X, ദശാംശം *y)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int index = offset + j;
-        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*sizeof(float));
-        if(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*sizeof(float));
+    പൂർണ്ണസംഖ്യ j;
+    വേണ്ടി(j = 0; j < n; ++j){
+        പൂർണ്ണസംഖ്യ index = offset + j;
+        memcpy(X+j*d.X.cols, d.X.vals[index], d.X.cols*വലുപ്പം(ദശാംശം));
+        എങ്കിൽ(y) memcpy(y+j*d.y.cols, d.y.vals[index], d.y.cols*വലുപ്പം(ദശാംശം));
     }
 }
 
-void smooth_data(data d)
+ശൂന്യം smooth_data(data d)
 {
-    int i, j;
-    float scale = 1. / d.y.cols;
-    float eps = .1;
-    for(i = 0; i < d.y.rows; ++i){
-        for(j = 0; j < d.y.cols; ++j){
+    പൂർണ്ണസംഖ്യ i, j;
+    ദശാംശം scale = 1. / d.y.cols;
+    ദശാംശം eps = .1;
+    വേണ്ടി(i = 0; i < d.y.rows; ++i){
+        വേണ്ടി(j = 0; j < d.y.cols; ++j){
             d.y.vals[i][j] = eps * scale + (1-eps) * d.y.vals[i][j];
         }
     }
@@ -1482,25 +1482,25 @@ data load_all_cifar10()
 {
     data d = {0};
     d.shallow = 0;
-    int i,j,b;
+    പൂർണ്ണസംഖ്യ i,j,b;
     matrix X = make_matrix(50000, 3072);
     matrix y = make_matrix(50000, 10);
     d.X = X;
     d.y = y;
 
 
-    for(b = 0; b < 5; ++b){
-        char buff[256];
+    വേണ്ടി(b = 0; b < 5; ++b){
+        അക്ഷരം buff[256];
         sprintf(buff, "data/cifar/cifar-10-batches-bin/data_batch_%d.bin", b+1);
         FILE *fp = fopen(buff, "rb");
-        if(!fp) file_error(buff);
-        for(i = 0; i < 10000; ++i){
-            unsigned char bytes[3073];
+        എങ്കിൽ(!fp) file_error(buff);
+        വേണ്ടി(i = 0; i < 10000; ++i){
+            unsigned അക്ഷരം bytes[3073];
             fread(bytes, 1, 3073, fp);
-            int class = bytes[0];
+            പൂർണ്ണസംഖ്യ class = bytes[0];
             y.vals[i+b*10000][class] = 1;
-            for(j = 0; j < X.cols; ++j){
-                X.vals[i+b*10000][j] = (double)bytes[j+1];
+            വേണ്ടി(j = 0; j < X.cols; ++j){
+                X.vals[i+b*10000][j] = (ഇരട്ട)bytes[j+1];
             }
         }
         fclose(fp);
@@ -1508,43 +1508,43 @@ data load_all_cifar10()
     //normalize_data_rows(d);
     scale_data_rows(d, 1./255);
     smooth_data(d);
-    return d;
+    തിരികെ d;
 }
 
-data load_go(char *filename)
+data load_go(അക്ഷരം *filename)
 {
     FILE *fp = fopen(filename, "rb");
     matrix X = make_matrix(3363059, 361);
     matrix y = make_matrix(3363059, 361);
-    int row, col;
+    പൂർണ്ണസംഖ്യ row, col;
 
-    if(!fp) file_error(filename);
-    char *label;
-    int count = 0;
-    while((label = fgetl(fp))){
-        int i;
-        if(count == X.rows){
-            X = resize_matrix(X, count*2);
-            y = resize_matrix(y, count*2);
+    എങ്കിൽ(!fp) file_error(filename);
+    അക്ഷരം *label;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    ആകുമ്പോൾ((label = fgetl(fp))){
+        പൂർണ്ണസംഖ്യ i;
+        എങ്കിൽ(എണ്ണം == X.rows){
+            X = resize_matrix(X, എണ്ണം*2);
+            y = resize_matrix(y, എണ്ണം*2);
         }
         sscanf(label, "%d %d", &row, &col);
-        char *board = fgetl(fp);
+        അക്ഷരം *board = fgetl(fp);
 
-        int index = row*19 + col;
-        y.vals[count][index] = 1;
+        പൂർണ്ണസംഖ്യ index = row*19 + col;
+        y.vals[എണ്ണം][index] = 1;
 
-        for(i = 0; i < 19*19; ++i){
-            float val = 0;
-            if(board[i] == '1') val = 1;
-            else if(board[i] == '2') val = -1;
-            X.vals[count][i] = val;
+        വേണ്ടി(i = 0; i < 19*19; ++i){
+            ദശാംശം val = 0;
+            എങ്കിൽ(board[i] == '1') val = 1;
+            അല്ലെങ്കിൽ എങ്കിൽ(board[i] == '2') val = -1;
+            X.vals[എണ്ണം][i] = val;
         }
-        ++count;
-        free(label);
-        free(board);
+        ++എണ്ണം;
+        സ്വതന്ത്രം(label);
+        സ്വതന്ത്രം(board);
     }
-    X = resize_matrix(X, count);
-    y = resize_matrix(y, count);
+    X = resize_matrix(X, എണ്ണം);
+    y = resize_matrix(y, എണ്ണം);
 
     data d = {0};
     d.shallow = 0;
@@ -1554,16 +1554,16 @@ data load_go(char *filename)
 
     fclose(fp);
 
-    return d;
+    തിരികെ d;
 }
 
 
-void randomize_data(data d)
+ശൂന്യം randomize_data(data d)
 {
-    int i;
-    for(i = d.X.rows-1; i > 0; --i){
-        int index = rand()%i;
-        float *swap = d.X.vals[index];
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = d.X.rows-1; i > 0; --i){
+        പൂർണ്ണസംഖ്യ index = rand()%i;
+        ദശാംശം *swap = d.X.vals[index];
         d.X.vals[index] = d.X.vals[i];
         d.X.vals[i] = swap;
 
@@ -1573,18 +1573,18 @@ void randomize_data(data d)
     }
 }
 
-void scale_data_rows(data d, float s)
+ശൂന്യം scale_data_rows(data d, ദശാംശം s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < d.X.rows; ++i){
         scale_array(d.X.vals[i], d.X.cols, s);
     }
 }
 
-void translate_data_rows(data d, float s)
+ശൂന്യം translate_data_rows(data d, ദശാംശം s)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < d.X.rows; ++i){
         translate_array(d.X.vals[i], d.X.cols, s);
     }
 }
@@ -1595,22 +1595,22 @@ data copy_data(data d)
     c.w = d.w;
     c.h = d.h;
     c.shallow = 0;
-    c.num_boxes = d.num_boxes;
+    c.അക്കം_boxes = d.അക്കം_boxes;
     c.boxes = d.boxes;
     c.X = copy_matrix(d.X);
     c.y = copy_matrix(d.y);
-    return c;
+    തിരികെ c;
 }
 
-void normalize_data_rows(data d)
+ശൂന്യം normalize_data_rows(data d)
 {
-    int i;
-    for(i = 0; i < d.X.rows; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < d.X.rows; ++i){
         normalize_array(d.X.vals[i], d.X.cols);
     }
 }
 
-data get_data_part(data d, int part, int total)
+data get_data_part(data d, പൂർണ്ണസംഖ്യ part, പൂർണ്ണസംഖ്യ total)
 {
     data p = {0};
     p.shallow = 1;
@@ -1620,38 +1620,38 @@ data get_data_part(data d, int part, int total)
     p.y.cols = d.y.cols;
     p.X.vals = d.X.vals + d.X.rows * part / total;
     p.y.vals = d.y.vals + d.y.rows * part / total;
-    return p;
+    തിരികെ p;
 }
 
-data get_random_data(data d, int num)
+data get_random_data(data d, പൂർണ്ണസംഖ്യ അക്കം)
 {
     data r = {0};
     r.shallow = 1;
 
-    r.X.rows = num;
-    r.y.rows = num;
+    r.X.rows = അക്കം;
+    r.y.rows = അക്കം;
 
     r.X.cols = d.X.cols;
     r.y.cols = d.y.cols;
 
-    r.X.vals = calloc(num, sizeof(float *));
-    r.y.vals = calloc(num, sizeof(float *));
+    r.X.vals = calloc(അക്കം, വലുപ്പം(ദശാംശം *));
+    r.y.vals = calloc(അക്കം, വലുപ്പം(ദശാംശം *));
 
-    int i;
-    for(i = 0; i < num; ++i){
-        int index = rand()%d.X.rows;
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < അക്കം; ++i){
+        പൂർണ്ണസംഖ്യ index = rand()%d.X.rows;
         r.X.vals[i] = d.X.vals[index];
         r.y.vals[i] = d.y.vals[index];
     }
-    return r;
+    തിരികെ r;
 }
 
-data *split_data(data d, int part, int total)
+data *split_data(data d, പൂർണ്ണസംഖ്യ part, പൂർണ്ണസംഖ്യ total)
 {
-    data *split = calloc(2, sizeof(data));
-    int i;
-    int start = part*d.X.rows/total;
-    int end = (part+1)*d.X.rows/total;
+    data *split = calloc(2, വലുപ്പം(data));
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ start = part*d.X.rows/total;
+    പൂർണ്ണസംഖ്യ end = (part+1)*d.X.rows/total;
     data train;
     data test;
     train.shallow = test.shallow = 1;
@@ -1661,25 +1661,25 @@ data *split_data(data d, int part, int total)
     train.X.cols = test.X.cols = d.X.cols;
     train.y.cols = test.y.cols = d.y.cols;
 
-    train.X.vals = calloc(train.X.rows, sizeof(float*));
-    test.X.vals = calloc(test.X.rows, sizeof(float*));
-    train.y.vals = calloc(train.y.rows, sizeof(float*));
-    test.y.vals = calloc(test.y.rows, sizeof(float*));
+    train.X.vals = calloc(train.X.rows, വലുപ്പം(ദശാംശം*));
+    test.X.vals = calloc(test.X.rows, വലുപ്പം(ദശാംശം*));
+    train.y.vals = calloc(train.y.rows, വലുപ്പം(ദശാംശം*));
+    test.y.vals = calloc(test.y.rows, വലുപ്പം(ദശാംശം*));
 
-    for(i = 0; i < start; ++i){
+    വേണ്ടി(i = 0; i < start; ++i){
         train.X.vals[i] = d.X.vals[i];
         train.y.vals[i] = d.y.vals[i];
     }
-    for(i = start; i < end; ++i){
+    വേണ്ടി(i = start; i < end; ++i){
         test.X.vals[i-start] = d.X.vals[i];
         test.y.vals[i-start] = d.y.vals[i];
     }
-    for(i = end; i < d.X.rows; ++i){
+    വേണ്ടി(i = end; i < d.X.rows; ++i){
         train.X.vals[i-(end-start)] = d.X.vals[i];
         train.y.vals[i-(end-start)] = d.y.vals[i];
     }
     split[0] = train;
     split[1] = test;
-    return split;
+    തിരികെ split;
 }
 

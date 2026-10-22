@@ -1,29 +1,29 @@
 // Oh boy, why am I about to do this....
 #ifndef NETWORK_H
 #define NETWORK_H
-#include "darknet.h"
+#അന്തര്ഭാവ "darknet.h"
 
-#include "image.h"
-#include "layer.h"
-#include "data.h"
-#include "tree.h"
+#അന്തര്ഭാവ "image.h"
+#അന്തര്ഭാവ "layer.h"
+#അന്തര്ഭാവ "data.h"
+#അന്തര്ഭാവ "tree.h"
 
 
 #ifdef GPU
-void pull_network_output(network *net);
+ശൂന്യം pull_network_output(network *net);
 #endif
 
-void compare_networks(network *n1, network *n2, data d);
-char *get_layer_string(LAYER_TYPE a);
+ശൂന്യം compare_networks(network *n1, network *n2, data d);
+അക്ഷരം *get_layer_string(LAYER_TYPE a);
 
-network *make_network(int n);
+network *make_network(പൂർണ്ണസംഖ്യ n);
 
 
-float network_accuracy_multi(network *net, data d, int n);
-int get_predicted_class_network(network *net);
-void print_network(network *net);
-int resize_network(network *net, int w, int h);
-void calc_network_cost(network *net);
+ദശാംശം network_accuracy_multi(network *net, data d, പൂർണ്ണസംഖ്യ n);
+പൂർണ്ണസംഖ്യ get_predicted_class_network(network *net);
+ശൂന്യം print_network(network *net);
+പൂർണ്ണസംഖ്യ resize_network(network *net, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h);
+ശൂന്യം calc_network_cost(network *net);
 
 #endif
 

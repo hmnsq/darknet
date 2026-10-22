@@ -1,29 +1,29 @@
-#include "route_layer.h"
-#include "cuda.h"
-#include "blas.h"
+#അന്തര്ഭാവ "route_layer.h"
+#അന്തര്ഭാവ "cuda.h"
+#അന്തര്ഭാവ "blas.h"
 
-#include <stdio.h>
+#അന്തര്ഭാവ <stdio.h>
 
-route_layer make_route_layer(int batch, int n, int *input_layers, int *input_sizes)
+route_layer make_route_layer(പൂർണ്ണസംഖ്യ batch, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ *നിവേശം_layers, പൂർണ്ണസംഖ്യ *നിവേശം_sizes)
 {
     fprintf(stderr,"route ");
     route_layer l = {0};
     l.type = ROUTE;
     l.batch = batch;
     l.n = n;
-    l.input_layers = input_layers;
-    l.input_sizes = input_sizes;
-    int i;
-    int outputs = 0;
-    for(i = 0; i < n; ++i){
-        fprintf(stderr," %d", input_layers[i]);
-        outputs += input_sizes[i];
+    l.നിവേശം_layers = നിവേശം_layers;
+    l.നിവേശം_sizes = നിവേശം_sizes;
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ outputs = 0;
+    വേണ്ടി(i = 0; i < n; ++i){
+        fprintf(stderr," %d", നിവേശം_layers[i]);
+        outputs += നിവേശം_sizes[i];
     }
     fprintf(stderr, "\n");
     l.outputs = outputs;
     l.inputs = outputs;
-    l.delta =  calloc(outputs*batch, sizeof(float));
-    l.output = calloc(outputs*batch, sizeof(float));;
+    l.delta =  calloc(outputs*batch, വലുപ്പം(ദശാംശം));
+    l.output = calloc(outputs*batch, വലുപ്പം(ദശാംശം));;
 
     l.forward = forward_route_layer;
     l.backward = backward_route_layer;
@@ -34,33 +34,33 @@ route_layer make_route_layer(int batch, int n, int *input_layers, int *input_siz
     l.delta_gpu =  cuda_make_array(l.delta, outputs*batch);
     l.output_gpu = cuda_make_array(l.output, outputs*batch);
     #endif
-    return l;
+    തിരികെ l;
 }
 
-void resize_route_layer(route_layer *l, network *net)
+ശൂന്യം resize_route_layer(route_layer *l, network *net)
 {
-    int i;
-    layer first = net->layers[l->input_layers[0]];
+    പൂർണ്ണസംഖ്യ i;
+    layer first = net->layers[l->നിവേശം_layers[0]];
     l->out_w = first.out_w;
     l->out_h = first.out_h;
     l->out_c = first.out_c;
     l->outputs = first.outputs;
-    l->input_sizes[0] = first.outputs;
-    for(i = 1; i < l->n; ++i){
-        int index = l->input_layers[i];
+    l->നിവേശം_sizes[0] = first.outputs;
+    വേണ്ടി(i = 1; i < l->n; ++i){
+        പൂർണ്ണസംഖ്യ index = l->നിവേശം_layers[i];
         layer next = net->layers[index];
         l->outputs += next.outputs;
-        l->input_sizes[i] = next.outputs;
-        if(next.out_w == first.out_w && next.out_h == first.out_h){
+        l->നിവേശം_sizes[i] = next.outputs;
+        എങ്കിൽ(next.out_w == first.out_w && next.out_h == first.out_h){
             l->out_c += next.out_c;
-        }else{
+        }അല്ലെങ്കിൽ{
             printf("%d %d, %d %d\n", next.out_w, next.out_h, first.out_w, first.out_h);
             l->out_h = l->out_w = l->out_c = 0;
         }
     }
     l->inputs = l->outputs;
-    l->delta =  realloc(l->delta, l->outputs*l->batch*sizeof(float));
-    l->output = realloc(l->output, l->outputs*l->batch*sizeof(float));
+    l->delta =  realloc(l->delta, l->outputs*l->batch*വലുപ്പം(ദശാംശം));
+    l->output = realloc(l->output, l->outputs*l->batch*വലുപ്പം(ദശാംശം));
 
 #ifdef GPU
     cuda_free(l->output_gpu);
@@ -71,64 +71,64 @@ void resize_route_layer(route_layer *l, network *net)
     
 }
 
-void forward_route_layer(const route_layer l, network net)
+ശൂന്യം forward_route_layer(സ്ഥിരം route_layer l, network net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *input = net.layers[index].output;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            copy_cpu(input_size, input + j*input_size, 1, l.output + offset + j*l.outputs, 1);
+    പൂർണ്ണസംഖ്യ i, j;
+    പൂർണ്ണസംഖ്യ offset = 0;
+    വേണ്ടി(i = 0; i < l.n; ++i){
+        പൂർണ്ണസംഖ്യ index = l.നിവേശം_layers[i];
+        ദശാംശം *നിവേശം = net.layers[index].output;
+        പൂർണ്ണസംഖ്യ നിവേശം_size = l.നിവേശം_sizes[i];
+        വേണ്ടി(j = 0; j < l.batch; ++j){
+            copy_cpu(നിവേശം_size, നിവേശം + j*നിവേശം_size, 1, l.output + offset + j*l.outputs, 1);
         }
-        offset += input_size;
+        offset += നിവേശം_size;
     }
 }
 
-void backward_route_layer(const route_layer l, network net)
+ശൂന്യം backward_route_layer(സ്ഥിരം route_layer l, network net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *delta = net.layers[index].delta;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            axpy_cpu(input_size, 1, l.delta + offset + j*l.outputs, 1, delta + j*input_size, 1);
+    പൂർണ്ണസംഖ്യ i, j;
+    പൂർണ്ണസംഖ്യ offset = 0;
+    വേണ്ടി(i = 0; i < l.n; ++i){
+        പൂർണ്ണസംഖ്യ index = l.നിവേശം_layers[i];
+        ദശാംശം *delta = net.layers[index].delta;
+        പൂർണ്ണസംഖ്യ നിവേശം_size = l.നിവേശം_sizes[i];
+        വേണ്ടി(j = 0; j < l.batch; ++j){
+            axpy_cpu(നിവേശം_size, 1, l.delta + offset + j*l.outputs, 1, delta + j*നിവേശം_size, 1);
         }
-        offset += input_size;
+        offset += നിവേശം_size;
     }
 }
 
 #ifdef GPU
-void forward_route_layer_gpu(const route_layer l, network net)
+ശൂന്യം forward_route_layer_gpu(സ്ഥിരം route_layer l, network net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *input = net.layers[index].output_gpu;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            copy_gpu(input_size, input + j*input_size, 1, l.output_gpu + offset + j*l.outputs, 1);
+    പൂർണ്ണസംഖ്യ i, j;
+    പൂർണ്ണസംഖ്യ offset = 0;
+    വേണ്ടി(i = 0; i < l.n; ++i){
+        പൂർണ്ണസംഖ്യ index = l.നിവേശം_layers[i];
+        ദശാംശം *നിവേശം = net.layers[index].output_gpu;
+        പൂർണ്ണസംഖ്യ നിവേശം_size = l.നിവേശം_sizes[i];
+        വേണ്ടി(j = 0; j < l.batch; ++j){
+            copy_gpu(നിവേശം_size, നിവേശം + j*നിവേശം_size, 1, l.output_gpu + offset + j*l.outputs, 1);
         }
-        offset += input_size;
+        offset += നിവേശം_size;
     }
 }
 
-void backward_route_layer_gpu(const route_layer l, network net)
+ശൂന്യം backward_route_layer_gpu(സ്ഥിരം route_layer l, network net)
 {
-    int i, j;
-    int offset = 0;
-    for(i = 0; i < l.n; ++i){
-        int index = l.input_layers[i];
-        float *delta = net.layers[index].delta_gpu;
-        int input_size = l.input_sizes[i];
-        for(j = 0; j < l.batch; ++j){
-            axpy_gpu(input_size, 1, l.delta_gpu + offset + j*l.outputs, 1, delta + j*input_size, 1);
+    പൂർണ്ണസംഖ്യ i, j;
+    പൂർണ്ണസംഖ്യ offset = 0;
+    വേണ്ടി(i = 0; i < l.n; ++i){
+        പൂർണ്ണസംഖ്യ index = l.നിവേശം_layers[i];
+        ദശാംശം *delta = net.layers[index].delta_gpu;
+        പൂർണ്ണസംഖ്യ നിവേശം_size = l.നിവേശം_sizes[i];
+        വേണ്ടി(j = 0; j < l.batch; ++j){
+            axpy_gpu(നിവേശം_size, 1, l.delta_gpu + offset + j*l.outputs, 1, delta + j*നിവേശം_size, 1);
         }
-        offset += input_size;
+        offset += നിവേശം_size;
     }
 }
 #endif

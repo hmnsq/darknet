@@ -1,61 +1,61 @@
 #ifdef OPENCV
 
-#include "stdio.h"
-#include "stdlib.h"
-#include "opencv2/opencv.hpp"
-#include "image.h"
+#അന്തര്ഭാവ "stdio.h"
+#അന്തര്ഭാവ "stdlib.h"
+#അന്തര്ഭാവ "opencv2/opencv.hpp"
+#അന്തര്ഭാവ "image.h"
 
-using namespace cv;
+using നാമാകാശ cv;
 
-extern "C" {
+ബാഹ്യ "C" {
 
 IplImage *image_to_ipl(image im)
 {
-    int x,y,c;
+    പൂർണ്ണസംഖ്യ x,y,c;
     IplImage *disp = cvCreateImage(cvSize(im.w,im.h), IPL_DEPTH_8U, im.c);
-    int step = disp->widthStep;
-    for(y = 0; y < im.h; ++y){
-        for(x = 0; x < im.w; ++x){
-            for(c= 0; c < im.c; ++c){
-                float val = im.data[c*im.h*im.w + y*im.w + x];
-                disp->imageData[y*step + x*im.c + c] = (unsigned char)(val*255);
+    പൂർണ്ണസംഖ്യ step = disp->widthStep;
+    വേണ്ടി(y = 0; y < im.h; ++y){
+        വേണ്ടി(x = 0; x < im.w; ++x){
+            വേണ്ടി(c= 0; c < im.c; ++c){
+                ദശാംശം val = im.data[c*im.h*im.w + y*im.w + x];
+                disp->imageData[y*step + x*im.c + c] = (unsigned അക്ഷരം)(val*255);
             }
         }
     }
-    return disp;
+    തിരികെ disp;
 }
 
 image ipl_to_image(IplImage* src)
 {
-    int h = src->height;
-    int w = src->width;
-    int c = src->nChannels;
+    പൂർണ്ണസംഖ്യ h = src->height;
+    പൂർണ്ണസംഖ്യ w = src->width;
+    പൂർണ്ണസംഖ്യ c = src->nChannels;
     image im = make_image(w, h, c);
-    unsigned char *data = (unsigned char *)src->imageData;
-    int step = src->widthStep;
-    int i, j, k;
+    unsigned അക്ഷരം *data = (unsigned അക്ഷരം *)src->imageData;
+    പൂർണ്ണസംഖ്യ step = src->widthStep;
+    പൂർണ്ണസംഖ്യ i, j, k;
 
-    for(i = 0; i < h; ++i){
-        for(k= 0; k < c; ++k){
-            for(j = 0; j < w; ++j){
+    വേണ്ടി(i = 0; i < h; ++i){
+        വേണ്ടി(k= 0; k < c; ++k){
+            വേണ്ടി(j = 0; j < w; ++j){
                 im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
             }
         }
     }
-    return im;
+    തിരികെ im;
 }
 
 Mat image_to_mat(image im)
 {
     image copy = copy_image(im);
     constrain_image(copy);
-    if(im.c == 3) rgbgr_image(copy);
+    എങ്കിൽ(im.c == 3) rgbgr_image(copy);
 
     IplImage *ipl = image_to_ipl(copy);
-    Mat m = cvarrToMat(ipl, true);
+    Mat m = cvarrToMat(ipl, സത്യം);
     cvReleaseImage(&ipl);
     free_image(copy);
-    return m;
+    തിരികെ m;
 }
 
 image mat_to_image(Mat m)
@@ -63,70 +63,70 @@ image mat_to_image(Mat m)
     IplImage ipl = m;
     image im = ipl_to_image(&ipl);
     rgbgr_image(im);
-    return im;
+    തിരികെ im;
 }
 
-void *open_video_stream(const char *f, int c, int w, int h, int fps)
+ശൂന്യം *open_video_stream(സ്ഥിരം അക്ഷരം *f, പൂർണ്ണസംഖ്യ c, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ fps)
 {
     VideoCapture *cap;
-    if(f) cap = new VideoCapture(f);
-    else cap = new VideoCapture(c);
-    if(!cap->isOpened()) return 0;
-    if(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
-    if(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
-    if(fps) cap->set(CV_CAP_PROP_FPS, w);
-    return (void *) cap;
+    എങ്കിൽ(f) cap = പുതിയ VideoCapture(f);
+    അല്ലെങ്കിൽ cap = പുതിയ VideoCapture(c);
+    എങ്കിൽ(!cap->isOpened()) തിരികെ 0;
+    എങ്കിൽ(w) cap->set(CV_CAP_PROP_FRAME_WIDTH, w);
+    എങ്കിൽ(h) cap->set(CV_CAP_PROP_FRAME_HEIGHT, w);
+    എങ്കിൽ(fps) cap->set(CV_CAP_PROP_FPS, w);
+    തിരികെ (ശൂന്യം *) cap;
 }
 
-image get_image_from_stream(void *p)
+image get_image_from_stream(ശൂന്യം *p)
 {
     VideoCapture *cap = (VideoCapture *)p;
     Mat m;
     *cap >> m;
-    if(m.empty()) return make_empty_image(0,0,0);
-    return mat_to_image(m);
+    എങ്കിൽ(m.empty()) തിരികെ make_empty_image(0,0,0);
+    തിരികെ mat_to_image(m);
 }
 
-image load_image_cv(char *filename, int channels)
+image load_image_cv(അക്ഷരം *filename, പൂർണ്ണസംഖ്യ channels)
 {
-    int flag = -1;
-    if (channels == 0) flag = -1;
-    else if (channels == 1) flag = 0;
-    else if (channels == 3) flag = 1;
-    else {
+    പൂർണ്ണസംഖ്യ flag = -1;
+    എങ്കിൽ (channels == 0) flag = -1;
+    അല്ലെങ്കിൽ എങ്കിൽ (channels == 1) flag = 0;
+    അല്ലെങ്കിൽ എങ്കിൽ (channels == 3) flag = 1;
+    അല്ലെങ്കിൽ {
         fprintf(stderr, "OpenCV can't force load with %d channels\n", channels);
     }
     Mat m;
     m = imread(filename, flag);
-    if(!m.data){
+    എങ്കിൽ(!m.data){
         fprintf(stderr, "Cannot load image \"%s\"\n", filename);
-        char buff[256];
+        അക്ഷരം buff[256];
         sprintf(buff, "echo %s >> bad.list", filename);
         system(buff);
-        return make_image(10,10,3);
+        തിരികെ make_image(10,10,3);
         //exit(0);
     }
     image im = mat_to_image(m);
-    return im;
+    തിരികെ im;
 }
 
-int show_image_cv(image im, const char* name, int ms)
+പൂർണ്ണസംഖ്യ show_image_cv(image im, സ്ഥിരം അക്ഷരം* name, പൂർണ്ണസംഖ്യ ms)
 {
     Mat m = image_to_mat(im);
     imshow(name, m);
-    int c = waitKey(ms);
-    if (c != -1) c = c%256;
-    return c;
+    പൂർണ്ണസംഖ്യ c = wait_താക്കോൽ(ms);
+    എങ്കിൽ (c != -1) c = c%256;
+    തിരികെ c;
 }
 
-void make_window(char *name, int w, int h, int fullscreen)
+ശൂന്യം make_window(അക്ഷരം *name, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ fullscreen)
 {
     namedWindow(name, WINDOW_NORMAL); 
-    if (fullscreen) {
+    എങ്കിൽ (fullscreen) {
         setWindowProperty(name, CV_WND_PROP_FULLSCREEN, CV_WINDOW_FULLSCREEN);
-    } else {
+    } അല്ലെങ്കിൽ {
         resizeWindow(name, w, h);
-        if(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
+        എങ്കിൽ(strcmp(name, "Demo") == 0) moveWindow(name, 0, 0);
     }
 }
 

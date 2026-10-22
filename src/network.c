@@ -1,36 +1,36 @@
-#include <stdio.h>
-#include <time.h>
-#include <assert.h>
-#include "network.h"
-#include "image.h"
-#include "data.h"
-#include "utils.h"
-#include "blas.h"
+#അന്തര്ഭാവ <stdio.h>
+#അന്തര്ഭാവ <time.h>
+#അന്തര്ഭാവ <assert.h>
+#അന്തര്ഭാവ "network.h"
+#അന്തര്ഭാവ "image.h"
+#അന്തര്ഭാവ "data.h"
+#അന്തര്ഭാവ "utils.h"
+#അന്തര്ഭാവ "blas.h"
 
-#include "crop_layer.h"
-#include "connected_layer.h"
-#include "gru_layer.h"
-#include "rnn_layer.h"
-#include "crnn_layer.h"
-#include "local_layer.h"
-#include "convolutional_layer.h"
-#include "activation_layer.h"
-#include "detection_layer.h"
-#include "region_layer.h"
-#include "yolo_layer.h"
-#include "normalization_layer.h"
-#include "batchnorm_layer.h"
-#include "maxpool_layer.h"
-#include "reorg_layer.h"
-#include "avgpool_layer.h"
-#include "cost_layer.h"
-#include "softmax_layer.h"
-#include "dropout_layer.h"
-#include "route_layer.h"
-#include "upsample_layer.h"
-#include "shortcut_layer.h"
-#include "parser.h"
-#include "data.h"
+#അന്തര്ഭാവ "crop_layer.h"
+#അന്തര്ഭാവ "connected_layer.h"
+#അന്തര്ഭാവ "gru_layer.h"
+#അന്തര്ഭാവ "rnn_layer.h"
+#അന്തര്ഭാവ "crnn_layer.h"
+#അന്തര്ഭാവ "local_layer.h"
+#അന്തര്ഭാവ "convolutional_layer.h"
+#അന്തര്ഭാവ "activation_layer.h"
+#അന്തര്ഭാവ "detection_layer.h"
+#അന്തര്ഭാവ "region_layer.h"
+#അന്തര്ഭാവ "yolo_layer.h"
+#അന്തര്ഭാവ "normalization_layer.h"
+#അന്തര്ഭാവ "batchnorm_layer.h"
+#അന്തര്ഭാവ "maxpool_layer.h"
+#അന്തര്ഭാവ "reorg_layer.h"
+#അന്തര്ഭാവ "avgpool_layer.h"
+#അന്തര്ഭാവ "cost_layer.h"
+#അന്തര്ഭാവ "softmax_layer.h"
+#അന്തര്ഭാവ "dropout_layer.h"
+#അന്തര്ഭാവ "route_layer.h"
+#അന്തര്ഭാവ "upsample_layer.h"
+#അന്തര്ഭാവ "shortcut_layer.h"
+#അന്തര്ഭാവ "parser.h"
+#അന്തര്ഭാവ "data.h"
 
 load_args get_base_args(network *net)
 {
@@ -47,179 +47,179 @@ load_args get_base_args(network *net)
     args.center = net->center;
     args.saturation = net->saturation;
     args.hue = net->hue;
-    return args;
+    തിരികെ args;
 }
 
-network *load_network(char *cfg, char *weights, int clear)
+network *load_network(അക്ഷരം *cfg, അക്ഷരം *weights, പൂർണ്ണസംഖ്യ clear)
 {
     network *net = parse_network_cfg(cfg);
-    if(weights && weights[0] != 0){
+    എങ്കിൽ(weights && weights[0] != 0){
         load_weights(net, weights);
     }
-    if(clear) (*net->seen) = 0;
-    return net;
+    എങ്കിൽ(clear) (*net->seen) = 0;
+    തിരികെ net;
 }
 
 size_t get_current_batch(network *net)
 {
-    size_t batch_num = (*net->seen)/(net->batch*net->subdivisions);
-    return batch_num;
+    size_t batch_അക്കം = (*net->seen)/(net->batch*net->subdivisions);
+    തിരികെ batch_അക്കം;
 }
 
-void reset_network_state(network *net, int b)
+ശൂന്യം reset_network_state(network *net, പൂർണ്ണസംഖ്യ b)
 {
-    int i;
-    for (i = 0; i < net->n; ++i) {
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി (i = 0; i < net->n; ++i) {
         #ifdef GPU
         layer l = net->layers[i];
-        if(l.state_gpu){
+        എങ്കിൽ(l.state_gpu){
             fill_gpu(l.outputs, 0, l.state_gpu + l.outputs*b, 1);
         }
-        if(l.h_gpu){
+        എങ്കിൽ(l.h_gpu){
             fill_gpu(l.outputs, 0, l.h_gpu + l.outputs*b, 1);
         }
         #endif
     }
 }
 
-void reset_rnn(network *net)
+ശൂന്യം reset_rnn(network *net)
 {
     reset_network_state(net, 0);
 }
 
-float get_current_rate(network *net)
+ദശാംശം get_current_rate(network *net)
 {
-    size_t batch_num = get_current_batch(net);
-    int i;
-    float rate;
-    if (batch_num < net->burn_in) return net->learning_rate * pow((float)batch_num / net->burn_in, net->power);
-    switch (net->policy) {
-        case CONSTANT:
-            return net->learning_rate;
-        case STEP:
-            return net->learning_rate * pow(net->scale, batch_num/net->step);
-        case STEPS:
+    size_t batch_അക്കം = get_current_batch(net);
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം rate;
+    എങ്കിൽ (batch_അക്കം < net->burn_in) തിരികെ net->learning_rate * pow((ദശാംശം)batch_അക്കം / net->burn_in, net->power);
+    തിരഞ്ഞെടുപ്പ് (net->policy) {
+        അവസ്ഥ CONSTANT:
+            തിരികെ net->learning_rate;
+        അവസ്ഥ STEP:
+            തിരികെ net->learning_rate * pow(net->scale, batch_അക്കം/net->step);
+        അവസ്ഥ STEPS:
             rate = net->learning_rate;
-            for(i = 0; i < net->num_steps; ++i){
-                if(net->steps[i] > batch_num) return rate;
+            വേണ്ടി(i = 0; i < net->അക്കം_steps; ++i){
+                എങ്കിൽ(net->steps[i] > batch_അക്കം) തിരികെ rate;
                 rate *= net->scales[i];
             }
-            return rate;
-        case EXP:
-            return net->learning_rate * pow(net->gamma, batch_num);
-        case POLY:
-            return net->learning_rate * pow(1 - (float)batch_num / net->max_batches, net->power);
-        case RANDOM:
-            return net->learning_rate * pow(rand_uniform(0,1), net->power);
-        case SIG:
-            return net->learning_rate * (1./(1.+exp(net->gamma*(batch_num - net->step))));
-        default:
+            തിരികെ rate;
+        അവസ്ഥ EXP:
+            തിരികെ net->learning_rate * pow(net->gamma, batch_അക്കം);
+        അവസ്ഥ POLY:
+            തിരികെ net->learning_rate * pow(1 - (ദശാംശം)batch_അക്കം / net->max_batches, net->power);
+        അവസ്ഥ RANDOM:
+            തിരികെ net->learning_rate * pow(rand_uniform(0,1), net->power);
+        അവസ്ഥ SIG:
+            തിരികെ net->learning_rate * (1./(1.+exp(net->gamma*(batch_അക്കം - net->step))));
+        സ്ഥിരസ്ഥിതി:
             fprintf(stderr, "Policy is weird!\n");
-            return net->learning_rate;
+            തിരികെ net->learning_rate;
     }
 }
 
-char *get_layer_string(LAYER_TYPE a)
+അക്ഷരം *get_layer_string(LAYER_TYPE a)
 {
-    switch(a){
-        case CONVOLUTIONAL:
-            return "convolutional";
-        case ACTIVE:
-            return "activation";
-        case LOCAL:
-            return "local";
-        case DECONVOLUTIONAL:
-            return "deconvolutional";
-        case CONNECTED:
-            return "connected";
-        case RNN:
-            return "rnn";
-        case GRU:
-            return "gru";
-        case LSTM:
-	    return "lstm";
-        case CRNN:
-            return "crnn";
-        case MAXPOOL:
-            return "maxpool";
-        case REORG:
-            return "reorg";
-        case AVGPOOL:
-            return "avgpool";
-        case SOFTMAX:
-            return "softmax";
-        case DETECTION:
-            return "detection";
-        case REGION:
-            return "region";
-        case YOLO:
-            return "yolo";
-        case DROPOUT:
-            return "dropout";
-        case CROP:
-            return "crop";
-        case COST:
-            return "cost";
-        case ROUTE:
-            return "route";
-        case SHORTCUT:
-            return "shortcut";
-        case NORMALIZATION:
-            return "normalization";
-        case BATCHNORM:
-            return "batchnorm";
-        default:
-            break;
+    തിരഞ്ഞെടുപ്പ്(a){
+        അവസ്ഥ CONVOLUTIONAL:
+            തിരികെ "convolutional";
+        അവസ്ഥ ACTIVE:
+            തിരികെ "activation";
+        അവസ്ഥ LOCAL:
+            തിരികെ "local";
+        അവസ്ഥ DECONVOLUTIONAL:
+            തിരികെ "deconvolutional";
+        അവസ്ഥ CONNECTED:
+            തിരികെ "connected";
+        അവസ്ഥ RNN:
+            തിരികെ "rnn";
+        അവസ്ഥ GRU:
+            തിരികെ "gru";
+        അവസ്ഥ LSTM:
+	    തിരികെ "lstm";
+        അവസ്ഥ CRNN:
+            തിരികെ "crnn";
+        അവസ്ഥ MAXPOOL:
+            തിരികെ "maxpool";
+        അവസ്ഥ REORG:
+            തിരികെ "reorg";
+        അവസ്ഥ AVGPOOL:
+            തിരികെ "avgpool";
+        അവസ്ഥ SOFTMAX:
+            തിരികെ "softmax";
+        അവസ്ഥ DETECTION:
+            തിരികെ "detection";
+        അവസ്ഥ REGION:
+            തിരികെ "region";
+        അവസ്ഥ YOLO:
+            തിരികെ "yolo";
+        അവസ്ഥ DROPOUT:
+            തിരികെ "dropout";
+        അവസ്ഥ CROP:
+            തിരികെ "crop";
+        അവസ്ഥ COST:
+            തിരികെ "cost";
+        അവസ്ഥ ROUTE:
+            തിരികെ "route";
+        അവസ്ഥ SHORTCUT:
+            തിരികെ "shortcut";
+        അവസ്ഥ NORMALIZATION:
+            തിരികെ "normalization";
+        അവസ്ഥ BATCHNORM:
+            തിരികെ "batchnorm";
+        സ്ഥിരസ്ഥിതി:
+            നിർത്തുക;
     }
-    return "none";
+    തിരികെ "none";
 }
 
-network *make_network(int n)
+network *make_network(പൂർണ്ണസംഖ്യ n)
 {
-    network *net = calloc(1, sizeof(network));
+    network *net = calloc(1, വലുപ്പം(network));
     net->n = n;
-    net->layers = calloc(net->n, sizeof(layer));
-    net->seen = calloc(1, sizeof(size_t));
-    net->t    = calloc(1, sizeof(int));
-    net->cost = calloc(1, sizeof(float));
-    return net;
+    net->layers = calloc(net->n, വലുപ്പം(layer));
+    net->seen = calloc(1, വലുപ്പം(size_t));
+    net->t    = calloc(1, വലുപ്പം(പൂർണ്ണസംഖ്യ));
+    net->cost = calloc(1, വലുപ്പം(ദശാംശം));
+    തിരികെ net;
 }
 
-void forward_network(network *netp)
+ശൂന്യം forward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    എങ്കിൽ(netp->gpu_index >= 0){
         forward_network_gpu(netp);   
-        return;
+        തിരികെ;
     }
 #endif
     network net = *netp;
-    int i;
-    for(i = 0; i < net.n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta){
+        എങ്കിൽ(l.delta){
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
         l.forward(l, net);
-        net.input = l.output;
-        if(l.truth) {
+        net.നിവേശം = l.output;
+        എങ്കിൽ(l.truth) {
             net.truth = l.output;
         }
     }
     calc_network_cost(netp);
 }
 
-void update_network(network *netp)
+ശൂന്യം update_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    എങ്കിൽ(netp->gpu_index >= 0){
         update_network_gpu(netp);   
-        return;
+        തിരികെ;
     }
 #endif
     network net = *netp;
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -232,53 +232,53 @@ void update_network(network *netp)
     ++*net.t;
     a.t = *net.t;
 
-    for(i = 0; i < net.n; ++i){
+    വേണ്ടി(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update){
+        എങ്കിൽ(l.update){
             l.update(l, a);
         }
     }
 }
 
-void calc_network_cost(network *netp)
+ശൂന്യം calc_network_cost(network *netp)
 {
     network net = *netp;
-    int i;
-    float sum = 0;
-    int count = 0;
-    for(i = 0; i < net.n; ++i){
-        if(net.layers[i].cost){
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    വേണ്ടി(i = 0; i < net.n; ++i){
+        എങ്കിൽ(net.layers[i].cost){
             sum += net.layers[i].cost[0];
-            ++count;
+            ++എണ്ണം;
         }
     }
-    *net.cost = sum/count;
+    *net.cost = sum/എണ്ണം;
 }
 
-int get_predicted_class_network(network *net)
+പൂർണ്ണസംഖ്യ get_predicted_class_network(network *net)
 {
-    return max_index(net->output, net->outputs);
+    തിരികെ max_index(net->output, net->outputs);
 }
 
-void backward_network(network *netp)
+ശൂന്യം backward_network(network *netp)
 {
 #ifdef GPU
-    if(netp->gpu_index >= 0){
+    എങ്കിൽ(netp->gpu_index >= 0){
         backward_network_gpu(netp);   
-        return;
+        തിരികെ;
     }
 #endif
     network net = *netp;
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     network orig = net;
-    for(i = net.n-1; i >= 0; --i){
+    വേണ്ടി(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        എങ്കിൽ(l.stopbackward) നിർത്തുക;
+        എങ്കിൽ(i == 0){
             net = orig;
-        }else{
+        }അല്ലെങ്കിൽ{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.നിവേശം = prev.output;
             net.delta = prev.delta;
         }
         net.index = i;
@@ -286,67 +286,67 @@ void backward_network(network *netp)
     }
 }
 
-float train_network_datum(network *net)
+ദശാംശം train_network_datum(network *net)
 {
     *net->seen += net->batch;
     net->train = 1;
     forward_network(net);
     backward_network(net);
-    float error = *net->cost;
-    if(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
-    return error;
+    ദശാംശം error = *net->cost;
+    എങ്കിൽ(((*net->seen)/net->batch)%net->subdivisions == 0) update_network(net);
+    തിരികെ error;
 }
 
-float train_network_sgd(network *net, data d, int n)
+ദശാംശം train_network_sgd(network *net, data d, പൂർണ്ണസംഖ്യ n)
 {
-    int batch = net->batch;
+    പൂർണ്ണസംഖ്യ batch = net->batch;
 
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        get_random_batch(d, batch, net->input, net->truth);
-        float err = train_network_datum(net);
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; ++i){
+        get_random_batch(d, batch, net->നിവേശം, net->truth);
+        ദശാംശം err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    തിരികെ (ദശാംശം)sum/(n*batch);
 }
 
-float train_network(network *net, data d)
+ദശാംശം train_network(network *net, data d)
 {
-    assert(d.X.rows % net->batch == 0);
-    int batch = net->batch;
-    int n = d.X.rows / batch;
+    പ്രതിജ്ഞാ(d.X.rows % net->batch == 0);
+    പൂർണ്ണസംഖ്യ batch = net->batch;
+    പൂർണ്ണസംഖ്യ n = d.X.rows / batch;
 
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
-        get_next_batch(d, batch, i*batch, net->input, net->truth);
-        float err = train_network_datum(net);
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; ++i){
+        get_next_batch(d, batch, i*batch, net->നിവേശം, net->truth);
+        ദശാംശം err = train_network_datum(net);
         sum += err;
     }
-    return (float)sum/(n*batch);
+    തിരികെ (ദശാംശം)sum/(n*batch);
 }
 
-void set_temp_network(network *net, float t)
+ശൂന്യം set_temp_network(network *net, ദശാംശം t)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net->n; ++i){
         net->layers[i].temperature = t;
     }
 }
 
 
-void set_batch_network(network *net, int b)
+ശൂന്യം set_batch_network(network *net, പൂർണ്ണസംഖ്യ b)
 {
     net->batch = b;
-    int i;
-    for(i = 0; i < net->n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net->n; ++i){
         net->layers[i].batch = b;
 #ifdef CUDNN
-        if(net->layers[i].type == CONVOLUTIONAL){
+        എങ്കിൽ(net->layers[i].type == CONVOLUTIONAL){
             cudnn_convolutional_setup(net->layers + i);
         }
-        if(net->layers[i].type == DECONVOLUTIONAL){
+        എങ്കിൽ(net->layers[i].type == DECONVOLUTIONAL){
             layer *l = net->layers + i;
             cudnnSetTensor4dDescriptor(l->dstTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, l->out_h, l->out_w);
             cudnnSetTensor4dDescriptor(l->normTensorDesc, CUDNN_TENSOR_NCHW, CUDNN_DATA_FLOAT, 1, l->out_c, 1, 1); 
@@ -355,378 +355,378 @@ void set_batch_network(network *net, int b)
     }
 }
 
-int resize_network(network *net, int w, int h)
+പൂർണ്ണസംഖ്യ resize_network(network *net, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h)
 {
 #ifdef GPU
     cuda_set_device(net->gpu_index);
     cuda_free(net->workspace);
 #endif
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     //if(w == net->w && h == net->h) return 0;
     net->w = w;
     net->h = h;
-    int inputs = 0;
+    പൂർണ്ണസംഖ്യ inputs = 0;
     size_t workspace_size = 0;
     //fprintf(stderr, "Resizing to %d x %d...\n", w, h);
     //fflush(stderr);
-    for (i = 0; i < net->n; ++i){
+    വേണ്ടി (i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        എങ്കിൽ(l.type == CONVOLUTIONAL){
             resize_convolutional_layer(&l, w, h);
-        }else if(l.type == CROP){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == CROP){
             resize_crop_layer(&l, w, h);
-        }else if(l.type == MAXPOOL){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == MAXPOOL){
             resize_maxpool_layer(&l, w, h);
-        }else if(l.type == REGION){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == REGION){
             resize_region_layer(&l, w, h);
-        }else if(l.type == YOLO){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == YOLO){
             resize_yolo_layer(&l, w, h);
-        }else if(l.type == ROUTE){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == ROUTE){
             resize_route_layer(&l, net);
-        }else if(l.type == SHORTCUT){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == SHORTCUT){
             resize_shortcut_layer(&l, w, h);
-        }else if(l.type == UPSAMPLE){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == UPSAMPLE){
             resize_upsample_layer(&l, w, h);
-        }else if(l.type == REORG){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == REORG){
             resize_reorg_layer(&l, w, h);
-        }else if(l.type == AVGPOOL){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == AVGPOOL){
             resize_avgpool_layer(&l, w, h);
-        }else if(l.type == NORMALIZATION){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == NORMALIZATION){
             resize_normalization_layer(&l, w, h);
-        }else if(l.type == COST){
+        }അല്ലെങ്കിൽ എങ്കിൽ(l.type == COST){
             resize_cost_layer(&l, inputs);
-        }else{
+        }അല്ലെങ്കിൽ{
             error("Cannot resize this type of layer");
         }
-        if(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
-        if(l.workspace_size > 2000000000) assert(0);
+        എങ്കിൽ(l.workspace_size > workspace_size) workspace_size = l.workspace_size;
+        എങ്കിൽ(l.workspace_size > 2000000000) പ്രതിജ്ഞാ(0);
         inputs = l.outputs;
         net->layers[i] = l;
         w = l.out_w;
         h = l.out_h;
-        if(l.type == AVGPOOL) break;
+        എങ്കിൽ(l.type == AVGPOOL) നിർത്തുക;
     }
     layer out = get_network_output_layer(net);
     net->inputs = net->layers[0].inputs;
     net->outputs = out.outputs;
     net->truths = out.outputs;
-    if(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
+    എങ്കിൽ(net->layers[net->n-1].truths) net->truths = net->layers[net->n-1].truths;
     net->output = out.output;
-    free(net->input);
-    free(net->truth);
-    net->input = calloc(net->inputs*net->batch, sizeof(float));
-    net->truth = calloc(net->truths*net->batch, sizeof(float));
+    സ്വതന്ത്രം(net->നിവേശം);
+    സ്വതന്ത്രം(net->truth);
+    net->നിവേശം = calloc(net->inputs*net->batch, വലുപ്പം(ദശാംശം));
+    net->truth = calloc(net->truths*net->batch, വലുപ്പം(ദശാംശം));
 #ifdef GPU
-    if(gpu_index >= 0){
-        cuda_free(net->input_gpu);
+    എങ്കിൽ(gpu_index >= 0){
+        cuda_free(net->നിവേശം_gpu);
         cuda_free(net->truth_gpu);
-        net->input_gpu = cuda_make_array(net->input, net->inputs*net->batch);
+        net->നിവേശം_gpu = cuda_make_array(net->നിവേശം, net->inputs*net->batch);
         net->truth_gpu = cuda_make_array(net->truth, net->truths*net->batch);
-        if(workspace_size){
-            net->workspace = cuda_make_array(0, (workspace_size-1)/sizeof(float)+1);
+        എങ്കിൽ(workspace_size){
+            net->workspace = cuda_make_array(0, (workspace_size-1)/വലുപ്പം(ദശാംശം)+1);
         }
-    }else {
-        free(net->workspace);
+    }അല്ലെങ്കിൽ {
+        സ്വതന്ത്രം(net->workspace);
         net->workspace = calloc(1, workspace_size);
     }
-#else
-    free(net->workspace);
+#അല്ലെങ്കിൽ
+    സ്വതന്ത്രം(net->workspace);
     net->workspace = calloc(1, workspace_size);
 #endif
     //fprintf(stderr, " Done!\n");
-    return 0;
+    തിരികെ 0;
 }
 
 layer get_network_detection_layer(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
-        if(net->layers[i].type == DETECTION){
-            return net->layers[i];
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net->n; ++i){
+        എങ്കിൽ(net->layers[i].type == DETECTION){
+            തിരികെ net->layers[i];
         }
     }
     fprintf(stderr, "Detection layer not found!!\n");
     layer l = {0};
-    return l;
+    തിരികെ l;
 }
 
-image get_network_image_layer(network *net, int i)
+image get_network_image_layer(network *net, പൂർണ്ണസംഖ്യ i)
 {
     layer l = net->layers[i];
 #ifdef GPU
     //cuda_pull_array(l.output_gpu, l.output, l.outputs);
 #endif
-    if (l.out_w && l.out_h && l.out_c){
-        return float_to_image(l.out_w, l.out_h, l.out_c, l.output);
+    എങ്കിൽ (l.out_w && l.out_h && l.out_c){
+        തിരികെ float_to_image(l.out_w, l.out_h, l.out_c, l.output);
     }
     image def = {0};
-    return def;
+    തിരികെ def;
 }
 
 image get_network_image(network *net)
 {
-    int i;
-    for(i = net->n-1; i >= 0; --i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = net->n-1; i >= 0; --i){
         image m = get_network_image_layer(net, i);
-        if(m.h != 0) return m;
+        എങ്കിൽ(m.h != 0) തിരികെ m;
     }
     image def = {0};
-    return def;
+    തിരികെ def;
 }
 
-void visualize_network(network *net)
+ശൂന്യം visualize_network(network *net)
 {
     image *prev = 0;
-    int i;
-    char buff[256];
-    for(i = 0; i < net->n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    അക്ഷരം buff[256];
+    വേണ്ടി(i = 0; i < net->n; ++i){
         sprintf(buff, "Layer %d", i);
         layer l = net->layers[i];
-        if(l.type == CONVOLUTIONAL){
+        എങ്കിൽ(l.type == CONVOLUTIONAL){
             prev = visualize_convolutional_layer(l, buff, prev);
         }
     } 
 }
 
-void top_predictions(network *net, int k, int *index)
+ശൂന്യം മുകൾ_predictions(network *net, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ *index)
 {
-    top_k(net->output, net->outputs, k, index);
+    മുകൾ_k(net->output, net->outputs, k, index);
 }
 
 
-float *network_predict(network *net, float *input)
+ദശാംശം *network_predict(network *net, ദശാംശം *നിവേശം)
 {
     network orig = *net;
-    net->input = input;
+    net->നിവേശം = നിവേശം;
     net->truth = 0;
     net->train = 0;
     net->delta = 0;
     forward_network(net);
-    float *out = net->output;
+    ദശാംശം *out = net->output;
     *net = orig;
-    return out;
+    തിരികെ out;
 }
 
-int num_detections(network *net, float thresh)
+പൂർണ്ണസംഖ്യ അക്കം_detections(network *net, ദശാംശം thresh)
 {
-    int i;
-    int s = 0;
-    for(i = 0; i < net->n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ s = 0;
+    വേണ്ടി(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        if(l.type == YOLO){
-            s += yolo_num_detections(l, thresh);
+        എങ്കിൽ(l.type == YOLO){
+            s += yolo_അക്കം_detections(l, thresh);
         }
-        if(l.type == DETECTION || l.type == REGION){
+        എങ്കിൽ(l.type == DETECTION || l.type == REGION){
             s += l.w*l.h*l.n;
         }
     }
-    return s;
+    തിരികെ s;
 }
 
-detection *make_network_boxes(network *net, float thresh, int *num)
+detection *make_network_boxes(network *net, ദശാംശം thresh, പൂർണ്ണസംഖ്യ *അക്കം)
 {
     layer l = net->layers[net->n - 1];
-    int i;
-    int nboxes = num_detections(net, thresh);
-    if(num) *num = nboxes;
-    detection *dets = calloc(nboxes, sizeof(detection));
-    for(i = 0; i < nboxes; ++i){
-        dets[i].prob = calloc(l.classes, sizeof(float));
-        if(l.coords > 4){
-            dets[i].mask = calloc(l.coords-4, sizeof(float));
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ nboxes = അക്കം_detections(net, thresh);
+    എങ്കിൽ(അക്കം) *അക്കം = nboxes;
+    detection *dets = calloc(nboxes, വലുപ്പം(detection));
+    വേണ്ടി(i = 0; i < nboxes; ++i){
+        dets[i].prob = calloc(l.classes, വലുപ്പം(ദശാംശം));
+        എങ്കിൽ(l.coords > 4){
+            dets[i].mask = calloc(l.coords-4, വലുപ്പം(ദശാംശം));
         }
     }
-    return dets;
+    തിരികെ dets;
 }
 
-void fill_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, detection *dets)
+ശൂന്യം fill_network_boxes(network *net, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, ദശാംശം thresh, ദശാംശം hier, പൂർണ്ണസംഖ്യ *map, പൂർണ്ണസംഖ്യ relative, detection *dets)
 {
-    int j;
-    for(j = 0; j < net->n; ++j){
+    പൂർണ്ണസംഖ്യ j;
+    വേണ്ടി(j = 0; j < net->n; ++j){
         layer l = net->layers[j];
-        if(l.type == YOLO){
-            int count = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
-            dets += count;
+        എങ്കിൽ(l.type == YOLO){
+            പൂർണ്ണസംഖ്യ എണ്ണം = get_yolo_detections(l, w, h, net->w, net->h, thresh, map, relative, dets);
+            dets += എണ്ണം;
         }
-        if(l.type == REGION){
+        എങ്കിൽ(l.type == REGION){
             get_region_detections(l, w, h, net->w, net->h, thresh, map, hier, relative, dets);
             dets += l.w*l.h*l.n;
         }
-        if(l.type == DETECTION){
+        എങ്കിൽ(l.type == DETECTION){
             get_detection_detections(l, w, h, thresh, dets);
             dets += l.w*l.h*l.n;
         }
     }
 }
 
-detection *get_network_boxes(network *net, int w, int h, float thresh, float hier, int *map, int relative, int *num)
+detection *get_network_boxes(network *net, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, ദശാംശം thresh, ദശാംശം hier, പൂർണ്ണസംഖ്യ *map, പൂർണ്ണസംഖ്യ relative, പൂർണ്ണസംഖ്യ *അക്കം)
 {
-    detection *dets = make_network_boxes(net, thresh, num);
+    detection *dets = make_network_boxes(net, thresh, അക്കം);
     fill_network_boxes(net, w, h, thresh, hier, map, relative, dets);
-    return dets;
+    തിരികെ dets;
 }
 
-void free_detections(detection *dets, int n)
+ശൂന്യം free_detections(detection *dets, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        free(dets[i].prob);
-        if(dets[i].mask) free(dets[i].mask);
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
+        സ്വതന്ത്രം(dets[i].prob);
+        എങ്കിൽ(dets[i].mask) സ്വതന്ത്രം(dets[i].mask);
     }
-    free(dets);
+    സ്വതന്ത്രം(dets);
 }
 
-float *network_predict_image(network *net, image im)
+ദശാംശം *network_predict_image(network *net, image im)
 {
     image imr = letterbox_image(im, net->w, net->h);
     set_batch_network(net, 1);
-    float *p = network_predict(net, imr.data);
+    ദശാംശം *p = network_predict(net, imr.data);
     free_image(imr);
-    return p;
+    തിരികെ p;
 }
 
-int network_width(network *net){return net->w;}
-int network_height(network *net){return net->h;}
+പൂർണ്ണസംഖ്യ network_width(network *net){തിരികെ net->w;}
+പൂർണ്ണസംഖ്യ network_height(network *net){തിരികെ net->h;}
 
-matrix network_predict_data_multi(network *net, data test, int n)
+matrix network_predict_data_multi(network *net, data test, പൂർണ്ണസംഖ്യ n)
 {
-    int i,j,b,m;
-    int k = net->outputs;
+    പൂർണ്ണസംഖ്യ i,j,b,m;
+    പൂർണ്ണസംഖ്യ k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.rows, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    ദശാംശം *X = calloc(net->batch*test.X.rows, വലുപ്പം(ദശാംശം));
+    വേണ്ടി(i = 0; i < test.X.rows; i += net->batch){
+        വേണ്ടി(b = 0; b < net->batch; ++b){
+            എങ്കിൽ(i+b == test.X.rows) നിർത്തുക;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*വലുപ്പം(ദശാംശം));
         }
-        for(m = 0; m < n; ++m){
-            float *out = network_predict(net, X);
-            for(b = 0; b < net->batch; ++b){
-                if(i+b == test.X.rows) break;
-                for(j = 0; j < k; ++j){
+        വേണ്ടി(m = 0; m < n; ++m){
+            ദശാംശം *out = network_predict(net, X);
+            വേണ്ടി(b = 0; b < net->batch; ++b){
+                എങ്കിൽ(i+b == test.X.rows) നിർത്തുക;
+                വേണ്ടി(j = 0; j < k; ++j){
                     pred.vals[i+b][j] += out[j+b*k]/n;
                 }
             }
         }
     }
-    free(X);
-    return pred;   
+    സ്വതന്ത്രം(X);
+    തിരികെ pred;   
 }
 
 matrix network_predict_data(network *net, data test)
 {
-    int i,j,b;
-    int k = net->outputs;
+    പൂർണ്ണസംഖ്യ i,j,b;
+    പൂർണ്ണസംഖ്യ k = net->outputs;
     matrix pred = make_matrix(test.X.rows, k);
-    float *X = calloc(net->batch*test.X.cols, sizeof(float));
-    for(i = 0; i < test.X.rows; i += net->batch){
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*sizeof(float));
+    ദശാംശം *X = calloc(net->batch*test.X.cols, വലുപ്പം(ദശാംശം));
+    വേണ്ടി(i = 0; i < test.X.rows; i += net->batch){
+        വേണ്ടി(b = 0; b < net->batch; ++b){
+            എങ്കിൽ(i+b == test.X.rows) നിർത്തുക;
+            memcpy(X+b*test.X.cols, test.X.vals[i+b], test.X.cols*വലുപ്പം(ദശാംശം));
         }
-        float *out = network_predict(net, X);
-        for(b = 0; b < net->batch; ++b){
-            if(i+b == test.X.rows) break;
-            for(j = 0; j < k; ++j){
+        ദശാംശം *out = network_predict(net, X);
+        വേണ്ടി(b = 0; b < net->batch; ++b){
+            എങ്കിൽ(i+b == test.X.rows) നിർത്തുക;
+            വേണ്ടി(j = 0; j < k; ++j){
                 pred.vals[i+b][j] = out[j+b*k];
             }
         }
     }
-    free(X);
-    return pred;   
+    സ്വതന്ത്രം(X);
+    തിരികെ pred;   
 }
 
-void print_network(network *net)
+ശൂന്യം print_network(network *net)
 {
-    int i,j;
-    for(i = 0; i < net->n; ++i){
+    പൂർണ്ണസംഖ്യ i,j;
+    വേണ്ടി(i = 0; i < net->n; ++i){
         layer l = net->layers[i];
-        float *output = l.output;
-        int n = l.outputs;
-        float mean = mean_array(output, n);
-        float vari = variance_array(output, n);
+        ദശാംശം *output = l.output;
+        പൂർണ്ണസംഖ്യ n = l.outputs;
+        ദശാംശം mean = mean_array(output, n);
+        ദശാംശം vari = variance_array(output, n);
         fprintf(stderr, "Layer %d - Mean: %f, Variance: %f\n",i,mean, vari);
-        if(n > 100) n = 100;
-        for(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
-        if(n == 100)fprintf(stderr,".....\n");
+        എങ്കിൽ(n > 100) n = 100;
+        വേണ്ടി(j = 0; j < n; ++j) fprintf(stderr, "%f, ", output[j]);
+        എങ്കിൽ(n == 100)fprintf(stderr,".....\n");
         fprintf(stderr, "\n");
     }
 }
 
-void compare_networks(network *n1, network *n2, data test)
+ശൂന്യം compare_networks(network *n1, network *n2, data test)
 {
     matrix g1 = network_predict_data(n1, test);
     matrix g2 = network_predict_data(n2, test);
-    int i;
-    int a,b,c,d;
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ a,b,c,d;
     a = b = c = d = 0;
-    for(i = 0; i < g1.rows; ++i){
-        int truth = max_index(test.y.vals[i], test.y.cols);
-        int p1 = max_index(g1.vals[i], g1.cols);
-        int p2 = max_index(g2.vals[i], g2.cols);
-        if(p1 == truth){
-            if(p2 == truth) ++d;
-            else ++c;
-        }else{
-            if(p2 == truth) ++b;
-            else ++a;
+    വേണ്ടി(i = 0; i < g1.rows; ++i){
+        പൂർണ്ണസംഖ്യ truth = max_index(test.y.vals[i], test.y.cols);
+        പൂർണ്ണസംഖ്യ p1 = max_index(g1.vals[i], g1.cols);
+        പൂർണ്ണസംഖ്യ p2 = max_index(g2.vals[i], g2.cols);
+        എങ്കിൽ(p1 == truth){
+            എങ്കിൽ(p2 == truth) ++d;
+            അല്ലെങ്കിൽ ++c;
+        }അല്ലെങ്കിൽ{
+            എങ്കിൽ(p2 == truth) ++b;
+            അല്ലെങ്കിൽ ++a;
         }
     }
     printf("%5d %5d\n%5d %5d\n", a, b, c, d);
-    float num = pow((abs(b - c) - 1.), 2.);
-    float den = b + c;
-    printf("%f\n", num/den); 
+    ദശാംശം അക്കം = pow((abs(b - c) - 1.), 2.);
+    ദശാംശം den = b + c;
+    printf("%f\n", അക്കം/den); 
 }
 
-float network_accuracy(network *net, data d)
+ദശാംശം network_accuracy(network *net, data d)
 {
     matrix guess = network_predict_data(net, d);
-    float acc = matrix_topk_accuracy(d.y, guess,1);
+    ദശാംശം acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    തിരികെ acc;
 }
 
-float *network_accuracies(network *net, data d, int n)
+ദശാംശം *network_accuracies(network *net, data d, പൂർണ്ണസംഖ്യ n)
 {
-    static float acc[2];
+    സ്ഥിതം ദശാംശം acc[2];
     matrix guess = network_predict_data(net, d);
     acc[0] = matrix_topk_accuracy(d.y, guess, 1);
     acc[1] = matrix_topk_accuracy(d.y, guess, n);
     free_matrix(guess);
-    return acc;
+    തിരികെ acc;
 }
 
 layer get_network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = net->n - 1; i >= 0; --i){
+        എങ്കിൽ(net->layers[i].type != COST) നിർത്തുക;
     }
-    return net->layers[i];
+    തിരികെ net->layers[i];
 }
 
-float network_accuracy_multi(network *net, data d, int n)
+ദശാംശം network_accuracy_multi(network *net, data d, പൂർണ്ണസംഖ്യ n)
 {
     matrix guess = network_predict_data_multi(net, d, n);
-    float acc = matrix_topk_accuracy(d.y, guess,1);
+    ദശാംശം acc = matrix_topk_accuracy(d.y, guess,1);
     free_matrix(guess);
-    return acc;
+    തിരികെ acc;
 }
 
-void free_network(network *net)
+ശൂന്യം free_network(network *net)
 {
-    int i;
-    for(i = 0; i < net->n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net->n; ++i){
         free_layer(net->layers[i]);
     }
-    free(net->layers);
-    if(net->input) free(net->input);
-    if(net->truth) free(net->truth);
+    സ്വതന്ത്രം(net->layers);
+    എങ്കിൽ(net->നിവേശം) സ്വതന്ത്രം(net->നിവേശം);
+    എങ്കിൽ(net->truth) സ്വതന്ത്രം(net->truth);
 #ifdef GPU
-    if(net->input_gpu) cuda_free(net->input_gpu);
-    if(net->truth_gpu) cuda_free(net->truth_gpu);
+    എങ്കിൽ(net->നിവേശം_gpu) cuda_free(net->നിവേശം_gpu);
+    എങ്കിൽ(net->truth_gpu) cuda_free(net->truth_gpu);
 #endif
-    free(net);
+    സ്വതന്ത്രം(net);
 }
 
 // Some day...
@@ -735,50 +735,50 @@ void free_network(network *net)
 
 layer network_output_layer(network *net)
 {
-    int i;
-    for(i = net->n - 1; i >= 0; --i){
-        if(net->layers[i].type != COST) break;
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = net->n - 1; i >= 0; --i){
+        എങ്കിൽ(net->layers[i].type != COST) നിർത്തുക;
     }
-    return net->layers[i];
+    തിരികെ net->layers[i];
 }
 
-int network_inputs(network *net)
+പൂർണ്ണസംഖ്യ network_inputs(network *net)
 {
-    return net->layers[0].inputs;
+    തിരികെ net->layers[0].inputs;
 }
 
-int network_outputs(network *net)
+പൂർണ്ണസംഖ്യ network_outputs(network *net)
 {
-    return network_output_layer(net).outputs;
+    തിരികെ network_output_layer(net).outputs;
 }
 
-float *network_output(network *net)
+ദശാംശം *network_output(network *net)
 {
-    return network_output_layer(net).output;
+    തിരികെ network_output_layer(net).output;
 }
 
 #ifdef GPU
 
-void forward_network_gpu(network *netp)
+ശൂന്യം forward_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    cuda_push_array(net.input_gpu, net.input, net.inputs*net.batch);
-    if(net.truth){
-        cuda_push_array(net.truth_gpu, net.truth, net.truths*net.batch);
+    cuda_തള്ളുക_array(net.നിവേശം_gpu, net.നിവേശം, net.inputs*net.batch);
+    എങ്കിൽ(net.truth){
+        cuda_തള്ളുക_array(net.truth_gpu, net.truth, net.truths*net.batch);
     }
 
-    int i;
-    for(i = 0; i < net.n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net.n; ++i){
         net.index = i;
         layer l = net.layers[i];
-        if(l.delta_gpu){
+        എങ്കിൽ(l.delta_gpu){
             fill_gpu(l.outputs * l.batch, 0, l.delta_gpu, 1);
         }
         l.forward_gpu(l, net);
-        net.input_gpu = l.output_gpu;
-        net.input = l.output;
-        if(l.truth) {
+        net.നിവേശം_gpu = l.output_gpu;
+        net.നിവേശം = l.output;
+        എങ്കിൽ(l.truth) {
             net.truth_gpu = l.output_gpu;
             net.truth = l.output;
         }
@@ -787,22 +787,22 @@ void forward_network_gpu(network *netp)
     calc_network_cost(netp);
 }
 
-void backward_network_gpu(network *netp)
+ശൂന്യം backward_network_gpu(network *netp)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     network net = *netp;
     network orig = net;
     cuda_set_device(net.gpu_index);
-    for(i = net.n-1; i >= 0; --i){
+    വേണ്ടി(i = net.n-1; i >= 0; --i){
         layer l = net.layers[i];
-        if(l.stopbackward) break;
-        if(i == 0){
+        എങ്കിൽ(l.stopbackward) നിർത്തുക;
+        എങ്കിൽ(i == 0){
             net = orig;
-        }else{
+        }അല്ലെങ്കിൽ{
             layer prev = net.layers[i-1];
-            net.input = prev.output;
+            net.നിവേശം = prev.output;
             net.delta = prev.delta;
-            net.input_gpu = prev.output_gpu;
+            net.നിവേശം_gpu = prev.output_gpu;
             net.delta_gpu = prev.delta_gpu;
         }
         net.index = i;
@@ -810,11 +810,11 @@ void backward_network_gpu(network *netp)
     }
 }
 
-void update_network_gpu(network *netp)
+ശൂന്യം update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     update_args a = {0};
     a.batch = net.batch*net.subdivisions;
     a.learning_rate = get_current_rate(netp);
@@ -827,115 +827,115 @@ void update_network_gpu(network *netp)
     ++*net.t;
     a.t = (*net.t);
 
-    for(i = 0; i < net.n; ++i){
+    വേണ്ടി(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.update_gpu){
+        എങ്കിൽ(l.update_gpu){
             l.update_gpu(l, a);
         }
     }
 }
 
-void harmless_update_network_gpu(network *netp)
+ശൂന്യം harmless_update_network_gpu(network *netp)
 {
     network net = *netp;
     cuda_set_device(net.gpu_index);
-    int i;
-    for(i = 0; i < net.n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < net.n; ++i){
         layer l = net.layers[i];
-        if(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
-        if(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
-        if(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
+        എങ്കിൽ(l.weight_updates_gpu) fill_gpu(l.nweights, 0, l.weight_updates_gpu, 1);
+        എങ്കിൽ(l.bias_updates_gpu) fill_gpu(l.nbiases, 0, l.bias_updates_gpu, 1);
+        എങ്കിൽ(l.scale_updates_gpu) fill_gpu(l.nbiases, 0, l.scale_updates_gpu, 1);
     }
 }
 
-typedef struct {
+തരനിർവചനം ഘടന {
     network *net;
     data d;
-    float *err;
+    ദശാംശം *err;
 } train_args;
 
-void *train_thread(void *ptr)
+ശൂന്യം *train_thread(ശൂന്യം *ptr)
 {
     train_args args = *(train_args*)ptr;
-    free(ptr);
+    സ്വതന്ത്രം(ptr);
     cuda_set_device(args.net->gpu_index);
     *args.err = train_network(args.net, args.d);
-    return 0;
+    തിരികെ 0;
 }
 
-pthread_t train_network_in_thread(network *net, data d, float *err)
+pthread_t train_network_in_thread(network *net, data d, ദശാംശം *err)
 {
     pthread_t thread;
-    train_args *ptr = (train_args *)calloc(1, sizeof(train_args));
+    train_args *ptr = (train_args *)calloc(1, വലുപ്പം(train_args));
     ptr->net = net;
     ptr->d = d;
     ptr->err = err;
-    if(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
-    return thread;
+    എങ്കിൽ(pthread_create(&thread, 0, train_thread, ptr)) error("Thread creation failed");
+    തിരികെ thread;
 }
 
-void merge_weights(layer l, layer base)
+ശൂന്യം merge_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL) {
+    എങ്കിൽ (l.type == CONVOLUTIONAL) {
         axpy_cpu(l.n, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.nweights, 1, l.weight_updates, 1, base.weights, 1);
-        if (l.scales) {
+        എങ്കിൽ (l.scales) {
             axpy_cpu(l.n, 1, l.scale_updates, 1, base.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } അല്ലെങ്കിൽ എങ്കിൽ(l.type == CONNECTED) {
         axpy_cpu(l.outputs, 1, l.bias_updates, 1, base.biases, 1);
         axpy_cpu(l.outputs*l.inputs, 1, l.weight_updates, 1, base.weights, 1);
     }
 }
 
-void scale_weights(layer l, float s)
+ശൂന്യം scale_weights(layer l, ദശാംശം s)
 {
-    if (l.type == CONVOLUTIONAL) {
+    എങ്കിൽ (l.type == CONVOLUTIONAL) {
         scal_cpu(l.n, s, l.biases, 1);
         scal_cpu(l.nweights, s, l.weights, 1);
-        if (l.scales) {
+        എങ്കിൽ (l.scales) {
             scal_cpu(l.n, s, l.scales, 1);
         }
-    } else if(l.type == CONNECTED) {
+    } അല്ലെങ്കിൽ എങ്കിൽ(l.type == CONNECTED) {
         scal_cpu(l.outputs, s, l.biases, 1);
         scal_cpu(l.outputs*l.inputs, s, l.weights, 1);
     }
 }
 
 
-void pull_weights(layer l)
+ശൂന്യം pull_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+    എങ്കിൽ(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.n);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.nweights);
-        if(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
-    } else if(l.type == CONNECTED){
+        എങ്കിൽ(l.scales) cuda_pull_array(l.scales_gpu, l.scale_updates, l.n);
+    } അല്ലെങ്കിൽ എങ്കിൽ(l.type == CONNECTED){
         cuda_pull_array(l.biases_gpu, l.bias_updates, l.outputs);
         cuda_pull_array(l.weights_gpu, l.weight_updates, l.outputs*l.inputs);
     }
 }
 
-void push_weights(layer l)
+ശൂന്യം തള്ളുക_weights(layer l)
 {
-    if(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
-        cuda_push_array(l.biases_gpu, l.biases, l.n);
-        cuda_push_array(l.weights_gpu, l.weights, l.nweights);
-        if(l.scales) cuda_push_array(l.scales_gpu, l.scales, l.n);
-    } else if(l.type == CONNECTED){
-        cuda_push_array(l.biases_gpu, l.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
+    എങ്കിൽ(l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL){
+        cuda_തള്ളുക_array(l.biases_gpu, l.biases, l.n);
+        cuda_തള്ളുക_array(l.weights_gpu, l.weights, l.nweights);
+        എങ്കിൽ(l.scales) cuda_തള്ളുക_array(l.scales_gpu, l.scales, l.n);
+    } അല്ലെങ്കിൽ എങ്കിൽ(l.type == CONNECTED){
+        cuda_തള്ളുക_array(l.biases_gpu, l.biases, l.outputs);
+        cuda_തള്ളുക_array(l.weights_gpu, l.weights, l.outputs*l.inputs);
     }
 }
 
-void distribute_weights(layer l, layer base)
+ശൂന്യം distribute_weights(layer l, layer base)
 {
-    if (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
-        cuda_push_array(l.biases_gpu, base.biases, l.n);
-        cuda_push_array(l.weights_gpu, base.weights, l.nweights);
-        if (base.scales) cuda_push_array(l.scales_gpu, base.scales, l.n);
-    } else if (l.type == CONNECTED) {
-        cuda_push_array(l.biases_gpu, base.biases, l.outputs);
-        cuda_push_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
+    എങ്കിൽ (l.type == CONVOLUTIONAL || l.type == DECONVOLUTIONAL) {
+        cuda_തള്ളുക_array(l.biases_gpu, base.biases, l.n);
+        cuda_തള്ളുക_array(l.weights_gpu, base.weights, l.nweights);
+        എങ്കിൽ (base.scales) cuda_തള്ളുക_array(l.scales_gpu, base.scales, l.n);
+    } അല്ലെങ്കിൽ എങ്കിൽ (l.type == CONNECTED) {
+        cuda_തള്ളുക_array(l.biases_gpu, base.biases, l.outputs);
+        cuda_തള്ളുക_array(l.weights_gpu, base.weights, l.outputs*l.inputs);
     }
 }
 
@@ -1024,103 +1024,103 @@ void distribute_weights(layer l, layer base)
    }
  */
 
-void sync_layer(network **nets, int n, int j)
+ശൂന്യം sync_layer(network **nets, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ j)
 {
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     network *net = nets[0];
     layer base = net->layers[j];
     scale_weights(base, 0);
-    for (i = 0; i < n; ++i) {
+    വേണ്ടി (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         pull_weights(l);
         merge_weights(l, base);
     }
     scale_weights(base, 1./n);
-    for (i = 0; i < n; ++i) {
+    വേണ്ടി (i = 0; i < n; ++i) {
         cuda_set_device(nets[i]->gpu_index);
         layer l = nets[i]->layers[j];
         distribute_weights(l, base);
     }
 }
 
-typedef struct{
+തരനിർവചനം ഘടന{
     network **nets;
-    int n;
-    int j;
+    പൂർണ്ണസംഖ്യ n;
+    പൂർണ്ണസംഖ്യ j;
 } sync_args;
 
-void *sync_layer_thread(void *ptr)
+ശൂന്യം *sync_layer_thread(ശൂന്യം *ptr)
 {
     sync_args args = *(sync_args*)ptr;
     sync_layer(args.nets, args.n, args.j);
-    free(ptr);
-    return 0;
+    സ്വതന്ത്രം(ptr);
+    തിരികെ 0;
 }
 
-pthread_t sync_layer_in_thread(network **nets, int n, int j)
+pthread_t sync_layer_in_thread(network **nets, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ j)
 {
     pthread_t thread;
-    sync_args *ptr = (sync_args *)calloc(1, sizeof(sync_args));
+    sync_args *ptr = (sync_args *)calloc(1, വലുപ്പം(sync_args));
     ptr->nets = nets;
     ptr->n = n;
     ptr->j = j;
-    if(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
-    return thread;
+    എങ്കിൽ(pthread_create(&thread, 0, sync_layer_thread, ptr)) error("Thread creation failed");
+    തിരികെ thread;
 }
 
-void sync_nets(network **nets, int n, int interval)
+ശൂന്യം sync_nets(network **nets, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ interval)
 {
-    int j;
-    int layers = nets[0]->n;
-    pthread_t *threads = (pthread_t *) calloc(layers, sizeof(pthread_t));
+    പൂർണ്ണസംഖ്യ j;
+    പൂർണ്ണസംഖ്യ layers = nets[0]->n;
+    pthread_t *threads = (pthread_t *) calloc(layers, വലുപ്പം(pthread_t));
 
     *(nets[0]->seen) += interval * (n-1) * nets[0]->batch * nets[0]->subdivisions;
-    for (j = 0; j < n; ++j){
+    വേണ്ടി (j = 0; j < n; ++j){
         *(nets[j]->seen) = *(nets[0]->seen);
     }
-    for (j = 0; j < layers; ++j) {
+    വേണ്ടി (j = 0; j < layers; ++j) {
         threads[j] = sync_layer_in_thread(nets, n, j);
     }
-    for (j = 0; j < layers; ++j) {
+    വേണ്ടി (j = 0; j < layers; ++j) {
         pthread_join(threads[j], 0);
     }
-    free(threads);
+    സ്വതന്ത്രം(threads);
 }
 
-float train_networks(network **nets, int n, data d, int interval)
+ദശാംശം train_networks(network **nets, പൂർണ്ണസംഖ്യ n, data d, പൂർണ്ണസംഖ്യ interval)
 {
-    int i;
-    int batch = nets[0]->batch;
-    int subdivisions = nets[0]->subdivisions;
-    assert(batch * subdivisions * n == d.X.rows);
-    pthread_t *threads = (pthread_t *) calloc(n, sizeof(pthread_t));
-    float *errors = (float *) calloc(n, sizeof(float));
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ batch = nets[0]->batch;
+    പൂർണ്ണസംഖ്യ subdivisions = nets[0]->subdivisions;
+    പ്രതിജ്ഞാ(batch * subdivisions * n == d.X.rows);
+    pthread_t *threads = (pthread_t *) calloc(n, വലുപ്പം(pthread_t));
+    ദശാംശം *errors = (ദശാംശം *) calloc(n, വലുപ്പം(ദശാംശം));
 
-    float sum = 0;
-    for(i = 0; i < n; ++i){
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; ++i){
         data p = get_data_part(d, i, n);
         threads[i] = train_network_in_thread(nets[i], p, errors + i);
     }
-    for(i = 0; i < n; ++i){
+    വേണ്ടി(i = 0; i < n; ++i){
         pthread_join(threads[i], 0);
         //printf("%f\n", errors[i]);
         sum += errors[i];
     }
     //cudaDeviceSynchronize();
-    if (get_current_batch(nets[0]) % interval == 0) {
+    എങ്കിൽ (get_current_batch(nets[0]) % interval == 0) {
         printf("Syncing... ");
         fflush(stdout);
         sync_nets(nets, n, interval);
         printf("Done!\n");
     }
     //cudaDeviceSynchronize();
-    free(threads);
-    free(errors);
-    return (float)sum/(n);
+    സ്വതന്ത്രം(threads);
+    സ്വതന്ത്രം(errors);
+    തിരികെ (ദശാംശം)sum/(n);
 }
 
-void pull_network_output(network *net)
+ശൂന്യം pull_network_output(network *net)
 {
     layer l = get_network_output_layer(net);
     cuda_pull_array(l.output_gpu, l.output, l.outputs*l.batch);

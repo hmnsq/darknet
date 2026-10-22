@@ -1,22 +1,22 @@
 #ifndef AVGPOOL_LAYER_H
 #define AVGPOOL_LAYER_H
 
-#include "image.h"
-#include "cuda.h"
-#include "layer.h"
-#include "network.h"
+#അന്തര്ഭാവ "image.h"
+#അന്തര്ഭാവ "cuda.h"
+#അന്തര്ഭാവ "layer.h"
+#അന്തര്ഭാവ "network.h"
 
-typedef layer avgpool_layer;
+തരനിർവചനം layer avgpool_layer;
 
 image get_avgpool_image(avgpool_layer l);
-avgpool_layer make_avgpool_layer(int batch, int w, int h, int c);
-void resize_avgpool_layer(avgpool_layer *l, int w, int h);
-void forward_avgpool_layer(const avgpool_layer l, network net);
-void backward_avgpool_layer(const avgpool_layer l, network net);
+avgpool_layer make_avgpool_layer(പൂർണ്ണസംഖ്യ batch, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h, പൂർണ്ണസംഖ്യ c);
+ശൂന്യം resize_avgpool_layer(avgpool_layer *l, പൂർണ്ണസംഖ്യ w, പൂർണ്ണസംഖ്യ h);
+ശൂന്യം forward_avgpool_layer(സ്ഥിരം avgpool_layer l, network net);
+ശൂന്യം backward_avgpool_layer(സ്ഥിരം avgpool_layer l, network net);
 
 #ifdef GPU
-void forward_avgpool_layer_gpu(avgpool_layer l, network net);
-void backward_avgpool_layer_gpu(avgpool_layer l, network net);
+ശൂന്യം forward_avgpool_layer_gpu(avgpool_layer l, network net);
+ശൂന്യം backward_avgpool_layer_gpu(avgpool_layer l, network net);
 #endif
 
 #endif

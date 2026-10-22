@@ -1,14 +1,14 @@
-#include <stdlib.h>
-#include <string.h>
-#include "list.h"
+#അന്തര്ഭാവ <stdlib.h>
+#അന്തര്ഭാവ <string.h>
+#അന്തര്ഭാവ "list.h"
 
 list *make_list()
 {
-	list *l = malloc(sizeof(list));
+	list *l = malloc(വലുപ്പം(list));
 	l->size = 0;
 	l->front = 0;
 	l->back = 0;
-	return l;
+	തിരികെ l;
 }
 
 /*
@@ -25,28 +25,28 @@ void transfer_node(list *s, list *d, node *n)
 }
 */
 
-void *list_pop(list *l){
-    if(!l->back) return 0;
-    node *b = l->back;
-    void *val = b->val;
+ശൂന്യം *list_എടുക്കുക(list *l){
+    എങ്കിൽ(!l->back) തിരികെ 0;
+    കണ്ണി *b = l->back;
+    ശൂന്യം *val = b->val;
     l->back = b->prev;
-    if(l->back) l->back->next = 0;
-    free(b);
+    എങ്കിൽ(l->back) l->back->next = 0;
+    സ്വതന്ത്രം(b);
     --l->size;
     
-    return val;
+    തിരികെ val;
 }
 
-void list_insert(list *l, void *val)
+ശൂന്യം list_തിരുകുക(list *l, ശൂന്യം *val)
 {
-	node *new = malloc(sizeof(node));
+	കണ്ണി *new = malloc(വലുപ്പം(കണ്ണി));
 	new->val = val;
 	new->next = 0;
 
-	if(!l->back){
+	എങ്കിൽ(!l->back){
 		l->front = new;
 		new->prev = 0;
-	}else{
+	}അല്ലെങ്കിൽ{
 		l->back->next = new;
 		new->prev = l->back;
 	}
@@ -54,39 +54,39 @@ void list_insert(list *l, void *val)
 	++l->size;
 }
 
-void free_node(node *n)
+ശൂന്യം free_കണ്ണി(കണ്ണി *n)
 {
-	node *next;
-	while(n) {
+	കണ്ണി *next;
+	ആകുമ്പോൾ(n) {
 		next = n->next;
-		free(n);
+		സ്വതന്ത്രം(n);
 		n = next;
 	}
 }
 
-void free_list(list *l)
+ശൂന്യം free_list(list *l)
 {
-	free_node(l->front);
-	free(l);
+	free_കണ്ണി(l->front);
+	സ്വതന്ത്രം(l);
 }
 
-void free_list_contents(list *l)
+ശൂന്യം free_list_contents(list *l)
 {
-	node *n = l->front;
-	while(n){
-		free(n->val);
+	കണ്ണി *n = l->front;
+	ആകുമ്പോൾ(n){
+		സ്വതന്ത്രം(n->val);
 		n = n->next;
 	}
 }
 
-void **list_to_array(list *l)
+ശൂന്യം **list_to_array(list *l)
 {
-    void **a = calloc(l->size, sizeof(void*));
-    int count = 0;
-    node *n = l->front;
-    while(n){
-        a[count++] = n->val;
+    ശൂന്യം **a = calloc(l->size, വലുപ്പം(ശൂന്യം*));
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    കണ്ണി *n = l->front;
+    ആകുമ്പോൾ(n){
+        a[എണ്ണം++] = n->val;
         n = n->next;
     }
-    return a;
+    തിരികെ a;
 }

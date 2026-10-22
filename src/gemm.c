@@ -1,25 +1,25 @@
-#include "gemm.h"
-#include "utils.h"
-#include "cuda.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#അന്തര്ഭാവ "gemm.h"
+#അന്തര്ഭാവ "utils.h"
+#അന്തര്ഭാവ "cuda.h"
+#അന്തര്ഭാവ <stdlib.h>
+#അന്തര്ഭാവ <stdio.h>
+#അന്തര്ഭാവ <math.h>
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ശൂന്യം gemm_bin(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        അക്ഷരം  *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
-    int i,j,k;
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            char A_PART = A[i*lda+k];
-            if(A_PART){
-                for(j = 0; j < N; ++j){
+    പൂർണ്ണസംഖ്യ i,j,k;
+    വേണ്ടി(i = 0; i < M; ++i){
+        വേണ്ടി(k = 0; k < K; ++k){
+            അക്ഷരം A_PART = A[i*lda+k];
+            എങ്കിൽ(A_PART){
+                വേണ്ടി(j = 0; j < N; ++j){
                     C[i*ldc+j] += B[k*ldb+j];
                 }
-            } else {
-                for(j = 0; j < N; ++j){
+            } അല്ലെങ്കിൽ {
+                വേണ്ടി(j = 0; j < N; ++j){
                     C[i*ldc+j] -= B[k*ldb+j];
                 }
             }
@@ -27,78 +27,78 @@ void gemm_bin(int M, int N, int K, float ALPHA,
     }
 }
 
-float *random_matrix(int rows, int cols)
+ദശാംശം *random_matrix(പൂർണ്ണസംഖ്യ rows, പൂർണ്ണസംഖ്യ cols)
 {
-    int i;
-    float *m = calloc(rows*cols, sizeof(float));
-    for(i = 0; i < rows*cols; ++i){
-        m[i] = (float)rand()/RAND_MAX;
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം *m = calloc(rows*cols, വലുപ്പം(ദശാംശം));
+    വേണ്ടി(i = 0; i < rows*cols; ++i){
+        m[i] = (ദശാംശം)rand()/RAND_MAX;
     }
-    return m;
+    തിരികെ m;
 }
 
-void time_random_matrix(int TA, int TB, int m, int k, int n)
+ശൂന്യം time_random_matrix(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ n)
 {
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    ദശാംശം *a;
+    എങ്കിൽ(!TA) a = random_matrix(m,k);
+    അല്ലെങ്കിൽ a = random_matrix(k,m);
+    പൂർണ്ണസംഖ്യ lda = (!TA)?k:m;
+    ദശാംശം *b;
+    എങ്കിൽ(!TB) b = random_matrix(k,n);
+    അല്ലെങ്കിൽ b = random_matrix(n,k);
+    പൂർണ്ണസംഖ്യ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    int i;
+    ദശാംശം *c = random_matrix(m,n);
+    പൂർണ്ണസംഖ്യ i;
     clock_t start = clock(), end;
-    for(i = 0; i<10; ++i){
+    വേണ്ടി(i = 0; i<10; ++i){
         gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
-    free(a);
-    free(b);
-    free(c);
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (ദശാംശം)(end-start)/CLOCKS_PER_SEC);
+    സ്വതന്ത്രം(a);
+    സ്വതന്ത്രം(b);
+    സ്വതന്ത്രം(c);
 }
 
 
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc)
+ശൂന്യം gemm(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം BETA,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
     gemm_cpu( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
 }
 
-void gemm_nn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ശൂന്യം gemm_nn(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[i*lda+k];
-            for(j = 0; j < N; ++j){
+    പൂർണ്ണസംഖ്യ i,j,k;
+    #pragma omp parallel വേണ്ടി
+    വേണ്ടി(i = 0; i < M; ++i){
+        വേണ്ടി(k = 0; k < K; ++k){
+            രജിസ്റ്റർ ദശാംശം A_PART = ALPHA*A[i*lda+k];
+            വേണ്ടി(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_nt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ശൂന്യം gemm_nt(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
+    പൂർണ്ണസംഖ്യ i,j,k;
+    #pragma omp parallel വേണ്ടി
+    വേണ്ടി(i = 0; i < M; ++i){
+        വേണ്ടി(j = 0; j < N; ++j){
+            രജിസ്റ്റർ ദശാംശം sum = 0;
+            വേണ്ടി(k = 0; k < K; ++k){
                 sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
             }
             C[i*ldc+j] += sum;
@@ -106,34 +106,34 @@ void gemm_nt(int M, int N, int K, float ALPHA,
     }
 }
 
-void gemm_tn(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ശൂന്യം gemm_tn(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(k = 0; k < K; ++k){
-            register float A_PART = ALPHA*A[k*lda+i];
-            for(j = 0; j < N; ++j){
+    പൂർണ്ണസംഖ്യ i,j,k;
+    #pragma omp parallel വേണ്ടി
+    വേണ്ടി(i = 0; i < M; ++i){
+        വേണ്ടി(k = 0; k < K; ++k){
+            രജിസ്റ്റർ ദശാംശം A_PART = ALPHA*A[k*lda+i];
+            വേണ്ടി(j = 0; j < N; ++j){
                 C[i*ldc+j] += A_PART*B[k*ldb+j];
             }
         }
     }
 }
 
-void gemm_tt(int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc)
+ശൂന്യം gemm_tt(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
-    int i,j,k;
-    #pragma omp parallel for
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
-            register float sum = 0;
-            for(k = 0; k < K; ++k){
+    പൂർണ്ണസംഖ്യ i,j,k;
+    #pragma omp parallel വേണ്ടി
+    വേണ്ടി(i = 0; i < M; ++i){
+        വേണ്ടി(j = 0; j < N; ++j){
+            രജിസ്റ്റർ ദശാംശം sum = 0;
+            വേണ്ടി(k = 0; k < K; ++k){
                 sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
             }
             C[i*ldc+j] += sum;
@@ -142,38 +142,38 @@ void gemm_tt(int M, int N, int K, float ALPHA,
 }
 
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc)
+ശൂന്യം gemm_cpu(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം BETA,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc)
 {
     //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
-    int i, j;
-    for(i = 0; i < M; ++i){
-        for(j = 0; j < N; ++j){
+    പൂർണ്ണസംഖ്യ i, j;
+    വേണ്ടി(i = 0; i < M; ++i){
+        വേണ്ടി(j = 0; j < N; ++j){
             C[i*ldc + j] *= BETA;
         }
     }
-    if(!TA && !TB)
+    എങ്കിൽ(!TA && !TB)
         gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(TA && !TB)
+    അല്ലെങ്കിൽ എങ്കിൽ(TA && !TB)
         gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else if(!TA && TB)
+    അല്ലെങ്കിൽ എങ്കിൽ(!TA && TB)
         gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
-    else
+    അല്ലെങ്കിൽ
         gemm_tt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
 }
 
 #ifdef GPU
 
-#include <math.h>
+#അന്തര്ഭാവ <math.h>
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc)
+ശൂന്യം gemm_gpu(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A_gpu, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B_gpu, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം BETA,
+        ദശാംശം *C_gpu, പൂർണ്ണസംഖ്യ ldc)
 {
     cublasHandle_t handle = blas_handle();
     cudaError_t status = cublasSgemm(handle, (TB ? CUBLAS_OP_T : CUBLAS_OP_N), 
@@ -181,87 +181,87 @@ void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA,
     check_error(status);
 }
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#അന്തര്ഭാവ <stdio.h>
+#അന്തര്ഭാവ <stdlib.h>
+#അന്തര്ഭാവ <string.h>
+#അന്തര്ഭാവ <time.h>
 
-void time_gpu_random_matrix(int TA, int TB, int m, int k, int n)
+ശൂന്യം time_gpu_random_matrix(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ n)
 {
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    ദശാംശം *a;
+    എങ്കിൽ(!TA) a = random_matrix(m,k);
+    അല്ലെങ്കിൽ a = random_matrix(k,m);
+    പൂർണ്ണസംഖ്യ lda = (!TA)?k:m;
+    ദശാംശം *b;
+    എങ്കിൽ(!TB) b = random_matrix(k,n);
+    അല്ലെങ്കിൽ b = random_matrix(n,k);
+    പൂർണ്ണസംഖ്യ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    int i;
+    ദശാംശം *c = random_matrix(m,n);
+    പൂർണ്ണസംഖ്യ i;
     clock_t start = clock(), end;
-    for(i = 0; i<32; ++i){
+    വേണ്ടി(i = 0; i<32; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     }
     end = clock();
-    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
-    free(a);
-    free(b);
-    free(c);
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s\n",m,k,k,n, TA, TB, (ദശാംശം)(end-start)/CLOCKS_PER_SEC);
+    സ്വതന്ത്രം(a);
+    സ്വതന്ത്രം(b);
+    സ്വതന്ത്രം(c);
 }
 
-void time_gpu(int TA, int TB, int m, int k, int n)
+ശൂന്യം time_gpu(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ n)
 {
-    int iter = 10;
-    float *a = random_matrix(m,k);
-    float *b = random_matrix(k,n);
+    പൂർണ്ണസംഖ്യ iter = 10;
+    ദശാംശം *a = random_matrix(m,k);
+    ദശാംശം *b = random_matrix(k,n);
 
-    int lda = (!TA)?k:m;
-    int ldb = (!TB)?n:k;
+    പൂർണ്ണസംഖ്യ lda = (!TA)?k:m;
+    പൂർണ്ണസംഖ്യ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
+    ദശാംശം *c = random_matrix(m,n);
 
-    float *a_cl = cuda_make_array(a, m*k);
-    float *b_cl = cuda_make_array(b, k*n);
-    float *c_cl = cuda_make_array(c, m*n);
+    ദശാംശം *a_cl = cuda_make_array(a, m*k);
+    ദശാംശം *b_cl = cuda_make_array(b, k*n);
+    ദശാംശം *c_cl = cuda_make_array(c, m*n);
 
-    int i;
+    പൂർണ്ണസംഖ്യ i;
     clock_t start = clock(), end;
-    for(i = 0; i<iter; ++i){
+    വേണ്ടി(i = 0; i<iter; ++i){
         gemm_gpu(TA,TB,m,n,k,1,a_cl,lda,b_cl,ldb,1,c_cl,n);
         cudaThreadSynchronize();
     }
-    double flop = ((double)m)*n*(2.*k + 2.)*iter;
-    double gflop = flop/pow(10., 9);
+    ഇരട്ട flop = ((ഇരട്ട)m)*n*(2.*k + 2.)*iter;
+    ഇരട്ട gflop = flop/pow(10., 9);
     end = clock();
-    double seconds = sec(end-start);
+    ഇരട്ട seconds = sec(end-start);
     printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf s, %lf GFLOPS\n",m,k,k,n, TA, TB, seconds, gflop/seconds);
     cuda_free(a_cl);
     cuda_free(b_cl);
     cuda_free(c_cl);
-    free(a);
-    free(b);
-    free(c);
+    സ്വതന്ത്രം(a);
+    സ്വതന്ത്രം(b);
+    സ്വതന്ത്രം(c);
 }
 
 
-void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
+ശൂന്യം test_gpu_accuracy(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ m, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ n)
 {
     srand(0);
-    float *a;
-    if(!TA) a = random_matrix(m,k);
-    else a = random_matrix(k,m);
-    int lda = (!TA)?k:m;
-    float *b;
-    if(!TB) b = random_matrix(k,n);
-    else b = random_matrix(n,k);
-    int ldb = (!TB)?n:k;
+    ദശാംശം *a;
+    എങ്കിൽ(!TA) a = random_matrix(m,k);
+    അല്ലെങ്കിൽ a = random_matrix(k,m);
+    പൂർണ്ണസംഖ്യ lda = (!TA)?k:m;
+    ദശാംശം *b;
+    എങ്കിൽ(!TB) b = random_matrix(k,n);
+    അല്ലെങ്കിൽ b = random_matrix(n,k);
+    പൂർണ്ണസംഖ്യ ldb = (!TB)?n:k;
 
-    float *c = random_matrix(m,n);
-    float *c_gpu = random_matrix(m,n);
-    memset(c, 0, m*n*sizeof(float));
-    memset(c_gpu, 0, m*n*sizeof(float));
-    int i;
+    ദശാംശം *c = random_matrix(m,n);
+    ദശാംശം *c_gpu = random_matrix(m,n);
+    memset(c, 0, m*n*വലുപ്പം(ദശാംശം));
+    memset(c_gpu, 0, m*n*വലുപ്പം(ദശാംശം));
+    പൂർണ്ണസംഖ്യ i;
     //pm(m,k,b);
     gemm_gpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c_gpu,n);
     //printf("GPU\n");
@@ -270,19 +270,19 @@ void test_gpu_accuracy(int TA, int TB, int m, int k, int n)
     gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
     //printf("\n\nCPU\n");
     //pm(m, n, c);
-    double sse = 0;
-    for(i = 0; i < m*n; ++i) {
+    ഇരട്ട sse = 0;
+    വേണ്ടി(i = 0; i < m*n; ++i) {
         //printf("%f %f\n", c[i], c_gpu[i]);
         sse += pow(c[i]-c_gpu[i], 2);
     }
     printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %g SSE\n",m,k,k,n, TA, TB, sse/(m*n));
-    free(a);
-    free(b);
-    free(c);
-    free(c_gpu);
+    സ്വതന്ത്രം(a);
+    സ്വതന്ത്രം(b);
+    സ്വതന്ത്രം(c);
+    സ്വതന്ത്രം(c_gpu);
 }
 
-int test_gpu_blas()
+പൂർണ്ണസംഖ്യ test_gpu_blas()
 {
     /*
        test_gpu_accuracy(0,0,10,576,75); 
@@ -318,7 +318,7 @@ int test_gpu_blas()
     time_gpu(0,0,512,4608,196); 
     time_gpu(1,1,4608,512,196); 
 
-    return 0;
+    തിരികെ 0;
 }
 #endif
 

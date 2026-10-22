@@ -1,97 +1,97 @@
-#include "layer.h"
-#include "cuda.h"
+#അന്തര്ഭാവ "layer.h"
+#അന്തര്ഭാവ "cuda.h"
 
-#include <stdlib.h>
+#അന്തര്ഭാവ <stdlib.h>
 
-void free_layer(layer l)
+ശൂന്യം free_layer(layer l)
 {
-    if(l.type == DROPOUT){
-        if(l.rand)           free(l.rand);
+    എങ്കിൽ(l.type == DROPOUT){
+        എങ്കിൽ(l.rand)           സ്വതന്ത്രം(l.rand);
 #ifdef GPU
-        if(l.rand_gpu)             cuda_free(l.rand_gpu);
+        എങ്കിൽ(l.rand_gpu)             cuda_free(l.rand_gpu);
 #endif
-        return;
+        തിരികെ;
     }
-    if(l.cweights)           free(l.cweights);
-    if(l.indexes)            free(l.indexes);
-    if(l.input_layers)       free(l.input_layers);
-    if(l.input_sizes)        free(l.input_sizes);
-    if(l.map)                free(l.map);
-    if(l.rand)               free(l.rand);
-    if(l.cost)               free(l.cost);
-    if(l.state)              free(l.state);
-    if(l.prev_state)         free(l.prev_state);
-    if(l.forgot_state)       free(l.forgot_state);
-    if(l.forgot_delta)       free(l.forgot_delta);
-    if(l.state_delta)        free(l.state_delta);
-    if(l.concat)             free(l.concat);
-    if(l.concat_delta)       free(l.concat_delta);
-    if(l.binary_weights)     free(l.binary_weights);
-    if(l.biases)             free(l.biases);
-    if(l.bias_updates)       free(l.bias_updates);
-    if(l.scales)             free(l.scales);
-    if(l.scale_updates)      free(l.scale_updates);
-    if(l.weights)            free(l.weights);
-    if(l.weight_updates)     free(l.weight_updates);
-    if(l.delta)              free(l.delta);
-    if(l.output)             free(l.output);
-    if(l.squared)            free(l.squared);
-    if(l.norms)              free(l.norms);
-    if(l.spatial_mean)       free(l.spatial_mean);
-    if(l.mean)               free(l.mean);
-    if(l.variance)           free(l.variance);
-    if(l.mean_delta)         free(l.mean_delta);
-    if(l.variance_delta)     free(l.variance_delta);
-    if(l.rolling_mean)       free(l.rolling_mean);
-    if(l.rolling_variance)   free(l.rolling_variance);
-    if(l.x)                  free(l.x);
-    if(l.x_norm)             free(l.x_norm);
-    if(l.m)                  free(l.m);
-    if(l.v)                  free(l.v);
-    if(l.z_cpu)              free(l.z_cpu);
-    if(l.r_cpu)              free(l.r_cpu);
-    if(l.h_cpu)              free(l.h_cpu);
-    if(l.binary_input)       free(l.binary_input);
+    എങ്കിൽ(l.cweights)           സ്വതന്ത്രം(l.cweights);
+    എങ്കിൽ(l.indexes)            സ്വതന്ത്രം(l.indexes);
+    എങ്കിൽ(l.നിവേശം_layers)       സ്വതന്ത്രം(l.നിവേശം_layers);
+    എങ്കിൽ(l.നിവേശം_sizes)        സ്വതന്ത്രം(l.നിവേശം_sizes);
+    എങ്കിൽ(l.map)                സ്വതന്ത്രം(l.map);
+    എങ്കിൽ(l.rand)               സ്വതന്ത്രം(l.rand);
+    എങ്കിൽ(l.cost)               സ്വതന്ത്രം(l.cost);
+    എങ്കിൽ(l.state)              സ്വതന്ത്രം(l.state);
+    എങ്കിൽ(l.prev_state)         സ്വതന്ത്രം(l.prev_state);
+    എങ്കിൽ(l.forgot_state)       സ്വതന്ത്രം(l.forgot_state);
+    എങ്കിൽ(l.forgot_delta)       സ്വതന്ത്രം(l.forgot_delta);
+    എങ്കിൽ(l.state_delta)        സ്വതന്ത്രം(l.state_delta);
+    എങ്കിൽ(l.concat)             സ്വതന്ത്രം(l.concat);
+    എങ്കിൽ(l.concat_delta)       സ്വതന്ത്രം(l.concat_delta);
+    എങ്കിൽ(l.ദ്വിമാന_weights)     സ്വതന്ത്രം(l.ദ്വിമാന_weights);
+    എങ്കിൽ(l.biases)             സ്വതന്ത്രം(l.biases);
+    എങ്കിൽ(l.bias_updates)       സ്വതന്ത്രം(l.bias_updates);
+    എങ്കിൽ(l.scales)             സ്വതന്ത്രം(l.scales);
+    എങ്കിൽ(l.scale_updates)      സ്വതന്ത്രം(l.scale_updates);
+    എങ്കിൽ(l.weights)            സ്വതന്ത്രം(l.weights);
+    എങ്കിൽ(l.weight_updates)     സ്വതന്ത്രം(l.weight_updates);
+    എങ്കിൽ(l.delta)              സ്വതന്ത്രം(l.delta);
+    എങ്കിൽ(l.output)             സ്വതന്ത്രം(l.output);
+    എങ്കിൽ(l.squared)            സ്വതന്ത്രം(l.squared);
+    എങ്കിൽ(l.norms)              സ്വതന്ത്രം(l.norms);
+    എങ്കിൽ(l.spatial_mean)       സ്വതന്ത്രം(l.spatial_mean);
+    എങ്കിൽ(l.mean)               സ്വതന്ത്രം(l.mean);
+    എങ്കിൽ(l.variance)           സ്വതന്ത്രം(l.variance);
+    എങ്കിൽ(l.mean_delta)         സ്വതന്ത്രം(l.mean_delta);
+    എങ്കിൽ(l.variance_delta)     സ്വതന്ത്രം(l.variance_delta);
+    എങ്കിൽ(l.rolling_mean)       സ്വതന്ത്രം(l.rolling_mean);
+    എങ്കിൽ(l.rolling_variance)   സ്വതന്ത്രം(l.rolling_variance);
+    എങ്കിൽ(l.x)                  സ്വതന്ത്രം(l.x);
+    എങ്കിൽ(l.x_norm)             സ്വതന്ത്രം(l.x_norm);
+    എങ്കിൽ(l.m)                  സ്വതന്ത്രം(l.m);
+    എങ്കിൽ(l.v)                  സ്വതന്ത്രം(l.v);
+    എങ്കിൽ(l.z_cpu)              സ്വതന്ത്രം(l.z_cpu);
+    എങ്കിൽ(l.r_cpu)              സ്വതന്ത്രം(l.r_cpu);
+    എങ്കിൽ(l.h_cpu)              സ്വതന്ത്രം(l.h_cpu);
+    എങ്കിൽ(l.ദ്വിമാന_നിവേശം)       സ്വതന്ത്രം(l.ദ്വിമാന_നിവേശം);
 
 #ifdef GPU
-    if(l.indexes_gpu)           cuda_free((float *)l.indexes_gpu);
+    എങ്കിൽ(l.indexes_gpu)           cuda_free((ദശാംശം *)l.indexes_gpu);
 
-    if(l.z_gpu)                   cuda_free(l.z_gpu);
-    if(l.r_gpu)                   cuda_free(l.r_gpu);
-    if(l.h_gpu)                   cuda_free(l.h_gpu);
-    if(l.m_gpu)                   cuda_free(l.m_gpu);
-    if(l.v_gpu)                   cuda_free(l.v_gpu);
-    if(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
-    if(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
-    if(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
-    if(l.state_gpu)               cuda_free(l.state_gpu);
-    if(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
-    if(l.gate_gpu)                cuda_free(l.gate_gpu);
-    if(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
-    if(l.save_gpu)                cuda_free(l.save_gpu);
-    if(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
-    if(l.concat_gpu)              cuda_free(l.concat_gpu);
-    if(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
-    if(l.binary_input_gpu)        cuda_free(l.binary_input_gpu);
-    if(l.binary_weights_gpu)      cuda_free(l.binary_weights_gpu);
-    if(l.mean_gpu)                cuda_free(l.mean_gpu);
-    if(l.variance_gpu)            cuda_free(l.variance_gpu);
-    if(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
-    if(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
-    if(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
-    if(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
-    if(l.x_gpu)                   cuda_free(l.x_gpu);
-    if(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
-    if(l.weights_gpu)             cuda_free(l.weights_gpu);
-    if(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
-    if(l.biases_gpu)              cuda_free(l.biases_gpu);
-    if(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
-    if(l.scales_gpu)              cuda_free(l.scales_gpu);
-    if(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
-    if(l.output_gpu)              cuda_free(l.output_gpu);
-    if(l.delta_gpu)               cuda_free(l.delta_gpu);
-    if(l.rand_gpu)                cuda_free(l.rand_gpu);
-    if(l.squared_gpu)             cuda_free(l.squared_gpu);
-    if(l.norms_gpu)               cuda_free(l.norms_gpu);
+    എങ്കിൽ(l.z_gpu)                   cuda_free(l.z_gpu);
+    എങ്കിൽ(l.r_gpu)                   cuda_free(l.r_gpu);
+    എങ്കിൽ(l.h_gpu)                   cuda_free(l.h_gpu);
+    എങ്കിൽ(l.m_gpu)                   cuda_free(l.m_gpu);
+    എങ്കിൽ(l.v_gpu)                   cuda_free(l.v_gpu);
+    എങ്കിൽ(l.prev_state_gpu)          cuda_free(l.prev_state_gpu);
+    എങ്കിൽ(l.forgot_state_gpu)        cuda_free(l.forgot_state_gpu);
+    എങ്കിൽ(l.forgot_delta_gpu)        cuda_free(l.forgot_delta_gpu);
+    എങ്കിൽ(l.state_gpu)               cuda_free(l.state_gpu);
+    എങ്കിൽ(l.state_delta_gpu)         cuda_free(l.state_delta_gpu);
+    എങ്കിൽ(l.gate_gpu)                cuda_free(l.gate_gpu);
+    എങ്കിൽ(l.gate_delta_gpu)          cuda_free(l.gate_delta_gpu);
+    എങ്കിൽ(l.save_gpu)                cuda_free(l.save_gpu);
+    എങ്കിൽ(l.save_delta_gpu)          cuda_free(l.save_delta_gpu);
+    എങ്കിൽ(l.concat_gpu)              cuda_free(l.concat_gpu);
+    എങ്കിൽ(l.concat_delta_gpu)        cuda_free(l.concat_delta_gpu);
+    എങ്കിൽ(l.ദ്വിമാന_നിവേശം_gpu)        cuda_free(l.ദ്വിമാന_നിവേശം_gpu);
+    എങ്കിൽ(l.ദ്വിമാന_weights_gpu)      cuda_free(l.ദ്വിമാന_weights_gpu);
+    എങ്കിൽ(l.mean_gpu)                cuda_free(l.mean_gpu);
+    എങ്കിൽ(l.variance_gpu)            cuda_free(l.variance_gpu);
+    എങ്കിൽ(l.rolling_mean_gpu)        cuda_free(l.rolling_mean_gpu);
+    എങ്കിൽ(l.rolling_variance_gpu)    cuda_free(l.rolling_variance_gpu);
+    എങ്കിൽ(l.variance_delta_gpu)      cuda_free(l.variance_delta_gpu);
+    എങ്കിൽ(l.mean_delta_gpu)          cuda_free(l.mean_delta_gpu);
+    എങ്കിൽ(l.x_gpu)                   cuda_free(l.x_gpu);
+    എങ്കിൽ(l.x_norm_gpu)              cuda_free(l.x_norm_gpu);
+    എങ്കിൽ(l.weights_gpu)             cuda_free(l.weights_gpu);
+    എങ്കിൽ(l.weight_updates_gpu)      cuda_free(l.weight_updates_gpu);
+    എങ്കിൽ(l.biases_gpu)              cuda_free(l.biases_gpu);
+    എങ്കിൽ(l.bias_updates_gpu)        cuda_free(l.bias_updates_gpu);
+    എങ്കിൽ(l.scales_gpu)              cuda_free(l.scales_gpu);
+    എങ്കിൽ(l.scale_updates_gpu)       cuda_free(l.scale_updates_gpu);
+    എങ്കിൽ(l.output_gpu)              cuda_free(l.output_gpu);
+    എങ്കിൽ(l.delta_gpu)               cuda_free(l.delta_gpu);
+    എങ്കിൽ(l.rand_gpu)                cuda_free(l.rand_gpu);
+    എങ്കിൽ(l.squared_gpu)             cuda_free(l.squared_gpu);
+    എങ്കിൽ(l.norms_gpu)               cuda_free(l.norms_gpu);
 #endif
 }

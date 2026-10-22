@@ -1,15 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
-#include <float.h>
-#include <limits.h>
-#include <time.h>
-#include <sys/time.h>
+#അന്തര്ഭാവ <stdio.h>
+#അന്തര്ഭാവ <stdlib.h>
+#അന്തര്ഭാവ <string.h>
+#അന്തര്ഭാവ <math.h>
+#അന്തര്ഭാവ <assert.h>
+#അന്തര്ഭാവ <unistd.h>
+#അന്തര്ഭാവ <float.h>
+#അന്തര്ഭാവ <limits.h>
+#അന്തര്ഭാവ <time.h>
+#അന്തര്ഭാവ <sys/time.h>
 
-#include "utils.h"
+#അന്തര്ഭാവ "utils.h"
 
 
 /*
@@ -24,69 +24,69 @@ double get_wall_time()
 }
 */
 
-double what_time_is_it_now()
+ഇരട്ട what_time_is_it_now()
 {
-    struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    ഘടന timeval time;
+    എങ്കിൽ (gettimeofday(&time,ശൂന്യ)){
+        തിരികെ 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    തിരികെ (ഇരട്ട)time.tv_sec + (ഇരട്ട)time.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+പൂർണ്ണസംഖ്യ *read_intlist(അക്ഷരം *gpu_list, പൂർണ്ണസംഖ്യ *ngpus, പൂർണ്ണസംഖ്യ d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    പൂർണ്ണസംഖ്യ *gpus = 0;
+    എങ്കിൽ(gpu_list){
+        പൂർണ്ണസംഖ്യ len = strlen(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        പൂർണ്ണസംഖ്യ i;
+        വേണ്ടി(i = 0; i < len; ++i){
+            എങ്കിൽ (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = calloc(*ngpus, വലുപ്പം(പൂർണ്ണസംഖ്യ));
+        വേണ്ടി(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
-        gpus = calloc(1, sizeof(float));
+    } അല്ലെങ്കിൽ {
+        gpus = calloc(1, വലുപ്പം(ദശാംശം));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    തിരികെ gpus;
 }
 
-int *read_map(char *filename)
+പൂർണ്ണസംഖ്യ *read_map(അക്ഷരം *filename)
 {
-    int n = 0;
-    int *map = 0;
-    char *str;
+    പൂർണ്ണസംഖ്യ n = 0;
+    പൂർണ്ണസംഖ്യ *map = 0;
+    അക്ഷരം *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    എങ്കിൽ(!file) file_error(filename);
+    ആകുമ്പോൾ((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*വലുപ്പം(പൂർണ്ണസംഖ്യ));
         map[n-1] = atoi(str);
     }
-    return map;
+    തിരികെ map;
 }
 
-void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
+ശൂന്യം sorta_shuffle(ശൂന്യം *arr, size_t n, size_t size, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
+    വേണ്ടി(i = 0; i < sections; ++i){
         size_t start = n*i/sections;
         size_t end = n*(i+1)/sections;
-        size_t num = end-start;
-        shuffle(arr+(start*size), num, size);
+        size_t അക്കം = end-start;
+        shuffle(arr+(start*size), അക്കം, size);
     }
 }
 
-void shuffle(void *arr, size_t n, size_t size)
+ശൂന്യം shuffle(ശൂന്യം *arr, size_t n, size_t size)
 {
     size_t i;
-    void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    ശൂന്യം *swp = calloc(1, size);
+    വേണ്ടി(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
         memcpy(swp,          arr+(j*size), size);
         memcpy(arr+(j*size), arr+(i*size), size);
@@ -94,118 +94,118 @@ void shuffle(void *arr, size_t n, size_t size)
     }
 }
 
-int *random_index_order(int min, int max)
+പൂർണ്ണസംഖ്യ *random_index_order(പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    പൂർണ്ണസംഖ്യ *inds = calloc(max-min, വലുപ്പം(പൂർണ്ണസംഖ്യ));
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
+    വേണ്ടി(i = min; i < max-1; ++i){
+        പൂർണ്ണസംഖ്യ swap = inds[i];
+        പൂർണ്ണസംഖ്യ index = i + rand()%(max-i);
         inds[i] = inds[index];
         inds[index] = swap;
     }
-    return inds;
+    തിരികെ inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+ശൂന്യം del_arg(പൂർണ്ണസംഖ്യ argc, അക്ഷരം **argv, പൂർണ്ണസംഖ്യ index)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+പൂർണ്ണസംഖ്യ find_arg(പൂർണ്ണസംഖ്യ argc, അക്ഷരം* argv[], അക്ഷരം *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < argc; ++i) {
+        എങ്കിൽ(!argv[i]) തുടരുക;
+        എങ്കിൽ(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            തിരികെ 1;
         }
     }
-    return 0;
+    തിരികെ 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+പൂർണ്ണസംഖ്യ find_int_arg(പൂർണ്ണസംഖ്യ argc, അക്ഷരം **argv, അക്ഷരം *arg, പൂർണ്ണസംഖ്യ def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < argc-1; ++i){
+        എങ്കിൽ(!argv[i]) തുടരുക;
+        എങ്കിൽ(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            നിർത്തുക;
         }
     }
-    return def;
+    തിരികെ def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+ദശാംശം find_float_arg(പൂർണ്ണസംഖ്യ argc, അക്ഷരം **argv, അക്ഷരം *arg, ദശാംശം def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < argc-1; ++i){
+        എങ്കിൽ(!argv[i]) തുടരുക;
+        എങ്കിൽ(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            നിർത്തുക;
         }
     }
-    return def;
+    തിരികെ def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+അക്ഷരം *find_char_arg(പൂർണ്ണസംഖ്യ argc, അക്ഷരം **argv, അക്ഷരം *arg, അക്ഷരം *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < argc-1; ++i){
+        എങ്കിൽ(!argv[i]) തുടരുക;
+        എങ്കിൽ(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
-            break;
+            നിർത്തുക;
         }
     }
-    return def;
+    തിരികെ def;
 }
 
 
-char *basecfg(char *cfgfile)
+അക്ഷരം *basecfg(അക്ഷരം *cfgfile)
 {
-    char *c = cfgfile;
-    char *next;
-    while((next = strchr(c, '/')))
+    അക്ഷരം *c = cfgfile;
+    അക്ഷരം *next;
+    ആകുമ്പോൾ((next = strchr(c, '/')))
     {
         c = next+1;
     }
     c = copy_string(c);
     next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    എങ്കിൽ (next) *next = 0;
+    തിരികെ c;
 }
 
-int alphanum_to_int(char c)
+പൂർണ്ണസംഖ്യ alphanum_to_int(അക്ഷരം c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    തിരികെ (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+അക്ഷരം int_to_alphanum(പൂർണ്ണസംഖ്യ i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    എങ്കിൽ (i == 36) തിരികെ '.';
+    തിരികെ (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+ശൂന്യം pm(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, ദശാംശം *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
+    പൂർണ്ണസംഖ്യ i,j;
+    വേണ്ടി(i =0 ; i < M; ++i){
         printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
+        വേണ്ടി(j = 0; j < N; ++j){
             printf("%2.4f, ", A[i*N+j]);
         }
         printf("\n");
@@ -213,15 +213,15 @@ void pm(int M, int N, float *A)
     printf("\n");
 }
 
-void find_replace(char *str, char *orig, char *rep, char *output)
+ശൂന്യം find_replace(അക്ഷരം *str, അക്ഷരം *orig, അക്ഷരം *rep, അക്ഷരം *output)
 {
-    char buffer[4096] = {0};
-    char *p;
+    അക്ഷരം buffer[4096] = {0};
+    അക്ഷരം *p;
 
     sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    എങ്കിൽ(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        തിരികെ;
     }
 
     *p = '\0';
@@ -229,20 +229,20 @@ void find_replace(char *str, char *orig, char *rep, char *output)
     sprintf(output, "%s%s%s", buffer, rep, p+strlen(orig));
 }
 
-float sec(clock_t clocks)
+ദശാംശം sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    തിരികെ (ദശാംശം)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+ശൂന്യം മുകൾ_k(ദശാംശം *a, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ k, പൂർണ്ണസംഖ്യ *index)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
+    പൂർണ്ണസംഖ്യ i,j;
+    വേണ്ടി(j = 0; j < k; ++j) index[j] = -1;
+    വേണ്ടി(i = 0; i < n; ++i){
+        പൂർണ്ണസംഖ്യ curr = i;
+        വേണ്ടി(j = 0; j < k; ++j){
+            എങ്കിൽ((index[j] < 0) || a[curr] > a[index[j]]){
+                പൂർണ്ണസംഖ്യ swap = curr;
                 curr = index[j];
                 index[j] = swap;
             }
@@ -250,14 +250,14 @@ void top_k(float *a, int n, int k, int *index)
     }
 }
 
-void error(const char *s)
+ശൂന്യം error(സ്ഥിരം അക്ഷരം *s)
 {
     perror(s);
-    assert(0);
+    പ്രതിജ്ഞാ(0);
     exit(-1);
 }
 
-unsigned char *read_file(char *filename)
+unsigned അക്ഷരം *read_file(അക്ഷരം *filename)
 {
     FILE *fp = fopen(filename, "rb");
     size_t size;
@@ -266,410 +266,410 @@ unsigned char *read_file(char *filename)
     size = ftell(fp);
     fseek(fp, 0, SEEK_SET); 
 
-    unsigned char *text = calloc(size+1, sizeof(char));
+    unsigned അക്ഷരം *text = calloc(size+1, വലുപ്പം(അക്ഷരം));
     fread(text, 1, size, fp);
     fclose(fp);
-    return text;
+    തിരികെ text;
 }
 
-void malloc_error()
+ശൂന്യം malloc_error()
 {
     fprintf(stderr, "Malloc error\n");
     exit(-1);
 }
 
-void file_error(char *s)
+ശൂന്യം file_error(അക്ഷരം *s)
 {
     fprintf(stderr, "Couldn't open file: %s\n", s);
     exit(0);
 }
 
-list *split_str(char *s, char delim)
+list *split_str(അക്ഷരം *s, അക്ഷരം delim)
 {
     size_t i;
     size_t len = strlen(s);
     list *l = make_list();
-    list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    list_തിരുകുക(l, s);
+    വേണ്ടി(i = 0; i < len; ++i){
+        എങ്കിൽ(s[i] == delim){
             s[i] = '\0';
-            list_insert(l, &(s[i+1]));
+            list_തിരുകുക(l, &(s[i+1]));
         }
     }
-    return l;
+    തിരികെ l;
 }
 
-void strip(char *s)
+ശൂന്യം strip(അക്ഷരം *s)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+    വേണ്ടി(i = 0; i < len; ++i){
+        അക്ഷരം c = s[i];
+        എങ്കിൽ(c==' '||c=='\t'||c=='\n') ++offset;
+        അല്ലെങ്കിൽ s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void strip_char(char *s, char bad)
+ശൂന്യം strip_char(അക്ഷരം *s, അക്ഷരം bad)
 {
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
-        char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+    വേണ്ടി(i = 0; i < len; ++i){
+        അക്ഷരം c = s[i];
+        എങ്കിൽ(c==bad) ++offset;
+        അല്ലെങ്കിൽ s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+ശൂന്യം free_ptrs(ശൂന്യം **ptrs, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
-    free(ptrs);
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i) സ്വതന്ത്രം(ptrs[i]);
+    സ്വതന്ത്രം(ptrs);
 }
 
-char *fgetl(FILE *fp)
+അക്ഷരം *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
+    എങ്കിൽ(feof(fp)) തിരികെ 0;
     size_t size = 512;
-    char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
-        free(line);
-        return 0;
+    അക്ഷരം *വരി = malloc(size*വലുപ്പം(അക്ഷരം));
+    എങ്കിൽ(!fgets(വരി, size, fp)){
+        സ്വതന്ത്രം(വരി);
+        തിരികെ 0;
     }
 
-    size_t curr = strlen(line);
+    size_t curr = strlen(വരി);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
+    ആകുമ്പോൾ((വരി[curr-1] != '\n') && !feof(fp)){
+        എങ്കിൽ(curr == size-1){
             size *= 2;
-            line = realloc(line, size*sizeof(char));
-            if(!line) {
+            വരി = realloc(വരി, size*വലുപ്പം(അക്ഷരം));
+            എങ്കിൽ(!വരി) {
                 printf("%ld\n", size);
                 malloc_error();
             }
         }
         size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
-        fgets(&line[curr], readsize, fp);
-        curr = strlen(line);
+        എങ്കിൽ(readsize > INT_MAX) readsize = INT_MAX-1;
+        fgets(&വരി[curr], readsize, fp);
+        curr = strlen(വരി);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    എങ്കിൽ(വരി[curr-1] == '\n') വരി[curr-1] = '\0';
 
-    return line;
+    തിരികെ വരി;
 }
 
-int read_int(int fd)
+പൂർണ്ണസംഖ്യ read_int(പൂർണ്ണസംഖ്യ fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    പൂർണ്ണസംഖ്യ n = 0;
+    പൂർണ്ണസംഖ്യ next = പഠ(fd, &n, വലുപ്പം(പൂർണ്ണസംഖ്യ));
+    എങ്കിൽ(next <= 0) തിരികെ -1;
+    തിരികെ n;
 }
 
-void write_int(int fd, int n)
+ശൂന്യം write_int(പൂർണ്ണസംഖ്യ fd, പൂർണ്ണസംഖ്യ n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    പൂർണ്ണസംഖ്യ next = ലിഖ(fd, &n, വലുപ്പം(പൂർണ്ണസംഖ്യ));
+    എങ്കിൽ(next <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+പൂർണ്ണസംഖ്യ read_all_fail(പൂർണ്ണസംഖ്യ fd, അക്ഷരം *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    ആകുമ്പോൾ(n < bytes){
+        പൂർണ്ണസംഖ്യ next = പഠ(fd, buffer + n, bytes-n);
+        എങ്കിൽ(next <= 0) തിരികെ 1;
         n += next;
     }
-    return 0;
+    തിരികെ 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+പൂർണ്ണസംഖ്യ write_all_fail(പൂർണ്ണസംഖ്യ fd, അക്ഷരം *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    ആകുമ്പോൾ(n < bytes){
+        size_t next = ലിഖ(fd, buffer + n, bytes-n);
+        എങ്കിൽ(next <= 0) തിരികെ 1;
         n += next;
     }
-    return 0;
+    തിരികെ 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+ശൂന്യം read_all(പൂർണ്ണസംഖ്യ fd, അക്ഷരം *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
-        n += next;
-    }
-}
-
-void write_all(int fd, char *buffer, size_t bytes)
-{
-    size_t n = 0;
-    while(n < bytes){
-        size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
+    ആകുമ്പോൾ(n < bytes){
+        പൂർണ്ണസംഖ്യ next = പഠ(fd, buffer + n, bytes-n);
+        എങ്കിൽ(next <= 0) error("read failed");
         n += next;
     }
 }
 
-
-char *copy_string(char *s)
+ശൂന്യം write_all(പൂർണ്ണസംഖ്യ fd, അക്ഷരം *buffer, size_t bytes)
 {
-    char *copy = malloc(strlen(s)+1);
+    size_t n = 0;
+    ആകുമ്പോൾ(n < bytes){
+        size_t next = ലിഖ(fd, buffer + n, bytes-n);
+        എങ്കിൽ(next <= 0) error("write failed");
+        n += next;
+    }
+}
+
+
+അക്ഷരം *copy_string(അക്ഷരം *s)
+{
+    അക്ഷരം *copy = malloc(strlen(s)+1);
     strncpy(copy, s, strlen(s)+1);
-    return copy;
+    തിരികെ copy;
 }
 
-list *parse_csv_line(char *line)
+list *parse_csv_വരി(അക്ഷരം *വരി)
 {
     list *l = make_list();
-    char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    അക്ഷരം *c, *p;
+    പൂർണ്ണസംഖ്യ in = 0;
+    വേണ്ടി(c = വരി, p = വരി; *c != '\0'; ++c){
+        എങ്കിൽ(*c == '"') in = !in;
+        അല്ലെങ്കിൽ എങ്കിൽ(*c == ',' && !in){
             *c = '\0';
-            list_insert(l, copy_string(p));
+            list_തിരുകുക(l, copy_string(p));
             p = c+1;
         }
     }
-    list_insert(l, copy_string(p));
-    return l;
+    list_തിരുകുക(l, copy_string(p));
+    തിരികെ l;
 }
 
-int count_fields(char *line)
+പൂർണ്ണസംഖ്യ എണ്ണം_fields(അക്ഷരം *വരി)
 {
-    int count = 0;
-    int done = 0;
-    char *c;
-    for(c = line; !done; ++c){
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    പൂർണ്ണസംഖ്യ done = 0;
+    അക്ഷരം *c;
+    വേണ്ടി(c = വരി; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        എങ്കിൽ(*c == ',' || done) ++എണ്ണം;
     }
-    return count;
+    തിരികെ എണ്ണം;
 }
 
-float *parse_fields(char *line, int n)
+ദശാംശം *parse_fields(അക്ഷരം *വരി, പൂർണ്ണസംഖ്യ n)
 {
-    float *field = calloc(n, sizeof(float));
-    char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
+    ദശാംശം *field = calloc(n, വലുപ്പം(ദശാംശം));
+    അക്ഷരം *c, *p, *end;
+    പൂർണ്ണസംഖ്യ എണ്ണം = 0;
+    പൂർണ്ണസംഖ്യ done = 0;
+    വേണ്ടി(c = വരി, p = വരി; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done){
+        എങ്കിൽ(*c == ',' || done){
             *c = '\0';
-            field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            field[എണ്ണം] = strtod(p, &end);
+            എങ്കിൽ(p == c) field[എണ്ണം] = nan("");
+            എങ്കിൽ(end != c && (end != c-1 || *end != '\r')) field[എണ്ണം] = nan(""); //DOS file formats!
             p = c+1;
-            ++count;
+            ++എണ്ണം;
         }
     }
-    return field;
+    തിരികെ field;
 }
 
-float sum_array(float *a, int n)
+ദശാംശം sum_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; ++i) sum += a[i];
+    തിരികെ sum;
 }
 
-float mean_array(float *a, int n)
+ദശാംശം mean_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    return sum_array(a,n)/n;
+    തിരികെ sum_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+ശൂന്യം mean_arrays(ദശാംശം **a, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ els, ദശാംശം *avg)
 {
-    int i;
-    int j;
-    memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    പൂർണ്ണസംഖ്യ j;
+    memset(avg, 0, els*വലുപ്പം(ദശാംശം));
+    വേണ്ടി(j = 0; j < n; ++j){
+        വേണ്ടി(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    വേണ്ടി(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+ശൂന്യം print_statistics(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    float m = mean_array(a, n);
-    float v = variance_array(a, n);
+    ദശാംശം m = mean_array(a, n);
+    ദശാംശം v = variance_array(a, n);
     printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+ദശാംശം variance_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    float sum = 0;
-    float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
-    float variance = sum/n;
-    return variance;
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    ദശാംശം mean = mean_array(a, n);
+    വേണ്ടി(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
+    ദശാംശം variance = sum/n;
+    തിരികെ variance;
 }
 
-int constrain_int(int a, int min, int max)
+പൂർണ്ണസംഖ്യ constrain_int(പൂർണ്ണസംഖ്യ a, പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    എങ്കിൽ (a < min) തിരികെ min;
+    എങ്കിൽ (a > max) തിരികെ max;
+    തിരികെ a;
 }
 
-float constrain(float min, float max, float a)
+ദശാംശം constrain(ദശാംശം min, ദശാംശം max, ദശാംശം a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    എങ്കിൽ (a < min) തിരികെ min;
+    എങ്കിൽ (a > max) തിരികെ max;
+    തിരികെ a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+ദശാംശം dist_array(ദശാംശം *a, ദശാംശം *b, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ sub)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
+    തിരികെ sqrt(sum);
 }
 
-float mse_array(float *a, int n)
+ദശാംശം mse_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; ++i) sum += a[i]*a[i];
+    തിരികെ sqrt(sum/n);
 }
 
-void normalize_array(float *a, int n)
+ശൂന്യം normalize_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    float mu = mean_array(a,n);
-    float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം mu = mean_array(a,n);
+    ദശാംശം sigma = sqrt(variance_array(a,n));
+    വേണ്ടി(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
     mu = mean_array(a,n);
     sigma = sqrt(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+ശൂന്യം translate_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n, ദശാംശം s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+ദശാംശം mag_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    float sum = 0;
-    for(i = 0; i < n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം sum = 0;
+    വേണ്ടി(i = 0; i < n; ++i){
         sum += a[i]*a[i];   
     }
-    return sqrt(sum);
+    തിരികെ sqrt(sum);
 }
 
-void scale_array(float *a, int n, float s)
+ശൂന്യം scale_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n, ദശാംശം s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+പൂർണ്ണസംഖ്യ sample_array(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    float sum = sum_array(a, n);
+    ദശാംശം sum = sum_array(a, n);
     scale_array(a, n, 1./sum);
-    float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    ദശാംശം r = rand_uniform(0, 1);
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        എങ്കിൽ (r <= 0) തിരികെ i;
     }
-    return n-1;
+    തിരികെ n-1;
 }
 
-int max_int_index(int *a, int n)
+പൂർണ്ണസംഖ്യ max_int_index(പൂർണ്ണസംഖ്യ *a, പൂർണ്ണസംഖ്യ n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    എങ്കിൽ(n <= 0) തിരികെ -1;
+    പൂർണ്ണസംഖ്യ i, max_i = 0;
+    പൂർണ്ണസംഖ്യ max = a[0];
+    വേണ്ടി(i = 1; i < n; ++i){
+        എങ്കിൽ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    തിരികെ max_i;
 }
 
-int max_index(float *a, int n)
+പൂർണ്ണസംഖ്യ max_index(ദശാംശം *a, പൂർണ്ണസംഖ്യ n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    എങ്കിൽ(n <= 0) തിരികെ -1;
+    പൂർണ്ണസംഖ്യ i, max_i = 0;
+    ദശാംശം max = a[0];
+    വേണ്ടി(i = 1; i < n; ++i){
+        എങ്കിൽ(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    തിരികെ max_i;
 }
 
-int int_index(int *a, int val, int n)
+പൂർണ്ണസംഖ്യ int_index(പൂർണ്ണസംഖ്യ *a, പൂർണ്ണസംഖ്യ val, പൂർണ്ണസംഖ്യ n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    പൂർണ്ണസംഖ്യ i;
+    വേണ്ടി(i = 0; i < n; ++i){
+        എങ്കിൽ(a[i] == val) തിരികെ i;
     }
-    return -1;
+    തിരികെ -1;
 }
 
-int rand_int(int min, int max)
+പൂർണ്ണസംഖ്യ rand_int(പൂർണ്ണസംഖ്യ min, പൂർണ്ണസംഖ്യ max)
 {
-    if (max < min){
-        int s = min;
+    എങ്കിൽ (max < min){
+        പൂർണ്ണസംഖ്യ s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    പൂർണ്ണസംഖ്യ r = (rand()%(max - min + 1)) + min;
+    തിരികെ r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal()
+ദശാംശം rand_normal()
 {
-    static int haveSpare = 0;
-    static double rand1, rand2;
+    സ്ഥിതം പൂർണ്ണസംഖ്യ haveSpare = 0;
+    സ്ഥിതം ഇരട്ട rand1, rand2;
 
-    if(haveSpare)
+    എങ്കിൽ(haveSpare)
     {
         haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        തിരികെ sqrt(rand1) * sin(rand2);
     }
 
     haveSpare = 1;
 
-    rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
+    rand1 = rand() / ((ഇരട്ട) RAND_MAX);
+    എങ്കിൽ(rand1 < 1e-100) rand1 = 1e-100;
     rand1 = -2 * log(rand1);
-    rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
+    rand2 = (rand() / ((ഇരട്ട) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    തിരികെ sqrt(rand1) * cos(rand2);
 }
 
 /*
@@ -685,7 +685,7 @@ float rand_normal()
 
 size_t rand_size_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    തിരികെ  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -695,32 +695,32 @@ size_t rand_size_t()
         ((size_t)(rand()&0xff) << 0);
 }
 
-float rand_uniform(float min, float max)
+ദശാംശം rand_uniform(ദശാംശം min, ദശാംശം max)
 {
-    if(max < min){
-        float swap = min;
+    എങ്കിൽ(max < min){
+        ദശാംശം swap = min;
         min = max;
         max = swap;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    തിരികെ ((ദശാംശം)rand()/RAND_MAX * (max - min)) + min;
 }
 
-float rand_scale(float s)
+ദശാംശം rand_scale(ദശാംശം s)
 {
-    float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    ദശാംശം scale = rand_uniform(1, s);
+    എങ്കിൽ(rand()%2) തിരികെ scale;
+    തിരികെ 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+ദശാംശം **one_hot_encode(ദശാംശം *a, പൂർണ്ണസംഖ്യ n, പൂർണ്ണസംഖ്യ k)
 {
-    int i;
-    float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
-        t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
+    പൂർണ്ണസംഖ്യ i;
+    ദശാംശം **t = calloc(n, വലുപ്പം(ദശാംശം*));
+    വേണ്ടി(i = 0; i < n; ++i){
+        t[i] = calloc(k, വലുപ്പം(ദശാംശം));
+        പൂർണ്ണസംഖ്യ index = (പൂർണ്ണസംഖ്യ)a[i];
         t[i][index] = 1;
     }
-    return t;
+    തിരികെ t;
 }
 

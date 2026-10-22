@@ -1,34 +1,34 @@
 #ifndef GEMM_H
 #define GEMM_H
 
-void gemm_bin(int M, int N, int K, float ALPHA, 
-        char  *A, int lda, 
-        float *B, int ldb,
-        float *C, int ldc);
+ശൂന്യം gemm_bin(പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        അക്ഷരം  *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc);
         
-void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
-                    float *A, int lda, 
-                    float *B, int ldb,
-                    float BETA,
-                    float *C, int ldc);
+ശൂന്യം gemm(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+                    ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+                    ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+                    ദശാംശം BETA,
+                    ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc);
 
-void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ശൂന്യം gemm_cpu(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം BETA,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc);
 
 #ifdef GPU
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A_gpu, int lda, 
-        float *B_gpu, int ldb,
-        float BETA,
-        float *C_gpu, int ldc);
+ശൂന്യം gemm_gpu(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A_gpu, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B_gpu, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം BETA,
+        ദശാംശം *C_gpu, പൂർണ്ണസംഖ്യ ldc);
 
-void gemm_gpu(int TA, int TB, int M, int N, int K, float ALPHA, 
-        float *A, int lda, 
-        float *B, int ldb,
-        float BETA,
-        float *C, int ldc);
+ശൂന്യം gemm_gpu(പൂർണ്ണസംഖ്യ TA, പൂർണ്ണസംഖ്യ TB, പൂർണ്ണസംഖ്യ M, പൂർണ്ണസംഖ്യ N, പൂർണ്ണസംഖ്യ K, ദശാംശം ALPHA, 
+        ദശാംശം *A, പൂർണ്ണസംഖ്യ lda, 
+        ദശാംശം *B, പൂർണ്ണസംഖ്യ ldb,
+        ദശാംശം BETA,
+        ദശാംശം *C, പൂർണ്ണസംഖ്യ ldc);
 #endif
 #endif
