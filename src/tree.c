@@ -8,13 +8,13 @@ void change_leaves(tree *t, char *leaf_list)
 {
     list *llist = get_paths(leaf_list);
     char **leaves = (char **)list_to_array(llist);
-    int n = llist->size;
-    int i,j;
-    int found = 0;
-    for(i = 0; i < t->n; ++i){
+    số_nguyên n = llist->size;
+    số_nguyên i,j;
+    số_nguyên found = 0;
+    cho(i = 0; i < t->n; ++i){
         t->leaf[i] = 0;
-        for(j = 0; j < n; ++j){
-            if (0==strcmp(t->name[i], leaves[j])){
+        cho(j = 0; j < n; ++j){
+            nếu (0==strcmp(t->name[i], leaves[j])){
                 t->leaf[i] = 1;
                 ++found;
                 break;
@@ -24,60 +24,60 @@ void change_leaves(tree *t, char *leaf_list)
     fprintf(stderr, "Found %d leaves.\n", found);
 }
 
-float get_hierarchy_probability(float *x, tree *hier, int c, int stride)
+float get_hierarchy_probability(float *x, tree *hier, số_nguyên c, số_nguyên stride)
 {
     float p = 1;
-    while(c >= 0){
+    trong_khi(c >= 0){
         p = p * x[c*stride];
         c = hier->parent[c];
     }
-    return p;
+    trả_về p;
 }
 
-void hierarchy_predictions(float *predictions, int n, tree *hier, int only_leaves, int stride)
+void hierarchy_predictions(float *predictions, số_nguyên n, tree *hier, số_nguyên only_leaves, số_nguyên stride)
 {
-    int j;
-    for(j = 0; j < n; ++j){
-        int parent = hier->parent[j];
-        if(parent >= 0){
+    số_nguyên j;
+    cho(j = 0; j < n; ++j){
+        số_nguyên parent = hier->parent[j];
+        nếu(parent >= 0){
             predictions[j*stride] *= predictions[parent*stride]; 
         }
     }
-    if(only_leaves){
-        for(j = 0; j < n; ++j){
-            if(!hier->leaf[j]) predictions[j*stride] = 0;
+    nếu(only_leaves){
+        cho(j = 0; j < n; ++j){
+            nếu(!hier->leaf[j]) predictions[j*stride] = 0;
         }
     }
 }
 
-int hierarchy_top_prediction(float *predictions, tree *hier, float thresh, int stride)
+số_nguyên hierarchy_top_prediction(float *predictions, tree *hier, float thresh, số_nguyên stride)
 {
     float p = 1;
-    int group = 0;
-    int i;
-    while(1){
+    số_nguyên group = 0;
+    số_nguyên i;
+    trong_khi(1){
         float max = 0;
-        int max_i = 0;
+        số_nguyên max_i = 0;
 
-        for(i = 0; i < hier->group_size[group]; ++i){
-            int index = i + hier->group_offset[group];
+        cho(i = 0; i < hier->group_size[group]; ++i){
+            số_nguyên index = i + hier->group_offset[group];
             float val = predictions[(i + hier->group_offset[group])*stride];
-            if(val > max){
+            nếu(val > max){
                 max_i = index;
                 max = val;
             }
         }
-        if(p*max > thresh){
+        nếu(p*max > thresh){
             p = p*max;
             group = hier->child[max_i];
-            if(hier->child[max_i] < 0) return max_i;
-        } else if (group == 0){
-            return max_i;
-        } else {
-            return hier->parent[hier->group_offset[group]];
+            nếu(hier->child[max_i] < 0) trả_về max_i;
+        } không_thì nếu (group == 0){
+            trả_về max_i;
+        } không_thì {
+            trả_về hier->parent[hier->group_offset[group]];
         }
     }
-    return 0;
+    trả_về 0;
 }
 
 tree *read_tree(char *filename)
@@ -86,54 +86,54 @@ tree *read_tree(char *filename)
     FILE *fp = fopen(filename, "r");
 
     char *line;
-    int last_parent = -1;
-    int group_size = 0;
-    int groups = 0;
-    int n = 0;
-    while((line=fgetl(fp)) != 0){
+    số_nguyên last_parent = -1;
+    số_nguyên group_size = 0;
+    số_nguyên groups = 0;
+    số_nguyên n = 0;
+    trong_khi((line=fgetl(fp)) != 0){
         char *id = calloc(256, sizeof(char));
-        int parent = -1;
+        số_nguyên parent = -1;
         sscanf(line, "%s %d", id, &parent);
-        t.parent = realloc(t.parent, (n+1)*sizeof(int));
+        t.parent = realloc(t.parent, (n+1)*sizeof(số_nguyên));
         t.parent[n] = parent;
 
-        t.child = realloc(t.child, (n+1)*sizeof(int));
+        t.child = realloc(t.child, (n+1)*sizeof(số_nguyên));
         t.child[n] = -1;
 
         t.name = realloc(t.name, (n+1)*sizeof(char *));
         t.name[n] = id;
-        if(parent != last_parent){
+        nếu(parent != last_parent){
             ++groups;
-            t.group_offset = realloc(t.group_offset, groups * sizeof(int));
+            t.group_offset = realloc(t.group_offset, groups * sizeof(số_nguyên));
             t.group_offset[groups - 1] = n - group_size;
-            t.group_size = realloc(t.group_size, groups * sizeof(int));
+            t.group_size = realloc(t.group_size, groups * sizeof(số_nguyên));
             t.group_size[groups - 1] = group_size;
             group_size = 0;
             last_parent = parent;
         }
-        t.group = realloc(t.group, (n+1)*sizeof(int));
+        t.group = realloc(t.group, (n+1)*sizeof(số_nguyên));
         t.group[n] = groups;
-        if (parent >= 0) {
+        nếu (parent >= 0) {
             t.child[parent] = groups;
         }
         ++n;
         ++group_size;
     }
     ++groups;
-    t.group_offset = realloc(t.group_offset, groups * sizeof(int));
+    t.group_offset = realloc(t.group_offset, groups * sizeof(số_nguyên));
     t.group_offset[groups - 1] = n - group_size;
-    t.group_size = realloc(t.group_size, groups * sizeof(int));
+    t.group_size = realloc(t.group_size, groups * sizeof(số_nguyên));
     t.group_size[groups - 1] = group_size;
     t.n = n;
     t.groups = groups;
-    t.leaf = calloc(n, sizeof(int));
-    int i;
-    for(i = 0; i < n; ++i) t.leaf[i] = 1;
-    for(i = 0; i < n; ++i) if(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
+    t.leaf = calloc(n, sizeof(số_nguyên));
+    số_nguyên i;
+    cho(i = 0; i < n; ++i) t.leaf[i] = 1;
+    cho(i = 0; i < n; ++i) nếu(t.parent[i] >= 0) t.leaf[t.parent[i]] = 0;
 
     fclose(fp);
     tree *tree_ptr = calloc(1, sizeof(tree));
     *tree_ptr = t;
     //error(0);
-    return tree_ptr;
+    trả_về tree_ptr;
 }

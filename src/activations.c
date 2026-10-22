@@ -9,98 +9,98 @@ char *get_activation_string(ACTIVATION a)
 {
     switch(a){
         case LOGISTIC:
-            return "logistic";
+            trả_về "logistic";
         case LOGGY:
-            return "loggy";
+            trả_về "loggy";
         case RELU:
-            return "relu";
+            trả_về "relu";
         case ELU:
-            return "elu";
+            trả_về "elu";
         case SELU:
-            return "selu";
+            trả_về "selu";
         case RELIE:
-            return "relie";
+            trả_về "relie";
         case RAMP:
-            return "ramp";
+            trả_về "ramp";
         case LINEAR:
-            return "linear";
+            trả_về "linear";
         case TANH:
-            return "tanh";
+            trả_về "tanh";
         case PLSE:
-            return "plse";
+            trả_về "plse";
         case LEAKY:
-            return "leaky";
+            trả_về "leaky";
         case STAIR:
-            return "stair";
+            trả_về "stair";
         case HARDTAN:
-            return "hardtan";
+            trả_về "hardtan";
         case LHTAN:
-            return "lhtan";
+            trả_về "lhtan";
         default:
             break;
     }
-    return "relu";
+    trả_về "relu";
 }
 
 ACTIVATION get_activation(char *s)
 {
-    if (strcmp(s, "logistic")==0) return LOGISTIC;
-    if (strcmp(s, "loggy")==0) return LOGGY;
-    if (strcmp(s, "relu")==0) return RELU;
-    if (strcmp(s, "elu")==0) return ELU;
-    if (strcmp(s, "selu")==0) return SELU;
-    if (strcmp(s, "relie")==0) return RELIE;
-    if (strcmp(s, "plse")==0) return PLSE;
-    if (strcmp(s, "hardtan")==0) return HARDTAN;
-    if (strcmp(s, "lhtan")==0) return LHTAN;
-    if (strcmp(s, "linear")==0) return LINEAR;
-    if (strcmp(s, "ramp")==0) return RAMP;
-    if (strcmp(s, "leaky")==0) return LEAKY;
-    if (strcmp(s, "tanh")==0) return TANH;
-    if (strcmp(s, "stair")==0) return STAIR;
+    nếu (strcmp(s, "logistic")==0) trả_về LOGISTIC;
+    nếu (strcmp(s, "loggy")==0) trả_về LOGGY;
+    nếu (strcmp(s, "relu")==0) trả_về RELU;
+    nếu (strcmp(s, "elu")==0) trả_về ELU;
+    nếu (strcmp(s, "selu")==0) trả_về SELU;
+    nếu (strcmp(s, "relie")==0) trả_về RELIE;
+    nếu (strcmp(s, "plse")==0) trả_về PLSE;
+    nếu (strcmp(s, "hardtan")==0) trả_về HARDTAN;
+    nếu (strcmp(s, "lhtan")==0) trả_về LHTAN;
+    nếu (strcmp(s, "linear")==0) trả_về LINEAR;
+    nếu (strcmp(s, "ramp")==0) trả_về RAMP;
+    nếu (strcmp(s, "leaky")==0) trả_về LEAKY;
+    nếu (strcmp(s, "tanh")==0) trả_về TANH;
+    nếu (strcmp(s, "stair")==0) trả_về STAIR;
     fprintf(stderr, "Couldn't find activation function %s, going with ReLU\n", s);
-    return RELU;
+    trả_về RELU;
 }
 
 float activate(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_activate(x);
+            trả_về linear_activate(x);
         case LOGISTIC:
-            return logistic_activate(x);
+            trả_về logistic_activate(x);
         case LOGGY:
-            return loggy_activate(x);
+            trả_về loggy_activate(x);
         case RELU:
-            return relu_activate(x);
+            trả_về relu_activate(x);
         case ELU:
-            return elu_activate(x);
+            trả_về elu_activate(x);
         case SELU:
-            return selu_activate(x);
+            trả_về selu_activate(x);
         case RELIE:
-            return relie_activate(x);
+            trả_về relie_activate(x);
         case RAMP:
-            return ramp_activate(x);
+            trả_về ramp_activate(x);
         case LEAKY:
-            return leaky_activate(x);
+            trả_về leaky_activate(x);
         case TANH:
-            return tanh_activate(x);
+            trả_về tanh_activate(x);
         case PLSE:
-            return plse_activate(x);
+            trả_về plse_activate(x);
         case STAIR:
-            return stair_activate(x);
+            trả_về stair_activate(x);
         case HARDTAN:
-            return hardtan_activate(x);
+            trả_về hardtan_activate(x);
         case LHTAN:
-            return lhtan_activate(x);
+            trả_về lhtan_activate(x);
     }
-    return 0;
+    trả_về 0;
 }
 
-void activate_array(float *x, const int n, const ACTIVATION a)
+void activate_array(float *x, const số_nguyên n, const ACTIVATION a)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    số_nguyên i;
+    cho(i = 0; i < n; ++i){
         x[i] = activate(x[i], a);
     }
 }
@@ -109,41 +109,41 @@ float gradient(float x, ACTIVATION a)
 {
     switch(a){
         case LINEAR:
-            return linear_gradient(x);
+            trả_về linear_gradient(x);
         case LOGISTIC:
-            return logistic_gradient(x);
+            trả_về logistic_gradient(x);
         case LOGGY:
-            return loggy_gradient(x);
+            trả_về loggy_gradient(x);
         case RELU:
-            return relu_gradient(x);
+            trả_về relu_gradient(x);
         case ELU:
-            return elu_gradient(x);
+            trả_về elu_gradient(x);
         case SELU:
-            return selu_gradient(x);
+            trả_về selu_gradient(x);
         case RELIE:
-            return relie_gradient(x);
+            trả_về relie_gradient(x);
         case RAMP:
-            return ramp_gradient(x);
+            trả_về ramp_gradient(x);
         case LEAKY:
-            return leaky_gradient(x);
+            trả_về leaky_gradient(x);
         case TANH:
-            return tanh_gradient(x);
+            trả_về tanh_gradient(x);
         case PLSE:
-            return plse_gradient(x);
+            trả_về plse_gradient(x);
         case STAIR:
-            return stair_gradient(x);
+            trả_về stair_gradient(x);
         case HARDTAN:
-            return hardtan_gradient(x);
+            trả_về hardtan_gradient(x);
         case LHTAN:
-            return lhtan_gradient(x);
+            trả_về lhtan_gradient(x);
     }
-    return 0;
+    trả_về 0;
 }
 
-void gradient_array(const float *x, const int n, const ACTIVATION a, float *delta)
+void gradient_array(const float *x, const số_nguyên n, const ACTIVATION a, float *delta)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    số_nguyên i;
+    cho(i = 0; i < n; ++i){
         delta[i] *= gradient(x[i], a);
     }
 } 

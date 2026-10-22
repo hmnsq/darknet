@@ -1,36 +1,36 @@
 #include "im2col.h"
 #include <stdio.h>
-float im2col_get_pixel(float *im, int height, int width, int channels,
-                        int row, int col, int channel, int pad)
+float im2col_get_pixel(float *im, số_nguyên height, số_nguyên width, số_nguyên channels,
+                        số_nguyên row, số_nguyên col, số_nguyên channel, số_nguyên pad)
 {
     row -= pad;
     col -= pad;
 
-    if (row < 0 || col < 0 ||
-        row >= height || col >= width) return 0;
-    return im[col + width*(row + height*channel)];
+    nếu (row < 0 || col < 0 ||
+        row >= height || col >= width) trả_về 0;
+    trả_về im[col + width*(row + height*channel)];
 }
 
 //From Berkeley Vision's Caffe!
 //https://github.com/BVLC/caffe/blob/master/LICENSE
 void im2col_cpu(float* data_im,
-     int channels,  int height,  int width,
-     int ksize,  int stride, int pad, float* data_col) 
+     số_nguyên channels,  số_nguyên height,  số_nguyên width,
+     số_nguyên ksize,  số_nguyên stride, số_nguyên pad, float* data_col) 
 {
-    int c,h,w;
-    int height_col = (height + 2*pad - ksize) / stride + 1;
-    int width_col = (width + 2*pad - ksize) / stride + 1;
+    số_nguyên c,h,w;
+    số_nguyên height_col = (height + 2*pad - ksize) / stride + 1;
+    số_nguyên width_col = (width + 2*pad - ksize) / stride + 1;
 
-    int channels_col = channels * ksize * ksize;
-    for (c = 0; c < channels_col; ++c) {
-        int w_offset = c % ksize;
-        int h_offset = (c / ksize) % ksize;
-        int c_im = c / ksize / ksize;
-        for (h = 0; h < height_col; ++h) {
-            for (w = 0; w < width_col; ++w) {
-                int im_row = h_offset + h * stride;
-                int im_col = w_offset + w * stride;
-                int col_index = (c * height_col + h) * width_col + w;
+    số_nguyên channels_col = channels * ksize * ksize;
+    cho (c = 0; c < channels_col; ++c) {
+        số_nguyên w_offset = c % ksize;
+        số_nguyên h_offset = (c / ksize) % ksize;
+        số_nguyên c_im = c / ksize / ksize;
+        cho (h = 0; h < height_col; ++h) {
+            cho (w = 0; w < width_col; ++w) {
+                số_nguyên im_row = h_offset + h * stride;
+                số_nguyên im_col = w_offset + w * stride;
+                số_nguyên col_index = (c * height_col + h) * width_col + w;
                 data_col[col_index] = im2col_get_pixel(data_im, height, width, channels,
                         im_row, im_col, c_im, pad);
             }

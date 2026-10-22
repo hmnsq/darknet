@@ -5,8 +5,8 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_normalization_layer(int batch, int w, int h, int c, int size, float alpha, float beta, float kappa);
-void resize_normalization_layer(layer *layer, int h, int w);
+layer make_normalization_layer(số_nguyên batch, số_nguyên w, số_nguyên h, số_nguyên c, số_nguyên size, float alpha, float beta, float kappa);
+void resize_normalization_layer(layer *layer, số_nguyên h, số_nguyên w);
 void forward_normalization_layer(const layer layer, network net);
 void backward_normalization_layer(const layer layer, network net);
 void visualize_normalization_layer(layer layer, char *window);

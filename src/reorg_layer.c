@@ -5,7 +5,7 @@
 #include <stdio.h>
 
 
-layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, int flatten, int extra)
+layer make_reorg_layer(số_nguyên batch, số_nguyên w, số_nguyên h, số_nguyên c, số_nguyên stride, số_nguyên reverse, số_nguyên flatten, số_nguyên extra)
 {
     layer l = {0};
     l.type = REORG;
@@ -16,11 +16,11 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.w = w;
     l.c = c;
     l.flatten = flatten;
-    if(reverse){
+    nếu(reverse){
         l.out_w = w*stride;
         l.out_h = h*stride;
         l.out_c = c/(stride*stride);
-    }else{
+    }không_thì{
         l.out_w = w/stride;
         l.out_h = h/stride;
         l.out_c = c*(stride*stride);
@@ -29,17 +29,17 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
 
     l.outputs = l.out_h * l.out_w * l.out_c;
     l.inputs = h*w*c;
-    if(l.extra){
+    nếu(l.extra){
         l.out_w = l.out_h = l.out_c = 0;
         l.outputs = l.inputs + l.extra;
     }
 
-    if(extra){
+    nếu(extra){
         fprintf(stderr, "reorg              %4d   ->  %4d\n",  l.inputs, l.outputs);
-    } else {
+    } không_thì {
         fprintf(stderr, "reorg              /%2d  %4d x%4d x%4d   ->  %4d x%4d x%4d\n",  stride, w, h, c, l.out_w, l.out_h, l.out_c);
     }
-    int output_size = l.outputs * batch;
+    số_nguyên output_size = l.outputs * batch;
     l.output =  calloc(output_size, sizeof(float));
     l.delta =   calloc(output_size, sizeof(float));
 
@@ -52,22 +52,22 @@ layer make_reorg_layer(int batch, int w, int h, int c, int stride, int reverse, 
     l.output_gpu  = cuda_make_array(l.output, output_size);
     l.delta_gpu   = cuda_make_array(l.delta, output_size);
 #endif
-    return l;
+    trả_về l;
 }
 
-void resize_reorg_layer(layer *l, int w, int h)
+void resize_reorg_layer(layer *l, số_nguyên w, số_nguyên h)
 {
-    int stride = l->stride;
-    int c = l->c;
+    số_nguyên stride = l->stride;
+    số_nguyên c = l->c;
 
     l->h = h;
     l->w = w;
 
-    if(l->reverse){
+    nếu(l->reverse){
         l->out_w = w*stride;
         l->out_h = h*stride;
         l->out_c = c/(stride*stride);
-    }else{
+    }không_thì{
         l->out_w = w/stride;
         l->out_h = h/stride;
         l->out_c = c*(stride*stride);
@@ -75,7 +75,7 @@ void resize_reorg_layer(layer *l, int w, int h)
 
     l->outputs = l->out_h * l->out_w * l->out_c;
     l->inputs = l->outputs;
-    int output_size = l->outputs * l->batch;
+    số_nguyên output_size = l->outputs * l->batch;
 
     l->output = realloc(l->output, output_size * sizeof(float));
     l->delta = realloc(l->delta, output_size * sizeof(float));
@@ -90,42 +90,42 @@ void resize_reorg_layer(layer *l, int w, int h)
 
 void forward_reorg_layer(const layer l, network net)
 {
-    int i;
-    if(l.flatten){
+    số_nguyên i;
+    nếu(l.flatten){
         memcpy(l.output, net.input, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+        nếu(l.reverse){
             flatten(l.output, l.w*l.h, l.c, l.batch, 0);
-        }else{
+        }không_thì{
             flatten(l.output, l.w*l.h, l.c, l.batch, 1);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } không_thì nếu (l.extra) {
+        cho(i = 0; i < l.batch; ++i){
             copy_cpu(l.inputs, net.input + i*l.inputs, 1, l.output + i*l.outputs, 1);
         }
-    } else if (l.reverse){
+    } không_thì nếu (l.reverse){
         reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 1, l.output);
-    } else {
+    } không_thì {
         reorg_cpu(net.input, l.w, l.h, l.c, l.batch, l.stride, 0, l.output);
     }
 }
 
 void backward_reorg_layer(const layer l, network net)
 {
-    int i;
-    if(l.flatten){
+    số_nguyên i;
+    nếu(l.flatten){
         memcpy(net.delta, l.delta, l.outputs*l.batch*sizeof(float));
-        if(l.reverse){
+        nếu(l.reverse){
             flatten(net.delta, l.w*l.h, l.c, l.batch, 1);
-        }else{
+        }không_thì{
             flatten(net.delta, l.w*l.h, l.c, l.batch, 0);
         }
-    } else if(l.reverse){
+    } không_thì nếu(l.reverse){
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta);
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } không_thì nếu (l.extra) {
+        cho(i = 0; i < l.batch; ++i){
             copy_cpu(l.inputs, l.delta + i*l.outputs, 1, net.delta + i*l.inputs, 1);
         }
-    }else{
+    }không_thì{
         reorg_cpu(l.delta, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta);
     }
 }
@@ -133,40 +133,40 @@ void backward_reorg_layer(const layer l, network net)
 #ifdef GPU
 void forward_reorg_layer_gpu(layer l, network net)
 {
-    int i;
-    if(l.flatten){
-        if(l.reverse){
+    số_nguyên i;
+    nếu(l.flatten){
+        nếu(l.reverse){
             flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 0, l.output_gpu);
-        }else{
+        }không_thì{
             flatten_gpu(net.input_gpu, l.w*l.h, l.c, l.batch, 1, l.output_gpu);
         }
-    } else if (l.extra) {
-        for(i = 0; i < l.batch; ++i){
+    } không_thì nếu (l.extra) {
+        cho(i = 0; i < l.batch; ++i){
             copy_gpu(l.inputs, net.input_gpu + i*l.inputs, 1, l.output_gpu + i*l.outputs, 1);
         }
-    } else if (l.reverse) {
+    } không_thì nếu (l.reverse) {
         reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, l.output_gpu);
-    }else {
+    }không_thì {
         reorg_gpu(net.input_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, l.output_gpu);
     }
 }
 
 void backward_reorg_layer_gpu(layer l, network net)
 {
-    if(l.flatten){
-        if(l.reverse){
+    nếu(l.flatten){
+        nếu(l.reverse){
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 1, net.delta_gpu);
-        }else{
+        }không_thì{
             flatten_gpu(l.delta_gpu, l.w*l.h, l.c, l.batch, 0, net.delta_gpu);
         }
-    } else if (l.extra) {
-        int i;
-        for(i = 0; i < l.batch; ++i){
+    } không_thì nếu (l.extra) {
+        số_nguyên i;
+        cho(i = 0; i < l.batch; ++i){
             copy_gpu(l.inputs, l.delta_gpu + i*l.outputs, 1, net.delta_gpu + i*l.inputs, 1);
         }
-    } else if(l.reverse){
+    } không_thì nếu(l.reverse){
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 0, net.delta_gpu);
-    } else {
+    } không_thì {
         reorg_gpu(l.delta_gpu, l.w, l.h, l.c, l.batch, l.stride, 1, net.delta_gpu);
     }
 }

@@ -5,11 +5,11 @@
 #include "layer.h"
 #include "network.h"
 
-layer make_iseg_layer(int batch, int w, int h, int classes, int ids);
+layer make_iseg_layer(số_nguyên batch, số_nguyên w, số_nguyên h, số_nguyên classes, số_nguyên ids);
 void forward_iseg_layer(const layer l, network net);
 void backward_iseg_layer(const layer l, network net);
-void resize_iseg_layer(layer *l, int w, int h);
-int iseg_num_detections(layer l, float thresh);
+void resize_iseg_layer(layer *l, số_nguyên w, số_nguyên h);
+số_nguyên iseg_num_detections(layer l, float thresh);
 
 #ifdef GPU
 void forward_iseg_layer_gpu(const layer l, network net);

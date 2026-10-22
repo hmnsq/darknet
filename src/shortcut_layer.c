@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <assert.h>
 
-layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int h2, int c2)
+layer make_shortcut_layer(số_nguyên batch, số_nguyên index, số_nguyên w, số_nguyên h, số_nguyên c, số_nguyên w2, số_nguyên h2, số_nguyên c2)
 {
     fprintf(stderr, "res  %3d                %4d x%4d x%4d   ->  %4d x%4d x%4d\n",index, w2,h2,c2, w,h,c);
     layer l = {0};
@@ -35,10 +35,10 @@ layer make_shortcut_layer(int batch, int index, int w, int h, int c, int w2, int
     l.delta_gpu =  cuda_make_array(l.delta, l.outputs*batch);
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     #endif
-    return l;
+    trả_về l;
 }
 
-void resize_shortcut_layer(layer *l, int w, int h)
+void resize_shortcut_layer(layer *l, số_nguyên w, số_nguyên h)
 {
     assert(l->w == l->out_w);
     assert(l->h == l->out_h);

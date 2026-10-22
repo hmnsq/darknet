@@ -5,11 +5,11 @@
 typedef struct{
     char *key;
     char *val;
-    int used;
+    số_nguyên used;
 } kvp;
 
 
-int read_option(char *s, list *options);
+số_nguyên read_option(char *s, list *options);
 void option_insert(list *l, char *key, char *val);
 char *option_find(list *l, char *key);
 float option_find_float(list *l, char *key, float def);

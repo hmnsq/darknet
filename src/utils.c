@@ -27,54 +27,54 @@ double get_wall_time()
 double what_time_is_it_now()
 {
     struct timeval time;
-    if (gettimeofday(&time,NULL)){
-        return 0;
+    nếu (gettimeofday(&time,NULL)){
+        trả_về 0;
     }
-    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+    trả_về (double)time.tv_sec + (double)time.tv_usec * .000001;
 }
 
-int *read_intlist(char *gpu_list, int *ngpus, int d)
+số_nguyên *read_intlist(char *gpu_list, số_nguyên *ngpus, số_nguyên d)
 {
-    int *gpus = 0;
-    if(gpu_list){
-        int len = strlen(gpu_list);
+    số_nguyên *gpus = 0;
+    nếu(gpu_list){
+        số_nguyên len = strlen(gpu_list);
         *ngpus = 1;
-        int i;
-        for(i = 0; i < len; ++i){
-            if (gpu_list[i] == ',') ++*ngpus;
+        số_nguyên i;
+        cho(i = 0; i < len; ++i){
+            nếu (gpu_list[i] == ',') ++*ngpus;
         }
-        gpus = calloc(*ngpus, sizeof(int));
-        for(i = 0; i < *ngpus; ++i){
+        gpus = calloc(*ngpus, sizeof(số_nguyên));
+        cho(i = 0; i < *ngpus; ++i){
             gpus[i] = atoi(gpu_list);
             gpu_list = strchr(gpu_list, ',')+1;
         }
-    } else {
+    } không_thì {
         gpus = calloc(1, sizeof(float));
         *gpus = d;
         *ngpus = 1;
     }
-    return gpus;
+    trả_về gpus;
 }
 
-int *read_map(char *filename)
+số_nguyên *read_map(char *filename)
 {
-    int n = 0;
-    int *map = 0;
+    số_nguyên n = 0;
+    số_nguyên *map = 0;
     char *str;
     FILE *file = fopen(filename, "r");
-    if(!file) file_error(filename);
-    while((str=fgetl(file))){
+    nếu(!file) file_error(filename);
+    trong_khi((str=fgetl(file))){
         ++n;
-        map = realloc(map, n*sizeof(int));
+        map = realloc(map, n*sizeof(số_nguyên));
         map[n-1] = atoi(str);
     }
-    return map;
+    trả_về map;
 }
 
 void sorta_shuffle(void *arr, size_t n, size_t size, size_t sections)
 {
     size_t i;
-    for(i = 0; i < sections; ++i){
+    cho(i = 0; i < sections; ++i){
         size_t start = n*i/sections;
         size_t end = n*(i+1)/sections;
         size_t num = end-start;
@@ -86,7 +86,7 @@ void shuffle(void *arr, size_t n, size_t size)
 {
     size_t i;
     void *swp = calloc(1, size);
-    for(i = 0; i < n-1; ++i){
+    cho(i = 0; i < n-1; ++i){
         size_t j = i + rand()/(RAND_MAX / (n-i)+1);
         memcpy(swp,          arr+(j*size), size);
         memcpy(arr+(j*size), arr+(i*size), size);
@@ -94,85 +94,85 @@ void shuffle(void *arr, size_t n, size_t size)
     }
 }
 
-int *random_index_order(int min, int max)
+số_nguyên *random_index_order(số_nguyên min, số_nguyên max)
 {
-    int *inds = calloc(max-min, sizeof(int));
-    int i;
-    for(i = min; i < max; ++i){
+    số_nguyên *inds = calloc(max-min, sizeof(số_nguyên));
+    số_nguyên i;
+    cho(i = min; i < max; ++i){
         inds[i] = i;
     }
-    for(i = min; i < max-1; ++i){
-        int swap = inds[i];
-        int index = i + rand()%(max-i);
+    cho(i = min; i < max-1; ++i){
+        số_nguyên swap = inds[i];
+        số_nguyên index = i + rand()%(max-i);
         inds[i] = inds[index];
         inds[index] = swap;
     }
-    return inds;
+    trả_về inds;
 }
 
-void del_arg(int argc, char **argv, int index)
+void del_arg(số_nguyên argc, char **argv, số_nguyên index)
 {
-    int i;
-    for(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
+    số_nguyên i;
+    cho(i = index; i < argc-1; ++i) argv[i] = argv[i+1];
     argv[i] = 0;
 }
 
-int find_arg(int argc, char* argv[], char *arg)
+số_nguyên find_arg(số_nguyên argc, char* argv[], char *arg)
 {
-    int i;
-    for(i = 0; i < argc; ++i) {
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)) {
+    số_nguyên i;
+    cho(i = 0; i < argc; ++i) {
+        nếu(!argv[i]) continue;
+        nếu(0==strcmp(argv[i], arg)) {
             del_arg(argc, argv, i);
-            return 1;
+            trả_về 1;
         }
     }
-    return 0;
+    trả_về 0;
 }
 
-int find_int_arg(int argc, char **argv, char *arg, int def)
+số_nguyên find_int_arg(số_nguyên argc, char **argv, char *arg, số_nguyên def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    số_nguyên i;
+    cho(i = 0; i < argc-1; ++i){
+        nếu(!argv[i]) continue;
+        nếu(0==strcmp(argv[i], arg)){
             def = atoi(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
             break;
         }
     }
-    return def;
+    trả_về def;
 }
 
-float find_float_arg(int argc, char **argv, char *arg, float def)
+float find_float_arg(số_nguyên argc, char **argv, char *arg, float def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    số_nguyên i;
+    cho(i = 0; i < argc-1; ++i){
+        nếu(!argv[i]) continue;
+        nếu(0==strcmp(argv[i], arg)){
             def = atof(argv[i+1]);
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
             break;
         }
     }
-    return def;
+    trả_về def;
 }
 
-char *find_char_arg(int argc, char **argv, char *arg, char *def)
+char *find_char_arg(số_nguyên argc, char **argv, char *arg, char *def)
 {
-    int i;
-    for(i = 0; i < argc-1; ++i){
-        if(!argv[i]) continue;
-        if(0==strcmp(argv[i], arg)){
+    số_nguyên i;
+    cho(i = 0; i < argc-1; ++i){
+        nếu(!argv[i]) continue;
+        nếu(0==strcmp(argv[i], arg)){
             def = argv[i+1];
             del_arg(argc, argv, i);
             del_arg(argc, argv, i);
             break;
         }
     }
-    return def;
+    trả_về def;
 }
 
 
@@ -180,32 +180,32 @@ char *basecfg(char *cfgfile)
 {
     char *c = cfgfile;
     char *next;
-    while((next = strchr(c, '/')))
+    trong_khi((next = strchr(c, '/')))
     {
         c = next+1;
     }
     c = copy_string(c);
     next = strchr(c, '.');
-    if (next) *next = 0;
-    return c;
+    nếu (next) *next = 0;
+    trả_về c;
 }
 
-int alphanum_to_int(char c)
+số_nguyên alphanum_to_int(char c)
 {
-    return (c < 58) ? c - 48 : c-87;
+    trả_về (c < 58) ? c - 48 : c-87;
 }
-char int_to_alphanum(int i)
+char int_to_alphanum(số_nguyên i)
 {
-    if (i == 36) return '.';
-    return (i < 10) ? i + 48 : i + 87;
+    nếu (i == 36) trả_về '.';
+    trả_về (i < 10) ? i + 48 : i + 87;
 }
 
-void pm(int M, int N, float *A)
+void pm(số_nguyên M, số_nguyên N, float *A)
 {
-    int i,j;
-    for(i =0 ; i < M; ++i){
+    số_nguyên i,j;
+    cho(i =0 ; i < M; ++i){
         printf("%d ", i+1);
-        for(j = 0; j < N; ++j){
+        cho(j = 0; j < N; ++j){
             printf("%2.4f, ", A[i*N+j]);
         }
         printf("\n");
@@ -219,9 +219,9 @@ void find_replace(char *str, char *orig, char *rep, char *output)
     char *p;
 
     sprintf(buffer, "%s", str);
-    if(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
+    nếu(!(p = strstr(buffer, orig))){  // Is 'orig' even in 'str'?
         sprintf(output, "%s", str);
-        return;
+        trả_về;
     }
 
     *p = '\0';
@@ -231,18 +231,18 @@ void find_replace(char *str, char *orig, char *rep, char *output)
 
 float sec(clock_t clocks)
 {
-    return (float)clocks/CLOCKS_PER_SEC;
+    trả_về (float)clocks/CLOCKS_PER_SEC;
 }
 
-void top_k(float *a, int n, int k, int *index)
+void top_k(float *a, số_nguyên n, số_nguyên k, số_nguyên *index)
 {
-    int i,j;
-    for(j = 0; j < k; ++j) index[j] = -1;
-    for(i = 0; i < n; ++i){
-        int curr = i;
-        for(j = 0; j < k; ++j){
-            if((index[j] < 0) || a[curr] > a[index[j]]){
-                int swap = curr;
+    số_nguyên i,j;
+    cho(j = 0; j < k; ++j) index[j] = -1;
+    cho(i = 0; i < n; ++i){
+        số_nguyên curr = i;
+        cho(j = 0; j < k; ++j){
+            nếu((index[j] < 0) || a[curr] > a[index[j]]){
+                số_nguyên swap = curr;
                 curr = index[j];
                 index[j] = swap;
             }
@@ -269,7 +269,7 @@ unsigned char *read_file(char *filename)
     unsigned char *text = calloc(size+1, sizeof(char));
     fread(text, 1, size, fp);
     fclose(fp);
-    return text;
+    trả_về text;
 }
 
 void malloc_error()
@@ -290,13 +290,13 @@ list *split_str(char *s, char delim)
     size_t len = strlen(s);
     list *l = make_list();
     list_insert(l, s);
-    for(i = 0; i < len; ++i){
-        if(s[i] == delim){
+    cho(i = 0; i < len; ++i){
+        nếu(s[i] == delim){
             s[i] = '\0';
             list_insert(l, &(s[i+1]));
         }
     }
-    return l;
+    trả_về l;
 }
 
 void strip(char *s)
@@ -304,10 +304,10 @@ void strip(char *s)
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
+    cho(i = 0; i < len; ++i){
         char c = s[i];
-        if(c==' '||c=='\t'||c=='\n') ++offset;
-        else s[i-offset] = c;
+        nếu(c==' '||c=='\t'||c=='\n') ++offset;
+        không_thì s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
@@ -317,104 +317,104 @@ void strip_char(char *s, char bad)
     size_t i;
     size_t len = strlen(s);
     size_t offset = 0;
-    for(i = 0; i < len; ++i){
+    cho(i = 0; i < len; ++i){
         char c = s[i];
-        if(c==bad) ++offset;
-        else s[i-offset] = c;
+        nếu(c==bad) ++offset;
+        không_thì s[i-offset] = c;
     }
     s[len-offset] = '\0';
 }
 
-void free_ptrs(void **ptrs, int n)
+void free_ptrs(void **ptrs, số_nguyên n)
 {
-    int i;
-    for(i = 0; i < n; ++i) free(ptrs[i]);
+    số_nguyên i;
+    cho(i = 0; i < n; ++i) free(ptrs[i]);
     free(ptrs);
 }
 
 char *fgetl(FILE *fp)
 {
-    if(feof(fp)) return 0;
+    nếu(feof(fp)) trả_về 0;
     size_t size = 512;
     char *line = malloc(size*sizeof(char));
-    if(!fgets(line, size, fp)){
+    nếu(!fgets(line, size, fp)){
         free(line);
-        return 0;
+        trả_về 0;
     }
 
     size_t curr = strlen(line);
 
-    while((line[curr-1] != '\n') && !feof(fp)){
-        if(curr == size-1){
+    trong_khi((line[curr-1] != '\n') && !feof(fp)){
+        nếu(curr == size-1){
             size *= 2;
             line = realloc(line, size*sizeof(char));
-            if(!line) {
+            nếu(!line) {
                 printf("%ld\n", size);
                 malloc_error();
             }
         }
         size_t readsize = size-curr;
-        if(readsize > INT_MAX) readsize = INT_MAX-1;
+        nếu(readsize > INT_MAX) readsize = INT_MAX-1;
         fgets(&line[curr], readsize, fp);
         curr = strlen(line);
     }
-    if(line[curr-1] == '\n') line[curr-1] = '\0';
+    nếu(line[curr-1] == '\n') line[curr-1] = '\0';
 
-    return line;
+    trả_về line;
 }
 
-int read_int(int fd)
+số_nguyên read_int(số_nguyên fd)
 {
-    int n = 0;
-    int next = read(fd, &n, sizeof(int));
-    if(next <= 0) return -1;
-    return n;
+    số_nguyên n = 0;
+    số_nguyên next = read(fd, &n, sizeof(số_nguyên));
+    nếu(next <= 0) trả_về -1;
+    trả_về n;
 }
 
-void write_int(int fd, int n)
+void write_int(số_nguyên fd, số_nguyên n)
 {
-    int next = write(fd, &n, sizeof(int));
-    if(next <= 0) error("read failed");
+    số_nguyên next = write(fd, &n, sizeof(số_nguyên));
+    nếu(next <= 0) error("read failed");
 }
 
-int read_all_fail(int fd, char *buffer, size_t bytes)
+số_nguyên read_all_fail(số_nguyên fd, char *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+    trong_khi(n < bytes){
+        số_nguyên next = read(fd, buffer + n, bytes-n);
+        nếu(next <= 0) trả_về 1;
         n += next;
     }
-    return 0;
+    trả_về 0;
 }
 
-int write_all_fail(int fd, char *buffer, size_t bytes)
+số_nguyên write_all_fail(số_nguyên fd, char *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
+    trong_khi(n < bytes){
         size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) return 1;
+        nếu(next <= 0) trả_về 1;
         n += next;
     }
-    return 0;
+    trả_về 0;
 }
 
-void read_all(int fd, char *buffer, size_t bytes)
+void read_all(số_nguyên fd, char *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
-        int next = read(fd, buffer + n, bytes-n);
-        if(next <= 0) error("read failed");
+    trong_khi(n < bytes){
+        số_nguyên next = read(fd, buffer + n, bytes-n);
+        nếu(next <= 0) error("read failed");
         n += next;
     }
 }
 
-void write_all(int fd, char *buffer, size_t bytes)
+void write_all(số_nguyên fd, char *buffer, size_t bytes)
 {
     size_t n = 0;
-    while(n < bytes){
+    trong_khi(n < bytes){
         size_t next = write(fd, buffer + n, bytes-n);
-        if(next <= 0) error("write failed");
+        nếu(next <= 0) error("write failed");
         n += next;
     }
 }
@@ -424,252 +424,252 @@ char *copy_string(char *s)
 {
     char *copy = malloc(strlen(s)+1);
     strncpy(copy, s, strlen(s)+1);
-    return copy;
+    trả_về copy;
 }
 
 list *parse_csv_line(char *line)
 {
     list *l = make_list();
     char *c, *p;
-    int in = 0;
-    for(c = line, p = line; *c != '\0'; ++c){
-        if(*c == '"') in = !in;
-        else if(*c == ',' && !in){
+    số_nguyên in = 0;
+    cho(c = line, p = line; *c != '\0'; ++c){
+        nếu(*c == '"') in = !in;
+        không_thì nếu(*c == ',' && !in){
             *c = '\0';
             list_insert(l, copy_string(p));
             p = c+1;
         }
     }
     list_insert(l, copy_string(p));
-    return l;
+    trả_về l;
 }
 
-int count_fields(char *line)
+số_nguyên count_fields(char *line)
 {
-    int count = 0;
-    int done = 0;
+    số_nguyên count = 0;
+    số_nguyên done = 0;
     char *c;
-    for(c = line; !done; ++c){
+    cho(c = line; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done) ++count;
+        nếu(*c == ',' || done) ++count;
     }
-    return count;
+    trả_về count;
 }
 
-float *parse_fields(char *line, int n)
+float *parse_fields(char *line, số_nguyên n)
 {
     float *field = calloc(n, sizeof(float));
     char *c, *p, *end;
-    int count = 0;
-    int done = 0;
-    for(c = line, p = line; !done; ++c){
+    số_nguyên count = 0;
+    số_nguyên done = 0;
+    cho(c = line, p = line; !done; ++c){
         done = (*c == '\0');
-        if(*c == ',' || done){
+        nếu(*c == ',' || done){
             *c = '\0';
             field[count] = strtod(p, &end);
-            if(p == c) field[count] = nan("");
-            if(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
+            nếu(p == c) field[count] = nan("");
+            nếu(end != c && (end != c-1 || *end != '\r')) field[count] = nan(""); //DOS file formats!
             p = c+1;
             ++count;
         }
     }
-    return field;
+    trả_về field;
 }
 
-float sum_array(float *a, int n)
+float sum_array(float *a, số_nguyên n)
 {
-    int i;
+    số_nguyên i;
     float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i];
-    return sum;
+    cho(i = 0; i < n; ++i) sum += a[i];
+    trả_về sum;
 }
 
-float mean_array(float *a, int n)
+float mean_array(float *a, số_nguyên n)
 {
-    return sum_array(a,n)/n;
+    trả_về sum_array(a,n)/n;
 }
 
-void mean_arrays(float **a, int n, int els, float *avg)
+void mean_arrays(float **a, số_nguyên n, số_nguyên els, float *avg)
 {
-    int i;
-    int j;
+    số_nguyên i;
+    số_nguyên j;
     memset(avg, 0, els*sizeof(float));
-    for(j = 0; j < n; ++j){
-        for(i = 0; i < els; ++i){
+    cho(j = 0; j < n; ++j){
+        cho(i = 0; i < els; ++i){
             avg[i] += a[j][i];
         }
     }
-    for(i = 0; i < els; ++i){
+    cho(i = 0; i < els; ++i){
         avg[i] /= n;
     }
 }
 
-void print_statistics(float *a, int n)
+void print_statistics(float *a, số_nguyên n)
 {
     float m = mean_array(a, n);
     float v = variance_array(a, n);
     printf("MSE: %.6f, Mean: %.6f, Variance: %.6f\n", mse_array(a, n), m, v);
 }
 
-float variance_array(float *a, int n)
+float variance_array(float *a, số_nguyên n)
 {
-    int i;
+    số_nguyên i;
     float sum = 0;
     float mean = mean_array(a, n);
-    for(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
+    cho(i = 0; i < n; ++i) sum += (a[i] - mean)*(a[i]-mean);
     float variance = sum/n;
-    return variance;
+    trả_về variance;
 }
 
-int constrain_int(int a, int min, int max)
+số_nguyên constrain_int(số_nguyên a, số_nguyên min, số_nguyên max)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    nếu (a < min) trả_về min;
+    nếu (a > max) trả_về max;
+    trả_về a;
 }
 
 float constrain(float min, float max, float a)
 {
-    if (a < min) return min;
-    if (a > max) return max;
-    return a;
+    nếu (a < min) trả_về min;
+    nếu (a > max) trả_về max;
+    trả_về a;
 }
 
-float dist_array(float *a, float *b, int n, int sub)
+float dist_array(float *a, float *b, số_nguyên n, số_nguyên sub)
 {
-    int i;
+    số_nguyên i;
     float sum = 0;
-    for(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
-    return sqrt(sum);
+    cho(i = 0; i < n; i += sub) sum += pow(a[i]-b[i], 2);
+    trả_về sqrt(sum);
 }
 
-float mse_array(float *a, int n)
+float mse_array(float *a, số_nguyên n)
 {
-    int i;
+    số_nguyên i;
     float sum = 0;
-    for(i = 0; i < n; ++i) sum += a[i]*a[i];
-    return sqrt(sum/n);
+    cho(i = 0; i < n; ++i) sum += a[i]*a[i];
+    trả_về sqrt(sum/n);
 }
 
-void normalize_array(float *a, int n)
+void normalize_array(float *a, số_nguyên n)
 {
-    int i;
+    số_nguyên i;
     float mu = mean_array(a,n);
     float sigma = sqrt(variance_array(a,n));
-    for(i = 0; i < n; ++i){
+    cho(i = 0; i < n; ++i){
         a[i] = (a[i] - mu)/sigma;
     }
     mu = mean_array(a,n);
     sigma = sqrt(variance_array(a,n));
 }
 
-void translate_array(float *a, int n, float s)
+void translate_array(float *a, số_nguyên n, float s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    số_nguyên i;
+    cho(i = 0; i < n; ++i){
         a[i] += s;
     }
 }
 
-float mag_array(float *a, int n)
+float mag_array(float *a, số_nguyên n)
 {
-    int i;
+    số_nguyên i;
     float sum = 0;
-    for(i = 0; i < n; ++i){
+    cho(i = 0; i < n; ++i){
         sum += a[i]*a[i];   
     }
-    return sqrt(sum);
+    trả_về sqrt(sum);
 }
 
-void scale_array(float *a, int n, float s)
+void scale_array(float *a, số_nguyên n, float s)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    số_nguyên i;
+    cho(i = 0; i < n; ++i){
         a[i] *= s;
     }
 }
 
-int sample_array(float *a, int n)
+số_nguyên sample_array(float *a, số_nguyên n)
 {
     float sum = sum_array(a, n);
     scale_array(a, n, 1./sum);
     float r = rand_uniform(0, 1);
-    int i;
-    for(i = 0; i < n; ++i){
+    số_nguyên i;
+    cho(i = 0; i < n; ++i){
         r = r - a[i];
-        if (r <= 0) return i;
+        nếu (r <= 0) trả_về i;
     }
-    return n-1;
+    trả_về n-1;
 }
 
-int max_int_index(int *a, int n)
+số_nguyên max_int_index(số_nguyên *a, số_nguyên n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
-    int max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    nếu(n <= 0) trả_về -1;
+    số_nguyên i, max_i = 0;
+    số_nguyên max = a[0];
+    cho(i = 1; i < n; ++i){
+        nếu(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    trả_về max_i;
 }
 
-int max_index(float *a, int n)
+số_nguyên max_index(float *a, số_nguyên n)
 {
-    if(n <= 0) return -1;
-    int i, max_i = 0;
+    nếu(n <= 0) trả_về -1;
+    số_nguyên i, max_i = 0;
     float max = a[0];
-    for(i = 1; i < n; ++i){
-        if(a[i] > max){
+    cho(i = 1; i < n; ++i){
+        nếu(a[i] > max){
             max = a[i];
             max_i = i;
         }
     }
-    return max_i;
+    trả_về max_i;
 }
 
-int int_index(int *a, int val, int n)
+số_nguyên int_index(số_nguyên *a, số_nguyên val, số_nguyên n)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(a[i] == val) return i;
+    số_nguyên i;
+    cho(i = 0; i < n; ++i){
+        nếu(a[i] == val) trả_về i;
     }
-    return -1;
+    trả_về -1;
 }
 
-int rand_int(int min, int max)
+số_nguyên rand_int(số_nguyên min, số_nguyên max)
 {
-    if (max < min){
-        int s = min;
+    nếu (max < min){
+        số_nguyên s = min;
         min = max;
         max = s;
     }
-    int r = (rand()%(max - min + 1)) + min;
-    return r;
+    số_nguyên r = (rand()%(max - min + 1)) + min;
+    trả_về r;
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
 float rand_normal()
 {
-    static int haveSpare = 0;
+    static số_nguyên haveSpare = 0;
     static double rand1, rand2;
 
-    if(haveSpare)
+    nếu(haveSpare)
     {
         haveSpare = 0;
-        return sqrt(rand1) * sin(rand2);
+        trả_về sqrt(rand1) * sin(rand2);
     }
 
     haveSpare = 1;
 
     rand1 = rand() / ((double) RAND_MAX);
-    if(rand1 < 1e-100) rand1 = 1e-100;
+    nếu(rand1 < 1e-100) rand1 = 1e-100;
     rand1 = -2 * log(rand1);
     rand2 = (rand() / ((double) RAND_MAX)) * TWO_PI;
 
-    return sqrt(rand1) * cos(rand2);
+    trả_về sqrt(rand1) * cos(rand2);
 }
 
 /*
@@ -685,7 +685,7 @@ float rand_normal()
 
 size_t rand_size_t()
 {
-    return  ((size_t)(rand()&0xff) << 56) | 
+    trả_về  ((size_t)(rand()&0xff) << 56) | 
         ((size_t)(rand()&0xff) << 48) |
         ((size_t)(rand()&0xff) << 40) |
         ((size_t)(rand()&0xff) << 32) |
@@ -697,30 +697,30 @@ size_t rand_size_t()
 
 float rand_uniform(float min, float max)
 {
-    if(max < min){
+    nếu(max < min){
         float swap = min;
         min = max;
         max = swap;
     }
-    return ((float)rand()/RAND_MAX * (max - min)) + min;
+    trả_về ((float)rand()/RAND_MAX * (max - min)) + min;
 }
 
 float rand_scale(float s)
 {
     float scale = rand_uniform(1, s);
-    if(rand()%2) return scale;
-    return 1./scale;
+    nếu(rand()%2) trả_về scale;
+    trả_về 1./scale;
 }
 
-float **one_hot_encode(float *a, int n, int k)
+float **one_hot_encode(float *a, số_nguyên n, số_nguyên k)
 {
-    int i;
+    số_nguyên i;
     float **t = calloc(n, sizeof(float*));
-    for(i = 0; i < n; ++i){
+    cho(i = 0; i < n; ++i){
         t[i] = calloc(k, sizeof(float));
-        int index = (int)a[i];
+        số_nguyên index = (số_nguyên)a[i];
         t[i][index] = 1;
     }
-    return t;
+    trả_về t;
 }
 
