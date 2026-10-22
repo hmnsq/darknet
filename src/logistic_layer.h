@@ -1,15 +1,15 @@
 #ifndef LOGISTIC_LAYER_H
 #define LOGISTIC_LAYER_H
-#include "layer.h"
-#include "network.h"
+#অন্তর্ভাব "layer.h"
+#অন্তর্ভাব "network.h"
 
-layer make_logistic_layer(int batch, int inputs);
-void forward_logistic_layer(const layer l, network net);
-void backward_logistic_layer(const layer l, network net);
+layer make_logistic_layer(পূর্ণাঙ্ক batch, পূর্ণাঙ্ক inputs);
+শূন্য forward_logistic_layer(ধ্রুব layer l, network net);
+শূন্য backward_logistic_layer(ধ্রুব layer l, network net);
 
 #ifdef GPU
-void forward_logistic_layer_gpu(const layer l, network net);
-void backward_logistic_layer_gpu(const layer l, network net);
+শূন্য forward_logistic_layer_gpu(ধ্রুব layer l, network net);
+শূন্য backward_logistic_layer_gpu(ধ্রুব layer l, network net);
 #endif
 
 #endif

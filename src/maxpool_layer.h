@@ -1,22 +1,22 @@
 #ifndef MAXPOOL_LAYER_H
 #define MAXPOOL_LAYER_H
 
-#include "image.h"
-#include "cuda.h"
-#include "layer.h"
-#include "network.h"
+#অন্তর্ভাব "image.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব "layer.h"
+#অন্তর্ভাব "network.h"
 
-typedef layer maxpool_layer;
+প্রকারনির্দেশ layer maxpool_layer;
 
 image get_maxpool_image(maxpool_layer l);
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding);
-void resize_maxpool_layer(maxpool_layer *l, int w, int h);
-void forward_maxpool_layer(const maxpool_layer l, network net);
-void backward_maxpool_layer(const maxpool_layer l, network net);
+maxpool_layer make_maxpool_layer(পূর্ণাঙ্ক batch, পূর্ণাঙ্ক h, পূর্ণাঙ্ক w, পূর্ণাঙ্ক c, পূর্ণাঙ্ক size, পূর্ণাঙ্ক stride, পূর্ণাঙ্ক padding);
+শূন্য resize_maxpool_layer(maxpool_layer *l, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h);
+শূন্য forward_maxpool_layer(ধ্রুব maxpool_layer l, network net);
+শূন্য backward_maxpool_layer(ধ্রুব maxpool_layer l, network net);
 
 #ifdef GPU
-void forward_maxpool_layer_gpu(maxpool_layer l, network net);
-void backward_maxpool_layer_gpu(maxpool_layer l, network net);
+শূন্য forward_maxpool_layer_gpu(maxpool_layer l, network net);
+শূন্য backward_maxpool_layer_gpu(maxpool_layer l, network net);
 #endif
 
 #endif

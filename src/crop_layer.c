@@ -1,19 +1,19 @@
-#include "crop_layer.h"
-#include "cuda.h"
-#include <stdio.h>
+#অন্তর্ভাব "crop_layer.h"
+#অন্তর্ভাব "cuda.h"
+#অন্তর্ভাব <stdio.h>
 
 image get_crop_image(crop_layer l)
 {
-    int h = l.out_h;
-    int w = l.out_w;
-    int c = l.out_c;
-    return float_to_image(w,h,c,l.output);
+    পূর্ণাঙ্ক h = l.out_h;
+    পূর্ণাঙ্ক w = l.out_w;
+    পূর্ণাঙ্ক c = l.out_c;
+    প্রত্যাগম float_to_image(w,h,c,l.output);
 }
 
-void backward_crop_layer(const crop_layer l, network net){}
-void backward_crop_layer_gpu(const crop_layer l, network net){}
+শূন্য backward_crop_layer(ধ্রুব crop_layer l, network net){}
+শূন্য backward_crop_layer_gpu(ধ্রুব crop_layer l, network net){}
 
-crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure)
+crop_layer make_crop_layer(পূর্ণাঙ্ক batch, পূর্ণাঙ্ক h, পূর্ণাঙ্ক w, পূর্ণাঙ্ক c, পূর্ণাঙ্ক crop_height, পূর্ণাঙ্ক crop_width, পূর্ণাঙ্ক flip, ভিন্ন angle, ভিন্ন saturation, ভিন্ন exposure)
 {
     fprintf(stderr, "Crop Layer: %d x %d -> %d x %d x %d image\n", h,w,crop_height,crop_width,c);
     crop_layer l = {0};
@@ -22,7 +22,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.h = h;
     l.w = w;
     l.c = c;
-    l.scale = (float)crop_height / h;
+    l.scale = (ভিন্ন)crop_height / h;
     l.flip = flip;
     l.angle = angle;
     l.saturation = saturation;
@@ -32,7 +32,7 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.out_c = c;
     l.inputs = l.w * l.h * l.c;
     l.outputs = l.out_w * l.out_h * l.out_c;
-    l.output = calloc(l.outputs*batch, sizeof(float));
+    l.output = calloc(l.outputs*batch, পরিমাণ(ভিন্ন));
     l.forward = forward_crop_layer;
     l.backward = backward_crop_layer;
 
@@ -42,10 +42,10 @@ crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int 
     l.output_gpu = cuda_make_array(l.output, l.outputs*batch);
     l.rand_gpu   = cuda_make_array(0, l.batch*8);
     #endif
-    return l;
+    প্রত্যাগম l;
 }
 
-void resize_crop_layer(layer *l, int w, int h)
+শূন্য resize_crop_layer(layer *l, পূর্ণাঙ্ক w, পূর্ণাঙ্ক h)
 {
     l->w = w;
     l->h = h;
@@ -56,7 +56,7 @@ void resize_crop_layer(layer *l, int w, int h)
     l->inputs = l->w * l->h * l->c;
     l->outputs = l->out_h * l->out_w * l->out_c;
 
-    l->output = realloc(l->output, l->batch*l->outputs*sizeof(float));
+    l->output = realloc(l->output, l->batch*l->outputs*পরিমাণ(ভিন্ন));
     #ifdef GPU
     cuda_free(l->output_gpu);
     l->output_gpu = cuda_make_array(l->output, l->outputs*l->batch);
@@ -64,37 +64,37 @@ void resize_crop_layer(layer *l, int w, int h)
 }
 
 
-void forward_crop_layer(const crop_layer l, network net)
+শূন্য forward_crop_layer(ধ্রুব crop_layer l, network net)
 {
-    int i,j,c,b,row,col;
-    int index;
-    int count = 0;
-    int flip = (l.flip && rand()%2);
-    int dh = rand()%(l.h - l.out_h + 1);
-    int dw = rand()%(l.w - l.out_w + 1);
-    float scale = 2;
-    float trans = -1;
-    if(l.noadjust){
+    পূর্ণাঙ্ক i,j,c,b,row,col;
+    পূর্ণাঙ্ক index;
+    পূর্ণাঙ্ক গুনতি = 0;
+    পূর্ণাঙ্ক flip = (l.flip && rand()%2);
+    পূর্ণাঙ্ক dh = rand()%(l.h - l.out_h + 1);
+    পূর্ণাঙ্ক dw = rand()%(l.w - l.out_w + 1);
+    ভিন্ন scale = 2;
+    ভিন্ন trans = -1;
+    যদি(l.noadjust){
         scale = 1;
         trans = 0;
     }
-    if(!net.train){
+    যদি(!net.train){
         flip = 0;
         dh = (l.h - l.out_h)/2;
         dw = (l.w - l.out_w)/2;
     }
-    for(b = 0; b < l.batch; ++b){
-        for(c = 0; c < l.c; ++c){
-            for(i = 0; i < l.out_h; ++i){
-                for(j = 0; j < l.out_w; ++j){
-                    if(flip){
+    প্রতি(b = 0; b < l.batch; ++b){
+        প্রতি(c = 0; c < l.c; ++c){
+            প্রতি(i = 0; i < l.out_h; ++i){
+                প্রতি(j = 0; j < l.out_w; ++j){
+                    যদি(flip){
                         col = l.w - dw - j - 1;    
-                    }else{
+                    }অন্যথা{
                         col = j + dw;
                     }
                     row = i + dh;
                     index = col+l.w*(row+l.h*(c + l.c*b)); 
-                    l.output[count++] = net.input[index]*scale + trans;
+                    l.output[গুনতি++] = net.প্রবেশ[index]*scale + trans;
                 }
             }
         }
