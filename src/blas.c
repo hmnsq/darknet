@@ -6,84 +6,84 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void reorg_cpu(float *x, int w, int h, int c, int batch, int stride, int forward, float *out)
+void reorg_cpu(float *x, puur_naa_nka w, puur_naa_nka h, puur_naa_nka c, puur_naa_nka batch, puur_naa_nka stride, puur_naa_nka forward, float *out)
 {
-    int b,i,j,k;
-    int out_c = c/(stride*stride);
+    puur_naa_nka b,i,j,k;
+    puur_naa_nka out_c = c/(stride*stride);
 
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h; ++j){
-                for(i = 0; i < w; ++i){
-                    int in_index  = i + w*(j + h*(k + c*b));
-                    int c2 = k % out_c;
-                    int offset = k / out_c;
-                    int w2 = i*stride + offset % stride;
-                    int h2 = j*stride + offset / stride;
-                    int out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
-                    if(forward) out[out_index] = x[in_index];
-                    else out[in_index] = x[out_index];
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(k = 0; k < c; ++k){
+            ꦏꦁꦒꦺꦴ(j = 0; j < h; ++j){
+                ꦏꦁꦒꦺꦴ(i = 0; i < w; ++i){
+                    puur_naa_nka in_index  = i + w*(j + h*(k + c*b));
+                    puur_naa_nka c2 = k % out_c;
+                    puur_naa_nka offset = k / out_c;
+                    puur_naa_nka w2 = i*stride + offset % stride;
+                    puur_naa_nka h2 = j*stride + offset / stride;
+                    puur_naa_nka out_index = w2 + w*stride*(h2 + h*stride*(c2 + out_c*b));
+                    ꦪꦼꦤ꧀(forward) out[out_index] = x[in_index];
+                    ꦭꦶꦪ out[in_index] = x[out_index];
                 }
             }
         }
     }
 }
 
-void flatten(float *x, int size, int layers, int batch, int forward)
+void flatten(float *x, puur_naa_nka size, puur_naa_nka layers, puur_naa_nka batch, puur_naa_nka forward)
 {
-    float *swap = calloc(size*layers*batch, sizeof(float));
-    int i,c,b;
-    for(b = 0; b < batch; ++b){
-        for(c = 0; c < layers; ++c){
-            for(i = 0; i < size; ++i){
-                int i1 = b*layers*size + c*size + i;
-                int i2 = b*layers*size + i*layers + c;
-                if (forward) swap[i2] = x[i1];
-                else swap[i1] = x[i2];
+    float *swap = calloc(size*layers*batch, parimaa_na(float));
+    puur_naa_nka i,c,b;
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(c = 0; c < layers; ++c){
+            ꦏꦁꦒꦺꦴ(i = 0; i < size; ++i){
+                puur_naa_nka i1 = b*layers*size + c*size + i;
+                puur_naa_nka i2 = b*layers*size + i*layers + c;
+                ꦪꦼꦤ꧀ (forward) swap[i2] = x[i1];
+                ꦭꦶꦪ swap[i1] = x[i2];
             }
         }
     }
-    memcpy(x, swap, size*layers*batch*sizeof(float));
+    memcpy(x, swap, size*layers*batch*parimaa_na(float));
     free(swap);
 }
 
-void weighted_sum_cpu(float *a, float *b, float *s, int n, float *c)
+void weighted_sum_cpu(float *a, float *b, float *s, puur_naa_nka n, float *c)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         c[i] = s[i]*a[i] + (1-s[i])*(b ? b[i] : 0);
     }
 }
 
-void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, int n, float *dc)
+void weighted_delta_cpu(float *a, float *b, float *s, float *da, float *db, float *ds, puur_naa_nka n, float *dc)
 {
-    int i;
-    for(i = 0; i < n; ++i){
-        if(da) da[i] += dc[i] * s[i];
-        if(db) db[i] += dc[i] * (1-s[i]);
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
+        ꦪꦼꦤ꧀(da) da[i] += dc[i] * s[i];
+        ꦪꦼꦤ꧀(db) db[i] += dc[i] * (1-s[i]);
         ds[i] += dc[i] * (a[i] - b[i]);
     }
 }
 
-void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2, int c2, float s1, float s2, float *out)
+void shortcut_cpu(puur_naa_nka batch, puur_naa_nka w1, puur_naa_nka h1, puur_naa_nka c1, float *add, puur_naa_nka w2, puur_naa_nka h2, puur_naa_nka c2, float s1, float s2, float *out)
 {
-    int stride = w1/w2;
-    int sample = w2/w1;
+    puur_naa_nka stride = w1/w2;
+    puur_naa_nka sample = w2/w1;
     assert(stride == h1/h2);
     assert(sample == h2/h1);
-    if(stride < 1) stride = 1;
-    if(sample < 1) sample = 1;
-    int minw = (w1 < w2) ? w1 : w2;
-    int minh = (h1 < h2) ? h1 : h2;
-    int minc = (c1 < c2) ? c1 : c2;
+    ꦪꦼꦤ꧀(stride < 1) stride = 1;
+    ꦪꦼꦤ꧀(sample < 1) sample = 1;
+    puur_naa_nka minw = (w1 < w2) ? w1 : w2;
+    puur_naa_nka minh = (h1 < h2) ? h1 : h2;
+    puur_naa_nka minc = (c1 < c2) ? c1 : c2;
 
-    int i,j,k,b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < minc; ++k){
-            for(j = 0; j < minh; ++j){
-                for(i = 0; i < minw; ++i){
-                    int out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
-                    int add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
+    puur_naa_nka i,j,k,b;
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(k = 0; k < minc; ++k){
+            ꦏꦁꦒꦺꦴ(j = 0; j < minh; ++j){
+                ꦏꦁꦒꦺꦴ(i = 0; i < minw; ++i){
+                    puur_naa_nka out_index = i*sample + w2*(j*sample + h2*(k + c2*b));
+                    puur_naa_nka add_index = i*stride + w1*(j*stride + h1*(k + c1*b));
                     out[out_index] = s1*out[out_index] + s2*add[add_index];
                 }
             }
@@ -91,15 +91,15 @@ void shortcut_cpu(int batch, int w1, int h1, int c1, float *add, int w2, int h2,
     }
 }
 
-void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
+void mean_cpu(float *x, puur_naa_nka batch, puur_naa_nka filters, puur_naa_nka spatial, float *mean)
 {
     float scale = 1./(batch * spatial);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    puur_naa_nka i,j,k;
+    ꦏꦁꦒꦺꦴ(i = 0; i < filters; ++i){
         mean[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
+        ꦏꦁꦒꦺꦴ(j = 0; j < batch; ++j){
+            ꦏꦁꦒꦺꦴ(k = 0; k < spatial; ++k){
+                puur_naa_nka index = j*filters*spatial + i*spatial + k;
                 mean[i] += x[index];
             }
         }
@@ -107,15 +107,15 @@ void mean_cpu(float *x, int batch, int filters, int spatial, float *mean)
     }
 }
 
-void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, float *variance)
+void variance_cpu(float *x, float *mean, puur_naa_nka batch, puur_naa_nka filters, puur_naa_nka spatial, float *variance)
 {
     float scale = 1./(batch * spatial - 1);
-    int i,j,k;
-    for(i = 0; i < filters; ++i){
+    puur_naa_nka i,j,k;
+    ꦏꦁꦒꦺꦴ(i = 0; i < filters; ++i){
         variance[i] = 0;
-        for(j = 0; j < batch; ++j){
-            for(k = 0; k < spatial; ++k){
-                int index = j*filters*spatial + i*spatial + k;
+        ꦏꦁꦒꦺꦴ(j = 0; j < batch; ++j){
+            ꦏꦁꦒꦺꦴ(k = 0; k < spatial; ++k){
+                puur_naa_nka index = j*filters*spatial + i*spatial + k;
                 variance[i] += pow((x[index] - mean[i]), 2);
             }
         }
@@ -123,19 +123,19 @@ void variance_cpu(float *x, float *mean, int batch, int filters, int spatial, fl
     }
 }
 
-void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
+void l2normalize_cpu(float *x, float *dx, puur_naa_nka batch, puur_naa_nka filters, puur_naa_nka spatial)
 {
-    int b,f,i;
-    for(b = 0; b < batch; ++b){
-        for(i = 0; i < spatial; ++i){
+    puur_naa_nka b,f,i;
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(i = 0; i < spatial; ++i){
             float sum = 0;
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
+            ꦏꦁꦒꦺꦴ(f = 0; f < filters; ++f){
+                puur_naa_nka index = b*filters*spatial + f*spatial + i;
                 sum += powf(x[index], 2);
             }
             sum = sqrtf(sum);
-            for(f = 0; f < filters; ++f){
-                int index = b*filters*spatial + f*spatial + i;
+            ꦏꦁꦒꦺꦴ(f = 0; f < filters; ++f){
+                puur_naa_nka index = b*filters*spatial + f*spatial + i;
                 x[index] /= sum;
                 dx[index] = (1 - x[index]) / sum;
             }
@@ -144,128 +144,128 @@ void l2normalize_cpu(float *x, float *dx, int batch, int filters, int spatial)
 }
 
 
-void normalize_cpu(float *x, float *mean, float *variance, int batch, int filters, int spatial)
+void normalize_cpu(float *x, float *mean, float *variance, puur_naa_nka batch, puur_naa_nka filters, puur_naa_nka spatial)
 {
-    int b, f, i;
-    for(b = 0; b < batch; ++b){
-        for(f = 0; f < filters; ++f){
-            for(i = 0; i < spatial; ++i){
-                int index = b*filters*spatial + f*spatial + i;
+    puur_naa_nka b, f, i;
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(f = 0; f < filters; ++f){
+            ꦏꦁꦒꦺꦴ(i = 0; i < spatial; ++i){
+                puur_naa_nka index = b*filters*spatial + f*spatial + i;
                 x[index] = (x[index] - mean[f])/(sqrt(variance[f]) + .000001f);
             }
         }
     }
 }
 
-void const_cpu(int N, float ALPHA, float *X, int INCX)
+void const_cpu(puur_naa_nka N, float ALPHA, float *X, puur_naa_nka INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
 }
 
-void mul_cpu(int N, float *X, int INCX, float *Y, int INCY)
+void mul_cpu(puur_naa_nka N, float *X, puur_naa_nka INCX, float *Y, puur_naa_nka INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) Y[i*INCY] *= X[i*INCX];
 }
 
-void pow_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
+void pow_cpu(puur_naa_nka N, float ALPHA, float *X, puur_naa_nka INCX, float *Y, puur_naa_nka INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = pow(X[i*INCX], ALPHA);
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) Y[i*INCY] = pow(X[i*INCX], ALPHA);
 }
 
-void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY)
+void axpy_cpu(puur_naa_nka N, float ALPHA, float *X, puur_naa_nka INCX, float *Y, puur_naa_nka INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) Y[i*INCY] += ALPHA*X[i*INCX];
 }
 
-void scal_cpu(int N, float ALPHA, float *X, int INCX)
+void scal_cpu(puur_naa_nka N, float ALPHA, float *X, puur_naa_nka INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) X[i*INCX] *= ALPHA;
 }
 
-void fill_cpu(int N, float ALPHA, float *X, int INCX)
+void fill_cpu(puur_naa_nka N, float ALPHA, float *X, puur_naa_nka INCX)
 {
-    int i;
-    for(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) X[i*INCX] = ALPHA;
 }
 
-void deinter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+void deinter_cpu(puur_naa_nka NX, float *X, puur_naa_nka NY, float *Y, puur_naa_nka B, float *OUT)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
-            if(X) X[j*NX + i] += OUT[index];
+    puur_naa_nka i, j;
+    puur_naa_nka index = 0;
+    ꦏꦁꦒꦺꦴ(j = 0; j < B; ++j) {
+        ꦏꦁꦒꦺꦴ(i = 0; i < NX; ++i){
+            ꦪꦼꦤ꧀(X) X[j*NX + i] += OUT[index];
             ++index;
         }
-        for(i = 0; i < NY; ++i){
-            if(Y) Y[j*NY + i] += OUT[index];
+        ꦏꦁꦒꦺꦴ(i = 0; i < NY; ++i){
+            ꦪꦼꦤ꧀(Y) Y[j*NY + i] += OUT[index];
             ++index;
         }
     }
 }
 
-void inter_cpu(int NX, float *X, int NY, float *Y, int B, float *OUT)
+void inter_cpu(puur_naa_nka NX, float *X, puur_naa_nka NY, float *Y, puur_naa_nka B, float *OUT)
 {
-    int i, j;
-    int index = 0;
-    for(j = 0; j < B; ++j) {
-        for(i = 0; i < NX; ++i){
+    puur_naa_nka i, j;
+    puur_naa_nka index = 0;
+    ꦏꦁꦒꦺꦴ(j = 0; j < B; ++j) {
+        ꦏꦁꦒꦺꦴ(i = 0; i < NX; ++i){
             OUT[index++] = X[j*NX + i];
         }
-        for(i = 0; i < NY; ++i){
+        ꦏꦁꦒꦺꦴ(i = 0; i < NY; ++i){
             OUT[index++] = Y[j*NY + i];
         }
     }
 }
 
-void copy_cpu(int N, float *X, int INCX, float *Y, int INCY)
+void copy_cpu(puur_naa_nka N, float *X, puur_naa_nka INCX, float *Y, puur_naa_nka INCY)
 {
-    int i;
-    for(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) Y[i*INCY] = X[i*INCX];
 }
 
-void mult_add_into_cpu(int N, float *X, float *Y, float *Z)
+void mult_add_into_cpu(puur_naa_nka N, float *X, float *Y, float *Z)
 {
-    int i;
-    for(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) Z[i] += X[i]*Y[i];
 }
 
-void smooth_l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+void smooth_l1_cpu(puur_naa_nka n, float *pred, float *truth, float *delta, float *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         float diff = truth[i] - pred[i];
         float abs_val = fabs(diff);
-        if(abs_val < 1) {
+        ꦪꦼꦤ꧀(abs_val < 1) {
             error[i] = diff * diff;
             delta[i] = diff;
         }
-        else {
+        ꦭꦶꦪ {
             error[i] = 2*abs_val - 1;
             delta[i] = (diff < 0) ? 1 : -1;
         }
     }
 }
 
-void l1_cpu(int n, float *pred, float *truth, float *delta, float *error)
+void l1_cpu(puur_naa_nka n, float *pred, float *truth, float *delta, float *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         float diff = truth[i] - pred[i];
         error[i] = fabs(diff);
         delta[i] = diff > 0 ? 1 : -1;
     }
 }
 
-void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+void softmax_x_ent_cpu(puur_naa_nka n, float *pred, float *truth, float *delta, float *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         float t = truth[i];
         float p = pred[i];
         error[i] = (t) ? -log(p) : 0;
@@ -273,10 +273,10 @@ void softmax_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *er
     }
 }
 
-void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *error)
+void logistic_x_ent_cpu(puur_naa_nka n, float *pred, float *truth, float *delta, float *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         float t = truth[i];
         float p = pred[i];
         error[i] = -t*log(p) - (1-t)*log(1-p);
@@ -284,64 +284,64 @@ void logistic_x_ent_cpu(int n, float *pred, float *truth, float *delta, float *e
     }
 }
 
-void l2_cpu(int n, float *pred, float *truth, float *delta, float *error)
+void l2_cpu(puur_naa_nka n, float *pred, float *truth, float *delta, float *error)
 {
-    int i;
-    for(i = 0; i < n; ++i){
+    puur_naa_nka i;
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         float diff = truth[i] - pred[i];
         error[i] = diff * diff;
         delta[i] = diff;
     }
 }
 
-float dot_cpu(int N, float *X, int INCX, float *Y, int INCY)
+float dot_cpu(puur_naa_nka N, float *X, puur_naa_nka INCX, float *Y, puur_naa_nka INCY)
 {
-    int i;
+    puur_naa_nka i;
     float dot = 0;
-    for(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
-    return dot;
+    ꦏꦁꦒꦺꦴ(i = 0; i < N; ++i) dot += X[i*INCX] * Y[i*INCY];
+    ꦮꦭꦶ dot;
 }
 
-void softmax(float *input, int n, float temp, int stride, float *output)
+void softmax(float *input, puur_naa_nka n, float temp, puur_naa_nka stride, float *output)
 {
-    int i;
+    puur_naa_nka i;
     float sum = 0;
     float largest = -FLT_MAX;
-    for(i = 0; i < n; ++i){
-        if(input[i*stride] > largest) largest = input[i*stride];
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
+        ꦪꦼꦤ꧀(input[i*stride] > largest) largest = input[i*stride];
     }
-    for(i = 0; i < n; ++i){
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         float e = exp(input[i*stride]/temp - largest/temp);
         sum += e;
         output[i*stride] = e;
     }
-    for(i = 0; i < n; ++i){
+    ꦏꦁꦒꦺꦴ(i = 0; i < n; ++i){
         output[i*stride] /= sum;
     }
 }
 
 
-void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, int group_offset, int stride, float temp, float *output)
+void softmax_cpu(float *input, puur_naa_nka n, puur_naa_nka batch, puur_naa_nka batch_offset, puur_naa_nka groups, puur_naa_nka group_offset, puur_naa_nka stride, float temp, float *output)
 {
-    int g, b;
-    for(b = 0; b < batch; ++b){
-        for(g = 0; g < groups; ++g){
+    puur_naa_nka g, b;
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(g = 0; g < groups; ++g){
             softmax(input + b*batch_offset + g*group_offset, n, temp, stride, output + b*batch_offset + g*group_offset);
         }
     }
 }
 
-void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int forward, float scale, float *out)
+void upsample_cpu(float *in, puur_naa_nka w, puur_naa_nka h, puur_naa_nka c, puur_naa_nka batch, puur_naa_nka stride, puur_naa_nka forward, float scale, float *out)
 {
-    int i, j, k, b;
-    for(b = 0; b < batch; ++b){
-        for(k = 0; k < c; ++k){
-            for(j = 0; j < h*stride; ++j){
-                for(i = 0; i < w*stride; ++i){
-                    int in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
-                    int out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
-                    if(forward) out[out_index] = scale*in[in_index];
-                    else in[in_index] += scale*out[out_index];
+    puur_naa_nka i, j, k, b;
+    ꦏꦁꦒꦺꦴ(b = 0; b < batch; ++b){
+        ꦏꦁꦒꦺꦴ(k = 0; k < c; ++k){
+            ꦏꦁꦒꦺꦴ(j = 0; j < h*stride; ++j){
+                ꦏꦁꦒꦺꦴ(i = 0; i < w*stride; ++i){
+                    puur_naa_nka in_index = b*w*h*c + k*w*h + (j/stride)*w + i/stride;
+                    puur_naa_nka out_index = b*w*h*c*stride*stride + k*w*h*stride*stride + j*w*stride + i;
+                    ꦪꦼꦤ꧀(forward) out[out_index] = scale*in[in_index];
+                    ꦭꦶꦪ in[in_index] += scale*out[out_index];
                 }
             }
         }

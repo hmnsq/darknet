@@ -9,8 +9,8 @@
 typedef layer maxpool_layer;
 
 image get_maxpool_image(maxpool_layer l);
-maxpool_layer make_maxpool_layer(int batch, int h, int w, int c, int size, int stride, int padding);
-void resize_maxpool_layer(maxpool_layer *l, int w, int h);
+maxpool_layer make_maxpool_layer(puur_naa_nka batch, puur_naa_nka h, puur_naa_nka w, puur_naa_nka c, puur_naa_nka size, puur_naa_nka stride, puur_naa_nka padding);
+void resize_maxpool_layer(maxpool_layer *l, puur_naa_nka w, puur_naa_nka h);
 void forward_maxpool_layer(const maxpool_layer l, network net);
 void backward_maxpool_layer(const maxpool_layer l, network net);
 
